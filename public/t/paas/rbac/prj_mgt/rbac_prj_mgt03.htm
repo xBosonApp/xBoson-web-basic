@@ -1,0 +1,58 @@
+<!-- rbac_prj_mgt03 添加修改项目 -->
+<div class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+          class="sr-only">Close</span></button>
+        <h4 class="modal-title">新项目</h4>
+      </div>
+      <div class="modal-body no-padding">
+        <form method="post" onsubmit="return false;" class="smart-form">
+          <fieldset>
+            <div class="row">
+              <section class="col col-6">
+                <label class="label">项目名称</label>
+                <label class="input">
+                  <input type="text" name="prjnm" placeholder="项目名称">
+                </label>
+              </section>
+              <section class="col col-6">
+                <label class="label">项目路径（创建后不可修改）</label>
+                <label class="input">
+                  <input type="text" name="prj_path" placeholder="项目路径">
+                </label>
+              </section>
+            </div>
+            <div class="row">
+              <!--<section class="col col-6">-->
+              <!--  <label class="label">项目组（留空创建新项目组，创建后不可修改）</label>-->
+              <!--  <label class="input">-->
+              <!--    <input type="hidden" name="ugid" data-type="select2" placeholder="项目组"/>-->
+              <!--  </label>-->
+              <!--</section>-->
+              <section class="col col-6">
+                <label class="label">状态</label>
+                <label class="input">
+                  <input type="hidden" name="status" data-type="select2" placeholder="状态"/>
+                </label>
+              </section>
+            </div>
+            <div>
+              <section>
+                <label class="label">项目描述</label>
+                <label class="textarea">
+                  <textarea rows="2" name="mark" placeholder="项目描述"></textarea>
+                </label>
+              </section>
+            </div>
+          </fieldset>
+          <footer>
+            <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">取消</button>
+            <button type="button" name="add" class="btn btn-primary btn-xs">确定</button>
+          </footer>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

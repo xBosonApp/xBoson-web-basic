@@ -1,0 +1,245 @@
+<!-- widget grid -->
+<section id="widget-grid" class="">
+	<!-- row -->
+	<div class="row">
+		<!-- NEW WIDGET START -->
+		<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<div class="jarviswidget jarviswidget-color-blue" id="wid-id-dkh" data-widget-editbutton="true" data-widget-deletebutton="false" data-widget-fullscreenbutton="false">
+				<header>
+					<span class="widget-icon"> <i class="fa fa-map-marker"></i> </span>
+					<h2>区域计量系统——大客户计量分析</h2>
+					<div class="widget-toolbar">
+						<div class="btn-group">
+							<button class="btn dropdown-toggle btn-xs btn-primary" data-toggle="dropdown">
+								选择年份 <i class="icon-caret-down"></i>
+							</button>
+							<ul class="dropdown-menu pull-right">
+								<li>
+									<a href="javascript:void(0);"><i class="icon-circle txt-color-green"></i> 2012</a>
+								</li>
+								<li>
+									<a href="javascript:void(0);"><i class="icon-circle txt-color-red"></i> 2011</a>
+								</li>
+								<li class="divider"></li>
+								<li>
+									<a href="javascript:void(0);"><i class="icon-delete"></i> 2010</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</header>
+				<!-- widget div-->
+				<div>
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary">
+              	总体
+              </button>
+              <button type="button" class="btn btn-primary">
+              	区域
+              </button>
+              <button type="button" class="btn btn-primary">
+              	领域
+              </button>
+              <button type="button" class="btn btn-primary">
+              	增长变化
+              </button>
+					</div>
+					<!-- end widget edit box -->
+					</div>
+					<!-- widget content -->
+					<div class="widget-body no-padding">
+					  <!-- d3 chart content -->
+            <div class="chart_content">
+              <div id="subject_tabs" style=" overflow-x: hidden; width: 1180px;height: auto; min-height: 610px;"></div>
+            </div>
+					</div>
+					<!-- end widget content -->
+				</div>
+				<!-- end widget div -->
+			</div>
+			<!-- end widget -->
+		</article>
+		<!-- WIDGET END -->
+	</div>
+	<!-- end row -->
+</section>
+<!-- end widget grid -->
+<!--<script src="ajax/sw/swdkh.js"></script>-->
+<script type="text/javascript">
+	// DO NOT REMOVE : GLOBAL FUNCTIONS!
+	pageSetUp();
+	// PAGE RELATED SCRIPTS
+  // var swdkh = new swdkh();
+</script>
+<script>
+var subjectDetailModule = function (id) {
+    var that = {
+        reportId: id,
+        init: function () {
+        },
+        param: {
+            set: function (options) {
+                this.merge(true, subjectDetailView.params[that.reportId], options);
+            },
+            get: function (id) {
+                return subjectDetailView.params[that.reportId];
+            },
+            getString: function () {
+                return JSON.stringify(subjectDetailView.params[that.reportId]);
+            },
+            merge: function (deep, target, options) {
+                var src, copy, name, clone, deep;
+                if (typeof target !== "object" && !jQuery.isFunction(target)) {
+                    target = {};
+                }
+                if (options != null) {
+                    for (name in options) {
+                        src = target[ name ];
+                        copy = options[ name ];
+                        if (target === copy) {
+                            continue;
+                        }
+                        if (deep && copy && jQuery.isPlainObject(copy)) {
+                            clone = src && jQuery.isPlainObject(src) ? src : {};
+                            target[ name ] = this.merge(deep, clone, copy);
+                        } else if (copy !== undefined || jQuery.isArray(copy)) {
+                            target[ name ] = copy;
+                        }
+                    }
+                }
+                return target;
+            }
+        },
+        data: {
+            load: function (options) {
+              zy.log('subjectDetailModule.that.data.load');
+                var defaultOptions = {
+                    type: 'GET',
+                    url: 'search.js',
+                    data: {
+                        'report.id': that.reportId,
+                        'report.templateId': subjectDetailView.pagInfo[that.reportId].templateId,
+                        'cn': '',
+                        'params': that.param.getString()
+                    },
+                    dataType: 'JSON',
+                    success: function (data) {
+                    }
+                };
+                $.extend(true, defaultOptions, options)
+                $.ajax(defaultOptions);
+            }
+        }
+    };
+    subjectDetailView.view = that;
+    return that;
+}
+var subjectDetailView = {
+    views: {},
+    command: {
+        init: function (type) {
+        },
+        change: function (type) {
+            this.init(type);
+        }
+    },
+    params: {"35":{"years":["2012"],"selectIndex":0}},
+    pagInfo: {"35":{"templateId":"35","id":"35","title":"全国财政支出结构分析","image":"_built_in_35.gif"}},
+    init: function () {
+    zy.log('002');
+        subjectDetailView.tabs.init();
+    },
+    param: {
+        getString: function () {
+            return JSON.stringify(subjectDetailView.params);
+        }
+    },
+    tabs: {
+        reports: ['35'],
+        selectIndex: 0,
+        selectTab: null,
+        init: function () {
+    zy.log('003');
+            subjectDetailView.tabs.select(subjectDetailView.tabs.selectIndex);
+        },
+        draw: function () {
+            subjectDetailView.tabs.title.draw();
+            subjectDetailView.view.init();
+            subjectDetailView.command.init(1);
+        },
+        title: {
+            text: '',
+            remark: '',
+            set: function (title, remark) {
+                subjectDetailView.tabs.title.text = title;
+                subjectDetailView.tabs.title.remark = remark;
+            },
+            draw: function () {
+                $("#pagenum").text(subjectDetailView.tabs.selectIndex + 1);
+                if (subjectDetailView.tabs.title.text != null) {
+                    $("#page_title").html(subjectDetailView.tabs.title.text);
+                    $("#page_text").html(subjectDetailView.tabs.title.remark);
+                }
+            }
+        },
+        select: function (index) {
+            //未传索引
+            if (index == undefined || index < 1) {
+                index = 0;
+            }
+            //索引为数字
+            if (typeof index == 'number') {
+                if (index > subjectDetailView.tabs.reports.length - 1)
+                    index = subjectDetailView.tabs.reports.length - 1;
+                _load(subjectDetailView.tabs.reports[index]);
+            }
+            //索引为其他
+            else {
+                _load(index);
+            }
+            var tab = null;
+
+            function _load(id) {
+              zy.net.loadHTML('ajax/sw/swdkh_page.html',$("#subject_tabs"),function(){
+                subjectDetailView.tabs.draw();
+              });
+            }
+        }
+    },
+    download: {
+        param: {
+            getString: function () {
+                var o = {};
+                for (var i in subjectDetailView.params) {
+                    o[i] = {
+                        tid: subjectDetailView.pagInfo[i].templateId,
+                        params: subjectDetailView.params[i],
+                        pid: subjectDetailView.pagInfo[i].id
+                    };
+                }
+                return JSON.stringify(o);
+            }
+        },
+        header: {
+            getString: function () {
+                return '';
+            }
+        }
+    },
+    replaceAll: function (val, p, e) {
+        while (val.indexOf(p) > -1) {
+            val = val.replace(p, e);
+        }
+        return val;
+    }
+}
+</script>
+<script type="text/javascript">
+  $(function () {
+    zy.log('001');
+    subjectDetailView.init();
+  })
+</script>

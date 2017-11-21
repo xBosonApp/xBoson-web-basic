@@ -1,0 +1,618 @@
+<div id="generate_test_data" class="jarviswidget jarviswidget-color-blue" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+  <header>
+    <h2>生成测试数据</h2>
+  </header>
+  <!-- widget div-->
+  <div>
+    <!-- widget content -->
+    <div class="widget-body">
+      <div class="container">
+        <div class="row">
+          <section class="col col-md-4">
+            <label>选择数据源：</label>
+            <input type="hidden" name="did" data-type="select2" placeholder="请选择数据源..."/>
+          </section>
+          <section name="join-condition" class="col col-md-8" style="display:none;">
+            <label>表关联条件 <i name="add-join" class="fa fa-plus" style="cursor:pointer;"></i></label>
+            <div name="one-join-condition" class="row">
+              <div class="col col-md-3">
+                <input type="hidden" name="join-table" data-type="select2" placeholder="表"/>
+              </div>
+              <div class="col col-md-3">
+                <input type="hidden" name="join-table-column" data-type="select2" placeholder="列"/>
+              </div>
+              <div class="col col-md-1">
+                <span> = </span>
+              </div>
+              <div class="col col-md-3">
+                <input type="hidden" name="join-table" data-type="select2" placeholder="表"/>
+              </div>
+              <div class="col col-md-2">
+                <input type="hidden" name="join-table-column" data-type="select2" placeholder="列"/>
+              </div>
+            </div>
+          </section>
+        </div>
+        <button name="add-table" class="btn btn-default" title="主表在前，从表在后">增加表</button>
+        <div name="table-and-columns">
+          <div class="row">
+            <section class="col col-md-4">
+             <!--fa fa-plus--> 
+              <!--<label>选择表 <i name="table-i" class="fa fa-minus" style="cursor:pointer;"></i></label>-->
+              <input type="hidden" name="table-select2" data-type="select2" placeholder="请选择表..."/>
+            </section>
+            <section class="col col-md-2">
+              <input type="number" name="data-number" class="form-control" placeholder="生成数据条数"/>
+            </section>
+            <section class="col col-md-2">
+              <span><i name="table-i" class="fa fa-minus" style="cursor:pointer;"></i></span>
+            </section>
+          </div>
+          <div name="table-div" class="row">
+            <section class="col col-md-10">
+              <div class="dataTables_wrapper">
+                <table name="columns" class="table table-bordered table-striped"></table>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+      <div class="pull-right">
+        <button name="submit" class="btn btn-primary">提交</button>
+      </div>
+      <!--选择数据弹出框-->
+      <!--//固定值-->
+      <!--//{table_name:'',column_name:'',tbl_col:'',type:'constants',value:''}  -->
+      <!--//范围随机值-->
+      <!--//{table_name:'',column_name:'',tbl_col:'',type:'range',range:[]}    -->
+      <!--//随机数 (int,double,string) 如： int 6, double 6.2, string 6-->
+      <!--//{table_name:'',column_name:'',tbl_col:'',type:'random',datatype:'',numrange:'6'}-->
+      <!--//日期date值 (指定范围随机日期)-->
+      <!--//{table_name:'',column_name:'',tbl_col:'',type:'dateR',value:'',start:'',end:''}     -->
+      <!--//api方法-->
+      <!--//{table_name:'',column_name:'',tbl_col:'',type:'api_func',value:''}-->
+      <!--//表中数据-->
+      <!--//{table_name:'',column_name:'',tbl_col:'',type:'column_value_array',table:'',column:''}-->
+      <!--//数据字典-->
+      <!--//{table_name:'',column_name:'',tbl_col:'',type:'dict',typecd:''}    -->
+      <!--//自增 datatype[n,d]-->
+      <!--//{table_name:'',column_name:'',tbl_col:'',type:'increase',datatype:'n',value:0}   -->
+      
+      <div name="sel_modal" class="modal fade">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title">选择数据</h4>
+            </div>
+            <div class="modal-body">
+          		<div class="row">
+          			<form class="col-md-12">
+          			  <div id="dataway">
+                    <ul name="dataway-ul">
+                      <li>
+                        <a href="#dataway-constants">固定值</a>
+                      </li>
+                      <li>
+                        <a href="#dataway-range">范围随机一个值</a>
+                      </li>
+                      <li>
+                        <a href="#dataway-random">随机值</a>
+                      </li>
+                      <li>
+                        <a href="#dataway-dict">数据字典</a>
+                      </li>
+                      <li>
+                        <a href="#dataway-column_value_array">表中数据</a>
+                      </li>
+                      <li>
+                        <a href="#dataway-api_func">API方法</a>
+                      </li>
+                      <li>
+                        <a href="#dataway-increase">自增</a>
+                      </li>
+                    </ul>
+                    <div id="dataway-constants">
+                      <input type="text" name="constants-value" class="form-control" placeholder="输入值..."/>
+                    </div>
+                    <div id="dataway-range">
+                      <input type="text" name="range-value" class="form-control" placeholder="多个值以逗号分隔..."/>
+                    </div>
+                    <div id="dataway-random">
+                      <label><input type="radio" name="random-radio" value="int">整数</label>
+                      <!--<input type="text" class="form-control" placeholder="长度"/>-->
+                      <!--<input type="text" class="form-control" placeholder="最小值"/>-->
+                      <!--<input type="text" class="form-control" placeholder="最大值"/>-->
+                      <label><input type="radio" name="random-radio" value="double">小数</label>
+                      <!--<input type="text" placeholder="长度"/>-->
+                      <label><input type="radio" name="random-radio" value="string">字符串</label>
+                      <input type="text" name="random-value" class="form-control" placeholder="如13或13,5"/>
+                    </div>
+                    <div id="dataway-dict">
+                      <input type="text" name="dict-value" class="form-control" placeholder="字典类别CODE"/>
+                    </div>
+                    <div id="dataway-column_value_array">
+                      <div class="row">
+                        <div class="col col-md-5">
+                          <input type="hidden" name="column_value_array-table" data-type="select2" placeholder="表"/>
+                        </div>
+                        <div class="col col-md-5">
+                          <input type="hidden" name="column_value_array-column" data-type="select2" placeholder="列"/>
+                        </div>
+                      </div>
+                    </div>
+                    <div id="dataway-api_func">
+                      <select name="api_func-value" class="form-control">
+                        <option value="uuid">uuid</option>
+                        <option value="currentTimeString">currentTimeString</option>
+                      </select>
+                    </div>
+                    <div id="dataway-increase">
+                      <input type="number" name="increase-value" class="form-control" placeholder="从此值开始"/>
+                    </div>
+                  </div>
+          			</form>
+          		</div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+              <button type="button" name="sel-save" class="btn btn-primary">保存</button>
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+    </div>
+  <!-- end widget content -->
+  </div>
+  <!-- end widget div -->
+</div>
+<script>
+var generateTestData = (function(){
+  var thiz;
+  var pt = generateTestData.prototype;
+  
+  pt.widget = $('#generate_test_data');
+  pt.v = {
+    container: $('div.container'),
+    did: $('[name=did]'),
+    add_tbl_button: $('[name=add-table]'),
+    selModal: $('[name=sel_modal]'),
+    tab_container: $('#dataway'), //tab页容器
+    submitBtn: pt.widget.find('[name=submit]')  //提交按钮
+  };
+  
+  pt.d = {
+    // 表select数据源
+    tableSelect2: [],
+    // 当前点击的选择数据按钮
+    eButton: null,
+    // 关联条件表select2数据源
+    join_table_select2: [],
+    // 关联条件列select2数据源
+    join_column_select2: {}
+  };
+  
+  // 提交的参数
+  pt.p = {
+    
+  };
+  
+  // 模板
+  pt.addDiv = $('[name=table-and-columns]').clone(false,false);
+  
+  // 工具方法
+  pt.tool = {
+    // 是否是正整数
+    chkNumber: function (num){
+      if(zy.tool.isInteger(num) && Number(num)>0){
+        return true;
+      }else{
+        return false;
+      }
+    }
+  };
+  
+  function generateTestData(){
+    thiz = this;
+    thiz.Init();
+    return this;
+  }
+  
+  pt.Init=function(){
+    // 初始化数据源select2
+    zy.extend.get({
+      app:'c879dcc94d204d96a98a34e0b7d75676',
+      mod:'tableandindex',
+      apinm:'datasource'
+    }, function (msg) {
+      pt.v.did.zySelectCustomData('', false, {width: '100%', allowClear: false}, msg.data);
+      
+      //注册事件
+      pt.Event.init();
+      pt.Event.join_table();
+      pt.v.did.select2('val',msg.data[0].id);
+      pt.v.did.trigger('change');
+    }, {});
+  }
+  
+  pt.Event = {
+    // 事件初始化
+    init: function(){
+      thiz.Event.did();
+      thiz.Event.add_tbl_button();
+      thiz.Event.tables($('div[name=table-and-columns]'));
+      thiz.Event.table_i($('div[name=table-and-columns]'));
+      thiz.Event.fk_tables();
+      thiz.Event.sel_save();
+      thiz.Event.submitBtn();
+      thiz.Event.add_join();
+    },
+    // 数据源select2
+    did: function(){
+      pt.v.did.change(function(){
+        zy.extend.get({
+          app:'c770045becc04c7583f626faacd3b456',
+          mod:'mddm_view',
+          apinm:'getdstables'
+        }, function (msg) {
+          pt.d.tableSelect2=msg.data;
+          // 所有表select2
+          pt.v.container.find('[name=table-select2]').zySelectCustomData('', false, {width: '100%', allowClear: true}, msg.data);
+          // 模态里表select2
+          pt.v.selModal.find('[name=column_value_array-table]').zySelectCustomData('', false, {width: '100%', allowClear: false}, msg.data);
+        }, {'did':pt.v.did.val()});
+      });
+    },
+    // 模态里表select2
+    fk_tables: function(){
+      pt.v.selModal.find('[name=column_value_array-table]').change(function(){
+        zy.extend.get({
+          app:'c879dcc94d204d96a98a34e0b7d75676',
+          mod:'mod',
+          apinm:'getdscolumns'
+        }, function (msg) {
+          $.each(msg.result,function(i,v){
+            msg.result[i].id = v.en;
+            msg.result[i].name = v.cn+'('+v.en+')';
+          });
+          pt.v.selModal.find('[name=column_value_array-column]').zySelectCustomData('', false, {width: '100%', allowClear: false}, msg.result);
+        }, {'did':pt.v.did.val(),'table_name':$(this).val()});
+      });
+    },
+    // 模态保存按钮
+    sel_save: function(){
+      pt.v.selModal.find('[name=sel-save]').click(function(){
+        var _active = pt.v.tab_container.tabs('option','active'); //激活的tab页索引
+//固定值
+//{table_name:'',column_name:'',tbl_col:'',type:'constants',value:''}  
+//范围随机值
+//{table_name:'',column_name:'',tbl_col:'',type:'range',range:[]}    
+//随机数 (int,double,string) 如： int 6, double 6.2, string 6
+//{table_name:'',column_name:'',tbl_col:'',type:'random',datatype:'',numrange:'6'}
+//日期date值 (指定范围随机日期)
+//{table_name:'',column_name:'',tbl_col:'',type:'dateR',value:'',start:'',end:''}     
+//api方法
+//{table_name:'',column_name:'',tbl_col:'',type:'api_func',value:''}
+//表中数据
+//{table_name:'',column_name:'',tbl_col:'',type:'column_value_array',table:'',column:''}
+//数据字典
+//{table_name:'',column_name:'',tbl_col:'',type:'dict',typecd:''}    
+//自增 datatype[n,d]
+//{table_name:'',column_name:'',tbl_col:'',type:'increase',datatype:'n',base:0}   
+        //激活的tab页填的内容
+        var _value = {
+          table_name: pt.d.eButton.next().attr('name').split('.')[0],
+          column_name: pt.d.eButton.next().attr('name').split('.')[1],
+          tbl_col: pt.d.eButton.next().attr('name'),
+          type: ''
+        };
+        
+        var tabHeader = pt.v.tab_container.find('[name=dataway-ul]').children()[_active]; //激活的tab页的页头
+        zy.log('tabHeader=',tabHeader);
+        window.ee=tabHeader;
+        var tabContent =  pt.v.tab_container.find($(tabHeader).find('a').attr('href'));  //激活的tab页的页内容
+        //固定值
+        if(_active == 0){
+          _value.type = 'constants';
+          _value.value = tabContent.find('input[name=constants-value]').val();
+          // if(_value.value == ''){
+          //   zy.ui.msg('提示信息：','请输入固定值！','w');
+          //   return;
+          // }
+          pt.d.eButton.html('固定值：'+_value.value);
+        }
+        //范围值
+        else if(_active == 1){
+          _value.type = 'range';
+          _value.range = tabContent.find('input[name=range-value]').val().split(',');
+          if(_value.range == ''){
+            zy.ui.msg('提示信息：','请输入范围值！','w');
+            return;
+          }
+          pt.d.eButton.html('范围值：'+_value.range);
+        }
+        //随机数
+        else if(_active == 2){
+          _value.type = 'random';
+          _value.datatype = tabContent.find('input[name=random-radio]:checked').val();
+          _value.numrange = tabContent.find('input[name=random-value]').val();
+          if(_value.datatype == 'int' || _value.datatype == 'string'){
+            // 检查numrange
+            if(!pt.tool.chkNumber(_value.numrange)){
+              zy.ui.msg('提示信息：','长度值为大于0的数字','w');
+              return;
+            }
+          }else if(_value.datatype == 'double'){
+            // 检查numrange
+            var isError = false;
+            if(_value.numrange.indexOf(',')==-1){
+              isError = true;
+            }else{
+              var _tmpArr = _value.numrange.split(',');
+              if(_tmpArr.length!=2){
+                isError = true;
+              }else if(!pt.tool.chkNumber(_tmpArr[0]) || !pt.tool.chkNumber(_tmpArr[0])){
+                isError = true;
+              }
+            }
+            if(isError){
+              zy.ui.msg('提示信息：','请输入正确格式的长度，如6,2','w');
+              return;
+            }
+          }
+          pt.d.eButton.html('随机数：'+_value.datatype+' 长度：'+_value.numrange);
+        }
+        //数据字典
+        else if(_active == 3){
+          _value.type = 'dict';
+          _value.typecd = tabContent.find('input[name=dict-value]').val();
+          if(_value.typecd == ''){
+            zy.ui.msg('提示信息：','请输入数据字典类别编码！','w');
+            return;
+          }
+          pt.d.eButton.html('数据字典：'+_value.typecd);
+        }
+        //数据来自表中列
+        else if(_active == 4){
+          _value.type = 'column_value_array';
+          _value.table = tabContent.find('input[name=column_value_array-table]').val();
+          _value.column = tabContent.find('input[name=column_value_array-column]').val();
+          if(_value.table == '' || _value.column == ''){
+            zy.ui.msg('提示信息：','请选择表和列！','w');
+            return;
+          }
+          pt.d.eButton.html('表中列：'+_value.table+'.'+_value.column);
+        }
+        //API方法
+        else if(_active == 5){
+          _value.type = 'api_func';
+          _value.value = tabContent.find('[name=api_func-value]').val();
+          if(_value.value == null || !_value.value || _value.value == ''){
+            zy.ui.msg('提示信息：','请选择API方法','w');
+            return;
+          }
+          pt.d.eButton.html('API方法：'+_value.value);
+        }
+        //自增
+        else if(_active == 6){
+          _value.type = 'increase';
+          _value.datatype = 'n';
+          _value.base = tabContent.find('input[name=increase-value]').val();
+          if(_value.base == ''){
+            zy.ui.msg('提示信息：','请输入自增基础值！','w');
+            return;
+          }
+          pt.d.eButton.html('自增：'+_value.base);
+        }
+        pt.d.eButton.next().val(JSON.stringify(_value));
+        
+        pt.v.selModal.modal('hide');
+      });
+    },
+    // 表select2
+    // 参数：表select2所在的容器
+    tables: function(tbl_and_columns_div){
+      tbl_and_columns_div.find('[name=table-select2]').change(function(){
+        var $this = $(this);
+        var _val = $this.val();
+        if(_val == ""){
+          $this.closest('div[name=table-and-columns]').find('table').html('');
+        }else{
+          zy.extend.get({
+            app:'c879dcc94d204d96a98a34e0b7d75676',
+            mod:'mod',
+            apinm:'getdscolumns'
+          }, function (msg) {
+            thiz.DataTable($this.closest('div[name=table-and-columns]').find('table'), msg.result);
+            // 为pt.d.join_column_select2赋值
+            var tmpds = $.extend(true,[],msg.result);
+            $.each(tmpds,function(i,v){
+              tmpds[i].id = tmpds[i].en;
+              tmpds[i].name = tmpds[i].cn;
+              tmpds[i].text = tmpds[i].cn+'('+tmpds[i].en+')';
+            });
+            pt.d.join_column_select2[_val] = tmpds;
+          }, {'did':pt.v.did.val(),'table_name':_val});
+        }
+        // 获取页面选择的表
+        pt.d.join_table_select2=[];
+        pt.v.container.find('[name=table-select2]').each(function(i,v){
+          pt.d.join_table_select2.push($(v).select2('data'));
+        });
+        // 表关联条件select2
+        pt.v.container.find('[name=join-table]').zySelectCustomData('', false, {width: '100%', allowClear: true}, pt.d.join_table_select2);
+      });
+    },
+    // 表折叠i
+    // 参数：表折叠i所在的容器
+    table_i: function(tbl_and_columns_div){
+      tbl_and_columns_div.find('[name=table-i]').click(function(){
+        if($(this).hasClass('fa fa-minus')){
+          $(this).removeClass();
+          $(this).addClass('fa fa-plus');
+          tbl_and_columns_div.find('div[name=table-div]').hide();
+        }else{
+          $(this).removeClass();
+          $(this).addClass('fa fa-minus');
+          tbl_and_columns_div.find('div[name=table-div]').show();
+        }
+      });
+    },
+    // 增加表按钮
+    add_tbl_button: function(){
+      pt.v.add_tbl_button.click(function(){
+        // 添加html片段
+        pt.v.container.append(pt.addDiv.clone(false,false));
+        var tbl_and_columns_div = $('div[name=table-and-columns]').last();
+        // 初始化表下拉select2
+        tbl_and_columns_div.find('[name=table-select2]').zySelectCustomData('', false, {width: '100%', allowClear: true}, pt.d.tableSelect2);
+        // 注册事件
+        pt.Event.tables(tbl_and_columns_div);
+        pt.Event.table_i(tbl_and_columns_div);
+        
+        // 显示关联条件区域
+        pt.v.container.find('[name=join-condition]').show();
+      });
+    },
+    // 添加关联条件
+    add_join: function(){
+      pt.v.container.find('[name=add-join]').click(function(){
+        var _tmp = pt.v.container.find('[name=one-join-condition]:first').clone(true,true);
+        pt.v.container.find('[name=join-condition]').append(_tmp);
+      });
+    },
+    // 关联条件：表
+    join_table: function(){
+      pt.v.container.find('[name=join-table]').on('change', function(){
+        var _val = $(this).val();
+        $(this).closest('div').next().find('[name=join-table-column]').zySelectCustomData('', false, {width: '100%', allowClear: true}, pt.d.join_column_select2[_val]);
+      });
+    },
+    // 提交按钮
+    submitBtn: function(){
+      pt.v.submitBtn.click(function(){
+        thiz.submit();
+      });
+    }
+  };
+  
+  // 初始化表格
+  pt.DataTable = function(jqObj,data){
+    var columns=[
+      {
+        title:'列中文名',
+        data:'cn'
+      },
+      {
+        title:'列英文名',
+        data:'en'
+      },
+      {
+        title:'是否主键',
+        data:'mk'
+      },
+      {
+        title:'是否必填',
+        data:'must'
+      },
+      {
+        title:'数据类型',
+        data:'datatype'
+      },
+      {
+        title:'数据长度',
+        data:'numrange'
+      },
+      {
+        title:'选择测试值',
+        render: function(data, type, row, meta){
+          var a='<div class="form-inline"><button class="btn btn-default btn-xs" onclick="tdObj.sel(this);">选择数据</button><input type="hidden" class="form-control" readonly="true" name='+row.table_name+'.'+row.en+' index="req_columns"/></div>';
+          return a;
+          // return '<button onclick="$(\'[name=sel]\').modal(\'show\')">选择数据</button>';
+          // return '<a href=\"javascript:void(0);\" rel=\"popover\" data-placement=\"left\" data-original-title=\"<i class=\'fa fa-fw fa-pencil\'></i> 选择数据方式\" data-content=\"'+''+'\" data-html=\"true\">' + '选择数据' + '</a>';
+        }
+      }
+    ];
+    //预设初始化参数
+    var options = {
+      "data": data,
+      "columns": columns
+    };
+    // 合并初始化参数选项
+    $.extend(options, zy.ui.dataTable);
+    //初始化 DataTable
+    jqObj.dataTable(options);
+  }
+  
+  // 选择数据模态
+  pt.sel=function(e){
+    pt.d.eButton = $(e);
+    pt.v.selModal.find('#dataway').tabs();
+    pt.v.selModal.find('form').clearForm();
+    pt.v.selModal.modal('show');
+  }
+  
+  // 提交
+  pt.submit = function(){
+    
+    zy.ui.mask('确认','确认是否生成此测试数据！',function(){
+      // 第一部分参数
+      var params_part1 = {
+        did: pt.v.did.val(),
+        table_num_json: [], //表，测试数据条数映射
+        table_join_json: {} //表关联条件
+      };
+      // table_num_json
+      pt.v.container.find('[name=table-and-columns]').each(function(i,v){
+        var _table = $(v).find('[name=table-select2]').val();
+        var _num = $(v).find('[name=data-number]').val();
+        if(_table == '' || _num == ''){
+          return true;
+        }
+        params_part1.table_num_json.push({'table_name':_table, 'count':_num});
+      });
+      params_part1.table_num_json = JSON.stringify(params_part1.table_num_json);
+      // table_join_json
+      pt.v.container.find('[name=one-join-condition]').each(function(i,v){
+        var jt = $(v).find('[name=join-table]');
+        var jtc = $(v).find('[name=join-table-column]');
+        var jt0 = $(jt[0]).val();
+        var jt1 = $(jt[1]).val();
+        var jtc0 = $(jtc[0]).val();
+        var jtc1 = $(jtc[1]).val();
+        if(jt0 == '' || jt1 == '' || jtc0 == '' || jtc1 == ''){
+          return true;
+        }
+        if(jt0 == jt1){
+          return true;
+        }
+        params_part1.table_join_json[jt1+'.'+jtc1] = jt0+'.'+jtc0;
+      });
+      params_part1.table_join_json = JSON.stringify(params_part1.table_join_json);
+      // 第二部分参数（列的测试数据）
+      var params_part2 = pt.v.container.find('[index=req_columns]').serializeArray();
+      zy.log('params_part2=',params_part2);
+      // 合并参数
+      $.each(params_part2,function(i,v){
+        params_part1[v.name] = v.value;
+      });
+      
+      zy.g.am.app = 'c879dcc94d204d96a98a34e0b7d75676';
+      zy.g.am.mod = 'import_data';
+      zy.net.post('api/test2',function(msg){
+        if(msg){
+          zy.ui.msg('提示信息：','生成测试数据成功！','s');
+        }
+      },params_part1);
+    });
+  };
+  
+  // 提交前check
+  pt.check = function(){
+    
+  } 
+  
+  return generateTestData;
+})();
+var tdObj = new generateTestData();
+</script>

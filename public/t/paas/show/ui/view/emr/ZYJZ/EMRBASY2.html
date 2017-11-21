@@ -1,0 +1,200 @@
+<script type="text/javascript" language="JavaScript" src="/t/paas/show/ui/comm.js"></script>
+		
+<script type="text/javascript">
+	var pageNum=1;
+	var pageSize=10;
+	  
+	var emrbasy2data;
+	var data2;	
+$(function(){
+  showDatablsy2();
+})
+
+
+	function showDatablsy2(){
+	  // *******************第二步请求数据***********************	
+	 	 
+	  if(retCheckFlg){		
+	    //你的服务名
+	   
+		var url ="emrbasy2/"; 
+
+       	//要提交表单的所有控件id	
+      	var itemsList=[];	
+    	var info= new Map();
+		//分页	
+		
+        info.put("pageNum",pageNum);
+        info.put("pageSize",pageSize);
+		info.put("pid",self.parent.pid);
+		console.log("pid:"+self.parent.pid);
+		if(self.parent.jgdm!=undefined){
+		info.put("jgdm",self.parent.jgdm);
+		info.put("zylsh",self.parent.zylsh);
+		}
+		
+        LC_AjaxGet(EMRBaseUrl+url,"form2","callbackdcl",info,itemsList);	
+	 }		
+	 
+  }
+  function callbackdcl(retData){ 
+  
+	//********************第三步处理请求后的数据***************	
+	emrbasy2data=retData;
+		$('#blsy2').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+				pagination:true,
+				pageNumber:0,
+				pageSize: 0,
+				loadMsg:"正在载入...",
+                pageList: [10,20,50,100,200],
+                singleSelect:false,
+				data:emrbasy2data.dataList,
+				columns:[[
+				   {field:'dc5001_SSID',title:'操作编码',width:60,align:'center'},
+				   {field:'dc5001_KSSJr',title:'操作日期',width:120,align:'center'},
+				   {field:'dc5001_SSMC',title:'操作名称',width:100,align:'center'},
+				   {field:'dc5001_SSYSXM',title:'操作医师(术者)',width:100,align:'center'},
+				   {field:'dc5001_SSYZXM',title:'操作医师(Ⅰ助)',width:100,align:'center'},
+				   {field:'dc5001_SSEZXM',title:'操作医师(Ⅱ助)',width:100,align:'center'},
+				   {field:'dc5001_MZFS',title:'麻醉方式',width:100,align:'center'},
+				   {field:'dc5001_QKYH',title:'切口愈合等级',width:80,align:'center'},
+				   {field:'dc5001_MZYSXM',title:'麻醉医师',width:100,align:'center'}
+				]],                  
+                onDblClickRow: function (rowIndex) {
+                  openRoleDiv(rowIndex);
+                },
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true
+		}); 
+
+	   var pager = $('#blsy2').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pageNum=pageNumber;
+		           pageSize=pageSize;
+		           showDatablsy2();
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:pageSize,pageNumber:pageNum,total:emrbasy2data.count});
+
+		};
+	
+	}
+</script>
+<!-- 病例首页2 结束 -->
+<div class="mainsW-912">
+<form  id="form2">
+	<table id="blsy2"></table>
+	<div class="easyui-panel" title="住院病案首页2" style="width:896px;">
+		<div class="padTB-10 clearfix">
+			<div class="mainsW-896">
+				<div class="itemLW-112 padT-4">术前诊断：</div>
+				<div class="itemsW-784"><input class="textLW" id="dc5001_SQMS" type="text" ></div>
+			</div>
+			<div class="mainsW-896">
+				<div class="itemLW-112 padT-4">术后诊断：</div>
+				<div class="itemsW-784"><input class="textLW" id="dc5001_SHMS" type="text" ></div>
+			</div>
+			<div class="mainsW-896">
+				<div class="itemLW-112 padT-4">特殊检查号：</div>
+				<div class="itemsW-784">
+					<div class="itemLW-112 padT-4">X线：</div>
+					<div class="itemsW-272"><input class="textLW" type="text" ></div>
+					<div class="itemLW-112 padT-4">CT：</div>
+					<div class="itemsW-272"><input class="textLW" type="text" ></div>
+					<div class="itemLW-112 padT-4">MRI：</div>
+					<div class="itemsW-272"><input class="textLW" type="text" ></div>
+					<div class="itemLW-112 padT-4">DSA：</div>
+					<div class="itemsW-272"><input class="textLW" type="text" ></div>
+				</div>
+			</div>
+			<div class="mainsW-896">
+				<div class="itemLW-240 padT-4">手术、治疗、检查、诊断为本院第一例：</div>
+				<div class="itemsW-656"><input class="textLW" id="dc7002_SSDYL" type="text" ></div>
+			</div>
+			<div class="mainsW-896">
+				<div class="itemLW-112 padT-4">随诊：</div>
+				<div class="itemsW-176"><input class="textLW" id="dc7002_SFSZ" type="text" ></div>
+				<div class="itemLW-112 padT-4">随诊期限：</div>
+				<div class="itemsW-176"><input class="textLW" id="dc7002_SZQX" type="text" ></div>
+				<div class="itemLW-112 padT-4">示教病例：</div>
+				<div class="itemsW-176"><input class="textLW" id="dc7002_SJBL" type="text" ></div>
+				<div class="itemLW-112 padT-4">血型：</div>
+				<div class="itemsW-176"><input class="textLW" type="text" ></div>
+				<div class="itemLW-112 padT-4">RH：</div>
+				<div class="itemsW-176"><input class="textLW" type="text" ></div>
+				<div class="itemLW-112 padT-4">输血反映：</div>
+				<div class="itemsW-176"><input class="textLW" id="dc7002_SXFY" type="text" ></div>
+			</div>
+			<div class="mainsW-896">
+				<div class="itemLW-112 padT-4">输血品种：</div>
+				<div class="mainsW-784">
+					<div class="itemLW-112 padT-4">红细胞：</div>
+					<div class="itemsW-48"><input class="textLW" id="dc7002_HXBSXL" type="text" ></div>
+					<div class="itemsW-32 padT-4">单位</div>
+					<div class="itemLW-112 padT-4">血小板：</div>
+					<div class="itemsW-48"><input class="textLW" id="dc7002_XXBSXL" type="text" ></div>
+					<div class="itemsW-32 padT-4">袋</div>
+					<div class="itemLW-112 padT-4">血浆：</div>
+					<div class="itemsW-48"><input class="textLW" id="dc7002_XJSXL" type="text" ></div>
+					<div class="itemsW-32 padT-4">ml</div>
+					<div class="itemLW-112 padT-4">全血：</div>
+					<div class="itemsW-48"><input class="textLW" id="dc7002_QXSXL" type="text" ></div>
+					<div class="itemsW-32 padT-4">ml</div>
+					<div class="itemLW-112 padT-4">其他：</div>
+					<div class="itemsW-672"><input class="textLW" id="dc7002_QTSXL" type="text" ></div>
+				</div>
+			</div>
+			<div class="mainsW-896">
+				<div class="itemLW-112 padT-4">住院费用总计：</div>
+				<div class="itemsW-80"><input class="textLW" type="text" ></div>
+				<div class="mainsW-704">
+					<div class="itemLW-96 padT-4">床费：</div>
+					<div class="itemsW-80"><input class="textLW" type="text" ></div>
+					<div class="itemLW-96 padT-4">护理：</div>
+					<div class="itemsW-80"><input class="textLW" type="text" ></div>
+					<div class="itemLW-96 padT-4">西药：</div>
+					<div class="itemsW-80"><input class="textLW" type="text" ></div>
+					<div class="itemLW-96 padT-4">中成药：</div>
+					<div class="itemsW-80"><input class="textLW" type="text" ></div>
+					<div class="itemLW-96 padT-4">中草药：</div>
+					<div class="itemsW-80"><input class="textLW" type="text" ></div>
+					<div class="itemLW-96 padT-4">放射：</div>
+					<div class="itemsW-80"><input class="textLW" type="text" ></div>
+					<div class="itemLW-96 padT-4">化验：</div>
+					<div class="itemsW-80"><input class="textLW" type="text" ></div>
+					<div class="itemLW-96 padT-4">输氧：</div>
+					<div class="itemsW-80"><input class="textLW" type="text" ></div>
+					<div class="itemLW-96 padT-4">输血：</div>
+					<div class="itemsW-80"><input class="textLW" type="text" ></div>
+					<div class="itemLW-96 padT-4">诊疗：</div>
+					<div class="itemsW-80"><input class="textLW" type="text" ></div>
+					<div class="itemLW-96 padT-4">麻醉费：</div>
+					<div class="itemsW-80"><input class="textLW" type="text" ></div>
+					<div class="itemLW-96 padT-4">接生：</div>
+					<div class="itemsW-80"><input class="textLW" type="text" ></div>
+					<div class="itemLW-96 padT-4">手术：</div>
+					<div class="itemsW-80"><input class="textLW" type="text" ></div>
+					<div class="itemLW-96 padT-4">其他检查：</div>
+					<div class="itemsW-80"><input class="textLW" type="text" ></div>
+					<div class="itemLW-96 padT-4">婴儿费：</div>
+					<div class="itemsW-80"><input class="textLW" type="text" ></div>
+					<div class="itemLW-96 padT-4">陪床费：</div>
+					<div class="itemsW-80"><input class="textLW" type="text" ></div>
+					<div class="itemLW-96 padT-4">其他：</div>
+					<div class="itemsW-80"><input class="textLW" type="text" ></div>
+				</div>
+			</div>
+		</div>
+		
+		
+		
+	</div>
+</form>
+</div>	

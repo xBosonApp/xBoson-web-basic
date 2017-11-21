@@ -1,0 +1,140 @@
+
+<!-- Modal -->
+<div class="modal fade" id="user_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title">个人信息（添加）</h4>
+      </div>
+      <div class="modal-body no-padding">
+        <!-- FORM Start -->
+        <form id="user_add_form" method="post" onsubmit="return false;" class="smart-form">
+          <fieldset>
+            <section>
+              <label class="label">用户ID</label>
+              <label class="input"> <i class="icon-append fa fa-user"></i>
+                <input type="text" name="userid">
+                <b class="tooltip tooltip-top-right"><i class="fa fa-user txt-color-teal"></i> 输入用户ID</b>
+              </label>
+            </section>
+            <section>
+              <label class="label">密码</label>
+              <label class="input"> <i class="icon-append fa fa-lock"></i>
+                <input type="password" name="password">
+                <b class="tooltip tooltip-top-right"><i class="fa fa-lock txt-color-teal"></i> 输入密码</b>
+              </label>
+            </section>
+            <section>
+              <label class="label">确认密码</label>
+              <label class="input"> <i class="icon-append fa fa-lock"></i>
+                <input type="password" name="cpassword">
+                <b class="tooltip tooltip-top-right"><i class="fa fa-lock txt-color-teal"></i> 输入密码</b>
+              </label>
+            </section>
+          </fieldset>
+          <footer>
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary">确定</button>
+          </footer>
+        </form>
+        <!-- FORM End -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+<!-- SCRIPTS ON PAGE EVENT -->
+<script type="text/javascript">
+// DO NOT REMOVE : GLOBAL FUNCTIONS!
+pageSetUp();
+
+$('#user_add').modal('show');
+
+(function(){
+  $('[name=password],[name=userid],[name=cpassword]').val('');
+})();
+
+$.validator.addMethod("userunion", function(value, element) {
+  if(!value)return true;
+  var flag;
+  // 设置同步
+  $.ajaxSetup({
+    async: false
+  });
+  zy.g.am.app = "ZYAPP_LOGIN";
+  zy.g.am.mod = "ZYMODULE_REG";
+  zy.net.post("user/get_havinguser", function(msg) {
+    flag = (msg.result && "1" == msg.result[0].count);
+  }, {
+    userid: value
+  });
+  // 设置异步
+  $.ajaxSetup({
+    async: true
+  });
+  return this.optional(element) || flag;
+}, "用户已存在");
+
+$("#user_add_form").validate({
+  onfocusout: function(element) {
+    $(element).valid();
+  },
+  rules: {
+    userid: {
+      minlength: 4,
+      maxlength: 16,
+      userunion: true
+    },
+    password: {
+      minlength: 6,
+      maxlength: 32
+    },
+    cpassword: {
+      equalTo: '[name=password]'
+    }
+  },
+  message: {
+    password: {
+      required: '必填项'
+    },
+    cpassword:{
+      equalTo: '两次密码不相同请重新输入'
+    }
+  },
+  // 验证成功后保存
+  submitHandler: function(form) {
+    
+    var param = $('#user_add_form').form2json();
+    param.password = $.md5(param.password);
+    delete param.cpassword;
+    var callback = function(msg) {
+      Console.open();
+      $('#user_add_form').formDisable(false);
+      if (msg) {
+        Console.log("保存成功 = " + JSON.stringify(msg));
+        if (user_view._g.param.flg == 'u') {
+          user_view.SetRow($('#user_add_form').form2json());
+        }
+        $('#user_add').modal('hide');
+        user_view.Pagination(user_view._g.crt_page); //更新当前页
+        zy.ui.msg("提示信息：", "保存成功！", "s");
+      }
+    };
+    zy.g.am.app = 'apils';
+    zy.g.am.mod = 'user';
+    zy.net.post("api/add", callback, param);
+
+    $('#user_add_form').formDisable(true);
+  },
+  // Do not change code below
+  errorPlacement: function(error, element) {
+    error.insertAfter(element.parent());
+  }
+});
+</script>

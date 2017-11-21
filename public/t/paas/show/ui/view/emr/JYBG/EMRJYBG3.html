@@ -1,0 +1,162 @@
+<script type="text/javascript" language="JavaScript" src="/t/paas/show/ui/comm.js"></script>
+		
+<script type="text/javascript">
+
+$(function () {
+   showData();
+});
+
+	function showData(){
+	   // 第一个 grode(列表) 
+		$('#ttw').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:true,
+				
+				iconCls:'icon-save', 
+				width:900, 
+				height:250, 
+				pagination:true,
+				pageNumber:0,
+				pageSize: 0,
+				loadMsg:"正在载入...",
+               // pageList: [10,20,50,100,200],
+				//data:dataInfo.dataList,
+				columns:[[
+				   {field:'dc4003_xjdh',title:'细菌代号',width:124,align:'center'},
+				   {field:'dc4003_xjmc',title:'细菌名称',width:124,align:'center'},
+				   {field:'dc4003_jljs',title:'菌落计数',width:124,align:'center'},
+				   {field:'dc4003_pyj',title:'培养基',width:124,align:'center'},
+				   {field:'dc4003_pysj',title:'培养时间',width:124,align:'center',
+				   	   formatter:function(value){
+		                   return LC_FormatYMD(value);
+		               }
+		           },
+				   {field:'dc4003_pytj',title:'培养条件',width:124,align:'center'},
+				   {field:'dc4003_fxfs',title:'发现方式',width:124,align:'center'}
+				]],                  
+                onDblClickRow: function (rowIndex) {
+                  openRoleDiv(rowIndex);
+                },
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true
+		}); 
+
+	   var pager = $('#ttw').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+				buttons:[{ 
+				   iconCls:'icon-search', 
+				   handler:function(){ 
+				       alert('search'); 
+				   } 
+				},{ 
+				   iconCls:'icon-add', 
+				   handler:function(){ 
+				       alert('add'); 
+				   } 
+				},{ 
+				   iconCls:'icon-edit', 
+				   handler:function(){ 
+				       alert('edit'); 
+				   } 
+				}], 
+			    onSelectPage:function(pageNumber,pageSize){
+		           pageNum=pageNumber;
+		           pageSize=pageSize;
+		           loading();
+		        }
+			});		
+		 
+			//$(pager).pagination({pageSize:PageSize,pageNumber:PageNumber,total:dataInfo.datalist.count});
+
+		};
+	
+	}
+ 
+ 
+ 	function openRoleDiv(rowIndex){
+		
+
+	}
+</script>
+
+<div class="mainsW-992">
+	<div class="mainW" >
+		 <div class="itemsW-992" >
+		  <div class="itemCW-992" ><lable id="dc4001_jgdm" style="font-size:25px"></lable></div>
+		  <div class="itemCW-992" >细菌报告单</div>
+		 </div>
+		 <div class="itemsW-992" >
+		  <div class="itemLW-96" >检验类型：</div>
+		  <div class="itemRW-80" ><input type="text" id="dc4001_lbbm"/></div>
+		 </div>
+		 <div class="itemsW-256" >
+		  <div class="itemLW-96">姓名：</div>
+		  <div class="itemLW-80"><input type="text" id="name"/></div>
+		 </div>
+		 <div class="itemsW-256 style="background-color: red">
+		  <div class="itemLW-96">性别：</div>
+		  <div class="itemRW-80"><input type="text" id="sex"/></div>
+		 </div>
+		  <div class="itemsW-256 style="background-color: red">
+		  <div class="itemLW-96">年龄：</div>
+		  <!--年龄需要通过id="birtday"来计算 --> 
+		  <div class="itemRW-80"><input type="text" id="birthday"/></div>
+		 </div>
+		 <div class="itemsW-256" >
+		  <div class="itemLW-96">开单医生：</div>
+		  <div class="itemRW-80"><input type="text" id="dc4001_shghxm"/></div>
+		 </div>
+		 <div class="itemsW-256" >
+		  <div class="itemLW-96">检验医生：</div>
+		  <div class="itemRW-80"><input type="text" id="dc4001_jcghxm"/></div>
+		 </div>
+		 <div class="itemsW-256" >
+		  <div class="itemLW-96">科室：</div>
+		  <div class="itemRW-80"><input type="text" id="dc4001_sqksmc"/></div>
+		 </div>
+		 <div class="itemsW-256" >
+		  <div class="itemLW-96">病区：</div>
+		  <div class="itemRW-80"><input type="text" id="dc4001_jcghxm"/></div>
+		 </div>
+		 <div class="itemsW-256" >
+		  <div class="itemLW-96">床号：</div>
+		  <div class="itemRW-80"><input type="text" id="dc4001_sqbqmc"/></div>
+		 </div>
+		 <div class="itemsW-256" >
+		  <div class="itemLW-96">开单日期：</div>
+		  <div class="itemRW-80"><input type="text" id="dc4001_sqrq"/></div>
+		 </div>
+		 <div class="itemsW-256" >
+		  <div class="itemLW-96">检验日期：</div>
+		  <div class="itemRW-80"><input type="text" id="dc4001_jyrq"/></div>
+		 </div>
+		 <div class="itemsW-256" >
+		  <div class="itemLW-96">检验名称：</div>
+		  <div class="itemRW-80"><input type="text" id="dc4001_bgdmc"/></div>
+		 </div>
+		 <div class="itemsW-256" >
+		  <div class="itemLW-96">标本固定液：</div>
+		  <div class="itemRW-80"><input type="text" id="dc4001_bbgdy"/></div>
+		 </div>
+	 
+	 </div>
+	<div class="mainW-992" >
+		<table id="ttw" class="easyui-datagrid"  style="width:992px;height:250px" data-options="rownumbers:true,singleSelect:true,pagination:true"></table>
+	</div>
+	<div class="mainW-992" >
+		 <div class="itemsW-256" >
+		  <div class="itemLW-96">报告人：</div>
+		  <div class="itemLW-80"><input type="text" id="dc4001_bgghxm"/></div>
+		 </div>
+		 <div class="itemsW-256" >
+		 </div>
+		 <div class="itemsW-256" >
+		  <div class="itemLW-96">报告日期：</div>
+		  <div class="itemLW-80"><input type="text" id="dc4001_bgrq"/></div>
+		 </div>
+	</div>
+</div>
+	

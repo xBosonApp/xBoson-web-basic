@@ -1,0 +1,705 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>哈尔滨市道里区卫生综合管理</title>
+<script type="text/javascript" src="../comm.js"></script>
+<script type="text/javascript" src="../comm/commonJs/LC_bi.js"></script>
+<script type="text/javascript" src="../comm/commonJs/bootstrap/gray.js"></script>
+<!--=====年月日插件=====-->
+<link href="../comm/commonCss/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+<script type="text/javascript" src="../comm/commonJs/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<style>
+.lc-inquire{ display:none;}
+.reload{ display:none;}
+#lc-rowtable{ overflow:hidden;}
+.row-fluid .span1{ margin: 0; text-align: right; line-height: 30px;}
+.row-fluid .span2{ margin: 0 0 0 10px;}
+.submenu{height:300px;overflow: auto; overflow-x:hidden;}
+.submenu2{height:200px;overflow: auto; overflow-x:hidden;}
+.container-fluid{padding: 0 20px 8px 20px;}
+ul.page-sidebar-menu > li.open > ul.sub-menu{ display: block;}
+.close{ display: none;}
+#main{ position: relative;}
+.loadshow{position: absolute; top: 0; background:rgba(0,0,0,0.5) url(../comm/commonImg/fancybox_loading.gif) center center no-repeat;}
+ul.page-sidebar-menu > li > ul.sub-menu li > ul.sub-menu > li > a.z-active{background:#9dd5fb;color:#555;}
+</style>
+<script>
+$(function(){
+//分割线---------------------没有二级的单页--------------------------------------------------
+$(".bi_show").click(function(){
+	$("#main").html("");
+//	$("#main").show().siblings("div").hide();
+//	$("#main").siblings("div").find(".gghidehtml").html("");
+	var ehrrel=$(this).attr("rel");
+	$("#main").load(ehrrel,function(){
+		setTimeout(function(){
+			 $('.selectpicker').selectpicker({
+				'selectedText': 'cat'
+			});
+            
+		}, 300);
+		$(".toolsmore").hide();
+        $(".lc-inquire").show();
+        $(".reload").show(); 
+	//$("#main").append("<div class='loadshow'></div>");
+	//$(".loadshow").height($("#main").height()+8);
+	//$(".loadshow").width($("#main").width());
+	});
+
+});
+$(".page-sidebar-menu").height(document.documentElement.clientHeight-80)
+});
+//登陆
+$(function () {
+   showDatalogin();
+});
+function showDatalogin(){
+    var url ="dimUser";
+    var itemsList = [];
+    var info = new Map();
+    info.put("sqlid","loginCheck");
+    sys_AjaxGet(BIUrl+url,"","logincallbacka",info,itemsList);
+    }
+function logincallbacka(reData){
+    if(reData.ret!=="105"){
+        $('#trigger').scojs_modal();
+    }else{
+        $("#ylfwjc").click();
+    	$("#mz").click();
+    	$("#firstshow").click();
+    }
+}
+//---------------------------------------下拉菜单-----
+//重点疾病
+function  getselectdimcv01(param){
+   sys_BI_getDimcvList("mdmSelectdimcvzyzdjb","dimCVPriDis");
+}
+function mdmSelectdimcvzyzdjb(data){
+	//alert("------------111");
+  var info = new Map();
+  info.put("key",["typecode"]);
+  info.put("value",["typename"]);
+  sys_GetSelect("org_zyzdjb","zyzdjb",info,sys_BI_getDimcvListData("dimCVPriDis"));
+  
+}
+//重点手术
+function  getselectdimcv02(){
+   sys_BI_getDimcvList("mdmSelectdimcvzyzdss","dimCVOper");
+}
+function mdmSelectdimcvzyzdss(data){
+	//alert("------------222");
+  var info = new Map();
+  info.put("key",["typecode"]);
+  info.put("value",["typename"]);
+  sys_GetSelect("org_zyzdss","zyzdss",info,sys_BI_getDimcvListData("dimCVOper"));
+}
+
+//右侧的高度随着浏览器高度变化而变化
+//window.onload=function (){ 
+//function auto_height() 
+//{
+//document.getElementById("page-content").style.height=document.documentElement.clientHeight-42+"px"; 
+//} 
+//auto_height(); 
+//onresize=auto_height; 
+//} 
+
+//获得当前时间,刻度为一千分一秒
+var initializationTime=(new Date()).getTime();
+function showLeftTime()
+{
+var now=new Date();
+var year=now.getFullYear();
+var month=now.getMonth()+1;
+var day=now.getDate();
+var hours=now.getHours();
+var minutes=now.getMinutes();
+var seconds=now.getSeconds();
+document.all.show.innerHTML=""+year+"年"+month+"月"+day+"日 "+hours+":"+minutes+":"+seconds+"";
+//一秒刷新一次显示时间
+var timeID=setTimeout(showLeftTime,1000);
+}
+//-->
+
+
+
+</script>
+</head>
+
+<body class="page-header-fixed" onload="showLeftTime()">
+<!-- =====header===== -->
+<div class="header navbar navbar-inverse navbar-fixed-top">
+	<div class="navbar-inner">
+    	<div class="container-fluid">
+            <a href="index.html" class="brand" style="color:#fff; font-family:微软雅黑; font-size:16px; margin:0;">哈尔滨市道里区卫生综合管理</a>
+            <a href="javascript:;" class="btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
+                <img src="../comm/commonImg/menu-toggler.png">
+            </a> 
+            <ul id="inline" class="nav pull-right">
+                <li id="default"></li>
+                <li id="blue"></li>
+                <!-- <li id="brown"></li>
+                <li id="purple"></li>
+                <li id="grey"></li> -->
+            </ul>
+        </div>
+    </div>
+    <div class="header-time">
+        <div class="header-time-main" id="show"></div>
+        <a href="http://222.171.79.100:8080/" target="_blank" style="float:right; color:#fff; margin:5px 10px 0 0;">道里区区域管理平台</a>
+    </div>
+</div>
+<div class="page-container row-fluid">
+	<div class="page-sidebar nav-collapse collapse">
+    	<ul class="page-sidebar-menu">
+            <li>
+                <div id="lchide" class="sidebar-toggler hidden-phone"></div>
+            </li>
+            <li class="open">
+                <a href="javascript:;"><i class="icon-home" style="color:#ffffff;"></i><span class="title">医疗服务</span></a>
+                <ul class="sub-menu">
+                    <li>
+                        <a id="ylfwjc" href="javascript:;"><i class="icon-th"></i> 基层<span class="arrow"></span></a>
+                        <ul class="sub-menu submenu">
+                            <li>
+                                <a id="mz" href="javascript:;"><i class="icon-user"></i> 门诊<span class="arrow"></span></a>
+                                <ul class="sub-menu">
+                                    <li><a id="firstshow" class="bi_show" href="javascript:;" rel="mz_mrmzl.html">每日门诊量</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="mz_mzgh.html">门诊挂号</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="zd_zd.html">诊断</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="mz_cf.html">处方</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="mzjc_yp.html">药品</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="mzjc_jc.html">检查</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="mzjc_jy.html">检验</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="mz_mzylfy.html">门诊医疗费用</a></li> 
+                                </ul>
+                            </li>
+                            <li>
+                                <a id="zy" href="javascript:;"><i class="icon-user"></i> 住院<span class="arrow"></span></a>
+                                <ul class="sub-menu">
+                                    <li><a class="bi_show" href="javascript:;" rel="zy_mrzy.html">每日住院量</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="zyjc_yp.html">药品</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="zyjc_jc.html">检查</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="zyjc_jy.html">检验</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="zyjc_zyylfy.html">住院医疗费用</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a class="bi_show bgc" href="javascript:;" rel="ylfw_mzhzykfylsrje.html">
+                                    <i class="icon-user"></i> <span class="title">门诊和住院康复医疗收入金额（元）</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:;"><i class="icon-th"></i> 医院<span class="arrow"></span></a>
+                        <ul class="sub-menu submenu">
+                            <li>
+                                <a id="mz" href="javascript:;;;" class="bgc">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">门诊</span>
+                                </a>
+                                <ul class="sub-menu sublia">
+                                    <li><a href="javascript:;;;">每日门诊量</a></li>
+                                    <li><a href="javascript:;;;">门诊挂号</a></li>
+                                    <li><a href="javascript:;;;">诊断</a></li>
+                                    <li><a href="javascript:;;;">处方</a></li>
+                                    <li><a href="javascript:;;;">处治</a></li>
+                                    <li><a href="javascript:;;;">药品</a></li>
+                                    <li><a href="javascript:;;;">检查</a></li>
+                                    <li><a href="javascript:;;;">检验</a></li>
+                                    <li><a href="javascript:;;;">门诊医疗费用</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a class="bgc" href="javascript:;;;">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">住院</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bgc" href="javascript:;;;">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">门诊和住院康复医疗收入金额（元）</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            
+                            <li>
+                                <a class="bgc" href="javascript:;;;">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">手术</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bgc" href="javascript:;;;">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">服务质量</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bgc" href="javascript:;;;">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">医院运行基本监测</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bgc" href="javascript:;;;">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">重点手术麻醉与疾病</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bgc" href="javascript:;;;">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">合理用药</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a id="ylsjyyfx" href="javascript:;"><i class="icon-th"></i> 数据应用分析<span class="arrow"></span></a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a class="bgc" href="javascript:;;;">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">数据分析应用模块</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;"><i class="icon-home" style="color:#ffffff;"></i><span class="title">公共卫生</span></a>
+                <ul class="sub-menu">
+                    <li>
+                        <a href="javascript:;"><i class="icon-th"></i> 绩效考核<span class="arrow"></span></a>
+                        <ul class="sub-menu submenu">
+                            <!-- <li>
+                                <a class="bi_show" href="" rel="jxkh_jxhz.html">
+                                    <i class="icon-th"></i> 
+                                    <span class="title">绩效汇总</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li> -->
+                            <li>
+                                <a class="bi_show" href="" rel="jxkh_jxhz_d.html">
+                                    <i class="icon-th"></i> 
+                                    <span class="title">绩效汇总</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="" rel="jxkh_jkda.html">
+                                    <i class="icon-th"></i> 
+                                    <span class="title">健康档案</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="" rel="jxkh_jkjy.html">
+                                    <i class="icon-th"></i> 
+                                    <span class="title">健康教育</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="" rel="jxkh_etbj.html">
+                                    <i class="icon-th"></i> 
+                                    <span class="title">儿童保健</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="" rel="jxkh_fnbj.html">
+                                    <i class="icon-th"></i> 
+                                    <span class="title">妇女保健</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="" rel="jxkh_jhsyjsfwzxzd.html">
+                                    <i class="icon-th"></i> 
+                                    <span class="title">计划生育技术服务咨询指导</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="" rel="jxkh_jktj.html">
+                                    <i class="icon-th"></i> 
+                                    <span class="title">健康体检</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="" rel="jxkh_mxbhzjkgl.html">
+                                    <i class="icon-th"></i> 
+                                    <span class="title">慢性病患者健康管理</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="" rel="jxkh_cjrgl.html">
+                                    <i class="icon-th"></i> 
+                                    <span class="title">残疾人管理</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="" rel="jxkh_zxjsbhzjkgl.html">
+                                    <i class="icon-th"></i> 
+                                    <span class="title">重性精神疾病患者健康管理</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="" rel="jxkh_kqwsfugl.html">
+                                    <i class="icon-th"></i> 
+                                    <span class="title">口腔卫生服务管理</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="" rel="jxkh_zyyjkglfw.html">
+                                    <i class="icon-th"></i> 
+                                    <span class="title">中医药健康管理服务</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="" rel="jxkh_syjc.html">
+                                    <i class="icon-th"></i> 
+                                    <span class="title">死因监测</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="" rel="jxkh_jhbgl.html">
+                                    <i class="icon-th"></i> 
+                                    <span class="title">结核病管理</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="" rel="jxkh_jhbrsf.html">
+                                    <i class="icon-th"></i> 
+                                    <span class="title">结核病人随访</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="" rel="jxkh_tjysjhbr.html">
+                                    <i class="icon-th"></i> 
+                                    <span class="title">推荐疑似结核病人</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="" rel="jxkh_sszfypg.html">
+                                    <i class="icon-th"></i> 
+                                    <span class="title">4-6岁生长发育评估</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="" rel="jxkh_setkqbj.html">
+                                    <i class="icon-th"></i> 
+                                    <span class="title">0-6岁儿童口腔保健</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:;"><i class="icon-th"></i> 业务统计<span class="arrow"></span></a>
+                        <ul class="sub-menu submenu">
+                            <li>
+                                <a class="bi_show" href="" rel="ggws_grdaglfx.html">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">个人档案管理分析</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="" rel="ggws_grdajdfx.html">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">个人档案建档分析</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a  class="bi_show" href="" rel="ggws_jljmjkda.html">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">建立居民健康档案</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="" rel="ggws_jtdagl.html">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">家庭档案管理</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="" rel="ggws_setjkgl.html">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">0~6岁儿童健康管理</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="" rel="ggws_ycfjkgl.html">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">孕产妇健康管理</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="" rel="ggws_sjslnrjkgl.html">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">65岁及以上老年人健康管理</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="" rel="ggws_gxydajd.html">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">高血压档案建档</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="" rel="ggws_gxyglda.html">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">高血压管理档案</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="" rel="ggws_gxysf.html">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">高血压随访</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="" rel="ggws_sjysgxyhzgl.html">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">35岁及以上高血压患者管理</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <!-- <li>
+                                <a class="bi_show" href="" rel="ggws_grgzltj.html">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">个人工作量统计</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li> -->
+                            <!-- <li>
+                                <a class="bi_show" href="" rel="ggws_lnrdagl.html">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">老年人档案管理</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li> -->
+                            <li>
+                                <a class="bi_show" href="" rel="ggws_tnbdajd.html">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">糖尿病档案建档</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="" rel="ggws_tnbglda.html">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">糖尿病管理档案</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="" rel="ggws_tnbsf.html">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">糖尿病随访</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="" rel="ggws_sjyslxtnbhzgl.html">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">35岁及以上2型糖尿病患者管理</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="" rel="ggws_zxjsbglrs.html">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">重性精神病管理人数</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+
+                           <!--  <li>
+                                <a class="bi_show" href="" rel="ggws_wcbjdajd.html">
+                                    <i class="icon-th"></i> 
+                                    <span class="title">围产保健档案建档</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="" rel="ggws_wcbjglda.html">
+                                    <i class="icon-th"></i> 
+                                    <span class="title">围产保健管理档案</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="" rel="ggws_wcbjsf.html">
+                                    <i class="icon-th"></i> 
+                                    <span class="title">围产保健随访</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li> -->  
+                            <li>
+                                <a class="bi_show" href="" rel="ggws_jkjy.html">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">健康教育</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:;"><i class="icon-th"></i> 数据应用分析<span class="arrow"></span></a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a id="zy" href="javascript:;"><i class="icon-user"></i> 人口基本情况分析<span class="arrow"></span></a>
+                                <ul class="sub-menu submenu2">
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_rkbl.html">人口比率</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_sqrkbl.html">社区人口比例</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_jwhrkbl.html">居委会人口比例</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_sqjkdanvbl.html">社区中性别比例情况</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_jwhjkdanvbl.html">居委会中性别比例情况</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_sqdabl.html">社区中心各项档案比率</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_jwhdabl.html">居委会各项档案比率</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_sqswrksjfx01.html">死亡人口(性别占比)</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_sqswrksjfx02.html">死亡人口(年度对比)</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_sqswrksjfx03.html">死亡人口(死亡人口年龄)</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_sqswrksjfx04.html">死亡人口(死亡人口占比)</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a id="zy" href="javascript:;"><i class="icon-user"></i> 慢病数据分析<span class="arrow"></span></a>
+                                <ul class="sub-menu submenu2">
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_gxy01.html">高血压(人群比率)</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_gxy34.html">高血压(社区高血压比率)</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_gxy02.html">高血压(增长趋势对比)</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_gxy03.html">高血压(患者性别分析)</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_gxy37.html">高血压(年龄比率)</a></li>
+
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_tnb39.html">糖尿病(人群比率)</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_tnb40.html">糖尿病(社区糖尿病比率)</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_tnb41.html">糖尿病(增长趋势对比)</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_tnb42.html">糖尿病(患者性别分析)</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_tnb43.html">糖尿病(年龄比率)</a></li>
+
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_jsb45.html">精神病(年龄比率)</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_jsb47.html">精神病(社区糖尿病比率)</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_jsb48.html">精神病(增长趋势对比)</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_jsb49.html">精神病(患者性别分析)</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_jsb50.html">精神病(年龄比率)</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a id="zy" href="javascript:;"><i class="icon-user"></i> 患病因素分析遗传病史<span class="arrow"></span></a>
+                                <ul class="sub-menu">
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_hbys54.html">吸烟饮酒健康情况</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_hbys55.html">高血压患病因素分析</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_hbys57.html">吸烟、饮酒情况增减趋势</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_hbys58.html">遗传病史数据分析</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_hbys59.html">家族疾病史性别情况分析</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_hbys60.html">家族病史历年情况分析</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a id="zy" href="javascript:;"><i class="icon-user"></i> 残疾人数据分析<span class="arrow"></span></a>
+                                <ul class="sub-menu">
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_cjr62.html">残疾人(人群比率)</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_cjr63.html">残疾人(社区残疾人比率)</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_cjr64.html">残疾人(增长趋势对比)</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_cjr65.html">残疾人(患者性别分析)</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_cjr66.html">残疾人(年龄比率)</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><a href="javascript:;" class="active"><i class="icon-home" style="color:#ffffff;"></i> <span class="title">行政管理</span></a>
+            <ul class="sub-menu submenu">
+                    <li>
+                        <a href="javascript:;"><i class="icon-th"></i> 人事管理<span class="arrow"></span></a>
+                        <ul class="sub-menu sublia">
+                            <li><a class="bi_show" href="#" rel="yzgl_zb.html">在编</a></li>
+                            <li><a class="bi_show" href="#" rel="yzgl_wp.html">外聘</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a class="bi_show" href="" rel="yzgl_jgglxx.html">
+                            <i class="icon-th"></i> 
+                            <span class="title">机构基础信息</span>
+                        </a>
+                        <ul class="sub-menu" style="height:0px;"></ul>
+                    </li>
+                    <li>
+                        <a href="javascript:;"><i class="icon-th"></i> 数据应用分析<span class="arrow"></span></a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a class="bgc" href="javascript:;;;">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">数据分析应用模块</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+            </ul>
+            </li>
+
+            <!-- <li><a href="javascript:;" class="active"><i class="icon-home" style="color:#ffffff;"></i> <span class="title">农合医疗</span></a></li> -->
+      </ul>
+    </div>
+</div>    
+<div id="page-content" class="page-content">
+	<div class="container-fluid">
+		<a id="trigger" data-trigger="modal" href="login.html" data-title="登陆" class="btn" style="display:none;" ></a>
+		<div id="main"></div>
+	</div>
+</div>
+<button id="btn-modal" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" style="display:none;"></button>
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body"><p>没有相应数据！</p></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+    jQuery(document).ready(function() {       
+       App.init();
+    });
+</script>
+</body>
+</html>

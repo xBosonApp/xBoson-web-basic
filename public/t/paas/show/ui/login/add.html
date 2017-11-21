@@ -1,0 +1,97 @@
+﻿<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="../../easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../easyui/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="../../LC.css">
+<script type="text/javascript" src="../../easyui/jquery-1.8.0.min.js"></script>
+<script type="text/javascript" src="../../easyui/jquery.easyui.min.js"></script>
+<script src="../../reporting/highcharts.js"></script>
+<script src="../../reporting/modules/exporting.js"></script>
+<script type="text/javascript" language="JavaScript"   src="../../commonJs/LC_Map.js"></script>
+<script type="text/javascript" language="JavaScript"   src="../../commonJs/LC_List.js"></script>
+<script type="text/javascript" language="JavaScript"  src="../../commonJs/LC_GetJsonData.js"></script>
+<script type="text/javascript" language="JavaScript"  src="../../commonJs/LC_Params.js"></script>
+<script type="text/javascript" language="JavaScript"  src="../../commonJs/LC_CheckData.js"></script>
+<script type="text/javascript" language="JavaScript"  src="../../commonJs/LC_AjaxSend.js"></script>
+<script type="text/javascript" src="../../commonTool/My97DatePicker/WdatePicker.js"></script>  	
+<script type="text/javascript" src="../../easyui/locale/easyui-lang-zh_CN.js"></script>
+<script>
+function regist(){
+	var url="regist/";
+		var itemsList = ["orgid","staffid","password"];
+		 var info = new Map();
+ 	 LC_AjaxGet(TRSBaseUrl+url,"regist","registcallback",info,itemsList);
+	
+}
+function registcallback(reData){
+	if(reData.flag===1){
+		alert("注册成功");
+		
+	}else{
+		alert("注册失败");
+	}
+}
+
+function orgcallback(){
+	    var url="mdm/officeList/";
+	    var itemsList = ["orgid"];
+		var infoa = new Map();
+		infoa.put("stringsplit",codeList);
+		LC_AjaxGet(MDMBaseUrl+url,"regist","orgSelect",infoa,itemsList);
+ }
+function orgSelect(retData){
+
+   var info = new Map();
+  info.put("key",["orgId"]);
+  info.put("value",["orgNm"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("regist","orgid",info,retData.dataList);
+}
+function inquire(){
+	$(".addorgan").show();
+}
+
+
+</script>
+<div class="itemsW-304">
+    <div class="easyui-panel" title="添加人员">
+    <form id="regist">
+    	<div class="padTB-10 clearfix">
+            <div class="itemLW-272">
+                <div class="itemLW-80 padT-4">机构：</div>
+                <div class="itemsW-192">
+                    <select class="textLW" name="dept" >  
+                        <option value="1">全部</option>
+                        <option value="2">注销</option>
+                        <option value="3">迁出</option>
+                    </select>
+                </div>
+            </div>
+            <div class="itemLW-272">
+                <div class="itemLW-80 padT-4">人员：</div>
+                <div class="itemsW-192">
+                    <select class="textLW" name="dept" >  
+                        <option value="1">全部</option>
+                        <option value="2">注销</option>
+                        <option value="3">迁出</option>
+                    </select>
+                </div>
+            </div>
+			<div class="itemLW-80 padT-4">机构种类：</div>
+                <div class="itemsW-192">
+                    <select class="textLW" name="dept" >  
+                        <option value="1">医院</option>
+                        <option value="2">社区</option>
+                        
+                    </select>
+                </div>
+            </div>
+            <div class="itemLW-272">
+                <div class="itemLW-80 padT-4">密码：</div>
+                <div class="itemsW-192"><input class="textLW" type="text" /></div>
+            </div>
+            <div class="itemLW-272"><a class="easyui-linkbutton">添加</a></div>
+        </div>
+        </form>
+    </div>
+</div>

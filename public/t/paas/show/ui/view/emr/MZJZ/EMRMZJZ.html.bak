@@ -1,0 +1,67 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script type="text/javascript" language="JavaScript" src="/comm.js"></script>
+<script type="text/javascript">
+		
+		$(function () {
+
+ //       LC_SetMapData("fm",self.parent.dataMap);
+		$("#dc1001_empi").val(UrlParm.parm("dc1001_empi"));
+		$("#dc1001_jgdm").val(UrlParm.parm("dc1001_jgdm"));
+		$("#dc1001_jzlsh").val(UrlParm.parm("dc1001_jzlsh"));
+		self.parent.typeCode="-1";
+		self.parent.pid=UrlParm.parm("dc1001_empi");
+		self.parent.jgdm=UrlParm.parm("dc1001_jgdm");
+		self.parent.jzlsh=UrlParm.parm("dc1001_jzlsh");
+//	alert(UrlParm.parm("dc1001_empi")+"----------11111");
+//	alert(UrlParm.parm("dc1001_jgdm")+"----------22222");
+//	alert(UrlParm.parm("dc1001_jzlsh")+"----------33333");
+
+//$(".tabs-wrap li:last").click(function(){
+//	alert("------------------");
+//	window.frames["emrssjl"].showDatacssjl()
+//	})
+
+
+//解决iframe 不刷新问题
+$('#tt').tabs({  
+    onSelect:function(title){  
+//	alert(title);
+	if(title=="检查报告"){
+		window.frames["emrjcbg"].showDatajcbg()
+		};
+	if(title=="检验报告"){
+		window.frames["emrjybg"].showDatajybg()
+		};
+	if(title=="手术记录"){
+		window.frames["emrssjl"].showDatacssjl()
+		};
+    }  
+});
+
+});
+</script>
+    <form id="fm">
+    <input type="hidden" id="dc1001_empi">
+    <input type="hidden" id="dc1001_jgdm">
+    <input type="hidden" id="dc1001_jzlsh">
+<div class="mainsW-912">
+	<div id="tt" class="easyui-tabs" style="height:550px;">
+		<div title="门诊就诊"  data-options="href:'EMRMZJZ_MZJZ.html'" style="padding:7px;">
+		</div>
+         <div title="用药情况" data-options="href:'EMRMZJZ_YYQK.html'" style="padding:7px;">
+        </div>
+        <div title="处置信息" data-options="href:'EMRMZJZ_CZXX.html'" style="padding:7px;">
+		</div>
+		<div title="检查报告" style="overflow:hidden">
+		    <iframe name="emrjcbg" frameborder="0" scrolling="yes" src="../JCBG/EMRJCBG.html" style="width: 100%; height: 100%;"></iframe>
+		</div>
+        <div title="检验报告" style="overflow:hidden">
+			<iframe name="emrjybg" frameborder="0" scrolling="yes" src="../JYBG/EMRJYBG.html" style="width: 100%; height: 100%;"></iframe>
+		</div>
+	    <div title="手术记录" style="overflow:hidden">
+			<iframe name="emrssjl" frameborder="0" scrolling="yes" src="../SSJL/EMRSSJL.html" style="width: 100%; height: 100%;"></iframe>
+		</div>
+        
+	</div>
+</div>
+</form>

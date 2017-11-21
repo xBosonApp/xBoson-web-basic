@@ -1,0 +1,95 @@
+<div class="modal fade" id="tab4_where_conditions" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+        </button>
+        <h4 class="modal-title"><span id="tab4_where_conditions_title">where条件</span></h4>
+      </div>
+      <div class="modal-body no-padding">
+        <!-- FORM Start -->
+        <form id="tab4_where_conditions_form" method="post" onsubmit="return false;" class="smart-form">
+          <fieldset>
+            <div class="row">
+              <section class="col col-3">
+                <label class="lable">列名</label>
+                <lable class="input">
+                  <input type="hidden" name="column" data-type="select2" placeholder="列名" />
+                </lable>
+              </section>
+              <section class="col col-3">
+                <label class="lable">条件</label>
+                <lable class="input">
+                  <input type="hidden" name="condition" data-type="select2" placeholder="条件" />
+                </lable>
+              </section>
+              <section class="col col-2">
+                <label class="lable">值</label>
+                <lable class="input">
+                  <input type="text" name="value" placeholder="值" />
+                </lable>
+              </section>
+              <section class="col col-2" style="display:none;">
+                <label class="lable">值2</label>
+                <lable class="input">
+                  <input type="text" name="value2" placeholder="值2" />
+                </lable>
+              </section>
+              <section class="col col-1" style="margin-left: -15px">
+               <label class="lable"></label>
+                <button name="and" class="btn btn-default btn-sm btn-info btn-primary">and</button>
+              </section>
+               <section class="col col-1">
+               <label class="lable"></label>
+                 <button name="or" class="btn btn-default btn-sm btn-info btn-primary" type="button">or</button>
+              </section>
+            </div>
+
+            <section>
+              <label class="label">文本</label>
+              <label class="textarea">
+                <textarea rows="5" name="wherearea" placeholder="文本区"></textarea>
+              </label>
+            </section>
+
+            <div class="row">
+              <section class="col col-5">
+                <label class="lable">列名</label>
+                <lable class="input">
+                  <input type="hidden" name="column1" data-type="select2" placeholder="列名" />
+                </lable>
+              </section>
+              <section class="col col-5">
+                <label class="lable">排序</label>
+                <lable class="input">
+                  <input type="hidden" name="collation" data-type="select2" placeholder="排序" />
+                </lable>
+              </section>
+
+              <section class="col col-1">
+                <label class="lable"></label>
+                <button name="on" class="btn btn-default btn-sm btn-info btn-primary" type="button">order by</button>
+              </section>
+
+            </div>
+            <section>
+              <label class="label">文本</label>
+              <label class="textarea">
+                <textarea rows="3" name="onarea" placeholder="文本区"></textarea>
+              </label>
+            </section>
+
+          </fieldset>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button name="btn_ok" type="submit" class="btn btn-primary">确定</button>
+        <button name="btn_cancel" type="submit" class="btn btn-default">取消</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<!--<script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>-->

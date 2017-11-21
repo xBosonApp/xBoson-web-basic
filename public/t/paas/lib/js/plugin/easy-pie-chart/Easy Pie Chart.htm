@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<!-- saved from url=(0073)http://192.241.236.31/test4.smartadmin/js/plugin/easy-pie-chart/examples/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <title>Easy Pie Chart</title>
+        <script type="text/javascript" src="./Easy Pie Chart_files/jquery.min.js"></script>
+        <script type="text/javascript" src="./Easy Pie Chart_files/html5.js"></script>
+        <script type="text/javascript" src="./Easy Pie Chart_files/excanvas.js"></script>
+        <script type="text/javascript" src="./Easy Pie Chart_files/jquery.easy-pie-chart.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="./Easy Pie Chart_files/style.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="./Easy Pie Chart_files/jquery.easy-pie-chart.css" media="screen">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <script type="text/javascript">
+            var initPieChart = function() {
+                $('.percentage').easyPieChart({
+                    animate: 1000,
+                    onStep: function(value) {
+                        this.$el.find('span').text(~~value);
+                    }
+                });
+                $('.percentage-light').easyPieChart({
+                    barColor: function(percent) {
+                        percent /= 100;
+                        return "rgb(" + Math.round(255 * (1-percent)) + ", " + Math.round(255 * percent) + ", 0)";
+                    },
+                    trackColor: '#666',
+                    scaleColor: false,
+                    lineCap: 'butt',
+                    rotate: -90,
+                    lineWidth: 15,
+                    animate: 1000,
+                    onStep: function(value) {
+                        this.$el.find('span').text(~~value);
+                    }
+                });
+
+                $('.updateEasyPieChart').on('click', function(e) {
+                  e.preventDefault();
+                  $('.percentage, .percentage-light').each(function() {
+                    $(this).data('easyPieChart').update(Math.round(100*Math.random()));
+                  });
+                });
+            };
+        </script>
+    <style type="text/css">#yddContainer{display:block;font-family:Microsoft YaHei;position:relative;width:100%;height:100%;top:-4px;left:-4px;font-size:12px;border:1px solid}#yddTop{display:block;height:22px;overflow:hidden;}#yddTopBorderlr{display:block;position:static;height:17px;padding:2px 28px;line-height:17px;font-size:12px;color:#5079bb;font-weight:bold;border-style:none solid;border-width:1px}#yddTopBorderlr .ydd-sp{position:absolute;top:2px;height:0;overflow:hidden}.ydd-icon{left:5px;width:17px;padding:0px 0px 0px 0px;padding-top:17px;background-position:-16px -44px}.ydd-close{right:5px;width:16px;padding-top:16px;background-position:left -44px}.ydd-close{*right:0px;width:16px;*padding-top:1px;*background-position: -44px}#yddKeyTitle{float:left;text-decoration:none}#yddMiddle{display:block;margin-bottom:10px}.ydd-tabs{display:block;margin:5px 0;padding:0 5px;height:18px;border-bottom:1px solid}.ydd-tab{display:block;float:left;height:18px;margin:0 5px -1px 0;padding:0 4px;line-height:18px;border:1px solid;border-bottom:none}.ydd-trans-container{display:block;line-height:160%}.ydd-trans-container a{text-decoration:none;}#yddBottom{position:absolute;bottom:0;left:0;width:100%;height:22px;line-height:22px;overflow:hidden;background-position:left -22px}.ydd-padding010{padding:0 10px}#yddWrapper{color:#252525;z-index:10001;background:url(se-extension://ext779217071/ab20.png);}#yddContainer{background:#fff;border-color:#4b7598}#yddTopBorderlr{border-color:#f0f8fc}#yddWrapper .ydd-sp{background-image:url(se-extension://ext779217071/ydd-sprite.png)}#yddWrapper a,#yddWrapper a:hover,#yddWrapper a:visited{color:#50799b}#yddWrapper .ydd-tabs{color:#959595}.ydd-tabs,.ydd-tab{background:#fff;border-color:#d5e7f3}#yddBottom{color:#363636}#yddWrapper{min-width:250px;max-width:400px;*width:270px;}</style></head>
+    <body onload="initPieChart();">
+        <div class="container">
+            <h1>EASY PIE CHART</h1>
+            <div class="chart">
+                <div class="percentage easyPieChart" data-percent="55" style="width: 110px; height: 110px; line-height: 110px;"><span>54</span>%<canvas width="110" height="110"></canvas></div>
+                <div class="label">New visits</div>
+            </div>
+            <div class="chart">
+                <div class="percentage easyPieChart" data-percent="46" style="width: 110px; height: 110px; line-height: 110px;"><span>45</span>%<canvas width="110" height="110"></canvas></div>
+                <div class="label">Bounce rate</div>
+            </div>
+            <div class="chart">
+                <div class="percentage easyPieChart" data-percent="92" style="width: 110px; height: 110px; line-height: 110px;"><span>91</span>%<canvas width="110" height="110"></canvas></div>
+                <div class="label">Server load</div>
+            </div>
+            <div class="chart">
+                <div class="percentage easyPieChart" data-percent="84" data-bar-color="#2980b9" style="width: 110px; height: 110px; line-height: 110px;"><span>83</span>MB<canvas width="110" height="110"></canvas></div>
+                <div class="label">Used RAM</div>
+            </div>
+            <div style="clear:both;"></div>
+            <div class="dark">
+                <div class="chart">
+                    <div class="percentage-light easyPieChart" data-percent="55" style="width: 110px; height: 110px; line-height: 110px;"><span>54</span>%<canvas width="110" height="110"></canvas></div>
+                    <div class="label">New visits</div>
+                </div>
+                <div class="chart">
+                    <div class="percentage-light easyPieChart" data-percent="46" style="width: 110px; height: 110px; line-height: 110px;"><span>45</span>%<canvas width="110" height="110"></canvas></div>
+                    <div class="label">Bounce rate</div>
+                </div>
+                <div class="chart">
+                    <div class="percentage-light easyPieChart" data-percent="92" style="width: 110px; height: 110px; line-height: 110px;"><span>91</span>%<canvas width="110" height="110"></canvas></div>
+                    <div class="label">Server load</div>
+                </div>
+                <div class="chart">
+                    <div class="percentage-light easyPieChart" data-percent="84" style="width: 110px; height: 110px; line-height: 110px;"><span>83</span>MB<canvas width="110" height="110"></canvas></div>
+                    <div class="label">Used RAM</div>
+                </div>
+                <div style="clear:both;"></div>
+            </div>
+
+            <p><a href="http://192.241.236.31/test4.smartadmin/js/plugin/easy-pie-chart/examples/#" class="button updateEasyPieChart">Update pie charts</a></p>
+
+            <p class="credits">Inspired by: <a href="http://drbl.in/ezuc" target="_blank">Simple Pie Charts II by Rafal Bromirski on dribble</a></p>
+        </div>
+    
+
+</body></html>

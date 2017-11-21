@@ -1,0 +1,261 @@
+<script src="/t/paas/show/ui/comm.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+var pagenum=1;
+var pagesize=10;
+var databacksjll;
+var rownoks;
+var pageNum1=1;
+var pagesize1=10;
+var rownosort;
+var aoidMap= new Map();
+
+$(function () {
+
+   showDataseljg();
+   
+   $("#startdate").val(LC_FormatYMD(new Date()));
+	$("#enddate").val(LC_FormatYMD(new Date()));
+	getselectdaoid();
+	
+});
+
+
+function showDataseljg(){
+	var url="mdm/orgs";	
+	var itemsList=[];	
+	var info= new Map();
+	info.put("pageNum",pagenum);
+	info.put("pageSize",pagesize);
+	LC_AjaxGet(MDMBaseUrl+url,"formorg","showDataseljgcallback",info,itemsList);
+}
+
+          function showDataseljgcallback(retData){
+			databacksjll=retData;
+          $('#div-jg').datagrid({
+	         nowrap: false,
+	         striped: true,
+	         collapsible:false,
+				pagination:true,
+				border:true,
+				title:'机构',
+				pageNumber:pagenum,
+				pageSize: pagesize,
+				loadMsg:"正在载入...",
+            	pageList: [10,20,50,100,200],
+				data:databacksjll.dataList,
+				fitColumns:true,
+				singleSelect:true, 
+				columns:[[
+				   {field:'orgNm',title:'机构名称',width:310,align:'center'}
+				   
+          	]],
+				onClickRow: function (rowIndex) {
+		           rownoks=rowIndex;
+				//   databackzsjlls(rowIndex);
+		        },
+				onDblClickRow: function (rowIndex) {
+		          secload(rowIndex);
+		        },
+			   fitColumns:false,
+			   pagination:true,
+            rownumbers:true,
+			   height:390,
+			   width:310
+		}); 
+	   var pager = $('#div-jg').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pagenum=pageNumber;
+		           pagesize=pageSize;
+		           showDataseljg();
+		        }
+			});				 
+			$(pager).pagination
+
+({pageSize:pagesize,pageNumber:pagenum,total:databacksjll.count});
+		  };
+}
+
+function secload(rowIndex){
+	pageNum1 = 1;
+	databackzXx(rowIndex);
+}
+
+function databackzXx(rowIndex){
+	   $("#orgid").val(databacksjll.dataList[rowIndex].orgId);
+		var url="mdm/osms004s/";
+		$("#status").val("1");
+		var itemsList=["orgid","status"];
+		//var itemsList=["orgid"];
+		var info= new Map();	
+		info.put("pageNum",pageNum1);
+		info.put("pageSize",pagesize1);
+		LC_AjaxGet(MDMBaseUrl+url,"find","showDatacssjlnr",info,itemsList);
+}
+
+function showDatacssjlsort(){
+	    	var url="mdm/osms004s/";
+			$("#status").val("1");
+          	var itemsList=["orgid","status"];	
+			//var itemsList=["orgid"];	
+			var info= new Map();
+			info.put("pageNum",pageNum1);
+			info.put("pageSize",pagesize1);
+        	LC_AjaxGet(MDMBaseUrl+url,"find","showDatacssjlnr",info,itemsList);
+}
+//小分类
+function showDatacssjlnr(retData){
+		databackzdetailXx=retData;
+		$('#div-detailed').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+				pagination:true,
+				border:false,
+				title:'类别',
+				pageNumber:pageNum1,
+				pageSize: pagesize1,
+				loadMsg:"正在载入...",
+                pageList: [10,20,50,100,200],
+				data:databackzdetailXx.dataList,
+				fitColumns:true,
+				singleSelect:true, 
+				columns:[[
+				   {field:'changorgid',title:'机构名称',width:310,align:'center',
+				    formatter:function(value){
+					  return LC_getMapValue(value,aoidMap);
+					 }}
+				]],
+				onClickRow: function (rowIndex) {
+		          rownosort=rowIndex;
+		        },
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true,
+			   height:390,
+			   width:310
+		}); 
+
+	   var pager = $('#div-detailed').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pageNum1=pageNumber;
+		           pagesize1=pageSize;
+		           showDatacssjlsort();
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:pagesize1,pageNumber:pageNum1,total:databackzdetailXx.count});
+
+		};
+
+	}
+
+	
+function  getselectdaoid(){
+  var url="mdm/orgs/";
+  var infoa = new Map();
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"find","mdmSelectdaoid",infoa,itemsList);
+}
+
+function mdmSelectdaoid(data){
+  var info = new Map();
+  info.put("key",["orgId"]);
+  info.put("value",["orgNm"]);
+  aoidMap=LC_getDataMap(info,data.dataList);
+}
+
+	
+
+//添加
+function sjllnewUser(){
+	//self.parent.datasortMap=databacksjll.dataList[rownoks];
+	//console.info(self.parent.dm.typeCode1);
+        localStorage.setItem("datasortMap",JSON.stringify(databacksjll.dataList[rownoks]))
+        localStorage.setItem("dataMap","")
+	//self.parent.dataMap="";
+	var openRoleDiv = self.parent.$("#openRoleDiv");
+	openRoleDiv.window({
+			  href:"institution/tjxg.html",
+			  title: '添加信息',
+			  width: 350,
+			  height: 250,
+			  onBeforeClose:function(){
+			  showDatacssjlsort();
+　　                }
+		  });
+}
+
+
+
+//修改
+   	function sjllpeeditUser(){
+		//self.parent.dataMap=databacksjll.dataList[rownoks];
+		//self.parent.dataMap2=databackzdetailXx.dataList[rownosort];
+        localStorage.setItem("dataMap2",JSON.stringify(databackzdetailXx.dataList[rownosort]))
+        localStorage.setItem("dataMap",JSON.stringify(databacksjll.dataList[rownoks]))
+		var openRoleDiv = self.parent.$("#openRoleDiv");
+		openRoleDiv.window({
+				  href:"institution/tjxg.html",
+	              title: '修改',
+	              width: 350,
+	              height: 250,
+	              onBeforeClose:function(){
+	              showDatacssjlsort();
+　　                }
+	          });
+	          
+	}
+
+</script>
+<style type="text/css">
+.padding1 {
+  padding: 10px 0 0 7px;
+}
+</style>
+
+      <div class="padding1" style="height: 365px; width: 710px;">
+	   <div style="width: 300px; float: left; border-right: 2px solid #95b8e7;">
+	      <div class="mainW" style="width: 300px; ">
+			<table id="div-jg" toolbar="#type-toolbar">
+          </table>
+          </div>
+		  </div>
+		  
+		  <div style="width: 350px; float: left">
+			  <table id="div-detailed" toolbar="#detailed-toolbar">
+			  </table>
+				<div id="detailed-toolbar">
+				<form id="find">
+				<input id="orgid" type="hidden">
+				<input id="status" type="hidden">
+				</form>
+				<a id="orgnew" class="easyui-linkbutton" href="javascript:void(0)" iconcls="icon-add"  plain="true" onclick="sjllnewUser()">新增</a> 
+				<a id="orgedit" class="easyui-linkbutton" href="javascript:void(0)" iconcls="icon-edit"  plain="true" onclick="sjllpeeditUser()">修改</a>    
+				</div>
+		  </div>
+      </div>
+<script type="text/javascript">
+//搜索延迟两秒
+var oInput = document.getElementById('orgedit');
+oInput.onclick = function(){
+	setTimeout(function(){
+	
+ sjllpeeditUser();
+}, 300);
+		$("#orgedit").linkbutton({  
+			disabled:true  
+			}); 
+setTimeout(function(){
+			
+			$("#orgedit").linkbutton({  
+			disabled:false  
+			}); 
+		},1000*2);
+}
+<script>
+

@@ -1,0 +1,82 @@
+<!-- rbac_role_mgt04 角色/角色组维护页面 -->
+<div class="modal fade" id="rbac_role_mgt04" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title"><span id="rbac_role_mgt04_title"></span></h4>
+      </div>
+      <div class="modal-body no-padding">
+        <form id="rbac_role_mgt04_form" method="post" onsubmit="return false;" class="smart-form">
+          <input type="hidden" name="op_type">
+          <fieldset>
+            <div class="row">
+              <section class="col col-6">
+                <label class="label">划归角色组</label>
+                <label class="input">
+                  <input type="hidden" name="rg_id" data-type="select2" placeholder="选择角色组">
+                </label>
+              </section>
+              <section class="col col-6">
+                <label class="label">&nbsp;</label>
+                <button id="rbac_role_mgt04_rg_op" class="btn btn-primary btn-sm">角色组操作</button>
+              </section>
+            </div>
+
+            <input type="hidden" name="roleid">
+            <div class="row">
+              <section class="col col-6">
+                <label class="label" for="rolenm">名称</label>
+                <label class="input has-warning">
+                  <input type="text" name="rolenm" id="rolenm" placeholder="角色名称">
+                  <b class="tooltip tooltip-bottom-right">角色名称为必填项目</b>
+                </label>
+              </section>
+            </div>
+            <section>
+              <label class="label" for="role_desc">描述</label>
+              <label class="textarea">
+                <textarea rows="2" name="role_desc" id="role_desc" placeholder="角色描述"></textarea>
+              </label>
+            </section>
+					</fieldset>
+          <footer>
+            <button type="button" id="rbac_role_mgt04_cancel" class="btn btn-default btn-xs" data-dismiss="modal">取消</button>
+            <button type="submit" id="rbac_role_mgt04_confirm" class="btn btn-primary">确定</button>
+          </footer>
+        </form>
+        <form id="rbac_role_mgt04_rg_info" method="post" onsubmit="return false;" class="smart-form">
+          <fieldset>
+            <div class="row">
+              <section class="col col-6">
+                <label class="label" for="rg_nm">角色组名称</label>
+                <label class="input has-warning">
+                  <input type="text" name="rg_nm" id="rg_nm" placeholder="角色组名称">
+                  <b class="tooltip tooltip-bottom-right">角色组名称为必填项目</b>
+                </label>
+              </section>
+					  </div>
+				  </fieldset>
+          <footer>
+            <button id="rbac_role_mgt04_rg_cancel" class="btn btn-default btn-sm">取消</button>
+            <button id="rbac_role_mgt04_rg_del" class="btn btn-danger btn-sm">删除</button>
+            <button id="rbac_role_mgt04_rg_edit" class="btn btn-info btn-sm">更新</button>
+            <button id="rbac_role_mgt04_rg_add" class="btn btn-success btn-sm">添加</button>
+          </footer>
+				</form>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="rbac_role_mgt04_dialog"></div>
+<div id="rbac_role_mgt04_op_type" data-op_type='###query.op_type###'></div>
+<div id="rbac_role_mgt04_roleid" data-roleid='###query.roleid###'></div>
+<div id="rbac_role_mgt04_rg_id" data-rg_id='###query.rg_id###'></div>
+<script src="rbac/role_mgt/rbac_role_mgt04.js"></script>
+<script>
+  (function () {
+    var rbac_role_mgt04Obj = new rbac_role_mgt04($('#rbac_role_mgt04_op_type').attr('data-op_type'),$('#rbac_role_mgt04_roleid').attr('data-roleid'),$('#rbac_role_mgt04_rg_id').attr('data-rg_id'));
+  })();
+</script>

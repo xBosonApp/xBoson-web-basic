@@ -1,0 +1,314 @@
+<script src="/t/paas/show/ui/comm.js" type="text/javascript"></script>
+<script type="text/javascript">
+var pageNum=1;
+var pagesize=10;
+var dataspringRestfulz;
+var pageNum1=1;
+var pagesize1=10;
+var databackzdetail;
+var databackzdetailXx;
+var rowno;
+
+$(function () {
+  $("#typeCode").focus();
+	showDatacssjl();
+  //databackzXx();
+  //showDatacssj2();
+});
+function databackz(retData){
+
+		dataspringRestfulz=retData;
+		$('#div-type').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+				pagination:true,
+				border:false,
+				title:'类别',
+				pageNumber:pageNum,
+				pageSize: pagesize,
+				loadMsg:"正在载入...",
+                pageList: [10,20,50,100,200],
+				data:dataspringRestfulz.dataList,
+				fitColumns:true,
+				singleSelect:true, 
+				columns:[[
+				   {field:'typeCode',title:'类别代码',width:80,align:'center'},
+				   {field:'typeName',title:'类别名称',width:100,align:'center'},
+				   {field:'status',title:'状态',width:70,align:'center',
+				   	formatter:function(value){
+		                 if(value=="1"){
+		                        return '有效';
+		                    }else if(value=="0"){
+		                        return '无效';
+		                    }else if(value=="2"){
+		                        return '迁出';
+		                    }
+		                 }
+				    },
+				   {field:'explicate',title:'说明',width:130,align:'center'}
+				]],
+				onDblClickRow: function (rowIndex) {
+		          secload(rowIndex);
+		        },
+		       onClickRow: function (rowIndex) {
+		          rowno=rowIndex;
+		        },
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true,
+			   height:396,
+			   width:430
+		}); 
+
+	   var pager = $('#div-type').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pageNum=pageNumber;
+		           pagesize=pageSize;
+
+		           showDatacssjl();
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:pagesize,pageNumber:pageNum,total:dataspringRestfulz.count});
+
+		};
+	
+	}
+	
+	function firload(){
+	pageNum = 1;
+	showDatacssjl();
+	}
+	function showDatacssjl(){
+	    	var url="mdm/dicts/";
+			var itemsList=["typeCode","typeName","explicate","status"];	
+			var info= new Map();	
+	        info.put("pageNum",pageNum);
+	        info.put("pageSize",pagesize);
+        	LC_AjaxGet(MDMBaseUrl+url,"formdatal","databackz",info,itemsList);
+
+	}
+	
+	function secload(rowIndex){
+		pageNum1= 1;
+		databackzXx(rowIndex);
+	}
+	//双击
+	function databackzXx(rowIndex){
+           $("#typeCode1").val(dataspringRestfulz.dataList[rowIndex].typeCode);
+          // alert("value="+$("#typeCode").val());
+	    	var url="mdm/dict/list/";
+			var itemsList=["typeCode1"];
+			
+			var info= new Map();	
+	        info.put("pageNum",pageNum1);
+	        info.put("pageSize",pagesize1);
+        	LC_AjaxGet(MDMBaseUrl+url,"formdatal","showDatacssjlnr",info,itemsList);
+        	//showDatacssjlnr(dataspringRestfulz.dataList[rowIndex].typeCode);
+        	//console.info(dataspringRestfulz.dataList[rowIndex].typeCode);
+
+	}
+	//保留住详细分类的刷新和当大类分类时保留住刷新
+	function showDatacssjlsort(){
+	    	var url="mdm/dict/list/";
+          	var itemsList=["typeCode1"];	
+			var info= new Map();
+			info.put("pageNum",pageNum1);
+	        info.put("pageSize",pagesize1);
+        	LC_AjaxGet(MDMBaseUrl+url,"formdatal","showDatacssjlnr",info,itemsList);
+        	//showDatacssjlnr(dataspringRestfulz.dataList[rowIndex].typeCode);
+        	//console.info(dataspringRestfulz.dataList[rowIndex].typeCode);
+
+	}
+
+//小分类
+function showDatacssjlnr(retData){
+		databackzdetailXx=retData;
+		$('#div-detailed').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+				pagination:true,
+				border:false,
+				title:'类别',
+				pageNumber:pageNum1,
+				pageSize: pagesize1,
+				loadMsg:"正在载入...",
+                pageList: [10,20,50,100,200],
+				data:databackzdetailXx.dataList,
+				fitColumns:true,
+				singleSelect:true, 
+				columns:[[
+				   {field:'typeCode1',title:'字典类别',width:100,align:'center'},
+				   {field:'typeCode2',title:'字典编码',width:100,align:'center'},
+				   {field:'typeName',title:'字典名称',width:130,align:'center'},
+				   {field:'status',title:'状态',width:70,align:'center',
+				   	formatter:function(value){
+		                 if(value=="1"){
+		                        return '有效';
+		                    }else if(value=="0"){
+		                        return '无效';
+		                    }else if(value=="2"){
+		                        return '迁出';
+		                    }
+		                 }
+				    },
+				   {field:'explicate',title:'说明',width:200,align:'center'}
+				]],
+				onClickRow: function (rowIndex) {
+		          rownosort=rowIndex;
+		        },
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true,
+			   height:396,
+			   width:430
+		}); 
+
+	   var pager = $('#div-detailed').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pageNum1=pageNumber;
+		           pagesize1=pageSize;
+		           showDatacssjlsort();
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:pagesize1,pageNumber:pageNum1,total:databackzdetailXx.count});
+
+		};
+
+	}
+	
+//添加类别信息
+	function typenewUser(){
+        //self.parent.dataMap="";
+	localStorage.setItem("dataMap", "");
+		var openRoleDiv = self.parent.$("#openRoleDiv");
+		openRoleDiv.window({
+				  href:"data/lb.html",
+	              title: '添加信息',
+	              width: 350,
+	              height: 250,
+	              onBeforeClose:function(){
+	              showDatacssjl();
+　　                }
+	          });
+		
+	}
+
+//修改类别信息
+	function typeeditUser(){
+		//self.parent.dataMap=dataspringRestfulz.dataList[rowno];
+                 localStorage.setItem("dataMap",JSON.stringify(dataspringRestfulz.dataList[rowno]));
+		if(dataspringRestfulz.dataList[rowno]){
+		var openRoleDiv = self.parent.$("#openRoleDiv");
+		openRoleDiv.window({
+		      href:"data/lb.html",
+	              title: '类别修改',
+	              width: 350,
+	              height: 250,
+	              onBeforeClose:function(){
+	              showDatacssjl();
+　　                }
+	          });
+	          }
+	          
+	}
+
+//修改明细
+	function detailededitUser(){
+		//self.parent.datasortMap=databackzdetailXx.dataList[rownosort];
+                 localStorage.setItem("datasortMap",JSON.stringify(databackzdetailXx.dataList[rownosort]));
+		//console.info(self.parent.datasortMap);
+		var openRoleDiv = self.parent.$("#openRoleDiv");
+		openRoleDiv.window({
+				  href:"data/xx.html",
+	              title: '修改明细',
+	              width: 350,
+	              height: 280,
+	              onBeforeClose:function(){
+	              showDatacssjlsort();
+　　                }
+	          });
+	          
+	}
+//添加明细
+	function detailednewUser(){
+		//self.parent.dm = dataspringRestfulz.dataList[rowno];
+                localStorage.setItem("dm",JSON.stringify(dataspringRestfulz.dataList[rowno]));   
+		//console.info(self.parent.dm.typeCode1);
+		//self.parent.datasortMap="";
+                localStorage.setItem("datasortMap",""); 
+		var openRoleDiv = self.parent.$("#openRoleDiv");
+		openRoleDiv.window({
+				  href:"data/xx.html",
+	              title: '添加明细',
+	              width: 350,
+	              height: 280,
+	              onBeforeClose:function(){
+	              showDatacssjlsort();
+　　                }
+	          });
+	}
+
+</script>
+<style type="text/css">
+.padding1 {
+  padding: 10px 0 0 7px;
+}
+</style>
+<div class="mainsW-872">
+  <div class="padding1">
+    <div class="easyui-panel" title="数据字典">
+      <div class="padTB-10 clearfix" style="border-bottom: 1px solid #95b8e7;">
+        <form id="formdatal" style="margin: 0;">
+          <input id="typeCode1" type="hidden">
+          <div class="mainW-208">
+            <div class="itemLW-80 padT-4">
+              类别代码：</div>
+            <div class="itemRW-128">
+              <input id="typeCode" class="textLW" type="text"></div>
+          </div>
+          <div class="mainW-208">
+            <div class="itemLW-80 padT-4">
+              类别名称：</div>
+            <div class="itemRW-128">
+              <input id="typeName" class="textLW" type="text"></div>
+          </div>
+          <div class="mainW-208">
+            <div class="itemLW-80 padT-4">
+              状态：</div>
+            <div class="itemRW-128">
+              <select id="status" class="textLW" name="dept">
+              <option value="">全部</option>
+              <option value="0">无效</option>
+              <option value="1">有效</option>
+              <option value="2">迁出</option>
+              </select> </div>
+          </div>
+          <div class="itemLW-208">
+            <a class="easyui-linkbutton" onclick="firload()">查询</a></div>
+        </form>
+      </div>
+      <div style="height: 380px;">
+        <div style="width: 430px; float: left; border-right: 2px solid #95b8e7;">
+          <table id="div-type" toolbar="#type-toolbar">
+          </table>
+          <div id="type-toolbar">
+            <a class="easyui-linkbutton" href="javascript:void(0)" iconcls="icon-add" onclick="typenewUser()" plain="true">添加类别</a> <a id="typeeditUser" class="easyui-linkbutton" href="javascript:void(0)" iconcls="icon-edit" onclick="typeeditUser()" plain="true">修改类别</a> </div>
+        </div>
+        <div style="width: 430px; float: left">
+          <table id="div-detailed" toolbar="#detailed-toolbar">
+          </table>
+          <div id="detailed-toolbar">
+            <a class="easyui-linkbutton" href="javascript:void(0)" iconcls="icon-add" onclick="detailednewUser()" plain="true">添加明细</a> <a class="easyui-linkbutton" href="javascript:void(0)" iconcls="icon-edit" onclick="detailededitUser()" plain="true">修改明细</a> </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

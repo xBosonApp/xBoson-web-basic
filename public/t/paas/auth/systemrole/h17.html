@@ -1,0 +1,149 @@
+<div class="modal fade" id="auth_h17" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title">服务授权</h4>
+      </div>
+      <div class="modal-body no-padding">
+        <!-- FORM Start -->
+        <form id="auth_h17_form" method="post" onsubmit="return false;" class="smart-form">
+          <fieldset>
+            <div class="row">
+              <section class="col col-6">
+                <label class="label" name="sysid">服务ID:</label>
+              </section>
+              <section class="col col-6">
+                <label class="label" name="sysnm">服务名称:</label>
+              </section>
+            </div>
+            <div class="row">
+              <section class="col col-6">
+                <label class="label">机构角色：</label>
+                <div name="h17_role_list">
+              </div>
+              </section>
+              <section class="col col-6">
+                <label class="label">应用角色：</label>
+                <div name="h17_approle_list">
+                </div>
+              </section>
+            </div>
+            
+          </fieldset>
+          <footer>
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary">保存</button>
+          </footer>
+        </form>
+        <!-- FORM End -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+<!-- SCRIPTS ON PAGE EVENT -->
+<script type="text/javascript">
+  // DO NOT REMOVE : GLOBAL FUNCTIONS!
+  pageSetUp();
+  /**显示角色checkbox
+   **/
+  $("#auth_h17_form label[name=sysid]").append("<b>" + auth_h16._g.param.sysid + "</b>");
+  $("#auth_h17_form label[name=sysnm]").append("<b>" + auth_h16._g.param.sysnm + "</b>");
+  var cb = function (msg) {
+    if (msg) {
+      //增加checked和disabled属性
+      for (var i in msg.result) {
+        if (msg.result[i].checked == 'true') {
+          var checkbox = "<label><input type='checkbox' name='roleid' value='" + msg.result[i].roleid + "' checked='true'";
+
+          if (msg.result[i].disabled == 'true') {
+            checkbox = checkbox + " disabled='true' />&emsp;" + msg.result[i].rolenm + "</label><br/>"
+          } else {
+            checkbox = checkbox + " />&emsp;" + msg.result[i].rolenm + "</label><br/>"
+          }
+
+          $("#auth_h17_form div[name=h17_role_list]").append(checkbox);
+        } else {
+          if (msg.result[i].disabled == 'true') {
+            var checkbox = "<label><input type='checkbox' name='roleid' value='" + msg.result[i].roleid + "' disabled='true' />&emsp;" + msg.result[i].rolenm + "</label><br/>";
+          } else {
+            var checkbox = "<label><input type='checkbox' name='roleid' value='" + msg.result[i].roleid + "' />&emsp;" + msg.result[i].rolenm + "</label><br/>";
+          }
+          $("#auth_h17_form div[name=h17_role_list]").append(checkbox);
+        }
+      }
+      //应用角色
+      for (var i in msg.approle) {
+        if (msg.approle[i].checked == 'true') {
+          var checkbox = "<label><input type='checkbox' name='roleid' value='" + msg.approle[i].roleid + "' checked='true'";
+
+          if (msg.approle[i].disabled == 'true') {
+            checkbox = checkbox + " disabled='true' />&emsp;" + msg.approle[i].rolenm + "</label><br/>"
+          } else {
+            checkbox = checkbox + " />&emsp;" + msg.approle[i].rolenm + "</label><br/>"
+          }
+
+          $("#auth_h17_form div[name=h17_approle_list]").append(checkbox);
+        } else {
+          if (msg.approle[i].disabled == 'true') {
+            var checkbox = "<label><input type='checkbox' name='roleid' value='" + msg.approle[i].roleid + "' disabled='true' />&emsp;" + msg.approle[i].rolenm + "</label><br/>";
+          } else {
+            var checkbox = "<label><input type='checkbox' name='roleid' value='" + msg.approle[i].roleid + "' />&emsp;" + msg.approle[i].rolenm + "</label><br/>";
+          }
+          $("#auth_h17_form div[name=h17_approle_list]").append(checkbox);
+        }
+      }
+    }
+  }
+  var param = {
+    'sysid': auth_h16._g.param.sysid,
+    'orgid': auth_h16._g.param.orgid
+  };
+  zy.g.am.app = "auth";
+  zy.g.am.mod = "systemrole";
+  zy.net.get("api/getsysroleinfo", cb, param);
+
+  $('#auth_h17').modal('show');
+  /*表单操作 保存按钮
+   */
+  $("#auth_h17_form").validate({
+    //保存按钮操作
+    submitHandler: function (form) {
+      //callback回调
+      var callback = function (msg) {
+        if (msg) {
+          $('#auth_h17').modal('hide');
+          zy.ui.msg("提示信息：", "保存成功！", "s");
+        }
+      };
+      //参数设置
+      var roleid = "";
+      var chekd = $("#auth_h17_form input[name=roleid]:checked");
+      //遍历选中的checkbox
+      chekd.each(function () {
+        roleid = roleid + $(this).val() + ",";
+      });
+      //去除最后一个逗号
+      roleid = roleid.trimCom();
+      //合并参数
+      var param = {
+        'sysid': auth_h16._g.param.sysid,
+        'roleid': roleid,
+        'orgid': auth_h16._g.param.orgid
+      };
+      zy.g.am.app = "auth";
+      zy.g.am.mod = "systemrole";
+      zy.net.post("api/savesystemrole", callback, param);
+    },
+    // Do not change code below
+    errorPlacement: function (error, element) {
+      error.insertAfter(element.parent());
+    }
+  });
+</script>

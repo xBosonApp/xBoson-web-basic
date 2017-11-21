@@ -1,0 +1,429 @@
+<script type="text/javascript" language="JavaScript" src="/comm.js"></script>
+
+<script type="text/javascript">
+	var pageNum=1;
+	var pageSize=10;
+	var emrbasy1data;
+	var data2;
+	$(function(){
+	//alert("-*-------------------");
+	  showDatablsy1();
+	 // showDatablsy2();
+	});
+	function showDatablsy1(){
+	  // *******************第二步请求数据***********************		
+	  if(retCheckFlg){
+	    //你的服务名
+		var url ="emrbasy1/"; 
+
+       	//要提交表单的所有控件id	
+      	var itemsList=[];	
+    	var info= new Map();
+		//分页	
+       info.put("pageNum",pageNum);
+       info.put("pageSize",pageSize);
+	   info.put("pid",self.parent.pid);
+		if(self.parent.jgdm!=undefined){
+		info.put("jgdm",self.parent.jgdm);
+		info.put("zylsh",self.parent.zylsh);
+		}
+	   
+       LC_AjaxGet(EMRBaseUrl+url,"form1","emrbasy1callback",info,itemsList);
+   
+		}		
+	}
+	function emrjybg1openRoleDiv(rowIndex){
+
+	 LC_SetMapData("form1",emrbasy1data.list[rowIndex]);
+    }
+
+  function emrbasy1callback(retData){ 
+ 	//********************第三步处理请求后的数据***************	
+ 	emrbasy1data=retData;
+
+		$('#blsy2').datagrid({
+            nowrap: false,
+            striped: true,
+            collapsible:false,
+			pagination:true,
+			pageNumber:pageNum,
+			pageSize: pageSize,
+			loadMsg:"正在载入...",
+               pageList: [10,20,50,100,200],
+			data:emrbasy1data.list,
+			columns:[[
+			   {field:'tablename',title:'出院诊断',width:432,align:'center'},
+			   {field:'busstotal',title:'出院情况',width:232,align:'center'},
+			   {field:'success',title:'ICD-10编码',width:232,align:'center'}
+			]],                  
+            onDblClickRow: function (rowIndex) {
+               emrjybg1openRoleDiv(rowIndex);
+            },
+			fitColumns:false,
+			pagination:true,
+			rownumbers:true
+		}); 
+
+	   var pager = $('#blsy2').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pageNum=pageNumber;
+		           pageSize=pageSize;
+		           showDatablsy1();
+		        }
+			});	
+			
+			$(pager).pagination({pageSize:pageSize,pageNumber:pageNum,total:emrbasy1data.count});
+		};
+	}
+	
+	
+	function showDatablsy2(){
+		var obj=JSON.parse(self.parent.window.localStorage.getItem(self.parent.pid));
+		$("#name").val(obj.datalist[0].name);
+		$("#sex").val(obj.datalist[0].sex);
+		$("#code").val(obj.datalist[0].code);
+		$("#birthday").val(obj.datalist[0].birthday);
+		$("#marriage").val(obj.datalist[0].marriage);
+		$("#nationality").val(obj.datalist[0].nationality);
+		$("#ethnic").val(obj.datalist[0].ethnic);
+		$("#birthdayPlace").val(obj.datalist[0].birthdayPlace);
+		$("#jobUnit").val(obj.datalist[0].jobUnit);
+//		$("#address").val(obj.datalist[0].address);
+		$("#addrZip").val(obj.datalist[0].addrZip);
+		$("#address").val(obj.datalist[0].addressList[0].address);
+	}
+//计算年龄
+$(function(){
+//alert($("#birthday").val()+"------------------");
+var birthday=$("#birthday").val()
+var brid1=LC_SubStr(birthday,0,4);
+var current=new Date();
+$("#nianling").val(current.getFullYear()*1-brid1*1+1*1);	
+})
+</script>
+
+    	<div class="mainsW-912">
+    	<form id="form1">
+		<div class="easyui-panel" title="住院病案首页">
+			<div class="flPadTB-20">
+				<div class="mainW-224" >
+					<div class="itemLW-112 padT-4" style="color: red">医疗保险(公费)号：</div>
+					<div class="itemRW-112"><input class="textLW" id="" type="text" value=""></div>
+				 </div>
+				 <div class="mainW-448" >
+					<div class="itemLW-160  padT-4">第</div>
+					<div class="itemRW-48"><input class="textLW" id="dc7002_ZYCS" type="text" value=""></div>
+					<div class="mainW-48 padT-4">次住院</div>
+				 </div>
+				 
+				 <div class="mainW-224">
+					<div class="itemLW-64 padT-4">住院号：</div>
+					<div class="itemRW-128"><input class="textLW" type="text" value=""></div>
+				 </div>
+				 
+				  <div class="mainW-192">
+					<div class="itemLW-112 padT-4">姓名：</div>
+					<div class="itemRW-80"><input class="textLW" id="name" type="text"  value=""></div>
+				 </div>
+				 
+				  <div class="mainW-80">
+					<div class="itemLW-48 padT-4">性别：</div>
+					<div class="itemRW-32"><input class="textLW" id="sex" type="text" value=""></div>
+				 </div>
+				 
+				 <div class="mainW-224">
+					<div class="itemLW-80 padT-4">身份证号：</div>
+					<div class="itemRW-144"><input class="textLW" id="code"  type="text" value=""></div>
+				 </div>
+				 
+				 <div class="mainW-160">
+					<div class="itemLW-80 padT-4">出生年月：</div>
+					<div class="itemRW-80"><input class="textLW" id="birthday" type="text" value=""></div>
+				 </div>
+				 
+				 <div class="mainW-96"><!-- =======================================================计算================================================== -->
+					<div class="itemLW-48 padT-4">年龄：</div>
+					<div class="itemRW-48"><input class="textLW" id="nianling" type="text" value=""></div>
+				 </div>
+				 
+				 <div class="mainW-112">
+					<div class="itemLW-48 padT-4">婚姻：</div>
+					<div class="itemRW-48"><input class="textLW" id="marriage" type="text" value=""></div>
+				 </div>
+				 
+				 <div class="mainW-272">
+					<div class="itemLW-112 padT-4">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;国籍：</div>
+					<div class="itemRW-160"><input class="textLW" id="nationality" type="text" value=""></div>
+				 </div>
+				 
+				 <div class="mainW-144">
+					<div class="itemLW-48 padT-4">民族：</div>
+					<div class="itemRW-96"><input class="textLW" id="ethnic" type="text" value=""></div>
+				 </div>
+				 
+				 <div class="mainW-464">
+					<div class="itemLW-48 padT-4">出生地：</div>
+					<div class="itemRW-400"><input class="textLW" id="birthdayPlace" type="text" value=""></div>
+				 </div>
+				 
+				  <div class="mainW-576">
+					<div class="itemLW-112 padT-4">工作单位：</div>
+					<div class="itemRW-464"><input class="textLW" id="jobUnit" type="text" value=""></div>
+				 </div>
+				  <div class="mainW-160">
+					<div class="itemLW-48 padT-4">电话：</div>
+					<div class="itemRW-112"><input class="textLW" type="text" value=""></div>
+				 </div>			 
+				  <div class="mainW-128">
+					<div class="itemLW-64 padT-4">邮政编码：</div>
+					<div class="itemRW-64"><input class="textLW" type="text" value=""></div>
+				 </div>
+				 
+				   <div class="mainW-576">
+					<div class="itemLW-112 padT-4">户口地址：</div>
+					<div class="itemRW-464"><input class="textLW" id="address" type="text" value=""></div>
+				 </div>
+				  <div class="mainW-160">
+					<div class="itemLW-48 padT-4">电话：</div>
+					<div class="itemRW-112"><input class="textLW" id="code" type="text" value=""></div>
+				 </div>			 
+				  <div class="mainW-128">
+					<div class="itemLW-64 padT-4">邮政编码：</div>
+					<div class="itemRW-64"><input class="textLW" id="addrZip" type="text" value=""></div>
+				 </div>
+				 
+				  <div class="mainW-192">
+					<div class="itemLW-112 padT-4">联系人姓名：</div>
+					<div class="itemRW-80"><input class="textLW" id="dc7002_LXRY" type="text" value=""></div>
+				 </div>
+				 
+				  <div class="mainW-112">
+					<div class="itemLW-48 padT-4">关系：</div>
+					<div class="itemRW-64"><input class="textLW" id="dc7002_LXRGX" type="text" value=""></div>
+				 </div>
+				  <div class="mainW-416">
+					<div class="itemLW-48 padT-4">地址：</div>
+					<div class="itemRW-368"><input class="textLW" id="dc7002_LXRDZ" type="text" value=""></div>
+				 </div>
+				 
+				  <div class="mainW-144">
+					<div class="itemLW-48 padT-4">电话：</div>
+					<div class="itemRW-96"><input class="textLW" id="dc7002_LXRDH" type="text" value=""></div>
+				 </div>
+				 
+				  <div class="mainW-224">
+					<div class="itemLW-112 padT-4">入院日期：</div>
+					<div class="itemRW-96"><input class="textLW" id="dc7002_RYRQ" type="text" value=""></div>
+				 </div>
+				  <div class="mainW-224">
+					<div class="itemLW-64 padT-4">入院科别：</div>
+					<div class="itemRW-96"><input class="textLW" id="dc7002_RYKSMC" type="text" value=""></div>
+				 </div>
+				 <div class="mainW-208">
+					<div class="itemLW-64 padT-4">入院病区：</div>
+					<div class="itemRW-96"><input class="textLW" id="dc7002_RYBQMC" type="text" value=""></div>
+				 </div>
+				 <div class="mainW-224">
+					<div class="itemLW-128 padT-4">术前住院（天数）：</div>
+					<div class="itemRW-80"><input class="textLW" type="text" value=""></div>
+				 </div>
+				 
+				   <div class="mainW-224">
+					<div class="itemLW-112 padT-4">专科日期：</div>
+					<div class="itemRW-96"><input class="textLW" type="text" value=""></div>
+				 </div>
+				  <div class="mainW-224">
+					<div class="itemLW-64 padT-4">转入科别：</div>
+					<div class="itemRW-96"><input class="textLW" id="dc7002_ZKKSMC1" type="text" value=""></div>
+				 </div>
+				 <div class="mainW-208">
+					<div class="itemLW-64 padT-4">转入病区：</div>
+					<div class="itemRW-96"><input class="textLW" id="dc7002_SZBQMC" type="text" value=""></div>
+				 </div>
+				 <div class="mainW-224">
+					<div class="itemLW-128 padT-4">再转科别：</div>
+					<div class="itemRW-80"><input class="textLW" id="dc7002_ZKKSMC2" type="text" value=""></div>
+				 </div>
+				 
+				  <div class="mainW-224">
+					<div class="itemLW-112 padT-4">出院日期：</div>
+					<div class="itemRW-96"><input class="textLW" id="dc7002_CYRQ" type="text" value=""></div>
+				 </div>
+				  <div class="mainW-224">
+					<div class="itemLW-64 padT-4">出院科别：</div>
+					<div class="itemRW-96"><input class="textLW" id="dc7002_CYKSMC" type="text" value=""></div>
+				 </div>
+				 <div class="mainW-224">
+					<div class="itemLW-64 padT-4">出院病区：</div>
+					<div class="itemRW-96"><input class="textLW" type="text" value=""></div>
+				 </div>
+				 <div class="mainW-208">
+					<div class="itemLW-128 padT-4">实际住院（天）：</div>
+					<div class="itemRW-64"><input class="textLW" id="dc7002_ZYTS" type="text" value=""></div>
+				 </div>
+				 
+				  <div class="mainW-224">
+					<div class="itemLW-112 padT-4">死亡日期：</div>
+					<div class="itemRW-96"><input class="textLW" id="dc7002_SWSJ" type="text" value=""></div>
+				 </div>
+				 
+				 <div class="mainW-656">
+					<div class="itemLW-64 padT-4">死亡原因：</div>
+					<div class="itemRW-592"><input class="textLW" id="dc7002_SWYY" type="text" value=""></div>
+				 </div>
+				 
+				 <div class="mainW-656">
+					<div class="itemLW-112 padT-4">门（急）急诊诊断：</div>
+					<div class="itemRW-544"><input class="textLW"  type="text" value=""></div>
+				 </div>
+				 
+				 <div class="mainW-240">
+					<div class="itemLW-96 padT-4">入院情况：</div>
+					<div class="itemRW-112"><input class="textLW" id="dc7002_RYQK" type="text" value=""></div>
+				 </div>
+				 
+				  <div class="mainW-656">
+					<div class="itemLW-112 padT-4">入院诊断：</div>
+					<div class="itemRW-544"><input class="textLW" type="text" value=""></div>
+				 </div>
+				 
+				 <div class="mainW-240">
+					<div class="itemLW-96 padT-4">入院确诊日期：</div>
+					<div class="itemRW-112"><input class="textLW" id="dc7002_QZRQ" type="text" value=""></div>
+				 </div>
+			 </div>
+			 <div class="mainW-896">
+				<table id="blsy2"></table>
+			</div>
+			
+			
+			 <div class="mainW-896">
+					<div class="itemLW-144 padT-4">医院感染名称：</div>
+					<div class="itemRW-736"><input class="textLW" type="text" value=""></div>
+				 </div>
+			
+			<div class="mainW-896">
+					<div class="itemLW-144 padT-4">损伤中毒的外部原因：</div>
+					<div class="itemRW-736"><input class="textLW" id="dc7002_ZSZD" type="text" value=""></div>
+			</div>
+			
+			<div class="mainW-576">
+					<div class="itemLW-144 padT-4">病理诊断：</div>
+					<div class="itemRW-432"><input class="textLW" type="text" value=""></div>
+			</div>
+			
+			<div class="mainW-320">
+					<div class="itemLW-144 padT-4">病理检查号：</div>
+					<div class="itemRW-144"><input class="textLW" id="dc7002_BLH" type="text" value=""></div>
+			</div>
+			
+			<div class="mainW-576">
+					<div class="itemLW-144 padT-4">尸检主要诊断：</div>
+					<div class="itemRW-432"><input class="textLW" type="text" value=""></div>
+			</div>
+			
+			<div class="mainW-320">
+					<div class="itemLW-144 padT-4">尸体检查号：</div>
+					<div class="itemRW-144"><input class="textLW" type="text" value=""></div>
+			</div>
+			
+			<div class="mainW-416">
+					<div class="itemLW-144 padT-4">过敏药物：</div>
+					<div class="itemRW-272"><input class="textLW" id="dc7002_YWGM" type="text" value=""></div>
+			</div>
+			<div class="mainW-144">
+					<div class="itemLW-48 padT-4"> HBsAg：</div>
+					<div class="itemRW-96"><input class="textLW" id="dc7002_HBSAG_JG" type="text" value=""></div>
+			</div>
+			<div class="mainW-144">
+					<div class="itemLW-48 padT-4">HCV-Ab：</div>
+					<div class="itemRW-96"><input class="textLW" id="dc7002_HCVAB_JG" type="text" value=""></div>
+			</div>
+			<div class="mainW-144">
+					<div class="itemLW-48 padT-4">HIV-Ab：</div>
+					<div class="itemRW-96"><input class="textLW" id="dc7002_HIVAB_JG" type="text" value=""></div>
+			</div>
+			
+			<div class="mainsW-896">
+				<div class="itemLW-144 padT-4">诊断符合情况：</div>
+				<div class="itemsW-736">
+					<div class="itemLW-96 padT-4">门诊与出院：</div>
+					<div class="itemsW-80"><input class="textLW" id="dc7002_MZZDFH" type="text" ></div>
+					<div class="itemLW-96 padT-4">入院与出院：</div>
+					<div class="itemsW-80"><input class="textLW" id="dc7002_RYBQMC" type="text" ></div>
+					<div class="itemLW-96 padT-4">术前与术后：</div>
+					<div class="itemsW-80"><input class="textLW" id="dc7002_SQHZDFH" type="text" ></div>
+					<div class="itemLW-96 padT-4">临床与病理：</div>
+					<div class="itemsW-80"><input class="textLW" id="dc7002_LCBLZDFH" type="text" ></div>
+					<div class="itemLW-96 padT-4">放射与病理：</div>
+					<div class="itemsW-80"><input class="textLW" id="dc7002_FSBLZDFH" type="text" ></div>
+					<div class="itemLW-96 padT-4">抢救</div>
+					<div class="itemsW-80"><input class="textLW" id="dc7002_QJCS" type="text" ></div><div class="itemLW-16 padT-4">次</div>
+					<div class="itemLW-80 padT-4">成功</div>
+					<div class="itemsW-80"><input class="textLW" id="dc7002_QJCG" type="text" ></div><div class="itemLW-16 padT-4">次</div>
+				</div>
+			
+			<div class="mainW-256">
+					<div class="itemLW-144 padT-4">科主任：</div>
+					<div class="itemRW-112"><input class="textLW" type="text" value=""></div>
+			</div>
+			
+			<div class="mainW-224">
+					<div class="itemLW-112 padT-4">主（副主）任医师：</div>
+					<div class="itemRW-112"><input class="textLW" id="dc7002_ZRYSXM" type="text" value=""></div>
+			</div>
+			
+			<div class="mainW-208">
+					<div class="itemLW-64 padT-4">主治医师：</div>
+					<div class="itemRW-112"><input class="textLW" id="dc7002_ZZYSXM" type="text" value=""></div>
+			</div>
+			<div class="mainW-192">
+					<div class="itemLW-64 padT-4">住院医师：</div>
+					<div class="itemRW-112"><input class="textLW" id="dc7002_ZYYSXM" type="text" value=""></div>
+			</div>
+			
+			<div class="mainW-256">
+					<div class="itemLW-144 padT-4">进修医生：</div>
+					<div class="itemRW-112"><input class="textLW" id="" type="text" value=""></div>
+			</div>
+			
+			<div class="mainW-224">
+					<div class="itemLW-112 padT-4">研究生实习医生：</div>
+					<div class="itemRW-112"><input class="textLW" id="" type="text" value=""></div>
+			</div>
+			
+			<div class="mainW-208">
+					<div class="itemLW-64 padT-4">实习医生：</div>
+					<div class="itemRW-112"><input class="textLW" id="" type="text" value=""></div>
+			</div>
+			<div class="mainW-192">
+					<div class="itemLW-64 padT-4">编码员：</div>
+					<div class="itemRW-112"><input class="textLW" id="" type="text" value=""></div>
+			</div>
+			
+				<div class="mainW-256">
+					<div class="itemLW-144 padT-4">病案质量：</div>
+					<div class="itemRW-112"><input class="textLW" id="dc7002_BAZL" type="text" value=""></div>
+			</div>
+			
+			<div class="mainW-224">
+					<div class="itemLW-112 padT-4">质控医师：</div>
+					<div class="itemRW-112"><input class="textLW" id="" type="text" value=""></div>
+			</div>
+			
+			<div class="mainW-208">
+					<div class="itemLW-64 padT-4">质控护士：</div>
+					<div class="itemRW-112"><input class="textLW" id="" type="text" value=""></div>
+			</div>
+			<div class="mainW-192">
+					<div class="itemLW-64 padT-4">日期：</div>
+					<div class="itemRW-112"><input class="textLW" id="" type="text" value=""></div>
+			</div>
+			
+			</div>
+			</form>
+		</div>
+
+

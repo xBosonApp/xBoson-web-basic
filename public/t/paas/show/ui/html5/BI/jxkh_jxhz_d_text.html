@@ -1,0 +1,2222 @@
+<style type="text/css">
+#timecx{ display: none;}	
+table{ font-size:12px; font-weight:normal; text-align:left;}
+table thead{background:linear-gradient(to bottom, #f9f9f9 0px, #efefef 100%) repeat-x; border-top:1px solid #dddddd; height:24px; line-height:24px;}
+.z-bg{background:linear-gradient(to bottom, #f9f9f9 0px, #efefef 100%) repeat-x;}
+table td,table th{ border-right:1px dotted #ccc; border-bottom:1px dotted #ccc; padding:0 0 0 5px;height:24px;}
+.tnull input[type="text"]{ width: 100px; padding: 0; border: none;text-align:center;margin-bottom:0; color: #000;}
+.tnulladd input[type="text"]{ width:80px; padding: 0; border:1px solid #ccc;text-align:center;margin-bottom:0; color: #000;}
+.tnull input[disabled]{background:none; border:none;box-shadow:none;cursor:auto;}
+.z-info{position:absolute;right:10px; top:3px;}
+#myModalzInfo .close{ display: block;}
+.modal.fade{top:-100%;}
+.portlet-title{position:relative;}
+.z-sg{height:450px;overflow: auto; overflow-x:hidden;}
+#rowtable select{font-size:12px;padding:0; height: 20px; line-height: 20px;}
+</style>
+ <form id="org_etbjglda" class="form-inline" action="">
+<div id="etbjglda-m"  class="portlet box grey">
+    <div class="portlet-title">
+        <div class="caption" id="yetj-name"><!-- 可以设置图标<i class="icon-globe"></i> -->补助标准及金额</div>
+        <div class="z-info">
+            <!-- Button trigger modal -->
+            <button id="z-a-tj" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModalzInfo">添加修改新标准</button>
+        </div>
+        
+    </div>
+    <div class="portlet-body">
+        <div class="lc-inquire" style="display:block;">
+                <input type="hidden" id="IsConfirm"/>
+                <input type="hidden" id="groupby" value="tablename"/>
+                <input type="hidden" id="pagenum"/>
+                <input type="hidden" id="pagesize"/>
+                <input type="hidden" id="sa"/>
+                <input type="hidden" id="MM"/>
+                <div class="row-fluid">
+                	<div class="span2" style="display:none;"><select id="zhuanqu" class="selectpicker"><option value="1">按机构</option></select></div>
+                    <div class="span1">机构名称</div>
+                    <div class="span2"><select id="dimOrg" class="selectpicker"></select>
+                    <!-- <select id="dimOrg" class="selectpicker">
+                        <option value="424101198">11111111111</option>
+                    </select> -->
+                    </div>
+                    <div class="span1">年度</div>
+                    <div class="span2">
+                    	<div class="year"><input id="year" type="text" class="dateday"></div>
+                    </div>
+                    <div class="span1">季度</div>
+                    <div class="span2">
+                    	<select id="quarter" class="selectpicker">
+                            <option value="1">第一季度</option>
+                            <option value="2">第二季度</option>
+                            <option value="3">第三季度</option>
+                            <option value="4">第四季度</option>
+                        </select>
+                    </div>
+                    <div class="span1"><a id="jgcx1" onclick="setData2EtbjgldaNew('tablename')" class="btn blue">查询</a></div>
+                    <div class="span1" id="jgcxid"></div>
+
+                    <div class="span1"><a id="jgcx2" onclick="setDatacompile()" class="btn blue" style="display:none;">修改</a></div>
+                    <div class="span1"><a id="jgcx3" onclick="setDatarevise()" class="btn blue" style="display:none;">保存</a></div>
+                    <div class="span1"><a id="jgcx4" onclick="setDataaddrevise()" class="btn blue" style="display:none;">添加</a></div>
+                    <div class="span1"><a id="jgcx5" onclick="setDataadd()" class="btn blue" style="display:none;">保存</a></div>
+                    <div class="span2" style="position:absolute; right:0; top:0;text-align:right"><a id="jgcx6" onclick="setDataaddY('tablename')" class="btn  btn-danger">确认保存</a></div>
+                    <!--<div class="span1"><a onclick="loading111()" class="btn blue">查询1</a></div>-->
+                </div>
+           
+        </div>
+<!-- 新 开始
+        <div class="row-fluid">
+			<div class="span12">
+                 <table id="logywlltj"></table>
+            </div>
+        </div> -->
+<!-- 新 结束 -->
+
+        <div id="rowtable" class="row-fluid">
+            <div class="span12">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <thead>
+                        <tr>
+                            <th>名称</th>
+                            <th>考核标准</th>
+                            <th align="center">数量</th>
+                            <th align="center">单价(元)</th>
+                            <th align="center">金额</th>
+                            <th align="center">实际拨付金额</th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td rowspan="2" style="position:relative;">健康档案
+                            <select id="JKDAEvaluation" name="z" style="position:absolute; right:0; top:0; width:80px;">
+                            	<option value="1.05">优秀</option>
+                                <option value="0.90">良好</option>
+                                <option value="0.80">合格</option>
+                                <option value="0.60">不合格</option>
+                            </select>
+                        </td>
+                        <td>新建档</td>
+                        <td align="center" class="tnull" valign="middle"><input class="quarterother" id="B001" name="" type="text" value="0" onfocus="this.select()" onmouseover="this.focus()" disabled="disabled"/></td>
+                        <td id="A001" class="z-zero">&nbsp;</td>
+                        <td id="C001" class="z-zero">&nbsp;</td>
+                        <td id="D001" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>社区卫生调查、卫生统计、社区诊断</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B002" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A002" class="z-zero">&nbsp;</td>
+                        <td id="C002" class="z-zero">&nbsp;</td>
+                        <td id="D002" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="7" style="position:relative;">健康教育
+                        	<select id="JKJYEvaluation" name="z" style="position:absolute; right:0; top:0; width:80px;">
+                            	<option value="1.05">优秀</option>
+                                <option value="0.90">良好</option>
+                                <option value="0.80">合格</option>
+                                <option value="0.60">不合格</option>
+                            </select>
+                        </td>
+                        <td>健康支持工具</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B003" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A003" class="z-zero">&nbsp;</td>
+                        <td id="C003" class="z-zero">&nbsp;</td>
+                        <td id="D003" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>健康教育宣传品</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B004" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A004" class="z-zero">&nbsp;</td>
+                        <td id="C004" class="z-zero">&nbsp;</td>
+                        <td id="D004" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>健康专栏更新</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B005" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A005" class="z-zero">&nbsp;</td>
+                        <td id="C005" class="z-zero">&nbsp;</td>
+                        <td id="D005" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>健康知识讲座</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B006" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A006" class="z-zero">&nbsp;</td>
+                        <td id="C006" class="z-zero">&nbsp;</td>
+                        <td id="D006" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>主题日宣传</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B007" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A007" class="z-zero">&nbsp;</td>
+                        <td id="C007" class="z-zero">&nbsp;</td>
+                        <td id="D007" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>健康教育网站</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B008" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A008" class="z-zero">&nbsp;</td>
+                        <td id="C008" class="z-zero">&nbsp;</td>
+                        <td id="D008" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>热线服务电话</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B009" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A009" class="z-zero">&nbsp;</td>
+                        <td id="C009" class="z-zero">&nbsp;</td>
+                        <td id="D009" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="6" style="position:relative;">预防接种
+                        <select id="YFJZEvaluation" name="z" style="position:absolute; right:0; top:0; width:80px;">
+                            	<option value="1.05">优秀</option>
+                                <option value="0.90">良好</option>
+                                <option value="0.80">合格</option>
+                                <option value="0.60">不合格</option>
+                            </select>
+                        </td>
+                        <td>一类疫苗接种</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B010" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A010" class="z-zero">&nbsp;</td>
+                        <td id="C010" class="z-zero">&nbsp;</td>
+                        <td id="D010" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>适龄儿童建档、督促</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B011" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A011" class="z-zero">&nbsp;</td>
+                        <td id="C011" class="z-zero">&nbsp;</td>
+                        <td id="D011" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>异常反应监测及处理</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B012" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A012" class="z-zero">&nbsp;</td>
+                        <td id="C012" class="z-zero">&nbsp;</td>
+                        <td id="D012" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>免疫效果监测、    接种调查评估</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B013" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A013" class="z-zero">&nbsp;</td>
+                        <td id="C013" class="z-zero">&nbsp;</td>
+                        <td id="D013" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>疫苗储存、使用管理</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B014" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A014" class="z-zero">&nbsp;</td>
+                        <td id="C014" class="z-zero">&nbsp;</td>
+                        <td id="D014" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>实施计划免疫网络化管理</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B015" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A015" class="z-zero">&nbsp;</td>
+                        <td id="C015" class="z-zero">&nbsp;</td>
+                        <td id="D015" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="11" style="position:relative;">儿童保健
+                        	<select id="ETBJEvaluation" name="z" style="position:absolute; right:0; top:0; width:80px;">
+                            	<option value="1.05">优秀</option>
+                                <option value="0.90">良好</option>
+                                <option value="0.80">合格</option>
+                                <option value="0.60">不合格</option>
+                            </select>
+                        </td>
+                        <td>新生儿访视</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B016" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A016" class="z-zero">&nbsp;</td>
+                        <td id="C016" class="z-zero">&nbsp;</td>
+                        <td id="D016" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>新生儿满月访视</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B017" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A017" class="z-zero">&nbsp;</td>
+                        <td id="C017" class="z-zero">&nbsp;</td>
+                        <td id="D017" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>1岁以下儿童健康体检</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B018" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A018" class="z-zero">&nbsp;</td>
+                        <td id="C018" class="z-zero">&nbsp;</td>
+                        <td id="D018" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>1-3岁儿童健康体检</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B019" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A019" class="z-zero">&nbsp;</td>
+                        <td id="C019" class="z-zero">&nbsp;</td>
+                        <td id="D019" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>血常规检测</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B020" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A020" class="z-zero">&nbsp;</td>
+                        <td id="C020" class="z-zero">&nbsp;</td>
+                        <td id="D020" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>4-6岁生长发育评估</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B021" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A021" class="z-zero">&nbsp;</td>
+                        <td id="C021" class="z-zero">&nbsp;</td>
+                        <td id="D021" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>3-6岁儿童口腔保健</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B022" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A022" class="z-zero">&nbsp;</td>
+                        <td id="C022" class="z-zero">&nbsp;</td>
+                        <td id="D022" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>残疾儿童康复救助工程(0.3万元/人)</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B023" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A023" class="z-zero">&nbsp;</td>
+                        <td id="C023" class="z-zero">&nbsp;</td>
+                        <td id="D023" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>残疾儿童康复救助工程(0.4万元/人)</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B0231" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A0231" class="z-zero">&nbsp;</td>
+                        <td id="C0231" class="z-zero">&nbsp;</td>
+                        <td id="D0231" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>残疾儿童康复救助工程(0.5万元/人)</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B0232" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A0232" class="z-zero">&nbsp;</td>
+                        <td id="C0232" class="z-zero">&nbsp;</td>
+                        <td id="D0232" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>妇幼卫生信息统计及监测</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B024" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A024" class="z-zero">&nbsp;</td>
+                        <td id="C024" class="z-zero">&nbsp;</td>
+                        <td id="D024" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="5" style="position:relative;">妇女保健
+                        	<select id="FNBJEvaluation" name="z" style="position:absolute; right:0; top:0; width:80px;">
+                            	<option value="1.05">优秀</option>
+                                <option value="0.90">良好</option>
+                                <option value="0.80">合格</option>
+                                <option value="0.60">不合格</option>
+                            </select>
+                        </td>
+                        <td>孕产妇早期建册</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B025" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A025" class="z-zero">&nbsp;</td>
+                        <td id="C025" class="z-zero">&nbsp;</td>
+                        <td id="D025" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>孕产妇早期健康   状况评估</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B026" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A026" class="z-zero">&nbsp;</td>
+                        <td id="C026" class="z-zero">&nbsp;</td>
+                        <td id="D026" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>孕期随访</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B027" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A027" class="z-zero">&nbsp;</td>
+                        <td id="C027" class="z-zero">&nbsp;</td>
+                        <td id="D027" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>产后入户随访</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B028" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A028" class="z-zero">&nbsp;</td>
+                        <td id="C028" class="z-zero">&nbsp;</td>
+                        <td id="D028" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>产后42天健康检查</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B029" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A029" class="z-zero">&nbsp;</td>
+                        <td id="C029" class="z-zero">&nbsp;</td>
+                        <td id="D029" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td style="position:relative;">计划生育技术服务咨询指导
+                        	<select id="JHSYEvaluation" name="z" style="position:absolute; right:0; top:0; width:80px;">
+                            	<option value="1.05">优秀</option>
+                                <option value="0.90">良好</option>
+                                <option value="0.80">合格</option>
+                                <option value="0.60">不合格</option>
+                            </select>
+                        </td>
+                        <td>避孕药具发放管理</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B030" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A030" class="z-zero">&nbsp;</td>
+                        <td id="C030" class="z-zero">&nbsp;</td>
+                        <td id="D030" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td style="position:relative;">老年人健康管理
+                        	<select id="LNRJKEvaluation" name="z" style="position:absolute; right:0; top:0; width:80px;">
+                            	<option value="1.05">优秀</option>
+                                <option value="0.90">良好</option>
+                                <option value="0.80">合格</option>
+                                <option value="0.60">不合格</option>
+                            </select>
+                        </td>
+                        <td>60岁以上老年人健康管理</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B031" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A031" class="z-zero">&nbsp;</td>
+                        <td id="C031" class="z-zero">&nbsp;</td>
+                        <td id="D031" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="5" style="position:relative;">慢性病患者健康管理
+                        	<select id="MXBHZEvaluation" name="z" style="position:absolute; right:0; top:0; width:80px;">
+                            	<option value="1.05">优秀</option>
+                                <option value="0.90">良好</option>
+                                <option value="0.80">合格</option>
+                                <option value="0.60">不合格</option>
+                            </select>
+                        </td>
+                        <td>重症患者入户随访</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B032" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A032" class="z-zero">&nbsp;</td>
+                        <td id="C032" class="z-zero">&nbsp;</td>
+                        <td id="D032" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>轻症患者入户随访</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B033" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A033" class="z-zero">&nbsp;</td>
+                        <td id="C033" class="z-zero">&nbsp;</td>
+                        <td id="D033" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>门诊随访</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B034" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A034" class="z-zero">&nbsp;</td>
+                        <td id="C034" class="z-zero">&nbsp;</td>
+                        <td id="D034" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>电话随访</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B035" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A035" class="z-zero">&nbsp;</td>
+                        <td id="C035" class="z-zero">&nbsp;</td>
+                        <td id="D035" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>60岁以下高血压、糖尿病患者年度体检</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B036" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A036" class="z-zero">&nbsp;</td>
+                        <td id="C036" class="z-zero">&nbsp;</td>
+                        <td id="D036" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="3" style="position:relative;">残疾人管理
+                        	<select id="CJREvaluation" name="z" style="position:absolute; right:0; top:0; width:80px;">
+                            	<option value="1.05">优秀</option>
+                                <option value="0.90">良好</option>
+                                <option value="0.80">合格</option>
+                                <option value="0.60">不合格</option>
+                            </select>
+                        </td>
+                        <td>入户随访</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B037" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A037" class="z-zero">&nbsp;</td>
+                        <td id="C037" class="z-zero">&nbsp;</td>
+                        <td id="D037" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>门诊、电话随访</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B038" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A038" class="z-zero">&nbsp;</td>
+                        <td id="C038" class="z-zero">&nbsp;</td>
+                        <td id="D038" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>健康体检</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B039" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A039" class="z-zero">&nbsp;</td>
+                        <td id="C039" class="z-zero">&nbsp;</td>
+                        <td id="D039" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="3" style="position:relative;">重性精神疾病患者健康管理
+                        <select id="ZXJSJBEvaluation" name="z" style="position:absolute; right:0; top:0; width:80px;">
+                            	<option value="1.05">优秀</option>
+                                <option value="0.90">良好</option>
+                                <option value="0.80">合格</option>
+                                <option value="0.60">不合格</option>
+                            </select>
+                        </td>
+                        <td>入户随访</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B040" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A040" class="z-zero">&nbsp;</td>
+                        <td id="C040" class="z-zero">&nbsp;</td>
+                        <td id="D040" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>门诊、电话随访</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B041" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A041" class="z-zero">&nbsp;</td>
+                        <td id="C041" class="z-zero">&nbsp;</td>
+                        <td id="D041" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>健康体检</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B042" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A042" class="z-zero">&nbsp;</td>
+                        <td id="C042" class="z-zero">&nbsp;</td>
+                        <td id="D042" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="4" style="position:relative;">传染病及突发公共卫生事件管理
+                        	<select id="CRBEvaluation" name="z" style="position:absolute; right:0; top:0; width:80px;">
+                            	<option value="1.05">优秀</option>
+                                <option value="0.90">良好</option>
+                                <option value="0.80">合格</option>
+                                <option value="0.60">不合格</option>
+                            </select>
+                        </td>
+                        <td>传染病疫情监测、疫情调查、漏报调查</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B043" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A043" class="z-zero">&nbsp;</td>
+                        <td id="C043" class="z-zero">&nbsp;</td>
+                        <td id="D043" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>传染病网络化管理</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B044" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A044" class="z-zero">&nbsp;</td>
+                        <td id="C044" class="z-zero">&nbsp;</td>
+                        <td id="D044" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>艾滋病等重大传染病综合管理</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B045" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A045" class="z-zero">&nbsp;</td>
+                        <td id="C045" class="z-zero">&nbsp;</td>
+                        <td id="D045" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>突发公共卫生事件</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B046" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A046" class="z-zero">&nbsp;</td>
+                        <td id="C046" class="z-zero">&nbsp;</td>
+                        <td id="D046" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2" style="position:relative;">卫生监督协管
+                        	<select id="WSJCEvaluation" name="z" style="position:absolute; right:0; top:0; width:80px;">
+                            	<option value="1.05">优秀</option>
+                                <option value="0.90">良好</option>
+                                <option value="0.80">合格</option>
+                                <option value="0.60">不合格</option>
+                            </select>
+                        </td>
+                        <td>卫生监督协管信息报告</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B047" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A047" class="z-zero">&nbsp;</td>
+                        <td id="C047" class="z-zero">&nbsp;</td>
+                        <td id="D047" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>协助开展的饮用水卫生安全、学校卫生、非法行医和非法采供血实地巡查</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B048" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A048" class="z-zero">&nbsp;</td>
+                        <td id="C048" class="z-zero">&nbsp;</td>
+                        <td id="D048" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2" style="position:relative;">中医药健康管理服务
+                        	<select id="ZYYEvaluation" name="z" style="position:absolute; right:0; top:0; width:80px;">
+                            	<option value="1.05">优秀</option>
+                                <option value="0.90">良好</option>
+                                <option value="0.80">合格</option>
+                                <option value="0.60">不合格</option>
+                            </select>
+                        </td>
+                        <td>65岁以上老年人中医药健康管理服务</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B049" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A049" class="z-zero">&nbsp;</td>
+                        <td id="C049" class="z-zero">&nbsp;</td>
+                        <td id="D049" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>0-36个月龄儿童中医药健康管理服务</td>
+                        <td align="center" class="tnull "><input class="quarterother" id="B050" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A050" class="z-zero">&nbsp;</td>
+                        <td id="C050" class="z-zero">&nbsp;</td>
+                        <td id="D050" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="3" style="position:relative;">口腔服务项目
+                        	<select id="KQFFEvaluation" name="z" style="position:absolute; right:0; top:0; width:80px;">
+                            	<option value="1.05">优秀</option>
+                                <option value="0.90">良好</option>
+                                <option value="0.80">合格</option>
+                                <option value="0.60">不合格</option>
+                            </select>
+                        </td>
+                        <td>居民口腔健康档案  新建档</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B051" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A051" class="z-zero">&nbsp;</td>
+                        <td id="C051" class="z-zero">&nbsp;</td>
+                        <td id="D051" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>口腔健康教育讲座</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B052" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A052" class="z-zero">&nbsp;</td>
+                        <td id="C052" class="z-zero">&nbsp;</td>
+                        <td id="D052" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>9.20“世界爱牙日”宣传活动</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B053" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A053" class="z-zero">&nbsp;</td>
+                        <td id="C053" class="z-zero">&nbsp;</td>
+                        <td id="D053" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td style="position:relative;">妇幼服务项目
+                        	<select id="FYFFEvaluation" name="z" style="position:absolute; right:0; top:0; width:80px;">
+                            	<option value="1.05">优秀</option>
+                                <option value="0.90">良好</option>
+                                <option value="0.80">合格</option>
+                                <option value="0.60">不合格</option>
+                            </select>
+                        </td>
+                        <td>积极宣传和推广IMFeD技术，应用IMFeD技术为患儿诊治</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B054" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A054" class="z-zero">&nbsp;</td>
+                        <td id="C054" class="z-zero">&nbsp;</td>
+                        <td id="D054" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="20" style="position:relative;">疾控服务项目
+                        	<select id="JKFFEvaluation" name="z" style="position:absolute; right:0; top:0; width:80px;">
+                            	<option value="1.05">优秀</option>
+                                <option value="0.90">良好</option>
+                                <option value="0.80">合格</option>
+                                <option value="0.60">不合格</option>
+                            </select>
+                        </td>
+                        <td>疫苗冷链和预防接种门诊视频监管系统项目建设(1万元/单位)</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B055" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A055" class="z-zero">&nbsp;</td>
+                        <td id="C055" class="z-zero">&nbsp;</td>
+                        <td id="D055" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>疫苗冷链和预防接种门诊视频监管系统项目建设(0.7万元/单位)</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B056" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A056" class="z-zero">&nbsp;</td>
+                        <td id="C056" class="z-zero">&nbsp;</td>
+                        <td id="D056" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>二类疫苗预防接种知情告知管理(0.1万元/单位)</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B057" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A057" class="z-zero">&nbsp;</td>
+                        <td id="C057" class="z-zero">&nbsp;</td>
+                        <td id="D057" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>二类疫苗预防接种知情告知管理(0.5万元/年)</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B058" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A058" class="z-zero">&nbsp;</td>
+                        <td id="C058" class="z-zero">&nbsp;</td>
+                        <td id="D058" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>二类疫苗预防接种知情告知管理(0.5万元/单位)</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B059" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A059" class="z-zero">&nbsp;</td>
+                        <td id="C059" class="z-zero">&nbsp;</td>
+                        <td id="D059" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>“健康知信行”慢病患者自我管理干预技术推广工作</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B060" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A060" class="z-zero">&nbsp;</td>
+                        <td id="C060" class="z-zero">&nbsp;</td>
+                        <td id="D060" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>2014-2015年城市癌症早诊早治项目（0.5万元/单位）</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B061" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A061" class="z-zero">&nbsp;</td>
+                        <td id="C061" class="z-zero">&nbsp;</td>
+                        <td id="D061" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>2014-2015年城市癌症早诊早治项目（20元/份)</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B062" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A062" class="z-zero">&nbsp;</td>
+                        <td id="C062" class="z-zero">&nbsp;</td>
+                        <td id="D062" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>2014-2015年城市癌症早诊早治项目（10元/份)</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B063" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A063" class="z-zero">&nbsp;</td>
+                        <td id="C063" class="z-zero">&nbsp;</td>
+                        <td id="D063" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>慢性病高危人群发现与干预工作</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B064" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A064" class="z-zero">&nbsp;</td>
+                        <td id="C064" class="z-zero">&nbsp;</td>
+                        <td id="D064" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>四个人人知晓、全面健康生活项目</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B065" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A065" class="z-zero">&nbsp;</td>
+                        <td id="C065" class="z-zero">&nbsp;</td>
+                        <td id="D065" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>健康讲座、人人共享项目</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B066" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A066" class="z-zero">&nbsp;</td>
+                        <td id="C066" class="z-zero">&nbsp;</td>
+                        <td id="D066" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>健康生活、吃动平衡项目</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B067" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A067" class="z-zero">&nbsp;</td>
+                        <td id="C067" class="z-zero">&nbsp;</td>
+                        <td id="D067" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>人群死因监测漏报调查(0.12万元/单位)</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B068" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A068" class="z-zero">&nbsp;</td>
+                        <td id="C068" class="z-zero">&nbsp;</td>
+                        <td id="D068" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>人群死因监测漏报调查(2元/户)</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B069" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A069" class="z-zero">&nbsp;</td>
+                        <td id="C069" class="z-zero">&nbsp;</td>
+                        <td id="D069" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>人群死因监测漏报调查(30元/例)</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B070" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A070" class="z-zero">&nbsp;</td>
+                        <td id="C070" class="z-zero">&nbsp;</td>
+                        <td id="D070" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>艾滋病高危人群干预活动</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B071" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A071" class="z-zero">&nbsp;</td>
+                        <td id="C071" class="z-zero">&nbsp;</td>
+                        <td id="D071" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>传染病防控工作项目(30元/例)</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B072" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A072" class="z-zero">&nbsp;</td>
+                        <td id="C072" class="z-zero">&nbsp;</td>
+                        <td id="D072" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>传染病防控工作项目(50元/例)</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B073" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A073" class="z-zero">&nbsp;</td>
+                        <td id="C073" class="z-zero">&nbsp;</td>
+                        <td id="D073" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>传染病防控工作项目(600元/单位)</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B074" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A074" class="z-zero">&nbsp;</td>
+                        <td id="C074" class="z-zero">&nbsp;</td>
+                        <td id="D074" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2" style="position:relative;">结核病服务项目
+                        	<select id="JHBEvaluation" name="z" style="position:absolute; right:0; top:0; width:80px;">
+                            	<option value="1.05">优秀</option>
+                                <option value="0.90">良好</option>
+                                <option value="0.80">合格</option>
+                                <option value="0.60">不合格</option>
+                            </select>
+                        </td>
+                        <td>发现病人(经结防机构确诊)</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B075" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A075" class="z-zero">&nbsp;</td>
+                        <td id="C075" class="z-zero">&nbsp;</td>
+                        <td id="D075" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>全程督导病人管理费</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B076" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A076" class="z-zero">&nbsp;</td>
+                        <td id="C076" class="z-zero">&nbsp;</td>
+                        <td id="D076" class="z-zero">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td style="position:relative;">家庭医生签约服务
+                        	<select id="JTYSEvaluation" name="z" style="position:absolute; right:0; top:0; width:80px;">
+                            	<option value="1.05">优秀</option>
+                                <option value="0.90">良好</option>
+                                <option value="0.80">合格</option>
+                                <option value="0.60">不合格</option>
+                            </select>
+                        </td>
+                        <td>家庭医生有效签约签约</td>
+                        <td align="center" class="tnull "><input class="quarter4" id="B077" name="" type="text" value="0"  disabled="disabled"/></td>
+                        <td id="A077" class="z-zero">&nbsp;</td>
+                        <td id="C077" class="z-zero">&nbsp;</td>
+                        <td id="D077" class="z-zero">&nbsp;</td>
+                    </tr>
+                </table>
+                 
+            </div>
+        </div>
+    </div>
+</div>
+ </form>
+<script type="text/javascript">
+var dataShow;
+var PageNumber=1;
+var PageSize=10;
+//确认-------------IsConfirm=1
+function setDataaddY(data){
+
+    var r=confirm("确认以后，数据将无法操作！");
+    if (r==true)
+      {
+        $(".tnull input").attr("disabled","disabled");
+        $("#rowtable select").attr("disabled","disabled");
+        $(".tnull input").css({ "border": "none"})
+        $("#IsConfirm").val("1");
+        $(".loadshow").show(); 
+        var  url ="xg"; 
+        var itemsList;
+        if($("#year").val()!=""){
+            itemsList=["year","quarter","dimOrg","A001","A002","A003","A004","A005","A006","A007","A008","A009","A010","A011","A012","A013","A014","A015","A016","A017","A018","A019","A020","A021","A022","A023","A0231","A0232","A024","A025","A026","A027","A028","A029","A030","A031","A032","A033","A034","A035","A036","A037","A038","A039","A040","A041","A042","A043","A044","A045","A046","A047","A048","A049","A050","A051","A052","A053","A054","A055","A056","A057","A058","A059","A060","A061","A062","A063","A064","A065","A066","A067","A068","A069","A070","A071","A072","A073","A074","A075","A076","A077","B001","B002","B003","B004","B005","B006","B007","B008","B009","B010","B011","B012","B013","B014","B015","B016","B017","B018","B019","B020","B021","B022","B023","B0231","B0232","B024","B025","B026","B027","B028","B029","B030","B031","B032","B033","B034","B035","B036","B037","B038","B039","B040","B041","B042","B043","B044","B045","B046","B047","B048","B049","B050","B051","B052","B053","B054","B055","B056","B057","B058","B059","B060","B061","B062","B063","B064","B065","B066","B067","B068","B069","B070","B071","B072","B073","B074","B075","B076","B077","C001","C002","C003","C004","C005","C006","C007","C008","C009","C010","C011","C012","C013","C014","C015","C016","C017","C018","C019","C020","C021","C022","C023","C0231","C0232","C024","C025","C026","C027","C028","C029","C030","C031","C032","C033","C034","C035","C036","C037","C038","C039","C040","C041","C042","C043","C044","C045","C046","C047","C048","C049","C050","C051","C052","C053","C054","C055","C056","C057","C058","C059","C060","C061","C062","C063","C064","C065","C066","C067","C068","C069","C070","C071","C072","C073","C074","C075","C076","C077","D001","D002","D003","D004","D005","D006","D007","D008","D009","D010","D011","D012","D013","D014","D015","D016","D017","D018","D019","D020","D021","D022","D023","D0231","D0232","D024","D025","D026","D027","D028","D029","D030","D031","D032","D033","D034","D035","D036","D037","D038","D039","D040","D041","D042","D043","D044","D045","D046","D047","D048","D049","D050","D051","D052","D053","D054","D055","D056","D057","D058","D059","D060","D061","D062","D063","D064","D065","D066","D067","D068","D069","D070","D071","D072","D073","D074","D075","D076","D077","evaluation","IsConfirm","JKDAEvaluation","JKJYEvaluation","YFJZEvaluation","ETBJEvaluation","FNBJEvaluation","JHSYEvaluation","LNRJKEvaluation","MXBHZEvaluation","CJREvaluation","ZXJSJBEvaluation","CRBEvaluation","WSJCEvaluation","ZYYEvaluation","KQFFEvaluation","FYFFEvaluation","JKFFEvaluation","JHBEvaluation","JTYSEvaluation"];
+        }else{
+            itemsList=[];
+        }
+        //空数据 会出现 小bug
+        var info= new Map();
+        info.put("sqlid","update");
+        info.put("pagenum",PageNumber);
+        info.put("pagesize",PageSize);
+        info.put("groupby",data);
+        sys_AjaxGet(BIUrl+url,"org_etbjglda","reCallbackhd",info,itemsList);
+      }
+    else
+      {
+      //alert("You pressed Cancel!");
+      }
+
+
+    
+}
+function reCallbackhd(data){
+    //alert("------修改成功")
+    setData2EtbjgldaNew();
+}
+
+
+
+
+
+
+
+
+
+function setDataaddrevise(){
+    var quarter=$("#quarter").val();
+    //if (quarter==4) {alert("------4")};
+    $(".tnull input").removeAttr("disabled");
+
+
+    var quarter=$("#quarter").val();
+    if (quarter==3 || quarter==4 ) {
+        $(".tnull input").removeAttr("disabled");
+        $(".tnull input").css({ "border": "1px solid #ccc"});
+    }else{
+        $(".tnull input.quarterother").removeAttr("disabled");
+        $(".tnull input.quarterother").css({ "border": "1px solid #ccc"});
+        $(".tnull input.quarter4").attr("disabled");
+        $(".tnull input.quarter4").css({ "border": "none"});
+    }
+
+
+    $("#rowtable select").removeAttr("disabled");
+    $("#jgcxid").html("");
+    $("#jgcxid").append("<a id='jgcx5' onclick='setDataadd()' class='btn blue'>保存</a>");
+
+}
+function setDatacompile(){
+    var quarter=$("#quarter").val();
+    if (quarter==3 || quarter==4) {
+        $(".tnull input").removeAttr("disabled");
+        $(".tnull input").css({ "border": "1px solid #ccc"});
+    }else{
+        $(".tnull input.quarterother").removeAttr("disabled");
+        $(".tnull input.quarterother").css({ "border": "1px solid #ccc"});
+        $(".tnull input.quarter4").attr("disabled");
+        $(".tnull input.quarter4").css({ "border": "none"});
+    }
+    $("#rowtable select").removeAttr("disabled");
+    $(".tnull input:first").focus();
+    $(".tnull input").click(function(){
+        $(this).select();
+    });
+
+    $("#jgcxid").html("");
+    $("#jgcxid").append("<a id='jgcx3' onclick='setDatarevise()' class='btn blue'>保存</a>");
+}
+//修改
+function setDatarevise(data){
+    $(".tnull input").attr("disabled","disabled");
+    $("#rowtable select").attr("disabled","disabled");
+    $(".tnull input").css({ "border": "none"})
+    $("#IsConfirm").val("0");
+    $(".loadshow").show(); 
+    var url ="xg"; 
+    var itemsList;
+    if($("#year").val()!=""){
+        itemsList=["year","quarter","dimOrg","A001","A002","A003","A004","A005","A006","A007","A008","A009","A010","A011","A012","A013","A014","A015","A016","A017","A018","A019","A020","A021","A022","A023","A0231","A0232","A024","A025","A026","A027","A028","A029","A030","A031","A032","A033","A034","A035","A036","A037","A038","A039","A040","A041","A042","A043","A044","A045","A046","A047","A048","A049","A050","A051","A052","A053","A054","A055","A056","A057","A058","A059","A060","A061","A062","A063","A064","A065","A066","A067","A068","A069","A070","A071","A072","A073","A074","A075","A076","A077","B001","B002","B003","B004","B005","B006","B007","B008","B009","B010","B011","B012","B013","B014","B015","B016","B017","B018","B019","B020","B021","B022","B023","B0231","B0232","B024","B025","B026","B027","B028","B029","B030","B031","B032","B033","B034","B035","B036","B037","B038","B039","B040","B041","B042","B043","B044","B045","B046","B047","B048","B049","B050","B051","B052","B053","B054","B055","B056","B057","B058","B059","B060","B061","B062","B063","B064","B065","B066","B067","B068","B069","B070","B071","B072","B073","B074","B075","B076","B077","C001","C002","C003","C004","C005","C006","C007","C008","C009","C010","C011","C012","C013","C014","C015","C016","C017","C018","C019","C020","C021","C022","C023","C0231","C0232","C024","C025","C026","C027","C028","C029","C030","C031","C032","C033","C034","C035","C036","C037","C038","C039","C040","C041","C042","C043","C044","C045","C046","C047","C048","C049","C050","C051","C052","C053","C054","C055","C056","C057","C058","C059","C060","C061","C062","C063","C064","C065","C066","C067","C068","C069","C070","C071","C072","C073","C074","C075","C076","C077","D001","D002","D003","D004","D005","D006","D007","D008","D009","D010","D011","D012","D013","D014","D015","D016","D017","D018","D019","D020","D021","D022","D023","D0231","D0232","D024","D025","D026","D027","D028","D029","D030","D031","D032","D033","D034","D035","D036","D037","D038","D039","D040","D041","D042","D043","D044","D045","D046","D047","D048","D049","D050","D051","D052","D053","D054","D055","D056","D057","D058","D059","D060","D061","D062","D063","D064","D065","D066","D067","D068","D069","D070","D071","D072","D073","D074","D075","D076","D077","evaluation","IsConfirm","JKDAEvaluation","JKJYEvaluation","YFJZEvaluation","ETBJEvaluation","FNBJEvaluation","JHSYEvaluation","LNRJKEvaluation","MXBHZEvaluation","CJREvaluation","ZXJSJBEvaluation","CRBEvaluation","WSJCEvaluation","ZYYEvaluation","KQFFEvaluation","FYFFEvaluation","JKFFEvaluation","JHBEvaluation","JTYSEvaluation"];
+    }else{
+        itemsList=[];
+    }
+    //空数据 会出现 小bug
+    var info= new Map();
+    info.put("sqlid","update");
+    info.put("pagenum",PageNumber);
+    info.put("pagesize",PageSize);
+    info.put("groupby",data);
+    sys_AjaxGet(BIUrl+url,"org_etbjglda","reCallbackhd",info,itemsList);
+}
+function reCallbackhd(data){
+    //alert("------修改成功")
+    setData2EtbjgldaNew();
+}
+//添加
+function setDataadd(data){
+    $(".tnull input").attr("disabled","disabled");
+    $("#rowtable select").attr("disabled","disabled");
+    $(".tnull input").css({ "border": "none"})
+    $("#IsConfirm").val("0");
+    $(".loadshow").show(); 
+    var url ="tj"; 
+    var itemsList;
+    if($("#year").val()!=""){
+        itemsList=["year","quarter","dimOrg","A001","A002","A003","A004","A005","A006","A007","A008","A009","A010","A011","A012","A013","A014","A015","A016","A017","A018","A019","A020","A021","A022","A023","A0231","A0232","A024","A025","A026","A027","A028","A029","A030","A031","A032","A033","A034","A035","A036","A037","A038","A039","A040","A041","A042","A043","A044","A045","A046","A047","A048","A049","A050","A051","A052","A053","A054","A055","A056","A057","A058","A059","A060","A061","A062","A063","A064","A065","A066","A067","A068","A069","A070","A071","A072","A073","A074","A075","A076","A077","B001","B002","B003","B004","B005","B006","B007","B008","B009","B010","B011","B012","B013","B014","B015","B016","B017","B018","B019","B020","B021","B022","B023","B0231","B0232","B024","B025","B026","B027","B028","B029","B030","B031","B032","B033","B034","B035","B036","B037","B038","B039","B040","B041","B042","B043","B044","B045","B046","B047","B048","B049","B050","B051","B052","B053","B054","B055","B056","B057","B058","B059","B060","B061","B062","B063","B064","B065","B066","B067","B068","B069","B070","B071","B072","B073","B074","B075","B076","B077","C001","C002","C003","C004","C005","C006","C007","C008","C009","C010","C011","C012","C013","C014","C015","C016","C017","C018","C019","C020","C021","C022","C023","C0231","C0232","C024","C025","C026","C027","C028","C029","C030","C031","C032","C033","C034","C035","C036","C037","C038","C039","C040","C041","C042","C043","C044","C045","C046","C047","C048","C049","C050","C051","C052","C053","C054","C055","C056","C057","C058","C059","C060","C061","C062","C063","C064","C065","C066","C067","C068","C069","C070","C071","C072","C073","C074","C075","C076","C077","D001","D002","D003","D004","D005","D006","D007","D008","D009","D010","D011","D012","D013","D014","D015","D016","D017","D018","D019","D020","D021","D022","D023","D0231","D0232","D024","D025","D026","D027","D028","D029","D030","D031","D032","D033","D034","D035","D036","D037","D038","D039","D040","D041","D042","D043","D044","D045","D046","D047","D048","D049","D050","D051","D052","D053","D054","D055","D056","D057","D058","D059","D060","D061","D062","D063","D064","D065","D066","D067","D068","D069","D070","D071","D072","D073","D074","D075","D076","D077","evaluation","IsConfirm","JKDAEvaluation","JKJYEvaluation","YFJZEvaluation","ETBJEvaluation","FNBJEvaluation","JHSYEvaluation","LNRJKEvaluation","MXBHZEvaluation","CJREvaluation","ZXJSJBEvaluation","CRBEvaluation","WSJCEvaluation","ZYYEvaluation","KQFFEvaluation","FYFFEvaluation","JKFFEvaluation","JHBEvaluation","JTYSEvaluation"];
+    }else{
+        itemsList=[];
+    }
+    //空数据 会出现 小bug
+    var info= new Map();
+    info.put("sqlid","insert");
+    info.put("pagenum",PageNumber);
+    info.put("pagesize",PageSize);
+    info.put("groupby",data);
+    sys_AjaxGet(BIUrl+url,"org_etbjglda","reCallbackadd",info,itemsList);
+}
+function reCallbackadd(data){
+    //alert("------修改成功")
+    setData2EtbjgldaNew();
+}
+function setData2EtbjgldaNew(data){
+    $(".tnull input").attr("disabled","disabled");
+    $("#rowtable select").attr("disabled","disabled");
+    $(".tnull input").css({ "border": "none"})
+    $("#jgcx3").hide();
+    //$('.tnull').text('0');
+
+	$(".loadshow").show(); 
+	var url ="cx"; 
+	var itemsList;
+	if($("#year").val()!=""){
+		itemsList=["year","quarter","dimOrg"];
+	}else{
+		itemsList=[];
+	}
+	//空数据 会出现 小bug
+	var info= new Map();
+	info.put("sqlid","select");
+	info.put("pagenum",PageNumber);
+	info.put("pagesize",PageSize);
+	if(data==="tablename"){
+	   LXtype="tablename";
+	}else if(data==="createdate"){
+	   LXtype="createdate";
+	}else{
+	   LXtype="hospunitorgcode"
+	}
+	info.put("groupby",data);
+	sys_AjaxGet(BIUrl+url,"org_etbjglda","reCallback101",info,itemsList);
+}
+function reCallback101(dataInfo){
+	if(dataInfo.ret=="103"){
+        alert("用户登录超时，请重新登陆！");
+        $('#trigger').scojs_modal();
+    }
+if (dataInfo.dataMap['isconfirm']==1) {
+    alert("已经确认，无法进行修改！");
+    $("#jgcxid").html("");
+    $("#jgcx6").hide();
+    //切换图形是grid时候，如果没有对应数据
+$(".evaluation").text(dataInfo.dataMap['evaluation']);
+$("#B001").val(dataInfo.dataMap['b001']);
+$("#B002").val(dataInfo.dataMap['b002']);
+$("#B003").val(dataInfo.dataMap['b003']);
+$("#B004").val(dataInfo.dataMap['b004']);
+$("#B005").val(dataInfo.dataMap['b005']);
+$("#B006").val(dataInfo.dataMap['b006']);
+$("#B007").val(dataInfo.dataMap['b007']);
+$("#B008").val(dataInfo.dataMap['b008']);
+$("#B009").val(dataInfo.dataMap['b009']);
+$("#B010").val(dataInfo.dataMap['b010']);
+$("#B011").val(dataInfo.dataMap['b011']);
+$("#B012").val(dataInfo.dataMap['b012']);
+$("#B013").val(dataInfo.dataMap['b013']);
+$("#B014").val(dataInfo.dataMap['b014']);
+$("#B015").val(dataInfo.dataMap['b015']);
+$("#B016").val(dataInfo.dataMap['b016']);
+$("#B017").val(dataInfo.dataMap['b017']);
+$("#B018").val(dataInfo.dataMap['b018']);
+$("#B019").val(dataInfo.dataMap['b019']);
+$("#B020").val(dataInfo.dataMap['b020']);
+$("#B021").val(dataInfo.dataMap['b021']);
+$("#B022").val(dataInfo.dataMap['b022']);
+$("#B023").val(dataInfo.dataMap['b023']);
+$("#B0231").val(dataInfo.dataMap['b0231']);
+$("#B0232").val(dataInfo.dataMap['b0232']);
+$("#B024").val(dataInfo.dataMap['b024']);
+$("#B025").val(dataInfo.dataMap['b025']);
+$("#B026").val(dataInfo.dataMap['b026']);
+$("#B027").val(dataInfo.dataMap['b027']);
+$("#B028").val(dataInfo.dataMap['b028']);
+$("#B029").val(dataInfo.dataMap['b029']);
+$("#B030").val(dataInfo.dataMap['b030']);
+$("#B031").val(dataInfo.dataMap['b031']);
+$("#B032").val(dataInfo.dataMap['b032']);
+$("#B033").val(dataInfo.dataMap['b033']);
+$("#B034").val(dataInfo.dataMap['b034']);
+$("#B035").val(dataInfo.dataMap['b035']);
+$("#B036").val(dataInfo.dataMap['b036']);
+$("#B037").val(dataInfo.dataMap['b037']);
+$("#B038").val(dataInfo.dataMap['b038']);
+$("#B039").val(dataInfo.dataMap['b039']);
+$("#B040").val(dataInfo.dataMap['b040']);
+$("#B041").val(dataInfo.dataMap['b041']);
+$("#B042").val(dataInfo.dataMap['b042']);
+$("#B043").val(dataInfo.dataMap['b043']);
+$("#B044").val(dataInfo.dataMap['b044']);
+$("#B045").val(dataInfo.dataMap['b045']);
+$("#B046").val(dataInfo.dataMap['b046']);
+$("#B047").val(dataInfo.dataMap['b047']);
+$("#B048").val(dataInfo.dataMap['b048']);
+$("#B049").val(dataInfo.dataMap['b049']);
+$("#B050").val(dataInfo.dataMap['b050']);
+$("#B051").val(dataInfo.dataMap['b051']);
+$("#B052").val(dataInfo.dataMap['b052']);
+$("#B053").val(dataInfo.dataMap['b053']);
+$("#B054").val(dataInfo.dataMap['b054']);
+$("#B055").val(dataInfo.dataMap['b055']);
+$("#B056").val(dataInfo.dataMap['b056']);
+$("#B057").val(dataInfo.dataMap['b057']);
+$("#B058").val(dataInfo.dataMap['b058']);
+$("#B059").val(dataInfo.dataMap['b059']);
+$("#B060").val(dataInfo.dataMap['b060']);
+$("#B061").val(dataInfo.dataMap['b061']);
+$("#B062").val(dataInfo.dataMap['b062']);
+$("#B063").val(dataInfo.dataMap['b063']);
+$("#B064").val(dataInfo.dataMap['b064']);
+$("#B065").val(dataInfo.dataMap['b065']);
+$("#B066").val(dataInfo.dataMap['b066']);
+$("#B067").val(dataInfo.dataMap['b067']);
+$("#B068").val(dataInfo.dataMap['b068']);
+$("#B069").val(dataInfo.dataMap['b069']);
+$("#B070").val(dataInfo.dataMap['b070']);
+$("#B071").val(dataInfo.dataMap['b071']);
+$("#B072").val(dataInfo.dataMap['b072']);
+$("#B073").val(dataInfo.dataMap['b073']);
+$("#B074").val(dataInfo.dataMap['b074']);
+$("#B075").val(dataInfo.dataMap['b075']);
+$("#B076").val(dataInfo.dataMap['b076']);
+$("#B077").val(dataInfo.dataMap['b077']);
+$("#A001").text(dataInfo.dataMap['a001']);
+$("#A002").text(dataInfo.dataMap['a002']);
+$("#A003").text(dataInfo.dataMap['a003']);
+$("#A004").text(dataInfo.dataMap['a004']);
+$("#A005").text(dataInfo.dataMap['a005']);
+$("#A006").text(dataInfo.dataMap['a006']);
+$("#A007").text(dataInfo.dataMap['a007']);
+$("#A008").text(dataInfo.dataMap['a008']);
+$("#A009").text(dataInfo.dataMap['a009']);
+$("#A010").text(dataInfo.dataMap['a010']);
+$("#A011").text(dataInfo.dataMap['a011']);
+$("#A012").text(dataInfo.dataMap['a012']);
+$("#A013").text(dataInfo.dataMap['a013']);
+$("#A014").text(dataInfo.dataMap['a014']);
+$("#A015").text(dataInfo.dataMap['a015']);
+$("#A016").text(dataInfo.dataMap['a016']);
+$("#A017").text(dataInfo.dataMap['a017']);
+$("#A018").text(dataInfo.dataMap['a018']);
+$("#A019").text(dataInfo.dataMap['a019']);
+$("#A020").text(dataInfo.dataMap['a020']);
+$("#A021").text(dataInfo.dataMap['a021']);
+$("#A022").text(dataInfo.dataMap['a022']);
+$("#A023").text(dataInfo.dataMap['a023']);
+$("#A0231").text(dataInfo.dataMap['a0231']);
+$("#A0232").text(dataInfo.dataMap['a0232']);
+$("#A024").text(dataInfo.dataMap['a024']);
+$("#A025").text(dataInfo.dataMap['a025']);
+$("#A026").text(dataInfo.dataMap['a026']);
+$("#A027").text(dataInfo.dataMap['a027']);
+$("#A028").text(dataInfo.dataMap['a028']);
+$("#A029").text(dataInfo.dataMap['a029']);
+$("#A030").text(dataInfo.dataMap['a030']);
+$("#A031").text(dataInfo.dataMap['a031']);
+$("#A032").text(dataInfo.dataMap['a032']);
+$("#A033").text(dataInfo.dataMap['a033']);
+$("#A034").text(dataInfo.dataMap['a034']);
+$("#A035").text(dataInfo.dataMap['a035']);
+$("#A036").text(dataInfo.dataMap['a036']);
+$("#A037").text(dataInfo.dataMap['a037']);
+$("#A038").text(dataInfo.dataMap['a038']);
+$("#A039").text(dataInfo.dataMap['a039']);
+$("#A040").text(dataInfo.dataMap['a040']);
+$("#A041").text(dataInfo.dataMap['a041']);
+$("#A042").text(dataInfo.dataMap['a042']);
+$("#A043").text(dataInfo.dataMap['a043']);
+$("#A044").text(dataInfo.dataMap['a044']);
+$("#A045").text(dataInfo.dataMap['a045']);
+$("#A046").text(dataInfo.dataMap['a046']);
+$("#A047").text(dataInfo.dataMap['a047']);
+$("#A048").text(dataInfo.dataMap['a048']);
+$("#A049").text(dataInfo.dataMap['a049']);
+$("#A050").text(dataInfo.dataMap['a050']);
+$("#A051").text(dataInfo.dataMap['a051']);
+$("#A052").text(dataInfo.dataMap['a052']);
+$("#A053").text(dataInfo.dataMap['a053']);
+$("#A054").text(dataInfo.dataMap['a054']);
+$("#A055").text(dataInfo.dataMap['a055']);
+$("#A056").text(dataInfo.dataMap['a056']);
+$("#A057").text(dataInfo.dataMap['a057']);
+$("#A058").text(dataInfo.dataMap['a058']);
+$("#A059").text(dataInfo.dataMap['a059']);
+$("#A060").text(dataInfo.dataMap['a060']);
+$("#A061").text(dataInfo.dataMap['a061']);
+$("#A062").text(dataInfo.dataMap['a062']);
+$("#A063").text(dataInfo.dataMap['a063']);
+$("#A064").text(dataInfo.dataMap['a064']);
+$("#A065").text(dataInfo.dataMap['a065']);
+$("#A066").text(dataInfo.dataMap['a066']);
+$("#A067").text(dataInfo.dataMap['a067']);
+$("#A068").text(dataInfo.dataMap['a068']);
+$("#A069").text(dataInfo.dataMap['a069']);
+$("#A070").text(dataInfo.dataMap['a070']);
+$("#A071").text(dataInfo.dataMap['a071']);
+$("#A072").text(dataInfo.dataMap['a072']);
+$("#A073").text(dataInfo.dataMap['a073']);
+$("#A074").text(dataInfo.dataMap['a074']);
+$("#A075").text(dataInfo.dataMap['a075']);
+$("#A076").text(dataInfo.dataMap['a076']);
+$("#A077").text(dataInfo.dataMap['a077']);
+$("#C001").text(dataInfo.dataMap['c001']);
+$("#C002").text(dataInfo.dataMap['c002']);
+$("#C003").text(dataInfo.dataMap['c003']);
+$("#C004").text(dataInfo.dataMap['c004']);
+$("#C005").text(dataInfo.dataMap['c005']);
+$("#C006").text(dataInfo.dataMap['c006']);
+$("#C007").text(dataInfo.dataMap['c007']);
+$("#C008").text(dataInfo.dataMap['c008']);
+$("#C009").text(dataInfo.dataMap['c009']);
+$("#C010").text(dataInfo.dataMap['c010']);
+$("#C011").text(dataInfo.dataMap['c011']);
+$("#C012").text(dataInfo.dataMap['c012']);
+$("#C013").text(dataInfo.dataMap['c013']);
+$("#C014").text(dataInfo.dataMap['c014']);
+$("#C015").text(dataInfo.dataMap['c015']);
+$("#C016").text(dataInfo.dataMap['c016']);
+$("#C017").text(dataInfo.dataMap['c017']);
+$("#C018").text(dataInfo.dataMap['c018']);
+$("#C019").text(dataInfo.dataMap['c019']);
+$("#C020").text(dataInfo.dataMap['c020']);
+$("#C021").text(dataInfo.dataMap['c021']);
+$("#C022").text(dataInfo.dataMap['c022']);
+$("#C023").text(dataInfo.dataMap['c023']);
+$("#C0231").text(dataInfo.dataMap['c0231']);
+$("#C0232").text(dataInfo.dataMap['c0232']);
+$("#C024").text(dataInfo.dataMap['c024']);
+$("#C025").text(dataInfo.dataMap['c025']);
+$("#C026").text(dataInfo.dataMap['c026']);
+$("#C027").text(dataInfo.dataMap['c027']);
+$("#C028").text(dataInfo.dataMap['c028']);
+$("#C029").text(dataInfo.dataMap['c029']);
+$("#C030").text(dataInfo.dataMap['c030']);
+$("#C031").text(dataInfo.dataMap['c031']);
+$("#C032").text(dataInfo.dataMap['c032']);
+$("#C033").text(dataInfo.dataMap['c033']);
+$("#C034").text(dataInfo.dataMap['c034']);
+$("#C035").text(dataInfo.dataMap['c035']);
+$("#C036").text(dataInfo.dataMap['c036']);
+$("#C037").text(dataInfo.dataMap['c037']);
+$("#C038").text(dataInfo.dataMap['c038']);
+$("#C039").text(dataInfo.dataMap['c039']);
+$("#C040").text(dataInfo.dataMap['c040']);
+$("#C041").text(dataInfo.dataMap['c041']);
+$("#C042").text(dataInfo.dataMap['c042']);
+$("#C043").text(dataInfo.dataMap['c043']);
+$("#C044").text(dataInfo.dataMap['c044']);
+$("#C045").text(dataInfo.dataMap['c045']);
+$("#C046").text(dataInfo.dataMap['c046']);
+$("#C047").text(dataInfo.dataMap['c047']);
+$("#C048").text(dataInfo.dataMap['c048']);
+$("#C049").text(dataInfo.dataMap['c049']);
+$("#C050").text(dataInfo.dataMap['c050']);
+$("#C051").text(dataInfo.dataMap['c051']);
+$("#C052").text(dataInfo.dataMap['c052']);
+$("#C053").text(dataInfo.dataMap['c053']);
+$("#C054").text(dataInfo.dataMap['c054']);
+$("#C055").text(dataInfo.dataMap['c055']);
+$("#C056").text(dataInfo.dataMap['c056']);
+$("#C057").text(dataInfo.dataMap['c057']);
+$("#C058").text(dataInfo.dataMap['c058']);
+$("#C059").text(dataInfo.dataMap['c059']);
+$("#C060").text(dataInfo.dataMap['c060']);
+$("#C061").text(dataInfo.dataMap['c061']);
+$("#C062").text(dataInfo.dataMap['c062']);
+$("#C063").text(dataInfo.dataMap['c063']);
+$("#C064").text(dataInfo.dataMap['c064']);
+$("#C065").text(dataInfo.dataMap['c065']);
+$("#C066").text(dataInfo.dataMap['c066']);
+$("#C067").text(dataInfo.dataMap['c067']);
+$("#C068").text(dataInfo.dataMap['c068']);
+$("#C069").text(dataInfo.dataMap['c069']);
+$("#C070").text(dataInfo.dataMap['c070']);
+$("#C071").text(dataInfo.dataMap['c071']);
+$("#C072").text(dataInfo.dataMap['c072']);
+$("#C073").text(dataInfo.dataMap['c073']);
+$("#C074").text(dataInfo.dataMap['c074']);
+$("#C075").text(dataInfo.dataMap['c075']);
+$("#C076").text(dataInfo.dataMap['c076']);
+$("#C077").text(dataInfo.dataMap['c077']);
+$("#D001").text(dataInfo.dataMap['d001']);
+$("#D002").text(dataInfo.dataMap['d002']);
+$("#D003").text(dataInfo.dataMap['d003']);
+$("#D004").text(dataInfo.dataMap['d004']);
+$("#D005").text(dataInfo.dataMap['d005']);
+$("#D006").text(dataInfo.dataMap['d006']);
+$("#D007").text(dataInfo.dataMap['d007']);
+$("#D008").text(dataInfo.dataMap['d008']);
+$("#D009").text(dataInfo.dataMap['d009']);
+$("#D010").text(dataInfo.dataMap['d010']);
+$("#D011").text(dataInfo.dataMap['d011']);
+$("#D012").text(dataInfo.dataMap['d012']);
+$("#D013").text(dataInfo.dataMap['d013']);
+$("#D014").text(dataInfo.dataMap['d014']);
+$("#D015").text(dataInfo.dataMap['d015']);
+$("#D016").text(dataInfo.dataMap['d016']);
+$("#D017").text(dataInfo.dataMap['d017']);
+$("#D018").text(dataInfo.dataMap['d018']);
+$("#D019").text(dataInfo.dataMap['d019']);
+$("#D020").text(dataInfo.dataMap['d020']);
+$("#D021").text(dataInfo.dataMap['d021']);
+$("#D022").text(dataInfo.dataMap['d022']);
+$("#D023").text(dataInfo.dataMap['d023']);
+$("#D0231").text(dataInfo.dataMap['d0231']);
+$("#D0232").text(dataInfo.dataMap['d0232']);
+$("#D024").text(dataInfo.dataMap['d024']);
+$("#D025").text(dataInfo.dataMap['d025']);
+$("#D026").text(dataInfo.dataMap['d026']);
+$("#D027").text(dataInfo.dataMap['d027']);
+$("#D028").text(dataInfo.dataMap['d028']);
+$("#D029").text(dataInfo.dataMap['d029']);
+$("#D030").text(dataInfo.dataMap['d030']);
+$("#D031").text(dataInfo.dataMap['d031']);
+$("#D032").text(dataInfo.dataMap['d032']);
+$("#D033").text(dataInfo.dataMap['d033']);
+$("#D034").text(dataInfo.dataMap['d034']);
+$("#D035").text(dataInfo.dataMap['d035']);
+$("#D036").text(dataInfo.dataMap['d036']);
+$("#D037").text(dataInfo.dataMap['d037']);
+$("#D038").text(dataInfo.dataMap['d038']);
+$("#D039").text(dataInfo.dataMap['d039']);
+$("#D040").text(dataInfo.dataMap['d040']);
+$("#D041").text(dataInfo.dataMap['d041']);
+$("#D042").text(dataInfo.dataMap['d042']);
+$("#D043").text(dataInfo.dataMap['d043']);
+$("#D044").text(dataInfo.dataMap['d044']);
+$("#D045").text(dataInfo.dataMap['d045']);
+$("#D046").text(dataInfo.dataMap['d046']);
+$("#D047").text(dataInfo.dataMap['d047']);
+$("#D048").text(dataInfo.dataMap['d048']);
+$("#D049").text(dataInfo.dataMap['d049']);
+$("#D050").text(dataInfo.dataMap['d050']);
+$("#D051").text(dataInfo.dataMap['d051']);
+$("#D052").text(dataInfo.dataMap['d052']);
+$("#D053").text(dataInfo.dataMap['d053']);
+$("#D054").text(dataInfo.dataMap['d054']);
+$("#D055").text(dataInfo.dataMap['d055']);
+$("#D056").text(dataInfo.dataMap['d056']);
+$("#D057").text(dataInfo.dataMap['d057']);
+$("#D058").text(dataInfo.dataMap['d058']);
+$("#D059").text(dataInfo.dataMap['d059']);
+$("#D060").text(dataInfo.dataMap['d060']);
+$("#D061").text(dataInfo.dataMap['d061']);
+$("#D062").text(dataInfo.dataMap['d062']);
+$("#D063").text(dataInfo.dataMap['d063']);
+$("#D064").text(dataInfo.dataMap['d064']);
+$("#D065").text(dataInfo.dataMap['d065']);
+$("#D066").text(dataInfo.dataMap['d066']);
+$("#D067").text(dataInfo.dataMap['d067']);
+$("#D068").text(dataInfo.dataMap['d068']);
+$("#D069").text(dataInfo.dataMap['d069']);
+$("#D070").text(dataInfo.dataMap['d070']);
+$("#D071").text(dataInfo.dataMap['d071']);
+$("#D072").text(dataInfo.dataMap['d072']);
+$("#D073").text(dataInfo.dataMap['d073']);
+$("#D074").text(dataInfo.dataMap['d074']);
+$("#D075").text(dataInfo.dataMap['d075']);
+$("#D076").text(dataInfo.dataMap['d076']);
+$("#D077").text(dataInfo.dataMap['d077']);
+$("#JKDAEvaluation").val(dataInfo.dataMap['jkdaevaluation']);   
+$("#JKJYEvaluation").val(dataInfo.dataMap['jkjyevaluation']);   
+$("#YFJZEvaluation").val(dataInfo.dataMap['yfjzevaluation']);   
+$("#ETBJEvaluation").val(dataInfo.dataMap['etbjevaluation']);   
+$("#FNBJEvaluation").val(dataInfo.dataMap['fnbjevaluation']);   
+$("#JHSYEvaluation").val(dataInfo.dataMap['jhsyevaluation']);   
+$("#LNRJKEvaluation").val(dataInfo.dataMap['lnrjkevaluation']);   
+$("#MXBHZEvaluation").val(dataInfo.dataMap['mxbhzevaluation']);   
+$("#CJREvaluation").val(dataInfo.dataMap['cjrevaluation']);  
+$("#ZXJSJBEvaluation").val(dataInfo.dataMap['zxjsjbevaluation']);  
+$("#CRBEvaluation").val(dataInfo.dataMap['crbevaluation']);  
+$("#WSJCEvaluation").val(dataInfo.dataMap['wsjcevaluation']);  
+$("#ZYYEvaluation").val(dataInfo.dataMap['zyyevaluation']);  
+$("#KQFFEvaluation").val(dataInfo.dataMap['kqffevaluation']);  
+$("#FYFFEvaluation").val(dataInfo.dataMap['fyffevaluation']);  
+$("#JKFFEvaluation").val(dataInfo.dataMap['jkffevaluation']);  
+$("#JHBEvaluation").val(dataInfo.dataMap['jhbevaluation']);  
+$("#JTYSEvaluation").val(dataInfo.dataMap['jtysevaluation']);
+}else{
+
+if (!dataInfo.dataMap['b001']) {
+    $("#jgcx6").show();
+    $("#jgcxid").html("");
+    $("#jgcxid").append("<a id='jgcx4' onclick='setDataaddrevise()' class='btn blue'>添加</a>");
+    $(".tnull input").val('0');
+    $("#rowtable select").val('1.05');
+    $(".z-zero").text('0');
+}else{
+    $("#jgcx6").show();
+    $("#jgcxid").html("");
+    $("#jgcxid").append("<a id='jgcx2' onclick='setDatacompile()' class='btn blue'>修改</a>");
+//alert(dataInfo.dataMap['a001'])
+//切换图形是grid时候，如果没有对应数据
+$(".evaluation").text(dataInfo.dataMap['evaluation']);
+$("#B001").val(dataInfo.dataMap['b001']);
+$("#B002").val(dataInfo.dataMap['b002']);
+$("#B003").val(dataInfo.dataMap['b003']);
+$("#B004").val(dataInfo.dataMap['b004']);
+$("#B005").val(dataInfo.dataMap['b005']);
+$("#B006").val(dataInfo.dataMap['b006']);
+$("#B007").val(dataInfo.dataMap['b007']);
+$("#B008").val(dataInfo.dataMap['b008']);
+$("#B009").val(dataInfo.dataMap['b009']);
+$("#B010").val(dataInfo.dataMap['b010']);
+$("#B011").val(dataInfo.dataMap['b011']);
+$("#B012").val(dataInfo.dataMap['b012']);
+$("#B013").val(dataInfo.dataMap['b013']);
+$("#B014").val(dataInfo.dataMap['b014']);
+$("#B015").val(dataInfo.dataMap['b015']);
+$("#B016").val(dataInfo.dataMap['b016']);
+$("#B017").val(dataInfo.dataMap['b017']);
+$("#B018").val(dataInfo.dataMap['b018']);
+$("#B019").val(dataInfo.dataMap['b019']);
+$("#B020").val(dataInfo.dataMap['b020']);
+$("#B021").val(dataInfo.dataMap['b021']);
+$("#B022").val(dataInfo.dataMap['b022']);
+$("#B023").val(dataInfo.dataMap['b023']);
+$("#B0231").val(dataInfo.dataMap['b0231']);
+$("#B0232").val(dataInfo.dataMap['b0232']);
+$("#B024").val(dataInfo.dataMap['b024']);
+$("#B025").val(dataInfo.dataMap['b025']);
+$("#B026").val(dataInfo.dataMap['b026']);
+$("#B027").val(dataInfo.dataMap['b027']);
+$("#B028").val(dataInfo.dataMap['b028']);
+$("#B029").val(dataInfo.dataMap['b029']);
+$("#B030").val(dataInfo.dataMap['b030']);
+$("#B031").val(dataInfo.dataMap['b031']);
+$("#B032").val(dataInfo.dataMap['b032']);
+$("#B033").val(dataInfo.dataMap['b033']);
+$("#B034").val(dataInfo.dataMap['b034']);
+$("#B035").val(dataInfo.dataMap['b035']);
+$("#B036").val(dataInfo.dataMap['b036']);
+$("#B037").val(dataInfo.dataMap['b037']);
+$("#B038").val(dataInfo.dataMap['b038']);
+$("#B039").val(dataInfo.dataMap['b039']);
+$("#B040").val(dataInfo.dataMap['b040']);
+$("#B041").val(dataInfo.dataMap['b041']);
+$("#B042").val(dataInfo.dataMap['b042']);
+$("#B043").val(dataInfo.dataMap['b043']);
+$("#B044").val(dataInfo.dataMap['b044']);
+$("#B045").val(dataInfo.dataMap['b045']);
+$("#B046").val(dataInfo.dataMap['b046']);
+$("#B047").val(dataInfo.dataMap['b047']);
+$("#B048").val(dataInfo.dataMap['b048']);
+$("#B049").val(dataInfo.dataMap['b049']);
+$("#B050").val(dataInfo.dataMap['b050']);
+$("#B051").val(dataInfo.dataMap['b051']);
+$("#B052").val(dataInfo.dataMap['b052']);
+$("#B053").val(dataInfo.dataMap['b053']);
+$("#B054").val(dataInfo.dataMap['b054']);
+$("#B055").val(dataInfo.dataMap['b055']);
+$("#B056").val(dataInfo.dataMap['b056']);
+$("#B057").val(dataInfo.dataMap['b057']);
+$("#B058").val(dataInfo.dataMap['b058']);
+$("#B059").val(dataInfo.dataMap['b059']);
+$("#B060").val(dataInfo.dataMap['b060']);
+$("#B061").val(dataInfo.dataMap['b061']);
+$("#B062").val(dataInfo.dataMap['b062']);
+$("#B063").val(dataInfo.dataMap['b063']);
+$("#B064").val(dataInfo.dataMap['b064']);
+$("#B065").val(dataInfo.dataMap['b065']);
+$("#B066").val(dataInfo.dataMap['b066']);
+$("#B067").val(dataInfo.dataMap['b067']);
+$("#B068").val(dataInfo.dataMap['b068']);
+$("#B069").val(dataInfo.dataMap['b069']);
+$("#B070").val(dataInfo.dataMap['b070']);
+$("#B071").val(dataInfo.dataMap['b071']);
+$("#B072").val(dataInfo.dataMap['b072']);
+$("#B073").val(dataInfo.dataMap['b073']);
+$("#B074").val(dataInfo.dataMap['b074']);
+$("#B075").val(dataInfo.dataMap['b075']);
+$("#B076").val(dataInfo.dataMap['b076']);
+$("#B077").val(dataInfo.dataMap['b077']);
+$("#A001").text(dataInfo.dataMap['a001']);
+$("#A002").text(dataInfo.dataMap['a002']);
+$("#A003").text(dataInfo.dataMap['a003']);
+$("#A004").text(dataInfo.dataMap['a004']);
+$("#A005").text(dataInfo.dataMap['a005']);
+$("#A006").text(dataInfo.dataMap['a006']);
+$("#A007").text(dataInfo.dataMap['a007']);
+$("#A008").text(dataInfo.dataMap['a008']);
+$("#A009").text(dataInfo.dataMap['a009']);
+$("#A010").text(dataInfo.dataMap['a010']);
+$("#A011").text(dataInfo.dataMap['a011']);
+$("#A012").text(dataInfo.dataMap['a012']);
+$("#A013").text(dataInfo.dataMap['a013']);
+$("#A014").text(dataInfo.dataMap['a014']);
+$("#A015").text(dataInfo.dataMap['a015']);
+$("#A016").text(dataInfo.dataMap['a016']);
+$("#A017").text(dataInfo.dataMap['a017']);
+$("#A018").text(dataInfo.dataMap['a018']);
+$("#A019").text(dataInfo.dataMap['a019']);
+$("#A020").text(dataInfo.dataMap['a020']);
+$("#A021").text(dataInfo.dataMap['a021']);
+$("#A022").text(dataInfo.dataMap['a022']);
+$("#A023").text(dataInfo.dataMap['a023']);
+$("#A0231").text(dataInfo.dataMap['a0231']);
+$("#A0232").text(dataInfo.dataMap['a0232']);
+$("#A024").text(dataInfo.dataMap['a024']);
+$("#A025").text(dataInfo.dataMap['a025']);
+$("#A026").text(dataInfo.dataMap['a026']);
+$("#A027").text(dataInfo.dataMap['a027']);
+$("#A028").text(dataInfo.dataMap['a028']);
+$("#A029").text(dataInfo.dataMap['a029']);
+$("#A030").text(dataInfo.dataMap['a030']);
+$("#A031").text(dataInfo.dataMap['a031']);
+$("#A032").text(dataInfo.dataMap['a032']);
+$("#A033").text(dataInfo.dataMap['a033']);
+$("#A034").text(dataInfo.dataMap['a034']);
+$("#A035").text(dataInfo.dataMap['a035']);
+$("#A036").text(dataInfo.dataMap['a036']);
+$("#A037").text(dataInfo.dataMap['a037']);
+$("#A038").text(dataInfo.dataMap['a038']);
+$("#A039").text(dataInfo.dataMap['a039']);
+$("#A040").text(dataInfo.dataMap['a040']);
+$("#A041").text(dataInfo.dataMap['a041']);
+$("#A042").text(dataInfo.dataMap['a042']);
+$("#A043").text(dataInfo.dataMap['a043']);
+$("#A044").text(dataInfo.dataMap['a044']);
+$("#A045").text(dataInfo.dataMap['a045']);
+$("#A046").text(dataInfo.dataMap['a046']);
+$("#A047").text(dataInfo.dataMap['a047']);
+$("#A048").text(dataInfo.dataMap['a048']);
+$("#A049").text(dataInfo.dataMap['a049']);
+$("#A050").text(dataInfo.dataMap['a050']);
+$("#A051").text(dataInfo.dataMap['a051']);
+$("#A052").text(dataInfo.dataMap['a052']);
+$("#A053").text(dataInfo.dataMap['a053']);
+$("#A054").text(dataInfo.dataMap['a054']);
+$("#A055").text(dataInfo.dataMap['a055']);
+$("#A056").text(dataInfo.dataMap['a056']);
+$("#A057").text(dataInfo.dataMap['a057']);
+$("#A058").text(dataInfo.dataMap['a058']);
+$("#A059").text(dataInfo.dataMap['a059']);
+$("#A060").text(dataInfo.dataMap['a060']);
+$("#A061").text(dataInfo.dataMap['a061']);
+$("#A062").text(dataInfo.dataMap['a062']);
+$("#A063").text(dataInfo.dataMap['a063']);
+$("#A064").text(dataInfo.dataMap['a064']);
+$("#A065").text(dataInfo.dataMap['a065']);
+$("#A066").text(dataInfo.dataMap['a066']);
+$("#A067").text(dataInfo.dataMap['a067']);
+$("#A068").text(dataInfo.dataMap['a068']);
+$("#A069").text(dataInfo.dataMap['a069']);
+$("#A070").text(dataInfo.dataMap['a070']);
+$("#A071").text(dataInfo.dataMap['a071']);
+$("#A072").text(dataInfo.dataMap['a072']);
+$("#A073").text(dataInfo.dataMap['a073']);
+$("#A074").text(dataInfo.dataMap['a074']);
+$("#A075").text(dataInfo.dataMap['a075']);
+$("#A076").text(dataInfo.dataMap['a076']);
+$("#A077").text(dataInfo.dataMap['a077']);
+$("#C001").text(dataInfo.dataMap['c001']);
+$("#C002").text(dataInfo.dataMap['c002']);
+$("#C003").text(dataInfo.dataMap['c003']);
+$("#C004").text(dataInfo.dataMap['c004']);
+$("#C005").text(dataInfo.dataMap['c005']);
+$("#C006").text(dataInfo.dataMap['c006']);
+$("#C007").text(dataInfo.dataMap['c007']);
+$("#C008").text(dataInfo.dataMap['c008']);
+$("#C009").text(dataInfo.dataMap['c009']);
+$("#C010").text(dataInfo.dataMap['c010']);
+$("#C011").text(dataInfo.dataMap['c011']);
+$("#C012").text(dataInfo.dataMap['c012']);
+$("#C013").text(dataInfo.dataMap['c013']);
+$("#C014").text(dataInfo.dataMap['c014']);
+$("#C015").text(dataInfo.dataMap['c015']);
+$("#C016").text(dataInfo.dataMap['c016']);
+$("#C017").text(dataInfo.dataMap['c017']);
+$("#C018").text(dataInfo.dataMap['c018']);
+$("#C019").text(dataInfo.dataMap['c019']);
+$("#C020").text(dataInfo.dataMap['c020']);
+$("#C021").text(dataInfo.dataMap['c021']);
+$("#C022").text(dataInfo.dataMap['c022']);
+$("#C023").text(dataInfo.dataMap['c023']);
+$("#C0231").text(dataInfo.dataMap['c0231']);
+$("#C0232").text(dataInfo.dataMap['c0232']);
+$("#C024").text(dataInfo.dataMap['c024']);
+$("#C025").text(dataInfo.dataMap['c025']);
+$("#C026").text(dataInfo.dataMap['c026']);
+$("#C027").text(dataInfo.dataMap['c027']);
+$("#C028").text(dataInfo.dataMap['c028']);
+$("#C029").text(dataInfo.dataMap['c029']);
+$("#C030").text(dataInfo.dataMap['c030']);
+$("#C031").text(dataInfo.dataMap['c031']);
+$("#C032").text(dataInfo.dataMap['c032']);
+$("#C033").text(dataInfo.dataMap['c033']);
+$("#C034").text(dataInfo.dataMap['c034']);
+$("#C035").text(dataInfo.dataMap['c035']);
+$("#C036").text(dataInfo.dataMap['c036']);
+$("#C037").text(dataInfo.dataMap['c037']);
+$("#C038").text(dataInfo.dataMap['c038']);
+$("#C039").text(dataInfo.dataMap['c039']);
+$("#C040").text(dataInfo.dataMap['c040']);
+$("#C041").text(dataInfo.dataMap['c041']);
+$("#C042").text(dataInfo.dataMap['c042']);
+$("#C043").text(dataInfo.dataMap['c043']);
+$("#C044").text(dataInfo.dataMap['c044']);
+$("#C045").text(dataInfo.dataMap['c045']);
+$("#C046").text(dataInfo.dataMap['c046']);
+$("#C047").text(dataInfo.dataMap['c047']);
+$("#C048").text(dataInfo.dataMap['c048']);
+$("#C049").text(dataInfo.dataMap['c049']);
+$("#C050").text(dataInfo.dataMap['c050']);
+$("#C051").text(dataInfo.dataMap['c051']);
+$("#C052").text(dataInfo.dataMap['c052']);
+$("#C053").text(dataInfo.dataMap['c053']);
+$("#C054").text(dataInfo.dataMap['c054']);
+$("#C055").text(dataInfo.dataMap['c055']);
+$("#C056").text(dataInfo.dataMap['c056']);
+$("#C057").text(dataInfo.dataMap['c057']);
+$("#C058").text(dataInfo.dataMap['c058']);
+$("#C059").text(dataInfo.dataMap['c059']);
+$("#C060").text(dataInfo.dataMap['c060']);
+$("#C061").text(dataInfo.dataMap['c061']);
+$("#C062").text(dataInfo.dataMap['c062']);
+$("#C063").text(dataInfo.dataMap['c063']);
+$("#C064").text(dataInfo.dataMap['c064']);
+$("#C065").text(dataInfo.dataMap['c065']);
+$("#C066").text(dataInfo.dataMap['c066']);
+$("#C067").text(dataInfo.dataMap['c067']);
+$("#C068").text(dataInfo.dataMap['c068']);
+$("#C069").text(dataInfo.dataMap['c069']);
+$("#C070").text(dataInfo.dataMap['c070']);
+$("#C071").text(dataInfo.dataMap['c071']);
+$("#C072").text(dataInfo.dataMap['c072']);
+$("#C073").text(dataInfo.dataMap['c073']);
+$("#C074").text(dataInfo.dataMap['c074']);
+$("#C075").text(dataInfo.dataMap['c075']);
+$("#C076").text(dataInfo.dataMap['c076']);
+$("#C077").text(dataInfo.dataMap['c077']);
+$("#D001").text(dataInfo.dataMap['d001']);
+$("#D002").text(dataInfo.dataMap['d002']);
+$("#D003").text(dataInfo.dataMap['d003']);
+$("#D004").text(dataInfo.dataMap['d004']);
+$("#D005").text(dataInfo.dataMap['d005']);
+$("#D006").text(dataInfo.dataMap['d006']);
+$("#D007").text(dataInfo.dataMap['d007']);
+$("#D008").text(dataInfo.dataMap['d008']);
+$("#D009").text(dataInfo.dataMap['d009']);
+$("#D010").text(dataInfo.dataMap['d010']);
+$("#D011").text(dataInfo.dataMap['d011']);
+$("#D012").text(dataInfo.dataMap['d012']);
+$("#D013").text(dataInfo.dataMap['d013']);
+$("#D014").text(dataInfo.dataMap['d014']);
+$("#D015").text(dataInfo.dataMap['d015']);
+$("#D016").text(dataInfo.dataMap['d016']);
+$("#D017").text(dataInfo.dataMap['d017']);
+$("#D018").text(dataInfo.dataMap['d018']);
+$("#D019").text(dataInfo.dataMap['d019']);
+$("#D020").text(dataInfo.dataMap['d020']);
+$("#D021").text(dataInfo.dataMap['d021']);
+$("#D022").text(dataInfo.dataMap['d022']);
+$("#D023").text(dataInfo.dataMap['d023']);
+$("#D0231").text(dataInfo.dataMap['d0231']);
+$("#D0232").text(dataInfo.dataMap['d0232']);
+$("#D024").text(dataInfo.dataMap['d024']);
+$("#D025").text(dataInfo.dataMap['d025']);
+$("#D026").text(dataInfo.dataMap['d026']);
+$("#D027").text(dataInfo.dataMap['d027']);
+$("#D028").text(dataInfo.dataMap['d028']);
+$("#D029").text(dataInfo.dataMap['d029']);
+$("#D030").text(dataInfo.dataMap['d030']);
+$("#D031").text(dataInfo.dataMap['d031']);
+$("#D032").text(dataInfo.dataMap['d032']);
+$("#D033").text(dataInfo.dataMap['d033']);
+$("#D034").text(dataInfo.dataMap['d034']);
+$("#D035").text(dataInfo.dataMap['d035']);
+$("#D036").text(dataInfo.dataMap['d036']);
+$("#D037").text(dataInfo.dataMap['d037']);
+$("#D038").text(dataInfo.dataMap['d038']);
+$("#D039").text(dataInfo.dataMap['d039']);
+$("#D040").text(dataInfo.dataMap['d040']);
+$("#D041").text(dataInfo.dataMap['d041']);
+$("#D042").text(dataInfo.dataMap['d042']);
+$("#D043").text(dataInfo.dataMap['d043']);
+$("#D044").text(dataInfo.dataMap['d044']);
+$("#D045").text(dataInfo.dataMap['d045']);
+$("#D046").text(dataInfo.dataMap['d046']);
+$("#D047").text(dataInfo.dataMap['d047']);
+$("#D048").text(dataInfo.dataMap['d048']);
+$("#D049").text(dataInfo.dataMap['d049']);
+$("#D050").text(dataInfo.dataMap['d050']);
+$("#D051").text(dataInfo.dataMap['d051']);
+$("#D052").text(dataInfo.dataMap['d052']);
+$("#D053").text(dataInfo.dataMap['d053']);
+$("#D054").text(dataInfo.dataMap['d054']);
+$("#D055").text(dataInfo.dataMap['d055']);
+$("#D056").text(dataInfo.dataMap['d056']);
+$("#D057").text(dataInfo.dataMap['d057']);
+$("#D058").text(dataInfo.dataMap['d058']);
+$("#D059").text(dataInfo.dataMap['d059']);
+$("#D060").text(dataInfo.dataMap['d060']);
+$("#D061").text(dataInfo.dataMap['d061']);
+$("#D062").text(dataInfo.dataMap['d062']);
+$("#D063").text(dataInfo.dataMap['d063']);
+$("#D064").text(dataInfo.dataMap['d064']);
+$("#D065").text(dataInfo.dataMap['d065']);
+$("#D066").text(dataInfo.dataMap['d066']);
+$("#D067").text(dataInfo.dataMap['d067']);
+$("#D068").text(dataInfo.dataMap['d068']);
+$("#D069").text(dataInfo.dataMap['d069']);
+$("#D070").text(dataInfo.dataMap['d070']);
+$("#D071").text(dataInfo.dataMap['d071']);
+$("#D072").text(dataInfo.dataMap['d072']);
+$("#D073").text(dataInfo.dataMap['d073']);
+$("#D074").text(dataInfo.dataMap['d074']);
+$("#D075").text(dataInfo.dataMap['d075']);
+$("#D076").text(dataInfo.dataMap['d076']);
+$("#D077").text(dataInfo.dataMap['d077']);
+$("#JKDAEvaluation").val(dataInfo.dataMap['jkdaevaluation']);   
+$("#JKJYEvaluation").val(dataInfo.dataMap['jkjyevaluation']);   
+$("#YFJZEvaluation").val(dataInfo.dataMap['yfjzevaluation']);   
+$("#ETBJEvaluation").val(dataInfo.dataMap['etbjevaluation']);   
+$("#FNBJEvaluation").val(dataInfo.dataMap['fnbjevaluation']);   
+$("#JHSYEvaluation").val(dataInfo.dataMap['jhsyevaluation']);   
+$("#LNRJKEvaluation").val(dataInfo.dataMap['lnrjkevaluation']);   
+$("#MXBHZEvaluation").val(dataInfo.dataMap['mxbhzevaluation']);   
+$("#CJREvaluation").val(dataInfo.dataMap['cjrevaluation']);  
+$("#ZXJSJBEvaluation").val(dataInfo.dataMap['zxjsjbevaluation']);  
+$("#CRBEvaluation").val(dataInfo.dataMap['crbevaluation']);  
+$("#WSJCEvaluation").val(dataInfo.dataMap['wsjcevaluation']);  
+$("#ZYYEvaluation").val(dataInfo.dataMap['zyyevaluation']);  
+$("#KQFFEvaluation").val(dataInfo.dataMap['kqffevaluation']);  
+$("#FYFFEvaluation").val(dataInfo.dataMap['fyffevaluation']);  
+$("#JKFFEvaluation").val(dataInfo.dataMap['jkffevaluation']);  
+$("#JHBEvaluation").val(dataInfo.dataMap['jhbevaluation']);  
+$("#JTYSEvaluation").val(dataInfo.dataMap['jtysevaluation']); 
+}
+}
+//删除新增的dataAll	
+if (zhuanqu=="1") {
+datapush.splice(datapush.length-1);
+}
+}
+</script>
+<script>
+$(function(){
+$(window).resize(function(){
+$('#ttEtbjglda').datagrid('resize');
+});
+});
+</script>
+<script>
+//机构
+$(function () {
+getselectdaoid101();
+});
+function  getselectdaoid101(){
+  sys_BI_getDaoidList("mdmSelectdaoid101");
+}
+function mdmSelectdaoid101(data){
+  var info = new Map();
+  info.put("key",["hospunitorgcode"]);
+  info.put("value",["hospunitorgnm"]);
+  sys_GetSelect("org_etbjglda","dimOrg",info,sys_BI_getCacheDaoidData());
+  $("#dimOrg option:first").remove()
+}
+
+//loadingEtbjglda();
+//setDataCy('tablename');
+
+$(function(){
+$('.dateday').datetimepicker({
+		format: 'yyyy',
+			weekStart: 1,
+	        autoclose: true,
+	        startView: 4,
+	        minView: 4,
+	        forceParse: false,  //必须设置，否则每次解析错，会变成1899年。
+	        language: 'zh-CN'
+	});
+//获取当前年-月-日
+today=new Date();
+var vMon = today.getMonth() + 1;
+var dateendymd=today.getFullYear();
+var ymd=today.getFullYear();
+$("#year").val(dateendymd);
+$("#dateend").val(ymd); 
+
+$("#zymrzy-m .reload").click(function(){
+	$("#zymrzy-m #rowtable").toggleClass("rowtable");
+	$("#zymrzy-m #lc-rowtable").toggleClass("rowtable");
+	})
+
+});
+setData2EtbjgldaNew();
+//--------------------添加新标准---------------------
+$(function(){
+    $("#z-a-tj").click(function(){
+        $("#myModalLabel").text("添加修改新标准");
+        
+    })
+})
+//添加-----添加标准
+function setDataaddBz(data){
+    var url ="anount"; 
+    var itemsList;
+    if($("#year").val()!=""){
+        itemsList=["year","A001","A002","A003","A004","A005","A006","A007","A008","A009","A010","A011","A012","A013","A014","A015","A016","A017","A018","A019","A020","A021","A022","A023","A0231","A0232","A024","A025","A026","A027","A028","A029","A030","A031","A032","A033","A034","A035","A036","A037","A038","A039","A040","A041","A042","A043","A044","A045","A046","A047","A048","A049","A050","A051","A052","A053","A054","A055","A056","A057","A058","A059","A060","A061","A062","A063","A064","A065","A066","A067","A068","A069","A070","A071","A072","A073","A074","A075","A076","A077"];
+    }else{
+        itemsList=[];
+    }
+    //空数据 会出现 小bug
+    var info= new Map();
+    info.put("sqlid","insert");
+    info.put("pagenum",PageNumber);
+    info.put("pagesize",PageSize);
+    info.put("groupby",data);
+    sys_AjaxGet(BIUrl+url,"org_etbjgldaadd","reCallbackaddBz",info,itemsList);
+}
+function reCallbackaddBz(data){
+    if (data.ret==0) {
+        alert("添加成功");
+        $(".close").click();
+    }else{
+        alert("添加失败");
+    }
+}
+//修改-----修改标准
+function setDataaddBzXg(data){
+    //alert("-----")
+    var url ="anount"; 
+    var itemsList;
+    if($("#year").val()!=""){
+        itemsList=["year","A001","A002","A003","A004","A005","A006","A007","A008","A009","A010","A011","A012","A013","A014","A015","A016","A017","A018","A019","A020","A021","A022","A023","A0231","A0232","A024","A025","A026","A027","A028","A029","A030","A031","A032","A033","A034","A035","A036","A037","A038","A039","A040","A041","A042","A043","A044","A045","A046","A047","A048","A049","A050","A051","A052","A053","A054","A055","A056","A057","A058","A059","A060","A061","A062","A063","A064","A065","A066","A067","A068","A069","A070","A071","A072","A073","A074","A075","A076","A077"];
+    }else{
+        itemsList=[];
+    }
+    //空数据 会出现 小bug
+    var info= new Map();
+    info.put("sqlid","update");
+    info.put("pagenum",PageNumber);
+    info.put("pagesize",PageSize);
+    info.put("groupby",data);
+    sys_AjaxGet(BIUrl+url,"org_etbjgldaadd","reCallbackaddBzXg",info,itemsList);
+}
+function reCallbackaddBzXg(data){
+    if (data.ret==0) {
+        alert("修改成功");
+        //$(".close").click();
+        setData2EtbjgldaNewBz();
+    }else{
+        alert("修改失败");
+    }
+}
+//查询新标准
+function setData2EtbjgldaNewBz(data){
+    $("#modalFooter").html("");
+    var url ="anountcx"; 
+    var itemsList;
+    if($("#year").val()!=""){
+        itemsList=["year"];
+    }else{
+        itemsList=[];
+    }
+    //空数据 会出现 小bug
+    var info= new Map();
+    info.put("sqlid","select");
+    info.put("pagenum",PageNumber);
+    info.put("pagesize",PageSize);
+    info.put("groupby",data);
+    sys_AjaxGet(BIUrl+url,"org_etbjgldaadd","reCallback101Bz",info,itemsList);
+}
+
+function reCallback101Bz(dataInfo){
+	if(dataInfo.ret=="103"){
+        alert("用户登录超时，请重新登陆！");
+        $('#trigger').scojs_modal();
+    }
+    if (dataInfo.ret==0) {
+        var dataMC=dataInfo.dataMap['a001'];
+        if(dataMC=="" || dataMC==undefined){
+            $("#modalBody input").val("0");
+            $("#modalFooter").append('<button type="button" class="btn btn-primary" id="addxg" onclick="setDataaddBz()">添加新标准</button>')
+        }else{
+            $("#modalFooter").append('<button type="button" class="btn btn-primary" id="addxg" onclick="setDataaddBzXg()">修改新标准</button>');
+            $(".A001").val(dataInfo.dataMap['a001']);
+            $(".A002").val(dataInfo.dataMap['a002']);
+            $(".A003").val(dataInfo.dataMap['a003']);
+            $(".A004").val(dataInfo.dataMap['a004']);
+            $(".A005").val(dataInfo.dataMap['a005']);
+            $(".A006").val(dataInfo.dataMap['a006']);
+            $(".A007").val(dataInfo.dataMap['a007']);
+            $(".A008").val(dataInfo.dataMap['a008']);
+            $(".A009").val(dataInfo.dataMap['a009']);
+            $(".A010").val(dataInfo.dataMap['a010']);
+            $(".A011").val(dataInfo.dataMap['a011']);
+            $(".A012").val(dataInfo.dataMap['a012']);
+            $(".A013").val(dataInfo.dataMap['a013']);
+            $(".A014").val(dataInfo.dataMap['a014']);
+            $(".A015").val(dataInfo.dataMap['a015']);
+            $(".A016").val(dataInfo.dataMap['a016']);
+            $(".A017").val(dataInfo.dataMap['a017']);
+            $(".A018").val(dataInfo.dataMap['a018']);
+            $(".A019").val(dataInfo.dataMap['a019']);
+            $(".A020").val(dataInfo.dataMap['a020']);
+            $(".A021").val(dataInfo.dataMap['a021']);
+            $(".A022").val(dataInfo.dataMap['a022']);
+            $(".A023").val(dataInfo.dataMap['a023']);
+            $(".A0231").val(dataInfo.dataMap['a0231']);
+            $(".A0232").val(dataInfo.dataMap['a0232']);
+            $(".A024").val(dataInfo.dataMap['a024']);
+            $(".A025").val(dataInfo.dataMap['a025']);
+            $(".A026").val(dataInfo.dataMap['a026']);
+            $(".A027").val(dataInfo.dataMap['a027']);
+            $(".A028").val(dataInfo.dataMap['a028']);
+            $(".A029").val(dataInfo.dataMap['a029']);
+            $(".A030").val(dataInfo.dataMap['a030']);
+            $(".A031").val(dataInfo.dataMap['a031']);
+            $(".A032").val(dataInfo.dataMap['a032']);
+            $(".A033").val(dataInfo.dataMap['a033']);
+            $(".A034").val(dataInfo.dataMap['a034']);
+            $(".A035").val(dataInfo.dataMap['a035']);
+            $(".A036").val(dataInfo.dataMap['a036']);
+            $(".A037").val(dataInfo.dataMap['a037']);
+            $(".A038").val(dataInfo.dataMap['a038']);
+            $(".A039").val(dataInfo.dataMap['a039']);
+            $(".A040").val(dataInfo.dataMap['a040']);
+            $(".A041").val(dataInfo.dataMap['a041']);
+            $(".A042").val(dataInfo.dataMap['a042']);
+            $(".A043").val(dataInfo.dataMap['a043']);
+            $(".A044").val(dataInfo.dataMap['a044']);
+            $(".A045").val(dataInfo.dataMap['a045']);
+            $(".A046").val(dataInfo.dataMap['a046']);
+            $(".A047").val(dataInfo.dataMap['a047']);
+            $(".A048").val(dataInfo.dataMap['a048']);
+            $(".A049").val(dataInfo.dataMap['a049']);
+            $(".A050").val(dataInfo.dataMap['a050']);
+            $(".A051").val(dataInfo.dataMap['a051']);
+            $(".A052").val(dataInfo.dataMap['a052']);
+            $(".A053").val(dataInfo.dataMap['a053']);
+            $(".A054").val(dataInfo.dataMap['a054']);
+            $(".A055").val(dataInfo.dataMap['a055']);
+            $(".A056").val(dataInfo.dataMap['a056']);
+            $(".A057").val(dataInfo.dataMap['a057']);
+            $(".A058").val(dataInfo.dataMap['a058']);
+            $(".A059").val(dataInfo.dataMap['a059']);
+            $(".A060").val(dataInfo.dataMap['a060']);
+            $(".A061").val(dataInfo.dataMap['a061']);
+            $(".A062").val(dataInfo.dataMap['a062']);
+            $(".A063").val(dataInfo.dataMap['a063']);
+            $(".A064").val(dataInfo.dataMap['a064']);
+            $(".A065").val(dataInfo.dataMap['a065']);
+            $(".A066").val(dataInfo.dataMap['a066']);
+            $(".A067").val(dataInfo.dataMap['a067']);
+            $(".A068").val(dataInfo.dataMap['a068']);
+            $(".A069").val(dataInfo.dataMap['a069']);
+            $(".A070").val(dataInfo.dataMap['a070']);
+            $(".A071").val(dataInfo.dataMap['a071']);
+            $(".A072").val(dataInfo.dataMap['a072']);
+            $(".A073").val(dataInfo.dataMap['a073']);
+            $(".A074").val(dataInfo.dataMap['a074']);
+            $(".A075").val(dataInfo.dataMap['a075']);
+            $(".A076").val(dataInfo.dataMap['a076']);
+            $(".A077").val(dataInfo.dataMap['a077']);
+        }
+
+        
+    }else{
+        alert("查询失败");
+    }
+    
+}
+
+
+
+
+</script>
+
+<form id="org_etbjgldaadd" >
+<!-- Modal -->
+<div class="modal fade zmyModalzInfo" id="myModalzInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width:1000px;margin-left:-500px">
+  <div class="modal-dialog" style="width:1000px;">
+    <div class="modal-content">
+      <div class="modal-header" style="position:relative;">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">title</h4>
+        <div style="position:absolute; left:162px; top:13px;">
+            <input id="year" type="text" class="dateday" style="width:100px;float:left;" value="2015">
+            <a id="jgcx7" onclick="setData2EtbjgldaNewBz()" class="btn blue" style="float:left;margin-left:10px;">查询</a></div>
+        </div>
+      </div>
+      <div id="modalBody" class="modal-body">
+         <table width="100%" border="0" cellspacing="0" cellpadding="0">
+<thead>
+    <tr>
+        <th>项目类别</th>
+        <th>项目名称</th>
+        <th align="center" width="100">补助标准</th>
+        <th>项目类别</th>
+        <th>项目名称</th>
+        <th align="center" width="100">补助标准</th>
+    </tr>
+</thead>
+<tr>
+    <td rowspan="2" class="z-bg">健康档案</td>
+    <td class="z-bg">新建档</td>
+    <td align="center" class="tnulladd" valign="middle"><input class="A001" id="A001" name="" type="text" value="0" onfocus="this.select()" onmouseover="this.focus()" /></td>
+    <td rowspan="2" class="z-bg">卫生监督、协管</td>
+    <td class="z-bg">卫生监督协管信息报告</td>
+    <td align="center" class="tnulladd "><input id="A047" class="A047" name="" type="text" value="0" /></td>
+  </tr>
+  <tr>
+    <td class="z-bg">社区卫生调查、卫生统计、社区诊断</td>
+    <td align="center" class="tnulladd "><input id="A002" class="A002" name="" type="text" value="0" /></td>
+    <td class="z-bg">协助开展的饮用水卫生安全、学校卫生、<br />非法行医和非法采供血实地巡查</td>
+    <td align="center" class="tnulladd "><input id="A048" class="A048" name="" type="text" value="0" /></td>
+  </tr>
+  <tr>
+    <td rowspan="7" class="z-bg">健康教育</td>
+    <td class="z-bg">健康支持工具</td>
+    <td align="center" class="tnulladd "><input id="A003" class="A003" name="" type="text" value="0" /></td>
+    <td rowspan="7" class="z-bg">预防接种</td>
+    <td class="z-bg">一类疫苗接种</td>
+    <td align="center" class="tnulladd "><input id="A010" class="A010" name="" type="text" value="0" /></td>
+  </tr>
+  <tr>
+    <td class="z-bg">健康教育宣传品</td>
+    <td align="center" class="tnulladd "><input id="A004" class="A004" name="" type="text" value="0" /></td>
+    <td class="z-bg">适龄儿童建档、督促</td>
+    <td align="center" class="tnulladd "><input id="A011" class="A011" name="" type="text" value="0" /></td>
+  </tr>
+  <tr>
+    <td class="z-bg">健康专栏更新</td>
+    <td align="center" class="tnulladd "><input id="A005" class="A005" name="" type="text" value="0" /></td>
+    <td class="z-bg">异常反应监测及处理</td>
+    <td align="center" class="tnulladd "><input id="A012" class="A012" name="" type="text" value="0" /></td>
+  </tr>
+  <tr>
+    <td class="z-bg">健康知识讲座</td>
+    <td align="center" class="tnulladd "><input id="A006" class="A006" name="" type="text" value="0" /></td>
+    <td class="z-bg">免疫效果监测、接种调查评估</td>
+    <td align="center" class="tnulladd "><input id="A013" class="A013" name="" type="text" value="0" /></td>
+  </tr>
+  <tr>
+    <td class="z-bg">主题日宣传</td>
+    <td align="center" class="tnulladd "><input id="A007" class="A007" name="" type="text" value="0" /></td>
+    <td class="z-bg">疫苗储存、使用管理</td>
+    <td align="center" class="tnulladd "><input id="A014" class="A014" name="" type="text" value="0" /></td>
+  </tr>
+  <tr>
+    <td class="z-bg">健康教育网站</td>
+    <td align="center" class="tnulladd "><input id="A008" class="A008" name="" type="text" value="0" /></td>
+    <td rowspan="2" class="z-bg">实施计划免疫网络化管理</td>
+    <td rowspan="2" align="center" class="tnulladd "><input id="A015" class="A015" name="" type="text" value="0" /></td>
+  </tr>
+  <tr>
+    <td class="z-bg">热线服务电话</td>
+    <td align="center" class="tnulladd "><input id="A009" class="A009" name="" type="text" value="0" /></td>
+  </tr>
+  <tr>
+    <td rowspan="11" class="z-bg">儿童保健</td>
+    <td class="z-bg">新生儿访视</td>
+    <td align="center" class="tnulladd "><input id="A016" class="A016" name="" type="text" value="0" /></td>
+    <td rowspan="11" class="z-bg">妇女保健</td>
+    <td rowspan="2" class="z-bg">孕产妇早期建册</td>
+    <td rowspan="2" align="center" class="tnulladd "><input id="A025" class="A025" name="" type="text" value="0" /></td>
+</tr>
+<tr>
+    <td class="z-bg">新生儿满月访视</td>
+    <td align="center" class="tnulladd "><input id="A017" class="A017" name="" type="text" value="0" /></td>
+</tr>
+<tr>
+    <td class="z-bg">1岁以下儿童健康体检</td>
+    <td align="center" class="tnulladd "><input id="A018" class="A018" name="" type="text" value="0" /></td>
+    <td rowspan="2" class="z-bg">孕产妇早期健康   状况评估</td>
+    <td rowspan="2" align="center" class="tnulladd "><input id="A026" class="A026" name="" type="text" value="0" /></td>
+</tr>
+<tr>
+    <td class="z-bg">1-3岁儿童健康体检</td>
+    <td align="center" class="tnulladd "><input class="A019" id="A019" name="" type="text" value="0" /></td>
+</tr>
+<tr>
+    <td class="z-bg">血常规检测</td>
+    <td align="center" class="tnulladd "><input class="A020" id="A020" name="" type="text" value="0" /></td>
+    <td rowspan="2" class="z-bg">孕期随访</td>
+    <td rowspan="2" align="center" class="tnulladd "><input class="A027" id="A027" name="" type="text" value="0" /></td>
+</tr>
+<tr>
+    <td class="z-bg">4-6岁生长发育评估</td>
+    <td align="center" class="tnulladd "><input class="A021" id="A021" name="" type="text" value="0" /></td>
+</tr>
+<tr>
+    <td class="z-bg">3-6岁儿童口腔保健</td>
+    <td align="center" class="tnulladd "><input class="A022" id="A022" name="" type="text" value="0" /></td>
+    <td rowspan="4" class="z-bg">产后入户随访</td>
+    <td rowspan="4" align="center" class="tnulladd "><input class="A028" id="A028" name="" type="text" value="0" /></td>
+</tr>
+<tr>
+    <td class="z-bg">残疾儿童康复救助工程(0.3万元/人)</td>
+    <td align="center" class="tnulladd "><input class="A023" id="A023" name="" type="text" value="0" /></td>
+</tr>
+<tr>
+  <td class="z-bg">残疾儿童康复救助工程(0.4万元/人)</td>
+  <td align="center" class="tnulladd "><input class="A0231" id="A0231" name="" type="text" value="0" /></td>
+</tr>
+<tr>
+  <td class="z-bg">残疾儿童康复救助工程(0.5万元/人)</td>
+  <td align="center" class="tnulladd "><input class="A0232" id="A0232" name="" type="text" value="0" /></td>
+</tr>
+<tr>
+    <td class="z-bg">妇幼卫生信息统计及监测</td>
+    <td align="center" class="tnulladd "><input class="A024" id="A024" name="" type="text" value="0" /></td>
+    <td class="z-bg">产后42天健康检查</td>
+    <td align="center" class="tnulladd "><input class="A029" id="A029" name="" type="text" value="0" /></td>
+</tr>
+<tr>
+    <td class="z-bg">老年人健康管理</td>
+    <td class="z-bg">60岁以上老年人健康管理（包括老年慢病患者）</td>
+    <td align="center" class="tnulladd "><input class="A031" id="A031" name="" type="text" value="0" /></td>
+    <td class="z-bg">计划生育技术服务咨询指导</td>
+    <td class="z-bg">避孕药具发放管理</td>
+    <td align="center" class="tnulladd "><input class="A030" id="A030" name="" type="text" value="0" /></td>
+</tr>
+<tr>
+    <td rowspan="5" class="z-bg">慢性病患者健康管理</td>
+    <td class="z-bg">重症患者入户随访</td>
+    <td align="center" class="tnulladd "><input class="A032" id="A032" name="" type="text" value="0" /></td>
+    <td rowspan="5" class="z-bg">传染病及突发公共卫生<br />事件管理</td>
+    <td class="z-bg">传染病疫情监测、疫情调查、漏报调查</td>
+    <td align="center" class="tnulladd "><input class="A043" id="A043" name="" type="text" value="0" /></td>
+</tr>
+<tr>
+    <td class="z-bg">轻症患者入户随访</td>
+    <td align="center" class="tnulladd "><input class="A033" id="A033" name="" type="text" value="0" /></td>
+    <td class="z-bg">传染病网络化管理</td>
+    <td align="center" class="tnulladd "><input class="A044" id="A044" name="" type="text" value="0" /></td>
+</tr>
+ <tr>
+    <td class="z-bg">门诊随访</td>
+    <td align="center" class="tnulladd "><input class="A034" id="A034" name="" type="text" value="0" /></td>
+    <td rowspan="2" class="z-bg">艾滋病等重大传染病综合管理</td>
+    <td rowspan="2" align="center" class="tnulladd "><input class="A045" id="A045" name="" type="text" value="0" /></td>
+</tr>
+<tr>
+    <td class="z-bg">电话随访</td>
+    <td align="center" class="tnulladd "><input class="A035" id="A035" name="" type="text" value="0"/></td>
+</tr>
+<tr>
+    <td class="z-bg">60岁以下高血压、糖尿病患者年度体检</td>
+    <td align="center" class="tnulladd "><input class="A036" id="A036" name="" type="text" value="0" /></td>
+    <td class="z-bg">突发公共卫生事件</td>
+    <td align="center" class="tnulladd "><input class="A046" id="A046" name="" type="text" value="0" /></td>
+</tr>
+<tr>
+    <td rowspan="3" class="z-bg">残疾人管理</td>
+    <td class="z-bg">入户随访</td>
+    <td align="center" class="tnulladd "><input class="A037" id="A037" name="" type="text" value="0" /></td>
+    <td rowspan="3" class="z-bg">重性精神疾病患者<br />健康管理</td>
+    <td class="z-bg">入户随访</td>
+    <td align="center" class="tnulladd "><input class="A040" id="A040" name="" type="text" value="0" /></td>
+</tr>
+<tr>
+    <td class="z-bg">门诊、电话随访</td>
+    <td align="center" class="tnulladd "><input class="A038" id="A038" name="" type="text" value="0" /></td>
+    <td class="z-bg">门诊、电话随访</td>
+    <td align="center" class="tnulladd "><input class="A041" id="A041" name="" type="text" value="0" /></td>
+</tr>
+<tr>
+    <td class="z-bg">健康体检</td>
+    <td align="center" class="tnulladd "><input class="A039" id="A039" name="" type="text" value="0" /></td>
+    <td class="z-bg">健康体检</td>
+    <td align="center" class="tnulladd "><input class="A042" id="A042" name="" type="text" value="0" /></td>
+</tr>
+<tr>
+    <td rowspan="4" class="z-bg">传染病及突发公共<br />卫生事件管理</td>
+    <td class="z-bg">结核病人管理</td>
+    <td align="center" class="tnulladd "><input class="A043" id="A043" name="" type="text" value="0" /></td>
+    <td class="z-bg">妇幼服务项目</td>
+    <td class="z-bg">积极宣传和推广IMFeD技术，<br />应用IMFeD技术为患儿诊治</td>
+    <td align="center" class="tnulladd "><input class="A054" id="A054" name="" type="text" value="0" /></td>
+</tr>
+<tr>
+    <td class="z-bg">入户随访</td>
+    <td align="center" class="tnulladd "><input class="A044" id="A044" name="" type="text" value="0" /></td>
+    <td rowspan="3" class="z-bg">口腔服务项目</td>
+    <td class="z-bg">居民口腔健康档案  新建档</td>
+    <td align="center" class="tnulladd "><input class="A051" id="A051" name="" type="text" value="0" /></td>
+</tr>
+<tr>
+    <td class="z-bg">门诊随访</td>
+    <td align="center" class="tnulladd "><input class="A045" id="A045" name="" type="text" value="0" /></td>
+    <td class="z-bg">口腔健康教育讲座</td>
+    <td align="center" class="tnulladd "><input class="A052" id="A052" name="" type="text" value="0" /></td>
+</tr>
+<tr>
+    <td class="z-bg">推荐疑似结核病病人</td>
+    <td align="center" class="tnulladd "><input class="A046" id="A046" name="" type="text" value="0" /></td>
+    <td class="z-bg">9.20“世界爱牙日”宣传活动</td>
+    <td align="center" class="tnulladd "><input class="A053" id="A053" name="" type="text" value="0" /></td>
+</tr>
+<tr>
+    <td rowspan="2" class="z-bg">中医药健康管理服务</td>
+    <td class="z-bg">65岁以上老年人中医药健康管理服务</td>
+    <td align="center" class="tnulladd"><input class="A049" id="A049" name="" type="text" value="0" /></td>
+    <td rowspan="2" class="z-bg">结核病服务项目</td>
+    <td class="z-bg">发现病人(经结防机构确诊)</td>
+    <td align="center" class="tnulladd "><input class="A075" id="A075" name="" type="text" value="0" /></td>
+  </tr>
+  <tr>
+    <td class="z-bg">0-36个月龄儿童中医药健康管理服务</td>
+    <td align="center" class="tnulladd "><input class="A050" id="A050" name="" type="text" value="0" /></td>
+    <td class="z-bg">全程督导病人管理费</td>
+    <td align="center" class="tnulladd "><input class="A076" id="A076" name="" type="text" value="0" /></td>
+  </tr>
+
+
+
+<!--go-->
+<tr>
+    <td rowspan="10" class="z-bg">疾控服务项目</td>
+    <td class="z-bg">疫苗冷链和预防接种门诊<br />视频监管系统项目建设(1万元/单位)</td>
+    <td align="center" class="tnulladd"><input class="A055" id="A055" name="" type="text" value="0" /></td>
+    <td colspan="2" class="z-bg">疫苗冷链和预防接种门诊<br />视频监管系统项目建设(0.7万元/单位)</td>
+    <td align="center" class="tnulladd "><input class="A056" id="A056" name="" type="text" value="0" /></td>
+  </tr>
+  <tr>
+    <td class="z-bg">二类疫苗预防接种知情告知管理(0.1万元/单位)</td>
+    <td align="center" class="tnulladd "><input class="A057" id="A057" name="" type="text" value="0" /></td>
+    <td colspan="2" class="z-bg">二类疫苗预防接种知情告知管理(0.5万元/单位)</td>
+    <td align="center" class="tnulladd "><input class="A058" id="A058" name="" type="text" value="0" /></td>
+  </tr>
+  <tr>
+    <td class="z-bg">二类疫苗预防接种知情告知管理(0.5万元/单位)</td>
+    <td align="center" class="tnulladd"><input class="A059" id="A059" name="" type="text" value="0" /></td>
+    <td colspan="2" class="z-bg">“健康知信行”慢病患者自我管理干预技术推广工作</td>
+    <td align="center" class="tnulladd "><input class="A060" id="A060" name="" type="text" value="0" /></td>
+  </tr>
+  <tr>
+    <td class="z-bg">2014-2015年城市癌症早诊早治项目<br />(仅在社区卫生服务中心实施)(0.5万元/单位)</td>
+    <td align="center" class="tnulladd "><input class="A061" id="A061" name="" type="text" value="0" /></td>
+    <td colspan="2" class="z-bg">2014-2015年城市癌症早诊早治项目<br />(仅在社区卫生服务中心实施)(20元/份)</td>
+    <td align="center" class="tnulladd "><input class="A062" id="A062" name="" type="text" value="0" /></td>
+  </tr>
+  <tr>
+    <td class="z-bg">2014-2015年城市癌症早诊早治项目<br />(仅在社区卫生服务中心实施)(10元/份)</td>
+    <td align="center" class="tnulladd "><input class="A063" id="A063" name="" type="text" value="0" /></td>
+    <td colspan="2" class="z-bg">慢性病高危人群发现与干预工作</td>
+    <td align="center" class="tnulladd "><input class="A064" id="A064" name="" type="text" value="0" /></td>
+  </tr>
+  <tr>
+    <td class="z-bg">四个人人知晓、全面健康生活项目</td>
+    <td align="center" class="tnulladd "><input class="A065" id="A065" name="" type="text" value="0" /></td>
+    <td colspan="2" class="z-bg">健康讲座、人人共享项目</td>
+    <td align="center" class="tnulladd "><input class="A066" id="A066" name="" type="text" value="0" /></td>
+  </tr>
+  <tr>
+    <td class="z-bg">健康生活、吃动平衡项目</td>
+    <td align="center" class="tnulladd "><input class="A067" id="A067" name="" type="text" value="0" /></td>
+    <td colspan="2" class="z-bg">人群死因监测漏报调查(0.12万元/单位)</td>
+    <td align="center" class="tnulladd "><input class="A068" id="A068" name="" type="text" value="0" /></td>
+  </tr>
+  <tr>
+    <td class="z-bg">人群死因监测漏报调查(2元/户)</td>
+    <td align="center" class="tnulladd "><input class="A069" id="A069" name="" type="text" value="0" /></td>
+    <td colspan="2" class="z-bg">人群死因监测漏报调查(30元/例)</td>
+    <td align="center" class="tnulladd "><input class="A070" id="A070" name="" type="text" value="0" /></td>
+  </tr>
+  <tr>
+    <td class="z-bg">艾滋病高危人群干预活动</td>
+    <td align="center" class="tnulladd "><input class="A071" id="A071" name="" type="text" value="0" /></td>
+    <td colspan="2" class="z-bg">传染病防控工作项目(30元/例)</td>
+    <td align="center" class="tnulladd "><input class="A072" id="A072" name="" type="text" value="0" /></td>
+  </tr>
+  <tr>
+    <td class="z-bg">传染病防控工作项目(50元/份)</td>
+    <td align="center" class="tnulladd "><input class="A073" id="A073" name="" type="text" value="0" /></td>
+    <td colspan="2" class="z-bg">传染病防控工作项目(600元/单位)</td>
+    <td align="center" class="tnulladd "><input class="A074" id="A074" name="" type="text" value="0" /></td>
+  </tr>
+  <tr>
+    <td class="z-bg">家庭医生签约服务</td>
+    <td class="z-bg">家庭医生有效签约签约</td>
+    <td align="center" class="tnulladd "><input class="A077" id="A077" name="" type="text" value="0" /></td>
+    <td colspan="3" class="z-bg">&nbsp;</td>
+    </tr>
+</table>
+
+      </div>
+      <div id="modalFooter" class="modal-footer">
+        
+      </div>
+    </div>
+  </div>
+</div>
+</form>

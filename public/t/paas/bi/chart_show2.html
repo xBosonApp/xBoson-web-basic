@@ -1,0 +1,82 @@
+<form onsubmit="return false;" class="smart-form">
+	<fieldset>
+	  <div id="search_main"></div>
+	  <section class="col col-2 pull-right">
+	    <button id="search_btn" class="btn btn-primary btn-sm pull-right">查询</button>
+	  </section>
+	</fieldset>
+</form>
+
+<section id="widget-grid">
+  <div class="row" _index="1">
+    <article id="template1" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" _size="12">
+      <div class="jarviswidget" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-editbutton="false">
+        <header>
+          <h2><strong></strong><i></i></h2>
+        </header>
+        <div>
+          <!-- widget edit box -->
+          <div class="jarviswidget-editbox">
+            <!--<input class="form-control" type="text">-->
+            <!--<span class="note"><i-->
+            <!--  class="fa fa-check text-success"></i> Change title to update and save instantly!</span>-->
+          </div>
+          <div class="widget-body">
+            <div class="col-md-6">
+              <!--<div class="row" style="margin-bottom: 10px">-->
+              <!--  <div class="col-lg-3 col-md-3 col-sm-3">-->
+              <!--    <div class="input-group">-->
+              <!--      <span class="input-group-addon"> 模块名称 </span>-->
+              <!--      <input type="text" index="modTitle" class="form-control">-->
+              <!--    </div>-->
+              <!--  </div>-->
+              <!--  <div class="col-lg-3 col-md-3 col-sm-3">-->
+              <!--    <div class="input-group">-->
+              <!--      <span class="input-group-addon"> 模块分类 </span>-->
+              <!--      <input type="text" index="modClass" class="form-control">-->
+              <!--    </div>-->
+              <!--  </div>-->
+              <!--  <div class="col-lg-2 col-md-2 col-sm-2">-->
+              <!--    <div class="smart-form">-->
+              <!--      <label class="checkbox">-->
+              <!--        <label class="text">分享</label>-->
+              <!--        <input type="checkbox" index="share">-->
+              <!--        <i></i>-->
+              <!--      </label>-->
+              <!--    </div>-->
+              <!--  </div>-->
+              <!--</div>-->
+              <div class="row" id="module_con"></div>
+            </div>
+            <div class="col-md-6">
+              <div class="input-group input-group-sm" style="width:100%;margin-bottom:-15px">
+                <header>
+                  <label>模块列表</label>
+                  <a href="javascript:void(0);" class="pull-right">
+                    <i class="fa fa-times"></i>
+                  </a>
+                </header>
+              </div>
+              <legend></legend>
+              <div class="row" style="overflow: auto; min-height: 300px; margin-top: -15px;">
+                <ul class="ztree" id=""></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+
+
+
+<script src="bi/echarts.js"></script>
+<script src="bi/new_class2.js"></script>
+<script src="bi/chart_show2.js"></script>
+<script type="text/javascript" src="bi/js/tableToCsv.js" ></script>
+<script>
+  var pageid = 'deanc9c0-05b5-11e4-9191-0800200c9a66';
+  zy.chart2.pagecontrol2(pageid);
+</script>

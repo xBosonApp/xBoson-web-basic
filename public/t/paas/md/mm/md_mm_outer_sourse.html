@@ -1,0 +1,62 @@
+ <div class="modal fade" id="md_mm_createobj" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+        </button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+        <form class="smart-form" onsubmit="return false;">
+          <div class="row">
+            <section class="col col-6">
+              <label class="label">业务大类</label>
+              <label class="input">
+                <input type="text" name="decd0" placeholder="业务大类">
+              </label>
+            </section>
+            <section class="col col-6">
+              <label class="label">业务小类</label>
+              <label class="input has-warning">
+                <input type="text" name="decd1" placeholder="业务小类(两位数字)">
+              </label>
+            </section>
+          </div>
+          <div class="row">
+            <section class="col col-6">
+              <label class="checkbox">
+                <input type="checkbox" checked="checked" name="is_cre_ds" value="1"/><i></i> 同时创建数据集
+              </label>
+            </section>
+            <section class="col col-6">
+              <label class="checkbox">
+                <input type="checkbox" checked="checked" name="is_cre_tbl_link" value="1"/><i></i> 同时创建物理表映射
+              </label>
+            </section>
+          </div>
+        </form>
+         <div class='row'>
+           <div class="col-xs-6" style="height:400px;overflow:auto;">
+             <div>选择数据元目录</div>
+             <div id="left" class="ztree"></div>
+           </div>
+           <div class="col-xs-6" style="height:400px;overflow:auto;">
+             <div>选择数据集合目录</div>
+             <div id="right" class="ztree"></div>
+           </div>
+         </div>
+       <form onsubmit="return false;" class="smart-form">
+          <footer>
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary">确定</button>
+          </footer>
+       </form>
+        <!-- FORM Start -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>

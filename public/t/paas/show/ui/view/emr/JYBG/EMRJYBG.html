@@ -1,0 +1,665 @@
+<script language="JavaScript" src="/t/paas/show/ui/comm.js" type="text/javascript"></script>
+<script type="text/javascript">
+	var pageNum=1;
+	var pagesize=10;
+	var data1;
+	var data2;
+	var data3;
+	var data4;
+	$(function () {
+		showDatajybg();
+	});
+	function emrjybg1callback(reData){
+		data1 = reData;
+		$('#jybg').datagrid({
+			nowrap: false,
+			striped: true,
+			collapsible:false,
+			title:'检验报告列表',
+			pagination:true,
+			singleSelect:true,
+			pageNumber:pageNum,
+			pageSize: pagesize,
+			loadMsg:"正在载入...",
+			pageList: [10,20,50,100,200],
+			data:data1.dataList,
+			columns:[[
+			// {field:'tablename',title:'序号',width:60,align:'center'},
+			{field:'dc4001_sqrq',title:'开单日期',width:120,align:'center',
+				formatter:function(value){
+					return LC_FormatYMD(value);
+			}
+			},
+			{field:'dc4001_bgdmc',title:'检验名称',width:150,align:'center'},
+			{field:'dc4001_sqghxm',title:'开单医生',width:130,align:'center'},
+			{field:'dc4001_jcghxm',title:'检验医生',width:130,align:'center'},
+			{field:'dc4001_jyrq',title:'检验日期',width:120,align:'center',
+				formatter:function(value){
+					return LC_FormatYMD(value);
+				}
+			},
+			{field:'dc4001_jgdmmc',title:'医院',width:150,align:'center'}
+			]],                  
+			onDblClickRow: function (rowIndex) {
+				emrjybg1openRoleDiv(rowIndex);
+			},
+			fitColumns:false,
+			pagination:true,
+			rownumbers:true
+		});
+	   var pager = $('#jybg').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pageNum=pageNumber;
+		           pagesize=pageSize;
+		           showDatajybg();
+		        }
+			});	
+			$(pager).pagination({pageSize:pagesize,pageNumber:pageNum,total:data1.count});
+		};
+	}
+	
+	function showDatajybg(){
+	 if(retCheckFlg){	
+        	var url ="emrjybg1/"; 	
+        	var itemsList=["latest_time","mzbz","lbbm","primal_time"];	
+			var info= new Map();	
+	        info.put("pageNum",pageNum);
+	        info.put("pageSize",pagesize);
+			info.put("pid",self.parent.pid);
+		if(self.parent.jgdm!=undefined){
+		info.put("jgdm",self.parent.jgdm);
+		if(self.parent.jzlsh){
+			info.put("ywlsh",self.parent.jzlsh);
+			$("#mzbz").val("1");
+			$("input[name=jybg]:eq(1)").attr("checked",'checked');
+			}else{
+				info.put("ywlsh",self.parent.zylsh);
+				$("#mzbz").val("2");
+				$("input[name=jybg]:eq(2)").attr("checked",'checked');
+				}
+		}
+			
+        	LC_AjaxGet(EMRBaseUrl+url,"form1","emrjybg1callback",info,itemsList);
+		}
+	}
+	
+	function emrjybg1openRoleDiv(rowIndex){
+   var obj=JSON.parse(self.parent.window.localStorage.getItem(self.parent.pid));
+	  $("#form3 #name").val(obj.datalist[0].name);
+    $("#form3 #sex").val(obj.datalist[0].sex);
+	  $("#form3 #birthday").val(obj.datalist[0].birthday);
+	  
+	  $("#form2 #name").val(obj.datalist[0].name);
+    $("#form2 #sex").val(obj.datalist[0].sex);
+	  $("#form2 #birthday").val(obj.datalist[0].birthday);
+
+
+	  $("#form4 #name").val(obj.datalist[0].name);
+    $("#form4 #sex").val(obj.datalist[0].sex);
+	  $("#form4 #birthday").val(obj.datalist[0].birthday);
+
+			LC_SetMapData("form2",data1.dataList[rowIndex]);
+			LC_SetMapData("form3",data1.dataList[rowIndex]);
+			LC_SetMapData("form4",data1.dataList[rowIndex]);
+		  showDatajybgtab(data1.dataList[rowIndex].dc4001_jlxh);
+		  showDataxjbgtab(data1.dataList[rowIndex].dc4001_jlxh);
+		  showDatamybgtab(data1.dataList[rowIndex].dc4001_jlxh);
+		  LC_FormatTextYMD("form2",["dc4001_sqrq","dc4001_jyrq","dc4001_bgrq"]);
+		  LC_FormatTextYMD("form3",["dc4001_sqrq","dc4001_jyrq","dc4001_bgrq"]);
+		  LC_FormatTextYMD("form4",["dc4001_sqrq","dc4001_jyrq","dc4001_bgrq"]);
+	}
+	
+	///////////////////检验报告/////////////////
+	function showDatajybgtab(djtxh){
+		var url ="emrjybg2/"; 	
+		var itemsList=[];	
+		var info= new Map();	
+		info.put("djtxh",djtxh);
+		info.put("pid",self.parent.pid);
+		LC_AjaxGet(EMRBaseUrl+url,"form2","emrjybg2callback", info,itemsList);	
+	}
+	
+	function emrjybg2callback(retData){
+		data2 = retData;
+
+		$('#jybg-tab').datagrid({
+			nowrap: false,
+			striped: true,
+			collapsible:false,
+			//pagination:true,
+			singleSelect:true,
+			pageNumber:5,
+			pageSize: 10,
+			loadMsg:"正在载入...",
+			//pageList: [10,20,50,100,200],
+			data:data2.dataList,
+			columns:[[
+				// {field:'tablename',title:'序号',width:80,align:'center'},
+				{field:'dc4002_jczbmc',title:'指标名称',width:256,align:'center'},
+				{field:'dc4002_jczbjg',title:'检验结果',width:128,align:'center'},
+				{field:'dc4002_ckzfw',title:'参考范围',width:304,align:'center'},
+				{field:'dc4002_jldw',title:'单位',width:96,align:'center'}
+			]],
+			onDblClickRow: function (rowIndex) {
+				openRoleDiv(rowIndex);
+			},
+			fitColumns:false,
+			height:270,
+			//pagination:true,
+			rownumbers:true
+		}); 
+
+	   //var pager = $('#jybg-tab').datagrid('getPager');
+       //    if(pager){
+		//	$(pager).pagination({
+		//	    onSelectPage:function(pageNumber,pageSize){
+		//           pageNum=pageNumber;
+		//           pageSize=pageSize;
+		//           showDatajybgtab();
+		//        }
+		//	});
+		//	$(pager).pagination({pageSize:pageSize,pageNumber:pageNum,total:data2.count});
+
+		//};
+	}
+	
+	
+	////////////////////////////细菌///////////////////
+	
+	function showDataxjbgtab(djtxh){
+		var url ="emrjybg3/"; 	
+		var itemsList=[];	
+		var info= new Map();	
+		info.put("djtxh",djtxh);
+		info.put("pid",self.parent.pid);
+		LC_AjaxGet(EMRBaseUrl+url,"form3","emrjybg3callback", info,itemsList);	
+ 	}
+	
+	function emrjybg3callback(retData){
+		data3=retData;
+		$('#xjbg-tab').datagrid({
+			nowrap: false,
+			striped: true,
+			collapsible:false,
+			//pagination:true,
+			singleSelect:true,
+			pageNumber:5,
+			pageSize: 10,
+			loadMsg:"正在载入...",
+			// pageList: [10,20,50,100,200],
+			data:data3.dataList,
+				columns:[[
+					//{field:'tablename',title:'序号',width:80,align:'center'},
+					{field:'dc4003_xjdh',title:'细菌代码',width:100,align:'center'},
+					{field:'dc4003_xjmc',title:'细菌名称',width:100,align:'center'},
+					{field:'dc4003_jljs',title:'菌落计数',width:100,align:'center'},
+					{field:'dc4003_pyj',title:'培养基',width:100,align:'center'},
+					{field:'dc4003_pysj',title:'培养时间',width:100,align:'center'},
+					{field:'dc4003_pytj',title:'培养条件',width:100,align:'center'},
+					{field:'dc4003_fxfs',title:'发现方式',width:100,align:'center'}
+				]],                  
+                //onDblClickRow: function (rowIndex) {
+                 // openRoleDiv(rowIndex);
+                //},
+               fitColumns:false,
+			   height:270,
+			  // pagination:true,
+               rownumbers:true
+		}); 
+	}
+		/*
+		var pager = $('#xjbg-tab').datagrid('getPager');
+			if(pager){
+				$(pager).pagination({
+					onSelectPage:function(pageNumber,pageSize){
+						pageNum=pageNumber;
+						pageSize=pageSize;
+					}
+				});	 
+			$(pager).pagination({pageSize:pageSize,pageNumber:pageNum,total:data3.count});
+		};*/
+	
+	//////////////药敏信息////////////
+	
+	function showDatamybgtab(djtxh){
+		var url ="emrjybg4/"; 	
+		var itemsList=[];	
+		var info= new Map();
+		info.put("djtxh",djtxh);
+		info.put("pid",self.parent.pid);
+		LC_AjaxGet(EMRBaseUrl+url,"form4","emrjybg4callback", info,itemsList);	
+	}
+	
+	function emrjybg4callback(retData){
+		data4 = retData;
+		$('#mybg-tab').datagrid({
+				nowrap: false,
+				striped: true,
+				collapsible:false,
+				//pagination:true,
+				singleSelect:true,
+				pageNumber:5,
+				pageSize: 5,
+				loadMsg:"正在载入...",
+				// pageList: [10,20,50,100,200],
+				data:data4.dataList,
+				columns:[[
+					//{field:'tablename',title:'序号',width:80,align:'center'},
+					{field:'dc4004_xjdh',title:'细菌代码',width:124,align:'center'},
+					{field:'dc4004_ymdm',title:'药敏代码',width:124,align:'center'},
+					{field:'dc4004_ymmc',title:'药敏名称',width:124,align:'center'},
+					{field:'dc4004_jgms',title:'监测结果',width:124,align:'center'}
+				]],
+                onDblClickRow: function (rowIndex) {
+                //  openRoleDiv(rowIndex);
+                },
+               fitColumns:false,
+			  // pagination:true,
+               rownumbers:true
+		}); 
+
+		var pager = $('#mybg-tab').datagrid('getPager');
+		if(pager){
+			$(pager).pagination({
+				onSelectPage:function(pageNumber,pageSize){
+					pageNum=pageNumber;
+					pageSize=pageSize;
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:pageSize,pageNumber:pageNum,total:data4.count});
+
+		};
+	}
+	
+
+	
+</script>
+<div class="mainsW-872">
+  <!-- 检验报告列表 开始 -->
+  <form id="form1">
+    <table id="jybg" style="width: 872px;" toolbar="#toolbar">
+      <div id="toolbar" class="pad-5 clearfix">
+      <div class="itemLW-32 padT-4">
+      <input id="mzbz" checked="checked" name="jybg" type="radio" value="" /></div>
+      <div class="itemsW-32 padT-4">
+      全部</div> 
+      <div class="itemLW-32 padT-4">
+      <input id="mzbz" name="jybg" type="radio" value="1" /></div>
+      <div class="itemsW-32 padT-4">
+      门诊</div> 
+      <div class="itemLW-32 padT-4">
+      <input id="mzbz" name="jybg" type="radio" value="2" /></div>
+      <div class="itemsW-64 padT-4">
+      住院</div> 
+      <div class="itemLW-64 padT-4">
+      检验类型：</div> 
+      <div class="itemsW-96 padT-4">
+      <select id="lbbm" class="textLW padT-4" name="dept">
+      <option value="">全部</option>
+      <option value="1">一般临床检验</option>
+      <option value="2">血液学检查</option>
+      <option value="3">临床化学检查</option>
+      <option value="4">临床免疫学检查</option>
+      <option value="5">临床微生物学检查</option>
+      <option value="6">临床寄生虫学检查</option>
+      <option value="7">分子生物学检查</option>
+      <option value="9999">其它</option>
+      </select> </div>
+      <div class="itemLW-64 padT-4">
+      日期：</div> 
+      <div class="itemsW-96 padT-4">
+      <input id="primal_time" class="Wdate" onclick="WdatePicker()" style="width: 96px;" type="text" /></div>
+      <div class="itemCW-16 padT-4">
+      至</div> 
+      <div class="itemsW-96 padT-4">
+      <input id="latest_time" class="Wdate" onclick="WdatePicker()" style="width: 96px;" type="text" /></div>
+      <div class="itemLW-64">
+      <a class="easyui-linkbutton" href="javascript:;;;" onclick="showDatajybg()">查询</a></div> </div>
+    </table>
+  </form>
+  <!-- 检验报告列表 结束 -->
+  <!-- 检验报告内容 开始 -->
+  <div class="easyui-tabs" style="width: 872px;">
+    <div title="检验报告">
+      <!-- 检验报告记录内容 开始 -->
+      <div border="false" class="easyui-panel" style="width: 864px;">
+        <form id="form2">
+          <div class="mainsW-864 padTB-20">
+            <div class="c-18">
+              <span id="dc4001_jgdmmc"></span></div>
+            <div class="c-18">
+              检验报告单</div>
+          </div>
+          <div class="padTB-10 clearfix">
+            <div class="mainsW-864">
+              <div class="itemLW-96 padT-4">
+                检验类型：</div>
+              <div class="itemLW-320 padT-4">
+                <input id="dc4001_lbbm" class="textLW" type="text" /></div>
+            </div>
+          </div>
+          <div class="padTB-10 clearfix">
+            <div class="mainsW-864">
+              <div class="itemsW-208">
+                <div class="itemLW-96 padT-4">
+                  姓名：</div>
+                <div class="itemLW-112 padT-4">
+                  <input id="name" class="textLW" type="text" /></div>
+              </div>
+              <div class="itemsW-208">
+                <div class="itemLW-96 padT-4">
+                  性别：</div>
+                <div class="itemLW-112 padT-4">
+                  <input id="sex" class="textLW" type="text" /></div>
+              </div>
+              <div class="itemsW-208">
+                <div class="itemLW-96 padT-4">
+                  出生：</div>
+                <div class="itemLW-112 padT-4">
+                  <input id="birthday" class="textLW" type="text" /></div>
+              </div>
+              <div class="itemsW-208">
+                <div class="itemLW-96 padT-4">
+                  开单医生：</div>
+                <div class="itemLW-112 padT-4">
+                  <input id="dc4001_sqghxm" class="textLW" type="text" /></div>
+              </div>
+              <div class="itemsW-208">
+                <div class="itemLW-96 padT-4">
+                  检验医生：</div>
+                <div class="itemLW-112 padT-4">
+                  <input id="dc4001_jcghxm" class="textLW" type="text" /></div>
+              </div>
+              <div class="itemsW-208">
+                <div class="itemLW-96 padT-4">
+                  科室：</div>
+                <div class="itemLW-112 padT-4">
+                  <input id="dc4001_sqksmc" class="textLW" type="text" /></div>
+              </div>
+              <div class="itemsW-208">
+                <div class="itemLW-96 padT-4">
+                  病区：</div>
+                <div class="itemLW-112 padT-4">
+                  <input id="dc4001_sqbqmc" class="textLW" type="text" /></div>
+              </div>
+              <div class="itemsW-208">
+                <div class="itemLW-96 padT-4">
+                  床号：</div>
+                <div class="itemLW-112 padT-4">
+                  <input id="dc4001_sqch" class="textLW" type="text" /></div>
+              </div>
+              <div class="itemsW-208">
+                <div class="itemLW-96 padT-4">
+                  开单日期：</div>
+                <div class="itemLW-112 padT-4">
+                  <input id="dc4001_sqrq" class="textLW Date" type="text" /></div>
+              </div>
+              <div class="itemsW-208">
+                <div class="itemLW-96 padT-4">
+                  检验日期：</div>
+                <div class="itemLW-112 padT-4">
+                  <input id="dc4001_jyrq" class="textLW Date" type="text" /></div>
+              </div>
+              <div class="itemsW-864">
+                <div class="itemLW-96 padT-4">
+                  检验名称：</div>
+                <div class="itemLW-320 padT-4">
+                  <input id="dc4001_bgdmc" class="textLW" type="text" /></div>
+              </div>
+              <div class="itemsW-864">
+                <div class="itemLW-96 padT-4">
+                  标本固定液：</div>
+                <div class="itemLW-320 padT-4">
+                  <input id="dc4001_bbgdy" class="textLW" type="text" /></div>
+              </div>
+            </div>
+          </div>
+          <table id="jybg-tab" style="width: 864px;">
+          </table>
+          <div class="mainsW-864 padTB-10 clearfix">
+            <div class="itemsW-208">
+              <div class="itemLW-96 padT-4">
+                报告人：</div>
+              <div class="itemLW-112 padT-4">
+                <input id="dc4001_bgghxm" class="textLW" type="text" /></div>
+            </div>
+            <div class="itemsW-208">
+              <div class="itemLW-96 padT-4">
+                报告日期：</div>
+              <div class="itemLW-112 padT-4">
+                <input id="dc4001_bgrq" class="textLW Date" type="text" /></div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- 手术记录内容 结束 --></div>
+    <div title="细菌报告">
+      <!-- 细菌报告内容 开始 -->
+      <div border="false" class="easyui-panel" style="width:864px;">
+        <form id="form3">
+          <div class="mainW">
+            <div class="mainsW-864 padTB-20">
+              <div class="c-18">
+                <span id="dc4001_jgdmmc"></span></div>
+              <div class="c-18">
+                细菌报告单</div>
+            </div>
+            <div class="padTB-10 clearfix">
+              <div class="mainsW-864">
+                <div class="itemLW-96 padT-4">
+                  检验类型：</div>
+                <div class="itemLW-320 padT-4">
+                  <input id="dc4001_lbbm" class="textLW" type="text"></div>
+              </div>
+            </div>
+            <div class="padTB-10 clearfix">
+              <div class="itemsW-208">
+                <div class="itemLW-96 padT-4">
+                  姓名：</div>
+                <div class="itemLW-112 padT-4">
+                  <input id="name" class="textLW" type="text"></div>
+              </div>
+              <div class="itemsW-208">
+                <div class="itemLW-96 padT-4">
+                  性别：</div>
+                <div class="itemLW-112 padT-4">
+                  <input id="sex" class="textLW" type="text"></div>
+              </div>
+              <div class="itemsW-208">
+                <div class="itemLW-96 padT-4">
+                  出生：</div>
+                <div class="itemLW-112 padT-4">
+                  <input id="birthday" class="textLW" type="text"></div>
+              </div>
+              <div class="itemsW-208">
+                <div class="itemLW-96 padT-4">
+                  开单医生：</div>
+                <div class="itemLW-112 padT-4">
+                  <input id="dc4001_shghxm" class="textLW" type="text"></div>
+              </div>
+              <div class="itemsW-208">
+                <div class="itemLW-96 padT-4">
+                  检验医生：</div>
+                <div class="itemLW-112 padT-4">
+                  <input id="dc4001_jcghxm" class="textLW" type="text"></div>
+              </div>
+              <div class="itemsW-208">
+                <div class="itemLW-96 padT-4">
+                  科室：</div>
+                <div class="itemLW-112 padT-4">
+                  <input id="dc4001_sqksmc" class="textLW" type="text"></div>
+              </div>
+              <div class="itemsW-208">
+                <div class="itemLW-96 padT-4">
+                  病区：</div>
+                <div class="itemLW-112 padT-4">
+                  <input id="dc4001_sqbqmc" class="textLW" type="text"></div>
+              </div>
+              <div class="itemsW-208">
+                <div class="itemLW-96 padT-4">
+                  床号：</div>
+                <div class="itemLW-112 padT-4">
+                  <input id="dc4001_sqch" class="textLW" type="text"></div>
+              </div>
+              <div class="itemsW-208">
+                <div class="itemLW-96 padT-4">
+                  开单日期：</div>
+                <div class="itemLW-112 padT-4">
+                  <input id="dc4001_sqrq" class="textLW Date" type="text"></div>
+              </div>
+              <div class="itemsW-208">
+                <div class="itemLW-96 padT-4">
+                  检验日期：</div>
+                <div class="itemLW-112 padT-4">
+                  <input id="dc4001_jyrq" class="textLW Date" type="text"></div>
+              </div>
+              <div class="itemsW-864">
+                <div class="itemLW-96 padT-4">
+                  检验名称：</div>
+                <div class="itemLW-320 padT-4">
+                  <input id="dc4001_bgdmc" class="textLW" type="text"></div>
+              </div>
+              <div class="itemsW-864">
+                <div class="itemLW-96 padT-4">
+                  标本固定液：</div>
+                <div class="itemLW-320 padT-4">
+                  <input id="dc4001_bbgdy" class="textLW" type="text"></div>
+              </div>
+            </div>
+          </div>
+          <div class="mainsW-864 padTB-10 clearfix">
+          <table id="xjbg-tab" style="width: 864px;"></table>
+            <div class="itemsW-208">
+              <div class="itemLW-96 padT-4">
+                报告人：</div>
+              <div class="itemLW-112 padT-4">
+                <input id="dc4001_bgghxm" class="textLW" type="text"></div>
+            </div>
+            <div class="itemsW-208">
+              <div class="itemLW-96 padT-4">
+                报告日期：</div>
+              <div class="itemLW-112 padT-4">
+                <input id="dc4001_bgrq" class="textLW Date" type="text"></div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- 细菌报告内容 结束 --></div>
+    <div title="药敏报告">
+      <!-- 药敏报告内容 开始 -->
+      <form id="form4">
+        <div border="false" class="easyui-panel" style="width: 864px;">
+          <div class="mainW">
+            <div class="mainsW-864 padTB-20">
+              <div class="c-18">
+                <span id="dc4001_jgdmmc"></span></div>
+              <div class="c-18">
+                药敏报告单</div>
+            </div>
+            <div class="padTB-10 clearfix">
+              <div class="mainsW-864">
+                <div class="itemLW-96 padT-4">
+                  检验类型：</div>
+                <div class="itemLW-320">
+                  <input id="dc4001_lbbm" class="textLW" type="text" /></div>
+              </div>
+            </div>
+            <div class="padTB-10 clearfix">
+              <div class="itemsW-208">
+                <div class="itemLW-96 padT-4">
+                  姓名：</div>
+                <div class="itemLW-112">
+                  <input id="name" class="textLW" type="text" /></div>
+              </div>
+              <div class="itemsW-208">
+                <div class="itemLW-96 padT-4">
+                  性别：</div>
+                <div class="itemLW-112">
+                  <input id="sex" class="textLW" type="text" /></div>
+              </div>
+              <div class="itemsW-208">
+                <div class="itemLW-96 padT-4">
+                  出生：</div>
+                <div class="itemLW-112">
+                  <input id="birthday" class="textLW" type="text" /></div>
+              </div>
+              <div class="itemsW-208">
+                <div class="itemLW-96 padT-4">
+                  开单医生：</div>
+                <div class="itemLW-112">
+                  <input id="dc4001_shghxm" class="textLW" type="text" /></div>
+              </div>
+              <div class="itemsW-208">
+                <div class="itemLW-96 padT-4">
+                  检验医生：</div>
+                <div class="itemLW-112">
+                  <input id="dc4001_jcghxm" class="textLW" type="text" /></div>
+              </div>
+              <div class="itemsW-208">
+                <div class="itemLW-96 padT-4">
+                  科室：</div>
+                <div class="itemLW-112">
+                  <input id="dc4001_sqksmc" class="textLW" type="text" /></div>
+              </div>
+              <div class="itemsW-208">
+                <div class="itemLW-96 padT-4">
+                  病区：</div>
+                <div class="itemLW-112">
+                  <input id="dc4001_sqbqmc" class="textLW" type="text" /></div>
+              </div>
+              <div class="itemsW-208">
+                <div class="itemLW-96 padT-4">
+                  床号：</div>
+                <div class="itemLW-112">
+                  <input id="dc4001_sqch" class="textLW" type="text" /></div>
+              </div>
+              <div class="itemsW-208">
+                <div class="itemLW-96 padT-4">
+                  开单日期：</div>
+                <div class="itemLW-112">
+                  <input id="dc4001_sqrq" class="textLW Date" type="text" /></div>
+              </div>
+              <div class="itemsW-208">
+                <div class="itemLW-96 padT-4">
+                  检验日期：</div>
+                <div class="itemLW-112">
+                  <input id="dc4001_jyrq" class="textLW Date" type="text" /></div>
+              </div>
+              <div class="itemsW-864">
+                <div class="itemLW-96 padT-4">
+                  检验名称：</div>
+                <div class="itemLW-320">
+                  <input id="dc4001_bgdmc" class="textLW" type="text" /></div>
+              </div>
+              <div class="itemsW-864">
+                <div class="itemLW-96 padT-4">
+                  标本固定液：</div>
+                <div class="itemLW-320">
+                  <input id="dc4001_bbgdy" class="textLW" type="text" /></div>
+              </div>
+            </div>
+          </div>
+          <table id="mybg-tab" style="width: 872px;">
+          </table>
+          <div class="mainsW-864 padTB-10 clearfix">
+            <div class="itemsW-208">
+              <div class="itemLW-96 padT-4">
+                报告人：</div>
+              <div class="itemLW-112">
+                <input id="dc4001_bgghxm" class="textLW" type="text" /></div>
+            </div>
+            <div class="itemsW-208">
+              <div class="itemLW-96 padT-4">
+                报告日期：</div>
+              <div class="itemLW-112">
+                <input id="dc4001_bgrq" class="textLW Date" type="text" /></div>
+            </div>
+          </div>
+        </div>
+      </form>
+      <!-- 药敏报告内容 结束 --></div>
+  </div>
+  <!-- 检验报告内容 结束 --></div>

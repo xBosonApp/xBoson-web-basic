@@ -1,0 +1,348 @@
+<!-- Modal -->
+<div class="modal fade" id="table_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+     data-backdrop="static">
+  <div class="modal-dialog" style='width:70%'>
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">
+        </h4>
+      </div>
+      <div class="modal-body no-padding">
+        <div class='row'></div>
+
+        <div id="table">
+          <!-- FORM Start -->
+          <form id="table_form" method="post" onsubmit="return false;" class="smart-form">
+            <fieldset>
+              <div class="widget-body-toolbar" style="background-color:white;">
+                <div class="btn-group">
+                  <button id="tabel_delete" class="btn btn-info btn-xs">&emsp;<i class="fa fa-trash-o" style="width:12px"></i>&nbsp;<span>删除</span>&emsp;</button>
+
+                </div>
+              </div>
+              <div class="dataTables_wrapper">
+                <table id="table_dt" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+                    <th>名称</th>
+                    <th>类型</th>
+                    <th>钻取方向</th>
+                    <th>显示</th>
+                  </tr>
+                  </thead>
+                </table>
+              </div>
+              <br/>
+            </fieldset>
+
+            <footer>
+              <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+              <button type="button" id="edit_submit" class="btn btn-primary">确定</button>
+            </footer>
+          </form>
+          <!-- FORM End -->
+        </div>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+                    <div id="menuContent" class="menuContent" style="background-color:#FFFFFF; display:none; position: absolute;z-index: 9999;">
+                      <ul id="treeDemo" class="ztree" style="margin-top:0; width:300px;height:300px;overflow: auto;"></ul>
+                    </div>
+
+<script type="text/javascript">
+
+  var clickTarget = null;
+
+  function beforeClick(treeId, treeNode) {
+    var check = (treeNode && !treeNode.isParent);
+    return check;
+  }
+
+  function onClick(e, treeId, treeNode) {
+    var zTree = $.fn.zTree.getZTreeObj("treeDemo"), nodes = zTree.getSelectedNodes(), v = "";
+    if (nodes.length > 0) {
+      var targetInput = clickTarget || null;
+      targetInput.select2('val', nodes[0].modid);
+      targetInput.trigger('change');
+      hideMenu();
+    }
+  }
+
+  function clearInput(obj) {
+  	$(obj).closest('td').find("[name='next']").select2('val','');
+  	$(obj).closest('td').find("[name='next']").trigger('change');
+  }
+
+  function showMenu(obj) {
+    var targetInput = $(obj);
+    var targetInputOffset = $(obj).position();
+    clickTarget = $(obj).closest('td').find("[name='next']");
+    window.ee = targetInputOffset;
+    $("#menuContent").css({
+      left : Number(targetInputOffset.left) + 30 + "px",
+      top : Number(targetInputOffset.top) + 80 + "px"
+    }).slideDown("fast");
+
+    $("body").bind("mousedown", onBodyDown);
+  }
+
+  function hideMenu() {
+    $("#menuContent").fadeOut("fast");
+    $("body").unbind("mousedown", onBodyDown);
+  }
+
+  function onBodyDown(event) {
+    if (!(event.target.id == "menuBtn" || event.target.id == "menuContent" || $(event.target).parents("#menuContent").length > 0)) {
+      hideMenu();
+    }
+  }
+  
+  function edit_table(chart_option, chartlistmap) {
+    
+    var Modal = $('#table_modal');
+    var dt = $('#table_dt');
+    var DeleteButton = $('#tabel_delete');
+    var SubmitButton = $('#edit_submit');
+
+    function Init() {
+      var data;
+      data = chart_option.fn.editData();
+      console.log('edit_data', data);
+      Modal.modal('show');
+      Modal.on('shown.bs.modal', function (e) {
+        DatatTable(data,function(){
+          NextMenu();
+          Toolbar();
+          Event();
+        });
+        
+        DeleteButton.btnDisable(true);
+      })
+    }
+
+    function DatatTable(data,cb) {
+      var columns = [{
+        "data": "cn"
+      }, {
+        "render": function (data, type, row, meta) {
+          return "<input name='type' type='text' value="+ row.dicttype +" chartlist="+ row.chartlist + ">";
+        }
+      }, {
+        "render": function (data, type, row, meta) {
+          return '<input name="next" value='+ row.next +' type="text" readonly value="" style="width:70%;">  <a index="menuBtn" href="#" onclick="showMenu(this); return false;" style="width:30%;">选择</a>  <a index="menuBtn" href="#" onclick="clearInput(this); return false;" style="width:30%;">删除</a>';
+        }
+      }, {
+        "render": function (data, type, row, meta) {
+          return "<input name='show' type='text' value="+ row.view +">";
+        }
+      }];
+      var options = {
+        "data": data,
+        "columns": columns
+      };
+      // 合并初始化参数选项
+      $.extend(options, zy.ui.dataTable);
+      //初始化 DataTable
+      dt.dataTable(options);
+      
+      zy.cache.initDicts('ZR.0003,ZR.0043', function(){
+        
+        $('[name=type]').each(function(i,input){
+          var $this, chartlist, selectdata = [];
+          $this = $(this);
+          chartlist = JSON.parse($this.attr('chartlist'));
+          chartlist.forEach(function(type){
+            if(chartlistmap[type]) selectdata.push(chartlistmap[type])
+          });
+          
+          $this.zySelectCustomData('', false, {
+            allowClear:false,
+            width: '100%'
+          },selectdata);
+        })
+        $('[name=show]').zySelect('ZR.0003', false, {
+          allowClear:false,
+          width: '100%'
+        });
+        
+        cb && cb();
+      });
+    }
+
+    function Toolbar() {
+      dt.on('click', 'tr', function (e) {
+        // 变换选择行状态颜色
+        if (e.target.nodeName == 'A')
+          return false;
+        if (!$(this).find('div').hasClass('popover') && $(this).hasClass('active')) {
+          $(this).removeClass('active');
+          if (dt.children('tbody').find('.active').length == 0) DeleteButton.btnDisable(true);
+        } else {
+          $(this).addClass('active');
+          DeleteButton.btnDisable(false);
+        }
+      });
+
+      DeleteButton.click(function () {
+        zy.ui.mask('请确认', '确认要删除数据吗？', function () {
+          var _param = [];
+          $('#table_dt .active').each(function (i, v) {
+            dt.DataTable().row(v).remove();
+            // _param.push(data.$id);
+            // v.remove();
+          });
+          dt.DataTable().draw();
+        },function(){})
+      });
+      
+      SubmitButton.click(function(){
+        var newData = dt.DataTable().data();
+        var rows = dt.children('tbody').children();
+        rows.each(function(index,row){
+          rowdata = newData[index];
+          rowdata.dicttype = $(row).find('[name=type]').val();
+          rowdata.next = $(row).find('[name=next]').val();
+          rowdata.view = $(row).find('[name=show]').val();
+        });
+        Modal.modal('hide');
+        zy.log('after edit', newData);
+        chart_option.fn.fromEdit({
+          type: newData
+        });
+      });
+    }
+    
+    function GetRowData(jq){
+      var row, data;
+      row = jq.closest('tr');
+      data = dt.DataTable().row(row).data();
+      return data;
+    }
+    
+    function Event(){
+      $('[name=type]').change(function(){
+        var $this = $(this);
+        if($this.val() == 'radar'){
+          $('[name=type]').select2('val', 'radar');
+        }else{
+          $('[name=type]').each(function(index,input){
+            var $input = $(input);
+            if($input.val() == 'radar') $input.select2('val','line');
+          })
+        }
+      });
+      // $('[name=show]').change(function(){
+      //   var $this, data, index;
+      //   $this = $(this);
+      //   data = GetRowData($this);
+      //   index = data.$id;
+      //   // chart_option.showornot(index, $this.val());
+      //   // zy.log('change',index);
+      // });
+    }
+    
+    function NextMenu(){
+      var selectTarget, selectSource = [];
+      
+      selectTarget = $('[name=next]');
+      
+      function GetData(cb){
+        zy.extend.get({
+          apinm:'mod_json_sel',
+          mod:'echart',
+          app:'a6929eedff5c49e5a1a0f5b490873b39'
+        },function(msg){
+          cb && cb(msg.pids);
+          console.log('msg',msg);
+        },{});
+      }
+      
+      function GetOwn(Array){
+        var result=[];
+        
+        // if(Array.length < 3) return result = [];
+        Array.forEach(function(inner,index){
+          if(inner.name == '用户自定义' || inner.name == '他人共享' ){
+            result.push(inner);
+          }
+        })
+        // var result;
+        // Array.forEach(function(inner,index){
+        //   if(inner.name == '用户自定义'){
+        //     result=inner;
+        //     return true
+        //   }
+        // })
+        console.log('result:',result);
+        return result;
+      }
+      
+      function Select2Data(Array, result){
+        Array.forEach(function(inner,index){
+          if(!inner.children){
+            var o = {
+              id: inner.modid,
+              name: inner.name,
+              text: inner.name
+            }
+            result.push(o) 
+          } else { 
+            Select2Data(inner.children, result);
+          };
+        })
+      }
+      
+
+      function buildTree(msg) {
+        var setting = {
+          view : {
+            dblClickExpand : false
+          },
+          data : {
+            simpleData : {
+              enable : true
+            }
+          },
+          callback : {
+            beforeClick : beforeClick,
+            onClick : onClick
+          }
+        };
+  
+        $.fn.zTree.init($("#treeDemo"), setting, msg);
+      }
+      
+      GetData(function(list){
+        console.log(list);
+        var own, ownlist;
+        own = GetOwn(list);
+        console.log('own',own);
+        buildTree(own);
+        
+        $.each(own,function(i,v){
+          ownlist = v.children;
+          Select2Data(ownlist,selectSource);
+        })
+        
+        selectTarget.zySelectCustomData('',false,{},selectSource);
+        selectTarget.change(function(){
+          var $this, data, index;
+          $this = $(this);
+          data = GetRowData($this);
+          index = data.$id;
+          // chart_option.changenext($this.val(),index);
+          console.log('nextchange',index);
+        });
+      })
+    }
+
+    Init();
+  }
+
+</script>

@@ -1,0 +1,178 @@
+<div id="rbac_role_mgt05">
+<!-- rbac_role_mgt05 页面权限配置 -->
+  <fieldset>
+    <div class="row">
+      <section class="col col-12">
+        <h5 class="margin-top-0" id="rbac_role_mgt05_page_title"></h5>
+      </section>
+    </div>
+  </fieldset>
+  <fieldset>
+    <div class="row">
+      <section class="col col-12">
+        <h6 class="margin-top-0">事件：</h6>
+      </section>
+    </div>
+  </fieldset>
+  <div id="rbac_role_mgt05_page_elements" name="rbac_role_mgt05_page_elements">
+    <script id="rbac_role_mgt05_tmpl_elements" type="text/x-jsrender">
+      <fieldset id="fieldsetelements" name="fieldsetelements">
+        <legend>
+          <div class="btn-group">
+            <section class="col">
+              <label class="input">
+                <input type="text" style="border:none;" name="elementnm" value="{{: elementnm}}" readonly tabindex="-1">
+              </label>
+            </section>
+            {{if is_init}}
+            {{else}}
+              <section class="col">
+                <div class="inline-group">
+                  <label class="radio">
+                    {{if element_status === "1"}}
+                      <input type="radio" name="rbac_role_mgt05_page_ele_status{{: elementid}}" data-elementid="{{: elementid}}" value="1" checked="checked">
+                    {{else}}
+                      <input type="radio" name="rbac_role_mgt05_page_ele_status{{: elementid}}" data-elementid="{{: elementid}}" value="1">
+                    {{/if}}
+                    <i></i>显示并可用
+                  </label>
+                  <label class="radio">
+                    {{if element_status === "2"}}
+                      <input type="radio" name="rbac_role_mgt05_page_ele_status{{: elementid}}" data-elementid="{{: elementid}}" value="2" checked="checked">
+                    {{else}}
+                      <input type="radio" name="rbac_role_mgt05_page_ele_status{{: elementid}}" data-elementid="{{: elementid}}" value="2">
+                    {{/if}}
+                    <i></i>显示但不可用
+                  </label>
+                  <label class="radio">
+                    {{if element_status === "3"}}
+                      <input type="radio" name="rbac_role_mgt05_page_ele_status{{: elementid}}" data-elementid="{{: elementid}}" value="3" checked="checked">
+                    {{else}}
+                      <input type="radio" name="rbac_role_mgt05_page_ele_status{{: elementid}}" data-elementid="{{: elementid}}" value="3">
+                    {{/if}}
+                    <i></i>不显示
+                  </label>
+                </div>
+              </section>
+            {{/if}}
+          </div>
+        </legend>
+        <div id="rbac_role_mgt05_page_ele_srv{{: elementid}}">
+        {{if children && children.length}}
+          {{for children}}
+              {{if is_model}}
+              <div id="rbac_role_mgt05_page_srv_div{{: page_model_id}}" class="row">
+                <section class="col col-8">
+                  <label class="input">
+                    <input type="text" class="input-xs" style="border:none;" name="srv{{: page_model_id}}" value="{{: modelid + ' ' + modelnm}}" readonly tabindex="-1">
+                  </label>
+                </section>
+                <section class="col col-4 pull-right">
+                  <div class="inline-group">
+                    {{if authorized && authorized.length}}
+                      <label class="radio">
+                        <input type="radio" data-id="{{: page_model_id}}" name="rbac_role_mgt05_page_srv_status{{: page_model_id}}" value="authorized" checked="checked">
+                        <i></i>授权
+                      </label>
+                      <label class="radio">
+                        <input type="radio" data-id="{{: page_model_id}}" name="rbac_role_mgt05_page_srv_status{{: page_model_id}}" value="unauthorized">
+                        <i></i>禁止
+                      </label>
+                    {{else}}
+                      <label class="radio">
+                        <input type="radio" data-id="{{: page_model_id}}" name="rbac_role_mgt05_page_srv_status{{: page_model_id}}" value="authorized">
+                        <i></i>授权
+                      </label>
+                      <label class="radio">
+                        <input type="radio" data-id="{{: page_model_id}}" name="rbac_role_mgt05_page_srv_status{{: page_model_id}}" value="unauthorized" checked="checked">
+                        <i></i>禁止
+                      </label>
+                    {{/if}}
+                  </div>
+                </section>
+              </div>
+              {{else}}
+              <div id="rbac_role_mgt05_page_srv_div{{: page_api_id}}"class="row">
+                <section class="col col-8">
+                  <label class="input">
+                    <input type="text" class="input-xs" style="border:none;" name="srv{{: page_api_id}}" value="{{: appid + '/' + moduleid + '/' + apiid + ' ' + appnm + '/' + modulenm + '/' + apinm}}" readonly tabindex="-1">
+                  </label>
+                </section>
+                <section class="col col-4 pull-right">
+                  <div class="inline-group">
+                    {{if authorized && authorized.length}}
+                      <label class="radio">
+                        <input type="radio" data-id="{{: page_api_id}}" name="rbac_role_mgt05_page_srv_status{{: page_api_id}}" value="authorized" checked="checked">
+                        <i></i>授权
+                      </label>
+                      <label class="radio">
+                        <input type="radio" data-id="{{: page_api_id}}" name="rbac_role_mgt05_page_srv_status{{: page_api_id}}" value="unauthorized">
+                        <i></i>禁止
+                      </label>
+                    {{else}}
+                      <label class="radio">
+                        <input type="radio" data-id="{{: page_api_id}}" name="rbac_role_mgt05_page_srv_status{{: page_api_id}}" value="authorized">
+                        <i></i>授权
+                      </label>
+                      <label class="radio">
+                        <input type="radio" data-id="{{: page_api_id}}" name="rbac_role_mgt05_page_srv_status{{: page_api_id}}" value="unauthorized" checked="checked">
+                        <i></i>禁止
+                      </label>
+                    {{/if}}
+                  </div>
+                </section>
+              </div>                
+              {{/if}}
+          {{/for}}
+        {{/if}}
+        </div>
+      </fieldset>
+    </script>
+  </div>
+  <fieldset>
+    <div class="row">
+      <section class="col col-12">
+        <h6 class="margin-top-0">关联页面：</h6>
+      </section>
+    </div>
+  </fieldset>
+  <fieldset>
+    <section>
+      <div id="rbac_role_mgt05_page_next_page">
+        <script id="rbac_role_mgt05_tmpl_next_page" type="text/x-jsrender">
+          <div class="dt-row">
+            <section class="col col-8">
+              <button type="button" id="rbac_role_mgt05_next_page_link{{: next_pageid}}" data-next_pageid="{{: next_pageid}}" class="btn btn-info btn-xs">
+                <i class="fa fa-file-o"></i>&nbsp;{{: next_pageid + ' ' + pagenm}}
+              </button>
+            </section>
+            <section class="col col-4 pull-right">
+              <div class="inline-group">
+                <label class="radio">
+                  {{if authorized && authorized.length}}
+                    <input type="radio" data-next_pageid="{{: next_pageid}}" name="rbac_role_mgt05_next_page_status{{: next_pageid}}" value="authorized" checked="checked">
+                  {{else}}
+                    <input type="radio" data-next_pageid="{{: next_pageid}}" name="rbac_role_mgt05_next_page_status{{: next_pageid}}" value="authorized">
+                  {{/if}}
+                  <i></i>授权
+                </label>
+                <label class="radio">
+                  {{if authorized && authorized.length}}
+                    <input type="radio" data-next_pageid="{{: next_pageid}}" name="rbac_role_mgt05_next_page_status{{: next_pageid}}" value="unauthorized">
+                  {{else}}
+                    <input type="radio" data-next_pageid="{{: next_pageid}}" name="rbac_role_mgt05_next_page_status{{: next_pageid}}" value="unauthorized" checked="checked">
+                  {{/if}}
+                  <i></i>禁止
+                </label>
+              </div>
+            </section>
+          </div>
+        </script>
+      </div>
+    </section>
+  </fieldset>
+  <div id="rbac_role_mgt05_roleid" data-roleid='###query.roleid###'></div>
+  <div id="rbac_role_mgt05_pageid" data-pageid='###query.pageid###'></div>
+  <script src="lib/js/plugin/jquery-jsrender/jsrender.min.js"></script>
+  <script src="rbac/role_mgt/rbac_role_mgt05.js"></script>
+</div>

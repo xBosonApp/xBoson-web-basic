@@ -1,0 +1,238 @@
+﻿<script language="JavaScript" src="/t/paas/show/ui/comm.js" type="text/javascript"></script>
+<style type="text/css">
+.padding1 {
+	!padding: 10px 0 0 7px;
+}
+.highcharts-button {
+	display: none;
+}
+</style>
+<script type="text/javascript">
+var LXtype="tablename";
+var retData;
+var hospunitorgcodeMap;
+var tablenameMap;
+$(function () {
+  $("#startdate").focus();
+   $("#startdate").val(LC_FormatYMD(new Date()));
+   $("#enddate").val(LC_FormatYMD(new Date()));
+   hospunitorgcodeMap=hospunitorgcode();
+   tablenameMap = tablename();
+   setData(LXtype);
+   $("#selectData").click(function(){
+   		setData(LXtype);
+   });
+});
+function getHospunitorgcodeMap(key){
+    
+   	var  getValue= hospunitorgcodeMap.get(key);
+	if(hospunitorgcodeMap.get(key)===false){
+		return "无此编码(" + key + ")";
+	}else{
+	    return getValue;
+	}
+   
+}
+function getTablenameMap(key){
+
+	var  getValue= tablenameMap.get(key);
+	if(tablenameMap.get(key)===false){
+		return "无此编码";
+	}else{
+	    return getValue;
+	}
+}
+function reCallback(retData){
+
+
+      var jsonData=retData.datalist;
+	   // json = eval(data);
+	   // alert(json[0].tablename)
+	   //var context=$('#context');
+	   var categ=['产生数据数','成功接收','失败'];
+	   var data=[];
+
+	   var categ2=[];
+
+	   var busstotal=[];
+       var accpect=[];
+       var success=[];
+       var fail=[];
+       var csuccess=[];
+       var cfail=[];
+	   for(var i=0;i<jsonData.length;i++)
+	   {
+		    if(LXtype==="tablename"){
+		        categ2.push(getTablenameMap(jsonData[i].tablename));
+		    }else if(LXtype==="createdate"){
+		        categ2.push(jsonData[i].createdate);
+		    }else{
+		        categ2.push(getHospunitorgcodeMap(jsonData[i].hospunitorgcode));
+		    }
+		    busstotal.push(jsonData[i].busstotal);
+		    accpect.push(jsonData[i].accpect);
+		    success.push(jsonData[i].success);
+		    fail.push(jsonData[i].fail);
+			csuccess.push(jsonData[i].csuccess);
+		    cfail.push(jsonData[i].cfail);
+	  }
+		 var subdata1=new Object();
+	     subdata1.name='总量';
+	     subdata1.data=busstotal;
+	     var subdata2=new Object();
+	     subdata2.name='异常';
+	     subdata2.data=accpect;
+	     var subdata3=new Object();
+	     subdata3.name='成功';
+	     subdata3.data=success;
+	     var subdata4=new Object();
+	     subdata4.name='失败';
+	     subdata4.data=fail;
+		 var subdata5=new Object();
+	     subdata5.name='前到中成功';
+	     subdata5.data=fail;
+		 var subdata6=new Object();
+	     subdata6.name='前到中失败';
+	     subdata6.data=fail;
+		 data.push(subdata1);
+		 data.push(subdata2);
+		 data.push(subdata3);
+		 data.push(subdata4);
+		 data.push(subdata5);
+		 data.push(subdata6);
+		 var setWidth=jsonData.length*60;
+		 if(setWidth<872){
+		    setWidth="872";
+		 }
+		 var chart=new Highcharts.Chart({
+	     chart: { //定义图开的类型
+	       // type: 'line',//折线
+					//type:'scatter',//点
+					//type:'spline',//曲线
+					//type:'bar',//柱状图
+					//type:'pie',
+					//type:'area',
+					type:'column',
+					//inverted:true,
+					height:500,
+					//width:setWidth, //w72
+					renderTo:'context'
+					//backgroundColor:'#aaaaaa'
+	     },
+		 title: {//定义标题
+	             text: '流量统计'
+	     },
+
+		 xAxis: {
+				 categories:categ2,
+				 type:'category',
+                labels: {
+                    rotation: -45,
+                    align: 'right',
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: '微软雅黑, 宋体, sans-serif'
+                    }
+                }
+	     },
+	     yAxis: {
+	            title: {
+	                text: '数据量'
+	            },
+	            labels: {
+	                formatter: function() {
+	                   return this.value;
+	                }
+	            }
+	     },
+	     tooltip: {
+	                pointFormat: '{point.y:,.0f}</b><br/>({series.name})'
+	     },
+	     plotOptions: {
+	        series: {
+	            cursor: 'pointer',
+	            events: {
+	                click: function(event) {
+	                   //  alert("这是获得的值"+"名称="+event.point.category+"  值="+event.point.y+ "我要跳转页面了");  
+	                   //  openRoleDiv(1);
+	                }
+	             }
+	          }
+	      },
+		  series:data
+	
+	    }
+   ); 
+}
+
+
+function setData(data){
+       var url ="busscount/"; 
+       var itemsList;
+       if($("#startdate").val()!=""&&$("#enddate").val()!=""){
+       		itemsList=["startdate","enddate"];
+       }else{
+       		itemsList=[];
+       }
+       //空数据 会出现 小bug
+	   var info= new Map();
+	   if(data==="tablename"){
+	       LXtype="tablename";
+	   }else if(data==="createdate"){
+	       LXtype="createdate";
+	   }else{
+	       LXtype="hospunitorgcode"
+	   }
+
+       info.put("groupby",LXtype);
+       LC_AjaxGet(TranLogBaseUrl+url,"form1","reCallback",info,itemsList);
+
+}
+
+function openRoleDiv(rowIndex){
+
+ 	   var paramData="id=ewqfr&name=sadfas";
+		var openRoleDiv = self.parent.$("#openRoleDiv").attr("paramData",paramData);
+		openRoleDiv.window({
+		         href:"log/html/2.html",
+	             title: '修改信息',
+	             onBeforeClose:function(){ 
+	             self.parent.workerid="";   
+	             self.parent.orgId="";         
+　　                         },
+	         width: 886,
+	         height: 421
+	     });
+
+	 }
+</script>
+<style>
+.padding1 {
+	padding: 10px 0 0 7px;
+}
+</style>
+<div class="mainsW-872">
+   <div class="padding1">
+      <div class="easyui-panel" title="流量统计查询">
+         <div class="padTB-5 clearfix">
+            <form id="form1" style="margin: 0;">
+              <div class="itemsW-240">
+                 <div class="itemLW-80 padT-4">开始时间:</div>
+                 <div class="itemRW-144"><input id="startdate" class="Wdate" onclick="WdatePicker()" type="text"></div>
+              </div>
+              <div class="itemsW-240">
+                 <div class="itemLW-80 padT-4">结束时间:</div>
+                 <div class="itemRW-144"><input id="enddate" class="Wdate" onclick="WdatePicker()" type="text"></div>
+              </div>
+            </form>
+            &nbsp;&nbsp;&nbsp;<a class="easyui-linkbutton" href="#" onclick="setData('hospunitorgcode')">按照机构代码查看</a> <a class="easyui-linkbutton" href="#" onclick="setData('tablename')">按业务查看</a> <a class="easyui-linkbutton" href="#" onclick="setData('createdate')">按时间查看</a>
+          </div>
+      </div>
+      <div>
+      </div>
+      <div class="mainsW-872" style="overflow-x: auto; overflow-y: auto; height: 500px;">
+         <div id="context" style="background-color: blue; height: 0px; text-align: center;">
+         </div>
+      </div>
+   </div>
+</div>

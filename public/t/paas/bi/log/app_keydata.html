@@ -1,0 +1,227 @@
+ <link rel="stylesheet" href="lib/js/plugin/datatables/media/css/jquery.dataTables.css" />
+ <section id="widget-grid" class="">
+    <div class="row" >
+		  <article class="col-sm-12">
+			<div class="jarviswidget" id="app_realtemes_jsw" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+				<header>
+					<span class="widget-icon"> <i class="glyphicon glyphicon-stats txt-color-darken"></i> </span>
+					<h2>关键指标</h2>
+				</header>
+				<div class="no-padding">
+					<div class="jarviswidget-editbox"></div>
+					<div class="widget-body  text-align-center">
+					  <article class="col-sm-12 table-bordered hidden" id="kedata_org">
+					    <h5><span class="semi-bold">&nbsp;&nbsp;机构总数&nbsp;&nbsp;</span> 
+  					    <span class="txt-color-blue">&nbsp;&nbsp;
+  					      <label name="org_nums">--</label>
+  					      <small><i class="fa fa-plus"></i>
+  					        <label name="org_num">--</label>&nbsp;&nbsp;
+  					      </small>
+  					    </span>
+				        <small class="text-danger slideInRight fast animated">
+				          <strong>日
+				          <label name="icon_org"><i class="fa fa-arrow-up icon-color-bad"></i></label>
+				          <code><label name="org_z">--</label>%</code></strong>
+				        </small>
+				      </h5>
+            </article> 
+            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 table-bordered ">
+              <h5>用户总数</h5>
+              <div class="txt-color-blue ">
+                <h6><label name="user_nums">--</label>
+                  <small>
+                    <i class="fa fa-plus"></i>
+                    <label name="user_num">--</label>
+                  </small>
+                  </h6>
+              </div>
+              <span class="easy-pie-title hidden-sm hidden-md">
+                日
+				        <label name="icon_user"><i class="fa fa-arrow-up icon-color-bad"></i></label>
+                <code><label name="user_z">--</label>%</code>
+              </span>
+            </div>
+            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 table-bordered ">
+              <h5>应用总数</h5>
+              <div class="txt-color-blue ">
+                <h6><label name="app_nums">--</label>
+                  <small>
+                    <i class="fa fa-plus"></i>
+                    <label name="app_num">--</label>
+                  </small>
+                  </h6>
+              </div>
+              <span class="easy-pie-title hidden-sm hidden-md">日
+				        <label name="icon_app"><i class="fa fa-arrow-up icon-color-bad"></i></label>
+                <code><label name="app_z">--</label>%</code>
+              </span>
+            </div>
+            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 table-bordered ">
+              <h5>模块总数</h5>
+              <div class="txt-color-blue ">
+                <h6><label name="mod_nums">--</label>
+                  <small>
+                    <i class="fa fa-plus"></i>
+                    <label name="mod_num">--</label>
+                  </small>
+                  </h6>
+              </div>
+              <span class="easy-pie-title hidden-sm hidden-md">
+                日
+				        <label name="icon_mod"><i class="fa fa-arrow-up icon-color-bad"></i></label>
+                <code><label name="mod_z">--</label>%</code>
+              </span>
+            </div>
+            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 table-bordered ">
+              <h5>API总数</h5>
+                <div class="txt-color-blue ">
+                <h6><label name="api_nums">--</label>
+                  <small>
+                    <i class="fa fa-plus"></i>
+                    <label name="api_num">--</label>
+                  </small>
+                  </h6>
+              </div>
+              <span class="easy-pie-title hidden-sm hidden-md">
+                日
+				        <label name="icon_api"><i class="fa fa-arrow-up icon-color-bad"></i></label>
+                <code><label name="api_z">--</label>%</code>
+              </span>
+            </div>
+					</div>
+				</div>
+			</div>
+		</article>
+    </div>
+    <div class="row" >
+    <article class="col-sm-12">
+			<div class="jarviswidget" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+				<header>
+				  <span class="widget-icon"> </span>
+					<h2></h2>
+					<div class="widget-toolbar"> 
+					   <div class="row">
+      		    <section class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          			<span> <span class="onoffswitch-title">条件筛选</span> <span class="onoffswitch">
+          			<input type="checkbox" name="time_interval" class="onoffswitch-checkbox" id="time_interval">
+          			<label class="onoffswitch-label" for="time_interval"> 
+          			<span class="onoffswitch-inner" data-swchon-text="指定" data-swchoff-text="快捷"></span> 
+          			<span class="onoffswitch-switch"></span> </label> </span> </span>
+          		</section>
+            </div>	
+					</div>	
+				</header>
+				<div class="no-padding">
+					<div class="jarviswidget-editbox"></div>
+					<div class="widget-body">
+              <form id="form_app_keydata" class="form_xzqujl smart-form" method="post" onsubmit="return false;" >
+  		    <fieldset>
+      			<div id="app_keydata_datapicker" class="row form-inline">
+              <section class="col col-2">
+                <label class="input">
+                  <input type="text" index="dt_from"  placeholder="开始时间" value=now()/>        
+                </label>  
+              </section>
+              <label class="col label">至</label>
+              <section class="col col-2">
+              <label class="input">
+              <input type="text" index="dt_to"  placeholder="结束时间" value=now()/>
+              </label>
+              </section>
+            </div>
+            <div id='app_keydata_customdt' class="row">
+              <section class="btn-group col col-6">
+                <!--<a class="btn btn-default btn-sm" href="javascript:void(0);" data-tag='-1'>昨天</a>-->
+                <!--<a class="btn btn-default btn-sm" href="javascript:void(0);" data-tag='0'>今天</a>-->
+                <a class="btn btn-default btn-sm" href="javascript:void(0);" data-tag='-7'>7天</a>
+                <a class="btn btn-default btn-sm" href="javascript:void(0);" data-tag='-14'>14天</a>
+                <a class="btn btn-default btn-sm" href="javascript:void(0);" data-tag='-30'>30天</a>
+              </section>
+            </div>
+            <div class="row">
+              <section class="col col-2 hidden" id="app_keydata_dept">
+                <label class="input">
+                  <input type="hidden" name="app_keydata_dept" placeholder="下属机构"/>
+                </label>
+    		      </section>
+    		      <section class="col col-2">
+                <button class="btn btn-info btn-sm _search" type="submit"><i class="fa fa-search fa-1"></i>&emsp;查 询&emsp;</button>
+                </section>
+    		    </div>
+    		  </fieldset> 
+        </form> 
+					</div>
+				</div>
+			</div>
+		</article>
+    </div>
+		<div class="row">
+		<article class="col-sm-12">
+			<div class="jarviswidget"  data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+				<header>
+					<span class="widget-icon"> <i class="glyphicon glyphicon-stats txt-color-darken"></i> </span>
+					<h2>小时数据</h2>
+					<div id="keydata_kpi" class="widget-toolbar nav nav-tabs pull-left in"> 
+					  
+					    <a data-tag='user' class='btn btn-default active'>用户总数</a>
+      		    <a data-tag='app' class='btn btn-default'>应用总数</a>
+      		    <a data-tag='mod' class='btn btn-default'>模块总数</a>
+      		    <a data-tag='api' class='btn btn-default'>API总数</a>
+      		    <a data-tag='org' class='btn btn-default hidden'>机构总数</a>
+          
+					</div>	
+					<ul class="nav nav-tabs pull-right in" id="myTab">
+						<li class="active">
+							<a data-toggle="tab" href="#s1"><i class="fa fa-clock-o"></i> <span class="hidden-mobile hidden-tablet"></span></a>
+						</li>
+					</ul>
+				</header>
+				<div class="no-padding">
+					<div class="jarviswidget-editbox">
+					 
+					</div>
+					<div class="widget-body">
+						<div id="myTabContent" class="tab-content">
+							<div class="tab-pane fade active in padding-10 no-padding-bottom" id="s1">
+								<div class="row no-space">
+									<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+										<div id="updating-chart" class="chart-large txt-color-blue"></div>
+									</div>
+									<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 show-stats form-inline">
+									  <form class="smart-form" id="keydata_infos">
+										</form>
+									</div>
+									<div id="app_keydata_table" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div id="chart_table_con">
+                    </div>
+                    <div id="chart_table_template" style="display:none;">
+                      <div class="row" style="padding-right: 15px">
+                        <button index="outData" class="btn btn-default btn-xs pull-right">导出数据</button>
+                        <!--<button index="closeTable" class="btn btn-default btn-xs pull-right closed">关闭</button>-->
+                      </div>
+                      <div class="dataTables_wrapper" >
+                        <table id="chart_table" class="table table-bordered table-striped"></table>
+                        <table id ="chart_table_ods" class="table table-bordered table-striped"></table>
+                      </div>
+                      <div id="chart_table_slider_bar"></div>
+                    </div>  
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</article>
+	</div>
+</section>
+<script src="lib/js/plugin/datatables/media/js/jquery.dataTables.min.js"> </script>
+<script src="bi/echarts.js"></script>
+<script src="bi/js/datetime_custom.js"></script>
+<script src="bi/html/table_custom.js"></script>
+<script src="bi/log/app_keydata.js"></script>
+
+<script>
+  pageSetUp();
+  var appkeydata = new Appkeydata();
+</script>

@@ -1,0 +1,359 @@
+<style type="text/css">
+#timecx{ display: none;}	
+</style>
+<div id="etbjglda-m"  class="portlet box grey">
+    <div class="portlet-title">
+        <div class="caption" id="yetj-name"><!-- 可以设置图标<i class="icon-globe"></i> -->孕产妇健康管理</div>
+        <!-- 设置关闭和刷新--> 
+        <div class="tools">
+            <div class="tools-chart">
+            	<a title="column"><i class="icon-bar-chart"></i></a> <a title="pie"><i class="icon-adjust"></i></a>
+                <span class="reload"><i class="icon-file-text-alt"></i></span>
+            </div>
+        </div>
+        
+    </div>
+    <div class="portlet-body">
+        <div class="lc-inquire">
+            <form id="org_etbjglda" class="form-inline" action="">
+                <input type="hidden" id="groupby" value="tablename"/>
+                <input type="hidden" id="pagenum"/>
+                <input type="hidden" id="pagesize"/>
+                <input type="hidden" id="sa"/>
+                <input type="hidden" id="MM"/>
+                <div class="row-fluid">
+                	<div class="span2"><select id="zhuanqu" class="selectpicker"><option value="2">按时间</option><option value="1">按机构</option></select></div>
+                    <div class="span1">机构名称</div>
+                    <div class="span2"><select id="dimorg" class="selectpicker"></select></div>
+                    <div class="span1 displayb">开始时间</div>
+                    <div class="span2 displayb">
+                    	<div class="datebegin"></div>
+                    </div>
+                    <div class="span1 displayb">结束时间</div>
+                    <div class="span2 displayb">
+                    	<div class="dateend"></div>
+                    </div>
+                    <div class="span1"><a id="jgcx" onclick="setData2Etbjglda('tablename')" class="btn blue">查询</a></div>
+                    <div class="span1"><a id="timecx" onclick="Etbjgltime('tablename')" class="btn blue">查询</a></div>
+                </div>
+            </form>
+        </div>
+        <div id="lc-rowtable" class="row-fluid">
+            <div class="span12">
+                <div id="contextEtbjglda"></div>
+            </div>
+        </div>
+        <div id="rowtable" class="row-fluid rowtable">
+            <div class="span12">
+                 <table id="ttEtbjglda"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	if($(window).width()>765){
+		$("#contextEtbjglda").height($(window).height()-207);
+	}
+});
+
+var dataShow;
+var PageNumber=1;
+var PageSize=10;
+function setData2Etbjglda(data){
+	$(".loadshow").show(); 
+	var url ="YCFJK01"; 
+	var itemsList;
+	if($("#datebegin").val()!=""&&$("#dateend").val()!=""){
+		itemsList=["datebegin","dateend","dimorg"];
+	}else{
+		itemsList=[];
+	}
+	//空数据 会出现 小bug
+	var info= new Map();
+	info.put("sqlid","select");
+	info.put("pagenum",PageNumber);
+	info.put("pagesize",PageSize);
+	if(data==="tablename"){
+	   LXtype="tablename";
+	}else if(data==="createdate"){
+	   LXtype="createdate";
+	}else{
+	   LXtype="hospunitorgcode"
+	}
+	info.put("groupby",data);
+	sys_AjaxGet(BIASUrl+url,"org_etbjglda","reCallback101",info,itemsList);
+}
+function Etbjgltime(){
+	$(".loadshow").show(); 
+	$("#sa").val("1");
+	$("#pagenum").val(PageNumber);
+  	$("#pagesize").val(PageSize);
+	var mapInfo = new Map();
+	mapInfo.put("sqlid","select");
+	mapInfo.put("pagenum",PageNumber);
+	mapInfo.put("pagesize",PageSize);
+	var itemsList;
+	itemsList = ["sa","datebegin","dateend","dimorg"];
+	var url = "YCFJK02";
+	sys_AjaxGet(BIASUrl+url,"org_etbjglda","reCallback101",mapInfo,itemsList);
+}
+function EtbjgltimeDay(){
+	$(".loadshow").show(); 
+	$("#sa").val("2");
+	$("#pagenum").val(PageNumber);
+  	$("#pagesize").val(PageSize);
+	var mapInfo = new Map();
+	mapInfo.put("sqlid","select");
+	mapInfo.put("pagenum",PageNumber);
+	mapInfo.put("pagesize",PageSize);
+	var itemsList;
+	itemsList = ["sa","MM","dimorg"];
+	var url = "YCFJK02";
+	sys_AjaxGet(BIASUrl+url,"org_etbjglda","reCallback101",mapInfo,itemsList);
+}
+function reCallback101(dataInfo){
+//切换图形是grid时候，如果没有对应数据
+if(dataInfo.dataMap.data.length==0)
+	{
+		$('.reload').unbind("click");
+		$("#rowtable").addClass("rowtable");
+		$("#lc-rowtable").removeClass("rowtable");
+	}else{
+		$(".reload").click(function(){
+			$("#rowtable").removeClass("rowtable");
+			$("#lc-rowtable").addClass("rowtable");
+		});
+	}
+	//切换图形-----------------------------------20131213---开始
+var chartselect="";
+$("#etbjglda-m .tools-chart a").click(function(){
+	$("#etbjglda-m #rowtable").addClass("rowtable");
+	$("#etbjglda-m #lc-rowtable").removeClass("rowtable");
+		var charttitle=$(this).attr("title");
+		chartselect=charttitle;
+		reCallback(dataInfo, chartselect, "#contextEtbjglda");
+});		
+if(chartselect===""){
+	reCallback(dataInfo, chartselect, "#contextEtbjglda");
+	$(".loadshow").hide();
+	}
+//切换图形-----------------------------------20131213---结束
+//动态获得grid的数据---------------------------开始
+var xq= [];
+var im=0;
+var zhuanqu=$("#zhuanqu").val();
+if(zhuanqu=="1"){
+$.each(dataInfo.dataMap.data[0], function(key, value){
+	if(im==0){
+		xq.push({field:"机构",title:"机构",align:'center',width:200});
+	}
+	im++;	
+	if(key!="机构"){
+	    xq.push({field:key,title:key,align:'center',
+		         formatter:function(value){
+		         	if (value=='') {
+		         		value=0;
+		         	};
+					 return parseData(value);  //数据缺失的时候用到。如：.2323 添加后0.2323  chart_common.js里面已经有定义parseData(data)
+			     }
+			});
+	}
+});
+}else{
+	if (dataInfo.dataMap.data[0].月) {
+		$.each(dataInfo.dataMap.data[0], function(key, value){
+		if(im==0){
+			xq.push({field:"月",title:"月",align:'center',width:200});
+		}
+		im++;	
+		if(key!="月"){
+		    xq.push({field:key,title:key,align:'center',
+			         formatter:function(value){
+		         	if (value=='') {
+		         		value=0;
+		         	};
+						 return parseData(value);  //数据缺失的时候用到。如：.2323 添加后0.2323  chart_common.js里面已经有定义parseData(data)
+				     }
+				});
+		}
+		});
+	}else{
+		$.each(dataInfo.dataMap.data[0], function(key, value){
+		if(im==0){
+			xq.push({field:"日期",title:"日期",align:'center',width:200});
+		}
+		im++;	
+		if(key!="日期"){
+		    xq.push({field:key,title:key,align:'center',
+			         formatter:function(value){
+		         	if (value=='') {
+		         		value=0;
+		         	};
+						 return parseData(value);  //数据缺失的时候用到。如：.2323 添加后0.2323  chart_common.js里面已经有定义parseData(data)
+				     }
+				});
+		}
+		});
+	}
+}
+//动态获得grid的数据---------------------------结束	
+//将dataAll添加到数据里面
+var zhuanqu=$("#zhuanqu").val();
+if (zhuanqu=="1") {
+var datapush=dataInfo.dataMap.data;
+dataInfo.dataMap.dataAll[0].机构="合计";
+datapush.push(dataInfo.dataMap.dataAll[0]);	
+}
+	$('#ttEtbjglda').datagrid({
+			nowrap: false,
+			striped: true,
+			collapsible:false,
+			//pagination:true,
+			pageNumber:PageNumber,
+			pageSize: PageSize,
+			singleSelect:true, 
+			loadMsg:"正在载入...",
+			pageList: [10,20,50,100,200],
+			data:dataInfo.dataMap.data,
+			columns:[xq],//对应上面的定义grid数据
+			onDblClickRow: function (rowIndex) { //双击
+				// openRoleDiv(rowIndex);
+			},
+		   fitColumns:false,
+		   rownumbers:true
+	}); 
+   var pager = $('#ttEtbjglda').datagrid('getPager');
+	   if(pager){
+		$(pager).pagination({
+			
+			onSelectPage:function(pageNumber,pageSize){
+			   PageNumber=pageNumber;
+			   PageSize=pageSize;
+			   }
+		});		
+		$(pager).pagination({pageSize:PageSize,pageNumber:PageNumber,total:dataInfo.count});
+	};
+//删除新增的dataAll	
+if (zhuanqu=="1") {
+datapush.splice(datapush.length-1);
+}
+$('#ttEtbjglda').datagrid('hideColumn', "健康（规范）管理人数");
+}
+</script>
+<script>
+$(function(){
+$(window).resize(function(){
+$('#ttEtbjglda').datagrid('resize');
+});
+});
+</script>
+<script>
+//机构
+$(function () {
+getselectdaoid101();
+});
+function  getselectdaoid101(){
+  sys_BI_getDaoidList("mdmSelectdaoid101");
+}
+function mdmSelectdaoid101(data){
+  var info = new Map();
+  info.put("key",["hospunitorgcode"]);
+  info.put("value",["hospunitorgnm"]);
+  sys_GetSelect("org_etbjglda","dimorg",info,sys_BI_getCacheDaoidData());
+}
+
+//loadingEtbjglda();
+//setDataCy('tablename');
+
+var zhuanqu=$("#zhuanqu").val();
+if (zhuanqu=="1") {
+	$(".datebegin").html("");
+	$(".dateend").html("");
+	$(".datebegin").append("<input id='datebegin' type='text' value='2012-09-09' class='dateday'>");
+	$(".dateend").append("<input id='dateend' type='text' value='2012-09-09' class='dateday'>");
+	$('.dateday').datetimepicker({
+		format: 'yyyy-mm-dd',
+		autoclose:true,
+		startView:2,
+		minView:2
+	});
+	today=new Date(); 
+	var ymd=sys_FormatYMD(today);
+	var vMon = today.getMonth() + 1;
+var dateendymd=today.getFullYear()-1+"-"+(vMon<10 ? "0" + vMon : vMon)+"-"+today.getDate();
+$("#datebegin").val(dateendymd);
+	$("#dateend").val(ymd);
+    setData2Etbjglda();
+    $("#jgcx").show();
+    $("#timecx").hide();
+}else{
+	$(".datebegin").html("");
+	$(".dateend").html("");
+	$(".datebegin").append("<input id='datebegin' type='text' value='2012-09' class='datemonth'>");
+	$(".dateend").append("<input id='dateend' type='text' value='2012-09' class='datemonth'>");
+	$('.datemonth').datetimepicker({
+		format: 'yyyy-mm',
+		autoclose:true,
+		startView:3,
+		minView:3
+	});
+	today=new Date();
+	var vMon = today.getMonth() + 1;
+	var dateendymd=today.getFullYear()-1+"-"+(vMon<10 ? "0" + vMon : vMon);
+	var ymd=today.getFullYear()+"-"+(vMon<10 ? "0" + vMon : vMon);
+	$("#datebegin").val(dateendymd);
+	$("#dateend").val(ymd); 
+    Etbjgltime();
+    $("#jgcx").hide();
+    $("#timecx").show();
+};
+$("#zhuanqu").change(function(){
+    var zhuanqu=$("#zhuanqu").val();
+    if (zhuanqu=="1") {
+    	$(".datebegin").html("");
+    	$(".dateend").html("");
+    	$(".datebegin").append("<input id='datebegin' type='text' value='2012-09-09' class='dateday'>");
+		$(".dateend").append("<input id='dateend' type='text' value='2012-09-09' class='dateday'>");
+		$('.dateday').datetimepicker({
+			format: 'yyyy-mm-dd',
+			autoclose:true,
+			startView:2,
+			minView:2
+		});
+		today=new Date(); 
+		var ymd=sys_FormatYMD(today);
+		var vMon = today.getMonth() + 1;
+var dateendymd=today.getFullYear()-1+"-"+(vMon<10 ? "0" + vMon : vMon)+"-"+today.getDate();
+$("#datebegin").val(dateendymd);
+		$("#dateend").val(ymd);
+	    setData2Etbjglda();
+	    $("#jgcx").show();
+    	$("#timecx").hide();
+    }else{
+    	$(".datebegin").html("");
+    	$(".dateend").html("");
+    	$(".datebegin").append("<input id='datebegin' type='text' value='2012-09' class='datemonth'>");
+		$(".dateend").append("<input id='dateend' type='text' value='2012-09' class='datemonth'>");
+		$('.datemonth').datetimepicker({
+			format: 'yyyy-mm',
+			autoclose:true,
+			startView:3,
+			minView:3
+		});
+		today=new Date();
+		var vMon = today.getMonth() + 1;
+		var dateendymd=today.getFullYear()-1+"-"+(vMon<10 ? "0" + vMon : vMon);
+		var ymd=today.getFullYear()+"-"+(vMon<10 ? "0" + vMon : vMon);
+		$("#datebegin").val(dateendymd);
+		$("#dateend").val(ymd);
+        Etbjgltime();
+        $("#jgcx").hide();
+    	$("#timecx").show();
+    };
+
+});
+</script>
+
+
+

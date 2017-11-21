@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>区域医疗健康信息平台——心医至成</title>
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,maximum-scale=0.5,user-scalable=no" />
+    <meta name="keywords" content="senyint, 心医国际, 心医至成, 区域医疗健康信息平台" />
+    <!-- jQuery -->
+    <script src="/ui/paas/lib/js/libs/jquery-1.11.0.min.js"></script>
+    <!--[if !IE]> -->
+    <!--  <script src="/ui/paas/lib/js/libs/jquery-2.0.3.min.js"></script>-->
+    <!-- <![endif]-->
+  </head>
+  <body style="margin: 0;">
+    <div class="row">
+      <iframe id='content' name='content' frameborder="0" scrolling="no" style="border:0px;width:100%;height:700px;"></iframe>
+    </div>
+    <form action="http://59.46.190.67:8086/senyint-ex/login" 
+      method="post" id="logform" target='loginfrm' style='display:none'>
+      <input type="hidden" value="update" name="act">
+      <input type="text" name="username" id='username' value="doctor">
+      <input type="password" name="password" id='password' value="111111">
+      <input name="" type="submit" class="submit" value="" id="login_but_click" >
+    </form>
+    <iframe id='loginfrm' name='loginfrm'></iframe>
+    <script type="text/javascript">
+      var url = 'http://59.46.190.67:8086/senyint-ex/patient/getPatientInfo?visitSn=4410468&patientSn=2341669&domain=2';
+      $('#loginfrm').each(function() {
+        console.log('login');
+        this.onload = function() {
+          console.log('success load', url);
+          document.getElementById("content").src = url;
+        }
+      }).hide();
+      $('#login_but_click').click();
+    </script>
+  </body>
+</html>
+  

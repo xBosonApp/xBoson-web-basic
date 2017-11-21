@@ -1,0 +1,199 @@
+﻿<script type="text/javascript">
+var pageNum=1;
+var pageSize=10;
+var emrmzjz1data;
+var emrmzjz2data;
+var emrmzjz3data;
+$(function(){
+
+   showDatamzcf();
+      showDatamzcf1();
+      showDatamzcf2();
+
+});
+
+	function emrmzjz1callback(retData){
+		emrmzjz1data = retData;
+		LC_SetMapData("form1",emrmzjz1data.dataList);
+	}
+	function showDatamzcf(){
+	
+		// 重置检查结果		
+		LC_Resetting("form1");		
+
+				
+		// 数据格式验证通过以后		
+		// *******************第二步请求数据***********************		
+		 if(retCheckFlg){		
+        	 var url ="emrmzjz1/"; 	
+        	 var itemsList=["primal_time","latest_time"];
+        	 var itemsList=[];
+			 var info= new Map();	
+	         info.put("pageNum",pageNum);
+	         info.put("pageSize",pageSize);
+			 info.put("pid",self.parent.pid);
+		if(self.parent.jgdm!=undefined){
+		info.put("jgdm",self.parent.jgdm);
+		info.put("jzlsh",self.parent.jzlsh);
+		}
+			 
+        	 LC_AjaxGet(EMRBaseUrl+url,"form1","emrmzjz1callback",info,itemsList);	
+		 }
+	 } 	
+	function callabckdcl(retData){
+		//********************第三步处理请求后的数据***************	
+		emrmzjz1data=retData;
+	}
+
+	function emrmzjz2callback(retData){
+		emrmzjz2data = retData;
+		LC_SetMapData("form2",emrmzjz2data.dataList);
+	}
+	function showDatamzcf1(){
+		
+		// 重置检查结果		
+		LC_Resetting("form2")			
+				
+		// 数据格式验证通过以后		
+		// *******************第二步请求数据***********************		
+		 if(retCheckFlg){		
+        	 var url ="emrmzjz1/"; 	
+        	 var itemsList=["primal_time","latest_time"];
+        	 var itemsList=[];
+			 var info= new Map();	
+	         info.put("pageNum",pageNum);
+	         info.put("pageSize",pageSize);
+			 info.put("pid",self.parent.pid);
+        	 LC_AjaxGet(EMRBaseUrl+url,"form2","emrmzjz2callback",info,itemsList);	
+		 }	
+		 
+		 
+	 } 	
+	 
+	function callabckdc2(retData){
+		//********************第三步处理请求后的数据***************	
+		emrmzjz2data=retData;
+    }
+
+	function emrmzjz3callback(retData){
+		 emrmzjz3data = retData;
+		 LC_SetMapData("form3",emrmzjz3data.dataList);
+	}
+	function showDatamzcf2(){
+		LC_Resetting("form3")		
+
+		// 数据格式验证通过以后		
+		// *******************第二步请求数据***********************		
+		 if(retCheckFlg){		
+        	 var url ="emrmzjz1/"; 	
+        	 var itemsList=["primal_time","latest_time"];
+        	 var itemsList=[];
+			 var info= new Map();	
+	         info.put("pageNum",pageNum);
+	         info.put("pageSize",pageSize);
+        	 LC_AjaxGet(EMRBaseUrl+url,"form3","emrmzjz3callback",info,itemsList);	
+		 }	
+	 } 	
+	 function callabckdc3(retData){
+		//********************第三步处理请求后的数据***************	
+		emrmzjz3data=retData;
+     }
+
+</script>	
+<!-- 门诊就诊开始 -->
+
+<div class="mainsW-872">
+	<!-- 就诊开始 -->
+	<div class="easyui-panel" title="就诊">
+		<div class="flPadTB-10">
+			<form id="form1">
+				<div class="itemsW-208" >
+					<div class="itemLW-80 padT-4">日期：</div>
+					<div class="itemRW-128"><input class="textLW" id="dc1001_jzkssj" type="text" ></div>
+				 </div>
+				 <div class="itemsW-208" >
+					<div class="itemLW-80 padT-4">科室：</div>
+					<div class="itemRW-128"><input class="textLW" id="dc1001_jzksmc" type="text" ></div>
+				 </div>
+				 <div class="itemsW-208" >
+					<div class="itemLW-80 padT-4">医生：</div>
+					<div class="itemRW-128"><input class="textLW" id="dc1001_jzysxm" type="text" ></div>
+				 </div>
+				 <div class="itemsW-208" >
+					<div class="itemLW-80 padT-4">医院：</div>
+					<div class="itemRW-128"><input class="textLW" id="dc1001_jgdm" type="text" ></div>
+				 </div>
+				 <div class="itemsW-416">
+					<div class="itemLW-80 padT-4">主要描述：</div>
+					<div class="itemRW-336"><input class="textLW" id="dc1001_zyzd" type="text" ></div>
+				 </div>
+				 <div class="itemsW-416">
+					<div class="itemLW-80 padT-4">诊断描述：</div>
+					<div class="itemRW-336"><input class="textLW" id="dc1001_zdms" type="text" ></div>
+				 </div>
+				 <div class="itemsW-416">
+					<div class="itemLW-80 padT-4">其他诊断：</div>
+					<div class="itemRW-336"><input class="textLW" type="text" ></div>
+				 </div>
+		 	</form>
+		 </div>
+	</div>
+	<!-- 就诊结束 -->
+	<!-- 生命体征开始 -->	
+	<div id="form2" class="easyui-panel" title="生命体征">
+		<div class="flPadTB-10">
+			<div class="mainW-160" >
+				<div class="itemLW-48 padT-4">血压：</div>
+				<div class="itemLW-64"><input class="textLW" id="dc1001_ssy" id="dc1001_szy" type="text" ></div>
+				<div class="itemRW-48 padT-4">(mmHg)</div>
+			 </div>
+			 <div class="mainW-160" >
+				<div class="itemLW-48 padT-4">体温：</div>
+				<div class="itemLW-64"><input class="textLW" id="dc1001_hztw" type="text" ></div>
+				<div class="itemRW-48 padT-4">(°C)</div>
+			 </div>
+			 <div class="mainW-160" >
+				<div class="itemLW-48 padT-4">脉搏：</div>
+				<div class="itemLW-64"><input class="textLW" id="dc1001_hzmb" type="text" ></div>
+				<div class="itemRW-48 padT-4">(每分钟)</div>
+			 </div>
+			 <div class="mainW-160" >
+				<div class="itemLW-48 padT-4">呼吸：</div>
+				<div class="itemLW-64"><input class="textLW" id="dc1001_hzhx"type="text" ></div>
+				<div class="itemRW-48 padT-4">(每分钟)</div>
+			 </div>
+			 <div class="mainW-160" >
+				<div class="itemLW-48 padT-4">体重：</div>
+				<div class="itemLW-64"><input class="textLW" id="dc1001_hztz" type="text" ></div>
+				<div class="itemRW-48 padT-4">(kg)</div>
+			 </div>
+		 </div>
+	</div>
+	<!-- 生命体征结束 -->
+	<!-- 诊疗情况开始 -->
+	<div id="form3"class="easyui-panel" title="诊疗情况">
+		<div class="flPadTB-10">
+			<div class="mainW-832" >
+				<div class="itemLW-144 padT-4">病人主诉：</div>
+				<div class="itemRW-656"><textarea class="textLW" id="dc1001_brzs" name="" cols="" rows=""></textarea></div>
+			 </div>
+			 <div class="mainW-832" >
+				<div class="itemLW-144 padT-4">现病史：</div>
+				<div class="itemRW-656"><textarea class="textLW" id="dc1001_xbs" name="" cols="" rows=""></textarea></div>
+			 </div>
+			 <div class="mainW-832" >
+				<div class="itemLW-144 padT-4">既往史：</div>
+				<div class="itemRW-656"><textarea class="textLW" id="dc1001_jws" name="" cols="" rows=""></textarea></div>
+			 </div>
+			 <div class="mainW-832" >
+				<div class="itemLW-144 padT-4">治疗计划：</div>
+				<div class="itemRW-656"><textarea class="textLW" id="dc1001_zljh" name="" cols="" rows=""></textarea></div>
+			 </div>
+			 <div class="mainW-832" >
+				<div class="itemLW-144 padT-4">治疗方案及康复建议：</div>
+				<div class="itemRW-656"><textarea class="textLW" id="dc1001_fajy" name="" cols="" rows=""></textarea></div>
+			 </div>
+		 </div>
+	</div>
+	<!-- 诊疗情况结束 -->
+</div>

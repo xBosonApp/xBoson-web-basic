@@ -1,0 +1,186 @@
+<div class="modal fade" id="add_upddatasource" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title">数据源（<span id="add_upddatasource_title"></span>）</h4>
+      </div>
+      <div class="modal-body no-padding">
+        <!-- FORM Start -->
+        <form id="add_upddatasource_form" method="post" onsubmit="return false;" class="smart-form">
+          <fieldset>
+          <div class="row">
+              <label class="input"></label>
+                <input type="hidden" name="did">
+             <section class="col col-6">
+              <label class="label has-warning">数据源名称</label>
+              <label class="input has-warning">
+                <input type="text" name="dn" placeholder="数据源名称">
+                 <b class="tooltip tooltip-bottom-right">数据源名称为必填项目</b>
+              </label>
+              </section>
+               <section class="col col-6">
+               <label class="label">数据库类型</label>
+                <label class="input">
+                  <input type="hidden" name="dbtype" data-type="select2" placeholder="数据库类型">
+                </label>
+              </section>
+            </div>
+            
+            <div class="row">
+              <section class="col col-6">
+               <label id="add_upddatasource_en" class="label has-warning">数据库物理名称</label>
+                <label class="input">
+                  <input type="text" name="en" placeholder="数据库物理名称">
+                </label>
+              </section>
+              <section class="col col-6">
+              <label class="label has-warning">数据库中文名称</label>
+                <label class="input has-warning">
+                  <input type="text" name="cn" placeholder="数据库中文名称">
+                  <b id="add_upddatasource_b" class="tooltip tooltip-bottom-right">数据库中文名称为必填项目</b>
+                  </label>
+              </section>
+              </div>
+              
+              <div class="row">
+                <label class="input"></label>
+                <input type="hidden" name="owner">
+                <section class="col col-6">
+                  <label class="label has-warning">用户名</label>
+                  <label class="input has-warning">
+                  <input type="text" name="user_name" placeholder="用户名">
+                  <b class="tooltip tooltip-bottom-right">用户名为必填项目</b>
+                </label>
+              </section>
+                <!--<section class="col col-6">
+                <label class="label">所有者</label>
+                <label class="input">
+                  <input type="text" name="owner" placeholder="所有者">
+                </label>
+                </section>-->
+              <section class="col col-6">
+              <label class="label">密码</label>
+              <label class="input">
+                <input type="text" name="pass" placeholder="密码">
+              </label>
+              </section>
+              </div>
+              <div class="row">
+                <section class="col col-6">
+              <label class="label has-warning">Host</label>
+              <label class="input has-warning">
+                <input type="text" name="dhost" placeholder="Host">
+                <b class="tooltip tooltip-bottom-right">Host为必填项目</b>
+              </label>
+                </section>
+              <section class="col col-6">
+             <label class="label has-warning">端口</label>
+              <label class="input has-warning">
+                <input type="text" name="dport" placeholder="端口">
+                <b class="tooltip tooltip-bottom-right">端口为必填项目</b>
+              </label>
+              </section>
+              </div>
+              <div class="row">
+              <section class="col col-6">
+                <label class="label">状态</label>
+                <label class="input">
+                <input type="hidden" name="status" data-type="select2" placeholder="状态">
+               </label>
+             </section>
+             <section class="col col-6">
+                <label class="label">标记</label>
+                <label class="input">
+                <input type="hidden" name="flg" data-type="select2" placeholder="标记">
+               </label>
+             </section>
+              </div>
+          <!--  <div class="row">
+                <section class="col col-6">
+              <label class="label">数据库存储大小</label>
+              <label class="input">
+                <input type="text" name="dbsize" placeholder="数据库存储大小">
+              </label>
+                </section>
+              <section class="col col-6">
+             <label class="label">用户表总数量</label>
+              <label class="input">
+                <input type="text" name="tcount" placeholder="用户表总数量">
+              </label>
+              </section>
+              </div>-->
+            <div>
+              <section >
+               <label class="label">JDBC URL</label>
+               <label class="input">
+                <input type="text" name="url" placeholder="JDBC URL">
+              </label>
+              </section>
+            </div>
+            <div class="row">
+             <section class="col col-6">
+                <label class="label">允许连接池</label>
+                <label class="input">
+                  <input type="hidden" name="pool_enabled" data-type="select2" placeholder="允许连接池">
+               </label>
+             </section>
+            </div>
+            <div>
+              <section>
+                <label>{<br/>
+"name":"通过名字区分监控。 缺省值 null",<br/>
+"url":"连接数据库的url",<br/>
+"driverClassName":"如果不配置druid会根据url自动识别dbType",<br/>
+"username":"连接数据库的用户名",<br/>
+"password":"连接数据库的密码",<br/>
+"filters":"stat",<br/>
+"initialSize":"初始化时建立物理连接的个数 缺省值 0",<br/>
+"minIdle":"最小连接池数量 缺省值 null",<br/>
+"maxActive":"最大连接池数量 缺省值 8",<br/>
+"timeBetweenEvictionRunsMillis":"如果连接空闲时间大于等于minEvictableIdleTimeMillis关闭物理连接 缺省值 1分钟",<br/>
+"minEvictableIdleTimeMillis":"连接保持空闲不被驱逐的最长时间 缺省值 30分钟",<br/>
+"validationQuery":"SELECT 'x'",<br/>
+"validationQueryTimeout":"单位：秒，检测连接是否有效的超时时间",<br/>
+"testWhileIdle":"true",<br/>
+"testOnBorrow":"false",<br/>
+"testOnReturn":"false",<br/>
+"poolPreparedStatements":"是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭。分库分表较多的数据库，建议配置为false。缺省值 false",<br/>
+"maxOpenPreparedStatements":"要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true。不会存在Oracle下PSCache占用内存过多的问题，可以把这个数值配置大一些，比如说100 缺省值 -1"<br/>
+}</label>
+                <label class="label">连接池配置JSON</label>
+                <label class="textarea">
+                  <textarea rows="2" name="prop" id="prop" placeholder="连接池配置JSON"></textarea>
+                </label>
+              </section>
+            </div>
+            <div>
+              <section>
+                <label class="label">说明</label>
+                <label class="textarea">
+                  <textarea rows="2" name="mark" id="mark" placeholder="描述"></textarea>
+                </label>
+              </section>
+            </div>
+          </fieldset>
+          <footer>
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+              取消
+            </button>
+            <button type="submit" class="btn btn-primary">
+              确定
+            </button>
+            <button type="button" name="test-jdbc-conn" class="btn btn-info">
+              测试连接
+            </button>
+          </footer>
+        </form>
+        <!-- FORM End -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>

@@ -1,0 +1,123 @@
+<meta http-equiv="Content-Type" charset="UTF-8" />
+<div class="modal fade" id="report_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title">报表上传</h4>
+			</div>
+			<div class="modal-body no-padding">
+				<div class="widget-body-toolbar">
+					<form id="report_template_upload_form" method="post" onsubmit="return false;" class="smart-form" enctype="multipart/form-data">
+						<fieldset>
+							<input type="hidden" name="up_type" value="report">
+							<div class="row">
+								<section class="col col-sm-6">
+									<label>报表分类</label>
+									<label class="input">
+										<input type="hidden" name="report_type" data-type="select2" placeholder="请选择报表类型">
+									</label>
+								</section>
+								<section class="col col-sm-6">
+									<label>报表数据源</label>
+									<label class="input">
+										<input type="hidden" name="report_api" data-type="select2" placeholder="请选择报表接口">
+									</label>
+								</section>
+							</div>
+							<div class="row">
+
+								<section class="col col-sm-6">
+									<label>上传文件</label>
+									<label>
+										<input type="file" class="btn-group" name="upload_field" placeholder="上传">
+									</label>
+								</section>
+							</div>
+							<div class="row">
+								<section class="col col-sm-12">
+									<label class="label">文件说明</label>
+									<label class="textarea">
+										<textarea rows="2" name="file_desc" placeholder="文件说明"></textarea>
+									</label>
+								</section>
+							</div>
+						</fieldset>
+						<footer>
+							<button type="button" class="btn btn-default" data-dismiss="modal">
+								取消
+							</button>
+							<button type="submit" id="uploadButton" class="btn btn-primary">
+								确定
+							</button>
+						</footer>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	pageSetUp();
+	$(document).ready(function () {
+		$("#report_template_upload_form input[name=report_type]").zySelect('49', false, {
+			width: '100%'
+		});
+
+		var cb_report_api = function (msg) {
+			if (msg) {
+				$("#report_template_upload_form input[name=report_api]").zySelectCustomData('', false, {
+					width: '100%'
+				}, msg.result);
+			}
+		};
+		zy.g.am.app = 'EWATERBI';
+		zy.g.am.mod = 'chartbi';
+		zy.net.get('api/report_list_sel', cb_report_api);
+	});
+
+	$('#report_modal').modal('show');
+
+	$("#report_template_upload_form").validate({
+		// Rules for form validation
+		rules: {
+			report_type: {
+				required: true
+			},
+			report_api: {
+				required: true
+			},
+			upload_field: {
+				required: true
+			}
+		},
+		// Messages for form validation
+		// 验证成功后保存
+		submitHandler: function (form) {
+			var callback = function (msg) {
+				$('#report_template_upload_form').formDisable(false);
+				if (msg) {
+					if (msg.ret == "0") {
+						Console.log("保存成功 = " + JSON.stringify(msg));
+						$('#report_modal').modal('hide');
+						zy.ui.msg("提示信息：", "上传成功!", "s");
+					}else{
+						zy.ui.msg("提示信息：", "上传失败!", "s");
+					}	
+				}
+			};
+
+			zy.g.am.app = 'EWATERBI';
+			zy.g.am.mod = 'prod_sc';
+			zy.net.postForm("upload/uploadreport", $('#report_template_upload_form'), callback);
+			$('#report_template_upload_form').formDisable(true);
+		},
+		// Do not change code below
+		errorPlacement: function (error, element) {
+			error.insertAfter(element.parent());
+		}
+	});
+</script>

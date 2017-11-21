@@ -1,0 +1,67 @@
+<!-- rbac_prj_mgt12 页面选择页面 -->
+<div class="modal fade show" id="rbac_prj_mgt12_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title"><span>选择页面</span></h4>
+      </div>
+      <div class="modal-body no-padding">
+        <form id="rbac_prj_mgt12_search_form" method="post" onsubmit="return false;" class="smart-form">
+          <fieldset>
+            <input type="hidden" name="prjid">
+            <div class="row">
+              <section class="col col-3">
+                <label class="input">
+                  <input type="text" name="pageid" placeholder="页面ID" class="form-control input-xs" />
+                </label>
+              </section>
+              <section class="col col-3">
+                <label class="input">
+                  <input type="text" name="pagenm" placeholder="页面名称" class="form-control input-xs">
+                </label>
+              </section>
+              <section class="col col-3">
+                <label class="input">
+                  <input type="text" name="page_path" placeholder="页面路径" class="form-control input-xs">
+                </label>
+              </section>
+              <section class="col col-3">
+                <button id="rbac_prj_mgt12_search" class="btn btn-info btn-xs" type="submit"><i class="fa fa-search fa-1"></i>&emsp;查 询&emsp;</button>
+              </section>
+            </div>
+            <div class="pull-right">
+              <b name="rbac_prj_mgt12_total_count"></b>
+            </div>
+            <div class="dataTables_wrapper">
+              <table id="rbac_prj_mgt12_dt" class="table table-bordered table-condensed">
+                <thead>
+                <tr>
+                  <th>页面ID</th>
+                  <th>页面名称</th>
+                  <th>页面路径</th>
+                </tr>
+                </thead>
+              </table>
+            </div>
+            <div id="rbac_prj_mgt12_pagination"></div>
+          </fieldset>
+          <footer>
+            <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">取消</button>
+            <button type="submit" id="rbac_prj_mgt12_confirm" class="btn btn-primary btn-xs">选择</button>
+          </footer>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="rbac_prj_mgt12_prjid" data-prjid='###query.prjid###'></div>
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script src="rbac/prj_mgt/rbac_prj_mgt12.js"></script>
+<script>
+  // (function () {
+    // var rbac_prj_mgt12Obj = new rbac_prj_mgt12($('#rbac_prj_mgt12_prjid').attr('data-prjid'));
+  // })();
+</script>

@@ -1,0 +1,316 @@
+ <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+        </button>
+        <h4 class="modal-title"><span >表对比（初始化之前先分配应用）</span></h4>
+      </div>
+      <div class="modal-body">
+          <div class="row" >
+            <button class="btn btn-info btn-sm" type="submit" name="compare" style="float:right">数据对比</button>
+          </div>
+          <h1></h1>
+          <div class="row">
+            <div class="col-xs-6">
+              <form class="smart-form" onsubmit="return false;" method="post">
+                  <section>
+                  <lable class="lable">可选数据表</lable>
+                    <label class="input">
+                      <input type="text" placeholder="请选择" data-type="select2" name="leftselect" >
+                    </label>
+                  </section>
+              </form>
+              <div class="row">
+                <ui id="lefttree" class="ztree"></ui>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <form class="smart-form" onsubmit="return false;" method="post">
+                  <section>
+                    <lable class="lable">参照数据表</lable>
+                    <label class="input">
+                      <input type="text" placeholder="请选择" data-type="select2" name="rightselect" >
+                    </label>
+                  </section>
+              </form>
+              <div class="row">
+                <ui id="righttree" class="ztree"></ui>
+              </div>
+            </div>
+            </div>
+          </div>
+      <div class="modal-footer">
+       <div class="popover fade left in" style="display:block;bottom:18px;top:auto;right:144px;left:auto">
+          <div class="arrow" style="top:50%"></div>
+          <div class="popover-content"> 请确认当前机构已经授权</div>
+        </div>
+        <button type="button" class="btn btn-primary" name="submit"></button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+      </div>  
+    </div>
+  </div>
+    <!-- /.modal-content -->
+ </div>
+  <!-- /.modal-dialog -->
+  
+<script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+<script>
+  function FirstModal(tr){
+    
+    function buildTable(callback){
+      loadScript('lib/html/zy_dytable.js',function(){
+          dyTable({
+            app:'zyapp_sysmgt',
+            mod:'pre_init_tenant_data',
+            api:'getpregriddata'
+          },function(hander){
+            callback&&callback(hander);
+          })
+      })
+    }
+    
+    function buildTree(container,data,comparebtn,pid){
+      
+      var Match = {
+        'lefttree':function(node){
+          comparebtn.trigger('_changeSelf',[node,null,pid,null]);
+        },
+        'righttree':function(node){
+          comparebtn.trigger('_changeSelf',[null,node,null,pid]);
+        }
+      }
+      
+      if(!container || !data) return null;
+      
+      var tree = null;
+      
+      function click(event, treeId, treeNode, clickFlag){
+        if(!treeNode) return;
+        var id = container.attr('id');
+        Match[id](treeNode);
+      }
+      
+      function Color(treeId, treeNode){
+        return treeNode.table_change?{color:"red"} : {};
+      }
+      function option(){
+        
+        var o = {
+          view:{
+            fontCss:Color
+          },
+          data:{
+            key:{
+              name:'typenm',
+              title:'shownm'
+            },
+            simpleData: {
+        			enable: true,
+        			idKey: "typecd",
+        			pIdKey: "parentcd",
+        			rootPId: null
+        		}
+          },
+          callback:{
+            onClick:click
+          }
+        }
+        
+        return o;
+      }
+      
+      var setting = option();
+      
+      tree = $.fn.zTree.init(container, setting, data);
+    }
+    
+    function init(next){
+      
+      function EventOn(left,right,leftT,rightT,compare,submit){
+        
+        var Match = {
+          'leftselect':{
+            tree:leftT,
+            button:true
+          },
+          'rightselect':{
+            tree:rightT,
+            button:false
+          }
+        }
+        
+        function _change(){
+          var $this = $(this);
+          var val = $this.val();
+          var name = $this.attr('name');
+          var target = Match[name].tree;
+          
+          compare.btnDisable(true);
+          
+          if(Match[name].button) submit.trigger('_change',[val,null]);
+          
+          compare.unbind('click');
+          
+          zy.extend.get({
+            app:'0418a865dac144cfa77a1e4573e3f549',
+            mod:'user_manager',
+            apinm:'getpretree'
+          },function(msg){
+            buildTree(target,msg.result,compare,val);
+          },{presetid:val})
+        }
+        
+        compare.btnDisable(true);
+        
+        buildTable(function(tableinit){
+          var _changeSelf = (function (){
+            var result = {};
+            return function(e,left,right,lpid,rpid){
+              
+              if(left) result['left'] = left;
+              if(lpid) result['lpid'] = lpid;
+              if(right) result['right'] = right;
+              if(rpid) result['rpid'] = rpid;
+              
+              var $this = $(this);
+              $this.unbind('click');
+              
+              $this.btnDisable(true);
+              
+              if(result['left'] && result['right']){
+                $this.btnDisable(false);
+                $this.click(function(e){
+                  target.find('.modal').modal('hide');
+                  zy.net.loadHTML("yunying_ptgl/kfsgl/pre_datatable_modal.html", $("#mdm_addr_h7_form2"),function(){
+                    var _target = $("#mdm_addr_h7_form2");
+                    _target.find('.close[type=button]').unbind().click(function(e){$('#mdm_addr_h7_form').find('.modal').modal('show')})
+                    _target.find('.modal').modal('show');
+                    _target.find('.modal').on('shown.bs.modal',function(){
+                      var lefttable = _target.find('[name=lefttable]');
+                      var righttable = _target.find('[name=righttable]');
+                      tableinit.init(lefttable,{
+                        presetid:result['lpid'],
+                        typecd:result['left'].typecd,
+                        did:result['left'].did,
+                        en:result['left'].en
+                      },function(msg){
+                        zy.log(msg);
+                      });
+                      tableinit.init(righttable,{
+                        presetid:result['rpid'],
+                        typecd:result['right'].typecd,
+                        did:result['right'].did,
+                        en:result['right'].en
+                      },function(msg){
+                        zy.log(msg);
+                      });
+                    })
+                  });
+                })
+              }
+            }
+          })();
+          
+          compare.unbind('_changeSelf').bind('_changeSelf',_changeSelf);
+        })
+        
+        var _submitSelf = (function (){
+          var presid,flag;
+          return function(e,pid,flg){
+            if(pid && pid!='') presid = pid;
+            if(flg) flag = flg;
+            var $this = $(this);
+            if(flag == '0') $this.html('初始化');
+            else $this.html('重置');
+            $this.unbind('click').click(function(){
+               zy.ui.mask(flag == '0'?'初始化确认':'重置确认',flag == '0'? '是否确认初始化数据':'是否确认重置数据', function () {
+                   if(presid && flag){
+                  zy.extend.get({
+                    app:'0418a865dac144cfa77a1e4573e3f549',
+                    mod:'user_manager',
+                    apinm:'init_tenant'
+                  },function(msg){
+                    zy.log(msg);
+                    zy.extend.msg(flag == '0'?'初始化成功':'重置成功','s');
+                    md_h7.SetRow($('.smart-form:eq(1)').form2json());
+                    $this.trigger('_change',[msg.result[0].presetid,msg.result[0].flag]);
+                  },{
+                    orgid:data.orgid,
+                    presetid:presid,
+                    flag:flag
+                  })
+                }else{
+                  zy.extend.msg('少点什么','w');
+                  zy.log(presid,flag);
+                }
+               });
+              
+            })
+          }
+        })();
+        
+        submit.unbind('_change').bind('_change',_submitSelf);
+        
+        left.bind('change',_change);
+        right.bind('change',_change);
+      }
+      
+      var target = $("#mdm_addr_h7_form");
+      var leftselect = target.find('[name=leftselect]'),
+          rightselect = target.find('[name=rightselect]'),
+          lefttree = target.find('#lefttree'),
+          righttree = target.find('#righttree'),
+          compare = target.find('[name=compare]'),
+          submit = target.find('[name=submit]');
+      
+      var cb = zy.extend.async(2);
+      var done = cb(function(result){
+        var dd = result.formData.result[0];
+          if(dd.presetid != ""){
+          leftselect.select2('val',dd.presetid);
+           zy.extend.get({
+            app:'0418a865dac144cfa77a1e4573e3f549',
+            mod:'user_manager',
+            apinm:'getpretree'
+          },function(msg){
+            buildTree(lefttree,msg.result,compare,dd.presetid);
+          },{presetid:dd.presetid})
+        }
+        submit.trigger('_change',[dd.presetid,dd.flag]);
+        next&&next(result);
+      });
+      
+      var data = tr.data();
+      zy.extend.get({
+        app:'0418a865dac144cfa77a1e4573e3f549',
+        mod:'user_manager',
+        apinm:'check_init'
+      },function(msg){
+        done('formData',msg);
+      },{orgid:data.orgid});
+      zy.extend.get({
+        app:'0418a865dac144cfa77a1e4573e3f549',
+        mod:'user_manager',
+        apinm:'presetselect2'
+      },function(msg){
+        leftselect.zySelectCustomData(null,false,{
+          width:'100%',
+          allowClear:false
+        },msg.result);
+        rightselect.zySelectCustomData(null,false,{
+          width:'100%',
+          allowClear:false
+        },msg.result);
+       
+        EventOn(leftselect,rightselect,lefttree,righttree,compare,submit);
+        done('selectData',msg)
+      },{})
+    }
+    
+    init(function(result,container,leftselect){
+      var formdata = result.formData.result[0];
+      // if(!Number(formdata.flag)){ leftselect.select2('val',formdata.presetid);}
+    });
+  }
+</script>

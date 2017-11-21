@@ -1,0 +1,79 @@
+<div class="row">
+  <div id="report_wid" class="col-xs-12 col-sm-12 col-md-12 col-lg-12"></div>
+</div>
+
+
+<div id="widget-grid" class="">
+    <div class="row">
+<!-- widget content -->
+        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<div id="report" class="jarviswidget jarviswidget-color-blueDark" data-widget-editbutton="false" data-widget-deletebutton="false">
+				<header>
+					<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+					<h2>报表</h2>
+				</header>
+				<div>
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+					</div>
+					<div class="widget-body no-padding">
+					<div class="widget-body-toolbar">
+							<form id="report_form" method="post" onsubmit="return false;" class="smart-form">
+								<div class="row">
+								<section class="col col-sm-2">
+									<label class="input">
+										<input type="text" name="filenm" placeholder="报表名称" class="form-control">
+									</label>
+								</section>
+
+								<section class="col col-sm-2">
+									<label class="input">
+										<input type="hidden" name="report_type"  data-type="select2" placeholder="报表类型">
+									</label>
+								</section>
+								<section class="col col-sm-2">
+									<button id="report_search" class="btn btn-info btn-sm" type="submit"><i class="fa fa-search fa-1"></i>&nbsp;查 询&nbsp;</button>
+								</section>
+									</div>
+								<div class="btn-group">
+									<button id="report_upload" class="btn btn-info btn-xs">&emsp;<i class="fa fa-magic"></i>&nbsp;上  传&emsp;
+									</button>
+									<button id="report_download" class="btn btn-info btn-xs">&emsp;<i class="fa fa-edit"></i>&nbsp;生成报表&emsp;
+									</button>					
+								</div>
+							</form>
+						</div>
+						<div class="dataTables_wrapper">
+							<table id="report_dt" class="table table-bordered table-striped">
+								<thead>
+								<tr>
+									<th>报表名称</th>
+									<th>报表分类</th>
+									<th>创建时间</th>
+									<th>更新时间</th>
+
+								</tr>
+								</thead>
+							</table>
+						</div>
+						<div id="report_pagination"></div>
+					</div>
+		<!-- end widget content -->
+				</div>
+		   </div>
+		</article>
+    </div>
+</div>
+
+<div id="report_2_form"></div>
+<div id="report_3_form"></div>
+<div id="download_form"></div>
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script src="lib/html/zy_modal.js"></script>
+<script src="lib/html/zy_tabs.js"></script>
+<script src="bi/regulatory/reportforms.js"></script>
+<script type="text/javascript">
+    // DO NOT REMOVE : GLOBAL FUNCTIONS!
+    pageSetUp();
+    var reportform = new ReportForm();	
+</script>

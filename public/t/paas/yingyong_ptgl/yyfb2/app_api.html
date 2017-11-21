@@ -1,0 +1,119 @@
+ <div class="modal fade" id="app_api" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title">API管理</h4>
+      </div>
+      <div class="modal-body">
+        <ul id="apitree" class="ztree"></ul>
+      </div>
+      <form method="post" onsubmit="return false;" class="smart-form">
+        <footer>
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <button type="submit" class="btn btn-primary" onclick="app_api_save()">确定</button>
+        </footer>
+      </form>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+<!-- SCRIPTS ON PAGE EVENT -->
+<script type="text/javascript">
+// DO NOT REMOVE : GLOBAL FUNCTIONS!
+pageSetUp();
+
+$('#app_api').modal('show');
+// 递归设置chkDisabled属性以及设置图标
+function loopResult(jsonResult) {
+  for (var i = 0; i < jsonResult.length; i++) {
+    var tmp = jsonResult[i];
+    tmp.chkDisabled = jsonResult[i].chkdisabled;
+    if (tmp.appid == null) {
+      tmp.icon = "lib/js/plugin/ztreev35/img/diy/9.png";
+    } else if (tmp.appid != null && tmp.moduleid == null) {
+      tmp.icon = "lib/js/plugin/ztreev35/img/diy/8.png";
+    } else {
+      tmp.icon = "lib/js/plugin/ztreev35/img/diy/2.png";
+    }
+    var tmpChildren = tmp.children;
+    if (tmpChildren != null) {
+      loopResult(tmpChildren);
+    }
+  }
+}
+var setting = {
+  check: {
+    enable: true,
+    chkDisabledInherit: true,
+    chkStyle: "checkbox",
+    chkboxType: {
+      "Y": "ps",
+      "N": "ps"
+    }
+  }
+};
+var callback = function(msg) {
+  var jsonResult = eval(msg.result);
+  loopResult(jsonResult);
+  $.fn.zTree.init($('#apitree'), setting, jsonResult);
+};
+var param = {
+  'applicationid': application_view._g.param.applicationid
+};
+zy.g.am.app = '03229cbe4f4f11e48d6d6f51497a883b';
+zy.g.am.mod = 'yyfb';
+zy.net.get('api/publish_api_tree', callback, param);
+
+//点击保存按钮
+function app_api_save() {
+  var treeObj = $.fn.zTree.getZTreeObj("apitree");
+  //checked的节点
+  var nodes = treeObj.getCheckedNodes();
+  //定义变量
+  var appid = '',
+    moduleid = '',
+    id = '';
+  if (nodes.length > 0) {
+    console.log("勾选的节点为" + JSON.stringify(nodes));
+  }
+  for (var i = 0; i < nodes.length; i++) {
+    //选取要更新到数据库的api节点
+    if ((nodes[i].appid != undefined) && (nodes[i].moduleid != undefined) && (nodes[i].children == undefined)) {
+      appid = appid + nodes[i].appid + ",";
+      moduleid = moduleid + nodes[i].moduleid + ",";
+      id = id + nodes[i].id + ",";
+    } else if ((nodes[i].appid != undefined) && (nodes[i].moduleid == undefined) && (nodes[i].children == undefined)) {
+      appid = appid + nodes[i].appid + ",";
+      moduleid = moduleid + nodes[i].id + ",";
+      id = id + " ,";
+    }
+  }
+  //去除最后一个逗号
+  appid = appid.substring(0, appid.length - 1);
+  moduleid = moduleid.substring(0, moduleid.length - 1);
+  id = id.substring(0, id.length - 1);
+  //组成json对象
+  var params = {
+    'appid': appid,
+    'moduleid': moduleid,
+    'apiid': id,
+    'applicationid': application_view._g.param.applicationid
+  };
+  var cb = function(msg) {
+    if (msg) {
+      $('#app_api').modal('hide');
+      application_view.Pagination(application_view._g.curpage);//更新当前页
+      zy.ui.msg("提示信息：", "保存成功！", "s");
+    }
+  };
+  zy.g.am.app = '03229cbe4f4f11e48d6d6f51497a883b';
+  zy.g.am.mod = 'yyfb';
+  zy.net.post("api/app_api_manage", cb, params);
+}
+</script>

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<script>
+	  document.write("<link href='http://" + location.host + "/ui/paas/show/css/modal.css' />");
+    document.write("<script src='http://" + location.host + "/ui/paas/lib/js/libs/jquery-1.11.0.min.js'><" + "/" + "script>"); 
+    document.write("<script src='http://" + location.host + "/ui/paas/lib/js/libs/showdown.min.js'><" + "/" + "script>"); 
+  </script>
+	<script>
+    $(function(){
+      showdown.setOption('noHeaderId', true);
+      showdown.setOption('strikethrough', true);
+      showdown.setOption('tables', true);
+      showdown.setOption('tasklists', true);
+      // showdown.setFlavor('vanilla');
+      //showdown.setFlavor('github');
+      var converter = new showdown.Converter();
+      var  te = $(".SR").html();
+      var  ht = converter.makeHtml(te);
+      $(".SC").empty();
+      $(".SC").html(ht);
+      $(".modal_img").css({
+        width:"60%",
+        height:"88%",
+        position: "fixed",
+        top:"5%",
+        left:"5%",
+      })
+    })
+  </script>
+  <style>
+    .SR{
+      display:none;
+    }
+    .SC{
+      width:30%;
+      height:100%;
+      font-size:24px;
+      color: #fff;
+      font-weight: bolder;
+      position: absolute;
+      right:0;
+      top:0;
+    }
+  </style> 
+</head>
+<body>
+<p class="SR">
+#居民主索引（EMPI）
+EMPI是在一个复杂的医疗体系内,    
+通过唯一的患者标识  
+将多个医疗信息系统   
+有效地关联在一起。  
+以实现各个系统之间的互联互通,  
+保证对同一个患者,  
+分布在不同系统中的  
+个人信息采集的完整性和准确性。  
+建立患者主索引是  
+实现大型医院内部系统集成,  
+医院集团内资源共享,  
+以及建立居民健康档案  
+实现区域医疗共享的必要条件。
+</p>
+<script> 
+  document.write("<img src='http://" + location.host + "/t/paas/show/img/jmzsy.png' class='modal_img' />"); 
+</script>
+<div class="SC">
+    
+</div>
+</body>
+
+</html>

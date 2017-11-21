@@ -1,0 +1,270 @@
+ <div class="modal fade" id="auth_role_h11" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title">设置角色权限</h4>
+      </div>
+      <div class="modal-body">
+        <p name="auth_h11_rolenm">&nbsp;角色名称:</p>
+        <div class="row">
+          <section class="col-sm-6">
+          <p name="">&nbsp;API权限</p>
+          <ul id="tree_api" class="ztree "></ul>
+            
+          </section>
+          <section class="col-sm-6">
+          <p name="">&nbsp;模型权限</p>
+          <ul id="tree_model" class="ztree"></ul>
+            
+          </section>
+        </div>
+         
+        
+       
+      </div>
+      <form method="post" onsubmit="return false;" class="smart-form">
+        <footer>
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <button type="submit" class="btn btn-primary" name="auth_h11_submit">确定</button>
+        </footer>
+      </form>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+pageSetUp();
+(function(){
+  var modal=$('#auth_role_h11');
+  var saveBtn=modal.find('[name=auth_h11_submit]');
+  var checkarray;
+  $("[name=auth_h11_rolenm]").append("<b>" + auth_h8._g.param.rolenm + "</b>");
+  // 递归设置chkDisabled属性以及设置图标
+  // function loopResult(jsonResult) {
+  //   for (var i = 0; i < jsonResult.length; i++) {
+  //     var tmp = jsonResult[i];
+  //     tmp.chkDisabled = jsonResult[i].chkdisabled;
+  //     if (tmp.appid == null) {
+  //       tmp.icon = "lib/js/plugin/ztreev35/img/diy/9.png";
+  //     } else if (tmp.appid != null && tmp.moduleid == null) {
+  //       tmp.icon = "lib/js/plugin/ztreev35/img/diy/8.png";
+  //     } else {
+  //       tmp.icon = "lib/js/plugin/ztreev35/img/diy/2.png";
+  //     }
+  //     var tmpChildren = tmp.children;
+  //     if (tmpChildren != null) {
+  //       loopResult(tmpChildren);
+  //     }
+  //   }
+  // }
+  
+  // function loopResult1(jsonResult){
+  //   $.each(jsonResult,function(i,v){
+  //     zy.log(v);
+  //     if(v.level==0)
+  //     v.icon = "lib/js/plugin/ztreev35/img/diy/9.png";
+  //     if(v.check_Child_State==-1)
+  //     tmp.icon = "lib/js/plugin/ztreev35/img/diy/2.png";
+  //     if(v.check_Child_State==0 &&　v.level==2 ||v.level==1)
+  //     tmp.icon = "lib/js/plugin/ztreev35/img/diy/8.png";
+      
+  //     if(v.children!=null)
+  //     loopResult(v.children);
+  //   })
+  // }
+  
+  //选中节点
+  function getcheck(result){
+    var modeltreeObj = $.fn.zTree.getZTreeObj("tree_model");
+    zy.log(checkarray);
+    if(checkarray.length>0){
+      $.each(result,function(i,v){
+        $.each(checkarray,function(ii,vv){
+          if(v.typecd==vv.typecd){
+            var node = modeltreeObj.getNodeByParam('typecd', v.typecd, null);
+            modeltreeObj.checkNode(node, true, true);
+          }
+        })
+      })
+    }
+  }
+  
+  // 回调函数定义
+  var auth_callback1 = function(msg) {
+    var setting = {
+      data: {
+        key: {
+          title: 'id'
+        }
+      },
+      check: {
+        enable: true,
+        chkDisabledInherit: true,
+        chkStyle: "checkbox",
+        chkboxType: {
+          "Y": "ps",
+          "N": "ps"
+        }
+      }
+    };
+    if (msg) {
+      // var jsonResult = eval(msg.result);
+      // loopResult(jsonResult);
+      $.fn.zTree.init($("#tree_api"), setting, msg.result);
+      $('#auth_role_h11').find('button[type=submit]').button('reset');
+    }
+  };
+  zy.g.am.app = 'auth';
+  zy.g.am.mod = 'role';
+  var param = {
+    roleid: auth_h8._g.param.roleid,
+    op_type: auth_h8._g.param.op_type,
+    orgid: auth_h8._g.param.orgid
+  };
+  // 发送请求并注册回调函数
+  zy.net.get("api/role_api", auth_callback1, param);
+  //获取选中节点数据
+  var auth_callback3=function(msg){
+    if(msg.result.length>0)
+      checkarray=msg.result;
+      else
+      checkarray=[];
+  }
+  
+  zy.g.am.app = 'auth';
+  zy.g.am.mod = 'role_model';
+  // 发送请求并注册回调函数
+  zy.net.get("api/getcheckinfo", auth_callback3,{roleid:auth_h8._g.param.roleid});
+  
+  var auth_callback2 = function(msg) {
+    var setting = {
+            data: {
+              key: {
+                checked: 'checked',
+                name: 'typenm',
+                title: 'typecd'
+              },
+              simpleData: {
+                enable: true,
+                idKey: "typecd",
+                pIdKey: "parentcd"
+  
+              }
+            },
+            check: {
+              enable: true,
+              chkDisabledInherit: true,
+              chkStyle: "checkbox",
+              chkboxType: {
+                "Y": "ps",
+                "N": "ps"
+              }
+            },
+            view: {
+              showTitle: true,
+              selectedMulti: false,
+              showIcon: true,
+              dblClickExpand: false
+            },
+            callback: {
+          		onClick: function(e,tid,tnode){
+          		  zy.log(tnode);
+          		}
+          	}
+          };
+    if (msg) {
+      $('#auth_role_h11').modal('show');
+
+      $.fn.zTree.init($("#tree_model"), setting, msg.result);
+      getcheck(msg.result);
+      $('#auth_role_h11').find('button[type=submit]').button('reset');
+    }
+  };
+  zy.g.am.app = 'auth';
+  zy.g.am.mod = 'role_model';
+  // 发送请求并注册回调函数
+  zy.net.get("api/getrolemodeltree", auth_callback2);
+  //点击保存按钮
+  saveBtn.click(auth_h11_save);
+  function auth_h11_save() {
+    // 添加遮盖层
+    // zy.ui.layer.mask($('#auth_role_h11 .modal-content'),'');
+    //判断此角色状态
+    if (auth_h8._g.param.status != '1') {
+      return;
+    }
+    var treeObj = $.fn.zTree.getZTreeObj("tree_api");
+    //checked的节点
+    var nodes = treeObj.getCheckedNodes();
+    //定义变量
+    var appid = '',
+      moduleid = '',
+      id = '';
+    //要更新的第三方应用，第三方应用只有app
+    var app_t3 = '';
+    var params;
+    if (nodes.length > 0) {
+      console.log("勾选的节点为" + JSON.stringify(nodes));
+    }
+  
+    for (var i = 0; i < nodes.length; i++) {
+      //选取要更新到数据库的api节点
+      if ((nodes[i].appid != undefined) && (nodes[i].moduleid != undefined) && (nodes[i].children == undefined)) {
+        appid = appid + nodes[i].appid + ",";
+        moduleid = moduleid + nodes[i].moduleid + ",";
+        id = id + nodes[i].id + ",";
+        //        console.log("要更新到数据库的api节点为" + nodes[i].appid + ' ' + nodes[i].moduleid + ' ' + nodes[i].id);
+        //以下是要更新的第三方的app
+      } else if ((nodes[i].appid == undefined) && (nodes[i].moduleid == undefined) && (nodes[i].children == undefined)) {
+        app_t3 = app_t3 + nodes[i].id + ",";
+        console.log("要更新的只有app的应用为" + nodes[i].id + '');
+        //以下更新的只有app和mod
+      } else if ((nodes[i].appid != undefined) && (nodes[i].moduleid == undefined) && (nodes[i].children == undefined)) {
+        appid = appid + nodes[i].appid + ",";
+        moduleid = moduleid + nodes[i].id + ",";
+        id = id + " ,";
+      }
+    }
+    //去除最后一个逗号
+    appid = appid.substring(0, appid.length - 1);
+    moduleid = moduleid.substring(0, moduleid.length - 1);
+    id = id.substring(0, id.length - 1);
+    app_t3 = app_t3.substring(0, app_t3.length - 1);
+    //模型选中节点
+    var _typecd='';
+    var typecd;
+      var modeltreeObj = $.fn.zTree.getZTreeObj("tree_model");
+    //checked的节点
+    var treenodes = modeltreeObj.getCheckedNodes();
+    $.each(treenodes,function(i,v){
+      if(v.ismodel && v.ismodel=='1')
+      _typecd=_typecd+v.typecd+',';
+    })
+    var typecd=_typecd.trimCom();
+  
+    //组成json对象
+    params = {
+      'typecd':typecd,
+      'appid': appid,
+      'moduleid': moduleid,
+      'id': id,
+      'app_t3': app_t3,
+      'roleid': auth_h8._g.param.roleid,
+      'orgid': auth_h8._g.param.orgid
+    };
+    var auth_cb2 = function(msg) {
+      saveBtn.btnDisable(false);
+      if (msg) {
+        $('#auth_role_h11').modal('hide');
+        zy.ui.msg("提示信息：", "保存成功！", "s");
+      }
+    };
+    zy.g.am.app = 'auth';
+    zy.g.am.mod = 'role';
+    saveBtn.btnDisable(true);
+    zy.net.post("api/role_api_save", auth_cb2, params);
+  }
+})();
+</script>

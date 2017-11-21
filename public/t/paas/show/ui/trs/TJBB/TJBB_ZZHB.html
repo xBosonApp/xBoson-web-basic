@@ -1,0 +1,334 @@
+<script type="text/javascript" language="JavaScript" src="/t/paas/show/ui/comm.js"></script>	
+<script type="text/javascript">
+var pagenum=1;
+var pagesize=10;
+var zzhbdata;
+
+$(function () {
+	$("#seasonstart").hide();
+	$("#seasonend").hide();
+	search();
+	showDatatzzhb();
+	
+		if(self.parent.usertype=="1"){
+			$("#vvoid").attr("disabled",true);
+			 //转出机构
+			getselectaoidout();
+			$("#vvoid").val(self.parent.orgid);
+		}else if(self.parent.usertype=="2"){
+			$("#aoid").attr("disabled",true);
+			//转入机构
+			 getselectaoidin();
+			$("#aoid").val(self.parent.orgid);
+	}
+});
+
+	function search(){
+	
+	   $(".Wdate").val(new Date().getFullYear());
+	   $("#monthnumstart").val("0"+(new Date().getMonth()+1));
+	   $("#monthnumend").val("0"+(new Date().getMonth()+1));
+	  /*if((new Date().getMonth()+1)<9)
+	  {
+		  $("#monthnumstart").val("0"+(new Date().getMonth()+1));
+	  	  $("#monthnumend").val("0"+(new Date().getMonth()+2));
+	  }
+	  else if(9<(new Date().getMonth()+1)<12)
+	  {
+		  $("#monthnumstart").val((new Date().getMonth()+1)<10?'09':(new Date().getMonth()+1));
+	  	  $("#monthnumend").val(new Date().getMonth()+2);
+	  }
+
+	  else
+	  {
+ 			$("#yearnumsend").val(new Date().getFullYear()+1);
+		    $("#monthnumstart").val(new Date().getMonth()+1);
+            $("#monthnumend").val(new Date().getMonth()+2);
+	  }*/
+
+	  if($("#selecttime").val()=="1"){
+		  	$("#yearnumstart").show();
+		  	$("#yearnumsend").show();
+		    $("#monthnumstart").show();
+		    $("#monthnumend").show();
+		    $("#seasonstart").hide();
+		    $("#seasonend").hide();
+	  }else if($("#selecttime").val()=="2"){
+			if(new Date().getMonth()<4){$("#seasonstart").val(1);$("#seasonend").val(1);}
+		    else if(4<=new Date().getMonth()&&new Date().getMonth()<7){$("#seasonstart").val(2);$("#seasonend").val(2);}
+		    else if(7<=new Date().getMonth()&&new Date().getMonth()<10){$("#seasonstart").val(3);$("#seasonend").val(3);}
+		    else{$("#seasonstart").val(4);$("#seasonend").val(4);}
+			$("#yearnumend").show();
+		  	$("#yearnumstart").show();
+		    $("#monthnumstart").hide();
+		    $("#monthnumend").hide();
+		    $("#seasonstart").show();
+		    $("#seasonend").show();
+	  }else if($("#selecttime").val()=="3"){
+			$("#yearnumend").show();
+		  	$("#yearnumstart").show();
+		    $("#monthnumstart").hide();
+		    $("#monthnumend").hide();
+		    $("#seasonstart").hide();
+		    $("#seasonend").hide();
+	  }
+	}
+	
+/*$(function (){ getselectaoid();});
+
+ function  getselectaoid(){
+  var url="mdm/orgs/";
+  var infoa = new Map();
+  //infoa.put("stringsplit","CV0000.01");
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"aoid","mdmSelectoid",infoa,itemsList);
+}
+
+function mdmSelectoid(data){
+  var info = new Map();
+  info.put("key",["orgId"]);
+  info.put("value",["orgNm"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("zzhb","aoid",info,data.dataList);
+}
+*/
+/*
+$(function () { getselectagoalhid(); });
+ 
+ function  getselectagoalhid(){
+   var url="mdm/orgs/";
+   var infoa = new Map();
+   //infoa.put("stringsplit","CV0000.01");
+   var itemsList= [];
+   LC_AjaxGet(MDMBaseUrl+url,"vvoid","mdmSelectgoalhid",infoa,itemsList);
+}
+
+function mdmSelectgoalhid(data){
+  var info = new Map();
+  info.put("key",["orgId"]);
+  info.put("value",["orgNm"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("zzhb","vvoid",info,data.dataList);
+}
+*/
+//转出医疗机构
+ function getselectaoidout(){
+
+  var url="mdm/osms004OrgId/";
+  var infoa = new Map();
+  infoa.put("orgid",self.parent.orgid);
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"aoid","mdmSelectoidout",infoa,itemsList);
+}
+
+function mdmSelectoidout(data){
+  var info = new Map();
+  info.put("key",["orgid"]);
+  info.put("value",["orgNm"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("zzhb","aoid",info,data.dataList);
+ // LC_GetSelect("sqzztj","goalhid",info,data.dataList);
+ // orgMap=LC_getDataMap(info,data.dataList);
+//	showDatatjbbzs();
+}
+//转入医疗机构
+ function getselectaoidin(){
+
+  var url="mdm/osms004ChOrgId/";
+  var infoa = new Map();
+  infoa.put("changorgid",self.parent.orgid);
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"vvoid","mdmSelectoidin",infoa,itemsList);
+}
+
+function mdmSelectoidin(data){
+  var info = new Map();
+  info.put("key",["orgid"]);
+  info.put("value",["orgNm"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("zzhb","vvoid",info,data.dataList);
+ //LC_GetSelect("sqzztj","goalhid",info,data.dataList);
+  //orgMap=LC_getDataMap(info,data.dataList);
+//	showDatatjbbzs();
+}
+function showDatatzzhb(){
+	var url ="tjbbzzhb/";
+	var itemsList=["selecttime","yearnumstart","seasonstart","seasonend","monthnumstart","yearnumend","monthnumend","vvoid","aoid","ts"];	
+	var info= new Map();
+	info.put("pagenum",pagenum);
+	info.put("pagesize",pagesize);
+	LC_AjaxGet(TRSBaseUrl+url,"zzhb","zzhbcallback",info,itemsList);
+}
+
+function zzhbcallback(retData){
+	zzhbdata = retData;	
+	if(zzhbdata.datalist2==undefined)
+	{
+		zzhbdata.datalist2=[];
+	}	
+	$('#div_zzhb').datagrid({
+			nowrap: false,
+			striped: true,			
+			collapsible:false,
+			pagination:true,
+			pageNumber:pagenum,
+			pageSize: pagesize,
+			loadMsg:"正在载入...",
+			//border:false,
+			singleSelect:true,
+			pageList: [10,20,50,100,200],
+			data:zzhbdata.datalist2,
+			columns:[[
+			   {field:'outtime',title:'时间',width:100,align:'center'},
+			   {field:'precouns',title:'预约总人数（数量）',width:130,align:'center'},
+			   {field:'preco2toprecos',title:'预约总人数（环比）',width:130,align:'center'},
+			   {field:'psues',title:'预约成功人数（数量）',width:130,align:'center'},
+			   {field:'psues2topsues',title:'预约成功人数（环比）',width:130,align:'center'},
+			   {field:'vpers',title:'就诊人数（数量）',width:130,align:'center'},
+			   {field:'vpers2tovpers',title:'就诊人数（环比）',width:120,align:'center'}
+			]],                  
+			onDblClickRow: function (rowIndex) {
+			  openRoleDiv(rowIndex);
+			},
+		   fitColumns:false,
+		   pagination:true,
+		   rownumbers:true
+	}); 
+
+	   var pager = $('#div_zzhb').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pagenum=pageNumber;
+		           pagesize=pageSize;
+		           showDatatzzhb();
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:pagesize,pageNum:pagenum,total:zzhbdata.count});
+
+		};	
+		
+	}	
+
+</script>
+<style>
+body{ font-size:12px;}
+.padding1{padding:10px 0 0 7px;}
+</style>
+<div class="padding1">
+<div class="mainsW-912" style="height:600px;">
+    <div class="mainsW-912">
+		<div class="easyui-panel" title="查询信息"  style="height:130px;">
+            <div class="flPadTB-10">
+            <form id="zzhb" style=" margin:0;">
+            	<div class="clearfix">
+                	<div class="mainW-208" >
+                        <div class="itemLW-112 padT-4">检索条件：</div>
+                        <div class="itemRW-96">
+                        <select class="textLW" name="dept" id="selecttime" onchange="search()">
+                        <option value="1" selected="selected">月份</option>
+                        <option value="2">季度</option >
+                        <option value="3">年份</option>
+                        </select></div>
+                     </div>
+                    <div class="mainW-240" >
+                        <div class="itemLW-112 padT-4" >开始时间：</div>
+                        <div class="itemRW-64"><input class="Wdate"  onClick="WdatePicker({dateFmt:'yyyy'})" type="text" style="width:48px;" id="yearnumstart"/></div>
+                    	<div class="itemRW-64">
+	                    	<select  style="width:64px;" class="month" id="monthnumstart" />
+	                    	<option value="01">01月</option>
+	                    	<option value="02">02月</option>
+	                    	<option value="03">03月</option>
+	                    	<option value="04">04月</option>
+	                    	<option value="05">05月</option>
+	                    	<option value="06">06月</option>
+	                    	<option value="07">07月</option>
+	                    	<option value="08">08月</option>
+	                    	<option value="09">09月</option>
+	                    	<option value="10">10月</option>
+	                    	<option value="11">11月</option>
+	                    	<option value="12">12月</option>
+	                    	</select>
+	                    	<select style="width:80px;" class="month" id="seasonstart"/>
+                    		<option value="1">第1季度</option>
+                    		<option value="2">第2季度</option>
+                    		<option value="3">第3季度</option>
+                    		<option value="4">第4季度</option>
+                    	</select>
+	                    	
+                    	</div>
+                    	<!--  <div class="itemLW-16 padT-4"></div> -->
+                    </div>
+                    <div class="mainW-224" >
+                        <div class="itemLW-112 padT-4" >结束时间：</div>
+                        <div class="itemRW-64"><input class="Wdate"  onClick="WdatePicker({dateFmt:'yyyy'})" type="text" style="width:48px;" id="yearnumend"/></div>
+                   		<div class="itemRW-48">
+	                    	<select  style="width:64px;" class="month" id="monthnumend"/>
+		                    	<option value="01">01月</option>
+		                    	<option value="02">02月</option>
+		                    	<option value="03">03月</option>
+		                    	<option value="04">04月</option>
+		                    	<option value="05">05月</option>
+		                    	<option value="06">06月</option>
+		                    	<option value="07">07月</option>
+		                    	<option value="08">08月</option>
+		                    	<option value="09">09月</option>
+		                    	<option value="10">10月</option>
+		                    	<option value="11">11月</option>
+		                    	<option value="12">12月</option>
+	                    	</select>
+	                    	<select style="width:80px;" class="month" id="seasonend"/>
+		                    	<option value="1">第1季度</option>
+		                    	<option value="2">第2季度</option>
+		                    	<option value="3">第3季度</option>
+		                    	<option value="4">第4季度</option>
+	                    	</select>
+                    	</div>
+                    </div>
+                    <div class="mainW-880">
+                        <div class="mainW-368">
+                            <div class="itemLW-112 padT-4" >转出医疗机构：</div>
+                            <div class="itemRW-240"><select class="textLW" name="dept" id="aoid"></select></div>
+                        </div>
+                        <div class="mainW-368">
+                            <div class="itemLW-112 padT-4">转入医疗机构：</div>
+                            <div class="itemRW-240"><select class="textLW" name="dept" id="vvoid"></select></div>
+                         </div>
+                     </div>
+                 </div>
+                 </form>
+                 <div class="itemLW-880"><a href="#" id="delaysearch" class="easyui-linkbutton" onclick="showDatatzzhb()">检索</a>
+				 <!--<span style="margin:0 0 0 10px;"><a href="#" class="easyui-linkbutton">导出EXCEL</a></span>-->
+				 </div>
+             </div>
+        </div>
+		<table id="div_zzhb"></table>                               
+    </div>
+    
+</div>
+</div>
+<script type="text/javascript">
+//搜索延迟两秒
+var oInput = document.getElementById('delaysearch');
+        oInput.onclick = function(){
+	setTimeout(function(){
+	pagenum=1;
+	pagesize=10;
+ showDatatzzhb();
+}, 300);
+		$("#delaysearch").linkbutton({  
+			disabled:true  
+			}); 
+        setTimeout(function(){
+			
+			$("#delaysearch").linkbutton({  
+			disabled:false  
+			}); 
+		},1000*2);
+}
+<script>

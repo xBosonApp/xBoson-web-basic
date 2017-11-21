@@ -1,0 +1,190 @@
+<div class="modal fade" id="ide_message_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+				</button>
+				<h4 class="modal-title"><span id="md_mm_h2h3_title">API通用返回结构</span></h4>
+			</div>
+			<div class="modal-body">
+			  <div id="ide_message_tabs">
+  		    <ul>
+            <li>
+              <a href="#ide_message_tabs-a"> API通用返回结构 </a>
+            </li>
+            <li>
+              <a href="#ide_message_tabs-b"> 通用接口 </a>
+            </li>
+          </ul>
+        
+          <div id="ide_message_tabs-a">
+            <h4>说明：</h4>
+  					<p class="bg-success">
+  						字典、数值（单位、格式）如：日期、金额、电压、压力、流量、温度等
+  					</p>
+  					<p class="bg-success">
+  						API相应数据结构：支持一览画面表格、动态表单、多维图表
+  					</p>
+  					<p class="bg-success">
+  						数据列属性（含图表）：type:[{en:英文名（对应data结构中的key）、cn:中文名、view:显示不显示（1：显示，0：不显示）、ro:是否只读（1：只读，0：非只读）、must、elemtype、datatype、numrange、dict:字典、unit:单位、format:格式、chart:图表样式（线、柱、饼...）,...}
+  					</p>
+  					<p class="bg-success">
+  						数据结构：data:[{key:value},...]
+  					</p>
+  					<p class="bg-success">
+  						通用API接口返回数据结构：
+  					</p>
+  					<pre>
+                      line	bar	  pie
+              分类	  统计A	统计B	统计C
+              直接访问	335	123	123
+              邮件营销	310	321	321
+              联盟广告	234	123	123
+              视频广告	135	321	321
+              搜索引擎	157	123	123
+  
+  {					
+      "type": [					
+          {					
+              "en": "en1（对应data结构中的key）",					
+              "cn": "分类名",					
+              "view": "是否显示:1",					
+              "ro": "是否只读:1",				
+              "must": "是否必须输入(sys_md_mm002):1",
+              "elemtype": "元素标签类型(ZR.0060)",					
+              "datatype": "数据类型(ZR.0041)",					
+              "numrange": "数据长度",					
+              "format": "显示格式(ZR.0042)",					
+              "unit": "单位(ZR.0043)",					
+              "dict": "字典类别(typecd)",					
+              "chart": null					
+          },					
+          {					
+              "en": "en2",					
+              "cn": "统计A",					
+              "view": "是否显示:1",					
+              "ro": "是否只读:1",					
+              "must": "是否必须输入(sys_md_mm002):1",
+              "elemtype": "元素标签类型",					
+              "datatype": "数据类型",					
+              "numrange": "数据长度",					
+              "format": "显示格式",					
+              "unit": "单位",					
+              "dict": "字典类别(typecd)",					
+              "chart": "line"					
+          },					
+          {					
+              "en": "en3",					
+              "cn": "统计B",					
+              "view": "是否显示:1",					
+              "ro": "是否只读:1",					
+              "must": "是否必须输入(sys_md_mm002):1",	
+              "elemtype": "元素标签类型",					
+              "datatype": "数据类型",					
+              "numrange": "数据长度",					
+              "format": "显示格式",					
+              "unit": "单位",					
+              "dict": "字典类别(typecd)",					
+              "chart": "bar"					
+          },					
+          {					
+              "en": "en4",					
+              "cn": "统计C",					
+              "view": "是否显示:1",					
+              "ro": "是否只读:1",					
+              "must": "是否必须输入(sys_md_mm002):1",
+              "elemtype": "元素标签类型",					
+              "datatype": "数据类型",					
+              "datalength": "数据长度",					
+              "format": "显示格式",					
+              "unit": "单位",					
+              "dict": "字典类别(typecd)",					
+              "chart": "pie"					
+          }					
+      ],					
+      "data": [					
+          {					
+              "en1": "直接访问",					
+              "en2": 121,					
+              "en3": 122,					
+              "en4": 123					
+          },					
+          {					
+              "en1": "邮件营销",					
+              "en2": 221,					
+              "en3": 222,					
+              "en4": 223					
+          },					
+          {					
+              "en1": "联盟广告",					
+              "en2": 321,					
+              "en3": 322,					
+              "en4": 323					
+          },					
+          {					
+              "en1": "视频广告",					
+              "en2": 635,					
+              "en3": 636,					
+              "en4": 637					
+          },					
+          {					
+              "en1": "搜索引擎",					
+              "en2": 757,					
+              "en3": 758,					
+              "en4": 759					
+          }					
+      ],					
+     "search":[					
+          {					
+              "en": "enName1",					
+              "cn": "名称1",					
+              "elemtype": "元素标签类型",					
+              "datatype": "数据类型",					
+              "numrange": "数据长度",					
+              "format": "显示格式",					
+              "unit": "单位",					
+              "dict": "字典类别(typecd)",
+              "condition":  "SQL条件"
+          },					
+          {					
+              "en": "enName2",					
+              "cn": "名称2",					
+              "elemtype": "元素标签类型",					
+              "datatype": "数据类型",					
+              "numrange": "数据长度",					
+              "format": "显示格式",					
+              "unit": "单位",					
+              "dict": "字典类别(typecd)",
+              "condition":  "SQL条件"
+          }					
+      ]					
+  }					
+  
+  
+            </pre>
+  				</div>
+  				<div id="ide_message_tabs-b">
+  				  <pre>
+              增删改：
+              app：c770045becc04c7583f626faacd3b456
+              mod：commapi
+              api：excuteapi
+              modolcd：模型ID
+              
+              查询：
+              app：c770045becc04c7583f626faacd3b456
+              mod：commapi
+              api：exc_select
+              modolcd：模型ID
+  				  </pre>
+  				</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+  $('#ide_message_tabs').tabs();
+	$('#ide_message_modal').modal('show');
+	
+</script>

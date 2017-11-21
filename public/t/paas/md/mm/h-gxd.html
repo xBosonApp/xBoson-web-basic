@@ -1,0 +1,116 @@
+<style>
+  #lefttabs-1_1,#lefttabs-2_1{cursor: pointer;}
+</style>
+<section id="widget-grid" class="">
+  <div id="bm_index" class="jarviswidget jarviswidget-color-blue" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+    <header name="bm_menu_header">
+      <h2></h2>
+      <div class="widget-toolbar" role="menu" title="文件目录"><i class="glyphicon glyphicon-folder-open" name="toolbar_folder"></i></div>
+      <div class="widget-toolbar" role="menu" title="操作日志"><i class="fa fa-book"></i></div>
+      <div class="widget-toolbar" role="menu" title="API"><i class="fa fa-list"></i></div>
+    </header>
+    <!-- widget div-->
+    <div>
+      <!-- widget content -->
+      <div class="widget-body">
+        <div class="row">
+          <div id="nouislider" class="noUiSlider"></div>
+        </div>
+        <div class="row" style="position: relative;">
+          <div id="_ztree" class="col-xs-3">
+            <div id="md_mm_h1_left">
+            <div id="lefttabs">
+              <ul>
+                <li><a href="#lefttabs-1">内部数据源</a></li>
+                <li><a href="#lefttabs-2">外部数据源</a></li>
+              </ul>
+              <div id="lefttabs-1">
+                  <div id="tree" class="ztree" style="overflow: auto;"></div>
+              </div>
+              <div id="lefttabs-2">
+                  <div id="outer_source_tree" class="ztree" style="overflow: auto;"></div>
+              </div>
+            </div>
+          </div>
+          </div>
+          <div id="innercontent" class="col-xs-9">
+          <!--数据集tab容器，外部数据源tab容器-->
+          <div id="md_mm_h1_tab_container" style="display:none;"></div>
+          <div id="md_mm_h1_container">
+            <!--数据元容器-->
+              <div class="row" id="row_form" >
+                <!--<form id="md_mm_h1_form" method="post" onsubmit="return false;" class="smart-form">-->
+                <!--</form>-->
+              </div>
+              <div class="btn-group" style="display:none">
+                <button id="md_mm_h1_add" class="btn btn-info btn-xs" type="submit">&emsp;<i class="fa fa-magic fa-1"></i>&emsp;添 加&emsp;</button>
+                <button id="md_mm_h1_edit" class="btn btn-info btn-xs" type="submit">&emsp;<i class="fa fa-edit fa-1"></i>&emsp;修 改&emsp;</button>
+                <button id="md_mm_h1_delete" class="btn btn-info btn-xs" type="submit">&emsp;<i class="fa fa-trash-o "></i>&emsp;注 销&emsp;</button>
+                <button id="md_mm_h1_export" class="btn btn-info btn-xs" type="submit">&emsp;<i class="glyphicon glyphicon-export"></i>&emsp;导 出&emsp;</button>
+              </div>
+              <div class="pull-right">
+                  <b name="total_count"></b>
+              </div>
+              <div id="md_mm_h1_table"></div>
+          </div>
+          </div>
+        </div>
+      </div>
+    <!-- end widget content -->
+    </div>
+    <!-- end widget div -->
+  </div>
+</section>
+<div id="bm_modal"></div>
+<div id="bm_modal_modal"></div>
+<div id="md_mm_h1_modal"></div>
+<div id="md_mm_h1_modal1"></div>
+<div id="md_mm_h1_modal_log"></div>
+
+<script type="text/javascript" src="md/ex_inport/export.js"></script>
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script type="text/javascript" src="lib/html/zy_dyform.js"></script>
+<script type="text/javascript" src="lib/html/zy_dytable.js"></script>
+<script src="md/mm/h1.js"></script>
+<script type="text/javascript" src="bi/js/tableToCsv.js" ></script>
+<script src="lib/js/plugin/noUiSlider/jquery.nouislider.min.js"></script>
+<!--<script src="bm/index.js"></script>-->
+<script>
+  var mm_h1 = new md_mm_h1();
+  // 页面初始化设置
+  pageSetUp();
+  // var bm_IndexObj = new bm_Index();
+  $("#lefttabs-1_1").click(function(){
+    $("#lefttabs-1").show()
+    $("#lefttabs-2").hide()
+  })
+  $("#lefttabs-2_1").click(function(){
+    $("#lefttabs-1").hide()
+    $("#lefttabs-2").show()
+  })
+  $("#innercontent").css({'border-width':"0px 0px 0px 1px",'border-style':"solid",'border-left-color':"#CCC!important",'background':"#F0F0F6"});
+  //* noUi Sliders 区域范围滑块插件处理
+  $("#nouislider").noUiSlider({
+    range: [0, 100],
+    start: 25,
+    handles: 1,
+    connect: true,
+    slide: function(){
+      zy.log('noUiSliderEvent');
+      var values = $(this).val();
+      if(10>values){
+        $("#_ztree").css({'display':'none','width':'0%'});
+        $("#innercontent").css({'display':"block",'width':"100%"});
+        $(this).val(0);
+        return false;
+      } else {
+        $("#_ztree").css({'display':'block','width': + values + '%'});
+      }
+      if(33>(100-values)){
+        $("#innercontent").css({'display':'none'});
+      } else {
+        $("#innercontent").css({'display':'block','width':(100-values) + '%'});
+      }
+    }
+  });
+</script>

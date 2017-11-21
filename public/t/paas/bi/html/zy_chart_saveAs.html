@@ -1,0 +1,191 @@
+<!-- Modal -->
+<div class="modal fade" id="zy_chart_saveAs" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="fa fa-times-circle fa-2" style="color:#E22403"></i>
+        </button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body no-padding">
+        <section id="widget-grid" class="">
+          <!-- row -->
+          <div class="row">
+            <!-- NEW WIDGET START -->
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <!-- Widget ID (each widget will need unique ID)-->
+              <div id="mdm_addr_h7_wid1" class="jarviswidget jarviswidget-color-blueDark" data-widget-editbutton="false" data-widget-deletebutton="false">
+                <header>
+                  <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                  <h2>创建新模块</h2>
+                </header>
+                <!-- widget div-->
+                <div>
+                  <!-- widget edit box -->
+                  <div class="jarviswidget-editbox">
+                    <!-- This area used as dropdown edit box -->
+                  </div>
+                  <!-- end widget edit box -->
+                  <!-- widget content -->
+                  <div class="widget-body">
+                    <div class="collapse navbar-collapse bg-color-white">
+                      <ul class="nav navbar-nav navbar-left">
+                        <li class="dropdown">
+                          <button class="dropdown-toggle btn btn-default" data-toggle="dropdown" href="javascript:void(0);">
+                            选择现有模块分类 <b class="caret"></b>
+                          </button>
+                          <ul class="dropdown-menu">
+                            <li>
+                              <a>
+                                空
+                              </a>
+                            </li>
+                          </ul>
+                          <button class="btn btn-default" index="newClass">
+                            新建分类
+                          </button>
+                        </li>
+                      </ul>
+                      <form class="navbar-form navbar-left" role="search">
+                        <div class="form-group">
+                          <label>模块分类:</label>
+                          <input class="form-control input-sm" placeholder="请输入模块分类" type="text" index="modClass" style="width: 30%;">
+                          <label>模块名称:</label>
+                          <input class="form-control input-sm" placeholder="请输入模块名" type="text" index="modTitle" style="width: 30%;">
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                  <!-- end widget content -->
+                </div>
+                <!-- end widget div -->
+              </div>
+              <!-- end widget -->
+            </article>
+            <!-- WIDGET END -->
+          </div>
+          <!-- end row -->
+        </section>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
+          取消
+        </button>
+        <button type="button" class="btn btn-primary" index="post">
+          提交
+        </button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<script type="text/javascript">
+  $('#zy_chart_saveAs').modal('show');
+  $('#zy_chart_saveAs').find('[index="modTitle"]').val(zy_chart.g.kpiconfig.modulename);
+  $('#zy_chart_saveAs').find('[index="modClass"]').val(zy_chart.g.kpiconfig.moduleclass);
+  // DO NOT REMOVE : GLOBAL FUNCTIONS!
+  zy_chart.pageSetUp();
+
+  function _eachTree(json,_flg) {
+  	if(_flg)
+  	  _check = '系统定义';
+  	else
+  	  _check = '用户自定义';
+    if (json != "undefined" && json.length > 0) {
+      for (var i in json) {
+        if (json[i].name == _check) {
+          if (json[i].children.length > 0) {
+            $('#zy_chart_saveAs').find('.widget-body').find('.dropdown-menu').empty();
+            $.each(json[i].children, function(ii, v) {
+              $('#zy_chart_saveAs').find('.widget-body').find('.dropdown-menu').append('<li><a>' + v.modtype + '</a></li>')
+            });
+          } else {
+            zy.ui.msg('提示', '用户未定义分类,请新建分类', 'w');
+          }
+        }
+      }
+    }
+  }
+
+
+  $(document).ready(function() {
+  	var _api = {
+      mod : 'chartbi',
+      api : 'mod_json_sel'
+  	}
+    if(zy_chart.g.kpiconfig._admin)
+      _api.parm = {
+      	systag : '1'
+      }
+    zy_chart._getMsg(_api, function(msg) {
+    	var _check;
+    	if(zy_chart.g.kpiconfig._admin)
+    	  _check = true;
+    	else
+    	  _check = false;
+      _eachTree(msg.pids,_check);
+      $('.widget-body').find('.dropdown-menu').find('a').click(function() {
+        if ($(this).text().trim() != '空')
+          $('#zy_chart_saveAs').find('[index="modClass"]').val($(this).text());
+      })
+    });
+  })
+
+  $('[index="newClass"]').click(function() {
+    $('#zy_chart_saveAs').find('[index="modClass"]').val('');
+  })
+
+  $('[index="post"]').click(function() {
+    if ($('#zy_chart_saveAs').find('[index="modTitle"]').val() != '' && $('#zy_chart_saveAs').find('[index="modClass"]').val() != '') {
+      zy_chart.g.kpiconfig.modulename = $('#zy_chart_saveAs').find('[index="modTitle"]').val();
+      zy_chart.g.kpiconfig.moduleclass = $('#zy_chart_saveAs').find('[index="modClass"]').val();
+      var _o = {
+        api : 'chartunit',
+        mod : 'chartbi',
+        parm : {
+          modnm : zy_chart.g.kpiconfig.modulename,
+          modtype : zy_chart.g.kpiconfig.moduleclass
+        }
+      };
+      if(zy_chart.g.kpiconfig._admin)
+        _o.parm.systag = '1';
+      zy_chart._getMsg(_o, function(msg) {
+        if (msg.res[0].upflag) {
+      	var _api = {
+            mod : 'chartbi',
+            api : 'mod_json_add',
+            parm : {
+              modid : null,
+              modnm : zy_chart.g.kpiconfig.modulename,
+              jsondata : JSON.stringify(zy_chart.g.kpiconfig),
+              modtype : zy_chart.g.kpiconfig.moduleclass,
+              shareable : zy_chart.g.kpiconfig.shareable
+            }
+          }
+          zy_chart.g.kpiconfig.update({
+            act : 'beforeSave'
+          });
+          if(zy_chart.g.kpiconfig._admin)
+            _api.parm.systag = '1';
+          zy_chart._getMsg(_api, function(msg) {
+            zy_chart.g.kpiconfig.moduleid = msg.res[0].data;
+            zy_chart.g.kpiconfig.update({
+              act : 'save',
+              moduleid : msg.res[0].data
+            });
+            $('#zy_chart_saveAs').modal('hide');
+            zy.ui.msg("提示信息：", "新模块: " + zy_chart.g.kpiconfig.modulename + " 创建成功", "s");
+          });
+        } else {
+          zy.ui.msg('提示信息', '模块名: ' + zy_chart.g.kpiconfig.modulename + ' 在 ' + zy_chart.g.kpiconfig.moduleclass + ' 分类中已存在,请重新输入', 'w');
+        }
+      })
+    } else {
+      zy.ui.msg('提示信息', '请输入模块名，模块分类', 'w');
+    }
+  })
+
+</script>

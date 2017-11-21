@@ -1,0 +1,40 @@
+<!-- rbac_prj_mgt07 项目菜单 -->
+<fieldset>
+  <div class="row">
+    <section>
+      <div class="col-sm-5">
+        <ul id="stree" class="ztree"></ul>
+      </div>
+    </section>
+  </div>
+</fieldset>
+<fieldset id="fieldsetsort">
+  <div class="row">
+    <section>
+      <label>排序</label>
+    </section>
+  </div>
+  <div class="row">
+    <section>
+      <ul id="ctree" class="ztree"></ul>
+    </section>
+  </div>
+  <div class="row">
+    <section>
+      <button name="sort" id="sort" class="btn btn-primary btn-xs">
+        &emsp;<i class="fa fa-check"></i>&nbsp;
+      </button>
+      <button id="closeCtree" class="btn btn-default btn-xs">
+        &emsp;<i class="fa fa-times"></i>&nbsp;
+      </button>
+    </section>
+  </div>
+</fieldset>
+<div id="rbac_prj_mgt07_prjid" data-prjid='###query.prjid###'></div>
+<script src="rbac/prj_mgt/rbac_prj_mgt07.js"></script>
+<script>
+  var divPrjId = $('#rbac_prj_mgt07_prjid').attr('id', zy.extend.random());
+  if (!rbac_prj_mgt07_cache[divPrjId.data('prjid')]) {
+    rbac_prj_mgt07_cache[divPrjId.data('prjid')] = new rbac_prj_mgt07(divPrjId.data('prjid'));
+  }
+</script>

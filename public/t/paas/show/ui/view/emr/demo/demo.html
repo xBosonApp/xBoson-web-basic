@@ -1,0 +1,117 @@
+<script type="text/javascript" language="JavaScript" src="/t/paas/show/ui/comm.js"></script>
+		
+<script type="text/javascript">
+
+$(function () {
+//alert("sddfsafds");
+   showData();
+
+});
+
+	function showData(){
+	   // 第一个 grode(列表)
+		$('#ttwa').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:true,
+				title:'门诊处方记录', 
+				iconCls:'icon-save', 
+				width:900, 
+				height:250, 
+				pagination:true,
+				pageNumber:0,
+				pageSize: 0,
+				loadMsg:"正在载入...",
+               // pageList: [10,20,50,100,200],
+				//data:dataInfo.dataList,
+				columns:[[
+				    {title:'记录序号',field:'dc1003_jlxh',width:200},
+				    {title:'开嘱日期',field:'dc1003_kdrq'},
+			        {title:'药品名称',field:'dc1004_ypmc'},
+			        {title:'频次',field:'dc1004_yypc'},
+			        {title:'途径',field:'dc1004_yytj'},
+			        {title:'每次用量',field:'dc1004_ycjl'},
+			        {title:'总量',field:'dc1004_zjl'},
+			        {title:'开嘱医生',field:'dc1003_kdysxm'},
+			        {title:'医院',field:'dc1003_jgdm'}
+				]],                  
+                onDblClickRow: function (rowIndex) {
+                  openRoleDiv(rowIndex);
+                },
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true
+		}); 
+	   var pager = $('#ttwa').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+				/*buttons:[{                           增删改查操作，代码注释，暂时不用
+				   iconCls:'icon-search', 
+				   handler:function(){ 
+				       alert('search'); 
+				   } 
+				},{ 
+				   iconCls:'icon-add', 
+				   handler:function(){ 
+				       alert('add'); 
+				   } 
+				},{ 
+				   iconCls:'icon-edit', 
+				   handler:function(){ 
+				       alert('edit'); 
+				   } 
+				}], */
+			    onSelectPage:function(pageNumber,pageSize){
+		           PageNumber=pageNumber;
+		           PageSize=pageSize;
+		           loading();
+		        }
+		        
+			});	
+			}
+	  //$(pager).pagination({pageSize:PageSize,pageNumber:PageNumber,total:dataInfo.datalist.count});
+
+	}
+	
+ 	function openRoleDiv(rowIndex){
+ 	
+	}
+	
+	
+ 
+ 
+</script>
+
+<div class="mainsW-1008" >               
+	<div class="mainW" style="background-color: blue">
+		<table id="ttwa" class="easyui-datagrid" title="门诊处方记录" style="width:700px;height:250px" data-options="rownumbers:true,singleSelect:true,pagination:true"></table>
+	</div>
+	<div class="mainW-640" style="background-color: red">
+        <div class="itemsW-256" style="background-color: blue">
+            <div class="itemLW-48" style="background-color:gray">姓名：</div>
+            <div class="itemRW" style="background-color: green"><input type="text" id="a001"></div>
+        </div>   
+                <div class="itemsW-256" style="background-color: blue">
+            <div class="itemLW-48" style="background-color:gray">姓名：</div>
+            <div class="itemRW" style="background-color: green"><input type="text" id="a001"></div>
+        </div>  
+                <div class="itemsW-256" style="background-color: blue">
+            <div class="itemLW-48" style="background-color:gray">姓名：</div>
+            <div class="itemRW" style="background-color: green"><input type="text" id="a001"></div>
+        </div>  
+                <div class="itemsW-256" style="background-color: blue">
+            <div class="itemLW-48" style="background-color:gray">姓名：</div>
+            <div class="itemRW" style="background-color: green"><input type="text" id="a001"></div>
+        </div>  
+                <div class="itemsW-256" style="background-color: blue">
+            <div class="itemLW-48" style="background-color:gray">姓名：</div>
+            <div class="itemRW" style="background-color: green"><input type="text" id="a001"></div>
+        </div>  
+                <div class="itemsW-256" style="background-color: blue">
+            <div class="itemLW-48" style="background-color:gray">姓名：</div>
+            <div class="itemRW" style="background-color: green"><input type="text" id="a001"></div>
+        </div>  
+    </div>
+    
+</div>
+	

@@ -1,0 +1,40 @@
+﻿<ul class="nav nav-tabs" id="myTabbox" style="margin-bottom:0;margin-top:10px;">
+  <li class="active" rel="ggws_tnbdajd.html"><a href="javascript:;;;">糖尿病人群综合查询报表</a></li>
+  <li rel="ggws_tnbsf.html"><a href="javascript:;;;">糖尿病随访报表</a></li>
+  <li rel="ggws_sjyslxtnbhzgl.html"><a href="javascript:;;;">35岁及以上2型糖尿病患者管理</a></li>
+</ul>
+<div id="tabbox" style="padding:10px; border:1px solid #ddd; border-top:none;"></div>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#myTabbox li").click(function(){
+		$(this).addClass("active");
+		$(this).siblings().removeClass("active")
+		})
+	$("#myTabbox li").click(function(){
+		$("#tabbox").html("");
+		var ehrrel=$(this).attr("rel");
+		$("#tabbox").load(ehrrel,function(){
+			setTimeout(function(){
+				 $('.selectpicker').selectpicker({
+					'selectedText': 'cat'
+				});
+				
+			}, 300);
+		});
+	});
+	$("#myTabbox li:first").click();
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+

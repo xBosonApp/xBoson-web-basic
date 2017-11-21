@@ -1,0 +1,204 @@
+﻿<div class="portlet box grey">
+    <div class="portlet-title">
+        <div class="caption" id="yetj-name">市级平台</div>
+        <div class="tools">
+            <div class="tools-chart">
+            	<a title="柱形图" rel="column"><i class="icon-bar-chart"></i></a>
+                <span class="reload" title="数据图表"><i class="icon-file-text-alt"></i></span>
+            </div>
+        </div>
+        
+    </div>
+     <div class="portlet-body">
+        <div id="lc-rowtable" class="row-fluid">
+            <div class="span12">
+                <div id="container">111</div>
+            </div>
+        </div>
+        <div id="rowtable" class="row-fluid rowtable">
+            <div class="span12">
+                 <table id="containerTable">222</table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	if($(window).width()>765){
+		$("#container").height($(window).height()-170);
+	};
+	dataLong()
+});
+function dataLong(){
+	$('#container').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: ''
+        },
+        subtitle: {
+            text: ''
+        },
+        xAxis: {
+            categories: [
+                '道理区',
+                '方正县'
+            ],
+			labels: {
+                rotation: -75,
+                align: 'right',
+                style: {
+                    fontSize: '13px',
+                    fontFamily: '微软雅黑, 宋体, sans-serif'
+                }
+            }
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: ''
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0,
+                point: {
+                    events: {
+                        click: function() {
+                        	dataSq();
+                        }
+                    }
+                },
+            }
+        },
+        series: [{
+            name: '复诊人数',
+            data: [49.9, 71.5]
+
+        }, {
+            name: '急诊人数',
+            data: [83.6, 78.8]
+
+        }, {
+            name: '门诊人数',
+            data: [48.9, 38.8]
+
+        }]
+    });
+	}
+function dataSq(){
+	$('#container').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: ''
+        },
+        subtitle: {
+            text: ''
+        },
+        xAxis: {
+            categories: [
+                '群力民生尚都社区卫生服务中心',
+                '爱建社区卫生服务中心',
+				'新华社区卫生服务中心',
+				'城乡社区卫生服务中心',
+				'新发镇卫生院',
+				'正阳社区卫生服务中心',
+				'经纬社区卫生服务中心',
+				'安和社区卫生服务中心',
+				'通江社区卫生服务中心',
+				'安静社区卫生服务中心',
+				'建国社区卫生服务中心',
+				'工农社区卫生服务中心',
+				'工程社区卫生服务中心',
+				'共乐社区卫生服务中心',
+				'城乡社区卫生服务站',
+				'光华社区卫生服务中心',
+				'太平镇卫生院',
+				'斯大林社区卫生服务中心',
+				'兆麟社区卫生服务中心',
+				'康安社区卫生服务中心',
+				'抚顺社区卫生服务中心',
+				'尚志社区卫生服务中心',
+				'榆树镇卫生院'
+            ],
+			labels: {
+                rotation: -75,
+                align: 'right',
+                style: {
+                    fontSize: '13px',
+                    fontFamily: '微软雅黑, 宋体, sans-serif'
+                }
+            }
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: ''
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0,
+                point: {
+                    events: {
+                        click: function() {
+                        	dataLong();
+                        }
+                    }
+                },
+            }
+        },
+        series: [{
+            name: '复诊人数',
+            data: [49, 11, 21, 31, 41, 51, 61, 71, 77, 67, 54, 34, 12, 90, 45, 33, 22, 34, 45, 97, 87, 70, 71]
+
+        }, {
+            name: '急诊人数',
+            data: [83, 78,40, 50,30, 20,10, 78,10, 99,88, 98,88, 77,44, 55,66, 65,54, 78,54, 25,41]
+
+        }, {
+            name: '门诊人数',
+            data: [48, 38,65, 78,43, 32,11, 87,87, 57,34, 21,12, 38,65, 87,54, 43,23, 88,54, 76,65]
+
+        }]
+    });
+	}
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

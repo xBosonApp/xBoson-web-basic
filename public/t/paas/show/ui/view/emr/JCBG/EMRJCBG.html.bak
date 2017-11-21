@@ -1,0 +1,248 @@
+﻿
+<script type="text/javascript" language="JavaScript" src="/comm.js"></script>
+
+<script type="text/javascript">
+	var pageNum=1;
+	var pagesize=10;
+	var emrjcbgdata;
+
+$(function () {
+   showDatajcbg();
+	
+});
+
+function emrjcbgcallback(retData){
+		emrjcbgdata = retData;
+        $('#jcbg').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+				title:'检查报告列表',
+				pagination:true,
+				pageNumber:pageNum,
+				pageSize:pagesize,
+				loadMsg:"正在载入...",
+                pageList: [10,20,50,100,200],
+                singleSelect:true,
+				data:emrjcbgdata.dataList,
+				columns:[[
+				   //{field:'dc3001_jlxh',title:'序号',width:60,align:'center'},
+				   {field:'dc3001_yybz',title:'阴阳性',width:48,align:'center'},
+				   {field:'dc3001_kdsj',title:'开单日期',width:100,align:'center',
+				   	   formatter:function(value){
+		                   return LC_FormatYMD(value);
+		               }
+		           },
+				   {field:'dc3001_jcmc',title:'检查项目',width:128,align:'center'},
+				   {field:'dc3001_jcbw',title:'检查部位',width:128,align:'center'},
+				   {field:'dc3001_sqghxm',title:'开单医生',width:96,align:'center'},
+				   {field:'dc3001_jcysxm',title:'检查医生',width:100,align:'center'},
+				   {field:'dc3001_jcsj',title:'检查日期',width:100,align:'center',
+				   	   formatter:function(value){
+		                   return LC_FormatYMD(value);
+		               }
+		           },
+				   {field:'dc3001_jgdmmc',title:'医院',width:136,align:'center'}
+				]],                  
+                onDblClickRow: function (rowIndex) {
+                  openRoleDiv(rowIndex);
+                },
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true
+		}); 
+
+	   var pager = $('#jcbg').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			       onSelectPage:function(pageNumber,pageSize){
+		           pageNum=pageNumber;
+		           pagesize=pageSize;
+		           showDatajcbg();
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:pagesize,pageNumber:pageNum,total:emrjcbgdata.count});
+
+		};
+	
+}
+	function showDatajcbg(){
+ 		if(retCheckFlg){
+        	var url ="emrjcbg1/"; 
+        	//要提交表单的所有控件id	
+			var itemsList=["yybz","mzbz","jclx","primal_time","latest_time"];	
+			var info= new Map();
+			 //分页	
+			info.put("pageNum",pageNum);
+	        info.put("pageSize",pagesize);
+			
+		if(self.parent.jgdm!=undefined){
+		info.put("jgdm",self.parent.jgdm);
+		if(self.parent.jzlsh){
+			info.put("ywlsh",self.parent.jzlsh);
+			$("#mzbz").val("1");
+			}else{
+				info.put("ywlsh",self.parent.zylsh);
+				$("#mzbz").val("2");
+				}
+		}
+	
+        	LC_AjaxGet(EMRBaseUrl+url,"jcbgform1","emrjcbgcallback",info,itemsList);	
+        	
+ }		
+
+	}
+	function openRoleDiv(rowIndex){
+   var obj=JSON.parse(self.parent.window.localStorage.getItem(self.parent.pid));
+	  $("#name").val(obj.datalist[0].name);
+    $("#sex").val(obj.datalist[0].sex);
+	  $("#birthday").val(obj.datalist[0].birthday);
+	LC_SetMapData("jcbgform2",emrjcbgdata.dataList[rowIndex]);
+	LC_FormatTextYMD("jcbgform2",["dc3001_kdsj","dc3001_jcsj","dc3001_bgrq"]);
+
+	}
+
+</script>
+<div class="mainsW-782">
+<form  id="jcbgform1">
+	<!-- 检查报告列表 开始 -->
+	<table toolbar="#toolbar" id="jcbg" style="width:872px;">
+	<div id="toolbar" class="pad-5 clearfix">
+		<div class="itemLW-64 padT-4">阴阳性：</div>
+		<div class="itemsW-96 padT-4">
+			<select class="textLW" id="yybz" name="dept">  
+				<option value="">全部</option>
+			    <option value="1">阴性</option>
+			    <option value="2">阳性</option>
+			    
+			</select>
+		</div>
+		<div class="itemLW-64 padT-4">门住单：</div>
+		<div class="itemsW-96 padT-4">
+			<select class="textLW" id="mzbz" name="dept">  
+			    <option value="">全部</option>  
+			    <option value="1">门诊</option>
+			    <option value="2">住院</option>
+			</select>
+		</div>
+		<div class="itemLW-64 padT-4">类型：</div>
+		<div class="itemsW-96 padT-4">
+			<select class="textLW"  id="jclx" name="dept">  
+				<option value="">全部</option>  
+			    <option value="01">计算机X线断层摄影</option>  
+			    <option value="02">核磁共振成像</option>  
+			    <option value="03">数字减影血管造影</option>  
+			    <option value="04">普通X光摄像</option>  
+			    <option value="05">特殊X光摄像</option>  
+			    <option value="06">超声检查</option>  
+			    <option value="07">病理检查</option>  
+			    <option value="08">内镜检查</option>  
+			    <option value="09">核医学检查</option>  
+			    <option value="10">其他检查</option>  
+			    <option value="11">心电图</option>  
+			</select>
+		</div>
+		<div class="itemLW-64 padT-4">日期：</div>
+		<div class="itemsW-96"><input class="Wdate" onClick="WdatePicker()" id="primal_time" type="text" style="width:96px;" /></div>
+		<div class="itemCW-16 padT-4">至</div>
+		<div class="itemsW-96"><input class="Wdate" onClick="WdatePicker()" id="latest_time" type="text" style="width:96px;" /></div>
+		<div class="itemLW-64"><a href="javascript:;;;" class="easyui-linkbutton" onclick="showDatajcbg()">查询</a></div>
+
+	</div></table></form>
+	<!-- 检查报告列表 结束 -->
+	<!-- 检查报告内容 开始 -->
+	
+	<div class="easyui-panel" title="检查报告内容" style="width:872px;">
+		<form  id="jcbgform2">
+		<div class="mainsW-864" >
+			 <div class="itemsW-864 padTB-20" >
+			 	<div class="c-18"><span id="dc3001_jgdmmc"></span></div>
+			 	<div class="c-18">检查报告单</div>
+			 </div>
+			 <div class="padTB-10 clearfix">
+				 <div class="itemsW-864" >
+				  <div class="itemLW-96 padT-4" >检查类型：</div>
+				  <div class="itemLW-320 padT-4" ><input class="textLW" id="dc3001_jclx"  type="text"/></div>
+				 </div>
+				 <div class="itemsW-208" >
+				  <div class="itemLW-96 padT-4">姓名：</div>
+				  <div class="itemLW-112 padT-4"><input class="textLW"  type="text" id="name"/></div>
+				 </div>
+				 <div class="itemsW-208">
+				  <div class="itemLW-96 padT-4">性别：</div>
+				  <div class="itemLW-112 padT-4"><input class="textLW" id="sex"  type="text"/></div>
+				 </div>
+				  <div class="itemsW-208" >
+				  <div class="itemLW-96 padT-4">出生：</div>
+				  <div class="itemLW-112 padT-4"><input class="textLW" id="birthday" type="text"/></div>
+				 </div>
+				 <div class="itemsW-208" >
+				  <div class="itemLW-96 padT-4">开单医生：</div>
+				  <div class="itemLW-112 padT-4"><input  class="textLW"  id="dc3001_sqghxm" type="text" /></div>
+				 </div>
+				 <div class="itemsW-208" >
+				  <div class="itemLW-96 padT-4">检查医生：</div>
+				  <div class="itemLW-112 padT-4"><input class="textLW" id="dc3001_jcysxm" type="text"/></div>
+				 </div>
+
+				 <div class="itemsW-208" >
+				  <div class="itemLW-96 padT-4">科室：</div>
+				  <div class="itemLW-112 padT-4"><input class="textLW" id="dc3001_jcksmc" type="text"/></div>
+				 </div>
+				 <div class="itemsW-208" >
+				  <div class="itemLW-96 padT-4">病区：</div>
+				  <div class="itemLW-112 padT-4"><input class="textLW" id="dc3001_sqbqmc" type="text"/></div>
+				 </div>
+				 <div class="itemsW-208" >
+				  <div class="itemLW-96 padT-4">床号：</div>
+				  <div class="itemLW-112 padT-4"><input class="textLW" id="dc3001_sqch" type="text"/></div>
+				 </div>
+				 <div class="itemsW-416" >
+				  <div class="itemLW-96 padT-4">开单日期：</div>
+				  <div class="itemLW-208 padT-4"><input class="textLW" id="dc3001_kdsj" type="text"/></div>
+				 </div>
+				 <div class="itemsW-416" >
+				  <div class="itemLW-96 padT-4">检查日期：</div>
+				  <div class="itemLW-208 padT-4"><input class="textLW" id="dc3001_jcsj" type="text"/></div>
+				</div>
+				 <div class="itemsW-864" >
+				  <div class="itemLW-96 padT-4">检查名称：</div>
+				  <div class="itemLW-320 padT-4"><input class="textLW" id="dc3001_jcmc" type="text"/></div>
+				 </div>
+				 <div class="itemsW-208">
+				  <div class="itemLW-96 padT-4">检查部位：</div>
+				  <div class="itemLW-112 padT-4"><input class="textLW" id="dc3001_jcbw" type="text"/></div>
+				 </div>
+				  <div class="itemsW-208" >
+				  <div class="itemLW-96 padT-4">影像号：</div>
+				  <div class="itemLW-112 padT-4"><input class="textLW" id="dc3001_yxhm" type="text"/></div>
+				 </div>
+				 <div class="itemsW-208" >
+				  <div class="itemLW-96 padT-4">结果：</div>
+				  <div class="itemLW-112 padT-4"><input  class="textLW" id="dc3001_yybz" type="text" /></div>
+				 </div>
+				 <div class="itemsW-864" >
+					<div class="itemLW-96 padT-4">报告临床诊断：</div>
+					<div class="itemRW-656 padT-4"><textarea class="textLW" id="dc3001_bgzd" name="" cols="" rows=""></textarea></div>
+				 </div>
+				 <div class="itemsW-864" >
+					<div class="itemLW-96 padT-4">检查情况说明：</div>
+					<div class="itemRW-656 padT-4"><textarea class="textLW" id="dc3001_jcts" name="" cols="" rows=""></textarea></div>
+				 </div>
+				 <div class="itemsW-224" >
+				  <div class="itemLW-96 padT-4">报告人：</div>
+				  <div class="itemLW-112 padT-4"><input class="textLW" id="dc3001_bgghxm" type="text"/></div>
+				 </div>
+				 <div class="itemsW-224" >
+				  <div class="itemLW-96 padT-4">报告日期：</div>
+				  <div class="itemLW-112 padT-4"><input class="textLW" id="dc3001_bgrq" type="text" /></div>
+				 </div>
+			</div>
+		 </div>
+			</form>
+	</div>
+	
+	<!-- 检查报告内容 结束 -->
+</div>
+	

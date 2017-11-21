@@ -1,0 +1,97 @@
+<!-- rbac_role_mgt02 授权情况页面 -->
+<div class="row padding-10" id="rbac_role_mgt02">
+  <ul class="nav nav-tabs bordered">
+    <li id="rbac_role_mgt02_tab_li_ug" class="active">
+      <a data-toggle="tab" href="#rbac_role_mgt02_tab_ug">
+        <i class="fa fa-fw fa-lg fa-group"></i>
+        用户组
+        <span id="rbac_role_mgt02_tab_ug_span" class="badge bg-color-blue txt-color-white"></span>
+      </a>
+    </li>
+    <li id="rbac_role_mgt02_tab_li_user">
+      <a data-toggle="tab" href="#rbac_role_mgt02_tab_user">
+        <i class="fa fa-fw fa-lg fa-user"></i>
+        用户
+        <span id="rbac_role_mgt02_tab_user_span" class="badge bg-color-blue txt-color-white"></span>
+      </a>
+    </li>
+    <li id="rbac_role_mgt02_tab_li_client">
+      <a data-toggle="tab" href="#rbac_role_mgt02_tab_client">
+        <i class="fa fa-fw fa-lg fa-user"></i>
+        服务
+        <span id="rbac_role_mgt02_tab_client_span" class="badge bg-color-blue txt-color-white"></span>
+      </a>
+    </li>
+  </ul>
+  <div id="rbac_role_mgt02_tab_content" class="tab-content padding-10">
+    <div class="tab-pane fade in active" id="rbac_role_mgt02_tab_ug">
+      <div class="panel-group smart-accordion-default" id="rbac_role_mgt02_accordion_ug">
+        <script id="rbac_role_mgt02_tmpl_ug" type="text/x-jsrender">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#rbac_role_mgt02_accordion_ug" href="#collapse{{: ugid}}">
+                <i class="fa fa-lg fa-angle-down pull-right"></i>
+                <i class="fa fa-lg fa-angle-up pull-right"></i>
+                {{: ugnm}}</a>
+              </h4>
+            </div>
+            <div id="collapse{{: ugid}}" class="panel-collapse collapse in">
+              <div class="panel-body no-padding">
+                <div class="row">
+                  <div class="col-sm-10">
+                    <table id="rbac_role_mgt02_table_uguser{{: ugid}}" class="table table-bordered table-condensed">
+                      <thead>
+                        <tr>
+                          <th>用户ID</th>
+                          <th>用户</th>
+                        </tr>
+                      </thead>
+                    </table>
+                  </div>
+                  <div class="col-sm-2">
+                    <a data-ugid="{{: ugid}}" href="javascript:void(0);" id="rbac_role_mgt02_btn_ug_more" class="btn btn-info btn-xs"><i class="fa fa-arrow-down text-muted"></i>&nbsp;加载更多</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </script>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="rbac_role_mgt02_tab_user">
+      <div class="row">
+        <div class="col-sm-10">
+          <table id="rbac_role_mgt02_table_user" class="table table-bordered table-condensed">
+            <thead>
+              <tr>
+                <th>用户ID</th>
+                <th>用户</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div class="col-sm-2">
+          <a href="javascript:void(0);" id="rbac_role_mgt02_btn_user_more" class="btn btn-info btn-xs"><i class="fa fa-arrow-down text-muted"></i>&nbsp;加载更多</a>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="rbac_role_mgt02_tab_client">
+      <table id="rbac_role_mgt02_table_client" class="table table-bordered table-condensed">
+        <thead>
+          <tr>
+            <th>客户端</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </div>
+</div>
+<div id="rbac_role_mgt02_roleid" data-roleid='###query.roleid###'></div>
+<script src="lib/js/plugin/jquery-jsrender/jsrender.min.js"></script>
+<script src="rbac/role_mgt/rbac_role_mgt02.js"></script>
+<script>
+  (function () {
+    var rbac_role_mgt02Obj = new rbac_role_mgt02($('#rbac_role_mgt02_roleid').attr('data-roleid'));
+  })();
+</script>

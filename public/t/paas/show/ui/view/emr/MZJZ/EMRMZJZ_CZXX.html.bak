@@ -1,0 +1,173 @@
+ 	
+		
+<script type="text/javascript">
+$(function () {
+   showDatacfxx();
+   //showDatacfmx();
+});
+var pageNum=1;
+var pageSize=10;
+var data1;
+var data2;
+	function emrmzjz5callback(retData){
+	data1 = retData;
+	$('#czxx').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+				title:'处置信息',
+				pagination:true,
+				pageNumber:pageNum,
+				pageSize: pageSize,
+ 				singleSelect:true,
+				loadMsg:"正在载入...",
+                pageList: [10,20,50,100,200],
+				data:data1.dataList,
+				columns:[[
+				 //  {field:'tablename',title:'序号',width:60,align:'center'},
+				   {field:'dc1008_kdysxm',title:'开单医师',width:100,align:'center'},
+				   {field:'dc1008_kdksmc',title:'开单科室',width:100,align:'center'},
+				   {field:'dc1008_zxysxm',title:'执行医生',width:100,align:'center'},
+				   {field:'dc1008_zxksmc',title:'执行科室',width:100,align:'center'},
+				   {field:'dc1008_kdrq',title:'开单日期',width:100,align:'center',
+				   	   formatter:function(value){
+		                   return LC_FormatYMD(value);
+		               }
+		           },
+				   {field:'dc1008_jgdm',title:'医院',width:150,align:'center'}
+				]],                  
+                onDblClickRow: function (rowIndex) {
+                  openRoleDiv(rowIndex);
+                },
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true
+		}); 
+
+	   var pager = $('#czxx').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           PageNum=pageNumber;
+		           PageSize=pageSize;
+		           showDatacfxx();
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:pageSize,pageNumber:pageNum,total:data1.count});
+
+		};
+	}
+	function showDatacfxx(){
+		// *******************第二步请求数据***********************		
+		if(retCheckFlg){
+		    //服务名
+        	var url ="emrmzjz5/"; 
+        	//要提交表单的所有控件id	
+        	var itemsList=[];	
+		    var info= new Map();
+		    //分页
+	        info.put("pageNum",pageNum);
+	        info.put("pageSize",pageSize);			 
+			 
+			 if(self.parent.jgdm!=undefined){
+		info.put("jgdm",self.parent.jgdm);
+		info.put("jzlsh",self.parent.jzlsh);
+		}
+        	LC_AjaxGet(EMRBaseUrl+url,"","emrmzjz5callback",info,itemsList);
+        	
+		}
+	}
+
+	
+	
+	function openRoleDiv(rowIndex){
+		  var url="emrmzjz6/";
+		  var itemsList=[];
+		  var info = new Map();
+		  info.put("djtxh",data1.dataList[rowIndex].dc1008_jlxh);
+		  info.put("pageNum",pageNum);
+		  info.put("pageSize",pageSize);
+
+//		if(self.parent.jgdm!=undefined){
+//		info.put("jgdm",self.parent.jgdm);
+//		info.put("jzlsh",self.parent.jzlsh);
+//		}
+
+		  LC_AjaxGet(EMRBaseUrl+url,"","emrmzjz6callback",info,itemsList);
+	}
+	
+	// 第二个grid
+	function emrmzjz6callback(reData){
+		data2 = reData;
+		$('#czmxxx').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+				title:'处置明细信息',
+				pagination:true,
+				pageNumber:pageNum,
+				pageSize: pageSize,
+				loadMsg:"正在载入...",
+ 				singleSelect:true,
+                pageList: [10,20,50,100,200],
+				data:data2.dataList,
+				columns:[[
+				  // {field:'tablename',title:'序号',width:60,align:'center'},
+				   {field:'dc1009_xmmc',title:'项目',width:150,align:'center'},
+				   {field:'dc1009_xmsl',title:'数量',width:100,align:'center'},
+				   {field:'dc1009_xmdw',title:'单位',width:100,align:'center'}
+				]],
+                onDblClickRow: function (rowIndex) {
+                  openRoleDiv(rowIndex);
+                },
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true
+		}); 
+
+		var pager = $('#czmxxx').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pageNum=pageNumber;
+		           pageSize=pageSize;
+		           showDatacfmx();
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:pageSize,pageNumber:pageNum,total:data2.count});
+		};
+	}
+	
+	
+	//function showDatacfmx(){
+	
+		// *******************第二步请求数据***********************		
+ 	//	if(retCheckFlg){		
+		 
+     //   	var url ="emrmzjz6/"; 
+        	//要提交表单的所有控件id	
+     //   	var itemsList=[];	
+	//	    var info= new Map();
+		    //分页	
+	 //       info.put("pageNum",pageNum);
+	 //       info.put("pageSize",pageSize);
+     //   	LC_AjaxGet(EMRBaseUrl+url,"","emrmzjz6callback",info,itemsList);
+        	
+
+//}		
+ //********************第三步处理请求后的数据***************	
+ 
+	//}
+
+</script>
+<div class="mainsW-872">
+	<!-- 处置信息 开始 -->
+	<table id="czxx" style="width:872px;"></table>
+	<!-- 处置信息 结束 -->
+	<!-- 处置明细信息 开始 -->
+	<table id="czmxxx" style="width:872px;"></table>
+	<!-- 处置明细信息 结束 -->
+</div>
+	

@@ -1,0 +1,67 @@
+<div class="modal fade" id="his_run_conf" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title">执行记录概览</h4>
+			</div>
+			<div class="modal-body">
+			  <div class="table-responsive">
+        	<table id="his_run_conf_table" class="table table-bordered table-striped">
+        	</table>
+        </div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+function his_run_conf(data){
+  
+  var modal = $('#his_run_conf');
+  var tableJq = $('#his_run_conf_table');
+  
+  modal.modal('show');
+  
+  zy.g.am.app = 'bf1d70edb9d6463d968a175ce7a6fd3a';
+  zy.g.am.mod = 'eeb_overview';
+  zy.net.get('api/his_run_conf',function(msg){
+    if(msg){
+      //预防css出错
+      modal.on('shown.bs.modal',function(){
+        Datatable(msg.result);
+      });
+    }
+  },{rid:data.rid?data.rid:data.id});
+  
+  //初始化grid
+  function Datatable(data){
+    var columns=[
+      {
+        title:'开始时间',
+        data:'tbegin'
+      },
+      {
+        title:'结束时间',
+        data:'tend'
+      },
+      {
+        title:'作业或流程图名称',
+        data:'name'
+      },
+      {
+        title:'消息',
+        data:'msg'
+      },
+    ];
+    var options = {
+      'data':data,
+      'columns':columns
+    };
+    // 合并初始化参数选项
+    $.extend(options, zy.ui.dataTable);
+    tableJq.dataTable(options);
+  }
+}
+</script>

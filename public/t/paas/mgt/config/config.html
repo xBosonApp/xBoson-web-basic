@@ -1,0 +1,98 @@
+<!-- widget grid -->
+<section id="widget-grid" class="">
+  <!-- row -->
+  <div class="row">
+    <!-- NEW WIDGET START -->
+    <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <!-- Widget ID (each widget will need unique ID)-->
+      <div id="mgt_config_wid1" class="jarviswidget jarviswidget-color-blueDark" data-widget-fullscreenbutton="false" data-widget-colorbutton="true" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-deletebutton="false">
+        <header>
+          <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+          <h2>平台配置属性管理</h2>
+        </header>
+        <!-- widget div-->
+        <div>
+          <!-- widget edit box -->
+          <div class="jarviswidget-editbox">
+            <!-- This area used as dropdown edit box -->
+          </div>
+          <!-- end widget edit box -->
+          <!-- widget content -->
+          <div class="widget-body no-padding">
+            <div class="widget-body-toolbar">
+              <div class="row">
+                <form id="mgt_config_form" method="post" onsubmit="return false;" class="smart-form">
+                  <section class="col col-2">
+                    <label class="input">
+                      <input type="hidden" name="status" placeholder="状态" data-type="select2">
+                    </label>
+                  </section>
+                  <section class="col col-2">
+                    <label class="input">
+                      <input type="text" name="config_key" placeholder="配置属性键" class="form-control input-sm">
+                    </label>
+                  </section>
+                  <section class="col col-2">
+                    <label class="input">
+                      <input type="text" name="config_value" placeholder="配置属性值" class="form-control input-sm">
+                    </label>
+                  </section>
+                  <section class="col col-3">
+                    <label class="input">
+                      <input type="text" name="config_desc" placeholder="配置属性说明" class="form-control input-sm">
+                    </label>
+                  </section>
+                   <section class="col col-3">
+                  <button id="mgt_config_search" class="btn btn-info btn-sm" type="submit">
+                    <i class="fa fa-search fa-1"></i> 　查 询
+                  </button>
+                  </section>
+                </form>
+              </div>
+              <div class="btn-group">
+                <button id="mgt_config_add" class="btn btn-info btn-xs">
+                  &emsp;<i
+                  class="fa fa-magic"></i>&nbsp;添 加&emsp;
+                </button>
+                <button id="mgt_config_edit" class="btn btn-info btn-xs">
+                  &emsp;<i
+                  class="fa fa-edit"></i>&nbsp;修 改&emsp;
+                </button>
+                <button id="mgt_config_delete" class="btn btn-info btn-xs">
+                  &emsp;<i
+                  class="fa  fa-trash-o "></i>&nbsp;删 除&emsp;
+                </button>
+              </div>
+
+            </div>
+            <div class="dataTables_wrapper">
+              <table id="mgt_config_dt" class="table table-bordered table-striped">
+
+              </table>
+            </div>
+          </div>
+          <!-- end widget content -->
+          <div id="mgt_config_pagination"></div>
+        </div>
+        <!-- end widget div -->
+      </div>
+      <!-- end widget -->
+    </article>
+    <!-- WIDGET END -->
+  </div>
+  <!-- end row -->
+</section>
+<div id="mgt_config_dialog_div">
+  <p style="text-align:center;color:red;font-size:16px">
+    数据删除后将不能再恢复，是否确定删除该数据？
+  </p>
+</div>
+<!-- end widget grid -->
+<div id="mgt_config_form2"></div>
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script src="mgt/config/config.js"></script>
+<script type="text/javascript">
+  // DO NOT REMOVE : GLOBAL FUNCTIONS!
+  var mgt_con = new MgtConfig();
+
+</script>

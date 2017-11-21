@@ -1,0 +1,263 @@
+<link rel="stylesheet" type="text/css" href="ajax/sw/page.css"/>
+<script type="text/javascript" src="ajax/sw/d3.v2.min.js"></script>
+<script type="text/javascript" src="ajax/sw/Chart.js"></script>
+<script type="text/javascript" src="ajax/sw/ChooseList.js"></script>
+<script type="text/javascript" src="ajax/sw/nytg.js"></script>
+<div class="chart_content">
+  <div class="chart_main">
+    <div id="containerColumn" style="height: 510px;">
+      <div class="nytg">
+                <!--[if IE 9]>
+                <div id="nytg-chartFrame">
+                <![endif]-->
+                <![if !IE]>
+                <div id="nytg-chartFrame"><![endif]>
+                    <div id="nytg-chart">
+                        <div class="nytg-navBar">
+                            <div style="display: none;" id="nytg-search"></div>
+                            <ul class="nytg-navigation clearfix" style="list-style: none;">
+                                <li id="nytg-nav-all">总体</li>
+                                <li id="nytg-nav-mandatory">区域分类</li>
+                                <li id="nytg-nav-deparment">领域分类</li>
+                                <li id="nytg-nav-discretionary">增长变化</li>
+                            </ul>
+                        </div>
+                        <div id="nytg-tooltip">
+                            <div id="nytg-tooltipContainer">
+                                <div class="nytg-department"></div>
+                                <div class="nytg-rule"></div>
+                                <div class="nytg-name"></div>
+                                <div class="nytg-discretion"></div>
+                                <div class="nytg-valuesContainer"><SPAN class="nytg-value"></SPAN><SPAN
+                                        class="nytg-change"></SPAN>
+                                </div>
+                                <div class="nytg-chart"></div>
+                                <div class="nytg-tail"></div>
+                            </div>
+                        </div>
+                        <div id="nytg-overlays">
+                            <div id="nytg-totalOverlay" class="nytg-overlay">
+                                <div class="nytg-overview">
+                                </div>
+
+                                <div id="nytg-colorKey">
+                                    <p>圆的大小代表财政支出大小</p>
+
+                                    <div id="nytg-sizeKey">
+                                        <div style="left: 125px; top: 57px; width: 40px;"
+                                             class="nytg-circleKeyLabel"><SPAN style="left: 48px;"
+                                                                               id="nytg-circleKeyLabel1">￥  200,000万元</SPAN>
+                                        </div>
+                                        <div style="left: 95px; top: 87px;" class="nytg-circleKeyLabel">
+                                            <SPAN id="nytg-circleKeyLabel2">￥ 20,000万元 </SPAN></div>
+                                        <div style="left: 80px; top: 115px;" class="nytg-circleKeyLabel">
+                                            <SPAN id="nytg-circleKeyLabel3">￥ 2,000万元 </SPAN></div>
+                                        <svg xmlns="http://www.w3.org/2000/svg" id="nytg-scaleKey" />
+                                    </div>
+                                    <p>颜色代表同期增长幅度</p>
+                                    <ul class="nytg-colorSwatches">
+                                        <li class="change-decrease3"></li>
+                                        <li class="change-decrease2"></li>
+                                        <li class="change-decrease1"></li>
+                                        <li class="change-increase1"></li>
+                                        <li class="change-increase2"></li>
+                                        <li class="change-increase3"></li>
+                                    </ul>
+                                    <ul class="nytg-colorTicks">
+                                        <li></li>
+                                        <li></li>
+                                        <li></li>
+                                        <li></li>
+                                        <li></li>
+                                    </ul>
+                                    <ul class="nytg-colorLabels">
+                                        <li>–50%</li>
+                                        <li>0%</li>
+                                        <li>50</li>
+                                        <li>100%</li>
+                                        <li>200%</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="nytg-overlay" id="nytg-mandatoryOverlay">
+                                <div class="nytg-mandatoryExplainer">
+                                </div>
+                                <div class="nytg-mandatoryAside">
+                                </div>
+                                <div class="nytg-discretionaryExplainer">
+                                </div>
+                                <div class="nytg-discretionaryAside">
+                                </div>
+                            </div>
+                            <div class="nytg-overlay" id="nytg-discretionaryOverlay">
+                                <div id="nytg-discretionaryIntro">
+                                    <h5>支出变化</h5>
+                                    <p></p>
+                                </div>
+                            </div>
+                            <div class="nytg-overlay" id="nytg-departmentOverlay">
+                                <p class="nytg-emptyCircleLabel"></p>
+                            </div>
+                            <div class="nytg-overlay" id="nytg-comparisonOverlay">
+                                <h5>Comparison Overlay</h5>
+                            </div>
+                        </div>
+                        <div id="nytg-chartCanvas"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var class_bubble = new subjectDetailModule('35');
+    $.extend(true, class_bubble, {
+        init: function () {
+          class_bubble.load.initDate();
+          class_bubble.load.data();
+        },
+        lables: [
+            {id:'合计',name:'',value:'<h5>全国公共预算支出#VALUE#，比同期支出增长#ZF#%</h5>'},
+            {id:'B',name:'民生类',value:'<h5>民生类</h5><p>民生支出合计#VALUE#，占财政支出的比重为#ZB#%，比同期增长#ZF#%。这里的民生支出包括教育、科学技术、文化体育与传媒、社会保障和就业、医疗卫生、节能环保、城乡社区事务、农林水事务、交通运输、商业服务业等事务、国土资源气象等事务、住房保障支出、粮油物资管理事务。</p>'},
+            {id:'A',name:'其他',value:'<h5>其他类</h5><p>其他类支出合计#VALUE#，占财政支出的比重为#ZB#%，比同期增长#ZF#%。主要包括一般公共服务、外交、国防、公共安全、资源勘探电力信息等事务、金融监管等事务支出、地震灾后恢复重建支出、援助其他地区支出、预备费、国债付息支出、其他支出。</p>'}
+        ],
+        load: {
+            initDate: function () {
+              // 设置画面加载时初始化默认参数
+              class_bubble.param.set({years: '2015'});
+            },
+            data: function () {
+                class_bubble.load.lable();
+                zy.net.loadPage('ajax/sw/search2.js',function (data) {
+                  class_bubble.load.draw(JSON.parse(data));
+                });
+            },
+            lable: function () {
+                zy.net.loadPage('ajax/sw/search1.js',function (msg) {
+                  var data = JSON.parse(msg);
+                        for (var d = 0; d < class_bubble.lables.length; d++) {
+                            for (var i = 0; i < data.length; i++) {
+                                if (class_bubble.lables[d].id == data[i].CODE) {
+                                    var val = class_bubble.lables[d].value;
+                                    var reg = new RegExp(/#(.*?)#/g);
+                                    var arr;
+                                    while ((arr = reg.exec(val)) != null) {
+                                        val = val.replace(arr[0], data[i][arr[1]]);
+                                    }
+                                    switch (d) {
+                                        case 0:
+                                            $(".nytg-overview").html(val)
+                                            break;
+                                        case 1:
+                                            $(".nytg-mandatoryAside").html(val)
+                                            break;
+                                        case 2:
+                                            $(".nytg-discretionaryAside").html(val);
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+                });
+            },
+            draw: function (data) {
+                var category_data = {};
+                if (!!document.createElementNS && !!document.createElementNS('http://www.w3.org/2000/svg', "svg").createSVGRect) {
+                    nytg.budget_array_data = [];
+                    nytg.category_data = [];
+                    nytg.total = 0;
+                    for (var i = 0; i < data.length; i++) {
+                        nytg.budget_array_data.push({
+                            "name": data[i].NAME3,
+                            "positions": {},
+                            "id": 50120128,
+                            "budget": data[i].VALUE,
+                            "change": data[i].ZF * 100,
+                            "department": data[i].NAME2,
+                            "discretion": data[i].NAME1});
+                        nytg.total += data[i].VALUE;
+                        if (!category_data[data[i].CODE2]) {
+                            category_data[data[i].CODE2] = { "label": data[i].NAME2, "total": 0, "num_children": 1, "short_label": data[i].NAME2};
+                            nytg.category_data.push(category_data[data[i].CODE2]);
+                        }
+                        category_data[data[i].CODE2].total += data[i].VALUE;
+                    }
+                    $("#nytg-chartCanvas").html("");
+                    $("#nytg-scaleKey").html("");
+                    $("#nytg-circleKeyLabel1").html("￥" + nytg.fmoney(nytg.total / 200 * 30, 0) + "亿元");
+                    $("#nytg-circleKeyLabel2").html("￥" + nytg.fmoney(nytg.total / 200 * 9, 0) + "亿元");
+                    $("#nytg-circleKeyLabel3").html("￥" + nytg.fmoney(nytg.total / 200 * 4, 0) + "亿元");
+                    nytg.c = new nytg.Chart();
+                    nytg.c.width = 1180;
+                    nytg.c.MANDATORY = class_bubble.lables[1].name;
+                    nytg.c.DISCRETIONARY = class_bubble.lables[2].name;
+                    nytg.c.totalValue = nytg.total;
+                    nytg.c.init();
+                    nytg.c.start();
+
+                    zy.log('!nytg.mainNav = ' + nytg.mainNav);
+                    if (!nytg.mainNav)
+                        nytg.mainNav = new nytg.ChooseList($(".nytg-navigation"), class_bubble.operate.onMainChange, class_bubble.param.get().selectIndex);
+                    else
+                        nytg.mainNav.selectByIndex(class_bubble.param.get().selectIndex);
+
+                    //callback
+                    class_bubble.param.set({'selectIndex': nytg.mainNav.getSelectValue()});
+                } else {
+                    $("#nytg-chartFrame").hide();
+                }
+            }
+        },
+        operate: {
+            yearSelect: function (d, c) {
+                class_bubble.param.set({'years': '2015'});
+                class_bubble.load.data();
+            },
+            onMainChange: function (evt) {
+                var tabIndex = evt.currentIndex
+                class_bubble.param.set({'selectIndex': tabIndex});
+                if (this.currentOverlay !== undefined) {
+                    this.currentOverlay.hide();
+                }
+                ;
+                if (tabIndex === 0) {
+                    nytg.c.totalLayout();
+                    this.currentOverlay = $("#nytg-totalOverlay");
+                    this.currentOverlay.delay(300).fadeIn(500);
+                    $("#nytg-chartFrame").css({ 'height': 550 });
+                    $("#containerColumn").css({ 'height': 550 });
+                } else if (tabIndex === 1) {
+                    nytg.c.mandatoryLayout();
+                    this.currentOverlay = $("#nytg-mandatoryOverlay");
+                    this.currentOverlay.delay(300).fadeIn(500);
+                    $("#nytg-chartFrame").css({ 'height': 550 });
+                } else if (tabIndex === 3) {
+                    nytg.c.discretionaryLayout();
+                    this.currentOverlay = $("#nytg-discretionaryOverlay");
+                    this.currentOverlay.delay(300).fadeIn(500);
+                    $("#nytg-chartFrame").css({ 'height': 650 });
+                    $("#containerColumn").css({ 'height': 650 });
+                } else if (tabIndex === 4) {
+                    nytg.c.comparisonLayout();
+                    this.currentOverlay = $("#nytg-comparisonOverlay");
+                    this.currentOverlay.delay(300).fadeIn(500);
+                    $("#nytg-chartFrame").css({ 'height': 650 });
+                    $("#containerColumn").css({ 'height': 650 });
+                } else if (tabIndex === 2) {
+                    nytg.c.departmentLayout();
+                    this.currentOverlay = $("#nytg-departmentOverlay");
+                    this.currentOverlay.delay(300).fadeIn(500);
+                    $("#nytg-chartFrame").css({ 'height': 1200 });
+                    $("#containerColumn").css({ 'height': 1200 });
+                }
+
+            }
+        }
+    });
+    $.extend(nytg, {
+        budget_array_data: null,
+        category_data: null,
+        total: 0
+    });
+</script>

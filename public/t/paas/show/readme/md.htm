@@ -1,0 +1,34 @@
+<link rel="stylesheet" href="css/md01.css" type="text/css" />
+<style>
+  #SC{font-size:24px;overflow:auto;}
+</style>
+<div>
+  <div id="SR" style="display:none" data-uri="show/readme/MD/###query.id###.html"></div>
+  <div id="SC" class="markdown"></div>
+</div>
+
+<script src="/ui/paas/lib/js/libs/jquery-1.11.0.min.js"></script>
+<script src="/ui/paas/lib/js/libs/showdown.min.js"></script>
+<script src="/ui/paas/lib/js/zy/zy.js"></script>
+<script>
+  $(function(){
+    var myid= $("#SR").data("uri");
+    var cb = function() {
+      // showdown.setOption('noHeaderId', true);
+      // showdown.setOption('strikethrough', true);
+      // showdown.setOption('tables', true);
+      // showdown.setOption('tasklists', true);
+      // showdown.setFlavor('vanilla');
+      showdown.setFlavor('github');
+      var converter = new showdown.Converter();
+      var  te = $("#SR").html();
+      // 解析 mackdown文档内容
+      var  ht = converter.makeHtml(te);
+      $("#SC").empty();
+      $("#SC").html(ht);
+    }
+    // 获取mackdown文档内容
+    zy.debug = true;
+    zy.net.loadHTML($("#SR").data("uri"), $("#SR"), cb);
+  });
+</script>

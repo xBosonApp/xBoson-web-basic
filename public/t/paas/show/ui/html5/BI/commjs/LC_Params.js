@@ -1,0 +1,107 @@
+﻿var sys_wait=200;
+
+var oid="";
+var sys_stepNum=0;
+var sys_stepNum0=0;
+var sys_stepNum1=0;
+var sys_stepNum2=0;
+var sys_stepNum3=0;
+var sys_stepNum4=0;
+var sys_stepNum5=0;
+
+//机构用
+var sys_orgInfo = new Map();
+sys_orgInfo.put("key",["orgid"]);
+sys_orgInfo.put("value",["orgnm"]);
+
+//科室用
+var sys_deptInfo = new Map();
+sys_deptInfo.put("key",["deptid"]);
+sys_deptInfo.put("value",["deptname"]);
+
+//人员用
+var sys_staffInfoByOrgId = new Map();
+sys_staffInfoByOrgId.put("key",["staffid"]);
+sys_staffInfoByOrgId.put("value",["name"]);
+
+//字典用
+var sys_dictInfo = new Map();
+sys_dictInfo.put("key",["yearversion","typecode1","typecode2"]);
+sys_dictInfo.put("value",["typename"]);
+sys_dictInfo.put("keySplit","|");
+sys_dictInfo.put("valueSplit","|");
+
+//通过部门查询人员信息
+var sys_staffInfoByDeptId = new Map();
+sys_staffInfoByDeptId.put("key",["staffid"]);
+sys_staffInfoByDeptId.put("value",["name","typename"]);
+sys_staffInfoByDeptId.put("keySplit","|");
+sys_staffInfoByDeptId.put("valueSplit","|");
+
+//通过部门查询职务信息
+var sys_jobInfoByDeptId = new Map();
+sys_jobInfoByDeptId.put("key",["jobid"]);
+sys_jobInfoByDeptId.put("value",["name","typename"]);
+sys_jobInfoByDeptId.put("keySplit","|");
+sys_jobInfoByDeptId.put("valueSplit","|");
+
+//通过部门查询人员和职务信息
+var sys_staffAndJobInfoByDeptId = new Map();
+sys_staffAndJobInfoByDeptId.put("key",["staffid","jobid"]);
+sys_staffAndJobInfoByDeptId.put("value",["name","typename"]);
+sys_staffAndJobInfoByDeptId.put("keySplit","|");
+sys_staffAndJobInfoByDeptId.put("valueSplit","|");
+
+// 调试开关 false步调试，true调试
+var debuggerFlg=false;
+var app="mdm";
+var urlMap= new Map();
+urlMap.put("10.3.1.34","http://10.3.1.34:8183");
+urlMap.put("222.171.79.97","http://222.171.79.97:8093");
+var getUrlAddress=window.location.toString();
+var addressUrl="";
+if (getUrlAddress.indexOf(":8091")>0){
+addressUrl=urlMap.get(getUrlAddress.substring(getUrlAddress.indexOf("\//")+2,getUrlAddress.indexOf(":8091")));
+}
+else{
+addressUrl=urlMap.get(getUrlAddress.substring(getUrlAddress.indexOf("\//")+2,getUrlAddress.indexOf(":801")));
+}
+var addressUrl="http://172.16.140.121:8080";
+var EMRBaseUrl="/rest/emrview/rest/emr/";
+var MDMBaseUrl="/rest/mdmServices/service/mdm/mdm_";
+var MDMBaseLoginUrl="/rest/mdmServices/service/mdmLogin/mdm_";
+var MDMBaseLoginCheckUrl="/rest/mdmServices/service/mdmLoginCheck/mdm_";
+//var MDMBaseUrl1="http://192.168.0.183:8080/AppRestful/service/";
+var MDMBaseUrl1="/rest/mdmServices/service/mdm/sys_";
+var TranLogBaseUrl="/rest/LogServices/service/log/log_";
+//var TranLogBaseUrl="http://192.168.0.183:8080/TranLog/service/";
+var TestBeeltUrl="/rest/DataServices/service/";
+var TRSBaseUrl="/rest/TRS/service/";
+//var EMPIUrl="http://192.168.0.105:8080/PID/service/";
+var EMPIUrl="/rest/PID/service/";
+var BIASUrl=addressUrl+"/rest/BiServices/service/biAS/bi_";
+var BIUrl=addressUrl+"/rest/BiServices/service/bi/bi_";
+var BIloginUrl=addressUrl+"/rest/BiServices/service/biLogin/bi_";
+
+//var BIASUrl="/rest/BiServices/service/biAS/bi_";
+//var BIUrl="/rest/BiServices/service/bi/bi_";
+//var BIloginUrl="/rest/BiServices/service/biLogin/bi_";
+
+var DataExchangeUrl="/rest/DataExchange/service/de/de_";
+var retData = undefined;
+var callback="callback";
+var empi="";
+var pid="";
+var typeCode="";
+var dataMap="";
+var dataId="";
+var datasource="";
+
+
+var dataxxMap="";
+var loginFlg=false;
+var orgid="";
+var staffid="";
+var username="";
+var lev="";
+var usertype="";

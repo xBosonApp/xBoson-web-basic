@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="description" content="智云 - Web Portal">
+  <meta name="keywords" content="智融, 智云">
+  <meta name="author" content="智融IT">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>PaaS 云平台 - Web Portal</title>
+  <!-- FAVICONS -->
+  <link rel="shortcut icon" href="lib/img/favicon/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="lib/img/favicon/favicon.ico" type="image/x-icon">
+
+  <!-- Basic Styles -->
+  <link rel="stylesheet" type="text/css" media="screen" href="lib/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="lib/css/font-awesome.min.css">
+
+  <!-- SmartAdmin Styles : Please note (smartadmin-production.css) was created using LESS variables -->
+  <link rel="stylesheet" type="text/css" media="screen" href="lib/css/smartadmin-production.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="lib/css/smartadmin-skins.css">
+
+  <!-- page specific plugin styles -->
+  <link rel="stylesheet" type="text/css" media="screen" href="lib/js/plugin/jquery-poshytip/tip-yellowsimple/tip-yellowsimple.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="lib/js/plugin/bootstrap-datepicker/datepicker3.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="lib/css/app_extend.css">
+
+  <!-- GOOGLE FONT -->
+  <!--  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">-->
+  <link rel="stylesheet" type="text/css" media="screen" href="lib/css/fonts.googleapis.com.css">
+
+  <!-- Specifying a Webpage Icon for Web Clip
+			 Ref: https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html -->
+  <link rel="apple-touch-icon" sizes="60x60" href="lib/img/splash/sptouch-icon-iphone.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="lib/img/splash/touch-icon-ipad.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="lib/img/splash/touch-icon-iphone-retina.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="lib/img/splash/touch-icon-ipad-retina.png">
+
+  <!-- iOS web-app metas : hides Safari UI Components and Changes Status Bar Appearance -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <!-- Startup image for web apps -->
+  <link rel="apple-touch-startup-image" href="lib/img/splash/ipad-landscape.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)">
+  <link rel="apple-touch-startup-image" href="lib/img/splash/ipad-portrait.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)">
+  <link rel="apple-touch-startup-image" href="lib/img/splash/iphone.png" media="screen and (max-device-width: 320px)">
+
+  <!-- zTree -->
+  <!--<link rel="stylesheet" type="text/css" href="lib/js/plugin/ztreev35/zTreeStyle.css">-->
+  <link rel="stylesheet" type="text/css" href="lib/js/plugin/ztree3524/css/metroStyle/metroStyle.css">
+  <style type="text/css">
+  .zy-logo {
+    width: 10px;
+    /*  background-color: #a0c2ce;*/
+    /*  overflow: hidden;*/
+  }
+  .zy-logo > a {
+    color: #A0C5E8;
+    overflow: hidden;
+    text-decoration: none;
+  }
+  .zy-logo > a:hover {
+    color: rgba(255, 255, 255, 0.75);
+    text-shadow: 0 1px white, 0 0 20px white;
+  }
+  .zy-logo .habra {
+    font: 800 32px Tahoma;
+    line-height: 35px;
+    text-shadow: 0px 0px #819da6, 1px 1px #819da6, 2px 2px #819da6, 3px 3px #819da6, 4px 4px #819da6, 5px 5px #819da6, 6px 6px #819da6, 7px 7px #819da6, 8px 8px #819da6, 9px 9px #819da6, 10px 10px #819da6, 11px 11px #819da6, 12px 12px #819da6, 13px 13px #819da6, 14px 14px #819da6, 15px 15px #819da6, 16px 16px #819da6, 17px 17px #819da6, 18px 18px #819da6, 19px 19px #819da6, 20px 20px #819da6, 21px 21px #819da6, 22px 22px #819da6, 23px 23px #819da6, 24px 24px #819da6, 25px 25px #819da6, 26px 26px #819da6, 27px 27px #819da6, 28px 28px #819da6;
+  }
+  </style>
+  <!--<style>body {font:12px/1.5 tahoma,arial,'Hiragino Sans GB','\5b8b\4f53',sans-serif}</style>-->
+</head>
+
+<body class="">
+  <!-- POSSIBLE CLASSES: minified, fixed-ribbon, fixed-header, fixed-width
+			 You can also add different skin classes such as "smart-skin-1", "smart-skin-2" etc...-->
+
+  <!-- HEADER -->
+  <header id="header">
+    <div id="logo-group">
+      <span id="logo" style="color:#A0C5E8;" class="zy-logo">
+        <a href="#home.html">
+          <i class="habra">P</i>
+        </a>
+        <span style="color:rgba(255, 255, 255, 0.75);text-shadow: 0 1px #A0C5E8;font-weight:bold;font-size:22px;">aaS 云平台</span>
+      </span>
+      <span id="activity" class="activity-dropdown" style="display: none;"> <i class="fa fa-user"></i>  <b class="badge"> 21 </b> 
+      </span>
+      <div class="ajax-dropdown">
+
+        <!-- the ID links are fetched via AJAX to the ajax container "ajax-notifications" -->
+        <div class="btn-group btn-group-justified" data-toggle="buttons">
+          <label class="btn btn-default">
+            <input name="activity" id="ajax/notify/mail.html" type="radio">通 知 (14)</label>
+          <label class="btn btn-default">
+            <input name="activity" id="ajax/notify/notifications.html" type="radio">报 警 (3)</label>
+          <label class="btn btn-default">
+            <input name="activity" id="ajax/notify/tasks.html" type="radio">待 办 (4)</label>
+        </div>
+
+        <!-- notification content -->
+        <div class="ajax-notifications custom-scroll">
+
+          <div class="alert alert-transparent">
+            <h4>Click a button to show messages here</h4>
+            This blank page message helps protect your privacy, or you can show the first message here automatically.
+          </div>
+
+          <i class="fa fa-lock fa-4x fa-border"></i>
+
+        </div>
+        <!-- end notification content -->
+
+        <!-- footer: refresh area -->
+        <span>Last updated on: 12/12/2013 9:43AM
+          <button type="button" data-loading-text="<i class='fa fa-refresh fa-spin'></i> Loading..." class="btn btn-xs btn-default pull-right">
+            <i class="fa fa-refresh"></i>
+          </button>
+        </span>
+        <!-- end footer -->
+
+      </div>
+    </div>
+
+
+    <!-- projects dropdown -->
+    <div id="project-context">
+      <span class="label" style="font-size: 110%;"></span>
+      <span id="project-selector" class="popover-trigger-element dropdown-toggle" data-toggle="dropdown">切换机构
+        <i class="fa fa-angle-down"></i>
+      </span>
+
+      <!-- Suggestion: populate this list with fetch and push technique -->
+      <ul class="dropdown-menu" id="index_org_list"></ul>
+      <!-- end dropdown-menu-->
+    </div>
+    <!-- end projects dropdown -->
+
+    <!-- pulled right: nav area -->
+    <div class="pull-right">
+      <!-- collapse menu button -->
+      <div id="hide-menu" class="btn-header pull-right">
+        <span>
+          <a href="javascript:void(0);" title="隐藏左侧菜单">
+            <i class="fa fa-reorder"></i>
+          </a>
+        </span>
+      </div>
+      <!-- end collapse menu -->
+
+      <!-- logout button -->
+      <div id="logout" class="btn-header transparent pull-right">
+        <span>
+          <a href="./login.html" title="注销">
+            <i class="fa fa-sign-out"></i>
+          </a>
+        </span>
+      </div>
+      <!-- end logout button -->
+
+      <!-- search mobile button (this is hidden till mobile view port) -->
+      <div id="search-mobile" class="btn-header transparent pull-right">
+        <span>
+          <a href="javascript:void(0)" title="搜索">
+            <i class="fa fa-search"></i>
+          </a>
+        </span>
+      </div>
+      <!-- end search mobile button -->
+
+      <!-- input: search field -->
+      <!--
+      <form action="#ajax/search.html" class="header-search pull-right">
+        <input type="text" name="param" placeholder="请输入关键字" id="search-fld">
+        <button type="submit">
+          <i class="fa fa-search"></i>
+        </button>
+        <a href="javascript:void(0);" id="cancel-search-js" title="取消搜索">
+          <i class="fa fa-times"></i>
+        </a>
+      </form>
+      -->
+      <!-- end input: search field -->
+
+      <!-- fullscreen button -->
+      <div id="fullscreen" class="btn-header transparent pull-right">
+        <span>
+          <a href="javascript:void(0);" onclick="launchFullscreen(document.documentElement);" title="全屏显示">
+            <i class="fa fa-arrows-alt"></i>
+          </a>
+        </span>
+      </div>
+      <!-- end fullscreen button -->
+    </div>
+    <!-- end pulled right: nav area -->
+
+  </header>
+  <!-- END HEADER -->
+
+  <!-- Left panel : Navigation area -->
+  <!-- Note: This width of the aside area can be adjusted through LESS variables -->
+  <aside id="left-panel">
+    <!-- User info -->
+    <div class="login-info">
+      <span>
+        <!-- User image size is adjusted inside CSS, it should stay as it -->
+        <a href="javascript:void(0);" id="show-shortcut">
+          <img src="lib/img/avatars/male.png" class="online" />
+          <span id="login_userid"></span>
+          <i class="fa fa-angle-down"></i>
+        </a>
+      </span>
+    </div>
+    <!-- end user info -->
+
+    <!-- NAVIGATION : This navigation is also responsive
+
+			To make this navigation dynamic please make sure to link the node
+			(the reference to the nav > ul) after page load. Or the navigation
+			will not initialize.
+			-->
+    <nav>
+      <!-- NOTE: Notice the gaps after each icon usage <i></i>..
+				Please note that these links work a bit different than
+				traditional href="" links. See documentation for details.
+				-->
+    </nav>
+    <span class="minifyme">
+      <i class="fa fa-arrow-circle-left hit"></i>
+    </span>
+
+  </aside>
+  <!-- END NAVIGATION -->
+
+  <!-- MAIN PANEL -->
+  <div id="main" role="main">
+
+    <!-- RIBBON -->
+    <div id="ribbon">
+
+      <span class="ribbon-button-alignment">
+        <span id="refresh" class="btn btn-ribbon" data-title="刷新" rel="tooltip" data-placement="bottom" data-original-title="<i class='text-warning fa fa-warning'></i> 注意这将刷新整个页面! " data-html="true">
+          <i class="fa fa-refresh"></i>
+        </span>
+      </span>
+
+      <!-- breadcrumb -->
+      <ol class="breadcrumb"></ol>
+      <!-- end breadcrumb -->
+
+    </div>
+    <!-- END RIBBON -->
+
+    <!-- MAIN CONTENT -->
+    <!--<div id="content" style="margin-left: -20px"></div>-->
+    <div id="content"></div>
+    <!-- END MAIN CONTENT -->
+
+  </div>
+  <!-- END MAIN PANEL -->
+
+  <!-- SHORTCUT AREA : 可以添加自定义快捷磁贴 -->
+  <div id="shortcut">
+    <ul>
+      <li>
+        <a href="javascript:void(0);" id="userinfo" class="jarvismetro-tile big-cubes bg-color-blue">
+          <span class="iconbox">
+            <i class="fa fa-user fa-4x"></i>
+            <span style='text-align:center'><b>个人信息</b>
+            </span>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a href="javascript:void(0);" id="changepassword" class="jarvismetro-tile big-cubes bg-color-greenLight">
+          <span class="iconbox">
+            <i class="fa fa-edit fa-4x"></i>
+            <span style='text-align:center'><b>修改密码</b>
+            </span>
+          </span>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div id="modal"></div>
+  <div id="modal2"></div>
+  <!-- END SHORTCUT AREA -->
+
+  <!--================================================== -->
+
+  <!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices) -->
+  <!--  <script data-pace-options='{ "restartOnRequestAfter": true }' src="lib/js/plugin/pace/pace.min.js"></script>-->
+
+  <!-- jQuery + jQueryUI -->
+  <script src="lib/js/libs/jquery-1.11.0.min.js"></script>
+  <!--[if !IE]> -->
+  <!--  <script src="lib/js/libs/jquery-2.0.3.min.js"></script>-->
+  <!-- <![endif]-->
+  <script src="lib/js/libs/jquery-ui-1.10.3.min.js"></script>
+  <script src="lib/js/libs/lodash.min.js"></script>
+
+  <!-- JS TOUCH : include this plugin for mobile drag / drop touch events -->
+  <script src="lib/js/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script>
+
+  <!-- BOOTSTRAP JS -->
+  <script src="lib/js/bootstrap/bootstrap.min.js"></script>
+
+  <!-- CUSTOM NOTIFICATION -->
+  <script src="lib/js/plugin/smart/SmartNotification.min.js"></script>
+
+  <!-- JARVIS WIDGETS -->
+  <script src="lib/js/plugin/smart/jarvis.widget.min.js"></script>
+
+  <!-- JQUERY COOKIE -->
+  <script src="lib/js/plugin/jquery-cookie/jquery.cookie.js"></script>
+
+  <!-- JQUERY Storage API -->
+  <script src="lib/js/plugin/jquery-storageapi/jquery.storageapi.min.js"></script>
+
+  <!-- EASY PIE CHARTS -->
+  <script src="lib/js/plugin/easy-pie-chart/jquery.easy-pie-chart.min.js"></script>
+
+  <!-- SPARKLINES -->
+  <script src="lib/js/plugin/sparkline/jquery.sparkline.min.js"></script>
+
+  <!-- JQUERY FORM -->
+  <script src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+
+  <!-- JQUERY VALIDATE -->
+  <script src="lib/js/plugin/jquery-validate/jquery.validate.min.js"></script>
+  <script src="lib/js/plugin/jquery-validate/messages_zh.js"></script>
+
+  <!-- JQUERY MASKED INPUT -->
+  <script src="lib/js/plugin/masked-input/jquery.maskedinput.min.js"></script>
+
+  <!-- JQUERY SELECT2 INPUT -->
+  <script src="lib/js/plugin/select2/select2.min.js"></script>
+
+  <!-- JQUERY POSHYTIP TOOLTIP -->
+  <script src="lib/js/plugin/jquery-poshytip/jquery.poshytip.min.js"></script>
+
+  <!-- JQUERY DATA TABLES -->
+  <script src="lib/js/plugin/datatables/media/js/jquery.dataTables.min.js"></script>
+  <!--<script src="lib/js/plugin/datatables/jquery.dataTables-cust.min.js"></script>-->
+  <!-- BOOTSTRAP UI + Slider -->
+  <script src="lib/js/plugin/bootstrap-slider/bootstrap-slider.min.js"></script>
+
+  <!-- BOOTSTRAP UI + Datepicker -->
+  <script src="lib/js/plugin/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+
+  <!-- PYM -->
+  <script src="lib/js/plugin/pym.js"></script>
+
+  <!-- browser msie issue fix -->
+  <script src="lib/js/plugin/msie-fix/jquery.mb.browser.min.js"></script>
+
+  <!-- FastClick: For mobile devices: you can disable this in app.js -->
+  <script src="lib/js/plugin/fastclick/fastclick.js"></script>
+
+  <!-- ztree -->
+  <!--<script src="lib/js/plugin/ztreev35/jquery.ztree.all-3.5.min.js"></script>-->
+  <!--<script src="lib/js/plugin/ztreev35/jquery.ztree.exhide-3.5.min.js"></script>-->
+  <script src="lib/js/plugin/ztree3524/js/jquery.ztree.all.min.js"></script>
+  <script src="lib/js/plugin/ztree3524/js/jquery.ztree.exhide.min.js"></script>
+  <!-- ZY Scripts -->
+  <script src="lib/js/plugin/jquery-dateFormat.js"></script>
+  <script src="lib/js/zy/zy.js"></script>
+  <script src="lib/js/zy/zy_extend.js"></script>
+  <script src="lib/js/zy/zy_md5.js"></script>
+  <script src="lib/js/plugin/hCharts/highcharts.js"></script>
+  <!-- MAIN APP JS FILE -->
+  <script src="lib/js/app_extend.js"></script>
+  <script src="lib/js/app.js"></script>
+  <script src="lib/html/zy_menu.js"></script>
+  <script src="main.js"></script>
+  <!--<script src="bi/js/zy_alarm.js"></script>-->
+
+  <!-- inline scripts related to this page -->
+  <script type="text/javascript">
+  function drawGraphic(width) {
+    pageSetUp();
+    pym_sc.sendHeightToParent();
+  }
+
+  function clickToLocal(){
+	  var _zyLocal = '_zy_user_lastclick';
+	  var _host = document.domain;
+	  var _localStorage = window.localStorage.getItem(_host + _zyLocal);
+	  if(_localStorage){
+	    var target = $('nav a[uri="' + _localStorage + '"]');
+	    target.length>0?target.click():null;
+	  }
+  }
+
+  function add_iframe(a) {
+    var url = window.location.href;
+    window.history.pushState('', '', url.replace(window.location.hash, ''));
+    $("#left-panel nav").find('li').removeClass();
+    $(a).closest('li').siblings('li').children('ul').slideUp();
+    $(a).closest('li').addClass('active');
+    $(a).closest('li').parents('li').addClass('active open');
+    $('#content').empty();
+    var host = location.host;
+    var href = location.href;
+    var http = 'http://';
+    var ui = '';
+    ui = href.indexOf(host + '/ui')>-1?'/ui/':'/t/';
+    var uri = http + host + ui + $(a).attr('uri');
+    if($(a).attr('uri').indexOf('http') > -1)
+      uri = $(a).attr('uri');
+    var pym_sc = pym.Parent('content', uri, {
+      renderCallback: drawGraphic
+    });
+    pym_sc._onHeightMessage($("#left-panel").height()+838);
+    var ifm= $('iframe');
+    $(ifm).attr('scroll','auto');
+  }
+  index();
+  
+  $('#userinfo').click(function() {
+    zy.net.loadHTML("userinfo.html", $("#modal"));
+  });
+  $('#changepassword').click(function() {
+    zy.net.loadHTML("changepassword.html", $("#modal"));
+  });
+
+    $('nav').resize(function(){
+      var nav = $(this).height();
+      var iframe = $('iframe').height();
+      if(nav > iframe)
+        $('iframe').height(nav);
+    });
+
+  </script>
+</body>
+
+</html>

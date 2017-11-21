@@ -1,0 +1,222 @@
+<!-- Modal -->
+<div class="modal fade" id="mgt_add_upd_system" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title">系统信息（<span id="mgt_add_upd_system_title"></span>）</h4>
+      </div>
+      <div class="modal-body no-padding">
+        <!-- FORM Start -->
+        <form id="mgt_add_upd_system_form" method="post" onsubmit="return false;" class="smart-form">
+          <fieldset>
+            <div class="row">
+              <label class="input"></label>
+              <input type="hidden" name="sysid">
+              <section class="col col-6">
+                <label class="label has-warning">系统名称</label>
+                <label class="input has-warning">
+                  <input type="text" name="sysnm" placeholder="系统名称">
+                  <b class="tooltip tooltip-bottom-right">系统名称为必填项目</b>
+                </label>
+              </section>
+              <section class="col col-6">
+                <label class="label">IP</label>
+                <label class="input">
+                  <input type="text" name="ip" placeholder="IP" />
+                </label>
+              </section>
+            </div>
+            <div class="row">
+              <section class="col col-6">
+                <label class="label">端口</label>
+                <label class="input">
+                  <input type="text" name="port" placeholder="端口">
+                </label>
+              </section>
+              <section class="col col-6">
+                <label class="label">URI</label>
+                <label class="input">
+                  <input type="text" name="uri" placeholder="URI、域名">
+                </label>
+              </section>
+            </div>
+            <div class="row">
+              <section class="col col-6">
+                <label class="label">系统标记</label>
+                <label class="input">
+                  <input type="hidden" name="inner_flag" data-type="select2" placeholder="内部/外部系统标记" />
+                </label>
+              </section>
+              <section class="col col-6">
+                <label class="label">用户名</label>
+                <label class="input">
+                  <input type="hidden" name="pid" placeholder="PID" readonly>
+                  <input type="text" name="de0201039" placeholder="请检索输入" style="width:80%;float:left" readonly>
+                  <input type="button" id='searchuser' class="btn" style="width:20%;float:right;" value="检索">
+                </label>
+              </section>
+            </div>
+            <section>
+              <label class="label">状态</label>
+              <label class="input">
+                <input type="hidden" name="status" data-type="select2" placeholder="状态" />
+              </label>
+            </section>
+            <section>
+              <label class="label">描述</label>
+              <label class="textarea">
+                <textarea rows="2" name="mark" id="sys_desc" placeholder="描述"></textarea>
+              </label>
+            </section>
+
+          </fieldset>
+          <footer>
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary">确定</button>
+          </footer>
+        </form>
+        <!-- FORM End -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<div id="search_user_modal"></div>
+<script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+<!-- SCRIPTS ON PAGE EVENT -->
+<script type="text/javascript">
+// DO NOT REMOVE : GLOBAL FUNCTIONS!
+pageSetUp();
+//检索
+$('#searchuser').click(function() {
+  $('#mgt_add_upd_system').modal('hide');
+  modalid = $('#mgt_add_upd_system');
+  userpid = $(this).siblings(":hidden");
+  usernm = $(this).siblings(":text");
+  userapp = 'ZYAPP_SYSMGT';
+  usermod = 'system_mgt';
+  userapi = 'personalselect2';
+  zy.net.loadHTML("mgt/sys_mdm/search_user.html", $("#search_user_modal"));
+});
+
+      
+(function() {
+  // 数据字典处理
+  var cb = function(msg) {
+    // 字典数据绑定
+    $('#mgt_add_upd_system_form input[name=status]').zySelect('ZR.0001', false, {
+      width: '100%'
+    });
+    $('#mgt_add_upd_system_form input[name=inner_flag]').zySelect('ZR.0025', false, {
+      width: '100%'
+    });
+    //接口判断是否为开发商
+    function inner_flag(msg){
+      if(msg.result[0].isplatorg){
+    }else{
+      $('#mgt_add_upd_system_form input[name=inner_flag]').select2('val','1');
+      $('#mgt_add_upd_system_form input[name=inner_flag]').attr('readonly', true);
+    }
+    
+    }
+      zy.g.am.app = 'zyapp_login';
+      zy.g.am.mod = 'zymodule_login';
+      zy.net.post("api/getuserorgtype", inner_flag);
+      
+    if (mgt_system._g.param.flg == 'i') {
+      //添加
+      $('#mgt_add_upd_system_title').text('添加');
+      $('#mgt_add_upd_system_form input[name=status]').select2("val", '1');
+      //当前登录pid
+      var cb = function(msg) {
+        if (msg) {
+          console.log("GetUserInfo.success: " + JSON.stringify(msg));
+          if (msg.result) {
+            $('[name=de0201039]').val(msg.result[0].de0201039);
+            $('[name=pid]').val(msg.result[0].pid);
+          }
+        }
+      };
+      zy.g.am.app = 'zyapp_sysmgt';
+      zy.g.am.mod = 'system_mgt';
+      zy.net.post("api/selectpid", cb);
+    } else if (mgt_system._g.param.flg == 'u') {
+      //修改
+      $('#mgt_add_upd_system_form').formDisable(true);
+      var callback = function(msg) {
+        $('#mgt_add_upd_system_form').formDisable(false);
+        if (msg) {
+          Console.log("获取系统信息数据 = " + JSON.stringify(msg));
+          $('#mgt_add_upd_system_form').json2form(msg.result[0]);
+        }
+      };
+      var system = {
+        sysid: mgt_system._g.param.sysid
+      };
+      zy.g.am.app = 'zyapp_sysmgt';
+      zy.g.am.mod = 'system_mgt';
+      zy.net.get("api/getsystemlistupt", callback, system);
+      $('#mgt_add_upd_system_title').text('修改');
+      $('#mgt_add_upd_system_form input[name=sysid]').attr('readonly', true);
+    }
+  };
+  // 预处理该画面所需的字典类型，以 , 号分割
+  zy.cache.initDicts('ZR.0001,ZR.0025', cb);
+
+})();
+$('#mgt_add_upd_system').modal('show');
+// Registration validation script
+$("#mgt_add_upd_system_form").validate({
+  // Rules for form validation
+  rules: {
+    sysnm: {
+      required: true,
+      maxlength: 50
+    },
+    ip: {
+      ipv4: true,
+      maxlength: 15
+    },
+    port: {
+      maxlength: 5
+    },
+    uri: {
+      url: true,
+      maxlength: 100
+    },
+    sys_desc: {
+      maxlength: 200
+    }
+  },
+  // 验证成功后保存
+  submitHandler: function(form) {
+    var callback = function(msg) {
+      $('#mgt_add_upd_system_form').formDisable(false);
+      if (msg) {
+        if (mgt_system._g.param.flg == 'u') {
+          mgt_system.SetRow($('#mgt_add_upd_system_form').form2json());
+        }
+        $('#mgt_add_upd_system').modal('hide');
+        zy.ui.msg("提示信息：", "保存成功！", "s");
+      }
+    };
+    zy.g.am.app = 'zyapp_sysmgt';
+    zy.g.am.mod = 'system_mgt';
+    if (mgt_system._g.param.flg == 'i') {
+      zy.net.post("api/addsysteminfo", callback, $('#mgt_add_upd_system_form').serialize());
+    } else if (mgt_system._g.param.flg == 'u') {
+      zy.net.post("api/setsysteminfo", callback, $('#mgt_add_upd_system_form').serialize());
+    }
+    $('#mgt_add_upd_system_form').formDisable(true);
+  },
+  // Do not change code below
+  errorPlacement: function(error, element) {
+    error.insertAfter(element.parent());
+  }
+});
+</script>

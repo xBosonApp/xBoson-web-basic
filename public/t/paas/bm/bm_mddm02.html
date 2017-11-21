@@ -1,0 +1,69 @@
+<style type="text/css">
+/*.ztree * {*/
+/*  font-family: Consolas, Microsoft YaHei, SimHei, STHeiti, SimSun, STSong, sans-serif;*/
+/*  font-size: 14px;*/
+/*  font-weight: 300;*/
+/*}*/
+/*.ztree li span.button {*/
+/*  margin-left: 5px;*/
+/*  background-position: -144px 0;*/
+/*  vertical-align: top;*/
+/*  *vertical-align: middle*/
+/*}*/
+</style>
+<div class="modal fade" id="bm_mddm02_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+        </button>
+        <h4 class="modal-title">选择项目</h4>
+      </div>
+      <div class="modal-body no-padding">
+        <form id="bm_mddm02_form" method="post" onsubmit="return false;" class="smart-form">
+          <fieldset>
+            <div class="row">
+              <section class="col col-6">
+                <header><i class="fa fa-table"></i> 选择表:</header><br />
+                <label class="input has-warning">
+                  <input type="hidden" name="tables" data-type="select2" placeholder="选择表">
+                </label>
+              </section>
+            </div>
+            <div class="row">
+              <section class="col col-6">
+                <header>
+                  <div class="row">
+                    <div class="col col-md-5">
+                      <i class="fa fa-columns"></i> 选择列: 
+                    </div>
+                    <button name="allSel" class="btn btn-info btn-xs col col-md-3">列全选</button>
+                    <!--<div name="col-alias-set" class="col col-md-4">-->
+                    <!--  <button class="btn btn-info btn-xs">列别名前缀设置<span class="caret"></span>-->
+                    <!--  </button>-->
+                    <!--  <ul name="col-alias-set-ul"></ul>-->
+                    <!--</div>-->
+                  </div>
+                </header>
+              </section>
+            </div>
+          </fieldset>
+        </form>
+        <div id="bm_mddm02_ztree" class="ztree"></div>
+        <!--<footer>-->
+        <!--    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>-->
+        <!--    <button id="bm_mddm02_submit" type="submit" class="btn btn-primary">确定</button>-->
+        <!--</footer>-->
+      </div>
+      <div class="modal-footer">
+        <button id="bm_mddm02_submit" type="submit" class="btn btn-primary">确定</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" src="bm/bm_mddm02.js"></script>
+<script type="text/javascript">
+  // var _data=[{table_name:'sys_mdm001',column_info:[{column_name:'typecd',is_select:'1',is_where:'1',datatype:'char',numrange:'2'}]}];
+  // var bm_mddm02_obj=new bm_mddm02({did:"00000000000000000000000000000000",flag:false},_data);
+</script>

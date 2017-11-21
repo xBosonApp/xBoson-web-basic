@@ -1,0 +1,219 @@
+<div id="grgzltj-m"  class="portlet box grey">
+    <div class="portlet-title">
+        <div class="caption" id="yetj-name"><!-- 可以设置图标<i class="icon-globe"></i> -->个人工作量统计</div>
+        <!-- 设置关闭和刷新--> 
+        <div class="tools">
+            <div class="tools-chart">
+            	<a title="column"><i class="icon-bar-chart"></i></a> <a title="pie"><i class="icon-adjust"></i></a>
+                <span class="reload"><i class="icon-file-text-alt"></i></span>
+            </div>
+        </div>
+        
+    </div>
+    <div class="portlet-body">
+        <div class="lc-inquire">
+            <form id="org_grgzltj" class="form-inline" action="">
+                <input type="hidden" id="groupby" value="tablename"/>
+                <input type="hidden" id="pagenum"/>
+                <input type="hidden" id="pagesize"/>
+                <div class="row-fluid">
+                    <div class="span2">机构名称</div>
+                    <div class="span2"><select id="dimorg" class="selectpicker"></select></div>
+                    <div class="span2">开始时间</div>
+                    <div class="span2"><input id="datebegin" class="form-control input-sm" type="text" data-date-format="yyyy-mm-dd"></div>
+                	<div class="span2">结束时间</div>
+                    <div class="span2"><input id="dateend" class="form-control input-sm" type="text" data-date-format="yyyy-mm-dd"></div>
+                </div>
+                <div class="row-fluid">
+                     <div class="span2">医生</div>
+                    <div class="span2"><select id="dimtype" class="selectpicker"></select></div>    
+                    <div class="span2"><a onclick="setData2Grgzltj('tablename')" class="btn blue">查询</a></div>
+                </div>
+            </form>
+        </div>
+        <div id="lc-rowtable" class="row-fluid">
+            <div class="span12">
+                <div id="contextGrgzltj"></div>
+            </div>
+        </div>
+        <div id="rowtable" class="row-fluid rowtable">
+            <div class="span12">
+                 <table id="ttGrgzltj"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+function setData2Grgzltj(data){
+	var url ="GRTJ"; 
+	var itemsList;
+	if($("#datebegin").val()!=""&&$("#dateend").val()!=""){
+		itemsList=["datebegin","dateend","dimorg","dimtype"];
+	}else{
+		itemsList=[];
+	}
+	//空数据 会出现 小bug
+	var info= new Map();
+	info.put("sqlid","select");
+	info.put("pagenum",PageNumber);
+	info.put("pagesize",PageSize);
+	if(data==="tablename"){
+	   LXtype="tablename";
+	}else if(data==="createdate"){
+	   LXtype="createdate";
+	}else{
+	   LXtype="hospunitorgcode"
+	}
+	info.put("groupby",data);
+	sys_AjaxGet(BIASUrl+url,"org_grgzltj","reCallback107",info,itemsList);
+	
+}
+
+</script>
+<script type="text/javascript">
+var dataShow;
+var PageNumber=1;
+var PageSize=10;
+function loadingGrgzltj(){
+	$("#pagenum").val(PageNumber);
+  	$("#pagesize").val(PageSize);
+	var mapInfo = new Map();
+	mapInfo.put("sqlid","select");
+	mapInfo.put("pagenum",PageNumber);
+	mapInfo.put("pagesize",PageSize);
+	var itemsList;
+	//itemsList = [];
+	if($("#datebegin").val()==""&&$("#dateend").val()==""){
+		itemsList=["groupby"];
+	}else{
+		itemsList = ["datebegin","dateend","dimorg","dimtype"];
+	}
+	var url = "GRTJ";
+	sys_AjaxGet(BIASUrl+url,"org_grgzltj","reCallback107",mapInfo,itemsList);
+	//alert("-----------------1111");
+}
+function reCallback107(dataInfo){
+//动态获得grid的数据---------------------------开始
+var xq= [];
+var im=0;
+$.each(dataInfo.dataMap.data[0], function(key, value){
+	//将“机构”的列值转移到第一列
+	if(im==0){
+		xq.push({field:"机构",title:"机构",align:'center',width:200});
+	}
+	im++;	
+	if(key!="机构"){
+	    xq.push({field:key,title:key,align:'center',
+		         formatter:function(value){
+		         	if (value=='') {
+		         		value=0;
+		         	};
+					 return parseData(value);  //数据缺失的时候用到。如：.2323 添加后0.2323  chart_common.js里面已经有定义parseData(data)
+			     }
+			});
+	}
+});
+//动态获得grid的数据---------------------------结束	
+//将dataAll添加到数据里面
+var datapush=dataInfo.dataMap.data;
+dataInfo.dataMap.dataAll[0].机构="合计";
+datapush.push(dataInfo.dataMap.dataAll[0]);	
+//切换图形-----------------------------------20131213---开始
+var chartselect="";
+$("#grgzltj-m .tools-chart a").click(function(){
+	$("#grgzltj-m #rowtable").addClass("rowtable");
+	$("#grgzltj-m #lc-rowtable").removeClass("rowtable");
+		var charttitle=$(this).attr("title");
+		chartselect=charttitle;
+		reCallback(dataInfo, chartselect, "#contextGrgzltj");
+});		
+if(chartselect===""){
+	reCallback(dataInfo, chartselect, "#contextGrgzltj");
+	}
+//切换图形-----------------------------------20131213---结束
+
+	$('#ttGrgzltj').datagrid({
+			nowrap: false,
+			striped: true,
+			collapsible:false,
+			pagination:true,
+			pageNumber:PageNumber,
+			pageSize: PageSize,
+			singleSelect:true, 
+			loadMsg:"正在载入...",
+			pageList: [10,20,50,100,200],
+			data:dataInfo.dataMap.data,
+			columns:[xq],//对应上面的定义grid数据
+			onDblClickRow: function (rowIndex) { //双击
+				// openRoleDiv(rowIndex);
+			},
+		   fitColumns:false,
+		   pagination:true,
+		   rownumbers:true
+	}); 
+   var pager = $('#ttGrgzltj').datagrid('getPager');
+	   if(pager){
+		$(pager).pagination({
+			
+			onSelectPage:function(pageNumber,pageSize){
+			   PageNumber=pageNumber;
+			   PageSize=pageSize;
+			   loadingGrgzltj();
+			}
+		});		
+		$(pager).pagination({pageSize:PageSize,pageNumber:PageNumber,total:dataInfo.count});
+	};
+//删除新增的dataAll	
+datapush.splice(datapush.length-1);
+}
+</script>
+<script>
+$(function(){
+$(window).resize(function(){
+$('#ttGrgzltj').datagrid('resize');
+});
+});
+</script>
+<script>
+$(function(){
+
+//日期控件
+$('#grgzltj-m #datebegin').datepicker();
+$('#grgzltj-m #dateend').datepicker();
+//获取当前年-月-日
+today=new Date(); 
+var ymd=sys_FormatYMD(today);
+$("#grgzltj-m #datebegin").val("2010-01-01");
+$("#grgzltj-m #dateend").val(ymd); 
+
+$("#grgzltj-m .reload").click(function(){
+	$("#grgzltj-m #rowtable").toggleClass("rowtable");
+	$("#grgzltj-m #lc-rowtable").toggleClass("rowtable");
+	});
+
+})
+//机构
+$(function () {
+
+getselectdaoid107();
+//getselectdaoid107();
+});
+
+//医生
+function  getselectdaoid107(){
+  sys_BI_getDicList("2","mdmSelectdaoid107");
+}
+function mdmSelectdaoid107(data){
+  var info = new Map();
+  info.put("key",["healthstaffno"]);
+  info.put("value",["healthstaffnm"]);
+  sys_GetSelect("org_grgzltj","dimtype",info,sys_BI_getCacheDaoidData("2"));
+}
+
+loadingGrgzltj();
+//setDataCy('tablename');
+
+</script>
+
+
+

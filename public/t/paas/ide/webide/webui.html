@@ -1,0 +1,131 @@
+<link rel="stylesheet" type="text/css" media="screen" href='ide/uiide/ide.css'/>
+<div id="widget-grid" class="row">
+  <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="jarviswidget jarviswidget-color-blue" id="ide" data-widget-colorbutton="true" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-editbutton="false">
+
+      <header>
+
+      </header>
+
+      <!-- widget div-->
+      <div>
+
+        <!-- widget edit box -->
+        <div class="jarviswidget-editbox">
+          <!-- This area used as dropdown edit box -->
+
+        </div>
+        <!-- end widget edit box -->
+
+        <!-- widget content -->
+        <div class="widget-body"></div>
+
+        <!-- end widget content -->
+
+      </div>
+      <!-- end widget div -->
+
+    </div>
+   
+  </article>
+   </div>
+
+<script type="text/javascript" src="lib/html/zy_tabs.js"></script>
+<script type="text/javascript" src="ide/webide/webui.js"></script>
+<script type="text/javascript" src="lib/js/plugin/dropzone/dropzone.min.js"></script>
+<script type="text/javascript">
+   pageSetUp();
+  // $(document).ready(function() {
+  //     var a, b, c, d, e;
+  //     a = $('#image-modal');
+  //     b = $('#image-modal ._getimage');
+  //     c = $('#image-modal ._upload');
+  //     d = $('#image-modal #_server');
+  //     e = $('#image-modal #_local');
+
+  //     function showImage(path){
+  //       var div = $('<div>');
+  //       var img = $('<img>');
+  //       div.addClass('superbox-list');
+  //       img.attr('src','/web/'+path);
+  //       img.addClass('superbox-img divImg');
+  //       div.append(img);
+  //       return div;
+  //     }
+
+  //     function init(){
+  //       a.modal('show');
+        
+  //       a.bind('_init',function(event,input){
+  //         d.show();
+  //         e.hide();
+  //         clean();
+  //         d.children().empty();
+  //         //$.get(window.location.host+"/web/getallimage",cb ,{});
+  //         $.get("http://"+window.location.host+"/web/getallimage",{
+  //             openid : zy.g.comm.openid,
+  //             org: zy.g.comm.org
+  //           }, function(list){
+  //           $.each(list,function(i,path){
+  //             var img = showImage(path);
+  //             d.children().append(img);
+  //           });
+  //           $('.superbox img').on('click',function(){
+  //             var src = $(this).attr("src");
+  //             if(zy.g.comm&&zy.g.comm.params){
+  //               var img = zy.g.comm.params.img ;
+  //               var newimg=zy.g.comm.params.newimg;
+  //               if(""!=img){
+  //                 $(img).attr("src",src);
+  //                 $(img).val(src);
+  //               }
+  //               if(""!=newimg){
+  //                 $(newimg).attr("src",src);
+  //                 $(newimg).val(src);
+  //               }
+                
+  //             }
+  //             a.modal('hide');
+  //             clean();
+  //           });
+  //         });
+  //       });
+  //       Event();
+  //     }
+
+  //     function clean(){
+  //       a.find('#my-awesome-dropzone').children(':gt(0)').remove();
+  //     }
+
+  //     function Event(){
+        
+  //       b.click(function(event){
+  //         a.trigger('_init');
+  //       });
+
+  //       c.click(function(event){
+  //         e.show();
+  //         d.hide();
+  //       });
+
+  //       var _dropzone = a.find('#my-awesome-dropzone').dropzone({
+  //         headers: {
+  //           'openid': zy.g.comm.openid,
+  //           'org': zy.g.comm.org
+  //         },
+  //         url: "/web/upload",
+  //         addRemoveLinks: true,
+  //         acceptedFiles:'image/*',
+  //         //autoDiscover : true, //覆盖
+  //         success:function(){
+  //           b.click();
+  //         }
+  //         // previewTemplate : ''
+  //       });
+  //       console.log(_dropzone);
+  //       window.ee=$(_dropzone);
+  //     }
+      
+  //     init();
+  // });
+</script>

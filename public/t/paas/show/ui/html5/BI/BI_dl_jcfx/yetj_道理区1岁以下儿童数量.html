@@ -1,0 +1,485 @@
+<div id="zymrzy-m" class="portlet box grey">
+    <div class="portlet-title">
+        <div class="caption" id="yetj-name"><!-- 可以设置图标<i class="icon-globe"></i> -->道里区1岁以下儿童数量 </div>
+        <!-- 设置关闭和刷新--> 
+        <div class="tools">
+            <div class="tools-chart" style="float:right;">
+            	<a title="饼形图" rel="pie"><i class="icon-adjust"></i></a>
+                <span class="reload" title="数据图表"><i class="icon-file-text-alt"></i></span>
+            </div>
+            <div style="float:right; margin:0 10px 0 0;">
+            	<div class="returnpic">返回上一步</div>
+            	<div class="returnjg">返回上一步</div>
+            </div>
+        </div>
+        
+    </div>
+     <div class="portlet-body">
+        <div class="lc-inquire" style="border:none;">
+            <form id="org-MrZy" class="form-inline" action="">
+                <input type="hidden" id="groupby" value="tablename"/>
+                <input type="hidden" id="pagenum"/>
+                <input type="hidden" id="pagesize"/>
+                <div class="row-fluid" style="padding:0 0 10px 0;display:none;">
+                	<div class="span1" style="display:none;">社区名称</div>
+                    <div class="span2" style="display:none;"><select id="dimOrgan" class="selectpicker"><option value="All">全部</option></select></div>
+                    <div class="span1">开始时间</div>
+                    <div class="span2"><input id="datebegin" type="text" class="dateday"></div>
+                	<div class="span1">结束时间</div>
+                    <div class="span2"><input id="dateend" type="text" class="dateday"></div>
+                    <div class="span2" style="display:none;"><select id="dimtype" class="selectpicker"></select></div>
+                    <div class="span1"><a onclick="loadingMrZyNew()" class="btn blue">查询</a></div>
+                </div>
+            </form>
+        </div>
+        <div id="lc-rowtable" class="row-fluid">
+            <div class="span12">
+                <div class="c-main"></div>
+            </div>
+        </div>
+        <div id="rowtable" class="row-fluid rowtable">
+            <div class="span12">
+                 <table id="ttMrZy"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+	if($(window).width()>765){
+		$(".c-main").height($(window).height()-187);
+	}
+});
+
+$(".returnpic").click(function(){
+	loadingMrZyPic();
+});
+$(".returnjg").click(function(){
+	//$("#dimOrgan").val('All');
+	getselectdaoid();
+	setTimeout('loadingMrZy()',800);
+	
+});
+
+var PageNumber=1;
+var PageSize=10;
+
+/* 饼形图-------------------------------- ================================================== */
+function loadingMrZyPic(){
+	$("#yetj-name").text("道里区1岁以下儿童数量");
+	$(".c-main").attr("id","contextMrzyPic");
+	/* show */
+	$("#contextMrzy").hide();
+	$("#contextMrzyPic").show();
+	$("#contextMrzyjsw").hide();
+
+	$(".returnpic").hide();
+	$(".returnjg").hide();
+
+	$("#pagenum").val(PageNumber);
+  	$("#pagesize").val(PageSize);
+	var mapInfo = new Map();
+	mapInfo.put("sqlid","select");
+	mapInfo.put("pagenum",PageNumber);
+	mapInfo.put("pagesize",PageSize);
+	var itemsList;
+	if($("#datebegin").val()==""&&$("#dateend").val()==""){
+		itemsList=["groupby"];
+	}else{
+		itemsList = ["datebegin","dateend","dimOrgan"];
+	}
+	var url = "a036"; //-----------------------------------------------------------------------------1----.饼形图接口（需要改）---
+	sys_AjaxGet(BIASUrl+url,"org-MrZy","reCallback217pic",mapInfo,itemsList);
+}
+function reCallback217pic(dataInfo){
+//切换图形-----------------------------------20131213---开始
+var chartselect="";
+$("#zymrzy-m .tools-chart a").click(function(){
+	$("#zymrzy-m #rowtable").addClass("rowtable");
+	$("#zymrzy-m #lc-rowtable").removeClass("rowtable");
+		var charttitle=$(this).attr("rel");
+		chartselect=charttitle;
+		reCallbackPic2(dataInfo, chartselect, "#contextMrzyPic");//--------reCallbackPic2/reCallbackColumn2/reCallbackBar2/reCallbackSpline2--------- 饼/柱/条/折 -------------对应图形（需要改）-----
+});
+if(chartselect===""){
+	reCallbackPic2(dataInfo, chartselect, "#contextMrzyPic");//--------reCallbackPic2/reCallbackColumn2/reCallbackBar2/reCallbackSpline2--------- 饼/柱/条/折 -------------对应图形（需要改）-----
+	reCallbackpicgrid(dataInfo);
+	}
+//切换图形-----------------------------------20131213---结束	
+}
+
+/* 柱形图-------------------------------- ================================================== */
+function loadingMrZy(){
+	$("#yetj-name").text("各社区1岁以下儿童数量");
+	$(".c-main").attr("id","contextMrzy");
+
+	/* show */
+	$("#contextMrzy").show();
+	$("#contextMrzyPic").hide();
+	$("#contextMrzyjsw").hide();
+
+	$(".returnpic").show();
+	$(".returnjg").hide();
+
+	$("#pagenum").val(PageNumber);
+  	$("#pagesize").val(PageSize);
+	var mapInfo = new Map();
+	mapInfo.put("sqlid","select");
+	mapInfo.put("pagenum",PageNumber);
+	mapInfo.put("pagesize",PageSize);
+	var itemsList;
+	if($("#datebegin").val()==""&&$("#dateend").val()==""){
+		itemsList=["groupby"];
+	}else{
+		itemsList = ["datebegin","dateend","dimOrgan"];
+	}
+	var url = "a036"; //-----------------------------------------------------------------------------2----.柱形图接口（需要改）---
+	sys_AjaxGet(BIASUrl+url,"org-MrZy","reCallback217",mapInfo,itemsList);
+}
+function reCallback217(dataInfo){
+//切换图形-----------------------------------20131213---开始
+var chartselect="";
+$("#zymrzy-m .tools-chart a").click(function(){
+	$("#zymrzy-m #rowtable").addClass("rowtable");
+	$("#zymrzy-m #lc-rowtable").removeClass("rowtable");
+		var charttitle=$(this).attr("rel");
+		chartselect=charttitle;
+		reCallbackColumn2(dataInfo, chartselect, "#contextMrzy");//--------reCallbackPic2/reCallbackColumn2/reCallbackBar2/reCallbackSpline2--------- 饼/柱/条/折 -------------对应图形（需要改）-----
+});
+if(chartselect===""){
+	reCallbackColumn2(dataInfo, chartselect, "#contextMrzy");//--------reCallbackPic2/reCallbackColumn2/reCallbackBar2/reCallbackSpline2--------- 饼/柱/条/折 -------------对应图形（需要改）-----
+	reCallbacksjgrid(dataInfo);
+	}
+//切换图形-----------------------------------20131213---结束	
+}
+
+/* 居委会柱形图-------------------------------- ================================================== */
+function loadingMrZyjwh(){
+	$("#yetj-name").text($('#dimOrgan').find("option:selected").text()+"--1岁以下儿童数量");
+	$(".c-main").attr("id","contextMrzyjsw");
+	/* show */
+	$("#contextMrzy").hide();
+	$("#contextMrzyPic").hide();
+	$("#contextMrzyjsw").show();
+
+	$(".returnpic").hide();
+	$(".returnjg").show();
+
+	$("#pagenum").val(PageNumber);
+  	$("#pagesize").val(PageSize);
+	var mapInfo = new Map();
+	mapInfo.put("sqlid","select");
+	mapInfo.put("pagenum",PageNumber);
+	mapInfo.put("pagesize",PageSize);
+	var itemsList;
+	if($("#datebegin").val()==""&&$("#dateend").val()==""){
+		itemsList=["groupby"];
+	}else{
+		itemsList = ["datebegin","dateend","dimOrgan"];
+	}
+	var url = "a037";   //-----------------------------------------------------------------------------3----.柱形图接口（需要改）---
+	sys_AjaxGet(BIASUrl+url,"org-MrZy","reCallback217jwh",mapInfo,itemsList);
+}
+function reCallback217jwh(dataInfo){
+//切换图形-----------------------------------20131213---开始
+var chartselect="";
+$("#zymrzy-m .tools-chart a").click(function(){
+	$("#zymrzy-m #rowtable").addClass("rowtable");
+	$("#zymrzy-m #lc-rowtable").removeClass("rowtable");
+		var charttitle=$(this).attr("rel");
+		chartselect=charttitle;
+		reCallbackColumn2(dataInfo, chartselect, "#contextMrzyjsw");//--------reCallbackPic2/reCallbackColumn2/reCallbackBar2/reCallbackSpline2--------- 饼/柱/条/折 -------------对应图形（需要改）-----
+});
+if(chartselect===""){
+	reCallbackColumn2(dataInfo, chartselect, "#contextMrzyjsw");//--------reCallbackPic2/reCallbackColumn2/reCallbackBar2/reCallbackSpline2--------- 饼/柱/条/折 -------------对应图形（需要改）-----
+	reCallbackjwhgrid(dataInfo);
+	}
+//切换图形-----------------------------------20131213---结束	
+}
+function reCallbackpicgrid(dataInfo){
+//动态获得grid的数据---------------------------开始
+var xq= [];
+var im=0;
+$.each(dataInfo.dataMap.data[0], function(key, value){
+	//将“社区”的列值转移到第一列
+	if(im==0){
+		xq.push({field:"社区",title:"社区",align:'center',width:200});
+	}
+	im++;	
+	if(key!="社区"){
+	    xq.push({field:key,title:key,align:'center',
+		         formatter:function(value){
+		         	if (value=='') {
+		         		value=0;
+		         	};
+					 return parseData(value);  //数据缺失的时候用到。如：.2323 添加后0.2323  chart_common.js里面已经有定义parseData(data)
+			     }
+			});
+	}
+});
+//动态获得grid的数据---------------------------结束	
+//将dataAll添加到数据里面
+var datapush=dataInfo.dataMap.data;
+dataInfo.dataMap.dataAll[0].社区="合计";
+datapush.push(dataInfo.dataMap.dataAll[0]);	
+	$('#ttMrZy').datagrid({
+			nowrap: false,
+			striped: true,
+			collapsible:false,
+			//pagination:true,
+			pageNumber:PageNumber,
+			pageSize: PageSize,
+			singleSelect:true, 
+			loadMsg:"正在载入...",
+			pageList: [10,20,50,100,200],
+			data:dataInfo.dataMap.dataAll,
+			columns:[xq],      
+			/*columns:[[
+				{field:'社区',title:'社区',align:'center'},
+			   {field:'复诊人数',title:'复诊人数',align:'center'},
+			   {field:'急诊人数',title:'急诊人数',align:'center'},
+			   {field:'门诊人数',title:'门诊人数',align:'center'}
+			]],*/              
+			onDblClickRow: function (rowIndex) {
+				// openRoleDiv(rowIndex);
+			},
+		   fitColumns:false,
+		   rownumbers:true
+	}); 
+   var pager = $('#ttMrZy').datagrid('getPager');
+	   if(pager){
+		$(pager).pagination({
+			
+			onSelectPage:function(pageNumber,pageSize){
+			   PageNumber=pageNumber;
+			   PageSize=pageSize;
+			   loadingMrZy();
+			}
+		});		
+		$(pager).pagination({pageSize:PageSize,pageNumber:PageNumber,total:dataInfo.count});
+	};
+//删除新增的dataAll	
+datapush.splice(datapush.length-1);
+}
+function reCallbacksjgrid(dataInfo){
+//动态获得grid的数据---------------------------开始
+var xq= [];
+var im=0;
+$.each(dataInfo.dataMap.data[0], function(key, value){
+	//将“社区”的列值转移到第一列
+	if(im==0){
+		xq.push({field:"社区",title:"社区",align:'center',width:200});
+	}
+	im++;	
+	if(key!="社区"){
+	    xq.push({field:key,title:key,align:'center',
+		         formatter:function(value){
+		         	if (value=='') {
+		         		value=0;
+		         	};
+					 return parseData(value);  //数据缺失的时候用到。如：.2323 添加后0.2323  chart_common.js里面已经有定义parseData(data)
+			     }
+			});
+	}
+});
+//动态获得grid的数据---------------------------结束	
+//将dataAll添加到数据里面
+var datapush=dataInfo.dataMap.data;
+dataInfo.dataMap.dataAll[0].社区="合计";
+datapush.push(dataInfo.dataMap.dataAll[0]);	
+	$('#ttMrZy').datagrid({
+			nowrap: false,
+			striped: true,
+			collapsible:false,
+			//pagination:true,
+			pageNumber:PageNumber,
+			pageSize: PageSize,
+			singleSelect:true, 
+			loadMsg:"正在载入...",
+			pageList: [10,20,50,100,200],
+			data:dataInfo.dataMap.data,
+			columns:[xq],      
+			/*columns:[[
+				{field:'社区',title:'社区',align:'center'},
+			   {field:'复诊人数',title:'复诊人数',align:'center'},
+			   {field:'急诊人数',title:'急诊人数',align:'center'},
+			   {field:'门诊人数',title:'门诊人数',align:'center'}
+			]],*/              
+			onDblClickRow: function (rowIndex) {
+				// openRoleDiv(rowIndex);
+			},
+		   fitColumns:false,
+		   rownumbers:true
+	}); 
+   var pager = $('#ttMrZy').datagrid('getPager');
+	   if(pager){
+		$(pager).pagination({
+			
+			onSelectPage:function(pageNumber,pageSize){
+			   PageNumber=pageNumber;
+			   PageSize=pageSize;
+			   loadingMrZy();
+			}
+		});		
+		$(pager).pagination({pageSize:PageSize,pageNumber:PageNumber,total:dataInfo.count});
+	};
+//删除新增的dataAll	
+datapush.splice(datapush.length-1);
+}
+
+
+function reCallbackjwhgrid(dataInfo){
+//动态获得grid的数据---------------------------开始
+var xq= [];
+var im=0;
+$.each(dataInfo.dataMap.data[0], function(key, value){
+	//将“社区”的列值转移到第一列
+	if(im==0){
+		xq.push({field:"居委会",title:"居委会",align:'center',width:200});
+	}
+	im++;	
+	if(key!="居委会"){
+	    xq.push({field:key,title:key,align:'center',
+		         formatter:function(value){
+		         	if (value=='') {
+		         		value=0;
+		         	};
+					 return parseData(value);  //数据缺失的时候用到。如：.2323 添加后0.2323  chart_common.js里面已经有定义parseData(data)
+			     }
+			});
+	}
+});
+//动态获得grid的数据---------------------------结束	
+//将dataAll添加到数据里面
+var datapush=dataInfo.dataMap.data;
+dataInfo.dataMap.dataAll[0].居委会="合计";
+datapush.push(dataInfo.dataMap.dataAll[0]);	
+	$('#ttMrZy').datagrid({
+			nowrap: false,
+			striped: true,
+			collapsible:false,
+			//pagination:true,
+			pageNumber:PageNumber,
+			pageSize: PageSize,
+			singleSelect:true, 
+			loadMsg:"正在载入...",
+			pageList: [10,20,50,100,200],
+			data:dataInfo.dataMap.data,
+			columns:[xq],      
+			/*columns:[[
+				{field:'社区',title:'社区',align:'center'},
+			   {field:'复诊人数',title:'复诊人数',align:'center'},
+			   {field:'急诊人数',title:'急诊人数',align:'center'},
+			   {field:'门诊人数',title:'门诊人数',align:'center'}
+			]],*/              
+			onDblClickRow: function (rowIndex) {
+				// openRoleDiv(rowIndex);
+			},
+		   fitColumns:false,
+		   rownumbers:true
+	}); 
+   var pager = $('#ttMrZy').datagrid('getPager');
+	   if(pager){
+		$(pager).pagination({
+			
+			onSelectPage:function(pageNumber,pageSize){
+			   PageNumber=pageNumber;
+			   PageSize=pageSize;
+			   loadingMrZy();
+			}
+		});		
+		$(pager).pagination({pageSize:PageSize,pageNumber:PageNumber,total:dataInfo.count});
+	};
+//删除新增的dataAll	
+datapush.splice(datapush.length-1);
+}
+//日期控件
+
+//---------------------------------------------------------------------------------这个是年月日-------------（需要改）
+$(function(){
+$('.dateday').datetimepicker({
+		format: 'yyyy-mm-dd',
+		autoclose:true,
+		startView:2,
+		minView:2
+	});
+//获取当前年-月-日
+today=new Date();
+var ymd=sys_FormatYMD(today);
+var vMon = today.getMonth() + 1;
+var dateendymd="1900"+"-"+"01"+"-"+"01";
+$("#datebegin").val(dateendymd);
+$("#dateend").val(ymd); 
+
+$("#zymrzy-m .reload").click(function(){
+	$("#zymrzy-m #rowtable").toggleClass("rowtable");
+	$("#zymrzy-m #lc-rowtable").toggleClass("rowtable");
+	})
+
+})
+//----------------------------------------------------------------------------------这个是年------------（需要改）
+/* $(function(){
+$('.dateday').datetimepicker({
+		format: 'yyyy',
+			weekStart: 1,
+	        autoclose: true,
+	        startView: 4,
+	        minView: 4,
+	        forceParse: false,  //必须设置，否则每次解析错，会变成1899年。
+	        language: 'zh-CN'
+	});
+//获取当前年-月-日
+today=new Date();
+var vMon = today.getMonth() + 1;
+var dateendymd=today.getFullYear()-4;
+var ymd=today.getFullYear();
+$("#datebegin").val(dateendymd);
+$("#dateend").val(ymd); 
+
+$("#zymrzy-m .reload").click(function(){
+	$("#zymrzy-m #rowtable").toggleClass("rowtable");
+	$("#zymrzy-m #lc-rowtable").toggleClass("rowtable");
+	})
+
+}) */
+$(function () {
+getselectdaoid();
+});
+//活动类型-老的下拉写法
+function  getselectdaoid(){
+  var url="dimOrgan";
+  var infoa = new Map();
+  var itemsList= [];
+  sys_AjaxGet(BIUrl+url,"dimOrgan","mdmSelectdaoid",infoa,itemsList);
+}
+function mdmSelectdaoid(data){
+  var info = new Map();
+  info.put("key",["organizationcode"]);
+  info.put("value",["organizationname"]);
+  sys_GetSelect("org-MrZy","dimOrgan",info,data.dataList);
+
+}
+/*loadingMrZy();*/
+loadingMrZyPic();
+/*setTimeout('loadingMrZyPic()',5000);*/
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,112 @@
+  	
+		
+<script type="text/javascript">
+var pageNum=1;
+var pageSize=10;
+var emrzyjz2data;	
+$(function () {
+   showDatazyyz();
+});
+function emrzyjz2callback(retData){
+
+    emrzyjz2data = retData;
+	$('#emrzyjz2zyyz').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+				title:'医嘱信息',
+				pagination:true,
+				pageNumber:pageNum,
+				pageSize:pageSize,
+				loadMsg:"正在载入...",
+                pageList: [10,20,50,100,200],
+                singleSelect:true, 
+				data:emrzyjz2data.dataList,
+				columns:[[
+				   {field:'dc2002_mxlb',title:'序号',width:60,align:'center'},
+				   {field:'dc2002_kzsj',title:'开嘱日期',width:100,align:'center',
+				   	   formatter:function(value){
+		                   return LC_FormatYMD(value);
+		               }
+		           },
+				   {field:'dc2002_yzmc',title:'药品名称',width:100,align:'center'},
+				   {field:'dc2002_yypc',title:'频次',width:100,align:'center'},
+				   {field:'dc2002_yytj',title:'途径',width:100,align:'center'},
+				   {field:'dc2002_ycjl',title:'每次计量',width:100,align:'center'},
+				   {field:'dc2002_kzysxm',title:'开嘱医生',width:100,align:'center'},
+				   {field:'dc2002_tzsj',title:'停嘱时间',width:100,align:'center'},
+				   {field:'dc2002_tzysxm',title:'停嘱医生',width:100,align:'center'}
+				]],                  
+                onDblClickRow: function (rowIndex) {
+                  openRoleDiv(rowIndex);
+                },
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true
+		}); 
+
+	   var pager = $('#emrzyjz2zyyz').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pageNum=pageNumber;
+		           pageSize=pageSize;
+		           showDatazyyz();
+		        }
+			});		
+		   $(pager).pagination({pageSize:pageSize,pageNumber:pageNum,total:emrzyjz2data.count});
+
+		  };
+	
+
+}
+
+	function showDatazyyz(){
+        	var url ="emrzyjz2_page/"; 	
+            var itemsList=["dc2002_ypbz","dc2002_yzlb"];	
+			var info= new Map();	
+	        info.put("pageNum",pageNum);
+	        info.put("pageSize",pageSize);
+	        
+			if(self.parent.jgdm!=undefined){
+				info.put("jgdm",self.parent.jgdm);
+				info.put("zylsh",self.parent.zylsh);
+				}
+			
+        	LC_AjaxGet(EMRBaseUrl+url,"fyzxx","emrzyjz2callback",info,itemsList);	
+        	
+ }		
+	
+	
+
+</script>
+<div class="mainsW-872">
+	<!-- 检查报告列表 开始 -->
+	<table toolbar="#toolbar"  id="emrzyjz2zyyz" style="width:872px;"></table>
+	<div id="toolbar" class="pad-5 clearfix">
+	<form id="fyzxx">
+		<div class="itemLW-96 padT-4">医嘱类型:</div>
+		<div class="itemsW-96">
+			<select class="textLW" id="dc2002_ypbz" name="dept">  
+			    <option value="0">非药品</option>
+			    <option value="1">药品</option>
+			</select>
+		</div>
+		<div class="itemLW-96 padT-4">医嘱类别:</div>
+		<div class="itemsW-96">
+			<select class="textLW" id="dc2002_yzlb" name="dept">  
+			    <option value="1">长期</option>
+			    <option value="2">临时</option>  
+			    <option value="3">出院带病</option>
+			    <option value="9">其它</option>
+			</select>
+
+
+	</div>
+	<!-- 检查报告列表 结束 -->
+	<!-- 检查报告内容 开始 -->
+	
+	<!-- 检查报告内容 结束 -->
+	</form>
+</div>
+</div>	

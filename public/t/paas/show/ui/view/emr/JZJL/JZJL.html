@@ -1,0 +1,297 @@
+<script type="text/javascript" language="JavaScript" src="/t/paas/show/ui/comm.js"></script>
+<script type="text/javascript">
+var pageNum=1;
+var pagesize=10; 
+
+var pageNum1=1;
+var pagesize1=10;
+
+var emrjzjldata;
+var emrjzjldata2;
+//<script type="text/javascript">
+$(function () {
+   showDatamjzjz();
+   showDataczyjz();
+   var a =LoadUrlParm.parm("flg");
+     if (a==="mz") {
+        $('#zy').hide();
+  } else if (a==="zy") {
+   
+    $('#mz').hide();
+  }
+
+});
+function emrjzjlcallback(retData){
+		emrjzjldata = retData;
+		$('#mjzjz').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+				title:'门急诊就诊记录',
+				pagination:true,
+				pageNumber:pageNum,
+				pageSize: pagesize,
+				loadMsg:"正在载入...",
+                pageList: [10,20,50,100,200],
+                singleSelect:true,
+				data:emrjzjldata.dataList,
+				columns:[[
+				   {title:'',field:'dc1002_ghlb',width:40,align:'center',
+						 formatter:function(value){
+		                   if(value==="200"){
+								return '<span style="color:red;font-weight:bold">急</span>';
+						   }
+						   if(value=="100"){
+								return '<span>普</span>';
+						   }
+		               }
+				   },
+			        {title:'就诊日期',field:'dc1002_ghsj' ,width:150,align:'center',
+			        			 formatter:function(value){
+		                   return LC_FormatYMD(value);
+		               }
+		            },
+			        {title:'就诊科室',field:'dc1001_jzksmc' ,width:150,align:'center'},
+			        {title:'主要诊断',field:'dc1001_zyzd',width:200,align:'center'},
+			        {title:'就诊医生',field:'dc1001_jzysxm',width:150,align:'center'},
+			        {title:'就诊医院',field:'dc1001_jgdmmc' ,width:188,align:'center'}
+				]],                  
+                onDblClickRow: function (rowIndex) {
+                  openRoleDiv(rowIndex);
+                },
+				onClickRow: function (rowIndex) {
+		          rowno=rowIndex;
+		        },
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true
+		}); 
+
+	   var pager = $('#mjzjz').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pageNum=pageNumber;
+		           pagesize=pageSize;
+		           showDatamjzjz();
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:pagesize,pageNumber:pageNum,total:emrjzjldata.count});
+
+		};
+	
+	}
+		
+	function showDatamjzjz(){
+	
+	
+		//var checkItemsList = ["primal_time","latest_time"];		
+		// 重置检查结果		
+		LC_Resetting("form1")		
+		// 调用指定的验证	
+		//LC_IsCheckLengthMin("form1",checkItemsList,'2');		
+		// 定义返回类型		
+				
+		// 数据格式验证通过以后		
+		// *******************第二步请求数据***********************		
+	// if(retCheckFlg){
+        	var url ="emrjzjl1/"; 	
+        	var itemsList=["jzlx","primal_time","latest_time"];	
+			var info= new Map();	
+	        info.put("pageNum",pageNum);
+	        info.put("pageSize",pagesize);
+			info.put("pid",self.parent.pid);
+        	LC_AjaxGet(EMRBaseUrl+url,"form1","emrjzjlcallback",info,itemsList);	
+	//	 }		
+		//********************第三步处理请求后的数据***************	
+	
+		}
+  //-------------就诊记录
+	function openRoleDiv(rowIndex){
+//	alert(emrjzjldata.dataList[rowIndex].dc1001_empi+"-----------------------");
+//	alert(emrjzjldata.dataList[rowIndex].dc1001_jgdm+"/////////");
+//	alert(emrjzjldata.dataList[rowIndex].dc1001_jzlsh+"===========/////////////==");
+	//console.info(emrjzjldata.dataList[rowIndex].pid);
+	//alert()
+
+//window.showModalDialog("/view/emr/MZJZ/EMRMZJZ.html?dc1001_empi=12&dc1001_jgdm=12&dc1001_jzlsh=12&typeCode=-1","","help:no;scroll:no");
+    window.open ('/view/emr/MZJZ/EMRMZJZ.html?dc1001_empi='+emrjzjldata.dataList[rowIndex].dc1001_empi+'&dc1001_jgdm='+emrjzjldata.dataList[rowIndex].dc1001_jgdm+'&dc1001_jzlsh='+emrjzjldata.dataList[rowIndex].dc1001_jzlsh+'&typeCode=-1', 'newwindow', 'width=911, height=550, help=no,status=yes,scroll=no');
+	
+	
+	}
+
+//<!--************************************以下是第二部分*****************************	-->
+
+
+	function emrjzjlcallback2(retData){
+		emrjzjldata2 = retData;
+	
+	$('#zyjz').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+				title:'住院就诊记录',
+				pagination:true,
+				pageNumber:pageNum1,
+				pageSize: pagesize1,
+				loadMsg:"正在载入...",
+                pageList: [10,20,50,100,200],
+                singleSelect:true,
+				data:emrjzjldata2.dataList,
+				columns:[[
+				   {title:'',field:'dc5001_jlxh',width:80,align:'center',
+				      formatter:function(value){
+							if(value!="")
+							{
+								return "<span style='color:red'>手术住院</span>";
+							}
+							if(value=="")
+							{
+								return "<span>普通住院</span>";
+							}
+						}
+				    },
+			        {title:'入院日期',field:'dc2001_ryrq' ,width:140,align:'center',
+			           formatter:function(value){
+		                   return LC_FormatYMD(value);
+		               }
+		            },
+			        {title:'出院日期',field:'dc2001_cyrq' ,width:100,align:'center',
+			           formatter:function(value){
+		                   return LC_FormatYMD(value);
+		               }
+		            },
+			        {title:'科室',field:'dc2001_ryksmc',width:100,align:'center'},
+			        {title:'病区',field:'dc7002_rybqmc',width:100,align:'center'},
+			        {title:'主要诊断',field:'dc2001_ryzdms',width:100,align:'center'},       
+			        {title:'就诊医生',field:'dc7002_zzysxm',width:100,align:'center'},
+			        {title:'就诊医院',field:'dc2001_jgdmmc',width:156,align:'center'}
+				]],                  
+                onDblClickRow: function (rowIndex) {
+                  openRoleDiv2(rowIndex);
+                },
+				onClickRow: function (rowIndex) {
+		          rowno=rowIndex;
+		        },
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true
+		}); 
+
+	   var pager = $('#zyjz').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			       onSelectPage:function(pageNumber,pageSize){
+		           pageNum1=pageNumber;
+		           pagesize1=pageSize;
+		           showDataczyjz();
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:pagesize1,pageNumber:pageNum1,total:emrjzjldata2.count});
+
+		};
+	
+	}
+	
+
+	function showDataczyjz(){
+		//var checkItemsList = ["dc3001_yybz","primal_time","latest_time"];		
+		// 重置检查结果		
+		//LC_Resetting("form2")		
+		// 调用指定的验证	
+		//LC_IsCheckLengthMin("form1",checkItemsList,'2');		
+		// 定义返回类型		
+				
+		// 数据格式验证通过以后		
+		// *******************第二步请求数据***********************		
+		
+		// if(retCheckFlg){		
+        	var url ="emrjzjl2/"; 
+        	var itemsList=["zylx","primal_time","latest_time"];	
+			var info= new Map();	
+	        info.put("pageNum",pageNum1);
+	        info.put("pageSize",pagesize1);
+			info.put("pid",self.parent.pid);
+            LC_AjaxGet(EMRBaseUrl+url,"form2","emrjzjlcallback2",info,itemsList);	
+        	 
+	//	 }		
+		//********************第三步处理请求后的数据***************			
+}	
+		
+  //-------------住院记录
+	function openRoleDiv2(rowIndex){
+  // window.open ('/view/emr/ZYJZ/EMRZYJZ.html', 'newwindow', 'width=890, height=550, status=no')
+     window.open ('/view/emr/ZYJZ/EMRZYJZ.html?dc2001_empi='+emrjzjldata2.dataList[rowIndex].dc2001_empi+'&dc2001_jgdm='+emrjzjldata2.dataList[rowIndex].dc2001_jgdm+'&dc2001_zylsh='+emrjzjldata2.dataList[rowIndex].dc2001_zylsh+'&typeCode=-1', 'newwindow', 'width=940, height=550, help=no,status=yes,scroll=no');
+	}
+$(function () {
+//getselect();
+});
+
+ function  getselect(){
+
+  var url="mdm/dict/listget/";
+  var infoa = new Map();
+  infoa.put("stringsplit","VA0004.234");
+  var itemsList= [];
+
+  LC_AjaxGet(MDMBaseUrl+url,"form1","mdmSelect",infoa,itemsList);
+
+}
+
+function mdmSelect(data){
+
+  var info = new Map();
+  info.put("key",["typeCode2"]);
+  info.put("value",["typeName"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("form1","dc1001_jzlx",info,data.dataList["VA0004.234"]);
+}
+</script>
+<div class="mainsW-912">
+	<!-- onload="loading()" -->
+	<div id="mz">
+	<table toolbar="#toolbar"  id="mjzjz"></table>
+	<div id="toolbar" class="pad-5 clearfix">
+	<form id="form1">
+		<div class="itemsW-96">
+			<select class="textLW" id="jzlx" name="dept">  				
+			    <option value="">全部</option>
+			    <option value="200">急诊</option>
+			    <option value="100">普诊</option>			    
+			</select>
+		</div>		
+		<div class="itemLW-64 padT-4">日期:</div>
+		<div class="itemsW-96"><input class="Wdate" onClick="WdatePicker()" id="primal_time" type="text" value="" style="width:96px;" /></div>
+		<div class="itemCW-16 padT-4">至</div>
+		<div class="itemsW-96"><input class="Wdate" onClick="WdatePicker()" id="latest_time" type="text" value="" style="width:96px;" /></div>
+		<div class="itemLW-64"><a href="javascript:;;;" class="easyui-linkbutton" onclick="showDatamjzjz()">查询</a></div>
+		</form>
+	</div>
+	</div>
+	<!-- 检查报告列表 结束 -->
+	<!-- 检查报告内容 开始 -->
+	<div id="zy">
+	<table toolbar="#toolbar-zyjz"  id="zyjz"></table>
+	<div id="toolbar-zyjz" class="pad-5 clearfix">
+		<form id="form2">
+		<div class="itemsW-96">		
+			<select class="textLW" id="zylx" name="dept">  				
+			    <option value="">全部</option>
+			    <option value="1">手术住院</option>
+			    <option value="2">普通住院</option>
+			    
+			</select>
+		</div>
+		<div class="itemLW-64 padT-4">日期:</div>
+		<div class="itemsW-96"><input class="Wdate" onClick="WdatePicker()" id="primal_time" type="text" value="" style="width:96px;" /></div>
+		<div class="itemCW-16 padT-4">至</div>
+		<div class="itemsW-96"><input class="Wdate" onClick="WdatePicker()" id="latest_time" type="text" value="" style="width:96px;" /></div>
+		<div class="itemLW-64"><a href="javascript:;;;" class="easyui-linkbutton" onclick="showDataczyjz()">查询</a></div>
+		</form>
+	</div>
+	</div>
+</div>
+	

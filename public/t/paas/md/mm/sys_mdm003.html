@@ -1,0 +1,222 @@
+<!--数据元模态-->
+<div data-backdrop="static" aria-hidden="false" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="mm_sys_mdm003" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button aria-hidden="true" data-dismiss="modal" class="close" type="button">×
+				</button>
+				<h4 class="modal-title"><span id="mm_sys_mdm003_title">添加</span></h4>
+			</div>
+			<div class="modal-body no-padding">
+				<!--FORM Start-->
+				<form class="smart-form" onsubmit="return false;" method="post">
+				  <input type="hidden" name="_decd">
+					<fieldset>
+						<div class="row">
+							<section class="col col-6">
+								<label class="label">类别编码</label>
+								<label class="input">
+									<input type="text" name="typecd" placeholder="类别编码" readonly="readonly">
+								</label>
+							</section>
+							<section class="col col-6">
+								<label class="label">数据元编码</label>
+								<label class="input">
+									<input type="text" name="decd" placeholder="数据元编码">
+								</label>
+							</section>
+						</div>
+						<div class="row">
+							<section class="col col-6">
+								<label class="label">英文名称</label>
+								<label class="input">
+									<input type="text" name="en" placeholder="英文名称">
+								</label>
+							</section>
+							<section class="col col-6">
+								<label class="label">中文名称</label>
+								<label class="input">
+									<input type="text" name="cn" placeholder="中文名称">
+								</label>
+							</section>
+						</div>
+						<div class="row">
+							<section class="col col-6">
+								<label class="label">数据类型</label>
+								<label class="input">
+									<input type="hidden" data-type="select2" name="datatype" placeholder="数据类型">
+								</label>
+							</section>
+							<section class="col col-6">
+								<label class="label">数据长度</label>
+								<label class="input">
+									<input type="text" name="numrange" placeholder="数据长度">
+								</label>
+							</section>
+						</div>
+						<div class="row">
+							<section class="col col-6">
+								<label class="label">显示格式</label>
+								<label class="input">
+									<input type="hidden" data-type="select2" name="format" placeholder="显示格式">
+								</label>
+							</section>
+							<section class="col col-6">
+								<label class="label">单位</label>
+								<label class="input">
+									<input type="hidden" data-type="select2" name="unit" placeholder="单位">
+								</label>
+							</section>
+						</div>
+						<div class="row">
+							<section class="col col-6">
+								<label class="label">字典类别</label>
+								<label class="input">
+									<input type="hidden" name="dict" placeholder="字典类别" data-type="select2">
+								</label>
+							</section>
+							<section class="col col-6">
+								<label class="label">状态</label>
+								<label class="input">
+									<input type="hidden" data-type="select2" name="status" placeholder="状态">
+								</label>
+							</section>
+						</div>
+						<div class="row">
+							<section class="col col-6">
+								<label class="label">是否标准</label>
+								<label class="input">
+									<input type="hidden" data-type="select2" name="isstd" placeholder="是否标准">
+								</label>
+							</section>
+							<section class="col col-6">
+								<label class="label">版本</label>
+								<label class="input">
+									<input type="text"  name="version" placeholder="版本">
+								</label>
+							</section>
+						</div>
+						<section>
+							<label class="label">说明</label>
+							<label class="textarea">
+								<textarea name="mark" placeholder="说明" rows="3"></textarea>
+							</label>
+						</section>
+					</fieldset>
+					<footer>
+						<button class="btn btn-default" type="button" data-dismiss="modal">取消</button>
+						<button class="btn btn-default btn-primary" name="submit" type="submit">提交</button>
+					</footer>
+					<input type="hidden" name="dictnm">
+				</form>
+			</div>
+		</div>
+		<!--/.modal-content-->
+	</div>
+	<!--/.modal-dialog-->
+</div>
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script>
+  /**
+   *  flag:i,u
+   *  typecd:
+   *  decd:
+   *  cb:确定之后的回调函数
+   * */
+  function mm_sys_mdm003(flag,typecd,decd,cb){
+    var modal=$('#mm_sys_mdm003');
+    var title=$('#mm_sys_mdm003_title');
+    var _form=modal.find('form');
+    
+    // 初始化dict的select2
+    zy.g.am.app = 'c879dcc94d204d96a98a34e0b7d75676';
+    zy.g.am.mod = 'tools';
+    zy.net.get("api/getmdm002tree", function(msg){
+      _form.find('[name=dict]').zySelectCustomData('',false,{'width':'100%'},msg.select2);
+      //画面数据字典
+      zy.cache.initDicts('ZR.0001,ZR.0041,ZR.0042,ZR.0043,ZR.0045',function(){
+        _form.find('[name=status]').zySelect('ZR.0001',false,{width:'100%'});
+        _form.find('[name=datatype]').zySelect('ZR.0041',false,{width:'100%'});
+        _form.find('[name=format]').zySelect('ZR.0042',false,{width:'100%'});
+        _form.find('[name=unit]').zySelect('ZR.0043',false,{width:'100%'});
+        _form.find('[name=isstd]').zySelect('ZR.0045',false,{width:'100%'});
+        //画面初始化
+        if(flag=='i'){
+          title.text('添加');
+          _form.find('[name=status]').select2("val", '1');
+          _form.find('[name=typecd]').val(typecd);
+        }else if(flag=='u'){
+          title.text('修改');
+          //调接口铺数据
+          zy.g.am.app = 'c879dcc94d204d96a98a34e0b7d75676';
+          zy.g.am.mod = 'mm';
+          zy.net.get("api/getdataupt", function(msg) {
+            if (msg) {
+              _form.json2form(msg.data[0]);
+              _form.find('[name=_decd]').val(msg.data[0].decd);
+            }
+          }, {'typecd':typecd,'decd':decd});
+        }
+      });
+    });
+    
+    modal.modal('show');
+    
+    _form.validate({
+      // Rules for form validation
+        rules: {
+          decd:{
+            required: true
+          },
+          en:{
+            required: true
+          },
+          cn:{
+            required: true
+          },
+          datatype:{
+            required: true
+          },
+          mark:{
+            maxlength: 600
+          }
+        },
+        // 验证成功后保存
+        submitHandler: function(form) {
+          var decd = _form.find('[name=decd]').val();
+          if(/[@#\$%\^&\*]+/g.test(decd)){
+            zy.ui.msg("提示信息：", "数据元编码不能为特殊字符！", "i");
+            return true;
+          }
+          if(flag=="i"){
+            zy.g.am.app = 'c879dcc94d204d96a98a34e0b7d75676';
+            zy.g.am.mod = 'mm';
+            zy.net.post("api/adddata", function(msg) {
+              _form.formDisable(false);
+              if (msg) {
+                cb && cb();
+                modal.modal('hide');
+                zy.ui.msg('提示', '保存成功', 's');
+              }
+            }, _form.serialize());
+          }
+          else if(flag=="u"){
+            zy.g.am.app = 'c879dcc94d204d96a98a34e0b7d75676';
+            zy.g.am.mod = 'mm';
+            zy.net.post("api/updatedata", function(msg) {
+              _form.formDisable(false);
+              if (msg) {
+                cb && cb();
+                modal.modal('hide');
+                zy.ui.msg('提示', '保存成功', 's');
+              }
+            }, _form.serialize());
+          }
+          _form.formDisable(true);
+        },
+        errorPlacement: function(error, element) {
+          error.insertAfter(element.parent());
+        }
+    });
+  }
+</script>

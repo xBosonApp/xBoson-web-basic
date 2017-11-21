@@ -1,0 +1,190 @@
+<div class="modal fade" id="app_add_upd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <div id="wizard-1">
+          <div id="rootwizard">
+            <div class="form-bootstrapWizard">
+              <ul class="bootstrapWizard form-wizard">
+                <li class="active" data-target="#step1">
+                  <a href="#tab1" data-toggle="tab" style="cursor:default"> <span class="step">1</span> <span class="title">应用信息</span> </a>
+                </li>
+                <li data-target="#step2">
+                  <a href="#tab2" data-toggle="tab" style="cursor:default"> <span class="step">2</span> <span class="title">角色信息</span> </a>
+                </li>
+                <li data-target="#step4">
+                  <a href="#tab4" data-toggle="tab" style="cursor:default"> <span class="step">3</span> <span class="title" >公共服务</span> </a>
+                </li>
+              </ul>
+            </div>
+            <div class="tab-content">
+              <div class="tab-pane active" id="tab1">
+                <h3><br><br></h3>
+                <div class="tab-pane" id="appinfo">
+                  <div class="panel-group smart-accordion-default smart-form">
+                    <div class="panel-body" style="padding: 10px">
+                      <div class="row">
+                        <section class="col col-sm-6">
+                          <label class="label">应用名称</label>
+                          <label class="input">
+                            <i class="icon-append fa fa-exclamation"></i>
+                            <input type="text" id="appnm" name="appnm" placeholder="应用名称">
+                          </label>
+                        </section>
+                        <section class="col col-sm-6">
+                          <label class="label">分类</label>
+                          <label class="input">
+                            <input type="text" id="category" name="category" placeholder="分类">
+                          </label>
+                        </section>
+                      </div>
+                      <section>
+                        <label class="label">应用描述</label>
+                        <label class="textarea">
+                          <i class="icon-append fa fa-exclamation"></i>
+                          <textarea id="appinfo" name="appinfo" placeholder="应用描述"></textarea>
+                        </label>
+                      </section>
+                      <div class="row">
+                        <label class="label col col-10">应用介绍</label>
+                        <section class="col col-10">
+                          <label class="input">
+                            <input type="text" id="intro_path" name="intro_path" placeholder="请选择....." readonly="readonly">
+                          </label>
+                        </section>
+                        <section class="col col-2">
+                          <label class="input" name="appuilist">
+                            <button class="btn btn-default btn-sm pull-right" style="height:32px">选择文件</button>
+                          </label>
+                        </section>
+                      </div>
+                      <div class="row">
+                        <section class="col col-sm-6">
+                          <label class="label">标准版应用</label>
+                          <label class="input">
+                            <input type="text" id="p_application_id" name="p_application_id" placeholder="标准版应用">
+                          </label>
+                        </section>
+                        <section class="col col-sm-6">
+                          <label class="label">专属应用</label>
+                          <label class="input">
+                            <input type="text" id="excl" name="excl" placeholder="专属应用">
+                          </label>
+                        </section>
+                      </div>
+                      <div class="row">
+                        <section class="col col-sm-6"></section>
+                        <section class="col col-sm-3">
+                          <label class="label">LOGO预览</label>
+                          <label>
+                            <input type="hidden" name="image_path">
+                            <input type="hidden" name="src">
+                            <button type="button" id="uplogo" class="btn btn-default btn-sm" style="height:32px">&emsp;<i class="fa fa-upload"></i>&emsp;上传LOGO&emsp;</button>
+                          </label>
+                        </section>
+                        <section class="col col-3">
+                          <div style="width:100px;height:100px;border: 0.5px #B2B9BF solid;float:right;"><img id="imglogo" src="lib/img/mybg.png" style="width:100px;height:100px;"/>
+                          </div>
+                        </section>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane" id="tab2">
+                <h3><br><br></h3>
+                <div class="panel-group smart-accordion-default" id="accordion-2">
+                  <div class="row">
+                    <div id="app_add_upd_role_container">
+                      <script id="app_add_upd_tmpl" type="text/x-jsrender">
+                        <div class="well well-sm padding-10" data-rg_id="{{: rg_id}}">
+                          <h5 class="margin-top-0"><strong>{{: rg_nm}}</strong></h5>
+                          <div class="row">
+                          {{if children && children.length}}
+                            <div class="list-group padding-10">
+                            {{for children}}
+                              {{if status=='1'}}
+                                {{if approle=='1'}}
+                                  <a data-roleid="{{: roleid}}" data-status="{{: status}}" class="list-group-item active" title="{{: role_desc}}" href="javascript:void(0);">
+                                    {{: rolenm}}
+                                  </a>
+                                {{else}}
+                                  <a data-roleid="{{: roleid}}" data-status="{{: status}}" class="list-group-item" title="{{: role_desc}}" href="javascript:void(0);">
+                                    {{: rolenm}}
+                                  </a>
+                                {{/if}}
+                              {{else}}
+                                {{if approle=='1'}}
+                                  <a data-roleid="{{: roleid}}" data-status="{{: status}}" class="list-group-item list-group-item-warning active" title="{{: role_desc}}" href="javascript:void(0);">
+                                    {{: rolenm}}
+                                    <span class="label label-warning pull-right">已停用</span>
+                                  </a>
+                                {{else}}
+                                  <a data-roleid="{{: roleid}}" data-status="{{: status}}" class="list-group-item list-group-item-warning" title="{{: role_desc}}" href="javascript:void(0);">
+                                    {{: rolenm}}
+                                    <span class="label label-warning pull-right">已停用</span>
+                                  </a>
+                                {{/if}}
+                              {{/if}}
+                            {{/for}}
+                            </div>
+                          {{/if}}
+                          </div>
+                        </div>
+                      </script>
+                    </div>
+                  </div>
+                  <div class="row" id="app_add_upd_sync_container" style="display:none">
+                    <button id="app_add_upd_sync" class="btn btn-primary btn-sm pull-right">&emsp;<i class="fa fa-magic"></i>&nbsp;同&nbsp;步&nbsp;</button>
+                  </div>
+                  <br>
+                </div>
+              </div>
+              <div class="tab-pane" id="tab4">
+                <h3><br><br></h3>
+                <div class="panel-group smart-accordion-default" id="accordion-4">
+                  <div class="row">
+                    <input type="text" name="publicapilist" style="display:none;">
+                    <section class='col-sm-6'>
+                      <ul id="publicapilisttree" class="ztree"></ul>
+                    </section>
+                    <section class='col-sm-6'>
+                      <ul id="secondModeltree" class="ztree"></ul>
+                    </section>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <ul class="pager wizard no-margin">
+                      <li class="previous disabled">
+                        <a href="javascript:void(0);"> 上一步 </a>
+                      </li>
+                      <li class="pull-right" name="nexttab">
+                        <a href="javascript:"> 下一步 </a>
+                      </li>
+                      <li class="next finish" style="display:none;"><a href="javascript:;" > 发 布 </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="lib/js/plugin/bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+<script src="lib/js/plugin/jquery-jsrender/jsrender.min.js"></script>
+<!--<script src="yingyong_ptgl/yyfb2/add_edit_modal.js"></script>-->
+<script>
+  // (function () {
+  //   var add_edit_modalObj = new add_edit_modal(applicationid);
+  // })();
+</script>

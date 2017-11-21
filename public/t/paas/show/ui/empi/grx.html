@@ -1,0 +1,463 @@
+<script type="text/javascript">
+var grxgdata;
+var grxgdata1;
+var indata;
+$(function () {
+$("input").removeAttr('disabled','disabled');
+$("select").removeAttr('disabled','disabled');
+
+indata=JSON.parse(localStorage.getItem('data'))
+localStorage.removeItem('data');
+//LC_SetMapData("grx",self.parent.dataMap);
+//   showDatagrxg(self.parent.dataMap);
+//   showDatagrxg1(self.parent.dataMap)	
+LC_SetMapData("grx",indata);
+  showDatagrxg(indata);
+  showDatagrxg1(indata)	
+   getselectdsex();
+});
+
+
+function agrxgcallback(retData){
+
+
+for(var i=0; i<indata.phones.length;i++){
+var typephones=indata.phones[i].type;
+var numphones=indata.phones[i].num;
+//alert(typephones);
+$('#tjwbk').append("<div id="+typephones+" class='rower'><div style='float:left;width:76px;padding:4px 4px 0 0;text-align: right;'>电话类型 :</div><div style='width:160px;float:left;padding-top:4px;'><select  id='typeCodedh_" + typephones + "' style='float:left;width:160px;'><option value=''></option><option value='01'>本人电话</option><option value='02'>配偶电话</option><option value='03'>监护人电话</option><option value='04'>家庭电话</option><option value='05'>本人工作单位电话</option><option value='06'>居委会电话</option><option value='07'>传真</option><option value='08'>QQ</option><option value='09'>MSN</option><option value='10'>电子邮件</option><option value='99'>其他</option></select></div><div style='float:left;width:76px;padding:4px 4px 0 0;text-align: right;'>电话号码 :</div><input type='text' id='phones_types_" + typephones + "' class='itemRW-224' style='margin-top:4px;'></div>")	 
+$("#typeCodedh_" + typephones+ "").val(typephones);
+$("#phones_types_" + typephones+ "").val(numphones);
+
+
+
+
+}
+
+
+
+	}
+
+function showDatagrxg(data){
+          agrxgcallback(data);
+          
+  		}
+
+
+function agrxgcallback1(retData){
+for(var i=0; i<indata.credentials.length;i++){
+var typecredentials=indata.credentials[i].type;
+var numcredentials=indata.credentials[i].num;
+//alert(typephones);
+$('#tjwbk1').append("<div id="+typecredentials+" class='rowerc'><div style='float:left;width:76px;padding:4px 4px 0 0;text-align: right;'>证件类型 :</div><div style='width:160px;float:left;padding-top:4px;'><select  id='typeCodezj_" + typecredentials+ "' style='float:left;width:160px;'><option value=''></option><option value='01'>居民身份证</option><option value='02'>港澳居民身份证</option><option value='03'>居民户口簿</option><option value='04'>护照</option><option value='05'>军官证</option><option value='06'>文职干部证</option><option value='07'>士兵证</option><option value='08'>驾驶执照</option><option value='09'>残疾证</option><option value='10'>医疗保险证</option><option value='11'>出生证明</option><option value='12'>家庭标识</option><option value='13'>住院病案</option><option value='14'>住院床位</option><option value='15'>门诊病历</option><option value='16'>死亡证明</option><option value='70'>社保卡</option><option value='71'>一卡通</option><option value='72'>健康卡</option><option value='73'>学生证</option><option value='80'>母亲身份证</option><option value='81'>父亲身份证</option><option value='90'>本地唯一标识</option><option value='91'>合作医疗卡</option><option value='92'>自费卡</option><option value='99'>其他标识</option></select></div><div style='float:left;width:76px;padding:4px 4px 0 0;text-align: right;'>证件号码 :</div><input type='text' id='credentials_uniques_" + typecredentials+ "' class='itemRW-224' style='margin-top:4px;'></div>")	 
+$("#typeCodezj_" + typecredentials+ "").val(typecredentials);
+$("#credentials_uniques_" + typecredentials+ "").val(numcredentials);
+
+}
+  		
+	}
+
+function showDatagrxg1(data){
+        agrxgcallback1(data);
+       
+        
+  			}
+
+function save1() {
+	if(retCheckFlg){
+		var url = "personchange/";
+		var itemsList = ["pname","gender","birthday","workdate","email","credentials","idcard","phones","nickname","registeretype","addrprovince","addrcity","addrcounty","addrvillage","addrhouseid","nationality","marriedstatus","nation","age","booldtype","jobtypecode","educationcode","degreecode"];
+		var info = new Map();
+		info.put("pid",indata.pid);
+		//电话类型
+		var ss = [];
+		var row=$(".rower").length;
+		for(var i=0;i<row;i++){
+			var roweri=$("#tjwbk div.rower:eq("+i+")");
+			var rowerinput=$("#tjwbk div.rower:eq("+i+") input");
+		//	console.info(roweri.attr("id")+"_"+rowerinput.val());
+			ss.push(roweri.attr("id")+"_"+rowerinput.val());
+		}
+		$("#phones").val(ss.join(','));
+		
+		//电话类型
+		var ss1 = [];
+		var row1=$(".rowerc").length;
+		for(var i=0;i<row1;i++){
+			var roweri1=$("#tjwbk1 div.rowerc:eq("+i+")");
+			var rowerinput1=$("#tjwbk1 div.rowerc:eq("+i+") input");
+		//	console.info(roweri.attr("id")+"_"+rowerinput.val());
+			ss1.push(roweri1.attr("id")+"_"+rowerinput1.val());
+		}
+		$("#credentials").val(ss1.join(','));
+
+		LC_AjaxGet(EMPIUrl + url, "grx", "callback1", info, itemsList);
+	}
+}
+
+
+function callback1(reData){
+	$("#openRoleDiv").window("close");
+	showDatagrxx();
+}
+
+
+$(function () {
+getselect();
+getselectdsex();
+
+});
+
+ function  getselect(){
+
+  var url="mdm/dict/listget/";
+  var infoa = new Map();
+  infoa.put("stringsplit","VA0004.04");
+  var itemsList= [];
+
+  LC_AjaxGet(MDMBaseUrl+url,"grx","mdmSelect",infoa,itemsList);
+
+}
+
+function mdmSelect(data){
+
+  var info = new Map();
+  info.put("key",["typeCode2"]);
+  info.put("value",["typeName"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("grx","gender",info,data.dataList["VA0004.04"]);
+     setTimeout(function(){
+$("#grx #gender").val(indata.gender);
+}, 1500);
+
+
+}	
+	
+function  getselectdsex(){
+  var url="mdm/dict/listget/";
+  var infoa = new Map();
+  infoa.put("stringsplit","VA0004.04");
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"grx","mdmSelectdsex",infoa,itemsList);
+}
+function mdmSelectdsex(data){
+  var info = new Map();
+  info.put("key",["typeCode2"]);
+  info.put("value",["typeName"]);
+  sexMap=LC_getDataMap(info,data.dataList["VA0004.04"]);
+}	
+$("#grx").find("#birthday").val(LC_SubStr(indata.birthday,0,10));
+</script>
+<form id="grx">	
+<div id="getpersons" class="flPadTB-10">	
+<input type="hidden" id="credentials"/>
+<input type="hidden" id="phones"/>
+<input type="hidden" id="pid"/>
+ 			<div class="mainW-736">
+ 			
+
+ 			
+ 			
+			<div class="mainW-224" >
+				<div class="itemLW-96 padT-4" >姓名：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="pname" /></div>
+			</div>
+			
+			<div class="mainW-224" >
+				<div class="itemLW-96 padT-4" >性别：</div>	
+				<div class="itemLW-128"><select id="gender" class="textLW" name="dept"></select></div>
+			</div>
+			
+			<div class="mainW-224" >
+				<div class="itemLW-96 padT-4" >出生日期：</div>	
+				<div class="itemLW-128"><input class="Wdate" onClick="WdatePicker()"  type="text" style="width:128px;" id="birthday" /></div>
+			</div>
+			</div>
+			
+ 			<div class="mainW-736">
+			<div class="mainW-224" >
+				<div class="itemLW-96 padT-4" >电子邮件地址：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="email" /></div>
+			</div>
+			
+			<div class="mainW-224" >
+				<div class="itemLW-96 padT-4" >身份证：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="idcard" /></div>
+	</div>
+    			<div class="mainW-224" >
+			    <div class="itemLW-96 padT-4" >年龄：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="age" /></div>
+			</div>
+
+			</div>
+			
+			<div class="mainW-736">
+			<div class="mainW-224" >
+				<div class="itemLW-96 padT-4" >昵称：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="nickname" /></div>
+			</div>
+			
+			<div class="mainW-224" >
+				<div class="itemLW-96 padT-4" >户籍类型代码：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="registeretype" /></div>
+			</div>
+			
+			<div class="mainW-224" >
+				<div class="itemLW-96 padT-4" >地址-省：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="addrprovince" /></div>
+			</div>
+			</div>
+			
+		    <div class="mainW-736">
+			<div class="mainW-224" >
+				<div class="itemLW-96 padT-4" >地址-市：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="addrcity" /></div>
+			</div>	
+			
+			<div class="mainW-224" >
+			    <div class="itemLW-96 padT-4" >地址-县：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="addrcounty" /></div>
+			</div>	
+			
+			<div class="mainW-224" >
+			    <div class="itemLW-96 padT-4" >地址-村：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="addrvillage" /></div>
+			</div>
+			</div>
+			
+			<div class="mainW-736">
+			<div class="mainW-224" >
+			    <div class="itemLW-96 padT-4" >地址-门牌号码：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="addrhouseid" /></div>
+			</div>				
+            
+	      <div class="mainW-224" style="height:22px;">
+		<div class="itemLW-96 padT-4">国籍：</div>
+		<div class="itemRW-128" >
+			<select class="textLW" name="dept" id="nationality">  
+			    <option>中国</option>  
+			</select>
+		</div>
+          </div>    
+			<div class="mainW-224" >
+			    <div class="itemLW-96 padT-4" >婚姻状况代码：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="marriedstatus" /></div>
+			</div>
+			</div>
+			
+			<div class="mainW-736">
+			<div class="mainW-224" >
+			    <div class="itemLW-96 padT-4" >民族：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="nation" /></div>
+			</div>
+			
+
+			
+			<div class="mainW-224" >
+			    <div class="itemLW-96 padT-4" >ABO血型：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="booldtype" /></div>
+			</div>
+	
+           <div class="mainW-224" >
+                <div class="itemLW-96 padT-4">参加工作时间：</div>
+                <div class="itemRW-128"><input id="workdate"  class="Wdate" onClick="WdatePicker()"  type="text" style="width:128px;" />  </div>
+              </div>
+              </div>
+           <div class="mainW-736">
+			<div class="mainW-224" >
+			    <div class="itemLW-96 padT-4" >职业类别代码：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="jobtypecode" /></div>
+			</div>
+			
+			<div class="mainW-224" >
+			    <div class="itemLW-96 padT-4" >学历代码：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="educationcode" /></div>
+			</div>
+					
+			<div class="mainW-224" >
+			    <div class="itemLW-96 padT-4" >学位代码：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="degreecode" /></div>
+			</div>
+			</div>
+            
+        <div class="mainW-736">
+	      <div class="mainW-224">
+		<div class="itemLW-96 padT-4"> RH血型：</div>
+		<div class="itemRW-128" >
+			<select class="textLW" name="dept" id="rh">  
+			    <option>阴性</option>  
+                <option>阳性</option>  
+			</select>
+		</div>
+        
+			</div>
+			</div>
+			
+<div class="mainW-560 pad-5" style="position:relative;">
+  <a href="#" class="easyui-linkbutton tjbut" onclick="btnAddzj()" style="position:absolute;top:7px;right:10px;z-index:100000;">添加</a>
+    <div class="easyui-panel" title="证件">
+ 
+        <div class="paenlbot" id="tjwbk1">  
+        
+      </div>
+  </div>
+</div>
+
+
+<div class="mainW-560 pad-5" style="position:relative;">
+  <a href="#" class="easyui-linkbutton tjbut" onclick="btnAddph()" style="position:absolute;top:7px;right:10px;z-index:100000;">添加</a>
+        <div class="easyui-panel" title="电话">
+      
+      <div class="paenlbot" id="tjwbk"></div>
+      </div>
+</div>
+<div class="itemLW-640"><a id="save1" href="#" onclick="save1()" class="easyui-linkbutton">修改</a></div> 
+</div>
+    </form>
+    <script>
+    
+    var editIndex = undefined;
+		function endEditing(){
+			if (editIndex == undefined){return true}
+			if ($('#div-grxg').datagrid('validateRow', editIndex)){
+				$('#div-grxg').datagrid('endEdit', editIndex);
+				editIndex = undefined;
+				return true;
+			} else {
+				return false;
+			}
+		}
+		function onClickRow(index){
+			if (editIndex != index){
+				if (endEditing()){
+					$('#div-grxg').datagrid('selectRow', index)
+							.datagrid('beginEdit', index);
+					editIndex = index;
+				} else {
+					$('#div-grxg').datagrid('selectRow', editIndex);
+				}
+			}
+		}
+		
+function btnAddph(){
+	
+	$('#div-ph-open').dialog('open');
+	
+
+}
+
+function btnAddzj(){
+	
+	$('#div-zj-open').dialog('open');
+	
+
+}
+
+function phadd(){
+	 var selectphval=$("#selectph").val();
+	 var zztextph=$("#zztextph").val();
+	 
+	 if(zztextph!==""){ 
+	 $('#tjwbk').append("<div id="+selectphval+" class='rower'><div style='float:left;width:76px;padding:4px 4px 0 0;text-align: right;'>电话类型 :</div><div style='width:160px;float:left;padding-top:4px;'><select  id='typeCodedh_" + selectphval + "' style='float:left;width:160px;'><option value=''></option><option value='01'>本人电话</option><option value='02'>配偶电话</option><option value='03'>监护人电话</option><option value='04'>家庭电话</option><option value='05'>本人工作单位电话</option><option value='06'>居委会电话</option><option value='07'>传真</option><option value='08'>QQ</option><option value='09'>MSN</option><option value='10'>电子邮件</option><option value='99'>其他</option></select></div><div style='float:left;width:76px;padding:4px 4px 0 0;text-align: right;'>电话号码 :</div><input type='text' id='phones_types_" + selectphval + "' class='itemRW-224' style='margin-top:4px;'></div>")	 
+	 $("#typeCodedh_" + selectphval + "").val(selectphval);
+	 $("#phones_types_" + selectphval + "").val(zztextph);
+	 $('#div-ph-open').dialog('close');
+	}
+	 }
+	
+function zjadd(){
+	 var selectzjval=$("#selectzj").val()
+	 var zztextzj=$("#zztextzj").val();
+	 if(zztextzj!==""){ 
+	 $('#tjwbk1').append("<div id="+selectzjval+" class='rowerc'><div style='float:left;width:76px;padding:4px 4px 0 0;text-align: right;'>证件类型 :</div><div style='width:160px;float:left;padding-top:4px;'><select  id='typeCodezj_" + selectzjval + "' style='float:left;width:160px;'><option value=''></option><option value='01'>居民身份证</option><option value='02'>港澳居民身份证</option><option value='03'>居民户口簿</option><option value='04'>护照</option><option value='05'>军官证</option><option value='06'>文职干部证</option><option value='07'>士兵证</option><option value='08'>驾驶执照</option><option value='09'>残疾证</option><option value='10'>医疗保险证</option><option value='11'>出生证明</option><option value='12'>家庭标识</option><option value='13'>住院病案</option><option value='14'>住院床位</option><option value='15'>门诊病历</option><option value='16'>死亡证明</option><option value='70'>社保卡</option><option value='71'>一卡通</option><option value='72'>健康卡</option><option value='73'>学生证</option><option value='80'>母亲身份证</option><option value='81'>父亲身份证</option><option value='90'>本地唯一标识</option><option value='91'>合作医疗卡</option><option value='92'>自费卡</option><option value='99'>其他标识</option></select></div><div style='float:left;width:76px;padding:4px 4px 0 0;text-align: right;'>证件号码 :</div><input type='text' id='credentials_uniques_" + selectzjval+ "' class='itemRW-224' style='margin-top:4px;'></div>")	 
+	 $("#typeCodezj_" + selectzjval + "").val(selectzjval);
+	 $("#credentials_uniques_" + selectzjval + "").val(zztextzj);	 
+	 $('#div-zj-open').dialog('close');
+	}
+	 }
+
+
+    </script>
+    
+    
+<!-- 弹出添加电话 -->
+<div id="div-ph-open" title="添加电话"  class="easyui-dialog textLW"  data-options="modal:true,closed:true" style="width:350px;height:200px;padding:10px 0 0 0;">
+    <form id="fmph">
+   <!--  <input type="hidden" id="orgId"> -->
+    <div class="mainW-288" style="margin-top:30px;">
+        <div class="itemLW-96 padT-4">电话类型：</div>
+        <div class="itemRW-160">
+          <select id="selectph" class="textLW" >
+            <option value=""></option>
+            <option value="01">本人电话</option>
+            <option value="02">配偶电话</option>
+            <option value="03">监护人电话</option>
+            <option value="04">家庭电话</option>
+            <option value="05">本人工作单位电话</option>
+            <option value="06">居委会电话</option>
+            <option value="07">传真</option>
+            <option value="08">QQ</option>
+            <option value="09">MSN</option>
+            <option value="10">电子邮件</option>
+            <option value="99">其他</option>
+          </select>        
+        </div>
+    </div>
+    <div class="mainW-288" >
+        <div class="itemLW-96 padT-4">电话号码：</div>
+        <div class="itemRW-160"><input id="zztextph"  required="true" class="textLW" type="text" /></div>
+    </div>
+        
+    <div class="itemLW-288 padTB-10"><a href="#" class="easyui-linkbutton" onclick="phadd()">添加</a></div>
+
+    </form>
+</div>
+
+<!-- 弹出添加证件 -->
+<div id="div-zj-open" title="添加证件"  class="easyui-dialog textLW"  data-options="modal:true,closed:true" style="width:350px;height:200px;padding:10px 0 0 0;">
+    <form id="fmzj">
+   <!--  <input type="hidden" id="orgId"> -->
+    <div class="mainW-288" style="margin-top:30px;">
+        <div class="itemLW-96 padT-4">证件类型：</div>
+        <div class="itemRW-160">
+          <select id="selectzj" class="textLW" >
+            <option value=""></option>
+            <option value="01">居民身份证</option>
+            <option value="02">港澳居民身份证</option>
+            <option value="03">居民户口簿</option>
+            <option value="04">护照</option>
+            <option value="05">军官证</option>
+            <option value="06">文职干部证</option>
+            <option value="07">士兵证</option>
+            <option value="08">驾驶执照</option>
+            <option value="09">残疾证</option>
+            <option value="10">医疗保险证</option>
+            <option value="11">出生证明</option>
+            <option value="12">家庭标识</option>
+            <option value="13">住院病案</option>
+            <option value="14">住院床位</option>
+            <option value="15">门诊病历</option>
+            <option value="16">死亡证明</option>
+            <option value="70">社保卡</option>
+            <option value="71">一卡通</option>
+            <option value="72">健康卡</option>
+            <option value="73">学生证</option>
+            <option value="80">母亲身份证</option>
+            <option value="81">父亲身份证</option>
+            <option value="90">本地唯一标识</option>
+            <option value="91">合作医疗卡</option>
+            <option value="92">自费卡</option>
+            <option value="99">其他标识</option>
+          </select>        
+        </div>
+    </div>
+    <div class="mainW-288" >
+        <div class="itemLW-96 padT-4">证件号码：</div>
+        <div class="itemRW-160"><input id="zztextzj"  required="true" class="textLW tjxjjyid" type="text" /></div>
+    </div>
+        
+    <div class="itemLW-288 padTB-10"><a href="#" class="easyui-linkbutton" onclick="zjadd()">添加</a></div>
+
+    </form>
+</div>    

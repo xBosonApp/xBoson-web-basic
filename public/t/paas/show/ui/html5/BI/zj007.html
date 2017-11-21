@@ -1,0 +1,121 @@
+﻿<div id="zymrzy-m" class="portlet box grey">
+    <div class="portlet-title">
+        <div class="caption" id="yetj-name"><!-- 可以设置图标<i class="icon-globe"></i> -->检验量统计</div>
+        <!-- 设置关闭和刷新--> 
+    </div>
+     <div class="portlet-body">
+        <div class="lc-inquire">
+            <form id="org-MrZy" class="form-inline" action="">
+                <input type="hidden" id="groupby" value="tablename"/>
+                <input type="hidden" id="pagenum"/>
+                <input type="hidden" id="pagesize"/>
+                <div class="row-fluid">
+                    <div class="span1">机构名称</div>
+                    <div class="span2"><select id="dimorg" class="selectpicker"><option value="001">哈尔滨市第十医院</option></select></div>
+                    <div class="span1">开始时间</div>
+                    <div class="span2"><input id="datebegin" type="text" class="dateday"></div>
+                	<div class="span1">结束时间</div>
+                    <div class="span2"><input id="dateend" type="text" class="dateday"></div>
+                    <div class="span1"><a class="btn blue">查询</a></div>
+                </div>
+            </form>
+        </div>
+        <div id="lc-rowtable" class="row-fluid">
+            <div class="span12">
+                <div id="contextMrzy"></div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+    
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+	if($(window).width()>765){
+		$("#contextMrzy").height($(window).height()-207);
+	}
+});
+//日期控件
+$('.dateday').datetimepicker({
+		format: 'yyyy-mm-dd',
+		autoclose:true,
+		startView:2,
+		minView:2
+	});
+//获取当前年-月-日
+today=new Date();
+var ymd=sys_FormatYMD(today);
+var vMon = today.getMonth() + 1;
+var dateendymd=today.getFullYear()-1+"-"+(vMon<10 ? "0" + vMon : vMon)+"-"+today.getDate();
+$("#datebegin").val(dateendymd);
+$("#dateend").val(ymd); 
+
+$(function () {
+    $('#contextMrzy').highcharts({
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: ''
+        },
+        subtitle: {
+            text: ''
+        },
+        xAxis: {
+            categories: [
+                '哈尔滨市第十医院'
+            ]
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: ''
+            }
+        },
+		credits: {
+            enabled: !0,
+            text: 'livechain.com.cn',
+            href: 'http://www.livechain.com.cn'
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:f}</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [{
+            name: '检验量统计',
+            data: [0]
+
+        }]
+    });
+});			
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+

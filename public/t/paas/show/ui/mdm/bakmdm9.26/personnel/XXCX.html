@@ -1,0 +1,218 @@
+<script src="/t/paas/show/ui/comm.js" type="text/javascript"></script>
+<script type="text/javascript">
+var pageNum=1;
+var pagesize=10;
+var xxcxdata;
+
+//定义字典map
+var statusMap=new Map();
+var departmentMap=new Map();
+var dutiesNmMap=new Map();
+var professionalMap=new Map();
+var orgIdMap=new Map();
+
+// 获取下拉选项数据
+function getselect(){
+  var url="mdm/dict/listget/";
+  var infoa = new Map();
+  infoa.put("stringsplit","VA0004.62,VA0004.02,VA0004.231");
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"xxcx","mdmSelect",infoa,itemsList);
+}
+// 回调函数
+function mdmSelect(data){
+  var info = new Map();
+  info.put("key",["typeCode2"]);
+  info.put("value",["typeName"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("xxcx","status",info,data.dataList["VA0004.62"]);
+  // map获取
+  statusMap=LC_getDataMap(info,data.dataList["VA0004.62"]);//有效标记
+  //departmentMap=LC_getDataMap(info,data.dataList["VA0004.784"]);//科室
+  dutiesNmMap=LC_getDataMap(info,data.dataList["VA0004.02"]);//职务
+  professionalMap=LC_getDataMap(info,data.dataList["VA0004.231"]);//专业技术职称
+  getselectaoid();
+}
+// 获取机构下拉选项数据
+function getselectaoid(){
+  var url="mdm/orgs/";
+  var infoa = new Map();
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"xxcx","mdmSelectoid",infoa,itemsList);
+}
+function mdmSelectoid(data){
+  var info = new Map();
+  info.put("key",["orgId"]);
+  info.put("value",["orgNm"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("xxcx","orgId",info,data.dataList);
+  // map获取
+  orgIdMap=LC_getDataMap(info,data.dataList);//有效标记
+  showDataxxcx();
+}
+//main
+$(function () {
+  $("#workerId").focus();
+  getselect();
+}); 
+	
+function axxcxcallback(retData){
+  xxcxdata=retData;
+	$('#div-xxcx').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+				title:'修改信息',
+				pagination:true,
+				pageNumber:pageNum,
+				pageSize: pagesize,
+				loadMsg:"正在载入...",
+                pageList: [10,20,50,100,200],
+                singleSelect:true, 
+				data:xxcxdata.dataList,
+				fitColumns:true,
+				columns:[[
+				   {field:'workerId',title:'工号',width:80},
+				   {field:'staffId',title:'人员ID',width:120},
+				   {field:'eid',title:'身份证号码',width:120},
+				   {field:'name',title:'姓名',width:80},
+				   {field:'orgId',title:'机构',width:160,formatter:function(value){return LC_getMapValue(value,orgIdMap);}},
+				   //{field:'departmentId',title:'科室名称',width:100,formatter:function(value){return LC_getMapValue(value,departmentMap);}},
+				   {field:'dutiesCd',title:'职务',width:150,formatter:function(value){return LC_getMapValue(value,dutiesNmMap);}},
+				   {field:'professional',title:'专业技术职称',width:150,formatter:function(value){return LC_getMapValue(value,professionalMap);}},
+				   {field:'cwCd',title:'医师中西医标识',width:100,formatter:function(value){if(value=="0"){return '西医医师';}else if(value=="1"){return '中医医师';}else{return '';}}},
+				   {field:'status',title:'状态',width:50,formatter:function(value){return LC_getMapValue(value,statusMap);}}
+				]],                  
+                onDblClickRow: function (rowIndex) {
+                  openRoleDiv(rowIndex);
+                },
+                onClickRow: function (rowIndex) {
+		          rowno=rowIndex;
+		        },
+                
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true,
+               height:380,
+			   width:872
+		}); 
+
+
+	   var pager = $('#div-xxcx').datagrid('getPager');
+          if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pageNum=pageNumber;
+		           pagesize=pageSize;
+		           showDataxxcx();
+		        }
+			});
+			$(pager).pagination({pageSize:pagesize,pageNumber:pageNum,total:xxcxdata.count});
+
+		  };
+}
+
+//双击
+	function openRoleDiv(rowIndex){
+	self.parent.showWiew=true;
+	//alert("-----------111---------"+self.parent.xxcxId);
+	self.parent.dataMap=xxcxdata.dataList[rowno];
+		var openRoleDiv = self.parent.$("#openRoleDiv");
+		openRoleDiv.window({
+				  href:"personnel/XXXG.html",
+	              title: '查看信息',
+	              width: 760,
+	              height: 250
+	          });
+	}
+	
+function firload(){
+pageNum=1;
+showDataxxcx();
+}
+function showDataxxcx(){
+  var url ="mdm/staffs"; 
+  var itemsList=["workerId","eid","name","status","orgId"];	
+  var info= new Map();		    		   
+  info.put("pageNum",pageNum);
+  info.put("pageSize",pagesize);	  
+  LC_AjaxGet(MDMBaseUrl+url,"xxcx","axxcxcallback",info,itemsList);	
+}
+
+//编辑
+	function edit(){
+	self.parent.showWiew=false;
+		self.parent.dataMap=xxcxdata.dataList[rowno];
+		
+		var openRoleDiv = self.parent.$("#openRoleDiv");
+		openRoleDiv.window({
+				  href:"personnel/XXXG.html",
+	              title: '编辑人员信息',
+	              width: 760,
+	              height: 250,
+	              onBeforeClose:function(){
+	              showDataxxcx();
+　　                }
+	          });
+	}
+
+function add(){
+self.parent.showWiew=false;
+		self.parent.dataMap="";	
+		var openRoleDiv = self.parent.$("#openRoleDiv");
+		openRoleDiv.window({
+				 href:"personnel/XXXG.html",
+	              title: '添加人员',
+	              width: 760,
+	              height: 250,
+	              onBeforeClose:function(){
+	              showDataxxcx();
+　　                }
+	          });
+	}	
+
+</script>
+<style type="text/css">
+.padding1 {
+  padding: 10px 0 0 7px;
+}
+</style>
+<div class="padding1">
+  <div class="mainW-872">
+    <form id="xxcx" style="margin: 0;">
+      <div id="jz11" class="easyui-panel" title="人员信息查询">
+        <div class="flPadTB-10 clearfix">
+          <div class="mainW-208">
+            <div class="itemLW-80 padT-4">工号：</div>
+            <div class="itemRW-128"><input id="workerId" class="textLW" type="text"></div>
+          </div>
+          <div class="mainW-208">
+            <div class="itemLW-80 padT-4">身份证号码：</div>
+            <div class="itemRW-128">
+              <input id="eid" class="textLW" type="text"></div>
+          </div>
+          <div class="mainW-208">
+            <div class="itemLW-80 padT-4">姓名：</div>
+            <div class="itemRW-128">
+              <input id="name" class="textLW" type="text"></div>
+          </div>
+          <div class="mainW-208">
+            <div class="itemLW-80 padT-4">状态：</div>
+            <div class="itemRW-128"><select id="status" class="textLW" name="dept"></select></div>
+          </div>
+		  <div class="mainW-208">
+            <div class="itemLW-80 padT-4">机构：</div>
+            <div class="itemRW-128"><select id="orgId" class="textLW" name="orgId"></select></div>
+          </div>
+          <div class="itemLW-832"><a class="easyui-linkbutton" href="#" onclick="firload()">查询</a></div>
+        </div>
+      </div>
+    </form>
+    <table id="div-xxcx" toolbar="#toolbar">
+    </table>
+    <div id="toolbar">
+      <a class="easyui-linkbutton" href="javascript:void(0)" iconcls="icon-add" onclick="add()" plain="true">添加</a> <a class="easyui-linkbutton" href="javascript:void(0)" iconcls="icon-edit" onclick="edit()" plain="true">编辑</a> </div>
+  </div>
+</div>

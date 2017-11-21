@@ -1,0 +1,233 @@
+<script type="text/javascript" src="/t/paas/show/ui/comm.js"></script>
+<script type="text/javascript">
+    
+var pageNum=1;
+var pagesize=10;
+var zxhfdata;
+var rowno;
+var sexMap  = new Map();
+$(function () {
+  	showDatazxhf();	
+}); 
+   setTimeout(function(){
+    getselectd();
+   }, 300);
+function azxhfcallback(retData){
+    zxhfdata=retData;
+	$('#div-zxhf').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+				title:'注销恢复列表',
+				pagination:true,
+				pageNumber:pageNum,
+				pageSize: pagesize,
+				loadMsg:"正在载入...",
+                pageList: [10,20,50,100,200],
+                singleSelect:true, 
+				data:zxhfdata.datalist,
+				fitColumns:true,
+				columns:[[
+				   {field:'pname',title:'姓名',width:120,align:'center'},
+				   {field:'gender',title:'性别代码',width:80,align:'center',
+					 formatter:function(value){
+					  return LC_getMapValue(value,sexMap);
+					 }},
+				   {field:'birthday',title:'出生日期',width:120,align:'center',
+					 formatter:function(value){
+					  return LC_SubStr(value,0,10);
+					 }},
+				   {field:'idcard',title:'身份证',width:170,align:'center'},
+				   {field:'addr',title:'地址',width:350,align:'center'}
+				   
+				   	]],                  
+//                onDblClickRow: function (rowIndex) {
+//					//rowno=rowIndex;
+//                  openRoleDiv(rowIndex);
+//                },
+				onClickRow: function (rowIndex) {
+		          rowno=rowIndex;
+		        },
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true,
+               height:400,
+			   width:872
+		}); 
+
+	   var pager = $('#div-zxhf').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pageNum=pageNumber;
+		           pagesize=pageSize;
+		           showDatazxhf();
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:pagesize,pageNumber:pageNum,total:zxhfdata.count});
+
+		};
+	
+	}
+
+function showDatazxhf(){
+   	var url="getlockpersons/";
+    var itemsList=["pname","card","idcard","birthday","gender"];	
+    // var itemsList=[];
+	var info= new Map();	
+       info.put("start",(pageNum*1-1)*pagesize);
+       info.put("pagesize",pagesize);
+
+      	LC_AjaxGet(EMPIUrl+url,"zxhf","azxhfcallback",info,itemsList);
+      	
+	}
+
+
+
+
+		           
+//双击
+//function openRoleDiv(rowIndex){
+//	//self.parent.showWiew=true;
+//		self.parent.dataMap=zxhfdata.datalist[rowno];
+//		var openRoleDiv = self.parent.$("#openRoleDiv");
+//		openRoleDiv.window({
+//				  href:"zxhf.html",
+//	              title: '查看信息',
+//	              width: 760,
+//	              height: 500
+//	          });
+//	}
+function grremove1(){
+  $.messager.confirm('恢复', '你确定要恢复吗!?', function(r){
+                if (r){
+                  
+	var url ="personunlock/"; 
+	var itemsList=["pid"];	
+	var info= new Map();
+//	alert(zxhfdata.datalist[rowno].isdel);
+   	info.put("pid",zxhfdata.datalist[rowno].pid);
+   //	info.put("isdel",zxhfdata.datalist[rowno].isdel);
+//	alert(zxhfdata.datalist[rowno].pid);
+	LC_AjaxGet(EMPIUrl+url,"zxhf","ztchexiaocallback",info,itemsList);
+				  
+                }
+            });
+	}         
+
+	
+function ztchexiaocallback(reData){
+  if (reData.ret=="0") {
+    self.parent.$.messager.alert('提示',reData.msg,'info');
+    showDatazxhf();
+  } else {
+    self.parent.$.messager.alert('错误提示',reData.msg,'error');
+  }
+  
+ }	
+	
+	
+
+//转换性别
+function  getselectd(){
+  var url="mdm/dict/listget/";
+  var infoa = new Map();
+  infoa.put("stringsplit","VA0004.04");
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"formfix2","mdmSelectd",infoa,itemsList);
+}
+function mdmSelectd(data){
+  var info = new Map();
+  info.put("key",["typeCode2"]);
+  info.put("value",["typeName"]);
+  sexMap=LC_getDataMap(info,data.dataList["VA0004.04"]);
+}
+//获得性别
+$(function () {
+getselect();
+});
+
+ function  getselect(){
+
+  var url="mdm/dict/listget/";
+  var infoa = new Map();
+  infoa.put("stringsplit","VA0004.04");
+  var itemsList= [];
+
+  LC_AjaxGet(MDMBaseUrl+url,"zxhf","mdmSelect",infoa,itemsList);
+
+}
+
+function mdmSelect(data){
+
+  var info = new Map();
+  info.put("key",["typeCode2"]);
+  info.put("value",["typeName"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("zxhf","gender",info,data.dataList["VA0004.04"]);
+
+}	
+</script>
+<style>
+.padding1 {padding: 10px 0 0 7px;}
+</style>
+<div class="mainW-872 padding1">
+<form  id="zxhf" style="margin:0;">
+<input type="hidden" id="pid" />
+<input type="hidden" id="isdel" />
+
+<div class="mainsW-872">
+<div id="getlockpersons" class="easyui-panel pad-5" title="注销恢复">
+
+    <div class="mainW-272" >
+        <div class="itemLW-112 padT-4">姓名：</div>
+        <div class="itemLW-160">
+        <input class="mainsW-160" type="text" id="pname" >
+    	</div>
+    </div>
+    <div class="mainW-272" >
+        <div class="itemLW-112 padT-4">一卡通：</div>
+        <div class="itemLW-160">
+        <input class="mainsW-160" type="text" id="card" disabled="disabled" >
+    	</div>
+    </div>
+    <div class="mainW-272" >
+        <div class="itemLW-112 padT-4" >身份证：</div>
+        <div class="itemLW-160">
+        <input class="mainW-160" type="text" id="idcard" >
+    	</div>
+    </div>
+                <div class="mainW-272" >
+                    <div class="itemLW-112 padT-4">出生日期：</div>
+                    <div class="itemLW-160">
+                    <input class="mainsW-160" type="text" id="birthday" >
+                </div>
+            </div>
+        <div class="mainW-272">
+            <div class="itemLW-112 padT-4">性别：</div>
+            <div class="itemRW-160" >
+            <select id="gender" class="mainsW-160" name="dept"></select>
+        </div>
+          </div>
+<div class="itemLW-272" ><a class="easyui-linkbutton" onclick="showDatazxhf()">查询</a></div>
+</div>
+</div>
+
+<div class="mainW-872">
+    <table id="div-zxhf" class="easyui-datagrid" toolbar="#toolbar"></table>
+    <div id="toolbar"><a href="javascript:void(0)" class="easyui-linkbutton"  iconCls="icon-remove" plain="true" onclick="grremove1()">恢复</a> </div>
+
+</div>
+</form>
+</div>
+
+
+
+
+
+
+
+
+

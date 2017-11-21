@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script type="text/javascript" language="JavaScript" src="/t/paas/show/ui/comm.js"></script>
+<script type="text/javascript">
+var pageNum=1;
+var pageSize=10;
+var emrzdjldata;
+$(function () {
+   showDatazdjl();
+});
+function zdjlcallback(retData){
+emrzdjldata=retData;
+
+$('#zdjl').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+				title:'诊断记录',
+				pagination:true,
+				pageNumber:pageNum,
+				pageSize: pageSize,
+				loadMsg:"正在载入...",
+                pageList: [10,20,50,100,200],
+                singleSelect:true,
+				data:emrzdjldata.dataList,
+				columns:[[
+				   {field:'tablename',title:'序号',width:48,align:'center'},
+				   {field:'dc7001_zdrq',title:'诊断日期',width:64,align:'center',
+				   	   formatter:function(value){
+		                   return LC_FormatYMD(value);
+		               }
+		            },
+				   {field:'success',title:'诊断描述项目',width:98,align:'center'},
+				   {field:'dc7001_zdbw',title:'诊断部位',width:64,align:'center'},
+				   {field:'dc7001_zhdm',title:'中医症候',width:64,align:'center'},
+				   {field:'dc7001_zdyj',title:'诊断依据',width:64,align:'center'},
+				   {field:'dc7001_yjms',title:'诊断依据描述',width:98,align:'center'},
+				   {field:'dc7001_zdlb',title:'诊断类别',width:64,align:'center'},
+				   {field:'dc7001_jbzg',title:'疾病转归',width:64,align:'center'},
+				   {field:'dc7001_zdysxm',title:'医生',width:48,align:'center'},
+				   {field:'dc7001_zdksmc',title:'科室',width:48,align:'center'},
+				   {field:'dc7001_jgdm',title:'医院',width:48,align:'center'}
+				]],                  
+                onDblClickRow: function (rowIndex) {
+                  openRoleDiv(rowIndex);
+                },
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true
+		}); 
+
+	   var pager = $('#zdjl').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pageNum=pageNumber;
+		           pageSize=pageSize;
+		           showDatazdjl();
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:pageSize,pageNumber:pageNum,total:emrzdjldata.count});
+
+		};
+	
+	}
+	function showDatazdjl(){
+
+	        var url ="emrzdjl1/"; 	
+	        	
+	        var loadpid=LoadUrlParm.parm("pid");
+			var typeCode=LoadUrlParm.parm("typeCode");
+			//alert("+++++1"+EMRBaseUrl+url+"?callback=emrmzjz4callback&pageNum=1&pageSize=5&pid="+loadpid+"&typeCode="+typeCode);
+			$.ajax({
+			   type: "get",
+		       //contentType : 'application/json;charset=utf-8',
+			   url : EMRBaseUrl+url+"?callback=zdjlcallback&pageNum=1&pageSize=5&pid="+loadpid+"&typeCode="+typeCode,
+			   dataType:"jsonp",
+			   //jsonp: "jsoncallback",   
+			   async: false, 
+			   jsonpCallback: "zdjlcallback",
+			   success : function(data) {
+		
+			   },   
+			   error : function() {   
+				   self.parent.$.messager.alert('系统错误提示',"操作数据失败",'error'); 
+				   retData= undefined;
+			   }   
+			});
+	}
+</script>
+</head>
+<body>
+  <table id="zdjl"></table>
+</body>
+</html>

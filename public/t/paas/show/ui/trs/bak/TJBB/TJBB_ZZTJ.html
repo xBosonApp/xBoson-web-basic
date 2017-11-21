@@ -1,0 +1,394 @@
+﻿<script type="text/javascript" language="JavaScript" src="/t/paas/show/ui/comm.js"></script>	
+<script type="text/javascript">
+var pagenum=1;
+var pagesize=10;
+var sqzztjdata;
+var sexMap  = new Map();
+var aoidMap  = new Map();
+var tsMap  = new Map();
+var orgMap= new Map();
+
+
+
+$(function (){
+	var tommorrow=new Date();
+    $("#startatime").val(LC_FormatYMD(tommorrow.setDate(tommorrow.getDate())));
+	$("#endatime").val(LC_FormatYMD(tommorrow.setDate(tommorrow.getDate())));
+	getselectd(); 
+	getselectdts(); 
+	getselectdaoid();
+
+
+	if(self.parent.usertype=="1"){
+		$("#goalhid").attr("disabled",true);
+			 //转出机构
+			getselectaoidout();
+			$("#goalhid").val(self.parent.orgid);
+	}else if(self.parent.usertype=="2"){
+			$("#aoid").attr("disabled",true);
+			//转入机构
+			 getselectaoidin();
+			$("#aoid").val(self.parent.orgid);
+	}
+});
+$(function (){
+	if(self.parent.usertype=="1"){
+		$("#goalhid").attr("disabled",true);
+	}else if(self.parent.usertype=="2"){
+		$("#aoid").attr("disabled",true);
+	}
+});
+//转换申请状态
+function  getselectdts(){
+  var url="mdm/dict/listget/";
+  var infoa = new Map();
+  infoa.put("stringsplit","VA0004.912");
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"","mdmSelectdts",infoa,itemsList);
+}
+function mdmSelectdts(data){
+  var info = new Map();
+  info.put("key",["typeCode2"]);
+  info.put("value",["typeName"]);
+  tsMap=LC_getDataMap(info,data.dataList["VA0004.912"]);   
+}
+function mdmSelectd(data){
+
+  var info = new Map();
+  info.put("key",["typeCode2"]);
+  info.put("value",["typeName"]);
+  // map获取
+  sexMap=LC_getDataMap(info,data.dataList["VA0004.04"]);
+}
+//转出医疗机构
+ function getselectaoidout(){
+
+  var url="mdm/osms004OrgId/";
+  var infoa = new Map();
+  infoa.put("orgid",self.parent.orgid);
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"aoid","mdmSelectoidout",infoa,itemsList);
+}
+
+function mdmSelectoidout(data){
+  var info = new Map();
+  info.put("key",["orgid"]);
+  info.put("value",["orgNm"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("sqzztj","aoid",info,data.dataList);
+ // LC_GetSelect("sqzztj","goalhid",info,data.dataList);
+  orgMap=LC_getDataMap(info,data.dataList);
+	showDatatjbbzs();
+}
+//转入医疗机构
+ function getselectaoidin(){
+
+  var url="mdm/osms004ChOrgId/";
+  var infoa = new Map();
+  infoa.put("changorgid",self.parent.orgid);
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"goalhid","mdmSelectoidin",infoa,itemsList);
+}
+
+function mdmSelectoidin(data){
+  var info = new Map();
+  info.put("key",["orgid"]);
+  info.put("value",["orgNm"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("sqzztj","goalhid",info,data.dataList);
+ // LC_GetSelect("sqzztj","goalhid",info,data.dataList);
+  orgMap=LC_getDataMap(info,data.dataList);
+	showDatatjbbzs();
+}
+function  getselectdaoid(){
+  var url="mdm/orgs/";
+  var infoa = new Map();
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"formfix2","mdmSelectdaoid",infoa,itemsList);
+}
+
+function mdmSelectdaoid(data){
+  var info = new Map();
+  info.put("key",["orgId"]);
+  info.put("value",["orgNm"]);
+  aoidMap=LC_getDataMap(info,data.dataList);
+}
+
+
+
+function  getselectd(){
+  var url="mdm/dict/listget/";
+  var infoa = new Map();
+  infoa.put("stringsplit","VA0004.04");
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"formfix2","mdmSelectd",infoa,itemsList);
+}
+
+
+function showDatatjbbzs(){
+	LC_Resetting("sqzztj");
+	var checkpcthrItems=["startatime","endatime"];
+	LC_IsCheckNotNull("sqzztj",checkpcthrItems);
+	if(retCheckFlg){
+	var url ="sqzztj/"; 	
+	var itemsList=["startatime","endatime","goalhid","aoid"];
+	var info= new Map();	
+	info.put("pagenum",pagenum);
+	info.put("pagesize",pagesize);
+	setData();
+	LC_AjaxGet(TRSBaseUrl+url,"sqzztj","sqzztjcallback",info,itemsList);    
+	}	
+}
+
+function sqzztjcallback(retData){
+	sqzztjdata=retData;
+	$('#div_tjbb_bbzs').datagrid({
+	           nowrap: false,
+	            striped: true,
+	            collapsible:false,
+				pagination:true,
+				pageNumber:pagenum,
+				pageSize: pagesize,
+				loadMsg:"正在载入...",
+				singleSelect:true,
+				//border:false,
+                pageList: [10,20,50,100,200],
+				data:sqzztjdata.dataList,
+				columns:[[
+				   {field:'pname',title:'姓名',width:100,align:'center'},
+				   {field:'psex',title:'性别',width:32,align:'center',
+						 formatter:function(value){
+ 						 return LC_getMapValue(value,sexMap);
+ 					}},
+				   //{field:'psex',title:'性别',width:70,align:'center'},
+				   {field:'pbirthdday',title:'生日',width:120,align:'center',
+				   formatter:function(value){
+					  return LC_SubStr(value,0,10);
+					 }},
+				   {field:'eid',title:'身份证号码',width:150,align:'center'},
+				   {field:'atime',title:'申请时间',width:150,align:'center',
+				   formatter:function(value){
+					  return LC_SubStr(value,0,19);
+					 }},
+				   {field:'aoid',title:'转出机构',width:100,align:'center',
+				    formatter:function(value){
+					  return LC_getMapValue(value,aoidMap);
+					 }},
+				   {field:'goalhid',title:'转入机构',width:100,align:'center',
+				    formatter:function(value){
+					  return LC_getMapValue(value,aoidMap);
+					 }},
+				   {field:'ts',title:'状态',width:70,align:'center',
+					 formatter:function(value){
+					  return LC_getMapValue(value,tsMap);
+					 }}
+				]],                  
+                onDblClickRow: function (rowIndex) {
+                  openRoleDiv(rowIndex);
+                },
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true
+		}); 
+
+	   var pager = $('#div_tjbb_bbzs').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pagenum=pageNumber;
+		           pagesize=pageSize;
+		           showDatatjbbzs();
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:pagesize,pageNu:pagenum,total:sqzztjdata.count});
+
+		};
+}
+function reCallback(retData){
+        var jsonData=retData.dataList;
+	    // json = eval(data);
+	    // alert(json[0].tablename)
+	    //var context=$('#context');
+	    var categ=['产生数据数','成功接收','失败'];
+	    var data=[];
+
+	    var categ2=[];
+	    var busstotal=[];
+	    for(var i=0;i<jsonData.length;i++){
+		    categ2.push(LC_getMapValue(jsonData[i].vvoid,orgMap));
+		    busstotal.push(jsonData[i].txcount*1);
+	     } 
+		 var subdata1=new Object();
+	     subdata1.name='总量';
+	     subdata1.data=busstotal;
+		 data.push(subdata1);
+		
+		 var setWidth=jsonData.length*60;
+		 if(setWidth<872){
+		    setWidth="872";
+		 }
+		 var chart=new Highcharts.Chart({
+	     chart: { //定义图开的类型
+	               // type: 'line',//折线
+					//type:'scatter',//点
+					//type:'spline',//曲线
+					//type:'bar',//柱状图
+					//type:'pie',
+					//type:'area',
+					type:'column',
+					//inverted:true,
+					height:400,
+					width:setWidth,
+					renderTo:'context',
+					backgroundColor:'#aaaaaa'
+	     },
+		 title: {//定义标题
+	             text: '流量统计'
+	     },
+
+		 xAxis: {
+				 categories:categ2,
+				 type:'category',
+				 labels: {
+                    rotation: -45,
+                    align: 'right',
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: '微软雅黑, 宋体, sans-serif'
+                    }
+                 }
+	     },
+	     yAxis: {
+	            title: {
+	                text: '数据量'
+	            },
+	            labels: {
+	                formatter: function() {
+	                   return this.value;
+	                }
+	            }
+	     },
+	     tooltip: {
+	                pointFormat: '{point.y:,.0f}</b><br/>({series.name})'
+	     },
+	     plotOptions: {
+	        series: {
+	            cursor: 'pointer',
+	            events: {
+	                click: function(event) {
+	                   //  alert("这是获得的值"+"名称="+event.point.category+"  值="+event.point.y+ "我要跳转页面了");  
+	                   //  openRoleDiv(1);
+	                }
+	             }
+	          }
+	      },
+		  series:data
+	
+	    }
+   ); 
+}
+
+
+function setData(){
+     var url ="sqzztjtx/"; 
+     var itemsList=["startatime","endatime","aoid","goalhid"];
+     //空数据 会出现 小bug
+	 var info= new Map();
+     LC_AjaxGet(TRSBaseUrl+url,"sqzztj","reCallback",info,itemsList);
+}
+</script>
+
+<style>
+body{ font-size:12px;}
+ .padding1{padding:10px 0 0 7px;}
+ .highcharts-button{display:none;}
+</style>
+<div class="padding1">
+<div class="mainsW-912" style="height:600px;">
+    <div class="mainsW-912">
+		<div class="easyui-panel" title="查询信息"  style="height:130px;!height:100px;">
+            <div class="flPadTB-10">
+            <form id="sqzztj" style="margin:0;">
+            	<div class="clearfix">
+                    <div class="mainW-224" >
+                        <div class="itemLW-112 padT-4">开始时间：</div>
+                        <div class="itemRW-112"><input class="Wdate" onClick="WdatePicker()" type="text" style="width:112px;" id="startatime"/></div>
+                     </div>
+                     <div class="mainW-224" >
+                        <div class="itemLW-112 padT-4">结束时间：</div>
+                        <div class="itemRW-112"><input class="Wdate" onClick="WdatePicker()" type="text" style="width:112px;" id="endatime"/></div>
+                     </div>
+                     <div class="mainW-896">
+                         <div class="mainW-368">
+                            <div class="itemLW-112 padT-4">转出医疗机构：</div>
+                            <div class="itemRW-240">
+                            	<select id="aoid" class="textLW" name="dept">
+                           		</select>
+                            </div>
+                         </div>
+                         <div class="mainW-368">
+                            <div class="itemLW-112 padT-4">转入医疗机构：</div>
+                            <div class="itemRW-240">
+                            	<select id="goalhid" class="textLW" name="dept">
+	                            </select>
+	                        </div>
+                         </div>
+                     </div>
+                 </div>
+                 </form>
+                 <div class="itemLW-896"><a href="#" id="delaysearch" class="easyui-linkbutton" onclick="showDatatjbbzs()" >检索</a><!--<span style="margin:0 0 0 10px;"><a href="#" class="easyui-linkbutton">导出EXCEL</a></span>--></div>
+             </div>
+        </div>
+        <div class="easyui-tabs">
+        	<div title="报表展示" class="pad-5">
+            	<table id="div_tjbb_bbzs"></table>
+            </div>
+        	<div title="图形展示" class="flPadTB-10">
+                <div class="mainsW-872" style="overflow-x: auto; overflow-y: auto; height: 500px;">
+					<div id="context" style="background-color: blue; height: 0px; text-align: center;"></div>
+				</div>
+            </div>
+        </div>                              
+    </div>
+    
+</div>
+
+</div>
+<script type="text/javascript">
+//搜索延迟两秒
+var oInput = document.getElementById('delaysearch');
+        oInput.onclick = function(){
+	
+			setTimeout(function(){
+			pagenum=1;
+			pagesize=10;
+	 showDatatjbbzs();
+}, 300);
+	
+		$("#delaysearch").linkbutton({  
+			disabled:true  
+			}); 
+        setTimeout(function(){
+			$("#delaysearch").linkbutton({  
+			disabled:false  
+			}); 
+		},1000*2);
+}
+
+//添加修改延迟五秒
+var oInput = document.getElementById('delayalter');
+        oInput.onclick = function(){
+		$("#delayalter").linkbutton({  
+			disabled:true  
+			}); 
+        setTimeout(function(){
+
+			$("#delayalter").linkbutton({  
+			disabled:false  
+			}); 
+		},1000*3);
+}
+</script>

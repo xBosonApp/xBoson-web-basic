@@ -1,0 +1,108 @@
+<div class="modal fade" id="app_role" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">
+          角色信息
+        </h4>
+      </div>
+      <div class="modal-body no-padding">
+        <!-- FORM Start -->
+        <form id="app_role_form" method="post" onsubmit="return false;" class="smart-form">
+          <fieldset>
+            <section style="padding-left:20px">
+              <div name="role_list"></div>
+            </section>
+          </fieldset>
+          <footer>
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary">确定</button>
+          </footer>
+        </form>
+        <!-- FORM End -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+<!-- SCRIPTS ON PAGE EVENT -->
+<script type="text/javascript">
+// DO NOT REMOVE : GLOBAL FUNCTIONS!
+pageSetUp();
+RoleList();
+
+
+function RoleList() {
+  var cb = function(msg) {
+    if (msg) {
+      //增加checked和disabled属性
+      for (var i in msg.result) {
+        if (msg.result[i].checked == 'true') {
+          var checkbox = "<input type='checkbox' name='roleid' value='" + msg.result[i].roleid + "' checked='true'";
+          if (msg.result[i].chkdisabled == 'true') {
+            checkbox = checkbox + " disabled='true' />&emsp;" + msg.result[i].name + "<br/>";
+          } else {
+            checkbox = checkbox + " />&emsp;" + msg.result[i].name + "<br/>";
+          }
+          $("div[name=role_list]").append(checkbox);
+        } else {
+          if (msg.result[i].chkdisabled == 'true') {
+            var checkbox = "<input type='checkbox' name='roleid' value='" + msg.result[i].roleid + "' disabled='true' />&emsp;" + msg.result[i].name + "<br/>";
+          } else {
+            var checkbox = "<input type='checkbox' name='roleid' value='" + msg.result[i].roleid + "' />&emsp;" + msg.result[i].name + "<br/>";
+          }
+          $("div[name=role_list]").append(checkbox);
+        }
+      }
+    }
+  };
+  var param = {
+    applicationid: application_view._g.param.applicationid
+  };
+  zy.g.am.app = "03229cbe4f4f11e48d6d6f51497a883b";
+  zy.g.am.mod = "yyfb";
+  zy.net.get("api/publish_role_view", cb, param);
+}
+
+$('#app_role').modal('show');
+
+/*表单操作 保存按钮*/
+$("#app_role_form").validate({
+  //保存按钮操作
+  submitHandler: function(form) {
+    //callback回调
+    var callback = function(msg) {
+      if (msg) {
+        $('#app_role').modal('hide');
+        application_view.Pagination(application_view._g.curpage); //更新当前页
+        zy.ui.msg("提示信息：", "保存成功！", "s");
+      }
+    };
+    //参数设置
+    var roleid = "";
+    var checked = $("#app_role_form input[name=roleid]:checked");
+    //遍历选中的checkbox
+    checked.each(function() {
+      roleid = roleid + $(this).val() + ",";
+    });
+    //去除最后一个逗号
+    roleid = roleid.trimCom();
+    //合并参数
+    var param = {
+      'roleid': roleid,
+      'applicationid': application_view._g.param.applicationid,
+    };
+    zy.g.am.app = "03229cbe4f4f11e48d6d6f51497a883b";
+    zy.g.am.mod = "yyfb";
+    zy.net.post("api/app_role_manage", callback, param);
+  },
+  // Do not change code below
+  errorPlacement: function(error, element) {
+    error.insertAfter(element.parent());
+  }
+});
+</script>

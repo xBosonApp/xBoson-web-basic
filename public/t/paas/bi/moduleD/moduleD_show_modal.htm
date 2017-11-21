@@ -1,0 +1,252 @@
+ <div class="modal fade" id="moduleD_show_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog" >
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title"></h4>
+      </div>
+        <div class="modal-body no-padding">
+          <div id="moduleD_show_modal_theme">
+            <form method="post" onsubmit="return false;" class="smart-form">
+  						<fieldset>					
+  							<section class="col col-6">
+  									<label class="label">目录名称</label>
+  									<label class="input">
+  										<input type="text" name="typenm">
+  									</label>
+  								</section>
+  							<section class="col col-6">
+  									<label class="label">上级目录</label>
+  									<label class="input">
+  										<input type="text" data-type="select2" name="parentcd">
+  									</label>
+  								</section>
+  						</fieldset>
+              <footer>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="submit" class="btn btn-primary">确定</button>
+              </footer>
+            </form>
+          </div>
+          <div id="moduleD_show_modal_page">
+            <form method="post" onsubmit="return false;" class="smart-form">
+  						<fieldset>
+								<section class="col col-6">
+									<label class="label">页面名称</label>
+									<label class="input">
+										<input type="text" name="typenm" placeholder="页面名称必填">
+									</label>
+								</section>
+  							<section class="col col-6">
+									<label class="label">上级目录</label>
+									<label class="input">
+										<input type="text" data-type="select2" name="parentcd">
+									</label>
+								</section>
+								<section class="col col-6">
+									<label class="label">模板路径</label>
+									<label class="input">
+										<input type="text" name="url" placeholder="模板相对路径">
+									</label>
+								</section>
+								<section class="col col-6">
+									<label class="label">页面编码</label>
+									<label class="input">
+										<input type="text" name="pageid" readonly="readonly" placeholder="新增-系统生成">
+									</label>
+								</section>
+  						</fieldset>
+              <footer>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="submit" class="btn btn-primary">确定</button>
+              </footer>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<script>
+  function moduleD_show_modal(node, tree_refresh ,type){
+    
+    var Jq_module, Jq_module_name, Jq_module_type, Jq_module_share;
+    
+    Jq_module = $('#moduleD_show_modal');
+    Jq_module_name = $('#moduleD_show_modal [name=modulenm]');
+    Jq_module_type = $('#moduleD_show_modal [name=moduletype]');
+    
+    function Init_Dom(){
+      zy.g.am.app = 'a6929eedff5c49e5a1a0f5b490873b39';
+      zy.g.am.mod = 'config';
+      zy.net.get("api/select2_chart_theme",function(msg){
+        var _data = msg.result;
+        if(type=="theme"){
+          $("#moduleD_show_modal_theme").show();
+          $("#moduleD_show_modal_page").hide();
+          $("#moduleD_show_modal").find(".modal-title").html("新建目录");
+          $('#moduleD_show_modal_theme [name=parentcd]').zySelectCustomData('', false, {
+            width: '100%'
+          }, _data,true);
+          $('#moduleD_show_modal_theme [name=parentcd]').select2('val',node.id);  
+        } else if(type=="themeEdit"){
+          
+          $("#moduleD_show_modal_theme").show();
+          $("#moduleD_show_modal_page").hide();
+          $("#moduleD_show_modal").find(".modal-title").html("修改目录");
+          $('#moduleD_show_modal_theme [name=parentcd]').zySelectCustomData('', false, {
+            width: '100%'
+          }, _data,true);
+          $('#moduleD_show_modal_theme [name=parentcd]').select2('val',node.parentcd).attr("readonly","readonly");
+          $('#moduleD_show_modal_theme [name=typenm]').val(node.name);
+        } else if(type=="pageAdd"){
+          $("#moduleD_show_modal_theme").hide();
+          $("#moduleD_show_modal_page").show();
+          $('#moduleD_show_modal_page [name=parentcd]').zySelectCustomData('', false, {
+            width: '100%'
+          }, _data,true);
+          $('#moduleD_show_modal_page [name=parentcd]').select2('val',node.id);  
+        } else if(type=="pageEdit"){
+          $("#moduleD_show_modal_theme").hide();
+          $("#moduleD_show_modal_page").show();
+          $('#moduleD_show_modal_page [name=pageid]').val(node.id);
+          $('#moduleD_show_modal_page [name=typenm]').val(node.name);
+          $('#moduleD_show_modal_page [name=parentcd]').zySelectCustomData('', false, {
+            width: '100%'
+          }, _data,true);
+          $('#moduleD_show_modal_page [name=parentcd]').select2('val',node.parentcd).attr("readonly","readonly");
+        }
+      },{treetype:'1'});
+      
+      Jq_module.modal('show');
+    }
+    
+    function Get_Dom_Value(){
+      var val_module_name, val_module_type, val_module_share;
+      
+      val_module_name = Jq_module_name.val();
+      val_module_type = Jq_module_type.val();
+      // val_module_share = Jq_module_share.prop('checked');
+      
+      return {
+        module_name: val_module_name,
+        module_type: val_module_type
+        // module_share: val_module_share
+      }
+    }
+    
+    function Event(type){
+      var Jq_Submit;
+      if(type=="themeEdit") {
+        Jq_Submit = $('#moduleD_show_modal_theme footer [type=submit]');
+        Jq_Submit.unbind().bind('click',function(){
+          var typenm = $('#moduleD_show_modal_theme [name=typenm]').val();
+          if(typenm.trim()==""){
+            zy.extend.msg('目录名称必填','i');
+            return false;
+          }
+          zy.extend.post({
+            apinm: 'page_theme_edit',
+            mod:'view',
+            app:'a6929eedff5c49e5a1a0f5b490873b39'
+          },function(msg){
+            if(msg.ret=="0"){
+              zy.extend.msg('保存成功','s');
+              Jq_module.modal('hide');
+              tree_refresh && tree_refresh();
+            } else {
+              zy.extend.msg('保存失败','w');
+            }
+          }, {
+            typecd : node.id,
+            typenm : $('#moduleD_show_modal_theme [name=typenm]').val(),
+            parentcd : $('#moduleD_show_modal_theme [name=parentcd]').val(),
+          });
+        }); 
+      } else if(type=="theme") {
+        Jq_Submit = $('#moduleD_show_modal_theme footer [type=submit]');
+        Jq_Submit.unbind().bind('click',function(){
+          var typenm = $('#moduleD_show_modal_theme [name=typenm]').val();
+          if(typenm.trim()==""){
+            zy.extend.msg('目录名称必填','i');
+            return false;
+          }
+          zy.extend.post({
+            apinm: 'page_theme_add',
+            mod:'view',
+            app:'a6929eedff5c49e5a1a0f5b490873b39'
+          },function(msg){
+            if(msg.ret=="0"){
+              zy.extend.msg('保存成功','s');
+              Jq_module.modal('hide');
+              tree_refresh && tree_refresh();
+            } else {
+              zy.extend.msg('保存失败','w');
+            }
+          }, {
+            typenm  : $('#moduleD_show_modal_theme [name=typenm]').val(),
+            parentcd : $('#moduleD_show_modal_theme [name=parentcd]').val(),
+          });
+        }); 
+      } else if(type=="pageAdd") {
+        Jq_Submit = $('#moduleD_show_modal_page footer [type=submit]');
+        Jq_Submit.unbind().bind('click',function(){
+          var typenm = $('#moduleD_show_modal_page [name=typenm]').val();
+          if(typenm.trim()==""){
+            zy.extend.msg('页面名称必填','i');
+            return false;
+          }
+          zy.extend.post({
+            apinm: 'addPageInfo',
+            mod:'view',
+            app:'a6929eedff5c49e5a1a0f5b490873b39'
+          },function(msg){
+            if(msg.ret=="0"){
+              zy.extend.msg('保存成功','s');
+              Jq_module.modal('hide');
+              tree_refresh && tree_refresh();
+            } else {
+              zy.extend.msg('保存失败','w');
+            }
+          }, {
+            url : $('#moduleD_show_modal_page [name=url]').val(),
+            pageid : $('#moduleD_show_modal_page [name=pageid]').val(),
+            typenm  : $('#moduleD_show_modal_page [name=typenm]').val(),
+            parentcd : $('#moduleD_show_modal_page [name=parentcd]').val(),
+          });
+        }); 
+      } else if(type=="pageEdit") {
+        Jq_Submit = $('#moduleD_show_modal_page footer [type=submit]');
+        Jq_Submit.unbind().bind('click',function(){
+          var typenm = $('#moduleD_show_modal_page [name=typenm]').val();
+          if(typenm.trim()==""){
+            zy.extend.msg('页面名称必填','i');
+            return false;
+          }
+          zy.extend.post({
+            apinm: 'editPageInfo',
+            mod:'view',
+            app:'a6929eedff5c49e5a1a0f5b490873b39'
+          },function(msg){
+            if(msg.ret=="0"){
+              zy.extend.msg('保存成功','s');
+              Jq_module.modal('hide');
+              tree_refresh && tree_refresh();
+            } else {
+              zy.extend.msg('保存失败','w');
+            }
+          }, {
+            url : $('#moduleD_show_modal_page [name=url]').val(),
+            pageid : $('#moduleD_show_modal_page [name=pageid]').val(),
+            typenm  : $('#moduleD_show_modal_page [name=typenm]').val(),
+            parentcd : $('#moduleD_show_modal_page [name=parentcd]').val(),
+          });
+        }); 
+      }
+    }
+    
+    Event(type);
+    Init_Dom();
+    
+  }
+</script>

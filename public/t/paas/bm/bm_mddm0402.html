@@ -1,0 +1,182 @@
+
+<form id="bm_mddm0402_form" class="smart-form" onsubmit="return false;" method="post">
+  <header><i class="fa-fw fa fa-pencil-square-o"></i>维度设置</header>
+  <div class="row">
+    <div name="sel-row-col" class="col col-4">
+      <label>
+        <input type="radio" name="row-col" value="1"/>列
+      </label>
+      <label>
+        <input type="radio" name="row-col" value="2"/>行
+      </label>
+    </div>
+  </div>
+  <!--style="display:none"-->
+  <div name="sel-row-way">
+    <label>
+      <input type="radio" name="row-way" value="1"/>自定义
+    </label>
+    <label>
+      <input type="radio" name="row-way" value="2"/>group by
+    </label>
+  </div>
+  <div class="row">
+    <label class="label col col-md-2">定义名称<span name="def-label"></span>：</label>
+    <section class="col col-md-3">
+      <label class="input">
+        <input type="text" name="def-name" placeholder="定义名称"/>
+      </label>
+    </section>
+  </div>
+  <div name="sel-col-item">
+    <div class="row">
+      <label class="label col col-md-2">列项目：</label>
+      <section class="col col-md-3">
+        <label class="input">
+          <input type="hidden" data-type="select2" name="sql-func" placeholder="合计函数">
+        </label>
+      </section>
+      <section class="col col-md-3">
+        <label class="input">
+          <input type="hidden" data-type="select2" name="col-name-item" index="col-name" placeholder="选择项目">
+        </label>
+      </section>
+    </div>
+    <div class="row">
+      <label class="col col-md-2"></label>
+      <section class="col col-md-10">
+        <label class="textarea">
+          <textarea name="col-item-area" rows="2" style="resize: vertical"></textarea>
+        </label>
+      </section>
+    </div>
+  </div>
+  <div name="sel-whe-cond">
+    <div class="row">
+      <section class="col col-md-2">
+        <label class="label">条件：</label>
+      </section>
+    </div>
+    <div name="sel-whe-cond-rows">
+      <div class="row">
+        <section class="col col-md-3">
+          <label class="input">
+            <input type="hidden" data-type="select2" name="col-name1" index="col-name" placeholder="项目">
+          </label>
+        </section>
+        <section class="col col-md-3">
+          <label class="input">
+            <input type="hidden" data-type="select2" name="col-cond1" index="col-cond" placeholder="SQL条件">
+          </label>
+        </section>
+        <section class="col col-md-2">
+          <label class="input">
+            <input type="text" name="col-value1" index="col-value" placeholder="值">
+          </label>
+        </section>
+        <section class="col col-md-2" style="display:none">
+          <label class="input">
+            <input type="text" name="col-value-back" index="col-value" placeholder="值">
+          </label>
+        </section>
+        <section class="col col-md-2">
+          <select name="col-andor1" index="col-andor" class="form-control">
+            <option value="AND">AND</option>
+            <option value="OR">OR</option>
+          </select>
+          <!--<input type="hidden" name="andor" data-type="select2" placeholder="ANDOR"/>-->
+        </section>
+      </div>
+      <div class="row">
+        <section class="col col-md-3">
+          <label class="input">
+            <input type="hidden" data-type="select2" name="col-name2" index="col-name" placeholder="项目">
+          </label>
+        </section>
+        <section class="col col-md-3">
+          <label class="input">
+            <input type="hidden" data-type="select2" name="col-cond2" index="col-cond" placeholder="SQL条件">
+          </label>
+        </section>
+        <section class="col col-md-2">
+          <label class="input">
+            <input type="text" name="col-value2" index="col-value" placeholder="值">
+          </label>
+        </section>
+        <section class="col col-md-2" style="display:none">
+          <label class="input">
+            <input type="text" name="col-value-back" index="col-value" placeholder="值">
+          </label>
+        </section>
+        <section class="col col-md-2">
+          <select name="col-andor2" index="col-andor" class="form-control">
+            <option value="AND">AND</option>
+            <option value="OR">OR</option>
+          </select>
+          <!--<input type="hidden" name="andor" data-type="select2" placeholder="ANDOR"/>-->
+        </section>
+      </div>
+      <div class="row">
+        <section class="col col-md-3">
+          <label class="input">
+            <input type="hidden" data-type="select2" name="col-name3" index="col-name" placeholder="项目">
+          </label>
+        </section>
+        <section class="col col-md-3">
+          <label class="input">
+            <input type="hidden" data-type="select2" name="col-cond3" index="col-cond" placeholder="SQL条件">
+          </label>
+        </section>
+        <section class="col col-md-2">
+          <label class="input">
+            <input type="text" name="col-value3" index="col-value" placeholder="值">
+          </label>
+        </section>
+        <section class="col col-md-2" style="display:none">
+          <label class="input">
+            <input type="text" name="col-value-back" index="col-value" placeholder="值">
+          </label>
+        </section>
+      </div>
+    </div>
+    <div class="row">
+      <section class="col col-md-12">
+        <label><input name="hand-whe" type="checkbox">手动编辑</label>
+      </section>
+      <section class="col col-md-12">
+        <label class="textarea">
+          <textarea name="col-whe-area" rows="4" style="resize: vertical" readonly="true"></textarea>
+        </label>
+      </section>
+    </div>
+  </div>
+  <div name="sel-group-by">
+    <div class="row">
+      <label class="label col col-md-2">GROUP BY </label>
+      <section class="col col-md-3">
+        <label class="input">
+          <input type="hidden" data-type="select2" name="col-name-group" placeholder="选择项目">
+        </label>
+      </section>
+    </div>
+    <div class="row">
+      <label class="col col-md-2"></label>
+      <label class="textarea col col-md-10">
+        <textarea name="group-by-area" rows="1" style="resize: vertical" readonly="readonly"></textarea>
+      </label>
+    </div>
+  </div>
+  <div>
+    <button type="submit" name="add-def" class="btn btn-primary btn-sm">追加定义</button>
+  </div>
+  <table id="bm_mddm0402_table" class="table table-bordered">
+    <thead>
+      <tr name="first-tr">
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+</form>
+<script src="bm/bm_mddm0402.js"></script>

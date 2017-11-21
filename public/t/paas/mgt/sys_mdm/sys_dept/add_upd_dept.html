@@ -1,0 +1,608 @@
+<!-- Modal -->
+<div class="modal fade" id="mgt_add_upd_dept" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title">部门信息（<span id="mgt_add_upd_dept_title"></span>）</h4>
+      </div>
+      <div class="modal-body no-padding">
+        <!-- FORM Start -->
+        <form id="mgt_add_upd_dept_form" method="post" onsubmit="return false;" class="smart-form">
+          <div id="tabs">
+            <ul>
+              <li>
+                <a href="#tabs-a"> 部门基本信息 </a>
+              </li>
+              <li>
+                <a href="#tabs-b"> 部门地址及联系方式 </a>
+              </li>
+              <li>
+                <a href="#tabs-c"> 部门规模信息 </a>
+              </li>
+            </ul>
+            <div id="tabs-a">
+              <div class="row">
+                <input type="hidden" name="deptid" placeholder="部门ID">
+                <section class="col col-6">
+                  <label class="label">部门名称</label>
+                  <label class="input has-warning">
+                    <input type="text" name="deptnm" placeholder="部门名称">
+                    <b class="tooltip tooltip-bottom-right">部门名称为必填项目</b>
+                  </label>
+                </section>
+                <section class="col col-6">
+                  <label class="label">部门代码</label>
+                  <label class="input">
+                    <input type="text" name="deptcd" placeholder="部门代码">
+                  </label>
+                </section>
+              </div>
+              <div class="row">
+                <section class="col col-6">
+                  <label class="label">主管机构</label>
+                  <label class="input">
+                    <input type="hidden" name="orgid" data-type="selecct2" placeholder="主管机构">
+                  </label>
+                </section>
+                <section class="col col-6">
+                  <label class="label">部门负责人</label>
+                  <label class="input">
+                    <input type="hidden" name="de0201039_pid" placeholder="PID">
+                    <input type="text" name="de0201039" placeholder="请检索输入" style="width:80%;float:left" readonly>
+                    <input type="button" id='searchuser' class="btn" style="width:20%;float:right;" value="检索">
+                  </label>
+                </section>
+              </div>
+              <div class="row">
+                <section class="col col-6">
+                  <label class="label">上级部门</label>
+                  <label class="input">
+                    <input type="hidden" name="higher_deptid" data-type="selecct2" placeholder="上级部门">
+                  </label>
+                </section>
+                <section class="col col-6">
+                  <label class="label">部门级别</label>
+                  <label class="input">
+                    <input type="text" name="dept_level" placeholder="部门级别">
+                  </label>
+                </section>
+              </div>
+              <div class="row">
+                <section class="col col-6">
+                  <label class="label">部门成立日期</label>
+                  <label class="input">
+                    <input type="text" name="de0810009" placeholder="部门成立日期" class="datepicker" readonly>
+                  </label>
+                </section>
+                <section class="col col-6">
+                  <label class="label">部门从业人员数</label>
+                  <label class="input">
+                    <input type="text" name="de0810010" placeholder="部门从业人员数">
+                  </label>
+                </section>
+              </div>
+              <div class="row">
+                <section class="col col-6">
+                  <label class="label">职工总数</label>
+                  <label class="input">
+                    <input type="text" name="de0810046" placeholder="职工总数">
+                  </label>
+                </section>
+                <section class="col col-6">
+                  <label class="label">状态</label>
+                  <label class="input">
+                    <input type="hidden" name="status" data-type="select2" placeholder="状态">
+                  </label>
+                </section>
+              </div>
+            </div>
+            <div id="tabs-b">
+              <div class="row">
+                <section class="col col-6">
+                  <label class="label">地址-省（自治区、直辖市）</label>
+                  <label class="input">
+                    <input type="hidden" name="de020100901" data-type="select2" placeholder="地址-省（自治区、直辖市）">
+                  </label>
+                </section>
+                <section class="col col-6">
+                  <label class="label">地址-市（地区、州）</label>
+                  <label class="input">
+                    <input type="hidden" name="de020100902" data-type="select2" placeholder="地址-市（地区、州）">
+                  </label>
+                </section>
+              </div>
+              <div class="row">
+                <section class="col col-6">
+                  <label class="label">地址-县（区）</label>
+                  <label class="input">
+                    <input type="hidden" name="de020100903" data-type="select2" placeholder="地址-县（区）">
+                  </label>
+                </section>
+                <section class="col col-6">
+                  <label class="label">地址-乡（镇、街道办事处）</label>
+                  <label class="input">
+                    <input type="hidden" name="de020100904" data-type="select2" placeholder="地址-乡（镇、街道办事处）">
+                  </label>
+                </section>
+              </div>
+              <div class="row">
+                <section class="col col-6">
+                  <label class="label">地址-村（街、路、弄等）</label>
+                  <label class="input">
+                    <input type="text" name="de020100905" placeholder="地址-村（街、路、弄等）">
+                  </label>
+                </section>
+                <section class="col col-6">
+                  <label class="label">地址-门牌号码</label>
+                  <label class="input">
+                    <input type="text" name="de020100906" placeholder="地址-门牌号码">
+                  </label>
+                </section>
+              </div>
+              <div class="row">
+                <section class="col col-6">
+                  <label class="label">行政区划代码</label>
+                  <label class="input">
+                    <input type="text" name="de0201038"  placeholder="行政区划代码">
+                  </label>
+                </section>
+                <section class="col col-6">
+                  <label class="label">邮政编码</label>
+                  <label class="input">
+                    <input type="text" name="de0201047" placeholder="邮政编码">
+                  </label>
+                </section>
+              </div>
+              <div class="row">
+                <section class="col col-6">
+                  <label class="label">电话号码</label>
+                  <label class="input">
+                    <input type="text" name="de0201010" placeholder="电话号码">
+                  </label>
+                </section>
+                <section class="col col-6">
+                  <label class="label">传真号码</label>
+                  <label class="input">
+                    <input type="text" name="de0201008" placeholder="传真号码">
+                  </label>
+                </section>
+              </div>
+              <div class="row">
+                <section class="col col-6">
+                  <label class="label">电子邮件地址</label>
+                  <label class="input">
+                    <input type="text" name="de0201012" placeholder="电子邮件地址">
+                  </label>
+                </section>
+                <section class="col col-6">
+                  <label class="label">中文域名</label>
+                  <label class="input">
+                    <input type="text" name="de0201054" placeholder="中文域名">
+                  </label>
+                </section>
+              </div>
+              <div class="row">
+                <section class="col col-6">
+                  <label class="label">英文域名</label>
+                  <label class="input">
+                    <input type="text" name="de0201046" placeholder="英文域名">
+                  </label>
+                </section>
+              </div>
+            </div>
+            <div id="tabs-c">
+              <div class="row">
+                <section class="col col-6">
+                  <label class="label">办公用房面积(m2)</label>
+                  <label class="input">
+                    <input type="text" name="de0810001" placeholder="办公用房面积(m2)">
+                  </label>
+                </section>
+                <section class="col col-6">
+                  <label class="label">房屋建筑总面积(m2)</label>
+                  <label class="input">
+                    <input type="text" name="de0810005" placeholder="房屋建筑总面积(m2)">
+                  </label>
+                </section>
+              </div>
+              <div class="row">
+                <section class="col col-6">
+                  <label class="label">房屋竣工面积(m2)</label>
+                  <label class="input">
+                    <input type="text" name="de0810006" placeholder="房屋竣工面积(m2)">
+                  </label>
+                </section>
+                <section class="col col-6">
+                  <label class="label">后勤保障及其他用房面积(m2)</label>
+                  <label class="input">
+                    <input type="text" name="de0810008" placeholder="后勤保障及其他用房面积(m2)">
+                  </label>
+                </section>
+              </div>
+              <div class="row">
+                <section class="col col-6">
+                  <label class="label">批准基建项目建筑面积(m2)</label>
+                  <label class="input">
+                    <input type="text" name="de0810030" placeholder="批准基建项目建筑面积(m2)">
+                  </label>
+                </section>
+                <section class="col col-6">
+                  <label class="label">生产车间面积(m2)</label>
+                  <label class="input">
+                    <input type="text" name="de0810031" placeholder="生产车间面积(m2)">
+                  </label>
+                </section>
+              </div>
+              <div class="row">
+                <section class="col col-6">
+                  <label class="label">危房面积(m2)</label>
+                  <label class="input">
+                    <input type="text" name="de0810032" placeholder="危房面积(m2)">
+                  </label>
+                </section>
+                <section class="col col-6">
+                  <label class="label">业务用房面积(m2)</label>
+                  <label class="input">
+                    <input type="text" name="de0810041" placeholder="业务用房面积(m2)">
+                  </label>
+                </section>
+              </div>
+              <div class="row">
+                <section class="col col-6">
+                  <label class="label">营业面积(m2)</label>
+                  <label class="input">
+                    <input type="text" name="de0810044" placeholder="营业面积(m2)">
+                  </label>
+                </section>
+                <section class="col col-6">
+                  <label class="label">自有房屋面积(m2)</label>
+                  <label class="input">
+                    <input type="text" name="de0810050" placeholder="自有房屋面积(m2)">
+                  </label>
+                </section>
+              </div>
+              <div class="row">
+                <section class="col col-6">
+                  <label class="label">租借房屋面积(m2)</label>
+                  <label class="input">
+                    <input type="text" name="de0810051" placeholder="租借房屋面积(m2)">
+                  </label>
+                </section>
+              </div>
+            </div>
+          </div>
+          <footer>
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary">确定</button>
+          </footer>
+        </form>
+        <!-- FORM End -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<div id="search_user_modal"></div>
+<script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+<!-- SCRIPTS ON PAGE EVENT -->
+<script type="text/javascript">
+// DO NOT REMOVE : GLOBAL FUNCTIONS!
+pageSetUp();
+$('#tabs').tabs();
+//检索
+$('#searchuser').click(function() {
+  $('#mgt_add_upd_dept').modal('hide');
+  modalid = $('#mgt_add_upd_dept');
+  userpid = $(this).siblings(":hidden");
+  usernm = $(this).siblings(":text");
+  userapp = 'd2c8511b47714faba5c71506a5029d94';
+  usermod = 'personalinfo';
+  userapi = 'personalselect2';
+  zy.net.loadHTML("c9e98ea6fc7148d186289e8c33776f8a/search_user.html", $("#search_user_modal"));
+});
+//地址联动
+var match = {
+  'de020100901': {
+    'name': 'de020100901',
+    'nextname': 'de020100902',
+  },
+  'de020100902': {
+    'name': 'de020100902',
+    'nextname': 'de020100903',
+  },
+  'de020100903': {
+    'name': 'de020100903',
+    'nextname': 'de020100904',
+  }
+};
+
+$("#mgt_add_upd_dept_form input").change(function() {
+  var key = $(this).attr('name');
+  if (match[key]) {
+    var nextname = match[key].nextname;
+    var val = $(this).val();
+    binddict(nextname, val);
+    $("#mgt_add_upd_dept_form input[name=" + nextname + "]").trigger("change");
+  }
+  
+});
+
+function binddict(nextname, val) {
+  var cb = function() {
+    $("#mgt_add_upd_dept_form input[name=" + nextname + "]").val('');
+    $("#mgt_add_upd_dept_form input[name=" + nextname + "]").zySelect(val, false, {
+      width: '100%'
+    });
+  }
+  zy.cache.initDicts("," + val + ",", cb);
+};
+  Console.log("开始");
+  
+(function() {
+  var dept_form = $("#mgt_add_upd_dept_form");
+  // 注册change事件，计算行政区划代码（当省，市，区变化时）
+  dept_form.find('[name=de020100903]').add(dept_form.find('[name=de020100902]')).add(dept_form.find('[name=de020100901]')).change(function(){
+    var xingzheng = $(this).val();
+    dept_form.find('[name=de0201038]').val(xingzheng.substring(0,6));
+  });
+  
+  // 数据字典处理
+  var cb = function() {
+    $('#mgt_add_upd_dept_form input[name=status]').zySelect('ZR.0001', false, {
+      width: '100%'
+    });
+   /* $('#mgt_add_upd_dept_form input[name=de0201038]').zySelect('GBT.2260', false, {
+      width: '100%'
+    });*/
+    $("#mgt_add_upd_dept_form input[name=de020100901]").zySelect('GBT.2260', false, {
+      width: '100%'
+    });
+    $("#mgt_add_upd_dept_form input[name=de020100902]").zySelect('', false, {
+      width: '100%'
+    });
+    $("#mgt_add_upd_dept_form input[name=de020100903]").zySelect('', false, {
+      width: '100%'
+    });
+    $("#mgt_add_upd_dept_form input[name=de020100904]").zySelect('', false, {
+      width: '100%'
+    });
+  };
+  // 预处理该画面所需的字典类型，以 , 号分割
+  zy.cache.initDicts('ZR.0001', cb);
+
+  //主管机构ID
+  zy.g.am.app = 'd2c8511b47714faba5c71506a5029d94';
+  zy.g.am.mod = 'orginfo';
+  zy.net.get('api/orgselect2', function(msg) {
+    if (msg) {
+      $("#mgt_add_upd_dept_form input[name=orgid]").zySelectCustomData('', false, {
+        width: '100%'
+      }, msg.result);
+    }
+  });
+  //上级部门ID
+  zy.g.am.app = 'd2c8511b47714faba5c71506a5029d94';
+  zy.g.am.mod = 'deptinfo';
+  zy.net.get('api/deptselect2', function(msg) {
+    if (msg) {
+      $("#mgt_add_upd_dept_form input[name=higher_deptid]").zySelectCustomData('', false, {
+        width: '100%'
+      }, msg.result);
+    }
+  });
+
+  if (mgt_dept._g.param.flg == 'i') {
+    //添加
+    $('#mgt_add_upd_dept_form').clearForm();
+    $("#mgt_add_upd_dept_title").text('添加');
+    $('#mgt_add_upd_dept_form input[name=status]').select2("val", '1'); //默认值
+    // p();
+  } else if (mgt_dept._g.param.flg == 'u') {
+    //修改
+    $("#mgt_add_upd_dept_title").text('修改');
+    $('#mgt_add_upd_dept_form').formDisable(true);
+    var callback = function(msg) {
+      $('#mgt_add_upd_dept_form').formDisable(false);
+      if (msg) {
+        console.log("获取个人信息数据 = " + JSON.stringify(msg));
+        var jsonResult = eval(msg.result[0]);
+        var cb = function() {
+          $("#mgt_add_upd_dept_form input[name=de020100902]").zySelect(jsonResult.de020100901, false, {
+            width: '100%'
+          });
+          $("#mgt_add_upd_dept_form input[name=de020100903]").zySelect(jsonResult.de020100902, false, {
+            width: '100%'
+          });
+          $("#mgt_add_upd_dept_form input[name=de020100904]").zySelect(jsonResult.de020100903, false, {
+            width: '100%'
+          });
+          $('#mgt_add_upd_dept_form').json2form(msg.result[0]);
+        }
+        zy.cache.initDicts(jsonResult.de020100901 + "," + jsonResult.de020100902 + "," + jsonResult.de020100903, cb);
+      }
+    };
+    //设置参数
+    var param = {
+      deptid: mgt_dept._g.param.deptid
+    };
+    zy.g.am.app = 'd2c8511b47714faba5c71506a5029d94';
+    zy.g.am.mod = 'deptinfo';
+    zy.net.get("api/getdeptlistupt", callback, param);
+  }
+})();
+$('#mgt_add_upd_dept').modal('show');
+//validation
+$("#mgt_add_upd_dept_form").validate({
+  rules: {
+    //部门代码
+    deptcd: {
+      maxlength: 10
+    },
+    //部门名称 【自定义验证唯一】
+    deptnm: {
+      required: true,
+      maxlength: 70,
+      deptunion: true
+    },
+    //主管机构ID
+    orgid: {
+      maxlength: 32
+    },
+    //部门负责人姓名
+    de0201039: {
+      maxlength: 50
+    },
+    //部门级别
+    dept_level: {
+      maxlength: 2,
+      number: true
+    },
+    //邮政编码
+    de0201047: {
+      maxlength: 6,
+      isZipCode: true
+    },
+    //电话号码
+    de0201010: {
+      maxlength: 20,
+      isPhone: true
+    },
+    //传真号码
+    de0201008: {
+      maxlength: 30,
+      isTel: true
+    },
+    //电子邮件地址
+    de0201012: {
+      maxlength: 70,
+      email: true
+    },
+    //中文域名
+    de0201054: {
+      maxlength: 50
+    },
+    //英文域名
+    de0201046: {
+      maxlength: 50
+    },
+    //行政区划代码
+    de0201038: {
+      maxlength: 6,
+      number: true
+    },
+    //办公用房面积(m2)
+    de0810001: {
+      maxlength: 10,
+      number: true
+    },
+    //房屋建筑总面积(m2)
+    de0810005: {
+      maxlength: 10,
+      number: true
+    },
+    //房屋竣工面积(m2)
+    de0810006: {
+      maxlength: 10,
+      number: true
+    },
+    //后勤保障及其他用房面积(m2)
+    de0810008: {
+      maxlength: 10,
+      number: true
+    },
+    //批准基建项目建筑面积(m2)
+    de0810030: {
+      maxlength: 10,
+      number: true
+    },
+    //生产车间面积(m2)
+    de0810031: {
+      maxlength: 10,
+      number: true
+    },
+    //危房面积(m2)
+    de0810032: {
+      maxlength: 10,
+      number: true
+    },
+    //业务用房面积(m2)
+    de0810041: {
+      maxlength: 10,
+      number: true
+    },
+    //营业面积(m2)
+    de0810044: {
+      maxlength: 10,
+      number: true
+    },
+    //自有房屋面积(m2)
+    de0810050: {
+      maxlength: 10,
+      number: true
+    },
+    //租借房屋面积(m2)
+    de0810051: {
+      maxlength: 10,
+      number: true
+    },
+  },
+  message: {
+    de0201008: {
+      isTel: '请输入正确的传真号码'
+    }
+  },
+  // 验证成功后保存
+  submitHandler: function(form) {
+    var callback = function(msg) {
+      $('#mgt_add_upd_dept_form').formDisable(false);
+      if (msg) {
+        Console.log("保存成功 = " + JSON.stringify(msg));
+        if (mgt_dept._g.param.flg == 'u') {
+          mgt_dept.SetRow($('#mgt_add_upd_dept_form').form2json());
+        }
+        $('#mgt_add_upd_dept').modal('hide');
+        mgt_dept.Pagination(mgt_dept._g.crt_page); //更新当前页
+        zy.ui.msg("提示信息：", "保存成功！", "s");
+      }
+    };
+    zy.g.am.app = 'd2c8511b47714faba5c71506a5029d94';
+    zy.g.am.mod = 'deptinfo';
+    if (mgt_dept._g.param.flg == 'i') {
+      zy.net.post("api/adddeptinfo", callback, $('#mgt_add_upd_dept_form').serialize());
+    } else if (mgt_dept._g.param.flg == 'u') {
+      zy.net.post("api/setdeptinfo", callback, $('#mgt_add_upd_dept_form').serialize());
+    }
+    $('#mgt_add_upd_dept_form').formDisable(true);
+  },
+  errorPlacement: function(error, element) {
+    error.insertAfter(element.parent());
+  }
+});
+//部门名称验证
+$.validator.addMethod("deptunion", function(value, element) {
+  var _flag;
+  $.ajaxSetup({
+    async: false // 设置同步
+  });
+  zy.g.am.app = "d2c8511b47714faba5c71506a5029d94";
+  zy.g.am.mod = "deptinfo";
+  zy.net.post("api/get_havingdept", function(msg) {
+    _flag = (msg.result && "1" == msg.result[0].count);
+  }, {
+    deptnm: value,
+    orgid: $("#mgt_add_upd_dept_form").find('[name=orgid]').val(),
+    _orgid: mgt_dept._g.param._orgid,
+    flag: mgt_dept._g.param.flg
+  });
+  console.log(123, mgt_dept._g.param._orgid);
+  $.ajaxSetup({
+    async: true // 设置异步
+  });
+  return this.optional(element) || _flag;
+}, "部门名已存在");
+</script>

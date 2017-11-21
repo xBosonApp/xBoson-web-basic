@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Custom DataGrid Pager - jQuery EasyUI Demo</title>
+<script type="text/javascript" language="JavaScript" src="/t/paas/show/ui/comm.js"></script>	
+<script type="text/javascript">
+
+$(function () {
+   dataqz();	
+});
+
+function dataqz(){
+
+	    	var url="getweightconfig/";
+         var itemsList=[];
+			var info= new Map();	
+	 	  // 获取权重比数据
+	 	 LC_AjaxGet(EMPIUrl+url,"qzform","qzcallback",info,itemsList);
+}
+
+
+//uniques
+function transuniques(uniques)
+{
+  var resuniques='';
+  for(var key in uniques)
+  {
+  //resuniques+=uniques[key]+';';
+  resuniques+=key+';';
+  }
+  return resuniques;
+}
+//weight
+function transweight(weight)
+{
+
+  if(weight.weight!=undefined)
+  {
+    return weight.weight;
+  }
+    else{
+      var resweight='';
+      for(var key in weight)
+      {
+      //resuniques+=uniques[key]+';';
+      resweight+=key+';';
+      }
+      return resweight;
+  }
+}
+
+//动态修改ID属性值,id为旧ID
+function toClone(id,newId){
+    var clone = $('#'+ id).cloneNode(true);
+    clone.id = newId;
+    return clone;
+}
+
+
+function qzcallback(data){
+var weight=data.weight;
+
+/* if(data.unique===null){
+		   data.unique=null;
+				}
+				else{
+		 data.unique=true;
+			}
+*/
+
+
+//证件
+/*function transuniques1(regx)
+{
+  var resregx='';
+  for(var key in regx)
+  {
+  resregx+=key+':'+regx[key]+';';
+  }
+  var res=resregx.split(';');
+	for(var i=0;i<res.length;i++)
+	{
+		if(res[i]){
+		$('#credentials_uniques').append('<div style="margin:2px 0 0 0;">类型唯一<input id="credentials_uniques_'+i+'" style="margin-left:8px;width:100px;" type="text" value="'+res[i]+'" /></div>');
+		}
+	}
+   return resregx;
+}*/
+//证件
+function transweight1(regx,id)
+{
+   for(var key in regx)
+  {
+    $('#'+ id).append("<div>类型唯一" + key + ":<input type='text' id='" + id + "_uniques_" + key + "' style='margin:3px 0 3px 10px;width:60px;' value='" + regx[key] + "' /><br /></div>");
+  }
+   
+   
+}
+
+
+//电话
+function transweight2(regx,id)
+{
+   for(var key in regx)
+  {
+    $('#'+ id).append("<div>类型唯一" + key + ":<input type='text' id='" + id + "_types_" + key + "' style='margin:3px 0 3px 10px;width:60px;' value='" + regx[key] + "' /><br /></div>");
+  }
+   
+   
+}
+
+
+LC_SetData("qzdiv",weight.max,"max");
+LC_SetData("qzdiv",weight.min,"min");
+
+//姓名
+LC_SetData("qzdiv",weight.pname.name,"pname_name");
+LC_SetData("qzdiv",weight.pname.comment,"pname_comment");
+LC_SetData("qzdiv",transweight(weight.pname.types),"pname_types_weight");
+LC_SetData("qzdiv",transuniques(weight.pname.uniques),"pname_uniques");
+LC_SetData("qzdiv",weight.pname.unique,"pname_unique");
+LC_SetData("qzdiv",weight.pname.regx,"pname_regx");
+
+
+//地址-省
+LC_SetData("qzdiv",weight.addrprovince.name,"addrprovince_name");     
+LC_SetData("qzdiv",weight.addrprovince.comment,"addrprovince_comment");
+LC_SetData("qzdiv",transweight(weight.addrprovince.types),"addrprovince_types_weight");    
+LC_SetData("qzdiv",transuniques(weight.addrprovince.uniques),"addrprovince_uniques");
+LC_SetData("qzdiv",weight.addrprovince.unique,"addrprovince_unique");
+LC_SetData("qzdiv",weight.addrprovince.regx,"addrprovince_regx"); 
+ 
+//地址-市 
+LC_SetData("qzdiv",weight.addrcity.name,"addrcity_name");
+LC_SetData("qzdiv",weight.addrcity.comment,"addrcity_comment");
+LC_SetData("qzdiv",transweight(weight.addrcity.types),"addrcity_types_weight");
+LC_SetData("qzdiv",transuniques(weight.addrcity.uniques),"addrcity_uniques");
+LC_SetData("qzdiv",weight.addrcity.unique,"addrcity_unique");
+LC_SetData("qzdiv",weight.addrcity.regx,"addrcity_regx");
+
+//地址-县
+LC_SetData("qzdiv",weight.addrcounty.name,"addrcounty_name");
+LC_SetData("qzdiv",weight.addrcounty.comment,"addrcounty_comment");
+LC_SetData("qzdiv",transweight(weight.addrcounty.types),"addrcounty_types_weight");
+LC_SetData("qzdiv",transuniques(weight.addrcounty.uniques),"addrcounty_uniques");
+LC_SetData("qzdiv",weight.addrcounty.unique,"addrcounty_unique");
+LC_SetData("qzdiv",weight.addrcounty.regx,"addrcounty_regx");
+
+//地址-乡 
+LC_SetData("qzdiv",weight.addrtown.name,"addrtown_name");
+LC_SetData("qzdiv",weight.addrtown.comment,"addrtown_comment");
+LC_SetData("qzdiv",transweight(weight.addrtown.types),"addrtown_types_weight");
+LC_SetData("qzdiv",transuniques(weight.addrtown.uniques),"addrtown_uniques");
+LC_SetData("qzdiv",weight.addrtown.unique,"addrtown_unique");
+LC_SetData("qzdiv",weight.addrtown.regx,"addrtown_regx");
+
+//地址-村
+LC_SetData("qzdiv",weight.addrvillage.name,"addrvillage_name");     
+LC_SetData("qzdiv",weight.addrvillage.comment,"addrvillage_comment");
+LC_SetData("qzdiv",transweight(weight.addrvillage.types),"addrvillage_types_weight");    
+LC_SetData("qzdiv",transuniques(weight.addrvillage.uniques),"addrvillage_uniques");
+LC_SetData("qzdiv",weight.addrvillage.unique,"addrvillage_unique");
+LC_SetData("qzdiv",weight.addrvillage.regx,"addrvillage_regx"); 
+
+//地址-门牌号码  
+LC_SetData("qzdiv",weight.addrhouseid.name,"addrhouseid_name");
+LC_SetData("qzdiv",weight.addrhouseid.comment,"addrhouseid_comment");
+LC_SetData("qzdiv",transweight(weight.addrhouseid.types),"addrhouseid_types_weight");
+LC_SetData("qzdiv",transuniques(weight.addrhouseid.uniques),"addrhouseid_uniques");
+LC_SetData("qzdiv",weight.addrhouseid.unique,"addrhouseid_unique");
+LC_SetData("qzdiv",weight.addrhouseid.regx,"addrhouseid_regx");
+
+//证件
+LC_SetData("qzdiv",weight.credentials.name,"credentials_name");
+LC_SetData("qzdiv",weight.credentials.comment,"credentials_comment");
+LC_SetData("qzdiv",transweight(weight.credentials.types),"credentials_types_weight");
+//LC_SetData("qzdiv",transuniques1(weight.credentials.uniques),"credentials_uniques");
+transweight1(weight.credentials.uniques,"credentials");  /**/
+LC_SetData("qzdiv",weight.credentials.unique,"credentials_unique");
+LC_SetData("qzdiv",weight.credentials.regx,"credentials_regx");
+
+//性别
+LC_SetData("qzdiv",weight.gender.name,"gender_name");     
+LC_SetData("qzdiv",weight.gender.comment,"gender_comment");
+LC_SetData("qzdiv",transweight(weight.gender.types),"gender_types_weight");    
+LC_SetData("qzdiv",transuniques(weight.gender.uniques),"gender_uniques");
+LC_SetData("qzdiv",weight.gender.unique,"gender_unique");
+LC_SetData("qzdiv",weight.gender.regx,"gender_regx"); 
+
+//出生日期    
+LC_SetData("qzdiv",weight.birthday.name,"birthday_name");
+LC_SetData("qzdiv",weight.birthday.comment,"birthday_comment");
+LC_SetData("qzdiv",transweight(weight.birthday.types),"birthday_types_weight");
+LC_SetData("qzdiv",transuniques(weight.birthday.uniques),"birthday_uniques");
+LC_SetData("qzdiv",weight.birthday.unique,"birthday_unique");
+LC_SetData("qzdiv",weight.birthday.regx,"birthday_regx");
+
+//电子邮件
+LC_SetData("qzdiv",weight.email.name,"email_name");
+LC_SetData("qzdiv",weight.email.comment,"email_comment");
+LC_SetData("qzdiv",transweight(weight.email.types),"email_types_weight");
+LC_SetData("qzdiv",transuniques(weight.email.uniques),"email_uniques");
+LC_SetData("qzdiv",weight.email.unique,"email_unique");
+LC_SetData("qzdiv",weight.email.regx,"email_regx");
+
+//昵称
+LC_SetData("qzdiv",weight.nickname.name,"nickname_name");     
+LC_SetData("qzdiv",weight.nickname.comment,"nickname_comment");
+LC_SetData("qzdiv",transweight(weight.nickname.types),"nickname_types_weight");    
+LC_SetData("qzdiv",transuniques(weight.nickname.uniques),"nickname_uniques");
+LC_SetData("qzdiv",weight.nickname.unique,"nickname_unique");
+LC_SetData("qzdiv",weight.nickname.regx,"nickname_regx"); 
+
+//户籍类型代码   
+LC_SetData("qzdiv",weight.registeretype.name,"registeretype_name");
+LC_SetData("qzdiv",weight.registeretype.comment,"registeretype_comment");
+LC_SetData("qzdiv",transweight(weight.registeretype.types),"registeretype_types_weight");
+LC_SetData("qzdiv",transuniques(weight.registeretype.uniques),"registeretype_uniques");
+LC_SetData("qzdiv",weight.registeretype.unique,"registeretype_unique");
+LC_SetData("qzdiv",weight.registeretype.regx,"registeretype_regx");
+
+//电话 
+LC_SetData("qzdiv",weight.phones.name,"phones_name");
+LC_SetData("qzdiv",weight.phones.comment,"phones_comment");
+//LC_SetData("qzdiv",transweight(weight.phones.types),"phones_types_weight");/*------*/
+//LC_SetData("qzdiv",transweight1(weight.phones.types),"phones_types_sole");
+//LC_SetData("qzdiv",transuniques(weight.phones.uniques),"phones_uniques");
+transweight2(weight.phones.types,"phones");
+LC_SetData("qzdiv",weight.phones.unique,"phones_unique");
+LC_SetData("qzdiv",weight.phones.regx,"phones_regx");
+
+//国籍
+LC_SetData("qzdiv",weight.nationality.name,"nationality_name");     
+LC_SetData("qzdiv",weight.nationality.comment,"nationality_comment");
+LC_SetData("qzdiv",transweight(weight.nationality.types),"nationality_types_weight");    
+LC_SetData("qzdiv",transuniques(weight.nationality.uniques),"nationality_uniques");
+LC_SetData("qzdiv",weight.nationality.unique,"nationality_unique");
+LC_SetData("qzdiv",weight.nationality.regx,"nationality_regx");
+
+//婚姻状况代码
+LC_SetData("qzdiv",weight.marriedstatus.name,"marriedstatus_name");
+LC_SetData("qzdiv",weight.marriedstatus.comment,"marriedstatus_comment");
+LC_SetData("qzdiv",transweight(weight.marriedstatus.types),"marriedstatus_types_weight");
+LC_SetData("qzdiv",transuniques(weight.marriedstatus.uniques),"marriedstatus_uniques");
+LC_SetData("qzdiv",weight.marriedstatus.unique,"marriedstatus_unique");
+LC_SetData("qzdiv",weight.marriedstatus.regx,"marriedstatus_regx");
+
+//民族
+LC_SetData("qzdiv",weight.nation.name,"nation_name");     
+LC_SetData("qzdiv",weight.nation.comment,"nation_comment");
+LC_SetData("qzdiv",transweight(weight.nation.types),"nation_types_weight");    
+LC_SetData("qzdiv",transuniques(weight.nation.uniques),"nation_uniques");
+LC_SetData("qzdiv",weight.nation.unique,"nation_unique");
+LC_SetData("qzdiv",weight.nation.regx,"nation_regx"); 
+
+//年龄   
+LC_SetData("qzdiv",weight.age.name,"age_name");
+LC_SetData("qzdiv",weight.age.comment,"age_comment");
+LC_SetData("qzdiv",transweight(weight.age.types),"age_types_weight");
+LC_SetData("qzdiv",transuniques(weight.age.uniques),"age_uniques");
+LC_SetData("qzdiv",weight.age.unique,"age_unique");
+LC_SetData("qzdiv",weight.age.regx,"age_regx");
+
+//ABO血型
+LC_SetData("qzdiv",weight.booldtype.name,"booldtype_name");
+LC_SetData("qzdiv",weight.booldtype.comment,"booldtype_comment");
+LC_SetData("qzdiv",transweight(weight.booldtype.types),"booldtype_types_weight"); 
+LC_SetData("qzdiv",transuniques(weight.booldtype.uniques),"booldtype_uniques");
+LC_SetData("qzdiv",weight.booldtype.unique,"booldtype_unique");
+LC_SetData("qzdiv",weight.booldtype.regx,"booldtype_regx");
+
+//RH血型
+LC_SetData("qzdiv",weight.rh.name,"rh_name");     
+LC_SetData("qzdiv",weight.rh.comment,"rh_comment");
+LC_SetData("qzdiv",transweight(weight.rh.types),"rh_types_weight");    
+LC_SetData("qzdiv",transuniques(weight.rh.uniques),"rh_uniques");
+LC_SetData("qzdiv",weight.rh.unique,"rh_unique");
+LC_SetData("qzdiv",weight.rh.regx,"rh_regx");
+
+//参加工作日期
+LC_SetData("qzdiv",weight.workdate.name,"workdate_name");
+LC_SetData("qzdiv",weight.workdate.comment,"workdate_comment");
+LC_SetData("qzdiv",transweight(weight.workdate.types),"workdate_types_weight");
+LC_SetData("qzdiv",transuniques(weight.workdate.uniques),"workdate_uniques");
+LC_SetData("qzdiv",weight.workdate.unique,"workdate_unique");
+LC_SetData("qzdiv",weight.workdate.regx,"workdate_regx");
+
+//职业类别代码
+LC_SetData("qzdiv",weight.jobtypecode.name,"jobtypecode_name");     
+LC_SetData("qzdiv",weight.jobtypecode.comment,"jobtypecode_comment");
+LC_SetData("qzdiv",transweight(weight.jobtypecode.types),"jobtypecode_types_weight");    
+LC_SetData("qzdiv",transuniques(weight.jobtypecode.uniques),"jobtypecode_uniques");
+LC_SetData("qzdiv",weight.jobtypecode.unique,"jobtypecode_unique");
+LC_SetData("qzdiv",weight.jobtypecode.regx,"jobtypecode_regx");  
+
+//学历代码  
+LC_SetData("qzdiv",weight.educationcode.name,"educationcode_name");
+LC_SetData("qzdiv",weight.educationcode.comment,"educationcode_comment");
+LC_SetData("qzdiv",transweight(weight.educationcode.types),"educationcode_types_weight");
+LC_SetData("qzdiv",transuniques(weight.educationcode.uniques),"educationcode_uniques");
+LC_SetData("qzdiv",weight.educationcode.unique,"educationcode_unique");
+LC_SetData("qzdiv",weight.educationcode.regx,"educationcode_regx");
+
+//学位代码  
+LC_SetData("qzdiv",weight.degreecode.name,"degreecode_name");
+LC_SetData("qzdiv",weight.degreecode.comment,"degreecode_comment");
+LC_SetData("qzdiv",transweight(weight.degreecode.types),"degreecode_types_weight"); 
+LC_SetData("qzdiv",transuniques(weight.degreecode.uniques),"degreecode_uniques");
+LC_SetData("qzdiv",weight.degreecode.unique,"degreecode_unique");
+LC_SetData("qzdiv",weight.degreecode.regx,"degreecode_regx");
+
+//机构代码
+LC_SetData("qzdiv",weight.orgcodes.name,"orgcodes_name");     
+LC_SetData("qzdiv",weight.orgcodes.comment,"orgcodes_comment");
+LC_SetData("qzdiv",transweight(weight.orgcodes.types),"orgcodes_types_weight");    
+LC_SetData("qzdiv",transuniques(weight.orgcodes.uniques),"orgcodes_uniques");
+LC_SetData("qzdiv",weight.orgcodes.unique,"orgcodes_unique");
+LC_SetData("qzdiv",weight.orgcodes.regx,"orgcodes_regx");
+
+}
+
+function btnAddph(){
+	
+	$('#div-ph-open').dialog('open');
+	
+
+}
+
+function btnAddzj(){
+	
+	$('#div-zj-open').dialog('open');
+	
+
+}
+
+function phadd(){
+	 var selectphval=$("#selectph").val()
+	 var zztextph=$("#zztextph").val();
+	 if(zztextph!==""){ 
+	 $('#tjwbk').append("<div><div style='float:left;padding:0 5px;'>类型唯一：</div><div style='height:20px;margin-top:3px;float:left;'><select style='float:left; width:88px;' id='typeCodedh_" + selectphval + "' class='textLW' ><option value=''></option><option value='01'>本人电话</option><option value='02'>配偶电话</option><option value='03'>监护人电话</option><option value='04'>家庭电话</option><option value='05'>本人工作单位电话</option><option value='06'>居委会电话</option><option value='07'>传真</option><option value='08'>QQ</option><option value='09'>MSN</option><option value='10'>电子邮件</option><option value='99'>其他</option></select><input id='phones_types_" + selectphval + "' style='float:left;margin-left:5px;width:50px' /></div></div>")	
+	 $("#typeCodedh_" + selectphval + "").val(selectphval);
+	 $("#phones_types_" + selectphval + "").val(zztextph);	 
+	 $('#div-ph-open').dialog('close');
+	}
+	 }
+	
+function zjadd(){
+	 var selectzjval=$("#selectzj").val()
+	 var zztextzj=$("#zztextzj").val();
+	 if(zztextzj!==""){ 
+	 $('#tjwbk1').append("<div><div style='float:left;padding:0 5px;'>类型唯一：</div><div style='height:20px;margin-top:3px;float:left;'><select style='float:left; width:88px;' id='typeCodezj_" + selectzjval + "' class='textLW' ><option value=''></option><option value='01'>居民身份证</option><option value='02'>港澳居民身份证</option><option value='03'>居民户口簿</option><option value='04'>护照</option><option value='05'>军官证</option><option value='06'>文职干部证</option><option value='07'>士兵证</option><option value='08'>驾驶执照</option><option value='09'>残疾证</option><option value='10'>医疗保险证</option><option value='11'>出生证明</option><option value='12'>家庭标识</option><option value='13'>住院病案</option><option value='14'>住院床位</option><option value='15'>门诊病历</option><option value='16'>死亡证明</option><option value='70'>社保卡</option><option value='71'>一卡通</option><option value='72'>健康卡</option><option value='73'>学生证</option><option value='80'>母亲身份证</option><option value='81'>父亲身份证</option><option value='90'>本地唯一标识</option><option value='91'>合作医疗卡</option><option value='92'>自费卡</option><option value='99'>其他标识</option><input id='credentials_uniques_" + selectzjval + "' style='float:left;margin-left:5px;width:50px' /></div></div>")	
+	 $("#typeCodezj_" + selectzjval + "").val(selectzjval);
+	 $("#credentials_uniques_" + selectzjval + "").val(zztextzj);	 
+	 $('#div-zj-open').dialog('close');
+	}
+	 }
+
+
+
+function xgbtton() {  
+var url="weightconfigchange/";
+   var itemsList=["pname_name","pname_comment","pname_types_weight","pname_uniques","pname_unique","nickname_name","nickname_comment","nickname_types_weight","nickname_uniques","nickname_unique","gender_name","gender_comment","gender_types_weight","gender_uniques","gender_unique","age_name","age_comment","age_types_weight","age_uniques","age_unique","birthday_name","birthday_comment","birthday_types_weight","birthday_uniques","birthday_unique","nation_name","nation_comment","nation_types_weight","nation_uniques","nation_unique","addrprovince_name","addrprovince_comment","addrprovince_types_weight","addrprovince_uniques","addrprovince_unique","addrcity_name","addrcity_comment","addrcity_types_weight","addrcity_uniques","addrcity_unique","addrcounty_name","addrcounty_comment","addrcounty_types_weight","addrcounty_uniques","addrcounty_unique","addrtown_name","addrtown_comment","addrtown_types_weight","addrtown_uniques","addrtown_unique","addrvillage_name","addrvillage_comment","addrvillage_types_weight","addrvillage_uniques","addrvillage_unique","addrhouseid_name","addrhouseid_comment","addrhouseid_types_weight","addrhouseid_uniques","addrhouseid_unique","registeretype_name","registeretype_comment","registeretype_types_weight","registeretype_uniques","registeretype_unique","nationality_name","nationality_comment","nationality_types_weight","nationality_uniques","nationality_unique","marriedstatus_name","marriedstatus_comment","marriedstatus_types_weight","marriedstatus_uniques","marriedstatus_unique","booldtype_name","booldtype_comment","booldtype_types_weight","booldtype_uniques","booldtype_unique","rh_name","rh_comment","rh_types_weight","rh_uniques","rh_unique","workdate_name","workdate_comment","workdate_types_weight","workdate_uniques","workdate_unique","jobtypecode_name","jobtypecode_comment","jobtypecode_types_weight","jobtypecode_uniques","jobtypecode_unique","educationcode_name","educationcode_comment","educationcode_types_weight","educationcode_uniques","educationcode_unique","degreecode_name","degreecode_comment","degreecode_types_weight","degreecode_uniques","degreecode_unique","orgcodes_name","orgcodes_comment","orgcodes_types_weight","orgcodes_uniques","orgcodes_unique","email_name","email_comment","email_types_weight","email_uniques","email_unique","credentials_name","credentials_comment","credentials_uniques_01","credentials_uniques_02","credentials_uniques_03","credentials_uniques_04","credentials_uniques_05","credentials_uniques_06","credentials_uniques_07","credentials_uniques_08","credentials_uniques_09","credentials_uniques_10","credentials_uniques_11","credentials_uniques_12","credentials_uniques_13","credentials_uniques_14","credentials_uniques_15","credentials_uniques_16","credentials_uniques_70","credentials_uniques_71","credentials_uniques_72","credentials_uniques_73","credentials_uniques_80","credentials_uniques_81","credentials_uniques_90","credentials_uniques_91","credentials_uniques_92","credentials_uniques_99","credentials_unique","phones_comment","phones_name","phones_types_01","phones_types_02","phones_types_03","phones_types_04","phones_types_05","phones_types_06","phones_types_07","phones_types_08","phones_types_09","phones_types_10","phones_types_99","phones_unique"];
+ // var itemsList=[];
+ var info= new Map();	
+
+   LC_AjaxGet(EMPIUrl+url,"qzform","callbacksave",info,itemsList);
+   dataqz();
+   setTimeout(function(){
+		   window.location.reload();
+		}, 300);	
+   
+   
+   
+} 
+
+// 保存回调函数
+ function callbacksave(reData){
+
+  if (reData.ret=="0") {
+    self.parent.$.messager.alert('提示',reData.msg,'info');
+    $("#openRoleDiv").window("close");
+
+    } else {
+    self.parent.$.messager.alert('错误提示',reData.msg,'error');
+  }
+ // dataxjjy();
+ }
+
+
+
+
+
+</script>
+<form id="qzform">
+
+<input type="hidden" id="max"/>
+<input type="hidden" id="min"/>
+      <div style="width:720px; float:left;padding-left:10px;" id="qzdiv">
+      		<div class="flPadTB-10 mainsW-528">
+                <a href="#" class="easyui-linkbutton" onclick="xgbtton()">提交</a>
+            </div>
+            
+      <div class="mainW-224 pad-5">
+  			<div class="easyui-panel" title="姓名" id="pname_comment">
+  				<div class="mainsW-208 pad-5">
+  			    权重:<input type="text" id="pname_types_weight" style="margin-left:32px;width:120px;"/>
+  			    </div>
+           <input type="hidden" id="pname_uniques"/>
+     			 <input type="hidden" id="pname_name"/>
+    		     <div class="mainsW-208 pad-5">
+                 字段唯一:<select style="margin-left:8px;width:50px;" id="pname_unique">
+                 <option value="true">是</option>
+                 <option value="false">否</option>
+               </select>
+  		    </div>
+			  </div>
+			</div>
+			
+			<div class="mainW-224 pad-5">
+			<div class="easyui-panel" title="昵称" id="nickname_comment">
+				<div class="mainsW-208 pad-5">
+			    权重:<input type="text" id="nickname_types_weight" style="margin-left:32px;width:120px;"/>
+			    </div>
+			    <input type="hidden" id="nickname_uniques"/>
+     			<input type="hidden" id="nickname_name"/>
+			    <div class="mainsW-208 pad-5">
+			           字段唯一:<select style="margin-left:8px;width:50px;" id="nickname_unique">
+			           <option value="true">是</option>
+			                    <option value="false">否</option>
+			         </select>
+			   </div>
+			</div>
+			</div>
+			
+			<div class="mainW-224 pad-5">
+			<div class="easyui-panel" title="性别" id="gender_comment">
+				<div class="mainsW-208 pad-5">
+			    权重:<input type="text" id="gender_types_weight" style="margin-left:32px;width:120px;"/>
+			    </div>
+			    <input type="hidden" id="gender_uniques"/>
+     			<input type="hidden" id="gender_name"/>
+			    <div class="mainsW-208 pad-5">
+			           字段唯一:<select style="margin-left:8px;width:50px;" id="gender_unique">
+			           <option value="true">是</option>
+			                    <option value="false">否</option>			         
+			                  </select>
+			   </div>
+			</div>
+			</div>
+			
+			<div class="mainW-224 pad-5">
+			<div class="easyui-panel" title="年龄" id="age_comment">
+				<div class="mainsW-208 pad-5">
+			    权重:<input type="text" id="age_types_weight" style="margin-left:32px;width:120px;"/>
+			    </div>
+			    <input type="hidden" id="age_uniques"/>
+     			<input type="hidden" id="age_name"/>
+     		  <div class="mainsW-208 pad-5">
+			           字段唯一:<select style="margin-left:8px;width:50px;" id="age_unique">
+			           <option value="true">是</option>
+			                    <option value="false">否</option>			         
+			                    </select>
+			   </div>
+			</div>
+			</div>
+			
+			<div class="mainW-224 pad-5">
+			<div class="easyui-panel" title="出生日期" id="birthday_comment">
+				<div class="mainsW-208 pad-5">
+			    权重:<input type="text" id="birthday_types_weight" style="margin-left:32px;width:120px;"/>
+			    </div>
+          <input type="hidden" id="birthday_uniques"/>
+     			<input type="hidden" id="birthday_name"/>
+			    <div class="mainsW-208 pad-5">
+			           字段唯一:<select style="margin-left:8px;width:50px;" id="birthday_unique">
+			           <option value="true">是</option>
+			                    <option value="false">否</option>			         
+			                    </select>
+			   </div>
+			</div>
+			</div>
+			
+			<div class="mainW-224 pad-5">
+			<div class="easyui-panel" title="民族" id="nation_comment">
+				<div class="mainsW-208 pad-5">
+			    权重:<input type="text" id="nation_types_weight" style="margin-left:32px;width:120px;"/>
+			    </div>
+          <input type="hidden" id="nation_uniques"/>
+     			<input type="hidden" id="nation_name"/>
+			    <div class="mainsW-208 pad-5">
+			           字段唯一:<select style="margin-left:8px;width:50px;" id="nation_unique">
+			           <option value="true">是</option>
+			                    <option value="false">否</option>			         
+			                    </select>
+			   </div>
+			</div>
+			</div>
+			<div class="mainW-224 pad-5">
+			<div class="easyui-panel" title="电子邮件" id="email_comment">
+				<div class="mainsW-208 pad-5">
+			    权重:<input type="text" id="email_types_weight" style="margin-left:32px;width:120px;"/>
+			    </div>
+          <input type="hidden" id="email_uniques"/>
+     			<input type="hidden" id="email_name"/>
+			    <div class="mainsW-208 pad-5">
+			           字段唯一:<select style="margin-left:8px;width:50px;" id="email_unique">
+			           <option value="true">是</option>
+			                    <option value="false">否</option>			         
+			                    </select>
+			   </div>
+			</div>
+			</div>
+			
+			<div class="mainW-224 pad-5">
+			<div class="easyui-panel" title="地址-省" id="addrprovince_comment">
+				<div class="mainsW-208 pad-5">
+			    权重:<input type="text" id="addrprovince_types_weight" style="margin-left:32px;width:120px;"/>
+			    </div>
+          <input type="hidden" id="addrprovince_uniques"/>
+     			<input type="hidden" id="addrprovince_name"/>
+ 			    <div class="mainsW-208 pad-5">
+			           字段唯一:<select style="margin-left:8px;width:50px;" id="addrprovince_unique">
+			           <option value="true">是</option>
+			                    <option value="false">否</option>			         
+			                    </select>
+			   </div>
+			</div>
+			</div>
+			
+			<div class="mainW-224 pad-5">
+			<div class="easyui-panel" title="地址-市" id="addrcity_comment">
+				<div class="mainsW-208 pad-5">
+			    权重:<input type="text" id="addrcity_types_weight" style="margin-left:32px;width:120px;"/>
+			    </div>
+          <input type="hidden" id="addrcity_uniques"/>
+     			<input type="hidden" id="addrcity_name"/>
+			    <div class="mainsW-208 pad-5">
+			           字段唯一:<select style="margin-left:8px;width:50px;" id="addrcity_unique">
+			           <option value="true">是</option>
+			                    <option value="false">否</option>			         
+			                    </select>
+			   </div>
+			</div>
+			</div>
+			
+			<div class="mainW-224 pad-5">
+			<div class="easyui-panel" title="地址-县" id="addrcounty_comment">
+				<div class="mainsW-208 pad-5">
+			    权重:<input type="text" id="addrcounty_types_weight" style="margin-left:32px;width:120px;"/>
+			    </div>
+          <input type="hidden" id="addrcounty_uniques"/>
+     			<input type="hidden" id="addrcounty_name"/>
+			    <div class="mainsW-208 pad-5">
+			           字段唯一:<select style="margin-left:8px;width:50px;" id="addrcounty_unique">
+			           <option value="true">是</option>
+			                    <option value="false">否</option>			         
+			                    </select>
+			   </div>
+			</div>
+			</div>
+			
+			<div class="mainW-224 pad-5">
+			<div class="easyui-panel" title="地址-乡" id="addrtown_comment">
+				<div class="mainsW-208 pad-5">
+			    权重:<input type="text" id="addrtown_types_weight" style="margin-left:32px;width:120px;"/>
+			    </div>
+          <input type="hidden" id="addrtown_uniques"/>
+     			<input type="hidden" id="addrtown_name"/>
+ 			    <div class="mainsW-208 pad-5">
+			           字段唯一:<select style="margin-left:8px;width:50px;" id="addrtown_unique">
+			           <option value="true">是</option>
+			                    <option value="false">否</option>			         
+			                    </select>
+			   </div>
+			</div>
+			</div>
+			
+			<div class="mainW-224 pad-5">
+			<div class="easyui-panel" title="地址-村" id="addrvillage_comment">
+				<div class="mainsW-208 pad-5">
+			    权重:<input type="text" id="addrvillage_types_weight" style="margin-left:32px;width:120px;"/>
+			    </div>
+          <input type="hidden" id="addrvillage_uniques"/>
+     			<input type="hidden" id="addrvillage_name"/>
+ 			    <div class="mainsW-208 pad-5">
+			           字段唯一:<select style="margin-left:8px;width:50px;" id="addrvillage_unique">
+			           <option value="true">是</option>
+			                    <option value="false">否</option>			         
+			                    </select>
+			   </div>
+			</div>
+			</div>
+			
+			<div class="mainW-224 pad-5">
+			<div class="easyui-panel" title="地址-门牌号码" id="addrhouseid_comment">
+				<div class="mainsW-208 pad-5">
+			    权重:<input type="text" id="addrhouseid_types_weight" style="margin-left:32px;width:120px;"/>
+			    </div>
+          <input type="hidden" id="addrhouseid_uniques"/>
+     			<input type="hidden" id="addrhouseid_name"/>
+ 			    <div class="mainsW-208 pad-5">
+			           字段唯一:<select style="margin-left:8px;width:50px;" id="aaddrhouseid_unique">
+			           <option value="true">是</option>
+			                    <option value="false">否</option>			         
+			                    </select>
+			   </div>
+			</div>
+			</div>
+			
+			<div class="mainW-224 pad-5">
+			<div class="easyui-panel" title="户籍类型代码" id="registeretype_comment">
+				<div class="mainsW-208 pad-5">
+			    权重:<input type="text" id="registeretype_types_weight" style="margin-left:32px;width:120px;"/>
+			    </div>
+          <input type="hidden" id="registeretype_uniques"/>
+     			<input type="hidden" id="registeretype_name"/>
+			    <div class="mainsW-208 pad-5">
+			           字段唯一:<select style="margin-left:8px;width:50px;" id="registeretype_unique">
+			           <option value="true">是</option>
+			                    <option value="false">否</option>			         
+			                    </select>
+			   </div>
+			</div>
+			</div>
+			
+			<div class="mainW-224 pad-5">
+			<div class="easyui-panel" title="国籍" id="nationality_comment">
+				<div class="mainsW-208 pad-5">
+			    权重:<input type="text" id="nationality_types_weight" style="margin-left:32px;width:120px;"/>
+			    </div>
+          <input type="hidden" id="nationality_uniques"/>
+     			<input type="hidden" id="nationality_name"/>
+ 			    <div class="mainsW-208 pad-5">
+			           字段唯一:<select style="margin-left:8px;width:50px;" id="nationality_unique">
+			           <option value="true">是</option>
+			                    <option value="false">否</option>			         
+			                    </select>
+			   </div>
+			</div>
+			</div>
+			
+			<div class="mainW-224 pad-5">
+			<div class="easyui-panel" title="婚姻状况代码" id="marriedstatus_comment">
+				<div class="mainsW-208 pad-5">
+			    权重:<input type="text" id="marriedstatus_types_weight" style="margin-left:32px;width:120px;"/>
+			    </div>
+          <input type="hidden" id="marriedstatus_uniques"/>
+     			<input type="hidden" id="marriedstatus_name"/>
+			    <div class="mainsW-208 pad-5">
+			           字段唯一:<select style="margin-left:8px;width:50px;" id="marriedstatus_unique">
+			           <option value="true">是</option>
+			                    <option value="false">否</option>			         
+			                    </select>
+			   </div>
+			</div>
+			</div>
+			
+			<div class="mainW-224 pad-5">
+			<div class="easyui-panel" title="ABO血型" id="booldtype_comment">
+				<div class="mainsW-208 pad-5">
+			    权重:<input type="text" id="booldtype_types_weight" style="margin-left:32px;width:120px;"/>
+			    </div>
+          <input type="hidden" id="booldtype_uniques"/>
+     			<input type="hidden" id="booldtype_name"/>
+			    <div class="mainsW-208 pad-5">
+			           字段唯一:<select style="margin-left:8px;width:50px;" id="booldtype_unique">
+			           <option value="true">是</option>
+			                    <option value="false">否</option>			         
+			                    </select>
+			   </div>
+			</div>
+			</div>
+			
+			<div class="mainW-224 pad-5">
+			<div class="easyui-panel" title="RH血型" id="rh_comment">
+				<div class="mainsW-208 pad-5">
+			    权重:<input type="text" id="rh_types_weight" style="margin-left:32px;width:120px;"/>
+			    </div>
+          <input type="hidden" id="rh_uniques"/>
+     			<input type="hidden" id="rh_name"/>
+ 			    <div class="mainsW-208 pad-5">
+			           字段唯一:<select style="margin-left:8px;width:50px;" id="rh_unique">
+			           <option value="true">是</option>
+			                    <option value="false">否</option>			         
+			                    </select>
+			   </div>
+			</div>
+			</div>
+			
+			<div class="mainW-224 pad-5">
+			<div class="easyui-panel" title="参加工作日期" id="workdate_comment">
+				<div class="mainsW-208 pad-5">
+			    权重:<input type="text" id="workdate_types_weight" style="margin-left:32px;width:120px;"/>
+			    </div>
+          <input type="hidden" id="workdate_uniques"/>
+     			<input type="hidden" id="workdate_name"/>
+			    <div class="mainsW-208 pad-5">
+			           字段唯一:<select style="margin-left:8px;width:50px;" id="workdate_unique">
+			           <option value="true">是</option>
+			                    <option value="false">否</option>			         
+			                    </select>
+			   </div>
+			</div>
+			</div>
+			
+			<div class="mainW-224 pad-5">
+			<div class="easyui-panel" title="职业类别代码" id="jobtypecode_comment">
+				<div class="mainsW-208 pad-5">
+			    权重:<input type="text" id="jobtypecode_types_weight" style="margin-left:32px;width:120px;"/>
+			    </div>
+          <input type="hidden" id="jobtypecode_uniques"/>
+     			<input type="hidden" id="jobtypecode_name"/>
+			    <div class="mainsW-208 pad-5">
+			           字段唯一:<select style="margin-left:8px;width:50px;" id="jobtypecode_unique">
+			           <option value="true">是</option>
+			                    <option value="false">否</option>			         
+			                    </select>
+			   </div>
+			</div>
+			</div>
+			
+			<div class="mainW-224 pad-5">
+			<div class="easyui-panel" title="学历代码" id="educationcode_comment">
+				<div class="mainsW-208 pad-5">
+			    权重:<input type="text" id="educationcode_types_weight" style="margin-left:32px;width:120px;"/>
+			    </div>
+          <input type="hidden" id="educationcode_uniques"/>
+     			<input type="hidden" id="educationcode_name"/>
+			    <div class="mainsW-208 pad-5">
+			           字段唯一:<select style="margin-left:8px;width:50px;" id="educationcode_unique">
+			           <option value="true">是</option>
+			                    <option value="false">否</option>			         
+			                    </select>
+			   </div>
+			</div>
+			</div>
+			
+			<div class="mainW-224 pad-5">
+			<div class="easyui-panel" title="学位代码" id="degreecode_comment">
+				<div class="mainsW-208 pad-5">
+			    权重:<input type="text" id="degreecode_types_weight" style="margin-left:32px;width:120px;"/>
+			    </div>
+          <input type="hidden" id="degreecode_uniques"/>
+     			<input type="hidden" id="degreecode_name"/>
+ 			    <div class="mainsW-208 pad-5">
+			           字段唯一:<select style="margin-left:8px;width:50px;" id="degreecode_unique">
+			           <option value="true">是</option>
+			                    <option value="false">否</option>			         
+			                    </select>
+			   </div>
+			</div>
+			</div>
+			
+			<div class="mainW-224 pad-5">
+			<div class="easyui-panel" title="机构代码" id="orgcodes_comment">
+				<div class="mainsW-208 pad-5">
+			    权重:<input type="text" id="orgcodes_types_weight" style="margin-left:32px;width:120px;"/>
+			    </div>
+          <input type="hidden" id="orgcodes_uniques"/>
+     			<input type="hidden" id="orgcodes_name"/>
+ 			    <div class="mainsW-208 pad-5">
+			           字段唯一:<select style="margin-left:8px;width:50px;" id="orgcodes_unique">
+			           <option value="true">是</option>
+			                    <option value="false">否</option>			         
+			                    </select>
+			   </div>
+			</div>
+			</div>
+            <div style="display:block; width:700px; float:left;">
+            <div class="mainW-224 pad-5" style="position:relative;">
+            <a href="#" class="easyui-linkbutton tjbut" onclick="btnAddzj()" style="position:absolute;top:7px;right:10px;z-index:100000;">添加</a>
+			<div class="easyui-panel" title="证件" id="credentials_comment">
+			
+				<div class="mainsW-208 pad-5">
+			    权重:<input type="text" id="credentials_types_weight" style="margin-left:32px;width:120px;"/>
+			     
+			    </div>
+			    
+			    <input type="hidden" id="credentials_name"/>
+            <div class="paenlbot" id="tjwbk1">  
+  			        <div id="credentials" class="mainsW-208 pad-5"></div>
+  			    </div>
+			    <div class="mainsW-208 pad-5">
+			           字段唯一:<select style="margin-left:8px;width:50px;" id="credentials_unique">
+			           <option value="true">是</option>
+			                    <option value="false">否</option>			         
+			                    </select>
+			   </div>
+			</div>
+			</div>
+			
+			<div class="mainW-224 pad-5" style="position:relative;">
+			<a href="#" class="easyui-linkbutton tjbut" onclick="btnAddph()" style="position:absolute;top:7px;right:10px;z-index:100000;">添加</a>
+			<div class="easyui-panel" title="电话" id="phones_comment">
+				<div class="mainsW-208 pad-5">
+			    权重:<input type="text" id="phones_types_weight" style="margin-left:32px;width:120px;"/>
+			    </div>
+			    
+			    <input type="hidden" id="phones_name"/>
+  			    <div class="paenlbot" id="tjwbk">               
+  			        <div id="phones" class="mainsW-208 pad-5"></div>
+  			    </div> 
+			    <div class="mainsW-208 pad-5">
+			           字段唯一:<select style="margin-left:8px;width:50px;" id="phones_unique">
+			           <option value="true">是</option>
+			                    <option value="false">否</option>			         
+			                    </select>
+			   </div>
+			</div>
+			</div>
+            </div>
+       </div>
+</form>
+
+
+<!-- 弹出添加电话 -->
+<div id="div-ph-open" title="添加电话"  class="easyui-dialog textLW"  data-options="modal:true,closed:true" style="width:350px;height:200px;padding:10px 0 0 0;">
+    <form id="fmph">
+   <!--  <input type="hidden" id="orgId"> -->
+    <div class="mainW-288" >
+        <div class="itemLW-80 padT-4">类型：</div>
+        <div class="itemRW-208">
+          <select id="selectph" class="textLW" >
+            <option value=""></option>
+            <option value="01">本人电话</option>
+            <option value="02">配偶电话</option>
+            <option value="03">监护人电话</option>
+            <option value="04">家庭电话</option>
+            <option value="05">本人工作单位电话</option>
+            <option value="06">居委会电话</option>
+            <option value="07">传真</option>
+            <option value="08">QQ</option>
+            <option value="09">MSN</option>
+            <option value="10">电子邮件</option>
+            <option value="99">其他</option>
+          </select>        
+        </div>
+    </div>
+    <div class="mainW-288" >
+        <div class="itemLW-80 padT-4">权重：</div>
+        <div class="itemRW-208"><input id="zztextph"  required="true" class="textLW" type="text" /></div>
+    </div>
+        
+    <div class="itemLW-288 padTB-10"><a href="#" class="easyui-linkbutton" onclick="phadd()">添加</a></div>
+
+    </form>
+</div>
+
+<!-- 弹出添加证件 -->
+<div id="div-zj-open" title="添加证件"  class="easyui-dialog textLW"  data-options="modal:true,closed:true" style="width:350px;height:200px;padding:10px 0 0 0;">
+    <form id="fmzj">
+   <!--  <input type="hidden" id="orgId"> -->
+    <div class="mainW-288" >
+        <div class="itemLW-80 padT-4">类型：</div>
+        <div class="itemRW-208">
+          <select id="selectzj" class="textLW" >
+            <option value=""></option>
+            <option value="01">居民身份证</option>
+            <option value="02">港澳居民身份证</option>
+            <option value="03">居民户口簿</option>
+            <option value="04">护照</option>
+            <option value="05">军官证</option>
+            <option value="06">文职干部证</option>
+            <option value="07">士兵证</option>
+            <option value="08">驾驶执照</option>
+            <option value="09">残疾证</option>
+            <option value="10">医疗保险证</option>
+            <option value="11">出生证明</option>
+            <option value="12">家庭标识</option>
+            <option value="13">住院病案</option>
+            <option value="14">住院床位</option>
+            <option value="15">门诊病历</option>
+            <option value="16">死亡证明</option>
+            <option value="70">社保卡</option>
+            <option value="71">一卡通</option>
+            <option value="72">健康卡</option>
+            <option value="73">学生证</option>
+            <option value="80">母亲身份证</option>
+            <option value="81">父亲身份证</option>
+            <option value="90">本地唯一标识</option>
+            <option value="91">合作医疗卡</option>
+            <option value="92">自费卡</option>
+            <option value="99">其他标识</option>
+          </select>        
+        </div>
+    </div>
+    <div class="mainW-288" >
+        <div class="itemLW-80 padT-4">权重：</div>
+        <div class="itemRW-208"><input id="zztextzj"  required="true" class="textLW tjxjjyid" type="text" /></div>
+    </div>
+        
+    <div class="itemLW-288 padTB-10"><a href="#" class="easyui-linkbutton" onclick="zjadd()">添加</a></div>
+
+    </form>
+</div>

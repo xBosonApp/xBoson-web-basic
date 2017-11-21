@@ -1,0 +1,252 @@
+﻿
+<script type="text/javascript">
+// 画面初始化处理
+ $(function () {
+
+  // 取得画面URI参数
+ $("#ctime").val(LC_FormatYMD(new Date()));
+ getselect();
+getselectaoido();
+LC_SetMapData("jl",self.parent.dataMap);
+   //alert(self.parent.dataMap.vdid);
+  });
+$(function(){
+setTimeout(function(){
+Selectjzjs();
+},300);
+});
+  function baoc(){
+  LC_Resetting("jl");
+  var checkvhrnoList=["vhrno"]
+  var checkDDHIDDNDList=["dr","dsymptom","hsummary","irribefore","drugcount","descs","ndw","drugcount"]
+  var checkARList=["aca","remark"]
+  LC_IsCheckLengthMax("jl",checkvhrnoList,50);
+  LC_IsCheckLengthMax("jl",checkDDHIDDNDList,500);
+  LC_IsCheckLengthMax("jl",checkARList,1000);
+  if(retCheckFlg){
+ var url="zzhzxzqrxzzljl/";
+  var itemsList = ["thid", "thno", "no",
+			"cthid", "vht", "vhrno","drdata",
+			"dr", "vdid", "dsymptom",
+			"hsummary", "irribefore", "aca",
+			"complication","descs", "dtime", 
+			"ndw", "ns","remark", "drugcount"];  
+  var info = new Map();
+  LC_AjaxGet(TRSBaseUrl+url,"jl","callbackbaoc",info,itemsList);
+   $("#openRoleDiv").window("close");
+ }
+}
+ 
+ function  getselect(){
+  var url="mdm/dict/listget/";
+  var infoa = new Map();
+  infoa.put("stringsplit","VA0004.411,VA0004.912,CV5101.62,VA0004.915,VA0004.911");
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"jl","mdmSelect",infoa,itemsList);
+}
+
+function mdmSelect(data){
+
+  var info = new Map();
+  info.put("key",["typeCode2"]);
+  info.put("value",["typeName"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("jl","ns",info,data.dataList["VA0004.411"]);
+  LC_GetSelect("jl","ts",info,data.dataList["VA0004.912"]);
+  LC_GetSelect("jl","vht",info,data.dataList["CV5101.62"]);
+  LC_GetSelect("jl","complication",info,data.dataList["VA0004.915"]);
+  LC_GetSelect("jl","drdata",info,data.dataList["VA0004.911"]);
+  $("#ts").val(self.parent.dataMap.ts);
+   $("#drdata").val(self.parent.dataMap.drdata);
+  
+}
+//医生下拉
+ function  getselectaoido(){
+  var url="mdm/orgs/";
+  var infoa = new Map();
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"","mdmSelectoido",infoa,itemsList);
+}
+function mdmSelectoido(data){
+  var info = new Map();
+  info.put("key",["orgId"]);
+  info.put("value",["orgNm"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("jl","orgid",info,data.dataList);
+  $("#orgid").val(self.parent.orgid);
+ selectJg();
+}
+//人员
+function  selectJg(){
+  var url="mdm/org/listSta/";
+  var info = new Map();
+  info.put("stringsplit",$("#goalhid").val());
+  var itemsList=[];
+  LC_AjaxGet(MDMBaseUrl+url,"","mdmSelectaosid",info,itemsList);
+}
+function mdmSelectaosid(data){
+  var info = new Map();
+  info.put("key",["staffId"]);
+  info.put("value",["name"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("jl","vdid",info,data.dataList);
+      selectaosid();
+   
+}
+//jzjl检索
+ function Selectjzjs(){
+ 
+var url="jzjljs/";
+  var infoa = new Map();
+  infoa.put("thid",self.parent.dataMap.thid);
+  var itemsList= [];
+  LC_AjaxGet(TRSBaseUrl+url,"jl","trsSelectjzjs",infoa,itemsList);
+}
+
+function trsSelectjzjs(data){
+  
+  LC_SetMapData("jl",data.dataList[0]);
+   LC_SetMapData("jl",data.dataList1[0]);
+$("#dtime").val(LC_SubStr($("#dtime").val(),0,10));
+$("#vdid").val(data.dataList[0].vdid);
+}
+</script>
+ 
+   <div id="div-zdjl-bfz" >
+      <form id="jl">
+	      <input type="hidden" id="thid">
+	      <input type="hidden" id="cthid">
+		  <input type="hidden" id="goalhid">
+		  <select type="hidden" id="orgid" class="textLW" name="dept" onchange="selectJg()" disabled="true"></select>
+        <div class="easyui-tabs" >
+            <div class="flPadTB-10" >
+			   <div class="flPadTB-10">
+				    <div class="mainW-448">
+				        <div class="itemLW-112 padT-4">转诊状态：</div>
+				        <div class="itemRW-336" ><select class="textLW" name="dept" id="ts" disabled='true'></select></div>
+				    </div>
+                    <div class="mainW-448">
+				        <div class="itemLW-112 padT-4">下转原因：</div>
+				        <div class="itemRW-336" ><select class="textLW" name="dept" id="drdata" disabled="true"></select></div>
+				    </div>
+				<div class="mainW-224" >
+				    <div class="itemLW-112 padT-4">就诊时间：</div>
+				    <div class="itemRW-112 padT-4"><input class="textLW" type="text" id="ctime" disabled='true'/></div>
+				</div>
+				<div class="mainW-224"  style="height:28px;">
+				    <div class="itemLW-112 padT-4">就诊类别：</div>
+				    <div class="itemRW-112"><select class="textLW" name="dept" id="vht" disabled="true"></select></div>
+				</div>
+				<div class="mainW-224" >
+				    <div class="itemLW-112 padT-4">就诊记录号：</div>
+				    <div class="itemRW-112"><input class="textLW" type="text" id="vhrno" disabled='true'/></div>
+				</div>
+				<div class="mainW-224" >
+				    <div class="itemLW-112 padT-4">经诊医生：</div>
+				    <div class="itemRW-112" ><select class="textLW" name="dept" id="vdid" disabled="true">
+						<!-- 医生 填值 是否机构登陆机构？？ 科室 不知道什么科室 下拉框赋值 需要商榷 -->
+					</select></div>
+				</div>
+				<div class="mainW-448">
+				    <div class="mainW-224" >
+				        <div class="itemLW-112 padT-4">诊断码：</div>
+				        <div class="itemRW-112"><input class="textLW" type="text" id="dr" disabled='true'/></div>
+				    </div>
+				    <div class="mainW-224" >
+				        <div class="itemLW-112 padT-4">诊断名：</div>
+				        <div class="itemRW-112"><input class="textLW" type="text" id="" disabled='true'/></div>
+				    </div>
+				</div>
+				<div class="mainW-448">
+				    <div class="itemLW-112 padT-4">诊断描述：</div>
+				    <div class="itemRW-336"><textarea class="textLW" name="" cols="" rows="" id="dsymptom" disabled='true'></textarea></div>
+				</div>
+				<div class="mainW-448">
+				    <div class="itemLW-112 padT-4">病史摘要：</div>
+				    <div class="itemRW-336"><textarea class="textLW" name="" cols="" rows="" id="hsummary" disabled='true'></textarea></div>
+				</div>
+				<div class="mainW-448">
+				    <div class="itemLW-112 padT-4">过敏史：</div>
+				    <div class="itemRW-336"><textarea class="textLW" name="" cols="" rows="" id="irribefore" disabled='true'></textarea></div>
+				</div>
+				<div class="mainW-448">
+				    <div class="itemLW-112 padT-4">用药记录：</div>
+				    <div class="itemRW-336"><textarea class="textLW" name="" cols="" rows="" id="drugcount" disabled='true'></textarea></div>
+				</div>
+				<div class="mainW-448">
+				    <div class="itemLW-112 padT-4">治疗建议：</div>
+				    <div class="itemRW-336"><textarea class="textLW" name="" cols="" rows="" id="aca" disabled='true'></textarea></div>
+				</div>              
+            </div>
+        </div>
+        <div class="flPadTB-10" >
+                    <div class="mainW-448">
+					<div class="itemLW-112 padT-4">并发症：</div>
+					    <div class="itemRW-336" ><select class="textLW" name="dept" id="complication" disabled="true"></select></div>
+					</div>
+					<div class="mainW-448">
+					    <div class="itemLW-112 padT-4">情况描述：</div>
+					    <div class="itemRW-336"><textarea class="textLW" name="" cols="" rows="" id="descs" disabled='true'></textarea></div>
+					</div>
+					<div class="mainW-448">
+					    <div class="itemLW-112 padT-4">诊断时间：</div>
+					    <div class="itemRW-336"><input class="Wdate" onClick="WdatePicker()" type="text" id="dtime" disabled='true'/></div>
+					</div>
+					<div class="mainW-448">
+					    <div class="itemLW-112 padT-4">当前诊疗方式：</div>
+					    <div class="itemRW-336"><textarea class="textLW" name="" cols="" rows="" id="ndw" disabled='true'></textarea></div>
+					</div>
+					<div class="mainW-448">
+					    <div class="itemLW-112 padT-4">治疗情况：</div>
+					    <div class="itemRW-336" ><select class="textLW" name="dept" id="ns" disabled="true"></select></div>
+					</div>
+					<div class="mainW-448">
+					    <div class="itemLW-112 padT-4">备注：</div>
+					    <div class="itemRW-336" ><textarea class="textLW" name="" cols="" rows="" id="remark" disabled="true"></textarea></div>
+					</div>      
+                                     
+            </div>
+             	
+	 </div>
+   </form>
+</div>
+	
+<script type="text/javascript">
+
+//搜索延迟两秒
+var oInput = document.getElementById('delaysearch');
+        oInput.onclick = function(){
+
+	setTimeout(function(){
+	baoc()
+}, 100);
+		$("#delaysearch").linkbutton({  
+			disabled:true  
+			}); 
+        setTimeout(function(){
+			$("#delaysearch").linkbutton({  
+			disabled:false  
+			}); 
+		},1000*2);
+}
+
+//添加修改延迟五秒
+var oInput = document.getElementById('delayalter');
+        oInput.onclick = function(){
+		$("#delayalter").linkbutton({  
+			disabled:true  
+			}); 
+        setTimeout(function(){
+			$("#delayalter").linkbutton({  
+			disabled:false  
+			}); 
+		},1000*5);
+}
+
+</script>
+
+
+

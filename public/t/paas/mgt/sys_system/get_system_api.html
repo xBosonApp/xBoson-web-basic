@@ -1,0 +1,238 @@
+<style>
+  .modal section  {
+    margin-bottom : 0px;
+  }
+</style>
+
+<div class="modal fade" id="get_system_api" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title">API列表</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-xs-6">
+            <ul id="apitree" class="ztree"></ul>
+          </div>
+          <div class="col-xs-6">
+            <form method="post" onsubmit="return false;" class="smart-form" id="help" style="display:none;">
+              <fieldset>
+                <div class="row">
+									<section>
+										<label class="label">基本信息</label>
+									</section>
+								</div>
+              
+								<div class="row">
+									<section class="col col-4">
+										<label class="label">
+										  API分类:
+										</label>
+									</section>
+
+									<section class="col col-8">
+										<label class="label" name="api_classify">
+										</label>
+									</section>
+
+								</div>
+
+								<div class="row">
+									<section class="col col-4">
+										<label class="label">
+										  APPID:
+										</label>
+									</section>
+
+									<section class="col col-8">
+										<label class="label" name="appid">
+										</label>
+									</section>
+
+								</div>
+								
+								<div class="row">
+									<section class="col col-4">
+										<label class="label">
+										  MODULEID:
+										</label>
+									</section>
+
+									<section class="col col-8">
+										<label class="label" name="moduleid">
+										</label>
+									</section>
+								</div>
+								
+								<div class="row">
+									<section class="col col-4">
+										<label class="label">
+										  APIID:
+										</label>
+									</section>
+
+									<section class="col col-8">
+										<label class="label" name="apiid">
+										</label>
+									</section>
+								</div>
+								
+								<div class="row">
+									<section class="col col-4">
+										<label class="label">
+										  请求方式:
+										</label>
+									</section>
+
+									<section class="col col-8">
+										<label class="label" name="requests">
+										</label>
+									</section>
+								</div>
+								
+                <div class="row">
+									<section>
+										<label class="label">参数</label>
+									</section>
+								</div>
+								
+								<div id="param">
+  								<div class="row">
+  									<section class="col col-4">
+  										<label class="label">
+  										</label>
+  									</section>
+  
+  									<section class="col col-8">
+  										<label class="label">
+  										</label>
+  									</section>
+  								</div>
+								</div>
+
+                <div class="row">
+									<section>
+										<label class="label">URL</label>
+									</section>
+								</div>
+								<section>
+									<label class="textarea"> 										
+										<textarea rows="3" name="url" readonly="readonly"></textarea> 
+									</label>
+								</section>
+							</fieldset>
+            </form>
+          </div>
+        </div>
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+<!-- SCRIPTS ON PAGE EVENT -->
+<script type="text/javascript">
+// DO NOT REMOVE : GLOBAL FUNCTIONS!
+pageSetUp();
+
+$('#get_system_api').modal('show');
+// 递归设置chkDisabled属性以及设置图标
+function loopResult(jsonResult) {
+  for (var i = 0; i < jsonResult.length; i++) {
+    var tmp = jsonResult[i];
+    tmp.chkDisabled = jsonResult[i].chkdisabled;
+    if (tmp.appid == null) {
+      tmp.icon = "lib/js/plugin/ztreev35/img/diy/9.png";
+    } else if (tmp.appid != null && tmp.moduleid == null) {
+      tmp.icon = "lib/js/plugin/ztreev35/img/diy/8.png";
+    } else {
+      tmp.icon = "lib/js/plugin/ztreev35/img/diy/2.png";
+    }
+    var tmpChildren = tmp.children;
+    if (tmpChildren != null) {
+      loopResult(tmpChildren);
+    }
+  }
+}
+var setting = {
+  data: {
+    key: {
+      checked: "checked",
+      children: "children",
+      name: "shownm",
+    }
+  },
+  callback: {
+    onClick: zTreeOnClick,
+  },
+};
+
+var emptyparam = $('#get_system_api #param').children().clone();
+$('#get_system_api #param').empty();
+//ztree的点击事件
+function zTreeOnClick(event, treeId, treeNode) {
+  if (treeNode && !treeNode.isParent && treeNode.level == 2) {
+    
+    if(treeNode.help_info != ''){
+      $('#help').attr('style','');
+      var help_info = JSON.parse(treeNode.help_info);
+      
+      console.log(help_info);
+      
+      help_info.requests = zy.cache.cd2name('ZR.0052', help_info.requests);
+      
+      $('#get_system_api [name=requests]').html(help_info.requests);
+      $('#get_system_api [name=url]').val(help_info.url);
+      $('#get_system_api [name=appid]').html(help_info.appid);
+      $('#get_system_api [name=moduleid]').html(help_info.moduleid);
+      $('#get_system_api [name=apiid]').html(help_info.apiid);
+      $('#get_system_api [name=api_classify]').html(help_info.api_classify);
+      
+      $('#param').empty();
+      $.each(help_info.param,function(i,v){
+        var row = emptyparam.clone();
+        var t = row.find('label');
+        $(t[0]).html(v.key);
+        $(t[1]).html(v.desc);
+        
+        row.appendTo($('#get_system_api #param'));
+      });
+    }else{
+      $('#help').hide();
+    }
+    
+    //   var param = {
+    //   'appid': treeNode.appid,
+    //   'moduleid': treeNode.moduleid,
+    //   'apiid': treeNode.apiid
+    // };
+    // zy.g.am.app = 'zyapp_sysmgt';
+    // zy.g.am.mod = 'system_mgt'; 
+    // zy.net.get('api/apihelp', function(msg){
+    // //console.log(11111,msg.result[0].help_info);
+    //   $('#help').text(msg.result[0].help_info);
+    // }, param);
+      }
+   }
+var callback = function(msg) {
+  var jsonResult = eval(msg.result);
+  loopResult(jsonResult);
+  
+  zy.cache.initDicts('ZR.0052',function(){
+    $.fn.zTree.init($('#apitree'), setting, jsonResult);
+  })
+};
+var param = {
+  'sysid': mgt_system._g.param.sysid
+};
+zy.g.am.app = 'zyapp_sysmgt';
+zy.g.am.mod = 'system_mgt';
+zy.net.get('api/selectapi', callback, param);
+</script>

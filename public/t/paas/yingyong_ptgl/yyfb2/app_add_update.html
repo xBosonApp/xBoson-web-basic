@@ -1,0 +1,233 @@
+<!-- Modal -->
+<div class="modal fade" id="app_add_upd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!--<div class="modal-header">-->
+      <!--  <button type="button" id="close_btn" class="close" data-dismiss="modal" aria-hidden="true">-->
+      <!--    &times;-->
+      <!--  </button>-->
+      <!--  <h4 class="modal-title"></h4>-->
+      <!--</div>-->
+      <div class="modal-body no-padding">
+        <button type="button" id="close_btn" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <!-- FORM Start -->
+        <form id="mgt_add_upd_personal_form" method="post" onsubmit="return false;" class="smart-form">
+          <!-- start row -->
+          <div>
+            <!-- NEW WIDGET START -->
+            <article class="col-sm-12 col-md-12 col-lg-12">
+              <!-- Widget ID (each widget will need unique ID)-->
+              <div class="well" id="wid-id-3" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+                <!-- widget div-->
+                <div>
+                  <!-- widget content -->
+                  <div class="widget-body">
+                    <ul id="myTab1" class="nav nav-tabs bordered">
+                      <li class="active">
+                        <a href="#appinfo" data-toggle="tab"> 应用基本信息 </a>
+                      </li>
+                      <li style="display: none">
+                        <a href="#approle" data-toggle="tab"> 角色信息 </a>
+                      </li>
+                      <li style="display: none">
+                        <a href="#appmenu" data-toggle="tab"> 菜单信息 </a>
+                      </li>
+                    </ul>
+                    <div id="myTabContent1" class="tab-content padding-10">
+                      <div class="tab-pane fade in active" id="appinfo">
+                        <!--用户基本信息-->
+                        <div class="panel-body" style="padding: 10px">
+                          <div class="row">
+                            <section class="col col-6">
+                              <label class="label">应用名称</label>
+                              <label class="input">
+                                <i class="icon-append fa fa-exclamation"></i>
+                                <input type="text" name="appnm" placeholder="应用名称">
+                              </label>
+                            </section>
+                            <section class="col col-6">
+                              <label class="label">应用类型</label>
+                              <label class="input">
+                                <input type="text" name="apptype" placeholder="应用类型">
+                              </label>
+                            </section>
+                          </div>
+                          <section>
+                            <label class="label">应用描述</label>
+                            <label class="textarea">
+                              <i class="icon-append fa fa-exclamation"></i>
+                              <textarea name="appinfo" placeholder="应用描述"></textarea>
+                            </label>
+                          </section>
+                          <div class="row">
+                            <section class="col col-6">
+                              <label class="label">标准版应用</label>
+                              <label class="input">
+                                <input type="text" name="p_application_id" placeholder="标准版应用">
+                              </label>
+                            </section>
+                            <section class="col col-3">
+                              <label class="label">LOGO预览</label>
+                              <label>
+                                <input type="hidden" name="image_path">
+                                <input type="hidden" name="src">
+                                <button type="button" id="uplogo" class="btn btn-default btn-sm" style="height:32px">&emsp;<i class="fa fa-upload"></i>&emsp;上传LOGO&emsp;</button>
+                              </label>
+                            </section>
+                            <section class="col col-3">
+                                <div style="width:100px;height:100px;border: 0.5px #B2B9BF solid;float:right"><img id="imglogo" src="" style="width:100px;height:100px;"/></div>
+                            </section>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="tab-pane fade" id="approle">
+                        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                          <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingOne">
+                              <h4 class="panel-title" style="margin: 5px">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true"
+                                   aria-controls="collapseOne" class="alert">新角色</a>
+                              </h4>
+                            </div>
+                            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                              <div class="panel-body" style="padding: 10px">
+                                <div class="row">
+                                  <section class="col col-6">
+                                    <label class="label">角色名称</label>
+                                    <label class="input">
+                                      <i class="icon-append fa fa-exclamation"></i>
+                                      <input type="text" name="rolenm" placeholder="角色名称">
+                                    </label>
+                                  </section>
+                                  <section class="col col-6">
+                                    <!--<label class="label">角色状态</label>-->
+                                    <!--<label class="input">-->
+                                    <!--  <input type="hidden" name="rolestatus" data-type="select2" placeholder="角色状态">-->
+                                    <!--</label>-->
+                                  </section>
+                                </div>
+                                <section>
+                                  <label class="label">角色描述</label>
+                                  <label class="textarea">
+                                    <i class="icon-append fa fa-exclamation"></i>
+                                    <textarea name="roleinfo" placeholder="角色描述"></textarea>
+                                  </label>
+                                </section>
+                                <div class="row">
+                                  <section class="col col-2 pull-right">
+                                    <label class="input">
+                                      <button class="btn btn-default btn-sm" name="removerole">删除角色</button>
+                                    </label>
+                                  </section>
+                                  <section class="col col-2 pull-right">
+                                    <label class="input">
+                                      <button class="btn btn-default btn-sm" name="apilist">选择 API</button>
+                                    </label>
+                                  </section>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <section class="col pull-right" style="padding-top: 10px">
+                            <button class="btn btn-default btn-sm" name="addrole">增加角色</button>
+                          </section>
+                        </div>
+                      </div>
+                      <div class="tab-pane fade" id="appmenu">
+                        <div class="panel-group" id="accordion2" role="tablist" aria-multislectable="true">
+                          <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="hone">
+                              <h4 class="panel-title" style="margin: 5px">
+                                <a data-toggle="collapse" data-parent="#accordion2" href="#cone" aria-expanded="true"
+                          aria-controls="cone" class="alert">新菜单</a>
+                              </h4>
+                            </div>
+                            <div id="cone" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="hone">
+                              <div class="panel-body" style="padding: 10px">
+                                <div class="row">
+                                  <section class="col col-6">
+                                    <label class="label">菜单名称</label>
+                                    <label class="input">
+                                      <i class="icon-append fa fa-exclamation"></i>
+                                      <input type="text" name="menunm" placeholder="菜单名称">
+                                    </label>
+                                  </section>
+                                  <section class="col col-6">
+                                    <label class="label">菜单图标</label>
+                                    <label class="input">
+                                      <input type="hidden" name="menu_icon" data-type="select2" placeholder="菜单图标" style="width: 100%">
+                                    </label>
+                                  </section>
+                                </div>
+                                <div class="row">
+                                  <label class="label col col-10">URI</label>
+                                  <section class="col col-10">
+                                    <label class="input">
+                                      <i class="icon-append fa fa-exclamation"></i>
+                                      <input type="text" name="menuurl" placeholder="URI" readonly="readonly">
+                                    </label>
+                                  </section>
+                                  <section class="col col-2">
+                                    <label class="input" name="uilist">
+                                      <button class="btn btn-default btn-sm">选择URI</button>
+                                    </label>
+                                  </section>
+                                </div>
+                                <section>
+                                  <label class="label">菜单角色</label>
+                                  <label class="input">
+                                    <input type="hidden" name="menurole" data-type="select2" placeholder="菜单角色">
+                                    <i class="icon-append fa fa-exclamation"></i>
+                                  </label>
+                                </section>
+                                <section>
+                                  <label class="label">菜单描述</label>
+                                  <label class="textarea">
+                                    <i class="icon-append fa fa-exclamation"></i>
+                                    <textarea name="menuinfo" placeholder="菜单描述"></textarea>
+                                  </label>
+                                </section>
+                                <div class="row">
+                                  <section class="col col-2 pull-right">
+                                    <label class="input" name="removemenu">
+                                      <button class="btn btn-default btn-sm">删除菜单</button>
+                                    </label>
+                                  </section>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <section class="col pull-right" style="padding-top: 10px">
+                            <button class="btn btn-default btn-sm" name="addmenu">增加菜单</button>
+                          </section>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- end widget content -->
+                  </div>
+                  <!-- end widget div -->
+                  <div id="app_add_update_form2"></div>
+                </div>
+                <!-- end widget -->
+              </div>
+            </article>
+            <!-- WIDGET END -->
+            <!-- end row -->
+          </div>
+          <footer>
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary">下一步</button>
+          </footer>
+        </form>
+        <!-- FORM End -->
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+</div>

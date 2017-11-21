@@ -1,0 +1,570 @@
+<script type="text/javascript" language="JavaScript" src="/t/paas/show/ui/comm.js"></script>	
+<script type="text/javascript">
+var sexMap  = new Map();
+var aoidMap  = new Map();
+	var pagenum=1;//
+	var pagesize=10;//
+	var sqzzdata;
+	var ztxxdata;
+	var ztfixdata;
+	var ztcxdata;
+	var i;
+	var cg;
+	var ysMap = new Map();
+	var tsMap = new Map();
+$(function () {
+
+
+var tommorrow=new Date();
+   $("#startatime").val(LC_FormatYMD(tommorrow.setDate(tommorrow.getDate())));
+	$("#endatime").val(LC_FormatYMD(tommorrow.setDate(tommorrow.getDate())));
+
+});
+
+	$(function () {
+	getselectdaoid()
+	getselectd();
+	//getselectdform1();
+	getselectaoid();
+	getselectdsex();
+	getselectdys();
+	getselectdts();
+	});
+$(function () {
+setTimeout(function(){
+	  showDatatjbb()
+	}, 300); 
+
+
+});
+
+////////////////////////////////////////
+////////检索
+	function sqzzcallback(retData){
+
+	sqzzdata = retData;
+	
+	$('#div_tjbb').datagrid({
+			nowrap: false,
+			striped: true,
+			collapsible:false,
+			pagination:true,
+			singleSelect:true,
+			pageNumber:pagenum,//
+			pageSize: pagesize,//
+			loadMsg:"正在载入...",
+			pageList: [10,20,50,100,200],
+			data:sqzzdata.dataList,
+			columns:[[
+			   //{field:'test',title:'详细',width:48,align:'center'},
+			  // {field:'test',title:'修改',width:48,align:'center'},
+			  // {field:'test',title:'撤销',width:48,align:'center'},
+			   {field:'pname',title:'姓名',width:100,align:'center'},
+			   {field:'psex',title:'性别',width:32,align:'center',
+				   formatter:function(value){
+					  return LC_getMapValue(value,sexMap);
+					 }},
+			   {field:'pbirthdday',title:'生日',width:170,align:'center',
+			   formatter:function(value){
+					  return LC_SubStr(value,0,10);
+					 }},
+			   {field:'eid',title:'身份证号码',width:150,align:'center'},
+			   {field:'goalhid',title:'转诊医院',width:235,align:'center', 
+			   formatter:function(value){
+					  return LC_getMapValue(value,aoidMap);
+					 }},
+			   {field:'adid',title:'转诊医生',width:100,align:'center',
+					 formatter:function(value){
+					  return LC_getMapValue(value,ysMap);
+					 }},
+			   {field:'ts',title:'申请状态',width:100,align:'center',
+					 formatter:function(value){
+					  return LC_getMapValue(value,tsMap);
+					 }}
+			]],                  
+			onDblClickRow: function (rowIndex) {
+			  openRoleDiv(rowIndex);
+			},
+		   onClickRow: function (rowIndex) {
+			  i=rowIndex;
+			},
+		   fitColumns:false,
+		   pagination:true,
+		   rownumbers:true
+		}); 
+
+	   var pager = $('#div_tjbb').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pagenum=pageNumber;
+		           pagesize=pageSize;
+		           showDatatjbb();
+		        }
+			});		
+			$(pager).pagination({pageSize:pagesize,pageNumber:pagenum,total:sqzzdata.count});
+		};
+	}
+
+	function showDatatjbb(){
+		var ysFlg=true
+		if(ysMap.size()==0){
+			ysFlg=false
+			getselectdaoid();
+		}
+		if(retCheckFlg){
+		//	LC_Resetting("form1");
+		//	var checkpcthrItems=["startatime","endatime"];
+		//	LC_IsCheckNotNull("form1",checkpcthrItems);
+		//	if(retCheckFlg){
+				var url ="zzsqtjbb/"; 
+				//要提交表单的所有控件id	
+				var itemsList=["startatime","endatime","goalhid","adid","ts"];	
+				var info= new Map();
+				 //分页	
+				info.put("pagenum",pagenum);
+				info.put("pagesize",pagesize);
+				if(ysFlg){
+				LC_AjaxGet(TRSBaseUrl+url,"form1","sqzzcallback",info,itemsList);
+			   }else{
+			   setTimeout(function(){
+		          LC_AjaxGet(TRSBaseUrl+url,"form1","sqzzcallback",info,itemsList);
+		       }, 300);	
+		   }
+		//}
+			
+			
+	}
+	
+	
+	
+}
+
+///////////////////////////////////////
+//详细的弹出数据列表	
+
+////////详细
+	function ztxxcallback(retData){
+	
+		ztxxdata = retData;
+
+		$('#div-ztxx').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+				pagination:true,
+				singleSelect:true,
+				pageNumber:pagenum,
+				pageSize: pagesize,
+				loadMsg:"正在载入...",
+                pageList: [10,20,50,100,200],
+				data:ztxxdata.dataList3,
+				fitColumns:true,
+				columns:[[
+				   {field:'utime',title:'更新时间',width:130,align:'left'},
+				   {field:'ts',title:'状态',width:60,align:'center'},
+				   {field:'uuid',title:'操作人',width:70,align:'center'},
+				   {field:'coid',title:'申请科室',width:150,align:'left'},
+				   {field:'cosid',title:'申请医疗机构',width:200,align:'left'}
+				]],                  
+               onDblClickRow: function (rowIndex) {
+                  RoleDiv(rowIndex);
+               },
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true
+	}); 
+		
+			var pager = $('#div-ztxx').datagrid('getPager');
+            if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pagenum=pageNumber;
+		            pagesize=pageSize;
+		            showDataztxx();
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:pagesize,pageNumber:pagenum,total:ztxxdata.count});
+
+		};
+		
+		LC_SetMapData("formxx1",ztxxdata.dataList[0]);
+		LC_SetMapData("formxx2",ztxxdata.dataList[0]);
+		
+	}
+	
+	function ztchexiaocallback(retData){
+		alert("success");
+	}
+	
+		//撤销的弹出
+	function revocation(){
+		$('#div-revocation-on').dialog('open');
+	}
+	
+	function revocationDialog(){
+		$('#div-revocation-on').dialog('close');
+		$('#div-revocation').dialog('open'); 
+		LC_SetMapData("formcx",sqzzdata.dataList[i]);
+	}
+	// 撤销
+	function showchexiao(retData){
+		var url ="zzsqtjcx/"; 
+       	var itemsList=[];	
+		var info= new Map();
+		info.put("status",sqzzdata.dataList[i].status)
+		info.put("ts",sqzzdata.dataList[i].ts);
+		info.put("thid",sqzzdata.dataList[i].thid);
+       
+       	LC_AjaxGet(TRSBaseUrl+url,"formcx","ztchexiaocallback",info,itemsList);
+       	$('#div-revocation').dialog('close');
+	}
+	//详细的弹出	
+	function detailed(){
+		var openRoleDiv =self.parent.$("#openRoleDiv");
+		openRoleDiv.window({
+		title: '详细信息',
+		width: 735,
+		height: 400,
+		content:$("#div-detailed").html()
+			});
+		var url ="zzsqtjxx/"; 
+       	var itemsList=[];	
+		var info= new Map();
+		info.put("status",sqzzdata.dataList[i].status)
+		info.put("ts",sqzzdata.dataList[i].ts);
+		info.put("thid",sqzzdata.dataList[i].thid);
+       	LC_AjaxGet(TRSBaseUrl+url,"","ztxxcallback",info,itemsList);
+		LC_SetMapData("formxx1",sqzzdata.dataList[i]);
+		LC_SetMapData("formxx2",sqzzdata.dataList[i]);
+	}
+	//修改的弹出	
+	function modify(){
+      	var openRoleDiv =self.parent.$("#openRoleDiv");
+		openRoleDiv.window({
+		title: '修改信息',
+		width: 735,
+		height: 400,
+		content:$("#div-modify").html()
+		});
+      
+		LC_SetMapData("formfix",sqzzdata.dataList[i]);
+		LC_SetMapData("formfix2",sqzzdata.dataList[i]);
+	}
+	
+	// 提交修改
+	function ztggcallback(retData){
+		alert("成功");
+		$('#div-modify').dialog('close');
+	}
+	// 提交修改
+	function showDatagg(){
+		if(retCheckFlg){
+	        var url ="zzsqtjgg/"; 
+        	var itemsList=["hid","thgoal","goalhsubid","thtype","siid","siph","ssnm","sifh","aoid","aosid","adid"];	
+			var info= new Map();
+			info.put("thid",sqzzdata.dataList[0].thid);
+			info.put("ts",sqzzdata.dataList[0].ts);
+        	LC_AjaxGet(TRSBaseUrl+url,"formfix2","ztggcallback",info,itemsList);	
+		}
+	}
+	
+
+	//$(function () {
+	 
+//	});
+
+	function  getselectd(){
+
+	var url="mdm/dict/listget/";
+	var infoa = new Map();
+	infoa.put("stringsplit","VA0004.908,VA0004.909,VA0004.907");
+	var itemsList= [];
+	LC_AjaxGet(MDMBaseUrl+url,"formfix2","mdmSelectd",infoa,itemsList);
+}
+
+	function mdmSelectd(data){
+		var info = new Map();
+		info.put("key",["typeCode2"]);
+		info.put("value",["typeName"]);
+		info.put("keySplit",",");
+		info.put("valueSplit","|");
+		LC_GetSelect("formfix2","thgoal",info,data.dataList["VA0004.908"]);
+		LC_GetSelect("formfix2","thtype",info,data.dataList["VA0004.909"]);
+		LC_GetSelect("formfix2","siid",info,data.dataList["VA0004.907"]);
+	}
+
+
+	//form1
+	//$(function () {
+	
+	//});
+
+	/*function  getselectdform1(){
+		var url="mdm/dict/listget/";
+		var infoa = new Map();
+		infoa.put("stringsplit","VA0004.912");
+		var itemsList= [];
+		LC_AjaxGet(MDMBaseUrl+url,"form1","mdmSelectdf",infoa,itemsList);
+}
+
+	function mdmSelectdf(data){
+		var info = new Map();
+		info.put("key",["typeCode2"]);
+		info.put("value",["typeName"]);
+		info.put("keySplit",",");
+		info.put("valueSplit","|");
+		LC_GetSelect("form1","ts",info,data.dataList["VA0004.912"]);
+}*/
+
+
+//机构
+
+	function  getselectaoid(){
+		var url="mdm/osms004ChOrgId/";
+  var infoa = new Map();
+  infoa.put("changorgid",self.parent.orgid);
+  var itemsList= [];
+		LC_AjaxGet(MDMBaseUrl+url,"form1","mdmSelectoid",infoa,itemsList);
+	}
+
+	function mdmSelectoid(data){
+		 var info = new Map();
+  info.put("key",["orgid"]);
+  info.put("value",["orgNm"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("form1","goalhid",info,data.dataList);
+	}
+
+	/*function  getselectaadid(){
+		var url="mdm/org/listSta/";
+		var info = new Map();
+		info.put("stringsplit",$("#goalhid").val());
+		var itemsList=[];
+		LC_AjaxGet(MDMBaseUrl+url,"adid","mdmSelectadid",info,itemsList);
+	}
+
+	function mdmSelectadid(data){
+		var info = new Map();
+		info.put("key",["staffId"]);
+		info.put("value",["name"]);
+		info.put("keySplit",",");
+		info.put("valueSplit","|");
+		LC_GetSelect("form1","adid",info,data.dataList);
+	}*/
+	function cg(){
+		var openRoleDiv = self.parent.$("#openRoleDiv");
+		openRoleDiv.window({
+			href:"SQZZ/cg.html",
+			title: '存根',
+			width: 635,
+			height: 500
+          });
+	}
+	function newUser(){
+		var openRoleDiv = self.parent.$("#openRoleDiv");
+		openRoleDiv.window({
+			href:"SQZZ/SQZZ_ZZSQ.html",
+            title: '转诊申请',
+            width: 956,
+            height: 500,
+			closable:true
+          });
+	}
+
+
+function  getselectdaoid(){
+  var url="mdm/orgs/";
+  var infoa = new Map();
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"formfix2","mdmSelectdaoid",infoa,itemsList);
+}
+
+function mdmSelectdaoid(data){
+  var info = new Map();
+  info.put("key",["orgId"]);
+  info.put("value",["orgNm"]);
+  aoidMap=LC_getDataMap(info,data.dataList);
+}
+
+	
+//转换性别
+//$(function () {
+
+//});
+function  getselectdsex(){
+  var url="mdm/dict/listget/";
+  var infoa = new Map();
+  infoa.put("stringsplit","VA0004.04");
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"formfix2","mdmSelectdsex",infoa,itemsList);
+}
+function mdmSelectdsex(data){
+  var info = new Map();
+  info.put("key",["typeCode2"]);
+  info.put("value",["typeName"]);
+  sexMap=LC_getDataMap(info,data.dataList["VA0004.04"]);
+}
+//转换申请状态
+
+function  getselectdts(){
+  var url="mdm/dict/listget/";
+  var infoa = new Map();
+  infoa.put("stringsplit","VA0004.912");
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"","mdmSelectdts",infoa,itemsList);
+}
+function mdmSelectdts(data){
+  var info = new Map();
+  info.put("key",["typeCode2"]);
+  info.put("value",["typeName"]);
+  tsMap=LC_getDataMap(info,data.dataList["VA0004.912"]);
+}
+//转换医生
+//
+
+//
+function  getselectdys(){
+  var url="mdm/org/listSta/";
+  var infoa = new Map();
+  infoa.put("stringsplit",self.parent.orgid);
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"formfix2","mdmSelectdys",infoa,itemsList);
+}
+function mdmSelectdys(data){
+  var info = new Map();
+  info.put("key",["staffId"]);
+  info.put("value",["name"]);
+  ysMap=LC_getDataMap(info,data.dataList);
+}
+
+
+
+
+
+getselectaoido2();
+
+
+
+
+//获取登陆机构的人员
+ function  getselectaoido2(){
+  var url="mdm/orgs/";
+  var infoa = new Map();
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"form1","mdmSelectoido2",infoa,itemsList);
+}
+function mdmSelectoido2(data){
+  var info = new Map();
+  info.put("key",["orgId"]);
+  info.put("value",["orgNm"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("form1","aoid",info,data.dataList);
+  $("#form1 #aoid").val(self.parent.orgid);
+  setTimeout(function(){
+ selectJg2();
+}, 300); 
+}
+人员
+function  selectJg2(){
+  var url="mdm/org/listSta/";
+  var info = new Map();
+  info.put("stringsplit",$("#form1 #aoid").val());
+  var itemsList=[];
+  LC_AjaxGet(MDMBaseUrl+url,"","mdmSelectaosid1",info,itemsList);
+}
+function mdmSelectaosid1(data){
+  var info = new Map();
+  info.put("key",["staffId"]);
+  info.put("value",["name"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("form1","adid",info,data.dataList);
+}
+
+</script>
+<style>
+body{ font-size:12px;}
+.padding1{padding:10px 0 0 7px;}
+</style>
+<form id="form1" style="margin:0;">
+<select id="aoid" class="textLW" name="dept" onchange="selectJg2()" style="display:none;" ></select>
+<div class="padding1">
+<div class="mainsW-912 clearfix" style="height:600px;">
+		<div class="easyui-panel" title="统计报表">
+        	<div class="padTB-10 clearfix">
+               
+                    <div class="mainW-224" >
+                        <div class="itemLW-112 padT-4">开始时间：</div>
+                        <div class="itemRW-112"><input class="Wdate"  onClick="WdatePicker()" id="startatime" type="text" style="width:112px;" value="" /></div>
+                     </div>
+                     <div class="mainW-224" >
+                        <div class="itemLW-112 padT-4">结束时间：</div>
+                        <div class="itemRW-112"><input class="Wdate"  onClick="WdatePicker()" id="endatime" type="text" style="width:112px;" value="" /></div>
+                     </div>
+                     <div class="mainW-448">
+                        <div class="itemLW-112 padT-4">目标医院：</div>
+                        <div class="itemRW-336"><select id="goalhid" class="textLW" name="dept" onchange="getselectaadid()"></select></div>
+                     </div>
+                 <div class="mainW-224" >
+                    <div class="itemLW-112 padT-4">申请医生：</div>
+                    <div class="itemRW-112"><select id="adid" class="textLW" name="dept"></select></div>
+                 </div>
+                 <div class="mainW-224" >
+                    <div class="itemLW-112 padT-4">申请状态：</div>
+                    <div class="itemRW-112"><select id="ts" class="textLW" name="dept">
+                    <option value=""></option>
+					<option value="01">申请【已】</option>
+					<option value="02">申请【取消】</option>
+					<option value="05">接收【同意】</option>
+					<option value="06">接收【拒绝】</option>
+					<option value="07">就诊【已】</option>
+					<option value="08">就诊【取消】</option>
+					<option value="10">转回【已】</option>
+                    </select></div>
+                 </div>
+                 
+                 <div class="itemLW-896"><a href="#" class="easyui-linkbutton" id="delaysearch" onclick="showDatatjbb()">检索</a><!--<span class="padLR-10"><a href="#" class="easyui-linkbutton">打印</a></span>--></div>
+             </div>
+        </div>
+        <table id="div_tjbb" ></table>
+       	
+</div>
+</div></form>
+
+<script type="text/javascript">
+//搜索延迟两秒
+var oInput = document.getElementById('delaysearch');
+        oInput.onclick = function(){
+		$("#delaysearch").linkbutton({  
+			disabled:true  
+			}); 
+        setTimeout(function(){
+				pagenum=1;
+				pagesize=10;
+				showDatatjbb();
+			$("#delaysearch").linkbutton({  
+			disabled:false  
+			}); 
+		},1000);
+		
+		
+}
+
+//添加修改延迟五秒
+/*var oInput = document.getElementById('delayalter');
+        oInput.onclick = function(){
+		$("#delayalter").linkbutton({  
+			disabled:true  
+			}); 
+        setTimeout(function(){
+			$("#delayalter").linkbutton({  
+			disabled:false  
+			}); 
+		},1000*2);
+}*/
+</script>
+

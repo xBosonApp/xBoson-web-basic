@@ -1,0 +1,61 @@
+<meta http-equiv="Content-Type" charset="UTF-8" />
+<div class="row">	
+	<div class="col-sm-12">
+		<div class="padding-10">
+			<div class="tab-content padding-top-10">				
+				<div class="row">						
+					<form id="myfile_form" method="post" onsubmit="return false;" class="smart-form">
+							<section class="col col-2">
+							  <label class="input">
+								<input type="hidden" name="ctype" data-type="select2" placeholder="控件类型" />
+							  </label>
+							</section>	
+							<section class="col col-2">
+							  <label class="input">
+								<input type="hidden" name="status" data-type="select2" placeholder="状态" />
+							  </label>
+							</section>														
+							<section class="col col-6">							    
+							    <div id="datadict_form_div"> 
+									
+								</div>
+							</section>
+							<section class="col col-4">									
+							    <button id="myfile_search" class="btn btn-info btn-sm" type="button" autofocus ><i class="fa fa-search fa-1"></i>&emsp;查 询&emsp;</button>								
+								 <div class="btn-group">
+									  <button id="myfile_add" class="btn btn-info btn-xs">&emsp;<i class="fa fa-magic"></i>&nbsp;添 加&emsp;</button>
+									  <button id="myfile_edit" class="btn btn-info btn-xs">&emsp;<i class="fa fa-edit"></i>&nbsp;修 改&emsp;</button>
+									  <button id="myfile_view" class="btn btn-info btn-xs">&emsp;<i class="fa fa-magic"></i>&nbsp;预 览&emsp;</button>
+									</div>								
+							</section>																								
+					</form>	
+				</div>	
+				<div class="row">
+					<table class="table table-striped table-hover table-bordered datatable" id="myfiletable">
+						<thead>
+							<tr>								
+								<th>显示名称</th>
+								<th>插件分类</th>									
+								<th>插件ID</th>
+								<th>插件name</th>
+								<th>更新时间</th>
+								<th>有效</th>
+							</tr>
+						</thead>							
+						<tbody> </tbody>
+					</table>		  
+				</div> 
+				<div id="myfile_pagination"></div>				
+			</div>
+		</div>
+	</div>
+</div>
+<!-- end row -->      
+<div id="sqlplug_mod"></div>
+<div id="sqlplug_mod_view"></div>
+<script src="bi/sqlplug/sqlplug.js"></script>
+<script>		
+	pageSetUp();
+	var plugdatas = {};
+	var sqlplug = new SQLPlug();	
+</script>

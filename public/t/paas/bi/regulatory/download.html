@@ -1,0 +1,131 @@
+<meta http-equiv="Content-Type" charset="UTF-8" />
+<div class="modal fade" id="download_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title">报表下载</h4>
+			</div>
+			<div class="modal-body no-padding">
+				<div class="widget-body-toolbar">
+					<div id="download_test_form" class="smart-form navbar-form">
+						<fieldset>
+							<form id="reportparam">
+								<div class="row">
+									<section class="col col-sm-12">
+										<label class="label">报表名称</label>
+										<label class="input">
+											<input type="text" style="width: 55%;" name="filenm" placeholder="报表名称" class="form-control">
+										</label>
+									</section>
+								</div>
+								<div id="scr_plug">
+
+
+								</div>
+							</form>
+							<div class="row">
+								<section class="col col-sm-12">
+									<label class="input"></label>
+									<div id='date_comp'></div>
+								</section>
+							</div>
+						</fieldset>
+						<footer>
+							<button type="button" class="btn btn-default" data-dismiss="modal">
+								取消
+							</button>
+							<button type="submit" id="downloadButton" class="btn btn-primary">
+								确定
+							</button>
+						</footer>
+					</div>
+					<div id="download_div"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script type="text/javascript" src="lib/js/zy/zy_chart_common.js"></script>
+<script type="text/javascript">
+	pageSetUp();
+
+	$("#download_test_form input[name=filenm]").val(reportform._g.param.filenm);
+
+	zy.g.am.app = "EWATERBI";
+	zy.g.am.mod = "prod_sc";
+	var date_div = $('#date_comp');
+	var dc = zy_chart.createDataComponent(date_div);
+
+	var sitecd;
+	var callback2 = function (msg) {
+		if (msg) {
+			sitecd = msg;
+			var rep_type = "",
+				rep_flag;
+			rep_flag = msg.rep[0].flag;
+			rep_type = msg.rep[0].type;
+			try {
+				dc.set({
+					"dt_from": "2014-03-02",
+					"dt_to": "2014-06-09",
+					"dt_type": parseInt(rep_type), // 必须是数字
+					"flg": parseInt(rep_flag),
+					"dt_q": 0,
+					"autotime": false
+				});
+			} catch (E) {
+				console.log(E);
+			}
+			if (msg.rep[0].plug) {
+				for (var i = 0; i < msg.rep[0].plug.length; i++) {
+					$('#scr_plug').append('<div class="row"><section  class="col col-sm-6"><label><input id="' + msg.rep[0].plug[i].cid + '" type="hidden" data-type="select2" style="width:290px" name="' + msg.rep[0].plug[i].cname + '" ></label> </section></div>');
+
+					$('#' + msg.rep[0].plug[i].cid).select2({
+						allowClear: true,
+						multiple: "2" == msg.rep[0].plug[i].ctype,
+						data: msg.rep[0].plug[i].plugdata,
+						// placeholder:plug.plugnm,
+						formatSelection: format,
+						formatResult: format
+					});
+					$('#' + msg.rep[0].plug[i].cid).select2('val', msg.rep[0].plug[i].plugdata[0].id);
+					//  $('#'+msg.rep.plug[i].cid).zySelectCustomData('', false, {width: '100%'}, msg.rep.plug.plugdata);
+				}
+
+			}
+		}
+
+	};
+
+	function format(item) {
+		return item.name;
+	}
+	var down = {
+		"down_type": "report",
+		"filenm": reportform._g.param.filenm,
+		"orgid": zy.g.comm.org,
+		"report": reportform._g.param.filenm
+	};
+
+	zy.net.get("api/" + reportform._g.param.report_api, callback2, down);
+
+	$('#downloadButton').click(function () {
+		zy.g.am.app = "EWATERBI";
+		zy.g.am.mod = "prod_sc";
+
+		//var downlo =dc.get();
+		var downlo = $.extend({}, dc.get(), $('#reportparam').form2json());
+		window.ee = downlo;
+		zy.net.postDownload("download/" + reportform._g.param.report_api, downlo);
+		$('#download_modal').modal('hide');
+		$('#report_dt').DataTable().$('tr.active').removeClass('active');
+		$('#report_download').btnDisable(true);
+		//        zy.net.get("api/" + reportform._g.param.report_api, callback1, downlo);
+	});
+	$('#download_modal').modal('show');
+</script>

@@ -1,0 +1,775 @@
+﻿<style>
+.form-inline input.inputwp{width:auto; position:relative; top:-3px;}
+.span6list span{ margin:5px 15px 0 0; float:left;}
+.tj{ float:left; border:1px solid #dddddd; border-radius:3px; position:relative; background:#f9f9f9; padding:0 5px 0 5px; margin:0 10px 5px 10px; height:30px;}
+.tj .tj-title{ float:left;border-right:1px solid #dddddd;color:#000; padding:0 5px; height:30px; line-height:30px;}
+.tj .tj-main{ text-align:center; float:left; padding:3px 5px 0 5px; font-size:12px;}
+.tj .tj-main button{ margin:0 2px;border:1px solid #ccc;}
+.row-fluid .span2{ line-height:normal;}
+.syfl{ font-size:12px;}
+label{ padding:0 5px 0 0; font-size:12px;}
+.btn{ border:none;}
+.bootstrap-select > .btn{ width:100%;}
+#timelx .bootstrap-select:not([class*="span"]):not([class*="col-"]):not([class*="form-control"]){ width:150px;}
+.btn-group > .btn:first-child{ border-radius:0; border:none; font-size:12px;}
+.btn.active, .btn:active {
+    background-color: #49afcd;
+    background-image: linear-gradient(to bottom, #5bc0de, #2f96b4);
+    background-repeat: repeat-x;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    color: #fff;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    outline: 0 none; color:#fff;
+}
+.btn:hover, .btn:focus {
+    background-position: 0;
+    text-decoration: none;
+    transition: background-position 0.1s linear 0s;
+}
+</style>
+<div class="portlet box grey">
+    <div class="portlet-title">
+        <div class="caption" id="yetj-name">健康档案综合查询</div>
+        <div class="tools"><a href="#myModal" data-toggle="modal" style=" cursor:pointer;"><i class="icon-question-sign"></i></a></div>
+    </div>
+    <div class="portlet-body">
+    	<form id="ggwssjcx" class="form-inline" action="">
+        <div class="lc-inquire">
+            <div class="row-fluid">
+            	<div class="span12" style="text-align:right;">
+                	<div class="tj" style="padding:0 0 0 5px;">
+                    	<div class="tj-title">机构名称</div>
+                        <div class="tj-main" id="sex" style="width:150px; padding:0;">
+                            <select id="dimorg" class="selectpicker" multiple="multiple" style=" border:none;"></select>
+                        </div>
+                    </div>
+                    <div class="tj">
+                    	<div class="tj-title">时间</div>
+                        <div class="tj-main" id="timelx">
+							<span style="position:relative;"><span style="position:relative; top:2px;">开始时间：</span><input id="datebegin" type="text" class="dateday" style="width:90px; height:11px;">
+                            <span style="position:relative;">结束时间：</span><input id="dateend" type="text"  class="dateday" style="width:90px; height:11px;"></span>
+                        </div>
+                    </div>
+                	<div class="tj">
+                    	<div class="tj-title">当前年龄</div>
+                        <div class="tj-main" id="sex">
+                            <input id="agebegin" name="" type="text" style="width:30px; height:11px;" value="20" /> - <input id="ageend" name="" type="text" style="width:30px;height:11px;" value="70" />
+                        </div>
+                    </div>
+                    <div class="tj">
+                        <div class="tj-title">疾病史</div>
+                        <div class="tj-main" id="jbs">
+                            <label class="checkbox">
+                                <button id="jiazubingshi" type="button" class="btn btn-mini" data-toggle="button" style="float:left; border:1px solid #ccc;">家族病史</button>
+                              <input id="jzbsid" type="checkbox" name="checkbox" value="01" style="width:auto;">
+                            </label>
+                            <!--<label class="checkbox">
+                              <input id="jbs02" type="checkbox" name="checkbox" value="02" style="width:auto;">个人病史
+                            </label>
+                            <button type="button" class="btn btn-mini" data-toggle="button">合计</button>-->
+                        </div>
+                    </div>
+                    <div class="tj">
+                        <div class="tj-title">性别</div>
+                        <div class="tj-main" id="sex">
+                            <label class="checkbox">
+                                <button id="nan" type="button" class="btn btn-mini active" data-toggle="button" style="float:left; border:1px solid #ccc;">男</button>
+                                <input id="sex01" type="checkbox" name="checkbox" value="01" style="width:auto;">
+                            </label>
+                            <label class="checkbox">
+                                <button id="nv" type="button" class="btn btn-mini active" data-toggle="button" style="float:left; border:1px solid #ccc;">女</button>
+                              <input id="sex02" type="checkbox" name="checkbox" value="02" style="width:auto;">
+                            </label>
+                            <button id="sex03" type="button" class="btn btn-mini active" data-toggle="button">合计</button>
+                        </div>
+                    </div>
+                    <div class="tj">
+                        <div class="tj-title">活动人口</div>
+                        <div class="tj-main" id="hdrk">
+                            <label class="checkbox">
+                                <button id="huji" type="button" class="btn btn-mini" data-toggle="button" style="float:left; border:1px solid #ccc;">户籍</button>
+                                <input id="hdrk01" type="checkbox" name="checkbox" value="1" style="width:auto;">
+                            </label>
+                            <label class="checkbox">
+                                <button id="feihuji" type="button" class="btn btn-mini" data-toggle="button" style="float:left; border:1px solid #ccc;">非户籍</button>
+                                <input id="hdrk02" type="checkbox" name="checkbox" value="2" style="width:auto;">
+                            </label>
+                            <button id="hdrk03" type="button" class="btn btn-mini" data-toggle="button">合计</button>
+                        </div>
+                    </div>
+                    <span style="position:relative; top:4px; float:left; height:37px;">
+                        <label class="checkbox" style="margin:3px 0 0 0;">
+                            <button id="zhongyitizhi" type="button" class="btn btn-mini" data-toggle="button" style="float:left; border:1px solid #ccc; margin:0 2px 0 0;">中医体质辨识</button>
+                            <input id="zytzbsid" type="checkbox" name="checkbox" value="0" style="width:auto;">
+                        </label>
+                        <button id="tjcs" type="button" class="btn btn-mini" data-toggle="button" style="border:1px solid #ccc;">体检次数</button>
+                    </span>
+                    <div class="tj" style="height:30px; padding-right:0;">
+                        <div class="tj-title" style="height:30px; line-height:30px;">学历 <input id="tnbmain" type="checkbox" name="checkbox" value="2" style="width:auto; margin:-2px 0 0 0;"></div>
+                        <div class="tj-main" style="padding:0; width:100px;">
+                            <select class="selectpicker" style=" border:none;width:100px;">
+                                <option value="1">小学及以下</option>
+                                <option value="2">初中</option>
+                                <option value="3">高中及以上</option>
+                            </select>
+                            <!--<table width="100%" border="0" cellspacing="0" cellpadding="0">
+                              <tr>
+                                <td height="30"><button type="button" class="btn btn-mini" data-toggle="button" style="float:left; position:relative; top:-4px;">学历</button></td>
+                                <td align="left" id="tnbsf" style="width:100px;">
+                                    <select class="selectpicker" style=" border:none;width:100px;">
+                                        <option value="1">小学及以下</option>
+                                        <option value="2">初中</option>
+                                        <option value="3">高中及以上</option>
+                                    </select>
+                                </td>
+                              </tr>
+                            </table>-->
+                        </div>
+                    </div>
+                    <div class="tj" style="height:30px; padding-right:0;">
+                        <div class="tj-title" style="height:30px; line-height:30px;">职业 <input id="tnbmain" type="checkbox" name="checkbox" value="2" style="width:auto; margin:-2px 0 0 0;"></div>
+                        <div class="tj-main" style="padding:0; width:100px;">
+                            <select class="selectpicker" style=" border:none;width:100px;">
+                                <option value="1">高危职业</option>
+                                <option value="2">非高危职业</option>
+                            </select>
+                        </div>
+                    </div>
+                    <span id="mb" style="display:none;">
+                        <div class="tj" style="height:30px;">
+                            <div class="tj-title" style="height:30px; line-height:30px;">高血压 <input id="gxymain" type="checkbox" name="checkbox" value="1" style="width:auto; margin:-2px 0 0 0;"></div>
+                            <div class="tj-main" style="padding:0">
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                  <tr>
+                                    <td height="30" align="right" style="color:#000000;">&nbsp;&nbsp;随访：</td>
+                                    <td align="left" id="gxysf">
+                                        <button id="gxy01" type="button" class="btn btn-mini" data-toggle="button">电话</button>
+                                        <button id="gxy02" type="button" class="btn btn-mini" data-toggle="button">上门</button>
+                                        <button id="gxy03" type="button" class="btn btn-mini" data-toggle="button">门诊</button>
+                                        <button id="gxy04" type="button" class="btn btn-mini" data-toggle="button">合计</button>
+                                    </td>
+                                  </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="tj" style="height:30px;">
+                            <div class="tj-title" style="height:30px; line-height:30px;">糖尿病 <input id="tnbmain" type="checkbox" name="checkbox" value="2" style="width:auto; margin:-2px 0 0 0;"></div>
+                            <div class="tj-main" style="padding:0">
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                  <tr>
+                                    <td height="30" align="right" style="color:#000000;">&nbsp;&nbsp;随访：</td>
+                                    <td align="left" id="tnbsf">
+                                        <button id="tnb01" type="button" class="btn btn-mini" data-toggle="button">电话</button>
+                                        <button id="tnb02" type="button" class="btn btn-mini" data-toggle="button">上门</button>
+                                        <button id="tnb03" type="button" class="btn btn-mini" data-toggle="button">门诊</button>
+                                        <button id="tnb04" type="button" class="btn btn-mini" data-toggle="button">合计</button>
+                                    </td>
+                                  </tr>
+                                </table>
+                            </div>
+                        </div>
+                        </span>
+                    	<div class="tj" style="height:30px; padding-right:0;">
+                            <div class="tj-title" style="height:30px; line-height:30px;">婚姻 <input id="tnbmain" type="checkbox" name="checkbox" value="2" style="width:auto; margin:-2px 0 0 0;"></div>
+                            <div class="tj-main" style="padding:0; width:100px;">
+                            	<select class="selectpicker" style=" border:none;width:100px;">
+                                    <option value="1">已婚</option>
+                                    <option value="2">未婚</option>
+                                </select>
+                            </div>
+                        </div>
+                    	<span style="position:relative; top:4px; float:left; height:37px;">
+                            <label class="checkbox" style="display:none;">
+                                <button id="jingshenbing" type="button" class="btn btn-mini" data-toggle="button" style="float:left; border:1px solid #ccc; margin:0 2px 0 0;">精神病</button>
+                                <input id="jsbid" type="checkbox" name="checkbox" value="0" style="width:auto;">
+                            </label>
+                            <label class="checkbox">
+                                <button id="canjiren" type="button" class="btn btn-mini" data-toggle="button" style="float:left; border:1px solid #ccc; margin:0 2px 0 0;">残疾人</button>
+                              <input id="cjrid" type="checkbox" name="checkbox" value="0" style="width:auto;">
+                            </label>
+                            <label class="checkbox">
+                                <button id="yunchanfu" type="button" class="btn btn-mini" data-toggle="button" style="float:left; border:1px solid #ccc; margin:0 2px 0 0;">孕产妇</button>
+                              <input id="ycfid" type="checkbox" name="checkbox" value="0" style="width:auto;">
+                            </label>
+                        </span>
+						<a onclick="setData()" class="btn btn-primary btn-lg" style="float:right;border:1px solid #006dcc;">查询</a>
+                    	<button id="all" type="button" class="btn btn-lg" data-toggle="button" style="float:right; border:1px solid #ccc; margin:0 5px 0 0;">全选</button>
+          
+                    
+                    
+                    
+                    
+                </div>
+            </div>
+        </div>
+        
+        
+        <input id="sexbox" name="" type="hidden" value="01,02" />
+        <input id="zytzbsidbox" name="" type="hidden" value="0" />
+        <input id="jzbsidbox" name="" type="hidden" value="0" />
+        <input id="jsbidbox" name="" type="hidden" value="0" />
+        <input id="cjridbox" name="" type="hidden" value="0" />
+        <input id="ycfidbox" name="" type="hidden"  value="0" />
+        <input id="hdrkidbox" name="" type="hidden" value="" />
+        <input id="gxysfidbox" name="" type="hidden" value="01,02,03" />
+        <input id="tnbsfidbox" name="" type="hidden" value="01,02,03" />
+        <input id="gxymainidbox" name="" type="hidden"  value="0" />
+        <input id="tnbmainidbox" name="" type="hidden"  value="0" />
+        <input id="mbidbox" name="" type="hidden"  value="" />
+        </form>
+        <div id="rowtable" class="row-fluid">
+            <div class="span12" style="overflow:hidden; overflow-y:auto; height:370px;">
+                 <table id="dg" ></table>
+            </div>
+        </div>
+        
+        
+        
+    </div>
+</div>
+<!-- Modal -->
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">帮助</h3>
+  </div>
+  <div class="modal-body">
+    <p>1.机构支持多选</p>
+    <p>2.复选按钮为选择条件</p>
+    <p>3.按钮表示显示与隐藏</p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
+</div>
+
+
+<script>
+$(function () {
+$("[name='checkbox']").click(function(){
+ if($(this).attr("checked")){
+	 $(this).removeAttr("checked")
+   }else{
+	 $(this).attr("checked",'true')
+	}
+});
+$("#all").click(function(){
+	if($(this).attr("class")=="btn btn-lg"){
+		$("#ggwssjcx input[type='checkbox']:visible").prop("checked",true);
+		$("#ggwssjcx button[class='btn btn-mini']:visible").addClass("active");
+		$(this).text("全不选");
+		}else{
+		$("#ggwssjcx input[type='checkbox']:visible").prop("checked",false);
+		$("#ggwssjcx button[class='btn btn-mini active']:visible").not("#nan,#nv,#sex03").removeClass("active");
+		$(this).text("全选");
+			}
+})
+//all  gxysf
+$("#sex [name='checkbox'],#mb [name='checkbox'],#hdrk [name='checkbox'],#gxysf [name='checkbox'],#tnbsf [name='checkbox'],#zytzbsid[name='checkbox'],#jzbsid[name='checkbox'],#jsbid[name='checkbox'],#cjrid[name='checkbox'],#ycfid[name='checkbox']").click(function(){
+	//性别
+    var str="";
+    $("#sex [name='checkbox'][checked]").each(function(){
+     str+=$(this).val()+",";
+    })
+	str=str.substring(0,str.length-1);
+	$("#sexbox").val(str);
+	//活动人口
+    var str1="";
+    $("#hdrk [name='checkbox'][checked]").each(function(){
+     str1+=$(this).val()+",";
+    })
+	str1=str1.substring(0,str1.length-1);
+	$("#hdrkidbox").val(str1);
+	//高血压随访
+    var str2="";
+    $("#gxysf [name='checkbox'][checked]").each(function(){
+     str2+=$(this).val()+",";
+    })
+	str2=str2.substring(0,str2.length-1);
+	$("#gxysfidbox").val(str2);
+	//糖尿病随访
+    var str3="";
+    $("#tnbsf [name='checkbox'][checked]").each(function(){
+     str3+=$(this).val()+",";
+    })
+	str3=str3.substring(0,str3.length-1);
+	$("#tnbsfidbox").val(str3);
+	//性别
+    var str4="";
+    $("#mb [name='checkbox'][checked]").each(function(){
+     str4+=$(this).val()+",";
+    })
+	str4=str4.substring(0,str4.length-1);
+	$("#mbidbox").val(str4);
+	
+	
+	//中医体质辨识
+	if ($("#zytzbsid").is(":checked")) {
+		$("#zytzbsidbox").val("1");
+	}else{
+		$("#zytzbsidbox").val("0");
+	};
+	if ($("#jzbsid").is(":checked")) {
+		$("#jzbsidbox").val("1");
+	}else{
+		$("#jzbsidbox").val("0");
+	};
+	if ($("#jsbid").is(":checked")) {
+		$("#jsbidbox").val("1");
+	}else{
+		$("#jsbidbox").val("0");
+	};
+	if ($("#cjrid").is(":checked")) {
+		$("#cjridbox").val("1");
+	}else{
+		$("#cjridbox").val("0");
+	};
+	if ($("#ycfid").is(":checked")) {
+		$("#ycfidbox").val("1");
+	}else{
+		$("#ycfidbox").val("0");
+	};
+	
+
+	//setData();
+});
+
+
+
+
+$('.dateday').datetimepicker({
+	format: 'yyyy-mm-dd',
+	autoclose:true,
+	startView:2,
+	minView:2
+});
+//获取当前年-月-日
+today=new Date();
+var ymd=sys_FormatYMD(today);
+var vMon = today.getMonth() + 1;
+//var dateendymd=today.getFullYear()-1+"-"+(vMon<10 ? "0" + vMon : vMon)+"-"+today.getDate();
+var dateendymd="2014"+"-"+"01"+"-"+"01";
+$("#datebegin").val(dateendymd);
+$("#dateend").val(ymd); 
+
+getselectdaoid101();
+});
+//机构
+function  getselectdaoid101(){
+    sys_BI_getDaoidList("mdmSelectdaoid101");
+}
+function mdmSelectdaoid101(){
+  var info = new Map();
+  info.put("key",["hospunitorgcode"]);
+  info.put("value",["hospunitorgnm"]);
+  sys_GetSelect("ggwssjcx","dimorg",info,sys_BI_getCacheDaoidData());
+}
+
+//setData
+var PageNumber=1;
+var PageSize=10;
+function setData(){	
+	load();
+	var sex=$("#sexbox").val();
+	var zytz=$("#zytzbsidbox").val();
+	var jts=$("#jzbsidbox").val();
+	var jsb=$("#jsbidbox").val();
+	var cjr=$("#cjridbox").val();
+	var ycf=$("#ycfidbox").val();
+	var hdrk=$("#hdrkidbox").val();
+	var gsf=$("#gxysfidbox").val();
+	var tsf=$("#tnbsfidbox").val();
+	var tnbmain=$("#tnbmainidbox").val();
+	var gxymain=$("#tnbmainidbox").val();
+	var mb=$("#mbidbox").val();
+	
+	var organizationcode=$("#dimorg").val();
+	var datetype=1;
+	var datebegin=$("#datebegin").val();
+	var dateend=$("#dateend").val();
+	if(organizationcode==null){
+		organizationcode="All";
+		}
+	var age=$("#agebegin").val()+","+$("#ageend").val()
+	//organizationcode="'"+organizationcode.replace(/,/g,"','")+"'";*/
+	//alert("机构ID:"+organizationcode+"性别:"+sex+"家族病史:"+jts+"性别:"+sex+"中医体质辨识:"+zytz+"精神病:"+jsb+"残疾人:"+cjr+"孕产妇:"+ycf+"年龄:"+age)
+	
+	var url ="customsearch"; 
+	var itemsList;
+	if($("#datebegin").val()!=""&&$("#dateend").val()!=""){
+		itemsList=["organizationcode","sex","jts","zytz","jsb","cjr","ycf","datetype","datebegin","dateend"];
+	}else{
+		itemsList=[];
+	}
+	//空数据 会出现 小bug
+	var info= new Map();
+	info.put("sqlid","select");
+	info.put("pagenum",PageNumber);
+	info.put("pagesize",PageSize);
+	info.put("organizationcode",organizationcode);
+	info.put("sex",sex);
+	info.put("zytz",zytz);
+	info.put("jts",jts);
+	info.put("jsb",jsb);
+	info.put("cjr",cjr);
+	info.put("ycf",ycf);
+	info.put("age",age);
+	info.put("hdrk",hdrk);
+	info.put("gsf",gsf);
+	info.put("tsf",tsf);
+	info.put("datetype",datetype);
+	info.put("datebegin",datebegin);
+	info.put("dateend",dateend);
+	info.put("tnbmain",tnbmain);
+	info.put("gxymain",gxymain);
+	info.put("mb",mb);
+	sys_AjaxGet(BIUrl+url,"ggwssjcx","reCallback217",info,itemsList);
+}
+function reCallback217(dataInfo){
+	if(dataInfo.ret=="103"){
+        alert("用户登录超时，请重新登陆！");
+        $('#trigger').scojs_modal();
+    }	
+	$('#dg').datagrid({
+		//height:385,
+		nowrap: false,
+		striped: true,
+		collapsible:false,
+		autoRowHeight:false,
+		//pagination:true,
+		pageNumber:PageNumber,
+		pageSize: PageSize,
+		fitColumns:false,
+		singleSelect:true,
+		
+		loadMsg:"正在载入...",
+		pageList: [10,20,50,100,200],
+		data:dataInfo.dataList,
+		frozenColumns:[[
+			{field:'机构',title:'机构',align:'center',width:200},
+		]],
+		columns:[[
+			{field:'男',title:'男',align:'center'},
+			{field:'女',title:'女',align:'center'},
+			{field:'性别合计',title:'性别合计',align:'center'},
+			{field:'中医体质辨别',title:'中医体质辨别',align:'center'},
+			{field:'体检次数',title:'体检次数',align:'center'},
+			{field:'家族史',title:'家族史',align:'center'},
+			{field:'户籍',title:'户籍',align:'center'},
+			{field:'fhj',title:'非户籍',align:'center'},
+			{field:'aaaa',title:'活动人口合计',align:'center'},
+			{field:'高血压电话随访',title:'高血压电话随访',align:'center'},
+			{field:'高血压上门随访',title:'高血压上门随访',align:'center'},
+			{field:'高血压门诊随访',title:'高血压门诊随访',align:'center'},
+			{field:'高血压随访次数',title:'高血压随访次数',align:'center'},
+			{field:'糖尿病电话随访',title:'糖尿病电话随访',align:'center'},
+			{field:'糖尿病上门随访',title:'糖尿病上门随访',align:'center'},
+			{field:'糖尿病门诊随访',title:'糖尿病门诊随访',align:'center'},
+			{field:'糖尿病随访次数',title:'糖尿病随访次数',align:'center'},
+			{field:'精神病',title:'精神病',align:'center'},
+			{field:'残疾人',title:'残疾人',align:'center'},
+			{field:'孕产妇',title:'孕产妇',align:'center'}
+		]]
+	});
+//男
+	if ($("#nan").attr("class")=="btn btn-mini") {
+		$('#dg').datagrid('hideColumn', "男");
+	}else{
+		$('#dg').datagrid('showColumn', "男");
+	};
+	$("#nan").click(function(){
+		var tjcsactive=$("#nan").attr("class");	
+		if(tjcsactive=="btn btn-mini active"){
+			$('#dg').datagrid('hideColumn', "男");
+			}else{
+				$('#dg').datagrid('showColumn', "男");
+				}
+		});
+//女
+	if ($("#nv").attr("class")=="btn btn-mini") {
+		$('#dg').datagrid('hideColumn', "女");
+	}else{
+		$('#dg').datagrid('showColumn', "女");
+	};
+	$("#nv").click(function(){
+		var tjcsactive=$("#nv").attr("class");	
+		if(tjcsactive=="btn btn-mini active"){
+			$('#dg').datagrid('hideColumn', "女");
+			}else{
+				$('#dg').datagrid('showColumn', "女");
+				}
+		});
+//性别合计
+	if ($("#sex03").attr("class")=="btn btn-mini") {
+		$('#dg').datagrid('hideColumn', "性别合计");
+	}else{
+		$('#dg').datagrid('showColumn', "性别合计");
+	};
+	$("#sex03").click(function(){
+		var tjcsactive=$("#sex03").attr("class");	
+		if(tjcsactive=="btn btn-mini active"){
+			$('#dg').datagrid('hideColumn', "性别合计");
+			}else{
+				$('#dg').datagrid('showColumn', "性别合计");
+				}
+		});	
+//家族病史
+	if ($("#jiazubingshi").attr("class")=="btn btn-mini") {
+		$('#dg').datagrid('hideColumn', "家族史");
+	}else{
+		$('#dg').datagrid('showColumn', "家族史");
+	};
+	$("#jiazubingshi").click(function(){
+		var tjcsactive=$("#jiazubingshi").attr("class");	
+		if(tjcsactive=="btn btn-mini active"){
+			$('#dg').datagrid('hideColumn', "家族史");
+			}else{
+				$('#dg').datagrid('showColumn', "家族史");
+				}
+		});
+//中医体质辨别
+	if ($("#zhongyitizhi").attr("class")=="btn btn-mini") {
+		$('#dg').datagrid('hideColumn', "中医体质辨别");
+	}else{
+		$('#dg').datagrid('showColumn', "中医体质辨别");
+	};
+	$("#zhongyitizhi").click(function(){
+		var tjcsactive=$("#zhongyitizhi").attr("class");	
+		if(tjcsactive=="btn btn-mini active"){
+			$('#dg').datagrid('hideColumn', "中医体质辨别");
+			}else{
+				$('#dg').datagrid('showColumn', "中医体质辨别");
+				}
+		});
+//体检次数
+	if ($("#tjcs").attr("class")=="btn btn-mini") {
+		$('#dg').datagrid('hideColumn', "体检次数");
+	}else{
+		$('#dg').datagrid('showColumn', "体检次数");
+	};
+	$("#tjcs").click(function(){
+		var tjcsactive=$("#tjcs").attr("class");	
+		if(tjcsactive=="btn btn-mini active"){
+			$('#dg').datagrid('hideColumn', "体检次数");
+			}else{
+				$('#dg').datagrid('showColumn', "体检次数");
+				}
+		});
+//精神病
+	if ($("#jingshenbing").attr("class")=="btn btn-mini") {
+		$('#dg').datagrid('hideColumn', "精神病");
+	}else{
+		$('#dg').datagrid('showColumn', "精神病");
+	};
+	$("#jingshenbing").click(function(){
+		var tjcsactive=$("#jingshenbing").attr("class");	
+		if(tjcsactive=="btn btn-mini active"){
+			$('#dg').datagrid('hideColumn', "精神病");
+			}else{
+				$('#dg').datagrid('showColumn', "精神病");
+				}
+		});
+//残疾人
+	if ($("#canjiren").attr("class")=="btn btn-mini") {
+		$('#dg').datagrid('hideColumn', "残疾人");
+	}else{
+		$('#dg').datagrid('showColumn', "残疾人");
+	};
+	$("#canjiren").click(function(){
+		var tjcsactive=$("#canjiren").attr("class");	
+		if(tjcsactive=="btn btn-mini active"){
+			$('#dg').datagrid('hideColumn', "残疾人");
+			}else{
+				$('#dg').datagrid('showColumn', "残疾人");
+				}
+		});
+//孕产妇
+	if ($("#yunchanfu").attr("class")=="btn btn-mini") {
+		$('#dg').datagrid('hideColumn', "孕产妇");
+	}else{
+		$('#dg').datagrid('showColumn', "孕产妇");
+	};
+	$("#yunchanfu").click(function(){
+		var tjcsactive=$("#yunchanfu").attr("class");	
+		if(tjcsactive=="btn btn-mini active"){
+			$('#dg').datagrid('hideColumn', "孕产妇");
+			}else{
+				$('#dg').datagrid('showColumn', "孕产妇");
+				}
+		});
+//户籍
+	if ($("#huji").attr("class")=="btn btn-mini") {
+		$('#dg').datagrid('hideColumn', "户籍");
+	}else{
+		$('#dg').datagrid('showColumn', "户籍");
+	};
+	$("#huji").click(function(){
+		var tjcsactive=$("#huji").attr("class");	
+		if(tjcsactive=="btn btn-mini active"){
+			$('#dg').datagrid('hideColumn', "户籍");
+			}else{
+				$('#dg').datagrid('showColumn', "户籍");
+				}
+		});
+//非户籍
+	if ($("#feihuji").attr("class")=="btn btn-mini") {
+		$('#dg').datagrid('hideColumn', "fhj");
+	}else{
+		$('#dg').datagrid('showColumn', "fhj");
+	};
+	$("#feihuji").click(function(){
+		var tjcsactive=$("#feihuji").attr("class");	
+		if(tjcsactive=="btn btn-mini active"){
+			$('#dg').datagrid('hideColumn', "fhj");
+			}else{
+				$('#dg').datagrid('showColumn', "fhj");
+				}
+		});
+//活动人口合计
+	if ($("#hdrk03").attr("class")=="btn btn-mini") {
+		$('#dg').datagrid('hideColumn', "aaaa");
+	}else{
+		$('#dg').datagrid('showColumn', "aaaa");
+	};
+	$("#hdrk03").click(function(){
+		var tjcsactive=$("#hdrk03").attr("class");	
+		if(tjcsactive=="btn btn-mini active"){
+			$('#dg').datagrid('hideColumn', "aaaa");
+			}else{
+				$('#dg').datagrid('showColumn', "aaaa");
+				}
+		});
+//高血压门诊随访
+	if ($("#gxy03").attr("class")=="btn btn-mini") {
+		$('#dg').datagrid('hideColumn', "高血压门诊随访");
+	}else{
+		$('#dg').datagrid('showColumn', "高血压门诊随访");
+	};
+	$("#gxy03").click(function(){
+		var tjcsactive=$("#gxy03").attr("class");	
+		if(tjcsactive=="btn btn-mini active"){
+			$('#dg').datagrid('hideColumn', "高血压门诊随访");
+			}else{
+				$('#dg').datagrid('showColumn', "高血压门诊随访");
+				}
+		});
+//高血压上门随访
+	if ($("#gxy02").attr("class")=="btn btn-mini") {
+		$('#dg').datagrid('hideColumn', "高血压上门随访");
+	}else{
+		$('#dg').datagrid('showColumn', "高血压上门随访");
+	};
+	$("#gxy02").click(function(){
+		var tjcsactive=$("#gxy02").attr("class");	
+		if(tjcsactive=="btn btn-mini active"){
+			$('#dg').datagrid('hideColumn', "高血压上门随访");
+			}else{
+				$('#dg').datagrid('showColumn', "高血压上门随访");
+				}
+		});
+//高血压电话随访
+	if ($("#gxy01").attr("class")=="btn btn-mini") {
+		$('#dg').datagrid('hideColumn', "高血压电话随访");
+	}else{
+		$('#dg').datagrid('showColumn', "高血压电话随访");
+	};
+	$("#gxy01").click(function(){
+		var tjcsactive=$("#gxy01").attr("class");	
+		if(tjcsactive=="btn btn-mini active"){
+			$('#dg').datagrid('hideColumn', "高血压电话随访");
+			}else{
+				$('#dg').datagrid('showColumn', "高血压电话随访");
+				}
+		});
+//高血压随访次数
+	if ($("#gxy04").attr("class")=="btn btn-mini") {
+		$('#dg').datagrid('hideColumn', "高血压随访次数");
+	}else{
+		$('#dg').datagrid('showColumn', "高血压随访次数");
+	};
+	$("#gxy04").click(function(){
+		var tjcsactive=$("#gxy04").attr("class");	
+		if(tjcsactive=="btn btn-mini active"){
+			$('#dg').datagrid('hideColumn', "高血压随访次数");
+			}else{
+				$('#dg').datagrid('showColumn', "高血压随访次数");
+				}
+		});
+//糖尿病门诊随访
+	if ($("#tnb03").attr("class")=="btn btn-mini") {
+		$('#dg').datagrid('hideColumn', "糖尿病门诊随访");
+	}else{
+		$('#dg').datagrid('showColumn', "糖尿病门诊随访");
+	};
+	$("#tnb03").click(function(){
+		var tjcsactive=$("#tnb03").attr("class");	
+		if(tjcsactive=="btn btn-mini active"){
+			$('#dg').datagrid('hideColumn', "糖尿病门诊随访");
+			}else{
+				$('#dg').datagrid('showColumn', "糖尿病门诊随访");
+				}
+		});
+//糖尿病上门随访
+	if ($("#tnb02").attr("class")=="btn btn-mini") {
+		$('#dg').datagrid('hideColumn', "糖尿病上门随访");
+	}else{
+		$('#dg').datagrid('showColumn', "糖尿病上门随访");
+	};
+	$("#tnb02").click(function(){
+		var tjcsactive=$("#tnb02").attr("class");	
+		if(tjcsactive=="btn btn-mini active"){
+			$('#dg').datagrid('hideColumn', "糖尿病上门随访");
+			}else{
+				$('#dg').datagrid('showColumn', "糖尿病上门随访");
+				}
+		});
+//糖尿病电话随访
+	if ($("#tnb01").attr("class")=="btn btn-mini") {
+		$('#dg').datagrid('hideColumn', "糖尿病电话随访");
+	}else{
+		$('#dg').datagrid('showColumn', "糖尿病电话随访");
+	};
+	$("#tnb01").click(function(){
+		var tjcsactive=$("#tnb01").attr("class");	
+		if(tjcsactive=="btn btn-mini active"){
+			$('#dg').datagrid('hideColumn', "糖尿病电话随访");
+			}else{
+				$('#dg').datagrid('showColumn', "糖尿病电话随访");
+				}
+		});
+//糖尿病随访次数
+	if ($("#tnb04").attr("class")=="btn btn-mini") {
+		$('#dg').datagrid('hideColumn', "糖尿病随访次数");
+	}else{
+		$('#dg').datagrid('showColumn', "糖尿病随访次数");
+	};
+	$("#tnb04").click(function(){
+		var tjcsactive=$("#tnb04").attr("class");	
+		if(tjcsactive=="btn btn-mini active"){
+			$('#dg').datagrid('hideColumn', "糖尿病随访次数");
+			}else{
+				$('#dg').datagrid('showColumn', "糖尿病随访次数");
+				}
+		});
+	
+	
+	disLoad();
+	
+	
+	
+	
+		
+}
+
+//弹出加载层
+function load() {  
+ $("<div class=\"datagrid-mask\"></div>").css({ display: "block", width: "100%", height: $(window).height() }).appendTo("body");  
+ $("<div class=\"datagrid-mask-msg\"></div>").html("正在加载，请稍候。。。").appendTo("body").css({ display: "block",padding: "0 0 0 25px", left: ($(document.body).outerWidth(true) - 190) / 2, top: ($(window).height() - 45) / 2 });  
+}  
+//取消加载层  
+function disLoad() {  
+ $(".datagrid-mask").remove();  
+ $(".datagrid-mask-msg").remove();  
+}
+//setData();
+</script>

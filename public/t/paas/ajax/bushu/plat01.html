@@ -1,0 +1,47 @@
+# 平台安装介质
+
+所有文件都在 plat-XXX.tgz 中,
+
+## 单机安装步骤
+
+0. 上传 plat-XXX.tgz 到目标服务器.
+
+1. 将 plat-XXX.tgz 解压:
+
+`tar -xvpzf plat-XXX.tgz -C /`
+--------- tar -xvpzf plat-dep.tgz -C / ------------
+
+2. 到 /home/plat/.installer 目录下
+cd /home/plat/.installer
+`./install-7.sh`
+
+首次需要删除apache目录下 info 及 classes下的key pc
+
+停止tomcat服务 进入/home/plat目录下   ./killtom.sh
+
+引入环境变量 进入/home/plat目录下 . ./set-evn.sh
+
+启动平台命令  service paas start
+
+新环境打包 关闭tomcat服务  进入cd /home/plat/.installer目录 打包 ./backup-dep.sh or ./backup-all.sh
+
+
+tomcat war包放在webapps目录下
+配置参数 ds->WEB-INF->classes->config.properties 连接redis等端口参数需注意修改
+配置参数 ds->WEB-INF->classes->config.properties 连接mysql等端口参数需注意修改
+node代码的配置文件路径     /home/plat/node-config
+
+chown -R plat:plat xxxx 用户授权 (注意UI部分权限)
+
+chmod a+x xxxx.sh sh文件执行权限
+
+bin/kafka-server-stop.sh
+bin/zookeeper-server-stop.sh
+
+--缓存
+> /home/plat/redis-2.8.19/src/redis-cli -p 6379 -a deaN9mizr_ZRzy1
+> FLUSHALL
+
+
+查看平台log
+tail -f /路径path/to/ds.log

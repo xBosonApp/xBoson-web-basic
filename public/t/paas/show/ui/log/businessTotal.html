@@ -1,0 +1,337 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Custom DataGrid Pager - jQuery EasyUI Demo</title>
+<script type="text/javascript" language="JavaScript" src="/t/paas/show/ui/comm.js"></script>	
+<style>
+.highcharts-button{display:none;}
+</style>
+	<script type="text/javascript">
+
+ 	var dataShow;
+	var PageNumber=1;
+	var PageSize=10;
+	$(function(){
+    $("#startdate").focus();
+		$("#startdate").val(LC_FormatYMD(new Date()));
+		$("#enddate").val(LC_FormatYMD(new Date()));
+	});
+    
+    function loading(){
+	  	$("#start").val((PageNumber-1)*PageSize);
+		$("#pagesize").val(PageSize);
+		var mapInfo = new Map();
+	  	var itemsList;
+	   	if($("#startdate").val()==""&&$("#enddate").val()==""){
+	   		itemsList=["groupby","start","pagesize"];
+	   	}else{
+			itemsList = ["startdate","enddate","groupby","start","pagesize"];
+		}
+		var url = "busscount/";
+		//LC_AjaxGet(TranLogBaseUrl+url,"org",mapInfo,itemsList);
+		LC_AjaxGet(TranLogBaseUrl+url,"org","reCallback",mapInfo,itemsList);
+	}
+	
+	function reCallback(dataInfo){
+	
+	
+		$('#tt').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+				singleSelect:true, 
+				title:'业务总量统计表', 
+				pagination:true,
+				pageNumber:PageNumber,
+				pageSize: PageSize,
+				loadMsg:"正在载入...",
+                pageList: [10,20,50,100,200],
+				data:dataInfo.datalist,
+				columns:[[
+				   {field:'tablename',title:'业务名称',width:160,align:'center',
+				   	 formatter:function(value){   
+                           return '<span>'+tablename().get(value)+'</span>';   
+                       }
+				   },
+				   {field:'busstotal',title:'业务发生总数',width:170,align:'center'},
+				   {field:'accpect',title:'平台接受总数',width:170,align:'center'},
+				   {field:'success',title:'平台处理成功总数',width:170,align:'center'},
+				   {field:'fail',title:'平台处理失败总数',width:160,align:'center'},
+				   {field:'csuccess',title:'前置机到中心成功',width:180,align:'center'},
+				   {field:'cfail',title:'前置机到中心失败',width:180,align:'center'}
+				]],                  
+                onDblClickRow: function (rowIndex) {
+                  openRoleDiv(rowIndex);
+                },
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true
+		}); 
+
+	   var pager = $('#tt').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+				
+			    onSelectPage:function(pageNumber,pageSize){
+		           PageNumber=pageNumber;
+		           PageSize=pageSize;
+		           loading();
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:PageSize,pageNumber:PageNumber,total:dataInfo.datalist.count});
+
+		};
+	}
+	
+	function openRoleDiv(rowIndex){
+	    self.parent.orgId = dataShow.data[rowIndex].orgId;
+		var openRoleDiv = self.parent.$("#openRoleDiv");
+		openRoleDiv.window({
+				  href:"datagrid/orgupdateinsert.html",
+	              title: '修改信息',
+	        //      onBeforeClose:function(){  
+	        //           self.parent.orgId="";         
+　　                      //           　},
+	              width: 900,
+	              height: 500
+	          });
+	}
+</script>
+<style type="text/css">
+.padding1{padding: 10px 0 0 7px;}
+</style>
+</head>
+<body onload="loading()">
+<div class="mainsW-872 padding1">
+<div class="easyui-panel" title="业务总量统计查询">
+<div class="padTB-5 clearfix">
+<form action="" id="org">
+
+<input type="hidden" id="groupby" value="tablename"/>
+<input type="hidden" id="start"/>
+<input type="hidden" id="pagesize"/>
+
+	<div class="mainsW">
+        <div class="mainW">
+               <div class="itemsW-272">
+                    <div class="itemLW-112 padT-4">
+                      开始时间：
+                    </div>
+ 		    <div class="itemRW">
+                    <input id="startdate"  class="Wdate" onClick="WdatePicker()"></input>  
+        </div>  
+    </div> 
+                    </div>
+               </div>
+               <div class="itemsW-272">
+                    <div class="itemLW-112 padT-4">
+                      结束时间：
+                    </div>
+ 		    <div class="itemRW">
+                        <input id="enddate"  class="Wdate" onClick="WdatePicker()"></input>
+                    </div>
+               </div>
+               <div class="itemLW-288"><span style="padding:0 10px;"><a class="easyui-linkbutton" onclick="loading()">查询</a></span>
+               <a href="#" onclick="setData2('tablename')" class="easyui-linkbutton">查看统计图</a></div>
+</form>
+
+</div>
+</div>
+
+   <div class="mainW">
+
+	<table id="tt" class="easyui-datagrid" title="业务总量统计表"  style="width:872px"  ></table>
+
+</div>
+</div>
+
+<div class="mainsW-872" style="overflow-x:auto;overflow-y:auto;height:500px; padding-top: 5px; padding-left: 5px;">
+	 <div id="context" style="background-color:blue;height:0px;width:0px;text-align:center;"></div>
+</div>
+<script type="text/javascript">
+
+
+var LXtype="tablename";
+var retData;
+
+var hospunitorgcodeMap;
+var tablenameMap;
+function getHospunitorgcodeMap(key){
+    
+   	var  getValue= hospunitorgcodeMap.get(key);
+	if(hospunitorgcodeMap.get(key)===false){
+		return "无此编码";
+	}else{
+	    return getValue;
+	}
+   
+}
+function getTablenameMap(key){
+
+	var  getValue= tablenameMap.get(key);
+	if(tablenameMap.get(key)===false){
+		return "无此编码";
+	}else{
+	    return getValue;
+	}
+}
+function reCallback2(retData){
+
+ hospunitorgcodeMap=hospunitorgcode();
+ tablenameMap = tablename();
+      var jsonData=retData.datalist;
+      //alert(jsonData[0].fail);
+	   // json = eval(data);
+	   // alert(json[0].tablename)
+	   //var context=$('#context');
+	   var categ=['产生数据数','成功接收','失败'];
+	   var data=[];
+
+	   var categ2=[];
+
+	   var busstotal=[];
+       var accpect=[];
+       var success=[];
+       var fail=[];
+	    var csuccess=[];
+       var cfail=[];
+      
+	   for(var i=0;i<jsonData.length;i++){
+		    if(LXtype==="tablename"){
+		        categ2.push(getTablenameMap(jsonData[i].tablename));
+		    }else if(LXtype==="createdate"){
+		        categ2.push(LC_FormatYMD(jsonData[i].createdate));
+		    }else{
+		        categ2.push(getHospunitorgcodeMap(jsonData[i].hospunitorgcode));
+		    }
+		   
+		    busstotal.push(jsonData[i].busstotal);
+		    accpect.push(jsonData[i].accpect);
+		    success.push(jsonData[i].success);
+		    fail.push(jsonData[i].fail);
+	  }
+		 var subdata1=new Object();
+	     subdata1.name='总量';
+	     subdata1.data=busstotal;
+	     var subdata2=new Object();
+	     subdata2.name='异常';
+	     subdata2.data=accpect;
+	     var subdata3=new Object();
+	     subdata3.name='成功';
+	     subdata3.data=success;
+	     var subdata4=new Object();
+	     subdata4.name='失败';
+	     subdata4.data=fail;
+		 var subdata5=new Object();
+	     subdata5.name='前到中成功';
+	     subdata5.data=fail;
+		 var subdata6=new Object();
+	     subdata6.name='前到中失败';
+	     subdata6.data=fail;
+		 data.push(subdata1);
+		 data.push(subdata2);
+		 data.push(subdata3);
+		 data.push(subdata4);
+		 data.push(subdata5);
+		 data.push(subdata6);
+		 var setWidth=jsonData.length*60;
+		 if(setWidth<872){
+		    setWidth="872";
+		 }
+		 //alert(jsonData.length);
+		 var chart=new Highcharts.Chart({
+	     chart: { //定义图开的类型
+	               // type: 'line',//折线
+					//type:'scatter',//点
+					//type:'spline',//曲线
+					//type:'bar',//柱状图
+					//type:'pie',
+					//type:'area',
+					type:'column',
+					//inverted:true,
+					height:480,
+					width:setWidth,
+					renderTo:'context',
+					//backgroundColor:'#aaaaaa'
+	     },
+		 title: {//定义标题
+	             text: '业务总量统计'
+	     },
+
+		 xAxis: {
+				 categories:categ2,
+				 type:'category',
+                labels: {
+                    rotation: -45,
+                    align: 'right',
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: '微软雅黑, 宋体, sans-serif'
+                    }
+                }
+	     },
+	     yAxis: {
+	            title: {
+	                text: '数据量'
+	            },
+	            labels: {
+	                formatter: function() {
+	                   return this.value;
+	                }
+	            }
+	     },
+	     tooltip: {
+	                pointFormat: '{point.y:,.0f}</b><br/>({series.name})'
+	     },
+	     plotOptions: {
+	        series: {
+	            cursor: 'pointer',
+	            events: {
+	                click: function(event) {
+	                   //  alert("这是获得的值"+"名称="+event.point.category+"  值="+event.point.y+ "我要跳转页面了");  
+	                   //  openRoleDiv(1);
+	                }
+	             }
+	          }
+	      },
+		  series:data
+	
+	    }
+   ); 
+}
+
+
+function setData2(data){
+       var url ="busscount/"; 
+       var itemsList;
+       if($("#startdate").val()!=""&&$("#enddate").val()!=""){
+       		itemsList=["startdate","enddate"];
+       }else{
+       		itemsList=[];
+       }
+       //空数据 会出现 小bug
+	   var info= new Map();
+	   if(data==="tablename"){
+	       LXtype="tablename";
+	   }else if(data==="createdate"){
+	       LXtype="createdate";
+	   }else{
+	       LXtype="hospunitorgcode"
+	   }
+
+       info.put("groupby",data);
+       LC_AjaxGet(TranLogBaseUrl+url,"org","reCallback2",info,itemsList);
+       
+       
+       
+}
+ 
+ 
+
+</script>
+
+</body>
+</html>

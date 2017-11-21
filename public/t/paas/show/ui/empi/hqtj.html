@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Custom DataGrid Pager - jQuery EasyUI Demo</title>
+<script type="text/javascript" language="JavaScript" src="/t/paas/show/ui/comm.js"></script>	
+
+<style type="text/css">
+.highcharts-button{display:none;}
+</style>
+	<script type="text/javascript">
+
+ 	var dataShow;
+	var PageNumber=1;
+	var PageSize=10;
+	var hqtjData;
+	$(function(){
+		$("#startdate").val('2013-08-01');
+		$("#enddate").val(LC_FormatYMD(new Date()));
+		
+	});
+    
+    function loading(){
+	  	$("#start").val((PageNumber-1)*PageSize);
+		$("#pagesize").val(PageSize);
+		var mapInfo = new Map();
+	  	var itemsList=['startdate','enddate'];
+	   	//if($("#startdate").val()==""&&$("#enddate").val()==""){
+	   		//itemsList=["groupby","start","pagesize"];
+	   	//}else{
+			//itemsList = ["startdate","enddate","groupby","start","pagesize"];
+		//}
+		
+		var url = "getempiwork/";
+		//LC_AjaxGet(TranLogBaseUrl+url,"org",mapInfo,itemsList);
+		LC_AjaxGet(EMPIUrl+url,"org","reCallback",mapInfo,itemsList);
+	}
+	
+	function reCallback(retData){
+			hqtjData=retData;
+	 var hqtjlist=[hqtjData.datalist];
+		$('#tj').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+				singleSelect:true, 
+				title:'获取EMPI注册情况表', 
+				pagination:true,
+				pageNumber:PageNumber,
+				pageSize: PageSize,
+				loadMsg:"正在载入...",
+                pageList: [10,20,50,100,200],
+				data:hqtjlist,
+				columns:[[
+				   //{field:'tablename',title:'业务名称',width:160,align:'center',
+				   	 //formatter:function(value){   
+                           //return '<span>'+tablename().get(value)+'</span>';   
+                      // }
+				   //},
+				   {field:'total',title:'注册总数',width:280,align:'center'},
+				   {field:'manager',title:'管理条数',width:280,align:'center'},
+				   {field:'merger',title:'合并条数',width:281,align:'center'}
+				]],                  
+                onDblClickRow: function (rowIndex) {
+                  openRoleDiv(rowIndex);
+                },
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true
+		}); 
+
+	   var pager = $('#tj').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+				
+			    onSelectPage:function(pageNumber,pageSize){
+		           PageNumber=pageNumber;
+		           PageSize=pageSize;
+		           loading();
+		        }
+			});		
+		 
+			//$(pager).pagination({pageSize:PageSize,pageNumber:PageNumber,total:hqtjData.datalist.count});
+
+		};
+	
+	}
+	//双击事件
+	function openRoleDiv(rowIndex){
+	    self.parent.orgId = dataShow.data[rowIndex].orgId;
+		var openRoleDiv = self.parent.$("#openRoleDiv");
+		openRoleDiv.window({
+				  href:"datagrid/orgupdateinsert.html",
+	              title: '修改信息',
+	        //      onBeforeClose:function(){  
+	        //           self.parent.orgId="";         
+　　                      //           　},
+	              width: 900,
+	              height: 500
+	          });
+	}
+</script>
+<style>
+.padding1{padding: 10px 0 0 7px;}
+</style>
+</head>
+<body onload="loading()">
+<div class="mainsW-872 padding1">
+<div class="easyui-panel" title="获取EMPI注册情况查询">
+<div class="padTB-5 clearfix">
+<form action="" id="org">
+
+<input type="hidden" id="groupby" value="tablename"/>
+<input type="hidden" id="start"/>
+<input type="hidden" id="pagesize"/>
+
+	<div class="mainsW">
+        <div class="mainW">
+               <div class="itemsW-272">
+                    <div class="itemLW-112 padT-4">
+                      开始时间：
+                    </div>
+ 		    <div class="itemRW">
+                    <input id="startdate"  class="Wdate" onClick="WdatePicker()"></input>  
+        </div>  
+    </div> 
+                    </div>
+               </div>
+               <div class="itemsW-272">
+                    <div class="itemLW-112 padT-4">
+                      结束时间：
+                    </div>
+ 		    <div class="itemRW">
+                        <input id="enddate"  class="Wdate" onClick="WdatePicker()"></input>
+                    </div>
+               </div>
+               <div class="itemLW-288"><span style="padding:0 10px;"><a class="easyui-linkbutton" onclick="loading()">查询</a></span>
+               <a href="#" onclick="setData2('tablename')" class="easyui-linkbutton">查看统计图</a></div>
+</form>
+
+</div>
+</div>
+
+   <div class="mainW">
+
+	<table id="tj" class="easyui-datagrid" title="获取EMPI注册情况查询"  style="width:872px;"  ></table>
+
+</div>
+</div>
+
+<div class="mainsW-872" style="overflow-x:auto;overflow-y:auto;height:500px; padding-top: 5px; padding-left: 5px;">
+	 <div id="context" style="background-color:blue;height:0px;width:0px;text-align:center;"></div>
+</div>
+<script type="text/javascript">
+
+
+
+function reCallback2(retData){
+
+ hospunitorgcodeMap=hospunitorgcode();
+ tablenameMap = tablename();
+      var jsonData=[hqtjData.datalist];
+      //alert(jsonData[0].merger);
+	   // json = eval(data);
+	   // alert(json[0].tablename)
+	   //var context=$('#context');
+	   var categ=['产生数据数','成功接收','失败'];
+	   var data=[];
+
+	   var categ2=[];
+
+	   var total=[];
+       var manager=[];
+       var merger=[];
+      
+	   for(var i=0;i<jsonData.length;i++){
+//		    if(LXtype==="tablename"){
+//		        categ2.push(getTablenameMap(jsonData[i].tablename));
+//		    }else if(LXtype==="createdate"){
+//		        categ2.push(LC_FormatYMD(jsonData[i].createdate));
+//		    }else{
+//		        categ2.push(getHospunitorgcodeMap(jsonData[i].hospunitorgcode));
+//		    }
+		   
+		    total.push(jsonData[i].total);
+		    manager.push(jsonData[i].manager);
+		    merger.push(jsonData[i].merger);
+	  }
+		 var subdata1=new Object();
+	     subdata1.name='注册总数';
+	     subdata1.data=total;
+	     var subdata2=new Object();
+	     subdata2.name='管理条数';
+	     subdata2.data=manager;
+	     var subdata3=new Object();
+	     subdata3.name='合并条数';
+	     subdata3.data=merger;
+		 data.push(subdata1);
+		 data.push(subdata2);
+		 data.push(subdata3);
+		 var setWidth=jsonData.length*60;
+		 if(setWidth<872){
+		    setWidth="872";
+		 }
+		 //alert(jsonData.length);
+		 var chart=new Highcharts.Chart({
+		 
+	     chart: { //定义图开的类型
+	               // type: 'line',//折线
+					//type:'scatter',//点
+					//type:'spline',//曲线
+					//type:'bar',//柱状图
+					//type:'pie',
+					//type:'area',
+					type:'column',
+					//inverted:true,
+					height:480,
+					width:setWidth,
+					renderTo:'context',
+					//backgroundColor:'#aaaaaa'
+	     },
+		 title: {//定义标题
+	             text: 'EMPI注册情况表'
+	     },
+
+		 xAxis: {
+				 categories:["EMPI"],
+				 type:'linear'
+//                labels: {
+//                    rotation: -45,
+//                    align: 'right',
+//                    style: {
+//                        fontSize: '13px',
+//                        fontFamily: '微软雅黑, 宋体, sans-serif'
+//                    }
+//                }
+	     },
+	     yAxis: {
+	            title: {
+	                text: '条数'
+	            },
+	            labels: {
+	                formatter: function() {
+	                   return this.value;
+	                }
+	            }
+	     },
+	     tooltip: {
+	                pointFormat: '{point.y:,.0f}</b><br/>({series.name})'
+	     },
+	     plotOptions: {
+	        series: {
+	            cursor: 'pointer',
+	            events: {
+	                click: function(event) {
+	                   //  alert("这是获得的值"+"名称="+event.point.category+"  值="+event.point.y+ "我要跳转页面了");  
+	                   //  openRoleDiv(1);
+	                }
+	             }
+	          }
+	      },
+		  series:data
+	
+	    }
+   ); 
+}
+function setData2(data){
+       var url ="getempiwork/"; 
+       var itemsList=['startdate','enddate'];
+       //if($("#startdate").val()!=""&&$("#enddate").val()!=""){
+       		//itemsList=["startdate","enddate"];
+       //}else{
+       		//itemsList=[];
+       //}
+       //空数据 会出现 小bug
+	   var info= new Map();
+	   if(data==="tablename"){
+	       LXtype="tablename";
+	   }else if(data==="createdate"){
+	       LXtype="createdate";
+	   }else{
+	       LXtype="hospunitorgcode"
+	   }
+
+       info.put("groupby",data);
+       LC_AjaxGet(EMPIUrl+url,"org","reCallback2",info,itemsList);
+}
+</script>
+
+</body>

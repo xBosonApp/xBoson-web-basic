@@ -1,0 +1,30 @@
+<div id="tab_second_ddl_modal" class="modal" tabindex="-1" role="dialog" data-backdrop="true" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="关闭"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">表定义语句（DDL）</h4>
+      </div>
+      <div class="modal-body">
+        <pre name="ddl"></pre>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function ddl_modal(param){
+    var ddl_modalDiv = $('#tab_second_ddl_modal');
+    zy.g.am.app = 'c879dcc94d204d96a98a34e0b7d75676';
+    zy.g.am.mod = 'outdatasource';
+    zy.net.get("api/getddl", function(msg){
+      if(msg){
+        ddl_modalDiv.modal('show');
+        ddl_modalDiv.find('[name=ddl]').html(msg.data);
+      }
+    }, {
+      did: param.did,
+      table_schema : param["table_schema"],
+      table_name :param["table_name"]
+    });  
+  }
+</script>

@@ -1,0 +1,136 @@
+ <div class="row">
+  <div class="alert alert-warning fade in" style="#display:none;">
+    <strong>服务接口规范：</strong><br><br>
+    API：<br>
+    <pre><code>/ds/api/{API ID}</code></pre>
+    <br>
+    请求参数：<br>
+    固定部分：<br>
+        openid 必须 OpenID<br>
+        org 必须 机构ID<br>
+        app 必须 应用ID（系统ID）<br>
+        mod 必须 模块ID<br>
+        cb 可选 回调函数名<br>
+        s 可选 调试状态标记 d：执行最新代码并返回调试信息，r：执行已发布代码并返回调试信息<br>
+        ems 可选 服务端运行耗时标记 不为空时将返回服务端处理耗时（毫秒）<br>
+        format 可选 输出格式 j：JSON，x：xml，默认为 JSON<br>
+    <br>
+    业务部分：<br>
+    根据业务实际需要，在后面增加参数<br>
+    app，mod，api 不区分大小写<br>
+    如果参数传入空字符串，空格，"null"字符串，都将等同与未传入，在API中将获取不到任何值。<br>
+    请求示例：<br>
+    <pre><code>
+    www.doman.com/ds/api/apiid001?
+    	openid=user001&
+    	org=orgid001&
+    	app=appid001&
+    	mod=moduleid&
+    	searchdate=20140101 // 业务参数
+    </code></pre>
+    返回说明：<br>
+        ret 返回码。<br>
+        msg 如果错误，返回错误信息。<br>
+        count 总记录条数 分页查询时可见<br>
+        {API自定义键值} 查询结果集，由API自定义的键值对应API内部执行的各个查询结果集，结果集内的 Key 均为小写。<br>
+        sqls 执行的SQL语句list API调试者可见<br>
+        errs API执行异常 API调试者可见<br>
+        print 打印指定的值 API调试者可见<br>
+        syserr API执行系统异常 API调试者可见<br>
+    <br>
+    <hr>
+    <strong>用户对接与 SSO：</strong><br><br>
+    平台与第三方应用系统用户登录及登录状态 API<br><br>
+    介绍：
+    第三方应用须事先在平台指定的机构进行注册，获取平台生成的第三方应用ID
+    在第三方应用登录后可直接或在访问平台系统之前，通过调用【登录】API（须提供平台用户ID与密码）实现平台用户在第三方应用内登录平台用户系统。
+    定时或在需要时调用【登录验证】API 验证用户在平台系统的登录状态，并延长登录超时时间。
+    在注销第三方应用时调用【注销】API 实现同时在平台系统注销（允许多点同时登录的用户将可以在其它点继续拥有登录状态）
+<hr>
+    登录(第三方应用登录接口)：<br>
+    API：<br>
+    <pre><code>/ds/user/tplogin</code></pre>
+    <br>
+    参数说明：<br>
+        userid 必须 平台用户ID<br>
+        password 必须 平台用户密码（MD5 处理后的值）<br>
+        tpapp 必须 第三方注册在平台的应用ID<br>
+        org 必须 注册第三方注册应用的机构ID<br>
+        uid 可选 第三方应用的用户ID<br>
+    <br>
+    返回说明：<br>
+        ret 返回码<br>
+        msg 如果错误，返回错误信息<br>
+        uid 已绑定的第三方应用系统内的用户ID<br>
+        openid 本次登录的 OpenID<br>
+    <br>
+    使用平台用户名密码通过第三方应用调用平台 API 实现用户登录及绑定（传入第三方用户ID时）功能，并获取本次登录生成的 Open ID。<br>
+    只支持 POST 方式调用<br>
+    调用前应确认该第三方应用已在平台的相应机构(org)进行注册，并获取到应用ID(tpapp)<br>
+    如果 userid 或 password 或 tpapp 或 org 为空，返回错误码 "1" // 缺少必要参数<br>
+    如果用户名不存在，或用户名密码（MD5 处理后）验证失败，返回错误吗 "1001" // 用户登录失败<br>
+    如果 tpapp 与 org 值错误，或不匹配，视情况返回错误码 "1203" // 该应用已经停用 或 "1202" // 该应用未注册或不存在<br>
+    如果传入第三方用户ID(uid)，系统将视为本次调用是进行平台用户与第三方用户绑定的操作，将传入的第三方用户ID与传入的平台注册用户绑定，并设置该用户的登录状态，返回状态码 "0"，同时返回已绑定的第三方应用系统内的用户ID，以及本次登录的 OpenID<br>
+    如果未传入第三方用户ID(uid)，系统验证应用ID与机构ID无误后，设置该用户的登录状态，返回状态码 "0"，并返回已绑定的第三方应用系统内的用户ID，以及本次登录的 OpenID<br>
+    <hr>
+    登录验证(第三方应用验证是否登录并刷新登录状态接口)：<br>
+    API：<br>
+    <pre><code>/ds/user/islogin</code></pre>
+    <br>
+    参数说明：<br>
+        tpapp 必须 第三方注册在平台的应用ID<br>
+        org 必须 注册第三方注册应用的机构ID<br>
+        openid 必须 上一次登录接口返回的当次登录的 OpenID<br>
+    <br>
+    使用本次登录获取到的 Open ID，通过调用平台 API 判断该用户是否仍然有登录状态，并刷新登录状态以延长登录超时时间。<br>
+    如果 tpapp 或 org 或 openid 为空，返回错误码 "1" // 缺少必要参数<br>
+    如果 tpapp 与 org 值错误，或不匹配，视情况返回错误码 "1203" // 该应用已经停用 或 "1202" // 该应用未注册或不存在<br>
+    如果该用户有登录状态，返回状态码 "1002" // 用户已登录，同时返回已绑定的第三方应用系统内的用户ID，并刷新登录状态<br>
+    如果该用户没有登录状态，根据情况可能返回以下状态码中的一个：<br>
+    "1000" // 没有登陆状态<br>
+    "1006" // 登录超时<br>
+    "1009" // 用户登录异常<br>
+    "1005" // 用户已在其他设备登录<br>
+    <br>
+    示例：<br>
+    <pre><code>
+    www.doman.com/ds/user/islogin?
+    	tpapp=appid001&
+    	org=orgid001&
+    	openid=openid001
+    </code></pre>
+    <hr>
+    注销(用户主动注销接口)：<br>
+    API：<br>
+    <pre><code>/ds/user/tplogout</code></pre>
+    <br>
+    参数说明：<br>
+        tpapp 必须 第三方注册在平台的应用ID<br>
+        org 必须 注册第三方注册应用的机构ID<br>
+        openid 必须 上一次登录接口返回的当次登录的 OpenID<br>
+    <br>
+    使用本次登录获取到的 Open ID，通过调用平台 API，实现本地注销，注销后当前浏览器需要重新登录。<br>
+    如果 tpapp 或 org 或 openid 为空，返回错误码 "1" // 缺少必要参数<br>
+    如果 tpapp 与 org 值错误，或不匹配，视情况返回错误码 "1203" // 该应用已经停用 或 "1202" // 该应用未注册或不存在<br>
+    注销成功时返回状态码 "1007" // 用户已注销<br>
+    <hr>
+    <strong>统一通讯接口服务(统一通讯平台接口)：</strong><br><br>
+    API：<br>
+    <pre><code>/comm/send</code></pre>
+    <br>
+    参数说明：<br>
+        type = mail / sms 等，发送类型<br>
+        from = 发件人<br>
+        to = 发送到哪里<br>
+        subject = 标题<br>
+        text = 内容<br>
+        attachment = 附件 type=mail 有效, 用 post 提交<br>
+    <br>
+    普通参数通过 get 发送<br>
+    附件通过 post 发送, content-type: multipart/form-data<br>
+<hr>
+  </div>
+<!-- widget grid -->
+<section id="widget-grid" class=""></section>
+
+<div class="modelform"></div>

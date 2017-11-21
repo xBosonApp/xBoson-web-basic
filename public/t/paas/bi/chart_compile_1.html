@@ -1,0 +1,221 @@
+<style>
+  #conshell td:hover{
+    cursor: pointer;
+    color:blue;
+  }
+</style>
+<section id="chart_compile_1" class="">
+  <div>
+    <form id="report_form" method="post" onsubmit="return false;" class="smart-form" style="height:3em;">
+      <div class="col-md-3">
+        <!--项目选择-->
+  			<input type="hidden" name="Npoj" id="Npoj" data-type="select2" placeholder="项目名称" />
+      </div>
+    </form>
+  </div>
+  <div style="height:80vh;">
+    <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12" style="height:100%;overflow:hidden;">
+      <div class="col-md-3" id="Npojjj" style="overflow:auto;height:100%;border:2px solid #333;display:none;">
+        <!--图表列表 -->
+        <table name="conshell" id="conshell" style="overflow:auto;"></table>
+      </div>
+      <div style="float:left;width:1em;height:1px"></div>
+      <div class="col-md-8 " id="conshellll" style="height:100%;background:#fff;display:none;">
+        <div class="row" style="margin-left:0.5em;height:10%;padding-top:13px;">
+          <!--图表ID选择-->
+  			  <input type="hidden" name="conId" id="conId" style="height:2em;vertical-align: top;" data-type="select2" placeholder="容器ID" />
+          <div class="btn-group" id="newlay" style='display:none;'>
+            <div class="row btn-group">
+              <button class="btn btn-primary  btn-sm dropdown-toggle" id="add_project"
+                      style="margin-left:13px;" data-toggle="dropdown">创建新布局
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" style="margin-left:13px;margin-bottom:10px;" id="size">
+                <li>
+                  <a id="3" href="javascript:void(0);">小布局</a>
+                </li>
+                <li>
+                  <a id="6" href="javascript:void(0);">中布局</a>
+                </li>
+                <li>
+                  <a id="9" href="javascript:void(0);">大布局</a>
+                </li>
+                <li>
+                  <a id="12" href="javascript:void(0);">行布局</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!--目标容器-->
+        <div class="row" id="widget-grid" name="ele_ne" style="height:90%;padding:1em;overflow:auto;"></div>
+        <!--目标容器模版 -->
+        <article id="template" style="display:none;">
+          <div class="jarviswidget" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-editbutton="false">
+            <header>
+              <h2><strong></strong><i></i></h2>
+            </header>
+            <div>
+              <!-- widget edit box -->
+              <div class="jarviswidget-editbox"></div>
+              <div class="widget-body">
+                <div class="col-md-6">
+                  <div class='row chart_form_div'></div>
+                  <div class="row" id="module_con" style='padding-bottom: 50px'></div>
+                </div>
+                <div class="col-md-6">
+                  <div class="input-group input-group-sm" style="width:100%;margin-bottom:-15px">
+                    <header>
+                      <label>模块列表</label>
+                      <a href="javascript:void(0);" class="pull-right">
+                        <i class="fa fa-times"></i>
+                      </a>
+                    </header>
+                  </div>
+                  <legend></legend>
+                  <div class="row" style="overflow: auto; min-height: 300px; margin-top: -15px;">
+                    <ul class="ztree" id=""></ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  var conshell,// 项目ID
+      conID,// 页面ID
+      domId;// 容器ID
+  
+  var generateTestData = (function(){
+    var thiz;
+    var pt = generateTestData.prototype;
+    pt.v = {
+      did: $('[name=Npoj]')
+    };
+    zy.extend.get({
+      app:'a6929eedff5c49e5a1a0f5b490873b39',
+      mod:'echart',
+      apinm:'getprojects'
+    }, function (msg) {
+      pt.v.did.zySelectCustomData('', false, {width: '100%', allowClear: false}, msg.result);
+    }, {});
+  });
+  
+  generateTestData();
+  
+  $('#Npoj').click(function(){
+    conshell = $(this).val();
+    generateTestData1(conshell);
+    $('#Npojjj').show();
+    $('#conshellll').hide();
+  });
+  
+  
+  
+  var generateTestData1 = (function(conshell){
+    $('#conshell').html('');
+    $('#widget-grid').html('');
+    var thiz;
+    var pt = generateTestData1.prototype;
+    pt.v = {
+      did: $('[name=conshell]'),
+    };
+    zy.extend.get({
+      app:'a6929eedff5c49e5a1a0f5b490873b39',
+      mod:'echart',
+      apinm:'getprjpages',
+      prjid: conshell,
+    }, function (msg) {
+      for (var i = 0; i < msg.result.length; i++) {
+        $('#conshell').append('<tr><td style="padding:0.5em;" abbr="' + msg.result[i].id + '">' + msg.result[i].name + '</td></tr>')
+      };
+    }, {});
+    
+    $("#conshell td").bind("click", function(){
+      $("#conshell td").css({color:'#333'});
+      $(this).css({color:'blue'});
+      conID = $(this).attr('abbr');
+      generateTestData2(conshell,conID);// (conshell 项目ID value)  (conID 页面 value)
+      $('#conshellll').show();
+      $('#widget-grid').html('');
+    }); 
+  });
+  
+  
+  var generateTestData2 = (function(conshell,conID){ // (conshell 项目ID value)  (conID 页面 value)
+    $('#conId').html('');
+    zy.log(conID +"////////"+ conshell)
+    var thiz;
+    var pt = generateTestData2.prototype;
+    pt.v = {
+      did: $('[name=conId]'),
+    };
+    zy.extend.get({
+      app:'a6929eedff5c49e5a1a0f5b490873b39',
+      mod:'echart',
+      apinm:'getpageattr',
+      prjid: conshell,
+      pageid: conID,
+    }, function (msg) {
+      zy.log(msg.elementinfo)
+      pt.v.did.zySelectCustomData('', false, {width: '30%',allowClear: false}, msg.elementinfo);
+    }, {});
+    
+    
+    $('#conId').click(function(){
+      $('#widget-grid').html('');
+      
+      domId = $(this).val();
+      generateTestData3(conshell,conID,domId);
+    });
+  });
+  var generateTestData3 = (function(conshell,conID,domid){
+    $('#widget-grid').html('');
+    var thiz;
+    var pt = generateTestData3.prototype;
+    pt.v = {
+      did: $('[name=ele_ne]'),
+    };
+    zy.extend.get({
+      apinm:'html_mod_sel',
+      domid: domid,
+      prjid: conshell,
+      pageid : conID,
+      app:'a6929eedff5c49e5a1a0f5b490873b39',
+      mod:'echart'
+    },function(msg){
+      if(msg.mods == ''){
+        $('#newlay').show();
+        pageid = conID;
+        // console.log('/////////////////////////////////////////'+conID)
+        zy.chart.pagecontrol(pageid);
+        
+      //   console.log('/////////10//////////' + pageid)
+      // }else{
+      //   var size = msg.mods[0].optdata.size;
+      //   zy.chart.pagecontrol(msg.mods[0].pageid,size);
+      //   pageid = msg.mods[0].pageid;
+      //   console.log('/////////9//////////' + pageid)
+      
+      
+      
+       // 新建布局
+
+      }else{
+        zy.log(msg.mods.optdata.size)
+      }
+      
+    });
+  });
+</script>
+<script src="bi/echarts.js"></script>
+<script src="bi/chart_compile_new_class.js"></script>
+<script src="bi/chart_compile_chart_show_1.js"></script>
+<script type="text/javascript" src="bi/js/tableToCsv.js"></script>
+<script>
+  
+</script>

@@ -1,0 +1,308 @@
+<script type="text/javascript" language="JavaScript" src="/t/paas/show/ui/comm.js"></script>	
+<script type="text/javascript">
+var pagenum=1;
+var pagesize=10;
+var hfjltjdata;
+var sexMap  = new Map();
+var rowno=0;
+var adidMap = new Map();
+var aoidMap  = new Map();
+getselectdys();
+ 
+$(function () {
+ var tommorrow=new Date();
+   $("#startutime").val(LC_FormatYMD(tommorrow.setDate(tommorrow.getDate())));
+	$("#endutime").val(LC_FormatYMD(tommorrow.setDate(tommorrow.getDate())));
+getselectdaoid();
+});
+function  getselectdaoid(){
+  var url="mdm/orgs/";
+  var infoa = new Map();
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"formfix2","mdmSelectdaoid",infoa,itemsList);
+}
+
+function mdmSelectdaoid(data){
+  var info = new Map();
+  info.put("key",["orgid"]);
+  info.put("value",["orgNm"]);
+  aoidMap=LC_getDataMap(info,data.dataList);
+}
+$(function () {
+getselectd();
+});
+function  getselectd(){
+  var url="mdm/dict/listget/";
+  var infoa = new Map();
+  infoa.put("stringsplit","VA0004.04");
+  var itemsList= [];
+
+  LC_AjaxGet(MDMBaseUrl+url,"formfix2","mdmSelectd",infoa,itemsList);
+
+}
+
+function mdmSelectd(data){
+
+  var info = new Map();
+  info.put("key",["typeCode2"]);
+  info.put("value",["typeName"]);
+// map获取
+  sexMap=LC_getDataMap(info,data.dataList["VA0004.04"]);
+
+}
+
+$(function () {
+   showDatahfjl();
+});
+function hfjltjcallback(retData){
+
+	hfjltjdata=retData;
+	$('#div-hfjl').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+				pagination:true,
+				pageNumber:pagenum,
+				pageSize: pagesize,
+				loadMsg:"正在载入...",
+				singleSelect:true,
+				
+                pageList: [10,20,50,100,200],
+				data:hfjltjdata.dataList,
+				columns:[[
+//				   {field:'div-jzjl',title:'就诊记录',width:100,align:'center'},
+//				   {field:'div-hf',title:'回访',width:100,align:'center'},
+				   {field:'pname',title:'姓名',width:100,align:'center'},
+				   {field:'psex',title:'性别',width:32,align:'center',
+					 formatter:function(value){
+					  return LC_getMapValue(value,sexMap);
+					 }},
+				   {field:'pbirthdday',title:'生日',width:120,align:'center',
+				   formatter:function(value){
+					  return LC_SubStr(value,0,10);
+					 }},
+				   {field:'pphone',title:'联系方式',width:100,align:'center'},
+				   
+				   {field:'adid',title:'就诊医生',width:100,align:'center',
+				   formatter:function(value){
+					  return LC_getMapValue(value,adidMap);
+					 }}
+				]],                  
+                onDblClickRow: function (rowIndex) {
+                  openRoleDiv(rowIndex);
+                },
+                onClickRow: function (rowIndex) {
+		     
+		         rowno=rowIndex;
+		       
+		        },
+         
+		       fitColumns:false,
+			   pagination:true,
+               rownumbers:true
+		}); 
+
+	   var pager = $('#div-hfjl').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pagenum=pageNumber;
+		           pagesize=pageSize;
+		          showDatahfjl();
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:pagesize,pageNumber:pagenum,total:hfjltjdata.count});
+
+		};
+	
+}
+		function showDatahfjl(){
+		//时间验证
+		//	LC_Resetting("hfjljs");
+		//	var checkpcthrItems=["startutime","endutime"];
+		//	LC_IsCheckNotNull("hfjljs",checkpcthrItems);
+		//	if(retCheckFlg){
+			var url ="hfjl/"; 	
+        	var itemsList=["startutime","endutime","goalhid","pname","pphone"];
+				
+			//var itemsList=[];
+			var info= new Map();	
+	        info.put("pagenum",pagenum);
+	        info.put("pagesize",pagesize);
+	        LC_AjaxGet(TRSBaseUrl+url,"hfjljs","hfjltjcallback",info,itemsList)		
+		//	}
+		}
+
+	
+	//点击回访弹出
+	function hf(){
+		//$('#div-hf').dialog('open');
+	self.parent.thid=hfjltjdata.dataList[rowno].thid;			
+				var openRoleDiv = self.parent.$("#openRoleDiv");
+				openRoleDiv.window({
+						 href:"SQZZ/hf.html",
+			              title: '回访信息',
+			              width: 520,
+			              height: 270,
+						  fit: false,
+						  closable:true,
+			  onBeforeClose:function(){
+			  showDatahfjl();
+　　                }
+			          });	
+	}
+	function divjzjl(){
+		$('#div-jzjl').dialog('open');
+	}
+//	function jzjldialog(){
+//	
+//		self.parent.dataMap=hfjltjdata.dataList[rowno];
+//
+//				var openRoleDiv = self.parent.$("#openRoleDiv");
+//				openRoleDiv.window({
+//						 href:"YYXZ/JZJL.html",
+//			              title: '就诊记录',
+//			              width: 500,
+//			              height: 450,
+//						  closable:true
+//			          });
+//	}
+	
+$(function () {
+getselectaoid();
+});
+ function  getselectaoid(){
+
+  var url="mdm/osms004ChOrgId/";
+  var infoa = new Map();
+  infoa.put("changorgid",self.parent.orgid);
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"goalhid","mdmSelectoid",infoa,itemsList);
+}
+
+function mdmSelectoid(data){
+  var info = new Map();
+  info.put("key",["orgid"]);
+  info.put("value",["orgNm"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("hfjljs","goalhid",info,data.dataList);
+}
+
+
+//转换医生
+function  getselectdys(){
+  var url="mdm/org/listSta/";
+  var infoa = new Map();
+  infoa.put("stringsplit",self.parent.orgid);
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"","mdmSelectdys",infoa,itemsList);
+}
+function mdmSelectdys(data){
+
+  var info = new Map();
+  info.put("key",["staffId"]);
+  info.put("value",["name"]);
+  adidMap=LC_getDataMap(info,data.dataList);
+}
+function confirm2(){
+	self.parent.dataMap=hfjltjdata.dataList[rowno];
+		if(self.parent.dataMap){
+				var openRoleDiv = self.parent.$("#openRoleDiv");
+				openRoleDiv.window({
+						 href:"YYXZ/BFZ1.html",
+			              title: '就诊记录',
+			              width: 500,
+			              height: 450,
+						  fit: false,
+				    	 closable:true,
+					  onBeforeClose:function(){
+						  setTimeout(function(){
+							showDatahfjl();
+							}, 300);
+		　　                }
+			          });
+					  };
+	}
+</script>
+<style>
+body{ font-size:12px;}
+.padding1{padding:10px 0 0 7px;}
+</style>
+
+<div class="mainsW-912">
+    <div class="padding1 clearfix">
+		<div class="easyui-panel" title="查询信息" style="height:130px;!height:100px;">
+        <div class="flPadTB-10">
+            <form id="hfjljs" style="margin:0;">            	
+                    <div class="mainW-224" >
+                        <div class="itemLW-112 padT-4">开始时间：</div>
+                        <div class="itemRW-112"><input id="startutime"  class="Wdate" onClick="WdatePicker()" type="text" style="width:112px;" /></div>
+                     </div>
+                     <div class="mainW-224" >
+                        <div class="itemLW-112 padT-4">结束时间：</div>
+                        <div class="itemRW-112"><input id="endutime"  class="Wdate" onClick="WdatePicker()" type="text" style="width:112px;" /></div>
+                     </div>
+                     <div class="mainW-368">
+                        <div class="itemLW-112 padT-4">目标医院：</div>
+                        <div class="itemRW-240"><select id="goalhid" class="textLW" name="dept"></select></div>
+                     </div>
+                 <div class="mainW-224" >
+                    <div class="itemLW-112 padT-4">患者姓名：</div>
+                    <div class="itemRW-112"><input id="pname" class="textLW" type="text" /></div>
+                 </div>
+                 <div class="mainW-224" >
+                    <div class="itemLW-112 padT-4">联系方式：</div>
+                    <div class="itemRW-112"><input id="pphone" class="textLW" type="text" /></div>
+                 </div>
+                 </form>
+				<div class="itemLW-896" style="padding:0 0 5px 0;"><a href="#" id="delaysearch" class="easyui-linkbutton" onclick="showDatahfjl()" >检索</a><!--<span class="padLR-10"><a href="#" class="easyui-linkbutton">打印</a></span>--></div>
+
+            </div>
+        </div>
+ 		      <table id="div-hfjl" toolbar="#toolbar"></table>
+              <div id="toolbar">
+       <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="confirm2()">就诊记录</a>
+       <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="hf()">回访</a>
+       </div>
+
+        
+    </div>
+    
+</div>
+
+
+        
+<script type="text/javascript">
+//搜索延迟两秒
+var oInput = document.getElementById('delaysearch');
+        oInput.onclick = function(){
+		$("#delaysearch").linkbutton({  
+			disabled:true  
+			}); 		
+        setTimeout(function(){
+				pagenum=1;
+				pagesize=10;
+				showDatahfjl();
+			$("#delaysearch").linkbutton({  
+			disabled:false  
+			}); 
+		},1000*2);
+		
+		
+}
+
+//添加修改延迟五秒
+var oInput = document.getElementById('delayalter');
+        oInput.onclick = function(){
+		$("#delayalter").linkbutton({  
+			disabled:true  
+			}); 
+        setTimeout(function(){
+			$("#delayalter").linkbutton({  
+			disabled:false  
+			}); 
+		},1000*5);
+}
+</script>

@@ -1,0 +1,532 @@
+  <link rel="stylesheet" type="text/css" href="projectmanagement/misc/core1.css" />
+  <link rel="stylesheet" type="text/css" href="projectmanagement/misc/core.css" />
+  <script type="text/javascript" src="projectmanagement/misc/core.js"></script>
+  <!-- jReject -->
+  <link rel="stylesheet" type="text/css" href="projectmanagement/misc/jquery.reject.css" />
+  <script type="text/javascript" src="projectmanagement/misc/jquery.reject.js"></script>
+  <script type="text/javascript" src="projectmanagement/misc/jquery.reject.360.js"></script>
+
+ <div class="modal fade" id="ide_run" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title">API 测试</h4>
+      </div>
+      <div class="modal-body no-padding">
+      <form method="post" onsubmit="return false;" class="smart-form">
+          <fieldset>
+            <div class="row">
+              <section class="col col-6">
+                <label class="label">API 分类</label>
+                <lable class="input has-warning">
+                  <input type="text" name="apitype" placeholder="API 分类">
+                </lable>
+              </section>
+              <section class="col col-6">
+                <label class="label">请求方式</label>
+                <label class="input has-warning">
+                  <input type="text" name="ajaxtype" placeholder="请求方式">
+                </label>
+              </section>
+            </div>
+            
+          </fieldset>
+         
+        </form>
+      <div>
+              <div class="row">
+                <section name="parameters"  class="col-sm-2" style="margin-left: 10px">
+                  参数列表<i class="fa fa-fw fa-plus-circle txt-color-green" name="addkey" style="cursor:pointer"></i>
+                </section>
+              </div>
+              <div id="api_assist_2">
+              
+              </div>
+            </div>
+        <form method="post" onsubmit="return false;" class="smart-form">
+          <fieldset>
+            
+            <div style="display:none;">
+              <section>
+                <label>参数</label>
+                <label class="input">
+                  <input name="url">
+                </label>
+              </section>
+            </div>
+            
+            <div>
+              <section>
+                <label class="label">完整URL</label>
+                <label class="textarea">
+                  <!--<p name="fullurl"></p>-->
+                  <textarea style="border: 0px;background:white;cursor: default;padding:0px;overflow-y: hidden;height:20px;" onpropertychange="this.style.height = this.scrollHeight + 'px';" oninput="this.style.height = this.scrollHeight + 'px';" readonly="readonly" name="fullurl"></textarea>
+                </label>
+              </section>
+            </div>
+          </fieldset>
+        </form>
+        <div class="row">
+          <div class="col-xs-2" style="margin-left:13px">
+            返回结果
+          </div>
+          <div class="col-xs-2" style="margin-left:13px">
+            <button class="btn btn-default btn-sm" name="switch">Tree/文本</button>
+          </div>
+          <!--<div class="col-xs-2" style="margin-left:13px">-->
+            <!--<button name="api_help" class="btn btn-sm btn-primary">API 帮助</button>-->
+          <!--  <textarea style="display:none" name="help_info"></textarea>-->
+          <!--</div>-->
+          <div class="col-xs-2" style="margin-left:13px">
+            <button name="runApi" class="btn btn-sm btn-primary">测试</button>
+          </div>
+        </div>
+            <div class="row">
+              <!--<section class="col col-10">-->
+              <!--  <label class="label">接口返回</label>-->
+              <!--  <lable class="textarea has-warning">-->
+                  <!--<textarea style="border: 0px;background:white;cursor: default;padding:0px;overflow-y: hidden;height:20px;" onpropertychange="this.style.height = this.scrollHeight + 'px';" oninput="this.style.height = this.scrollHeight + 'px';" readonly="readonly" name="apiReturn"></textarea>style="margin-left: 13px"-->
+                <div class="col-md-12">
+                  <div id="jsoneditor"></div>
+                </div>
+                <div class="col-md-12">
+                  <div id="jsonformatter" style="display:none;height:400px;"></div>
+                </div>
+                <!--</lable>-->
+              <!--</section> -->
+              <!--<section class="col col-2">-->
+              <!--  <lable class="input has-warning">-->
+                  
+              <!--  </lable>-->
+              <!--</section>-->
+            </div>
+
+        <form method="post" onsubmit="return false;" class="smart-form">
+          <footer>
+            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            <button name="runSubmit" class="btn btn-primary">保存</button>
+          </footer>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function RunApi(node,help_info){
+    
+    var modal = $('#ide_run');
+    var appid = node.appid,
+        modid = node.moduleid,
+        apiid = node.apiid;
+    
+    var apitype = modal.find('[name=apitype]'),
+        ajaxtype = modal.find('[name=ajaxtype]'),
+        url = modal.find('[name=url]');
+        
+    var help = null;
+    var rowList = {};
+    
+    //editor
+		var editor = new jsoneditor.JSONEditor(modal.find('#jsoneditor').get(0), {
+		  mode : 'viewer',
+			change: function () {
+				app.lastChanged = editor;
+			}
+		});
+		// formatter
+		var formatter = new jsoneditor.JSONFormatter(modal.find('#jsonformatter').get(0), {});
+		
+		window.ee = editor;
+    
+    function newlabel(row) {
+      var row = row || {key:'',desc:'',value:''};
+      
+      var rk = Random();
+      
+      function createkey(c){
+        var section = $('<section>').addClass('col-sm-3').attr('style','margin-left: 10px');
+        var label = $('<label>').addClass('input').html('参数名称');
+        var a =$(' <a href="form-x-editable.html#"  class="editable editable-click" name="key" data-type="text" data-pk="1" data-placement="right" data-placeholder="Required"></a> ');
+        section.append(label).append(a)
+        a.html(row.key);
+        url.trigger('_param');
+        a.editable({
+          validate: function (value) {
+            if ($.trim(value) == '')
+              return 'This field is required';
+          },
+          display:function(value){
+            $(this).html(value);
+            url.trigger('_param');
+          }
+        });
+        c.append(section);
+        return a
+      }
+      
+      function createdesc(c){
+        var section= $('<section>').addClass('col-sm-4');
+      var label = $('<label>').addClass('input').html('描述');
+      var a = $(' <a href="form-x-editable.html#"  class="editable editable-click" name="desc" data-type="textarea" data-pk="1" data-placeholder="Your comments here..."></a> ');
+      section.append(label).append(a);
+      a.html(row.desc);
+      
+       a.editable({
+        showbuttons: 'bottom'
+      });
+      c.append(section);
+      return a
+      }
+      
+      function createvalue(c){
+        var section = $('<section>').addClass('col-sm-3').attr('style','margin-left: 10px');
+        var label = $('<label>').addClass('input').html('值');
+        var a =$(' <a href="form-x-editable.html#"  class="editable editable-click" name="value" data-type="text" data-pk="1" data-placement="right" data-placeholder="Required"></a> ');
+        section.append(label).append(a)
+        a.html(row.value);
+        url.trigger('_param');
+        a.editable({
+          validate: function (value) {
+            if ($.trim(value) == '')
+              return 'This field is required';
+          },
+          display:function(value){
+            $(this).html(value);
+            url.trigger('_param');
+          }
+        });
+        c.append(section);
+        return a
+      }
+      
+      var h4='<h4><i name="removekey" class="fa fa-fw fa-times-circle txt-color-red" style="display:none"></i></h4>'
+      var _c = $('<div>').addClass('row').attr('_index',rk);
+      modal.find('#api_assist_2').append(_c);
+      
+      var rowdata={
+        key:createkey(_c),
+        value:createvalue(_c)
+      }
+      
+      rowList[rk] = _getrow;
+      
+      zy.log(rowdata);
+    
+      function _getrow(){
+        var key= rowdata.key.html();
+        var value=rowdata.value.html();
+        
+        return [key,encodeURIComponent(value)];
+      }
+      
+      _c.append(h4);
+    
+      _c.mouseover(function(){
+      $($(this).find('[name=removekey]')).attr('style','cursor:pointer');
+      _c.find('i').click(function () {
+        url.trigger('_param');
+        var target = $(this).closest('div');
+        var k = target.attr('_index');
+        delete rowList[k];
+        target.remove();
+        
+      })
+      
+    });
+      _c.mouseout(function(){
+        $('[name=removekey]').attr('style','display:none');
+      });
+      
+    }
+  
+    function jsonToform(data){
+      if(data.param.length>0){
+        $.each(data.param,function(i,v){
+          newlabel(v);
+        })
+      }
+    }
+    
+    function Event(){
+      
+      var atype = 'api';
+      var host = location.host;
+      var ds = '/ds/';
+      var ajtype = '01';
+      var param = '';
+      
+      apitype.change(function(e){
+        atype = e.val;
+        url.trigger('_change');
+      });
+      
+      ajaxtype.change(function(e){
+        ajtype = e.val;
+        url.trigger('_change');
+      });
+      
+      url.bind('_change',function(e){
+        var $this = $(this);
+        var fullc = modal.find('[name=fullurl]');
+        
+        var t = $.extend({},zy.g.comm,{app:appid,mod:modid,s:'d',ems:"ems"});
+        delete t.orgtype;
+        delete t.orgpath;
+        
+        var full = '';
+        
+        //get
+        if(ajtype=='01'){
+          var last = '&';
+        
+          if(param!=''){
+            if(param[param.length - 1] == '&'){
+              last = '';
+            }
+          }else{
+            last = '';
+          }
+          full = host + ds + atype + '/' + apiid + '?' + param + last + zy.net.parseParam(t);
+        }
+        //post等
+        else{
+          full = host + ds + atype + '/' + apiid + '?' + zy.net.parseParam(t);
+        }
+          
+        $this.val(param);
+        fullc.val(full);
+        setTimeout(function(){
+          $('[name=fullurl]').trigger('input');
+        },300);
+      });
+      
+      url.bind('_param',function(e){
+        var t = [];
+        $.each(rowList,function(i,v){
+          var _tmp = v();
+          t.push(_tmp.join('='));
+        })
+        param = t.join('&');
+        
+        $(this).trigger('_change');
+      })
+      
+      modal.find('[name=runApi]').click(function(e){
+        // var url ='http://'+ host + ds + atype + '/' + apiid;
+        var url = 'http://' + modal.find('[name=fullurl]').val();
+        zy.log('url=',url);
+        // var common = $.extend({},zy.g.comm,{app:appid,mod:modid});
+        var common = {};
+        if(ajtype!='01'){
+          $.each(rowList,function(i,v){
+            var _tmp = v();
+            common[_tmp[0]] = _tmp[1];
+          })
+        }
+        zy.log('common=',common);
+        Ajax(url,common,ajtype);
+      });
+      // 手动加入文本框
+      // $('[name=help_info]').val(help_info);
+      // modal.find('[name=api_help]').click(function(e){
+      //   zy.net.loadHTML('projectmanagement/api_assist.html',$('#modal_container3'),function(){
+      //     $('#ide_run').modal('hide');
+      //     $('#api_assist').modal('show');
+      //     var apiinfo;
+          
+      //       apiinfo={
+      //         apiid:apiid,
+      //         apinm:node.apinm,
+      //         appid:appid,
+      //         appnm:node.appnm,
+      //         moduleid:modid,
+      //         modulenm:node.modulenm
+      //       };
+      //     api_help.init(apiinfo,$('[name=help_info]'));
+      //   });
+      // });
+      
+      modal.find('[name=switch]').click(function(e){
+        if(modal.find('#jsoneditor').is(':hidden')){
+          modal.find('#jsoneditor').show();
+          modal.find('#jsonformatter').hide();
+        }else{
+          modal.find('#jsoneditor').hide();
+          modal.find('#jsonformatter').show();
+        }
+      });
+      //  保存 API帮助
+      modal.find('[name=runSubmit]').click(function(e){
+        var _tools = {
+          // 调api
+          _api : function(_param, _success, _nodata_cb) {
+            if (!_param.apiid)
+              return;
+            var _p = $.extend(true, {}, _param.r_param);
+            var _cb = function(msg) {
+              if (msg) {
+                _success && _success(msg);
+              } else {
+                _nodata_cb && _nodata_cb(msg);
+              }
+            };
+      
+            zy.g.am.mod = 'zymodule_ide';
+            zy.g.am.app = 'zyapp_ide';
+            var _apitype = 'ide/';
+            zy.net.post(_apitype + _param.apiid, _cb, _p);
+          }
+        }
+        var _o = {};
+        var _t={
+          appid:appid,
+          moduleid:modid,
+          apiid:apiid
+        };
+        zy.g.am.app='ZYAPP_IDE'
+        zy.g.am.mod='ZYMODULE_IDE'
+        zy.net.get('api/getapiinfo',function(msg){
+          var data = msg.result[0];
+          var r_param_vals = $('#ide_run [name=value]');
+          var r_param = [];
+          $('#ide_run [name=key]').each(function(index,el){
+            r_param[index] = {};
+            r_param[index].key = $(el).html();
+            r_param[index].value = r_param_vals.eq(index).html();
+            if(data.help_info == '' || index >= JSON.parse(data.help_info).param.length){
+              r_param[index].desc = 'Empty';
+            } else {
+              r_param[index].desc = JSON.parse(data.help_info).param[index].desc;
+            }
+          });
+          
+          _o.apiid = _checkLevel(node, true);
+          _o.r_param = {
+            type : 1,
+            appid:node.appid,
+            moduleid:node.moduleid,
+            apiid:node.apiid,
+            apinm:data.apinm,
+            status:data.status
+          };
+          if(data.help_info.indexOf('"param":[') !== -1){
+            _o.r_param.help_info = data.help_info.slice(0,data.help_info.indexOf('"param":[')) + '"param":' + JSON.stringify(r_param) + data.help_info.slice(data.help_info.indexOf(',"result":{'));
+          } 
+          else if (r_param.length){
+            var param_help_info = {
+              api_classify:$('#ide_run').find('[name=apitype]').val(),
+              requests:$('#ide_run').find('[name=ajaxtype]').val(),
+              param:r_param,
+            };
+            _o.r_param.help_info = JSON.stringify(param_help_info);
+          } 
+          else {
+            _o.r_param.help_info = '';
+          }
+          zy.log($('.ui-draggable').data('roleid'));
+          _o.r_param.roleid = $('.ui-draggable').data('roleid');
+          _tools._api(_o, function(msg) {
+            zy.ui.msg('提示信息', '成功', 's');
+          })
+        },_t,null,function(msg){
+          zy.log(msg);
+        });
+      
+      });
+    }
+    
+    function _checkLevel(_node, _flg) {
+      if (!_node.appid)
+        return 'app';
+      if (!_node.moduleid)
+        return _flg ? 'app' : 'mod';
+      if (_node.apiid && _node.contentid)
+        return 'api';
+      if (_node.moduleid && !_node.apiid)
+        return _flg ? 'mod' : 'api';
+      if (_node.apiid && _node.hisid)
+        return 'his';
+    }
+    
+    function init(cb){
+      zy.cache.initDicts('ZR.0052,ZR.0053',function(){
+        apitype.zySelect('ZR.0053', false, {
+          width: '100%',
+          allowClear: false
+        });
+        apitype.select2('val','api');
+        ajaxtype.zySelect('ZR.0052', false, {
+          width: '100%',
+          allowClear: false
+        });
+        ajaxtype.select2('val','01');
+        
+        cb&&cb();
+      });
+    }
+    
+    loadScript("lib/js/plugin/x-editable/moment.min.js", loadMockJax);
+  
+    function loadMockJax() {
+      loadScript("lib/js/plugin/x-editable/jquery.mockjax.min.js", loadXeditable);
+    }
+  
+    function loadXeditable() {
+      loadScript("lib/js/plugin/x-editable/x-editable-new.min-n.js", loadTypeHead);
+    }
+  
+    function loadTypeHead() {
+      loadScript("lib/js/plugin/typeahead/typeahead.bundle.min.js", function(){
+        init(function(){
+          
+          modal.find('[name=addkey]').click(function () {
+            newlabel();
+          });
+          
+          if(help_info!=''){
+            help = JSON.parse(help_info);
+            jsonToform(help);
+          }
+          
+          Event();
+          modal.modal('show');
+          url.trigger('_change');
+          url.trigger('_param');
+        })
+      });
+    }
+    
+    function Random(){
+      return Math.round(Math.random() * 1000000);
+    }
+    
+    function Ajax(url,param,type){
+      
+      function showResult(msg){
+        window.ee = msg;
+        
+        editor.set(JSON.parse(msg));
+        formatter.set(JSON.parse(msg));
+        // $('[name=apiReturn]').val(msg);
+        // $('[name=apiReturn]').trigger('input');
+      }
+      
+      if(type == '01'){
+        $.get(url,param,function(msg){
+          showResult(msg);
+        })
+      }
+      
+      if(type == '02'){
+        $.post(url, param, function (msg) {
+          showResult(msg);
+        })
+      }
+    }
+  }
+</script>

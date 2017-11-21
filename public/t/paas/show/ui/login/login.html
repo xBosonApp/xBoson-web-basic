@@ -1,0 +1,99 @@
+<script>
+//function check(){
+//	var url="logincheck/";
+//	var itemsList = ["username","orgid"];
+//	var info=new Map();
+//	LC_AjaxGet(TRSBaseUrl+url,"orgincheck","checkcallback",info,itemsList);
+//}
+//function checkcallback(){
+	
+//}
+function login(){
+	var url="login/";
+	var itemsList = ["username"];
+	var info = new Map();
+ 	LC_AjaxGet(TRSBaseUrl+url,"login","zzsqcallback",info,itemsList);
+}
+function loginin(){
+	LC_Resetting("login");
+	var checkNameItems=["username"];
+	LC_IsCheckLength("login",checkNameItems,1,18);
+	var checkpassItems=["password"];
+	LC_IsCheckLength("login",checkpassItems,1, 50);
+	var checkorgidItems=["orgid"];
+	LC_IsCheckLength("login",checkorgidItems,1, 32);
+		if(retCheckFlg){
+		var url="loginin/";
+		var itemsList = ["username","password","orgid"];
+		 var info = new Map();
+ 	 LC_AjaxGet(TRSBaseUrl+url,"login","logincallback",info,itemsList);
+ }
+}
+function logincallback(reData1){
+	if(reData1.flag===1){
+		self.parent.loginFlg=true;
+		self.parent.usertype=reData1.usertype;
+		self.parent.orgid=reData1.orgid;
+		self.parent.staffid=reData1.staffid;
+		$("#openRoleDiv").window("close");
+	}
+	 else{
+		alert("登陆失败");
+	}
+	
+}
+
+function zzsqcallback(reData){
+	    var codeList="";
+	    for(var i=0;i<reData.dataList.length;i++){
+	       if(codeList!=""){
+	          codeList=codeList+","+reData.dataList[i].orgid;
+	       }else{
+	          codeList=reData.dataList[i].orgid;
+	       }
+	    }
+	    $(".addorgan").show();
+	    var url="mdm/org/listgetorg/";
+		var infoa = new Map();
+		infoa.put("stringsplit",codeList);
+		var itemsList= [];
+		LC_AjaxGet(MDMBaseUrl+url,"login","orgSelect",infoa,itemsList);
+ }
+function orgSelect(retData){
+
+   var info = new Map();
+  info.put("key",["orgId"]);
+  info.put("value",["orgNm"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("login","orgid",info,retData.dataList);
+}
+function inquire(){
+	$(".addorgan").show();
+}
+
+</script>
+<div class="itemsW-304">
+    <form id="login">
+    	<div class="padTB-10 clearfix">
+            <div class="itemLW-272">
+                <div class="itemLW-80 padT-4">用户名：</div>
+                <div class="itemsW-192"><input id="username" onblur="login()" class="textLW" type="text" /></div>
+            </div>
+           
+            
+                <div class="itemLW-80 padT-4">机构：</div>
+                <div class="itemsW-192">
+                    <select class="textLW" id="orgid" name="dept" >  
+                    
+                    </select>
+                </div>
+           
+            <div class="itemLW-272">
+                <div  class="itemLW-80 padT-4">密码：</div>
+                <div class="itemsW-192"><input id="password" class="textLW" type="password" /></div>
+            </div>
+            <div class="itemLW-272"><a class="easyui-linkbutton" onclick="loginin()">登陆</a></div>
+        </div>
+    </form>
+</div>

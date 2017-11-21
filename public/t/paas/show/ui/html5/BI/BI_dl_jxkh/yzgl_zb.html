@@ -1,0 +1,1689 @@
+﻿<style>
+.choose-c{ line-height: 30px;}
+.choose-c input{ float: left;margin:9px 0 0 0;}
+.choose-c span{ float: left; margin:0 10px 0 0;}
+</style>
+<div id="mrmzl-m" class="portlet box grey">
+    <div class="portlet-title">
+        <div class="caption" id="yetj-name"><!-- 可以设置图标<i class="icon-globe"></i> -->在编</div> 
+        <div style="float:right;">
+              <i onclick="dayin()" class="icon-print" style="cursor:pointer"></i>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="lc-inquire">
+            <form id="org-mrmzl" class="form-inline" action="">
+                <input type="hidden" id="groupby" value="tablename"/>
+                <input type="hidden" id="pagenum"/>
+                <input type="hidden" id="pagesize"/>
+                <div class="row-fluid">
+                    <div class="span1">机构名称</div>
+                    <div class="span2"><select id="dimorg" class="selectpicker"><option value="All">全部</option></select></div>
+                    <div class="span1">开始时间</div>
+                    <div class="span2"><input id="datebegin" type="text" class="dateday"></div>
+                    <div class="span1">结束时间</div>
+                    <div class="span2"><input id="dateend" type="text"  class="dateday"></div>
+                    <div class="span1"><a onclick="setData101New('tablename')" class="btn blue">查询</a></div>
+                    <div class="span1"><input id="checkedyes" name="" type="checkbox" value="" checked="checked" style="float:left;width:auto;margin:9px 0 0 14px;"  /><span style="float:left;">全选</span></div>
+            </div>
+            </form>
+            <div id="zb_z" class="choose-c">
+				<input id="zb1" name="" type="checkbox" value="" checked="checked" /><span>机构</span>
+				<input id="zb2" name="" type="checkbox" value="" checked="checked" /><span>编制数</span>
+				<input id="zb3" name="" type="checkbox" value="" checked="checked" /><span>空编数</span>
+				<input id="zb4" name="" type="checkbox" value="" checked="checked" /><span>现有人员</span>
+				<input id="zb5" name="" type="checkbox" value="" checked="checked" /><span>执业医师</span>
+				<input id="zb6" name="" type="checkbox" value="" checked="checked" /><span>执业助理医师</span>
+				<input id="zb7" name="" type="checkbox" value="" checked="checked" /><span>见习医师</span>
+				<input id="zb8" name="" type="checkbox" value="" checked="checked" /><span>注册护士</span>
+				<input id="zb9" name="" type="checkbox" value="" checked="checked" /><span>西药师（士）</span>
+				<input id="zb10" name="" type="checkbox" value="" checked="checked" /><span>中药师（士）</span>
+				<input id="zb11" name="" type="checkbox" value="" checked="checked" /><span>检验技师（士）</span>
+				<input id="zb12" name="" type="checkbox" value="" checked="checked" /><span>影像技师（士）</span><br />
+				<input id="zb13" name="" type="checkbox" value="" checked="checked" /><span>其他卫生技术人员</span>
+				<input id="zb14" name="" type="checkbox" value="" checked="checked" /><span>第一学历（统招学历）</span>
+				<input id="zb15" name="" type="checkbox" value="" checked="checked" /><span>最高学历</span>
+				<input id="zb16" name="" type="checkbox" value="" checked="checked" /><span>年龄</span>
+				<input id="zb17" name="" type="checkbox" value="" checked="checked" /><span>卫生专业技术职称（已获）</span>
+				<input id="zb18" name="" type="checkbox" value="" checked="checked" /><span>卫生专业技术职称（已聘）</span>
+				<input id="zb19" name="" type="checkbox" value="" checked="checked" /><span>其他专业技术职称（已获）</span><br />
+				<input id="zb20" name="" type="checkbox" value="" checked="checked" /><span>其他专业技术职称（已聘）</span>
+				<input id="zb21" name="" type="checkbox" value="" checked="checked" /><span>工人岗位技术等级（已获）</span>
+				<input id="zb22" name="" type="checkbox" value="" checked="checked" /><span>工人岗位技术等级（已聘）</span>
+				<input id="zb23" name="" type="checkbox" value="" checked="checked" /><span>管理人员职务等级（已获）</span>
+				<input id="zb24" name="" type="checkbox" value="" checked="checked" /><span>管理人员职务等级（已聘）</span>
+				<input id="zb25" name="" type="checkbox" value="" checked="checked" /><span>执业资质</span><br />
+				<input id="zb26" name="" type="checkbox" value="" checked="checked" /><span>离休人数</span>
+				<input id="zb27" name="" type="checkbox" value="" checked="checked" /><span>退休人数</span>
+				<input id="zb28" name="" type="checkbox" value="" checked="checked" /><span>下一年度拟退专业技术人员</span>
+				<div style="clear:both;"></div>
+            </div>
+        </div>
+        <div id="rowtable" class="row-fluid">
+            <div class="span12">
+                 <table id="ttmrmzl"></table>
+            </div>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+<script type="text/javascript">
+function dayin(){
+$("#rowtable").printArea();
+}
+$(document).ready(function(){
+  $("#checkedyes").click(function(){
+      if ($("#checkedyes").is(":checked")) {
+          $("#zb_z input").prop("checked",true);
+          $('#ttmrmzl').datagrid('showColumn', "机构");
+          $('#ttmrmzl').datagrid('showColumn', "编制数（在编）");
+          $('#ttmrmzl').datagrid('showColumn', "空编数");
+          $('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(3)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(1)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(2)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(3)').show();
+          $('#ttmrmzl').datagrid('showColumn', "现有人员（合计）");
+          $('#ttmrmzl').datagrid('showColumn', "专业技术人员（男）");
+          $('#ttmrmzl').datagrid('showColumn', "专业技术人员（女）");
+          $('#ttmrmzl').datagrid('showColumn', "管理（男）");
+          $('#ttmrmzl').datagrid('showColumn', "管理（女）");
+          $('#ttmrmzl').datagrid('showColumn', "工勤（男）");
+          $('#ttmrmzl').datagrid('showColumn', "工勤（女）");
+          $('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(4)').show();
+          $('#ttmrmzl').datagrid('showColumn', "执业医师（合计）");
+          $('#ttmrmzl').datagrid('showColumn', "执业医师（临床）");
+          $('#ttmrmzl').datagrid('showColumn', "执业医师（中医）");
+          $('#ttmrmzl').datagrid('showColumn', "执业医师（口腔）");
+          $('#ttmrmzl').datagrid('showColumn', "执业医师（公共卫生）");
+          $('#ttmrmzl').datagrid('showColumn', "执业医师（中西医结合）");
+          $('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(5)').show();
+          $('#ttmrmzl').datagrid('showColumn', "执业助理医师（合计）");
+          $('#ttmrmzl').datagrid('showColumn', "执业助理医师（临床）");
+          $('#ttmrmzl').datagrid('showColumn', "执业助理医师（中医）");
+          $('#ttmrmzl').datagrid('showColumn', "执业助理医师（口腔）");
+          $('#ttmrmzl').datagrid('showColumn', "执业助理医师（公共卫生）");
+          $('#ttmrmzl').datagrid('showColumn', "执业助理医师（中西医结合）");
+          $('#ttmrmzl').datagrid('showColumn', "见习医师");
+          $('#ttmrmzl').datagrid('showColumn', "注册护士");
+          $('#ttmrmzl').datagrid('showColumn', "西药师（士）");
+          $('#ttmrmzl').datagrid('showColumn', "中药师（士）");
+          $('#ttmrmzl').datagrid('showColumn', "检验技师（士）");
+          $('#ttmrmzl').datagrid('showColumn', "影像技师（士）");
+          $('#ttmrmzl').datagrid('showColumn', "其他卫生技术人员");
+          $('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(13)').show();
+          $('#ttmrmzl').datagrid('showColumn', "第一学历（统招学历）（合计）");
+          $('#ttmrmzl').datagrid('showColumn', "研究生及以上");
+          $('#ttmrmzl').datagrid('showColumn', "本科");
+          $('#ttmrmzl').datagrid('showColumn', "大专");
+          $('#ttmrmzl').datagrid('showColumn', "中专");
+          $('#ttmrmzl').datagrid('showColumn', "高中及以下");
+          $('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(14)').show();
+          $('#ttmrmzl').datagrid('showColumn', "最高学历（合计）");
+          $('#ttmrmzl').datagrid('showColumn', "研究生及以上（最高）");
+          $('#ttmrmzl').datagrid('showColumn', "本科（最高）");
+          $('#ttmrmzl').datagrid('showColumn', "大专（最高）");
+          $('#ttmrmzl').datagrid('showColumn', "中专（最高）");
+          $('#ttmrmzl').datagrid('showColumn', "高中及以下（最高）");
+          $('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(15)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(29)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(30)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(31)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(32)').show();
+          $('#ttmrmzl').datagrid('showColumn', "年龄（合计）");
+          $('#ttmrmzl').datagrid('showColumn', "30以下（男）");
+          $('#ttmrmzl').datagrid('showColumn', "30以下（女）");
+          $('#ttmrmzl').datagrid('showColumn', "31-40岁（男）");
+          $('#ttmrmzl').datagrid('showColumn', "31-40岁（女）");
+          $('#ttmrmzl').datagrid('showColumn', "41-50岁（男）");
+          $('#ttmrmzl').datagrid('showColumn', "41-50岁（女）");
+          $('#ttmrmzl').datagrid('showColumn', "50-60岁（男）");
+          $('#ttmrmzl').datagrid('showColumn', "50-60岁（女）");
+          $('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(16)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(33)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(34)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(35)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(36)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(37)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(38)').show();
+          $('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已获）（合计男）");
+          $('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已获）（合计女）");
+          $('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已获）（正高男）");
+          $('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已获）（正高女）");
+          $('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已获）（副高男）");
+          $('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已获）（副高女）");
+          $('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已获）（中级男）");
+          $('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已获）（中级女）");
+          $('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已获）（助级男）");
+          $('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已获）（助级女）");
+          $('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已获）（员级男）");
+          $('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已获）（员级女）");
+          $('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(17)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(39)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(40)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(41)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(42)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(43)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(44)').show();
+          $('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已聘）（合计男）");
+          $('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已聘）（合计女）");
+          $('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已聘）（正高男）");
+          $('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已聘）（正高女）");
+          $('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已聘）（副高男）");
+          $('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已聘）（副高女）");
+          $('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已聘）（中级男）");
+          $('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已聘）（中级女）");
+          $('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已聘）（助级男）");
+          $('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已聘）（助级女）");
+          $('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已聘）（员级男）");
+          $('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已聘）（员级女）");
+          $('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(18)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(45)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(46)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(47)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(48)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(49)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(50)').show();
+          $('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已获）（合计男）");
+          $('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已获）（合计女）");
+          $('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已获）（正高男）");
+          $('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已获）（正高女）");
+          $('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已获）（副高男）");
+          $('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已获）（副高女）");
+          $('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已获）（中级男）");
+          $('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已获）（中级女）");
+          $('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已获）（助级男）");
+          $('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已获）（助级女）");
+          $('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已获）（员级男）");
+          $('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已获）（员级女）");
+          $('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(19)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(51)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(52)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(53)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(54)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(55)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(56)').show();
+          $('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已聘）（合计男）");
+          $('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已聘）（合计女）");
+          $('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已聘）（正高男）");
+          $('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已聘）（正高女）");
+          $('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已聘）（副高男）");
+          $('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已聘）（副高女）");
+          $('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已聘）（中级男）");
+          $('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已聘）（中级女）");
+          $('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已聘）（助级男）");
+          $('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已聘）（助级女）");
+          $('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已聘）（员级男）");
+          $('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已聘）（员级女）");
+          $('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(20)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(57)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(58)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(59)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(60)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(61)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(62)').show();
+          $('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已获）（合计男）");
+          $('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已获）（合计女）");
+          $('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已获）（高级技师男）");
+          $('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已获）（高级技师女）");
+          $('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已获）（技师男）");
+          $('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已获）（技师女）");
+          $('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已获）（高级工男）");
+          $('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已获）（高级工女）");
+          $('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已获）（中级工男）");
+          $('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已获）（中级工女）");
+          $('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已获）（普工男）");
+          $('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已获）（普工女）");
+          $('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(21)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(63)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(64)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(65)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(66)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(67)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(68)').show();
+          $('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已聘）（合计男）");
+          $('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已聘）（合计女）");
+          $('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已聘）（高级技师男）");
+          $('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已聘）（高级技师女）");
+          $('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已聘）（技师男）");
+          $('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已聘）（技师女）");
+          $('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已聘）（高级工男）");
+          $('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已聘）（高级工女）");
+          $('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已聘）（中级工男）");
+          $('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已聘）（中级工女）");
+          $('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已聘）（普工男）");
+          $('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已聘）（普工女）");
+          $('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(22)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(69)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(70)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(71)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(72)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(73)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(74)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(75)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(76)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(77)').show();
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（合计男）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（合计女）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（正局级男）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（正局级女）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（副局级男）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（副局级女）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（正处级男）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（正处级女）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（副处级男）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（副处级女）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（正科级男）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（正科级女）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（副科级男）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（副科级女）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（科员级男）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（科员级女）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（办事员级男）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（办事员级女）");
+          $('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(23)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(78)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(79)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(80)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(81)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(82)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(83)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(84)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(85)').show();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(86)').show();
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（合计男）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（合计女）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（正局级男）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（正局级女）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（副局级男）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（副局级女）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（正处级男）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（正处级女）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（副处级男）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（副处级女）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（正科级男）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（正科级女）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（副科级男）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（副科级女）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（科员级男）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（科员级女）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（办事员级男）");
+          $('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（办事员级女）");
+          $('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(24)').show();
+          $('#ttmrmzl').datagrid('showColumn', "执业资质（合计）");
+          $('#ttmrmzl').datagrid('showColumn', "执业护士");
+          $('#ttmrmzl').datagrid('showColumn', "执业医生");
+          $('#ttmrmzl').datagrid('showColumn', "执业助理医师");
+          $('#ttmrmzl').datagrid('showColumn', "离休人数");
+          $('#ttmrmzl').datagrid('showColumn', "退休人数");
+          $('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(27)').show();
+          $('#ttmrmzl').datagrid('showColumn', "下一年度拟退人员（合计）");
+          $('#ttmrmzl').datagrid('showColumn', "下一年度拟退人员（高级）");
+          $('#ttmrmzl').datagrid('showColumn', "下一年度拟退人员（副高）");
+          $('#ttmrmzl').datagrid('showColumn', "下一年度拟退人员（中级）");
+          $('#ttmrmzl').datagrid('showColumn', "下一年度拟退人员（初级）");
+        }else{
+          $("#zb_z input").prop("checked",false);
+          $('#ttmrmzl').datagrid('hideColumn', "机构");
+          $('#ttmrmzl').datagrid('hideColumn', "编制数（在编）");
+          $('#ttmrmzl').datagrid('hideColumn', "空编数");
+          $('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(3)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(1)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(2)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(3)').hide();
+          $('#ttmrmzl').datagrid('hideColumn', "现有人员（合计）");
+          $('#ttmrmzl').datagrid('hideColumn', "专业技术人员（男）");
+          $('#ttmrmzl').datagrid('hideColumn', "专业技术人员（女）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理（男）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理（女）");
+          $('#ttmrmzl').datagrid('hideColumn', "工勤（男）");
+          $('#ttmrmzl').datagrid('hideColumn', "工勤（女）");
+          $('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(4)').hide();
+          $('#ttmrmzl').datagrid('hideColumn', "执业医师（合计）");
+          $('#ttmrmzl').datagrid('hideColumn', "执业医师（临床）");
+          $('#ttmrmzl').datagrid('hideColumn', "执业医师（中医）");
+          $('#ttmrmzl').datagrid('hideColumn', "执业医师（口腔）");
+          $('#ttmrmzl').datagrid('hideColumn', "执业医师（公共卫生）");
+          $('#ttmrmzl').datagrid('hideColumn', "执业医师（中西医结合）");
+          $('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(5)').hide();
+          $('#ttmrmzl').datagrid('hideColumn', "执业助理医师（合计）");
+          $('#ttmrmzl').datagrid('hideColumn', "执业助理医师（临床）");
+          $('#ttmrmzl').datagrid('hideColumn', "执业助理医师（中医）");
+          $('#ttmrmzl').datagrid('hideColumn', "执业助理医师（口腔）");
+          $('#ttmrmzl').datagrid('hideColumn', "执业助理医师（公共卫生）");
+          $('#ttmrmzl').datagrid('hideColumn', "执业助理医师（中西医结合）");
+          $('#ttmrmzl').datagrid('hideColumn', "见习医师");
+          $('#ttmrmzl').datagrid('hideColumn', "注册护士");
+          $('#ttmrmzl').datagrid('hideColumn', "西药师（士）");
+          $('#ttmrmzl').datagrid('hideColumn', "中药师（士）");
+          $('#ttmrmzl').datagrid('hideColumn', "检验技师（士）");
+          $('#ttmrmzl').datagrid('hideColumn', "影像技师（士）");
+          $('#ttmrmzl').datagrid('hideColumn', "其他卫生技术人员");
+          $('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(13)').hide();
+          $('#ttmrmzl').datagrid('hideColumn', "第一学历（统招学历）（合计）");
+          $('#ttmrmzl').datagrid('hideColumn', "研究生及以上");
+          $('#ttmrmzl').datagrid('hideColumn', "本科");
+          $('#ttmrmzl').datagrid('hideColumn', "大专");
+          $('#ttmrmzl').datagrid('hideColumn', "中专");
+          $('#ttmrmzl').datagrid('hideColumn', "高中及以下");
+          $('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(14)').hide();
+          $('#ttmrmzl').datagrid('hideColumn', "最高学历（合计）");
+          $('#ttmrmzl').datagrid('hideColumn', "研究生及以上（最高）");
+          $('#ttmrmzl').datagrid('hideColumn', "本科（最高）");
+          $('#ttmrmzl').datagrid('hideColumn', "大专（最高）");
+          $('#ttmrmzl').datagrid('hideColumn', "中专（最高）");
+          $('#ttmrmzl').datagrid('hideColumn', "高中及以下（最高）");
+          $('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(15)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(29)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(30)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(31)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(32)').hide();
+          $('#ttmrmzl').datagrid('hideColumn', "年龄（合计）");
+          $('#ttmrmzl').datagrid('hideColumn', "30以下（男）");
+          $('#ttmrmzl').datagrid('hideColumn', "30以下（女）");
+          $('#ttmrmzl').datagrid('hideColumn', "31-40岁（男）");
+          $('#ttmrmzl').datagrid('hideColumn', "31-40岁（女）");
+          $('#ttmrmzl').datagrid('hideColumn', "41-50岁（男）");
+          $('#ttmrmzl').datagrid('hideColumn', "41-50岁（女）");
+          $('#ttmrmzl').datagrid('hideColumn', "50-60岁（男）");
+          $('#ttmrmzl').datagrid('hideColumn', "50-60岁（女）");
+          $('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(16)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(33)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(34)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(35)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(36)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(37)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(38)').hide();
+          $('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已获）（合计男）");
+          $('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已获）（合计女）");
+          $('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已获）（正高男）");
+          $('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已获）（正高女）");
+          $('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已获）（副高男）");
+          $('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已获）（副高女）");
+          $('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已获）（中级男）");
+          $('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已获）（中级女）");
+          $('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已获）（助级男）");
+          $('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已获）（助级女）");
+          $('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已获）（员级男）");
+          $('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已获）（员级女）");
+          $('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(17)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(39)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(40)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(41)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(42)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(43)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(44)').hide();
+          $('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已聘）（合计男）");
+          $('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已聘）（合计女）");
+          $('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已聘）（正高男）");
+          $('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已聘）（正高女）");
+          $('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已聘）（副高男）");
+          $('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已聘）（副高女）");
+          $('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已聘）（中级男）");
+          $('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已聘）（中级女）");
+          $('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已聘）（助级男）");
+          $('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已聘）（助级女）");
+          $('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已聘）（员级男）");
+          $('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已聘）（员级女）");
+          $('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(18)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(45)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(46)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(47)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(48)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(49)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(50)').hide();
+          $('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已获）（合计男）");
+          $('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已获）（合计女）");
+          $('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已获）（正高男）");
+          $('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已获）（正高女）");
+          $('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已获）（副高男）");
+          $('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已获）（副高女）");
+          $('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已获）（中级男）");
+          $('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已获）（中级女）");
+          $('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已获）（助级男）");
+          $('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已获）（助级女）");
+          $('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已获）（员级男）");
+          $('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已获）（员级女）");
+          $('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(19)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(51)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(52)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(53)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(54)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(55)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(56)').hide();
+          $('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已聘）（合计男）");
+          $('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已聘）（合计女）");
+          $('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已聘）（正高男）");
+          $('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已聘）（正高女）");
+          $('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已聘）（副高男）");
+          $('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已聘）（副高女）");
+          $('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已聘）（中级男）");
+          $('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已聘）（中级女）");
+          $('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已聘）（助级男）");
+          $('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已聘）（助级女）");
+          $('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已聘）（员级男）");
+          $('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已聘）（员级女）");
+          $('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(20)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(57)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(58)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(59)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(60)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(61)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(62)').hide();
+          $('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已获）（合计男）");
+          $('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已获）（合计女）");
+          $('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已获）（高级技师男）");
+          $('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已获）（高级技师女）");
+          $('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已获）（技师男）");
+          $('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已获）（技师女）");
+          $('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已获）（高级工男）");
+          $('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已获）（高级工女）");
+          $('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已获）（中级工男）");
+          $('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已获）（中级工女）");
+          $('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已获）（普工男）");
+          $('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已获）（普工女）");
+          $('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(21)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(63)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(64)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(65)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(66)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(67)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(68)').hide();
+          $('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已聘）（合计男）");
+          $('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已聘）（合计女）");
+          $('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已聘）（高级技师男）");
+          $('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已聘）（高级技师女）");
+          $('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已聘）（技师男）");
+          $('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已聘）（技师女）");
+          $('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已聘）（高级工男）");
+          $('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已聘）（高级工女）");
+          $('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已聘）（中级工男）");
+          $('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已聘）（中级工女）");
+          $('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已聘）（普工男）");
+          $('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已聘）（普工女）");
+          $('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(22)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(69)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(70)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(71)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(72)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(73)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(74)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(75)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(76)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(77)').hide();
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（合计男）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（合计女）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（正局级男）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（正局级女）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（副局级男）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（副局级女）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（正处级男）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（正处级女）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（副处级男）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（副处级女）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（正科级男）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（正科级女）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（副科级男）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（副科级女）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（科员级男）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（科员级女）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（办事员级男）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（办事员级女）");
+          $('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(23)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(78)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(79)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(80)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(81)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(82)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(83)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(84)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(85)').hide();
+          $('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(86)').hide();
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（合计男）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（合计女）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（正局级男）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（正局级女）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（副局级男）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（副局级女）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（正处级男）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（正处级女）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（副处级男）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（副处级女）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（正科级男）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（正科级女）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（副科级男）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（副科级女）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（科员级男）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（科员级女）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（办事员级男）");
+          $('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（办事员级女）");
+          $('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(24)').hide();
+          $('#ttmrmzl').datagrid('hideColumn', "执业资质（合计）");
+          $('#ttmrmzl').datagrid('hideColumn', "执业护士");
+          $('#ttmrmzl').datagrid('hideColumn', "执业医生");
+          $('#ttmrmzl').datagrid('hideColumn', "执业助理医师");
+          $('#ttmrmzl').datagrid('hideColumn', "离休人数");
+          $('#ttmrmzl').datagrid('hideColumn', "退休人数");
+          $('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(27)').hide();
+          $('#ttmrmzl').datagrid('hideColumn', "下一年度拟退人员（合计）");
+          $('#ttmrmzl').datagrid('hideColumn', "下一年度拟退人员（高级）");
+          $('#ttmrmzl').datagrid('hideColumn', "下一年度拟退人员（副高）");
+          $('#ttmrmzl').datagrid('hideColumn', "下一年度拟退人员（中级）");
+          $('#ttmrmzl').datagrid('hideColumn', "下一年度拟退人员（初级）");
+        };
+    });
+	//机构
+	$("#zb1").click(function(){
+		if ($("#zb1").is(":checked")) {
+   				$('#ttmrmzl').datagrid('showColumn', "机构");
+   			}else{
+   				$('#ttmrmzl').datagrid('hideColumn', "机构");
+   			};
+	});
+	//编制数（在编）
+	$("#zb2").click(function(){
+		if ($("#zb2").is(":checked")) {
+   				$('#ttmrmzl').datagrid('showColumn', "编制数（在编）");
+   			}else{
+   				$('#ttmrmzl').datagrid('hideColumn', "编制数（在编）");
+   			};
+	});
+	//空编数
+	$("#zb3").click(function(){
+		if ($("#zb3").is(":checked")) {
+   				$('#ttmrmzl').datagrid('showColumn', "空编数");
+   			}else{
+   				$('#ttmrmzl').datagrid('hideColumn', "空编数");
+   			};
+	});
+	//现有人员
+	$("#zb4").click(function(){
+		if ($("#zb4").is(":checked")) {
+				$('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(3)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(1)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(2)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(3)').show();
+   				$('#ttmrmzl').datagrid('showColumn', "现有人员（合计）");
+   				$('#ttmrmzl').datagrid('showColumn', "专业技术人员（男）");
+   				$('#ttmrmzl').datagrid('showColumn', "专业技术人员（女）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理（男）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理（女）");
+   				$('#ttmrmzl').datagrid('showColumn', "工勤（男）");
+   				$('#ttmrmzl').datagrid('showColumn', "工勤（女）");
+   			}else{
+   				$('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(3)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(1)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(2)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(3)').hide();
+   				$('#ttmrmzl').datagrid('hideColumn', "现有人员（合计）");
+   				$('#ttmrmzl').datagrid('hideColumn', "专业技术人员（男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "专业技术人员（女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理（男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理（女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "工勤（男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "工勤（女）");
+   			};
+	});
+	//执业医师
+	$("#zb5").click(function(){
+		if ($("#zb5").is(":checked")) {
+				$('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(4)').show();
+   				$('#ttmrmzl').datagrid('showColumn', "执业医师（合计）");
+   				$('#ttmrmzl').datagrid('showColumn', "执业医师（临床）");
+   				$('#ttmrmzl').datagrid('showColumn', "执业医师（中医）");
+   				$('#ttmrmzl').datagrid('showColumn', "执业医师（口腔）");
+   				$('#ttmrmzl').datagrid('showColumn', "执业医师（公共卫生）");
+   				$('#ttmrmzl').datagrid('showColumn', "执业医师（中西医结合）");
+   			}else{
+   				$('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(4)').hide();
+   				$('#ttmrmzl').datagrid('hideColumn', "执业医师（合计）");
+   				$('#ttmrmzl').datagrid('hideColumn', "执业医师（临床）");
+   				$('#ttmrmzl').datagrid('hideColumn', "执业医师（中医）");
+   				$('#ttmrmzl').datagrid('hideColumn', "执业医师（口腔）");
+   				$('#ttmrmzl').datagrid('hideColumn', "执业医师（公共卫生）");
+   				$('#ttmrmzl').datagrid('hideColumn', "执业医师（中西医结合）");
+   			};
+	});
+	//执业助理医师
+	$("#zb6").click(function(){
+		if ($("#zb6").is(":checked")) {
+				$('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(5)').show();
+   				$('#ttmrmzl').datagrid('showColumn', "执业助理医师（合计）");
+   				$('#ttmrmzl').datagrid('showColumn', "执业助理医师（临床）");
+   				$('#ttmrmzl').datagrid('showColumn', "执业助理医师（中医）");
+   				$('#ttmrmzl').datagrid('showColumn', "执业助理医师（口腔）");
+   				$('#ttmrmzl').datagrid('showColumn', "执业助理医师（公共卫生）");
+   				$('#ttmrmzl').datagrid('showColumn', "执业助理医师（中西医结合）");
+   			}else{
+   				$('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(5)').hide();
+   				$('#ttmrmzl').datagrid('hideColumn', "执业助理医师（合计）");
+          $('#ttmrmzl').datagrid('hideColumn', "执业助理医师（临床）");
+          $('#ttmrmzl').datagrid('hideColumn', "执业助理医师（中医）");
+          $('#ttmrmzl').datagrid('hideColumn', "执业助理医师（口腔）");
+          $('#ttmrmzl').datagrid('hideColumn', "执业助理医师（公共卫生）");
+          $('#ttmrmzl').datagrid('hideColumn', "执业助理医师（中西医结合）");
+   			};
+	});
+	//见习医师
+	$("#zb7").click(function(){
+		if ($("#zb7").is(":checked")) {
+   				$('#ttmrmzl').datagrid('showColumn', "见习医师");
+   			}else{
+   				$('#ttmrmzl').datagrid('hideColumn', "见习医师");
+   			};
+	});
+	//注册护士
+	$("#zb8").click(function(){
+		if ($("#zb8").is(":checked")) {
+   				$('#ttmrmzl').datagrid('showColumn', "注册护士");
+   			}else{
+   				$('#ttmrmzl').datagrid('hideColumn', "注册护士");
+   			};
+	});
+	//西药师（士）
+	$("#zb9").click(function(){
+		if ($("#zb9").is(":checked")) {
+   				$('#ttmrmzl').datagrid('showColumn', "西药师（士）");
+   			}else{
+   				$('#ttmrmzl').datagrid('hideColumn', "西药师（士）");
+   			};
+	});
+	//中药师（士）
+	$("#zb10").click(function(){
+		if ($("#zb10").is(":checked")) {
+   				$('#ttmrmzl').datagrid('showColumn', "中药师（士）");
+   			}else{
+   				$('#ttmrmzl').datagrid('hideColumn', "中药师（士）");
+   			};
+	});
+	//检验技师（士）
+	$("#zb11").click(function(){
+		if ($("#zb11").is(":checked")) {
+   				$('#ttmrmzl').datagrid('showColumn', "检验技师（士）");
+   			}else{
+   				$('#ttmrmzl').datagrid('hideColumn', "检验技师（士）");
+   			};
+	});
+	//影像技师（士）
+	$("#zb12").click(function(){
+		if ($("#zb12").is(":checked")) {
+   				$('#ttmrmzl').datagrid('showColumn', "影像技师（士）");
+   			}else{
+   				$('#ttmrmzl').datagrid('hideColumn', "影像技师（士）");
+   			};
+	});
+	//其他卫生技术人员
+	$("#zb13").click(function(){
+		if ($("#zb13").is(":checked")) {
+   				$('#ttmrmzl').datagrid('showColumn', "其他卫生技术人员");
+   			}else{
+   				$('#ttmrmzl').datagrid('hideColumn', "其他卫生技术人员");
+   			};
+	});
+	//第一学历（统招学历）
+	$("#zb14").click(function(){
+		if ($("#zb14").is(":checked")) {
+				$('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(13)').show();
+   				$('#ttmrmzl').datagrid('showColumn', "第一学历（统招学历）（合计）");
+   				$('#ttmrmzl').datagrid('showColumn', "研究生及以上");
+   				$('#ttmrmzl').datagrid('showColumn', "本科");
+   				$('#ttmrmzl').datagrid('showColumn', "大专");
+   				$('#ttmrmzl').datagrid('showColumn', "中专");
+   				$('#ttmrmzl').datagrid('showColumn', "高中及以下");
+   			}else{
+   				$('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(13)').hide();
+   				$('#ttmrmzl').datagrid('hideColumn', "第一学历（统招学历）（合计）");
+   				$('#ttmrmzl').datagrid('hideColumn', "研究生及以上");
+   				$('#ttmrmzl').datagrid('hideColumn', "本科");
+   				$('#ttmrmzl').datagrid('hideColumn', "大专");
+   				$('#ttmrmzl').datagrid('hideColumn', "中专");
+   				$('#ttmrmzl').datagrid('hideColumn', "高中及以下");
+   			};
+	});
+	//最高学历
+	$("#zb15").click(function(){
+		if ($("#zb15").is(":checked")) {
+				$('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(14)').show();
+   				$('#ttmrmzl').datagrid('showColumn', "最高学历（合计）");
+   				$('#ttmrmzl').datagrid('showColumn', "研究生及以上（最高）");
+   				$('#ttmrmzl').datagrid('showColumn', "本科（最高）");
+   				$('#ttmrmzl').datagrid('showColumn', "大专（最高）");
+   				$('#ttmrmzl').datagrid('showColumn', "中专（最高）");
+   				$('#ttmrmzl').datagrid('showColumn', "高中及以下（最高）");
+   			}else{
+   				$('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(14)').hide();
+   				$('#ttmrmzl').datagrid('hideColumn', "最高学历（合计）");
+   				$('#ttmrmzl').datagrid('hideColumn', "研究生及以上（最高）");
+   				$('#ttmrmzl').datagrid('hideColumn', "本科（最高）");
+   				$('#ttmrmzl').datagrid('hideColumn', "大专（最高）");
+   				$('#ttmrmzl').datagrid('hideColumn', "中专（最高）");
+   				$('#ttmrmzl').datagrid('hideColumn', "高中及以下（最高）");
+   			};
+	});
+	//年龄
+	$("#zb16").click(function(){
+		if ($("#zb16").is(":checked")) {
+				$('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(15)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(29)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(30)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(31)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(32)').show();
+   				$('#ttmrmzl').datagrid('showColumn', "年龄（合计）");
+   				$('#ttmrmzl').datagrid('showColumn', "30以下（男）");
+   				$('#ttmrmzl').datagrid('showColumn', "30以下（女）");
+   				$('#ttmrmzl').datagrid('showColumn', "31-40岁（男）");
+   				$('#ttmrmzl').datagrid('showColumn', "31-40岁（女）");
+   				$('#ttmrmzl').datagrid('showColumn', "41-50岁（男）");
+   				$('#ttmrmzl').datagrid('showColumn', "41-50岁（女）");
+   				$('#ttmrmzl').datagrid('showColumn', "50-60岁（男）");
+   				$('#ttmrmzl').datagrid('showColumn', "50-60岁（女）");
+   			}else{
+   				$('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(15)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(29)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(30)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(31)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(32)').hide();
+   				$('#ttmrmzl').datagrid('hideColumn', "年龄（合计）");
+   				$('#ttmrmzl').datagrid('hideColumn', "30以下（男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "30以下（女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "31-40岁（男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "31-40岁（女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "41-50岁（男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "41-50岁（女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "50-60岁（男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "50-60岁（女）");
+   			};
+	});
+	//卫生专业技术职称（已获）
+	$("#zb17").click(function(){
+		if ($("#zb17").is(":checked")) {
+				$('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(16)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(33)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(34)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(35)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(36)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(37)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(38)').show();
+   				$('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已获）（合计男）");
+   				$('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已获）（合计女）");
+   				$('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已获）（正高男）");
+   				$('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已获）（正高女）");
+   				$('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已获）（副高男）");
+   				$('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已获）（副高女）");
+   				$('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已获）（中级男）");
+   				$('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已获）（中级女）");
+   				$('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已获）（助级男）");
+   				$('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已获）（助级女）");
+   				$('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已获）（员级男）");
+   				$('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已获）（员级女）");
+   			}else{
+   				$('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(16)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(33)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(34)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(35)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(36)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(37)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(38)').hide();
+   				$('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已获）（合计男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已获）（合计女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已获）（正高男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已获）（正高女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已获）（副高男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已获）（副高女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已获）（中级男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已获）（中级女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已获）（助级男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已获）（助级女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已获）（员级男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已获）（员级女）");
+   			};
+	});
+	//卫生专业技术职称（已聘）
+	$("#zb18").click(function(){
+		if ($("#zb18").is(":checked")) {
+				$('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(17)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(39)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(40)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(41)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(42)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(43)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(44)').show();
+   				$('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已聘）（合计男）");
+   				$('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已聘）（合计女）");
+   				$('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已聘）（正高男）");
+   				$('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已聘）（正高女）");
+   				$('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已聘）（副高男）");
+   				$('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已聘）（副高女）");
+   				$('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已聘）（中级男）");
+   				$('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已聘）（中级女）");
+   				$('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已聘）（助级男）");
+   				$('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已聘）（助级女）");
+   				$('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已聘）（员级男）");
+   				$('#ttmrmzl').datagrid('showColumn', "卫生专业技术职称（已聘）（员级女）");
+   			}else{
+   				$('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(17)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(39)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(40)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(41)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(42)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(43)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(44)').hide();
+   				$('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已聘）（合计男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已聘）（合计女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已聘）（正高男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已聘）（正高女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已聘）（副高男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已聘）（副高女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已聘）（中级男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已聘）（中级女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已聘）（助级男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已聘）（助级女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已聘）（员级男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "卫生专业技术职称（已聘）（员级女）");
+   			};
+	});
+	//其他专业技术职称（已获）
+	$("#zb19").click(function(){
+		if ($("#zb19").is(":checked")) {
+				$('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(18)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(45)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(46)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(47)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(48)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(49)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(50)').show();
+   				$('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已获）（合计男）");
+   				$('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已获）（合计女）");
+   				$('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已获）（正高男）");
+   				$('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已获）（正高女）");
+   				$('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已获）（副高男）");
+   				$('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已获）（副高女）");
+   				$('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已获）（中级男）");
+   				$('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已获）（中级女）");
+   				$('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已获）（助级男）");
+   				$('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已获）（助级女）");
+   				$('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已获）（员级男）");
+   				$('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已获）（员级女）");
+   			}else{
+   				$('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(18)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(45)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(46)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(47)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(48)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(49)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(50)').hide();
+   				$('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已获）（合计男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已获）（合计女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已获）（正高男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已获）（正高女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已获）（副高男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已获）（副高女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已获）（中级男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已获）（中级女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已获）（助级男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已获）（助级女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已获）（员级男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已获）（员级女）");
+   			};
+	});
+	//其他专业技术职称（已聘）
+	$("#zb20").click(function(){
+		if ($("#zb20").is(":checked")) {
+				$('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(19)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(51)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(52)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(53)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(54)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(55)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(56)').show();
+   				$('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已聘）（合计男）");
+   				$('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已聘）（合计女）");
+   				$('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已聘）（正高男）");
+   				$('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已聘）（正高女）");
+   				$('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已聘）（副高男）");
+   				$('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已聘）（副高女）");
+   				$('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已聘）（中级男）");
+   				$('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已聘）（中级女）");
+   				$('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已聘）（助级男）");
+   				$('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已聘）（助级女）");
+   				$('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已聘）（员级男）");
+   				$('#ttmrmzl').datagrid('showColumn', "其他专业技术职称（已聘）（员级女）");
+   			}else{
+   				$('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(19)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(51)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(52)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(53)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(54)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(55)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(56)').hide();
+   				$('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已聘）（合计男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已聘）（合计女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已聘）（正高男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已聘）（正高女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已聘）（副高男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已聘）（副高女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已聘）（中级男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已聘）（中级女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已聘）（助级男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已聘）（助级女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已聘）（员级男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "其他专业技术职称（已聘）（员级女）");
+   			};
+	});
+	//工人岗位技术等级（已获）
+	$("#zb21").click(function(){
+		if ($("#zb21").is(":checked")) {
+				$('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(20)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(57)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(58)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(59)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(60)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(61)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(62)').show();
+   				$('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已获）（合计男）");
+   				$('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已获）（合计女）");
+   				$('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已获）（高级技师男）");
+   				$('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已获）（高级技师女）");
+   				$('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已获）（技师男）");
+   				$('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已获）（技师女）");
+   				$('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已获）（高级工男）");
+   				$('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已获）（高级工女）");
+   				$('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已获）（中级工男）");
+   				$('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已获）（中级工女）");
+   				$('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已获）（普工男）");
+   				$('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已获）（普工女）");
+   			}else{
+   				$('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(20)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(57)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(58)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(59)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(60)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(61)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(62)').hide();
+   				$('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已获）（合计男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已获）（合计女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已获）（高级技师男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已获）（高级技师女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已获）（技师男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已获）（技师女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已获）（高级工男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已获）（高级工女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已获）（中级工男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已获）（中级工女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已获）（普工男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已获）（普工女）");
+   			};
+	});
+	//工人岗位技术等级（已聘）
+	$("#zb22").click(function(){
+		if ($("#zb22").is(":checked")) {
+				$('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(21)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(63)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(64)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(65)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(66)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(67)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(68)').show();
+   				$('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已聘）（合计男）");
+   				$('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已聘）（合计女）");
+   				$('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已聘）（高级技师男）");
+   				$('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已聘）（高级技师女）");
+   				$('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已聘）（技师男）");
+   				$('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已聘）（技师女）");
+   				$('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已聘）（高级工男）");
+   				$('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已聘）（高级工女）");
+   				$('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已聘）（中级工男）");
+   				$('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已聘）（中级工女）");
+   				$('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已聘）（普工男）");
+   				$('#ttmrmzl').datagrid('showColumn', "工人岗位技术等级（已聘）（普工女）");
+   			}else{
+   				$('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(21)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(63)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(64)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(65)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(66)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(67)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(68)').hide();
+   				$('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已聘）（合计男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已聘）（合计女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已聘）（高级技师男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已聘）（高级技师女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已聘）（技师男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已聘）（技师女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已聘）（高级工男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已聘）（高级工女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已聘）（中级工男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已聘）（中级工女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已聘）（普工男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "工人岗位技术等级（已聘）（普工女）");
+   			};
+	});
+	//管理人员职务等级（已获）
+	$("#zb23").click(function(){
+		if ($("#zb23").is(":checked")) {
+				$('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(22)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(69)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(70)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(71)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(72)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(73)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(74)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(75)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(76)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(77)').show();
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（合计男）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（合计女）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（正局级男）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（正局级女）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（副局级男）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（副局级女）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（正处级男）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（正处级女）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（副处级男）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（副处级女）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（正科级男）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（正科级女）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（副科级男）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（副科级女）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（科员级男）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（科员级女）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（办事员级男）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已获）（办事员级女）");
+   			}else{
+   				$('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(22)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(69)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(70)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(71)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(72)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(73)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(74)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(75)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(76)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(77)').hide();
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（合计男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（合计女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（正局级男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（正局级女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（副局级男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（副局级女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（正处级男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（正处级女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（副处级男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（副处级女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（正科级男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（正科级女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（副科级男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（副科级女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（科员级男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（科员级女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（办事员级男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已获）（办事员级女）");
+   			};
+	});
+	//管理人员职务等级（已聘）
+	$("#zb24").click(function(){
+		if ($("#zb24").is(":checked")) {
+				$('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(23)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(78)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(79)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(80)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(81)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(82)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(83)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(84)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(85)').show();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(86)').show();
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（合计男）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（合计女）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（正局级男）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（正局级女）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（副局级男）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（副局级女）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（正处级男）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（正处级女）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（副处级男）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（副处级女）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（正科级男）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（正科级女）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（副科级男）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（副科级女）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（科员级男）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（科员级女）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（办事员级男）");
+   				$('#ttmrmzl').datagrid('showColumn', "管理人员职务等级（已聘）（办事员级女）");
+   			}else{
+   				$('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(23)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(78)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(79)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(80)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(81)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(82)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(83)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(84)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(85)').hide();
+				$('.datagrid-view2 .datagrid-header-row:eq(1) td:eq(86)').hide();
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（合计男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（合计女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（正局级男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（正局级女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（副局级男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（副局级女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（正处级男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（正处级女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（副处级男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（副处级女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（正科级男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（正科级女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（副科级男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（副科级女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（科员级男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（科员级女）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（办事员级男）");
+   				$('#ttmrmzl').datagrid('hideColumn', "管理人员职务等级（已聘）（办事员级女）");
+   			};
+	});
+	//执业资质
+	$("#zb25").click(function(){
+		if ($("#zb25").is(":checked")) {
+				$('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(24)').show();
+   				$('#ttmrmzl').datagrid('showColumn', "执业资质（合计）");
+   				$('#ttmrmzl').datagrid('showColumn', "执业护士");
+   				$('#ttmrmzl').datagrid('showColumn', "执业医生");
+   				$('#ttmrmzl').datagrid('showColumn', "执业助理医师");
+   			}else{
+   				$('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(24)').hide();
+   				$('#ttmrmzl').datagrid('hideColumn', "执业资质（合计）");
+          $('#ttmrmzl').datagrid('hideColumn', "执业护士");
+          $('#ttmrmzl').datagrid('hideColumn', "执业医生");
+          $('#ttmrmzl').datagrid('hideColumn', "执业助理医师");
+   			};
+	});
+	//离休人数
+	$("#zb26").click(function(){
+		if ($("#zb26").is(":checked")) {
+   				$('#ttmrmzl').datagrid('showColumn', "离休人数");
+   			}else{
+   				$('#ttmrmzl').datagrid('hideColumn', "离休人数");
+   			};
+	});
+	//离休人数
+	$("#zb27").click(function(){
+		if ($("#zb27").is(":checked")) {
+   				$('#ttmrmzl').datagrid('showColumn', "退休人数");
+   			}else{
+   				$('#ttmrmzl').datagrid('hideColumn', "退休人数");
+   			};
+	});
+	//下一年度拟退专业技术人员
+	$("#zb28").click(function(){
+		if ($("#zb28").is(":checked")) {
+				$('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(27)').show();
+   				$('#ttmrmzl').datagrid('showColumn', "下一年度拟退人员（合计）");
+   				$('#ttmrmzl').datagrid('showColumn', "下一年度拟退人员（高级）");
+   				$('#ttmrmzl').datagrid('showColumn', "下一年度拟退人员（副高）");
+   				$('#ttmrmzl').datagrid('showColumn', "下一年度拟退人员（中级）");
+   				$('#ttmrmzl').datagrid('showColumn', "下一年度拟退人员（初级）");
+   			}else{
+   				$('.datagrid-view2 .datagrid-header-row:eq(0) td:eq(27)').hide();
+   				$('#ttmrmzl').datagrid('hideColumn', "下一年度拟退人员（合计）");
+   				$('#ttmrmzl').datagrid('hideColumn', "下一年度拟退人员（高级）");
+   				$('#ttmrmzl').datagrid('hideColumn', "下一年度拟退人员（副高）");
+   				$('#ttmrmzl').datagrid('hideColumn', "下一年度拟退人员（中级）");
+   				$('#ttmrmzl').datagrid('hideColumn', "下一年度拟退人员（初级）");
+   			};
+	});
+
+});
+
+
+/*function hahaha(){
+	alert("---------------")
+	$('#ttmrmzl').datagrid('hideColumn', "机构");
+}*/
+
+function setData101(data){
+	$(".loadshow").show();  //--------------------------------------------------20140312
+	var url ="ZBTJ001"; 
+	var itemsList;
+	if($("#datebegin").val()!=""&&$("#dateend").val()!=""){
+		itemsList=["datebegin","dateend","dimorg"];
+	}else{
+		itemsList=[];
+	}
+	//空数据 会出现 小bug
+	var info= new Map();
+	info.put("sqlid","select");
+	info.put("pagenum",PageNumber);
+	info.put("pagesize",PageSize);
+	if(data==="tablename"){
+	   LXtype="tablename";
+	}else if(data==="createdate"){
+	   LXtype="createdate";
+	}else{
+	   LXtype="hospunitorgcode"
+	}
+	info.put("groupby",data);
+	sys_AjaxGet(BIASUrl+url,"org-mrmzl","reCallback1011",info,itemsList);
+	
+
+}
+</script>
+<script type="text/javascript">
+var dataShow;
+var PageNumber=1;
+var PageSize=10;
+function loadingmrmzl(){
+
+	$("#pagenum").val(PageNumber);
+  	$("#pagesize").val(PageSize);
+	var mapInfo = new Map();
+	mapInfo.put("sqlid","select");
+	mapInfo.put("pagenum",PageNumber);
+	mapInfo.put("pagesize",PageSize);
+	var itemsList;
+	//itemsList = [];
+	if($("#datebegin").val()==""&&$("#dateend").val()==""){
+		itemsList=["groupby"];
+	}else{
+		itemsList = ["datebegin","dateend","dimorg"];
+	}
+	var url = "ZBTJ001";
+	//sys_AjaxGet(BIASUrl+url,"org",mapInfo,itemsList);
+	sys_AjaxGet(BIASUrl+url,"org-mrmzl","reCallback1011",mapInfo,itemsList);
+	
+}
+function reCallback1011(dataInfo){
+if(dataInfo.dataMap.dataAll==""){
+alert("暂无数据！")
+}else{
+//将dataAll添加到数据里面
+var datapush=dataInfo.dataMap.data;
+dataInfo.dataMap.dataAll[0].机构="合计";
+datapush.push(dataInfo.dataMap.dataAll[0]);
+//	dataShow=dataInfo;
+//var retdata = dataInfo.dataMap==null?null:dataInfo.dataMap.data;
+	$('#ttmrmzl').datagrid({
+			nowrap: false,
+			striped: true,
+			collapsible:false,
+			//pagination:true,
+			pageNumber:PageNumber,
+			pageSize: PageSize,
+			singleSelect:true, 
+			loadMsg:"正在载入...",
+			pageList: [10,20,50,100,200],
+			data:dataInfo.dataMap.data,
+      frozenColumns:[[
+        {field:'机构',title:'机构',align:'center',rowspan:12,width:200},
+      ]],
+			columns:[[
+      {field:'机构1',title:'机构',align:'center',rowspan:12,width:200},
+			{field:'编制数（在编）',title:'编制数（在编）',align:'center',rowspan:12,width:100},
+			{field:'空编数',title:'空编数',align:'center',rowspan:12,width:100},
+			{field:'',title:'现有人员',align:'center',colspan:7},
+			{field:'',title:'执业医师',align:'center',colspan:6},
+			{field:'',title:'执业助理医师',align:'center',colspan:6},
+			{field:'见习医师',title:'见习医师',align:'center',rowspan:12,width:100},
+			{field:'注册护士',title:'注册护士',align:'center',rowspan:12,width:100},
+			{field:'西药师（士）',title:'西药师（士）',align:'center',rowspan:12,width:100},
+			{field:'中药师（士）',title:'中药师（士）',align:'center',rowspan:12,width:100},
+			{field:'检验技师（士）',title:'检验技师（士）',align:'center',rowspan:12,width:100},
+			{field:'影像技师（士）',title:'影像技师（士）',align:'center',rowspan:12,width:100},
+			{field:'其他卫生技术人员',title:'其他卫生技术人员',align:'center',rowspan:12,width:100},
+			{field:'',title:'第一学历（统招学历）',align:'center',colspan:6},
+			{field:'',title:'最高学历',align:'center',colspan:6},
+			{field:'',title:'年龄',align:'center',colspan:9},
+			{field:'',title:'卫生专业技术职称（已获）',align:'center',colspan:12},
+			{field:'',title:'卫生专业技术职称（已聘）',align:'center',colspan:12},
+			{field:'',title:'其他专业技术职称（已获）',align:'center',colspan:12},
+			{field:'',title:'其他专业技术职称（已聘）',align:'center',colspan:12},
+			{field:'',title:'工人岗位技术等级（已获）',align:'center',colspan:12},
+			{field:'',title:'工人岗位技术等级（已聘）',align:'center',colspan:12},
+			{field:'',title:'管理人员职务等级（已获）',align:'center',colspan:18},
+			{field:'',title:'管理人员职务等级（已聘）',align:'center',colspan:18},
+			{field:'',title:'执业资质',align:'center',colspan:4},
+			{field:'离休人数',title:'离休人数',align:'center',rowspan:12,width:100},
+			{field:'退休人数',title:'退休人数',align:'center',rowspan:12,width:100},
+			{field:'',title:'下一年度拟退专业技术人员',align:'center',colspan:5}
+			],[
+			//现有人员
+			{field:'现有人员（合计）',title:'合计',align:'center',rowspan:13,width:100},
+			{field:'',title:'专业技术人员',align:'center',colspan:2},
+			{field:'',title:'管理',align:'center',colspan:2},
+			{field:'',title:'工勤',align:'center',colspan:2},
+			//执业医师
+			{field:'执业医师（合计）',title:'合计',align:'center',rowspan:13,width:100},
+			{field:'执业医师（临床）',title:'临床',align:'center',rowspan:13,width:100},
+			{field:'执业医师（中医）',title:'中医',align:'center',rowspan:13,width:100},
+			{field:'执业医师（口腔）',title:'口腔',align:'center',rowspan:13,width:100},
+			{field:'执业医师（公共卫生）',title:'公共卫生',align:'center',rowspan:13,width:100},
+			{field:'执业医师（中西医结合）',title:'中西医结合',align:'center',rowspan:13,width:100},
+			//执业助理医师
+			{field:'执业助理医师（合计）',title:'合计',align:'center',rowspan:13,width:100},
+			{field:'执业助理医师（临床）',title:'临床',align:'center',rowspan:13,width:100},
+			{field:'执业助理医师（中医）',title:'中医',align:'center',rowspan:13,width:100},
+			{field:'执业助理医师（口腔）',title:'口腔',align:'center',rowspan:13,width:100},
+			{field:'执业助理医师（公共卫生）',title:'公共卫生',align:'center',rowspan:13,width:100},
+			{field:'执业助理医师（中西医结合）',title:'中西医结合',align:'center',rowspan:13,width:100},
+			//第一学历（统招学历）
+			{field:'第一学历（统招学历）（合计）',title:'合计',align:'center',rowspan:13,width:100},
+			{field:'研究生及以上',title:'研究生及以上',align:'center',rowspan:13,width:100},
+			{field:'本科',title:'本科',align:'center',rowspan:13,width:100},
+			{field:'大专',title:'大专',align:'center',rowspan:13,width:100},
+			{field:'中专',title:'中专',align:'center',rowspan:13,width:100},
+			{field:'高中及以下',title:'高中及以下',align:'center',rowspan:13,width:100},
+			//最高学历
+			{field:'最高学历（合计）',title:'合计',align:'center',rowspan:13,width:100},
+			{field:'研究生及以上（最高）',title:'研究生及以上',align:'center',rowspan:13,width:100},
+			{field:'本科（最高）',title:'本科',align:'center',rowspan:13,width:100},
+			{field:'大专（最高）',title:'大专',align:'center',rowspan:13,width:100},
+			{field:'中专（最高）',title:'中专',align:'center',rowspan:13,width:100},
+			{field:'高中及以下（最高）',title:'高中及以下',align:'center',rowspan:13,width:100},
+			//年龄
+			{field:'年龄（合计）',title:'合计',align:'center',rowspan:13,width:100},
+			{field:'',title:'30以下',align:'center',colspan:2},
+			{field:'',title:'31-40岁',align:'center',colspan:2},
+			{field:'',title:'41-50岁',align:'center',colspan:2},
+			{field:'',title:'50-60岁',align:'center',colspan:2},
+			//卫生专业技术职称（已获）
+			{field:'',title:'合计',align:'center',colspan:2},
+			{field:'',title:'正高',align:'center',colspan:2},
+			{field:'',title:'副高',align:'center',colspan:2},
+			{field:'',title:'中级',align:'center',colspan:2},
+			{field:'',title:'助级',align:'center',colspan:2},
+			{field:'',title:'员级',align:'center',colspan:2},
+			//卫生专业技术职称（已聘）
+			{field:'',title:'合计',align:'center',colspan:2},
+			{field:'',title:'正高',align:'center',colspan:2},
+			{field:'',title:'副高',align:'center',colspan:2},
+			{field:'',title:'中级',align:'center',colspan:2},
+			{field:'',title:'助级',align:'center',colspan:2},
+			{field:'',title:'员级',align:'center',colspan:2},
+			//其他专业技术职称（已获）
+			{field:'',title:'合计',align:'center',colspan:2},
+			{field:'',title:'正高',align:'center',colspan:2},
+			{field:'',title:'副高',align:'center',colspan:2},
+			{field:'',title:'中级',align:'center',colspan:2},
+			{field:'',title:'助级',align:'center',colspan:2},
+			{field:'',title:'员级',align:'center',colspan:2},
+			//其他专业技术职称（已聘）
+			{field:'',title:'合计',align:'center',colspan:2},
+			{field:'',title:'正高',align:'center',colspan:2},
+			{field:'',title:'副高',align:'center',colspan:2},
+			{field:'',title:'中级',align:'center',colspan:2},
+			{field:'',title:'助级',align:'center',colspan:2},
+			{field:'',title:'员级',align:'center',colspan:2},
+			//工人岗位技术等级（已获）
+			{field:'',title:'合计',align:'center',colspan:2},
+			{field:'',title:'高级技师',align:'center',colspan:2},
+			{field:'',title:'技师',align:'center',colspan:2},
+			{field:'',title:'高级工',align:'center',colspan:2},
+			{field:'',title:'中级工',align:'center',colspan:2},
+			{field:'',title:'普工',align:'center',colspan:2},
+			//工人岗位技术等级（已聘）
+			{field:'',title:'合计',align:'center',colspan:2},
+			{field:'',title:'高级技师',align:'center',colspan:2},
+			{field:'',title:'技师',align:'center',colspan:2},
+			{field:'',title:'高级工',align:'center',colspan:2},
+			{field:'',title:'中级工',align:'center',colspan:2},
+			{field:'',title:'普工',align:'center',colspan:2},
+			//管理人员职务等级（已获）
+			{field:'',title:'合计',align:'center',colspan:2},
+			{field:'',title:'正局级',align:'center',colspan:2},
+			{field:'',title:'副局级',align:'center',colspan:2},
+			{field:'',title:'正处级',align:'center',colspan:2},
+			{field:'',title:'副处级',align:'center',colspan:2},
+			{field:'',title:'正科级',align:'center',colspan:2},
+			{field:'',title:'副科级',align:'center',colspan:2},
+			{field:'',title:'科员级',align:'center',colspan:2},
+			{field:'',title:'办事员级',align:'center',colspan:2},
+			//管理人员职务等级（已聘）
+			{field:'',title:'合计',align:'center',colspan:2},
+			{field:'',title:'正局级',align:'center',colspan:2},
+			{field:'',title:'副局级',align:'center',colspan:2},
+			{field:'',title:'正处级',align:'center',colspan:2},
+			{field:'',title:'副处级',align:'center',colspan:2},
+			{field:'',title:'正科级',align:'center',colspan:2},
+			{field:'',title:'副科级',align:'center',colspan:2},
+			{field:'',title:'科员级',align:'center',colspan:2},
+			{field:'',title:'办事员级',align:'center',colspan:2},
+			//执业资质
+			{field:'执业资质（合计）',title:'合计',align:'center',rowspan:13,width:100},
+			{field:'执业护士',title:'执业护士',align:'center',rowspan:13,width:100},
+			{field:'执业医生',title:'执业医师',align:'center',rowspan:13,width:100},
+			{field:'执业助理医师',title:'执业助理医师',align:'center',rowspan:13,width:100},
+			//下一年度拟退专业技术人员
+			{field:'下一年度拟退人员（合计）',title:'合计',align:'center',rowspan:13,width:100},
+			{field:'下一年度拟退人员（高级）',title:'高级',align:'center',rowspan:13,width:100},
+			{field:'下一年度拟退人员（副高）',title:'副高',align:'center',rowspan:13,width:100},
+			{field:'下一年度拟退人员（中级）',title:'中级',align:'center',rowspan:13,width:100},
+			{field:'下一年度拟退人员（初级）',title:'初级',align:'center',rowspan:13,width:100}
+
+
+
+
+
+			],[
+			//现有人员
+			{field:'专业技术人员（男）',title:'男',align:'center',width:50},
+			{field:'专业技术人员（女）',title:'女',align:'center',width:50},
+			{field:'管理（男）',title:'男',align:'center',width:50},
+			{field:'管理（女）',title:'女',align:'center',width:50},
+			{field:'工勤（男）',title:'男',align:'center',width:50},
+			{field:'工勤（女）',title:'女',align:'center',width:50},
+			//年龄
+			{field:'30以下（男）',title:'男',align:'center',width:50},
+			{field:'30以下（女）',title:'女',align:'center',width:50},
+			{field:'31-40岁（男）',title:'男',align:'center',width:50},
+			{field:'31-40岁（女）',title:'女',align:'center',width:50},
+			{field:'41-50岁（男）',title:'男',align:'center',width:50},
+			{field:'41-50岁（女）',title:'女',align:'center',width:50},
+			{field:'50-60岁（男）',title:'男',align:'center',width:50},
+			{field:'50-60岁（女）',title:'女',align:'center',width:50},
+			//卫生专业技术职称（已获）
+			{field:'卫生专业技术职称（已获）（合计男）',title:'男',align:'center',width:50},
+			{field:'卫生专业技术职称（已获）（合计女）',title:'女',align:'center',width:50},
+			{field:'卫生专业技术职称（已获）（正高男）',title:'男',align:'center',width:50},
+			{field:'卫生专业技术职称（已获）（正高女）',title:'女',align:'center',width:50},
+			{field:'卫生专业技术职称（已获）（副高男）',title:'男',align:'center',width:50},
+			{field:'卫生专业技术职称（已获）（副高女）',title:'女',align:'center',width:50},
+			{field:'卫生专业技术职称（已获）（中级男）',title:'男',align:'center',width:50},
+			{field:'卫生专业技术职称（已获）（中级女）',title:'女',align:'center',width:50},
+			{field:'卫生专业技术职称（已获）（助级男）',title:'男',align:'center',width:50},
+			{field:'卫生专业技术职称（已获）（助级女）',title:'女',align:'center',width:50},
+			{field:'卫生专业技术职称（已获）（员级男）',title:'男',align:'center',width:50},
+			{field:'卫生专业技术职称（已获）（员级女）',title:'女',align:'center',width:50},
+			//卫生专业技术职称（已聘）
+			{field:'卫生专业技术职称（已聘）（合计男）',title:'男',align:'center',width:50},
+			{field:'卫生专业技术职称（已聘）（合计女）',title:'女',align:'center',width:50},
+			{field:'卫生专业技术职称（已聘）（正高男）',title:'男',align:'center',width:50},
+			{field:'卫生专业技术职称（已聘）（正高女）',title:'女',align:'center',width:50},
+			{field:'卫生专业技术职称（已聘）（副高男）',title:'男',align:'center',width:50},
+			{field:'卫生专业技术职称（已聘）（副高女）',title:'女',align:'center',width:50},
+			{field:'卫生专业技术职称（已聘）（中级男）',title:'男',align:'center',width:50},
+			{field:'卫生专业技术职称（已聘）（中级女）',title:'女',align:'center',width:50},
+			{field:'卫生专业技术职称（已聘）（助级男）',title:'男',align:'center',width:50},
+			{field:'卫生专业技术职称（已聘）（助级女）',title:'女',align:'center',width:50},
+			{field:'卫生专业技术职称（已聘）（员级男）',title:'男',align:'center',width:50},
+			{field:'卫生专业技术职称（已聘）（员级女）',title:'女',align:'center',width:50},
+			//其他专业技术职称（已获）
+			{field:'其他专业技术职称（已获）（合计男）',title:'男',align:'center',width:50},
+			{field:'其他专业技术职称（已获）（合计女）',title:'女',align:'center',width:50},
+			{field:'其他专业技术职称（已获）（正高男）',title:'男',align:'center',width:50},
+			{field:'其他专业技术职称（已获）（正高女）',title:'女',align:'center',width:50},
+			{field:'其他专业技术职称（已获）（副高男）',title:'男',align:'center',width:50},
+			{field:'其他专业技术职称（已获）（副高女）',title:'女',align:'center',width:50},
+			{field:'其他专业技术职称（已获）（中级男）',title:'男',align:'center',width:50},
+			{field:'其他专业技术职称（已获）（中级女）',title:'女',align:'center',width:50},
+			{field:'其他专业技术职称（已获）（助级男）',title:'男',align:'center',width:50},
+			{field:'其他专业技术职称（已获）（助级女）',title:'女',align:'center',width:50},
+			{field:'其他专业技术职称（已获）（员级男）',title:'男',align:'center',width:50},
+			{field:'其他专业技术职称（已获）（员级女）',title:'女',align:'center',width:50},
+			//其他专业技术职称（已聘）
+			{field:'其他专业技术职称（已聘）（合计男）',title:'男',align:'center',width:50},
+			{field:'其他专业技术职称（已聘）（合计女）',title:'女',align:'center',width:50},
+			{field:'其他专业技术职称（已聘）（正高男）',title:'男',align:'center',width:50},
+			{field:'其他专业技术职称（已聘）（正高女）',title:'女',align:'center',width:50},
+			{field:'其他专业技术职称（已聘）（副高男）',title:'男',align:'center',width:50},
+			{field:'其他专业技术职称（已聘）（副高女）',title:'女',align:'center',width:50},
+			{field:'其他专业技术职称（已聘）（中级男）',title:'男',align:'center',width:50},
+			{field:'其他专业技术职称（已聘）（中级女）',title:'女',align:'center',width:50},
+			{field:'其他专业技术职称（已聘）（助级男）',title:'男',align:'center',width:50},
+			{field:'其他专业技术职称（已聘）（助级女）',title:'女',align:'center',width:50},
+			{field:'其他专业技术职称（已聘）（员级男）',title:'男',align:'center',width:50},
+			{field:'其他专业技术职称（已聘）（员级女）',title:'女',align:'center',width:50},
+			//工人岗位技术等级（已获）
+			{field:'工人岗位技术等级（已获）（合计男）',title:'男',align:'center',width:50},
+			{field:'工人岗位技术等级（已获）（合计女）',title:'女',align:'center',width:50},
+			{field:'工人岗位技术等级（已获）（高级技师男）',title:'男',align:'center',width:50},
+			{field:'工人岗位技术等级（已获）（高级技师女）',title:'女',align:'center',width:50},
+			{field:'工人岗位技术等级（已获）（技师男）',title:'男',align:'center',width:50},
+			{field:'工人岗位技术等级（已获）（技师女）',title:'女',align:'center',width:50},
+			{field:'工人岗位技术等级（已获）（高级工男）',title:'男',align:'center',width:50},
+			{field:'工人岗位技术等级（已获）（高级工女）',title:'女',align:'center',width:50},
+			{field:'工人岗位技术等级（已获）（中级工男）',title:'男',align:'center',width:50},
+			{field:'工人岗位技术等级（已获）（中级工女）',title:'女',align:'center',width:50},
+			{field:'工人岗位技术等级（已获）（普工男）',title:'男',align:'center',width:50},
+			{field:'工人岗位技术等级（已获）（普工女）',title:'女',align:'center',width:50},
+			//工人岗位技术等级（已聘）
+			{field:'工人岗位技术等级（已聘）（合计男）',title:'男',align:'center',width:50},
+			{field:'工人岗位技术等级（已聘）（合计女）',title:'女',align:'center',width:50},
+			{field:'工人岗位技术等级（已聘）（高级技师男）',title:'男',align:'center',width:50},
+			{field:'工人岗位技术等级（已聘）（高级技师女）',title:'女',align:'center',width:50},
+			{field:'工人岗位技术等级（已聘）（技师男）',title:'男',align:'center',width:50},
+			{field:'工人岗位技术等级（已聘）（技师女）',title:'女',align:'center',width:50},
+			{field:'工人岗位技术等级（已聘）（高级工男）',title:'男',align:'center',width:50},
+			{field:'工人岗位技术等级（已聘）（高级工女）',title:'女',align:'center',width:50},
+			{field:'工人岗位技术等级（已聘）（中级工男）',title:'男',align:'center',width:50},
+			{field:'工人岗位技术等级（已聘）（中级工女）',title:'女',align:'center',width:50},
+			{field:'工人岗位技术等级（已聘）（普工男）',title:'男',align:'center',width:50},
+			{field:'工人岗位技术等级（已聘）（普工女）',title:'女',align:'center',width:50},
+			//管理人员职务等级（已获）
+			{field:'管理人员职务等级（已获）（合计男）',title:'男',align:'center',width:50},
+			{field:'管理人员职务等级（已获）（合计女）',title:'女',align:'center',width:50},
+			{field:'管理人员职务等级（已获）（正局级男）',title:'男',align:'center',width:50},
+			{field:'管理人员职务等级（已获）（正局级女）',title:'女',align:'center',width:50},
+			{field:'管理人员职务等级（已获）（副局级男）',title:'男',align:'center',width:50},
+			{field:'管理人员职务等级（已获）（副局级女）',title:'女',align:'center',width:50},
+			{field:'管理人员职务等级（已获）（正处级男）',title:'男',align:'center',width:50},
+			{field:'管理人员职务等级（已获）（正处级女）',title:'女',align:'center',width:50},
+			{field:'管理人员职务等级（已获）（副处级男）',title:'男',align:'center',width:50},
+			{field:'管理人员职务等级（已获）（副处级女）',title:'女',align:'center',width:50},
+			{field:'管理人员职务等级（已获）（正科级男）',title:'男',align:'center',width:50},
+			{field:'管理人员职务等级（已获）（正科级女）',title:'女',align:'center',width:50},
+			{field:'管理人员职务等级（已获）（副科级男）',title:'男',align:'center',width:50},
+			{field:'管理人员职务等级（已获）（副科级女）',title:'女',align:'center',width:50},
+			{field:'管理人员职务等级（已获）（科员级男）',title:'男',align:'center',width:50},
+			{field:'管理人员职务等级（已获）（科员级女）',title:'女',align:'center',width:50},
+			{field:'管理人员职务等级（已获）（办事员级男）',title:'男',align:'center',width:50},
+			{field:'管理人员职务等级（已获）（办事员级女）',title:'女',align:'center',width:50},
+			//管理人员职务等级（已聘）
+			{field:'管理人员职务等级（已聘）（合计男）',title:'男',align:'center',width:50},
+			{field:'管理人员职务等级（已聘）（合计女）',title:'女',align:'center',width:50},
+			{field:'管理人员职务等级（已聘）（正局级男）',title:'男',align:'center',width:50},
+			{field:'管理人员职务等级（已聘）（正局级女）',title:'女',align:'center',width:50},
+			{field:'管理人员职务等级（已聘）（副局级男）',title:'男',align:'center',width:50},
+			{field:'管理人员职务等级（已聘）（副局级女）',title:'女',align:'center',width:50},
+			{field:'管理人员职务等级（已聘）（正处级男）',title:'男',align:'center',width:50},
+			{field:'管理人员职务等级（已聘）（正处级女）',title:'女',align:'center',width:50},
+			{field:'管理人员职务等级（已聘）（副处级男）',title:'男',align:'center',width:50},
+			{field:'管理人员职务等级（已聘）（副处级女）',title:'女',align:'center',width:50},
+			{field:'管理人员职务等级（已聘）（正科级男）',title:'男',align:'center',width:50},
+			{field:'管理人员职务等级（已聘）（正科级女）',title:'女',align:'center',width:50},
+			{field:'管理人员职务等级（已聘）（副科级男）',title:'男',align:'center',width:50},
+			{field:'管理人员职务等级（已聘）（副科级女）',title:'女',align:'center',width:50},
+			{field:'管理人员职务等级（已聘）（科员级男）',title:'男',align:'center',width:50},
+			{field:'管理人员职务等级（已聘）（科员级女）',title:'女',align:'center',width:50},
+			{field:'管理人员职务等级（已聘）（办事员级男）',title:'男',align:'center',width:50},
+			{field:'管理人员职务等级（已聘）（办事员级女）',title:'女',align:'center',width:50}
+
+
+
+
+			]],
+
+
+			onDblClickRow: function (rowIndex) {
+				// openRoleDiv(rowIndex);
+			},
+		   fitColumns:false,
+		   rownumbers:false
+	}); 
+   var pager = $('#ttmrmzl').datagrid('getPager');
+	   if(pager){
+		$(pager).pagination({
+			
+			onSelectPage:function(pageNumber,pageSize){
+			   PageNumber=pageNumber;
+			   PageSize=pageSize;
+			   loadingmrmzl();
+			}
+		});		
+		$(pager).pagination({pageSize:PageSize,pageNumber:PageNumber,total:dataInfo.count});
+	};
+//删除新增的dataAll	
+datapush.splice(datapush.length-1);
+$('#ttmrmzl').datagrid('hideColumn', "机构1");
+}
+}
+</script>
+<script>
+$(function(){
+$(window).resize(function(){
+$('#ttmrmzl').datagrid('resize');
+});
+});
+</script>
+<script>
+
+$(function(){
+
+
+
+	
+//日期控件
+$('.dateday').datetimepicker({
+		format: 'yyyy-mm-dd',
+		autoclose:true,
+		startView:2,
+		minView:2
+	});
+//获取当前年-月-日
+today=new Date();
+var ymd=sys_FormatYMD(today);
+var vMon = today.getMonth() + 1;
+var dateendymd=today.getFullYear()-1+"-"+(vMon<10 ? "0" + vMon : vMon)+"-"+today.getDate();
+$("#datebegin").val(dateendymd);
+$("#dateend").val(ymd); 
+
+$("#mrmzl-m .reload").click(function(){
+	$("#mrmzl-m #rowtable").toggleClass("rowtable");
+	$("#mrmzl-m #lc-rowtable").toggleClass("rowtable");
+	});
+
+})
+//机构
+$(function () {
+getselectdaoid101();
+//getselectdimcv101();
+});
+function  getselectdaoid101(){
+	//复制  开始
+    sys_BI_getDaoidList("mdmSelectdaoid101");
+	//复制  结束
+}
+function mdmSelectdaoid101(){
+  var info = new Map();
+  info.put("key",["hospunitorgcode"]);
+  info.put("value",["hospunitorgnm"]);
+  //复制  开始
+  sys_GetSelect("org-mrmzl","dimorg",info,sys_BI_getCacheDaoidData());
+  //复制  结束
+}
+
+loadingmrmzl();
+
+</script>

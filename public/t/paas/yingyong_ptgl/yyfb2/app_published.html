@@ -1,0 +1,103 @@
+<link rel="stylesheet" href="lib/js/plugin/ztreev35/zTreeStyle.css" type="text/css">
+<style type="text/css">
+/*.ztree * {*/
+/*  font-family: Consolas, Microsoft YaHei, SimHei, STHeiti, SimSun, STSong, sans-serif;*/
+/*  font-size: 14px;*/
+/*  font-weight: 400;*/
+/*}*/
+/*.ztree li span.button {*/
+/*  margin-left: 5px;*/
+/*  background-position: -144px 0;*/
+/*  vertical-align: top;*/
+/*  *vertical-align: middle*/
+/*}*/
+/*.ztree li {*/
+/*  padding: 3px 0;*/
+/*}*/
+</style>
+<!-- widget grid -->
+<section id="widget-grid" class="">
+  <!-- row -->
+  <div class="row">
+    <!-- NEW WIDGET START -->
+    <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <!-- Widget ID (each widget will need unique ID)-->
+      <div id="app_view_wid" class="jarviswidget jarviswidget-color-blueDark" data-widget-fullscreenbutton="false" data-widget-colorbutton="true" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-deletebutton="false">
+        <header>
+          <span class="widget-icon"> <i class="fa fa-table"></i> 
+          </span>
+          <h2>应用发布管理</h2>
+        </header>
+        <!-- widget div-->
+        <div>
+          <!-- widget edit box -->
+          <div class="jarviswidget-editbox">
+            <!-- This area used as dropdown edit box -->
+          </div>
+          <!-- end widget edit box -->
+          <!-- widget content -->
+          <div class="widget-body no-padding">
+            <div class="widget-body-toolbar">
+              <form id="app_view_form" method="post" onsubmit="return false;" class="smart-form">
+                <div class="row">
+                  <section class="col col-3">
+                    <label class="input">
+                      <input type="hidden" name="status" data-type="select2" placeholder="状态" />
+                    </label>
+                  </section>
+                  <section class="col col-3">
+                    <label class="input">
+                      <input type="text" name="appnm" placeholder="应用名称" class="form-control input-sm">
+                    </label>
+                  </section>
+                  <section class="col col-3">
+                    <button id="app_view_search" class="btn btn-info btn-sm" type="submit"><i class="fa fa-search fa-1"></i>&emsp;查 询&emsp;</button>
+                  </section>
+                </div>
+              </form>
+              <div class="btn-group">
+                <button id="app_view_add" class="btn btn-info btn-xs">&emsp;<i class="fa fa-plus" style="width:12px"></i>&nbsp;<span id="title">创建应用</span>&emsp;</button>
+                <button id="app_view_role" class="btn btn-info btn-xs">&emsp;<i class="fa fa-user"></i>&nbsp;更新应用&emsp;</button>
+                 <button id="app_view_his" class="btn btn-info btn-xs">&emsp;<i class="fa fa-user"></i>&nbsp;查看更新历史&emsp;</button>
+                 
+                
+              </div>
+            </div>
+            <div class="dataTables_wrapper">
+              <table id="app_view_dt" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>应用名称</th>
+                    <th>API 数量</th>
+                    <th>标准版应用名称</th>
+                    <th>审核状态</th>
+                    <th>用户数量</th>
+                    <th>创建时间</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+          <!-- end widget content -->
+          <div id="app_view_pagination"></div>
+        </div>
+        <!-- end widget div -->
+      </div>
+      <!-- end widget -->
+    </article>
+    <!-- WIDGET END -->
+  </div>
+  <!-- end row -->
+</section>
+<!-- end widget grid -->
+<div id="app_view_modal"></div>
+<div id="app_view_modal2"></div>
+<div id="app_view_modallogo"></div>
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script src="yingyong_ptgl/yyfb2/app_published.js"></script>
+ <script src="lib/html/x-editable.js"></script>
+<script type="text/javascript">
+// DO NOT REMOVE : GLOBAL FUNCTIONS!
+pageSetUp();
+var application_view = new APPview();
+</script>

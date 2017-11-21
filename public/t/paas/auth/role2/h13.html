@@ -1,0 +1,121 @@
+<!--角色分配页面权限-->
+<div class="modal fade" id="role2_h13" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title">预览和编辑角色页面权限</h4>
+			</div>
+			<div class="modal-body">
+			  <div>
+			    <ul id="role2_h13_tree" class="ztree"></ul>
+			  </div>
+			</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" name="role2_h13_save">保存</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+		</div>
+	</div>
+</div>
+<script>
+  (function(){
+    var modal=$('#role2_h13');
+    var zTreeDiv = $('#role2_h13_tree');
+    var saveBtn = modal.find('[name=role2_h13_save]');
+    var roleid=auth_h8._g.param.roleid;
+    
+    function Init(){
+      zy.g.am.app='auth';
+      zy.g.am.mod='role_page';
+      zy.net.post('api/getpagetree',function(msg){
+        if(msg){
+          InitTree(msg.result);
+          Event();
+          modal.modal('show');
+        }
+      },{roleid:roleid});
+    }
+    
+    function InitTree(data){
+      //设置ztree
+  	  var setting = {
+    		data: {
+    			key: {
+    				name: "name"
+    			},
+    			simpleData: {
+    				enable: true,
+    				idKey: "id",
+    				pIdKey: "pid",
+    				rootPId: null
+    			}
+    		},
+    		view: {
+    			showTitle: false,
+    			addDiyDom: addDiyDom
+    		},
+    		callback:{}
+    	};
+    	function addDiyDom(treeId,treeNode){
+        if(treeNode.isParent){
+         return;
+        }
+        var aObj = $("#" + treeNode.tId + "_a");
+        if ($("#diyBtn1_"+treeNode.tId).length>0) return;
+        var radioStr = "<span id='diyBtn_space_" +treeNode.tId+ "' > </span>"+ "<label><input type='radio' id='diyBtn1_" + treeNode.tId+ "' onfocus='this.blur();' name='page_auth" + treeNode.tId+ "' value='0'/>只读</label> "+ "<label><input type='radio' id='diyBtn2_" + treeNode.tId+ "' onfocus='this.blur();' name='page_auth" + treeNode.tId+ "' value='1'/>编辑</label>";
+        aObj.after(radioStr);
+        //绑定单选按钮事件
+        $('#diyBtn1_'+treeNode.tId).click(function(){
+          treeNode.page_auth='0';
+        });
+        $('#diyBtn2_'+treeNode.tId).click(function(){
+          treeNode.page_auth='1';
+        });
+        //设置单选按钮状态
+        if(treeNode.page_auth=='0'){
+          $('#diyBtn1_'+treeNode.tId).click();
+        }else if(treeNode.page_auth=='1'){
+          $('#diyBtn2_'+treeNode.tId).click();
+        }
+      }
+      $.fn.zTree.init(zTreeDiv, setting, data);
+    }
+    
+    function Event(){
+      //保存按钮
+      saveBtn.click(function(){
+        zy.g.am.app='auth';
+        zy.g.am.mod='role_page';
+        zy.net.post('api/save_page_auth',function(msg){
+          if(msg){
+            zy.ui.msg('提示信息：','保存成功','s');
+            modal.modal('hide');
+          }
+        },{
+          roleid:roleid,
+          json:getParams()
+        });
+      });
+    }
+    
+    function getParams(){
+      var treeObj = $.fn.zTree.getZTreeObj('role2_h13_tree');
+      //获取所有底层节点
+      var diNodes = treeObj.getNodesByParam('isParent',false);
+      //生成参数
+      var params={};
+      for(var i in diNodes){
+        if(diNodes[i].page_auth){
+          params[diNodes[i].pageid]=diNodes[i].page_auth;
+        }
+      }
+      zy.log(params);
+      return JSON.stringify(params);
+    }
+    
+    Init();
+  })();
+</script>

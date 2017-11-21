@@ -1,0 +1,143 @@
+﻿
+		<script type="text/javascript">
+		var aoidMap = new Map();
+                var datasortMap;
+                var dataMap;
+                var dataMap2;
+                
+                dataMap2= JSON.parse(localStorage.getItem("dataMap2"))
+                localStorage.removeItem("dataMap2")
+                
+		$(function () {
+		getselectdaoid();
+		//getselectdorgid();
+        $("#orgId").focus();
+        //if(self.parent.dataMap===""){
+         if(localStorage.getItem("dataMap")===""){
+           datasortMap= JSON.parse(localStorage.getItem("datasortMap"))
+           
+        $("#update").hide();
+	    $("#orgNm").val(datasortMap.orgNm);
+		$("#orgid").val(datasortMap.orgId);
+        $("#orgNm").attr('disabled','disabled');
+        }else{
+                 dataMap= JSON.parse(localStorage.getItem("dataMap"))
+                 localStorage.removeItem("dataMap")
+        $("#add").hide();
+		$("#orgNm").val(dataMap.orgNm);
+		$("#orgid").val(dataMap.orgId);
+		$("#status").val(dataMap2.status);
+		$("#orgNm").attr('disabled','disabled');
+		setTimeout(function(){
+		$("#changorgid").val(dataMap2.changorgid);
+		}, 500);
+        $("#changorgid").attr('disabled','disabled');
+        } 
+ 
+       
+		
+	});
+	function update(){
+	//LC_Resetting("fm");
+	if(retCheckFlg){
+		var url="mdm/osms004set/";
+		var itemsList = ["status","changorgid","orgid"];
+		var info = new Map();
+		//info.put("osms003_orgid",self.parent.orgid)
+		LC_AjaxGet(MDMBaseUrl+url,"fm","callback3",info,itemsList);
+	}
+	
+
+}		
+function callback3(reData){
+  if (reData.ret=="0") {
+    self.parent.$.messager.alert('提示',reData.msg,'info');
+    $("#openRoleDiv").window("close");
+  } else {
+    self.parent.$.messager.alert('错误提示',reData.msg,'error');
+  }
+  
+ }
+//反转
+function  getselectdaoid(){
+  var url="mdm/orgs/";
+  var infoa = new Map();
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"fm","mdmSelectdaoid",infoa,itemsList);
+}
+
+function mdmSelectdaoid(data){
+  var infoc = new Map();
+  infoc.put("key",["orgId"]);
+  infoc.put("value",["orgNm"]);
+  //aoidMap=LC_getDataMap(infoc,data.dataList);
+  LC_GetSelect("fm","changorgid",infoc,data.dataList);
+}
+//反转
+function  getselectdorgid(){
+  var url="mdm/osms004OrgId/";
+  var infoa = new Map();
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"fm","mdmSelectdorgid",infoa,itemsList);
+}
+
+function mdmSelectdorgid(data){
+  var infoc = new Map();
+  infoc.put("key",["orgid"]);
+  infoc.put("value",["orgNm"]);
+  //aoidMap=LC_getDataMap(infoc,data.dataList);
+  LC_GetSelect("fm","changorgid",infoc,data.dataList);
+}
+
+function add(){
+	//LC_Resetting("fm");
+	if(retCheckFlg){
+	var url="mdm/osms004add/";
+	var itemsList = ["status","changorgid","orgid"];
+	var info = new Map();
+	//info.put("osms003_orgid",self.parent.orgid)
+	LC_AjaxGet(MDMBaseUrl+url,"fm","callback1",info,itemsList);
+	}
+}
+
+function callback1(reData){
+  if (reData.ret=="0") {
+    self.parent.$.messager.alert('提示',reData.msg,'info');
+    $("#openRoleDiv").window("close");
+  } else {
+    self.parent.$.messager.alert('错误提示',reData.msg,'error');
+  }
+ }
+
+
+</script>
+
+<div class="padTB-5">
+    <form id="fm">
+   <input type="hidden" id="orgid">
+
+    <div class="mainW-288" style="padding-top:30px;">
+        <div class="itemLW-80 padT-4">机构名：</div>
+        <div class="itemRW-208"><input id="orgNm" class="textLW" type="text" ></div>
+    </div>
+    <div class="mainW-288" >
+        <div class="itemLW-80 padT-4">可转入机构：</div>
+        <div class="itemRW-208"><select id="changorgid" class="textLW" type="text"></select></div>
+    </div>
+    <div class="mainW-288" >
+        <div class="itemLW-80 padT-4">状态：</div>
+        <div class="itemRW-208">
+        <select id="status" class="textLW" name="dept">
+              <option value="">全部</option>
+              <option value="0">无效</option>
+              <option value="1">有效</option>
+              <option value="2">迁出</option>
+              </select>
+		</div>
+    </div>
+    <div class="itemLW-288 padTB-10"><a id="update" href="#" class="easyui-linkbutton" onclick="update()">修改</a>
+	<a id="add" href="#" class="easyui-linkbutton" onclick="add()">添加</a></div>
+
+    </form>
+</div>
+

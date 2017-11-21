@@ -1,0 +1,102 @@
+ <style type="text/css">
+/*.ztree * {*/
+/*  font-family: Consolas, Microsoft YaHei, SimHei, STHeiti, SimSun, STSong, sans-serif;*/
+/*  font-size: 14px;*/
+/*  font-weight: 400;*/
+/*}*/
+/*.ztree li span.button {*/
+/*  margin-left: 5px;*/
+/*  background-position: -144px 0;*/
+/*  vertical-align: top;*/
+/*  *vertical-align: middle*/
+/*}*/
+</style>
+<div id="mdms_datatict_h1" class="jarviswidget jarviswidget-color-blue" data-widget-deletebutton="false" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-colorbutton="false" role="widget">
+  <header role="heading">
+    <h2>
+      <strong>
+        主数据管理
+      </strong>
+    </h2>
+    <div class="widget-toolbar" role="menu" title="文件目录"><i class="glyphicon glyphicon-folder-open" name="toolbar_folder"></i></div>
+    <div class="widget-toolbar" role="menu" title="操作日志"><i class="fa fa-book"></i></div>
+    <div class="widget-toolbar" role="menu" title="API"><i class="fa fa-list"></i></div>
+  </header>
+
+  <!-- widget div-->
+  <div>
+    <!-- widget content -->
+    <div class="widget-body">
+      <div class="row">
+        <div id="nouislider" class="noUiSlider"></div>
+      </div>
+      <div class="row">
+        <div id="_ztree" class="col-xs-3"><ul id="mdms_datadict_h1_tree" class="ztree"></ul></div>
+        <div id="mdms_datadict_h1_container" class="col-xs-9">
+          <div class="row" id="row_form">
+            <!--<form id="datadict_h1_form" method="post" onsubmit="return false;" class="smart-form">-->
+            <!--</form>-->
+          </div>
+          <div class="btn-group">
+            <button id="mdms_datadict_h1_add" class="btn btn-info btn-xs" type="submit">&emsp;<i class="fa fa-magic fa-1"></i>&emsp;添 加&emsp;</button>
+            <button id="mdms_datadict_h1_edit" class="btn btn-info btn-xs" type="submit">&emsp;<i class="fa fa-edit fa-1"></i>&emsp;修 改&emsp;</button>
+            <button id="mdms_datadict_h1_delete" class="btn btn-info btn-xs">&emsp;<i class="fa  fa-trash-o "></i>&emsp;注 销&emsp;</button>
+            <button id="mdms_datadict_h1_export" class="btn btn-info btn-xs">&emsp;<i class="glyphicon glyphicon-export  "></i>&emsp;导 出&emsp;</button>
+          </div>
+          <div class="pull-right">
+            <b name="total_count"></b>
+          </div>
+          <h1></h1>
+          <div id="mdms_datadict_h1_table"></div>
+        </div>
+      </div>
+    </div>
+  <!-- end widget content -->
+  </div>
+  <!-- end widget div -->
+
+
+
+<hr>
+<hr>
+<hr>
+<hr>
+</div>
+<div id="mdm_datadict_h1_form"></div>
+<div id="mdm_datadict_h1_log"></div>
+<script type="text/javascript" src="md/ex_inport/export.js"></script>
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script type="text/javascript" src="lib/html/zy_dyform.js"></script>
+<script type="text/javascript" src="lib/html/zy_dytable.js"></script>
+<script src="lib/js/plugin/noUiSlider/jquery.nouislider.min.js"></script>
+<script src="mdms/datadict/h1.js"></script>
+<script type="text/javascript">
+  $('#mdms_datatict_h1').find('[class=btn-group]').css('display', 'none');
+  var mdms_datadict_h1Obj = new mdms_datadict_h1();
+  
+  $("#mdms_datadict_h1_container").css({'border-width':"0px 0px 0px 1px",'border-style':"solid",'border-left-color':"#CCC!important",'background':"#F0F0F6"});
+  //* noUi Sliders 区域范围滑块插件处理
+  $("#nouislider").noUiSlider({
+    range: [0, 100],
+    start: 25,
+    handles: 1,
+    connect: true,
+    slide: function(){
+      zy.log('noUiSliderEvent');
+      var values = $(this).val();
+      if(10>values){
+        $("#_ztree").css({'display':'none','width':'0%'});
+        $("#mdms_datadict_h1_container").css({'display':"block",'width':"100%"});
+        $(this).val(0);
+        return false;
+      } else {
+        $("#_ztree").css({'display':'block','width': + values + '%'});
+      }
+      if(33>(100-values)){
+        $("#mdms_datadict_h1_container").css({'display':'none'});
+      } else {
+        $("#mdms_datadict_h1_container").css({'display':'block','width':(100-values) + '%'});
+      }
+    }
+  });
+</script>

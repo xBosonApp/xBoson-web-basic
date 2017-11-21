@@ -1,0 +1,1081 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+<div id="module_con">
+  <div id="echart" style="height:500px"></div>
+</div>
+<script src="/ui/paas/lib/js/libs/jquery-1.11.0.min.js"></script>
+<script src="/ui/paas/lib/js/plugin/jquery-poshytip/jquery.poshytip.min.js"></script>
+<script src="/ui/paas/lib/js/zy/zy.js"></script>
+<script src="/ui/paas/lib/js/zy/zy_extend.js"></script>
+<!--<script src="lib/js/zy/zy_md5.js"></script>-->
+<script src="/ui/paas/lib/js/app.js"></script>
+<script src="/ui/paas/bi/echarts.js"></script>
+<script>
+
+  var ModuleCon = $('#module_con');
+  
+  // var apiinfo;
+  // apiinfo = {
+  //   apinm:'exc_select',
+  //   app:'c770045becc04c7583f626faacd3b456',
+  //   mod:'commapi'
+  // };
+  // debugger
+  // zy.extend.get(apiinfo,function(msg){
+  //   var chartcon = ModuleCon.find('#echart');
+  //   Chart(chartcon, msg, msg, msg);
+  // },{
+  //   "modolcd":"static2"
+  // })
+      
+// $.getJSON('/ds/api/exc_select?app=c770045becc04c7583f626faacd3b456&mod=commapi&org=a297dfacd7a84eab9656675f61750078&openid=daz1002020741&s=d&cb=cb14851349938355082&modolcd=static2&_=1485134982415', function(msg) {
+//   var chartcon = ModuleCon.find('#echart');
+//   // msg = $.parseJSON(msg)
+//   console.log(msg.ret);
+//   console.log('1');
+//   Chart(chartcon, msg, msg, msg);
+// });
+var link = '/ds/api/exc_select?app=c770045becc04c7583f626faacd3b456&mod=commapi&org=a297dfacd7a84eab9656675f61750078&openid=daz1002020741&s=d';
+var param = {"modolcd":"static2"};
+ var setting = {
+      url: link,
+      type: "get",
+      async: false,
+      timeout: 10000,
+      cache: false,
+      dataType: "jsonp",
+      jsonp: "cb",
+      jsonpCallback: "cb" + zy.tool.random(),
+      data: param,
+      success: function (msg) {
+        var chartcon = ModuleCon.find('#echart');
+        // msg = $.parseJSON(msg)
+        Chart(chartcon, msg, msg, msg);
+      },
+     
+    };
+
+$.ajax(setting);
+  /* 基于Echarts 若不传module 也可独立运行*/
+function Chart(con, newType, modulemsg, modolmg, module) {
+  
+  
+  /* 图形优先级 */
+  var zlevel = {
+    line: 999,
+    pie: 9,
+    bar: 8,
+    column: 8,
+    stagecolumn: 8,
+    stagebar: 8,
+    arealine: 10,
+  };
+
+  var match = {
+    line: DefaultXy,
+    pie: DefaultXy,
+    bar: DefaultXy,
+    column: DefaultXy,
+    stagecolumn: DefaultXy,
+    stagebar: DefaultXy,
+    arealine: DefaultXy,
+    gauge: DefaultGauge,
+    radar: DefaultRadar,
+    scatter: DefaultScatter
+  };
+
+  var chartlistmap = {
+    bar: {
+      id: 'bar',
+      name: '柱形图',
+      text: '柱形图bar'
+    },
+    line: {
+      id: 'line',
+      name: '线形图',
+      text: '线形图line'
+    },
+    arealine: {
+      id: 'arealine',
+      name: '范围线形图',
+      text: '范围线形图arealine'
+    },
+    pie: {
+      id: 'pie',
+      name: '饼形图',
+      text: '饼形图pie'
+    },
+    stagebar: {
+      id: 'stagebar',
+      name: '堆叠柱形图',
+      text: '堆叠柱形图stagebar'
+    },
+    column: {
+      id: 'column',
+      name: '条形图',
+      text: '条形图column'
+    },
+    radar: {
+      id: 'radar',
+      name: '雷达图',
+      text: '雷达图radar'
+    },
+    gauge: {
+      id: 'gauge',
+      name: '仪表盘',
+      text: '仪表盘gauge'
+    },
+    scatter: {
+      id: 'scatter',
+      name: '散点/气泡图',
+      text: '散点/气泡图scatter'
+    },
+    stagecolumn: {
+      id: 'stagecolumn',
+      name: '堆叠条形图',
+      text: '堆叠条形图stagecolumn'
+    }
+  };
+
+  /* 基类 */
+  function Base(newType, modulemsg, modolmg) {
+
+    var thiz = this;
+
+    thiz.fn = {};
+
+    /* 默认配置 */
+    thiz.chartoption = {
+      calculable: false, //拖拽开关
+      tooltip: {
+        show: true
+      },
+      legend: {
+        y: 'bottom',
+        data: [],
+        selected: {}
+      },
+      toolbox: {
+        show: true,
+        feature: {
+          chartedit: {
+            show: true,
+            title: '配置',
+            icon: 'bi/image/edit.png',
+            onclick: function () {
+              zy.net.loadHTML('bi/edit_table.html', $('#modal'), function () {
+                edit_table(thiz, chartlistmap);
+              });
+              return false;
+            }
+          },
+          rollback: {
+            show: true,
+            title: '还原',
+            icon: 'bi/image/reset.png',
+            onclick: function () {
+              Echart(thiz.moduledata, thiz.moduledata, thiz.modoldata);
+            }
+          },
+          saveAsImage: {show: true},
+          datagrid: {
+            show: true,
+            title: '数据表格',
+            icon: 'bi/image/grid.png',
+            onclick: function () {
+              var chartdata = thiz.chartdata;
+              var o = {};
+              o.columns = [];
+              chartdata.type.forEach(function (col) {
+                o.columns.push({
+                  title: col.cn,
+                  data: col.en
+                });
+              });
+              o.data = chartdata.data;
+              module && module.fn.BuildGrid(o);
+            }
+          },
+          backtoparent: {
+            show:false,
+            title:'回到上一个模块',
+            icon:'bi/image/back.png',
+            onclick: function(){
+              module && module.fn.DrillUp();
+            }
+          }
+        }
+      },
+      series: []
+    };
+
+    /* 三个数据源 */
+    thiz.moduledata = modulemsg;
+    thiz.modoldata = modolmg;
+    thiz.chartdata = newType;
+    console.log('modoldata',modolmg)
+    console.log('chartdata',newType)
+
+    /* 获取x轴数据  */
+    thiz.fn.getx = function () {
+      console.log(thiz.chartdata.type[0])
+      var type = thiz.chartdata.type[0], result;
+      // 第一列是x轴
+      if (type && !type.chart) {
+        var en = type.en;
+        result = thiz.fn.typetodata(en);
+      }
+      // 每一列的列头为x轴
+      return result || [];
+    };
+
+    /* 构造series内部对象 */
+    thiz.fn.common = function (inner) {
+      var o;
+      o = {
+        name: inner.cn,
+        en: inner.en,
+        cn: inner.cn,
+        unit: inner.unit,
+        view: inner.view,
+        chart: inner.chart,
+        next: inner.next,
+        dicttype: inner.dicttype || inner.chart.split(',')[0],
+        data: []
+      };
+
+      return o;
+    };
+
+    /* 用en查询数据 返回对应的数组 */
+    thiz.fn.typetodata = function (en) {
+      console.log(en)
+      var data = thiz.chartdata.data;
+      // zy.log('thiz.chartdata:',thiz.chartdata);
+      var result = [];
+      console.log(data);
+      window.pp=en;
+      window.ll=data;
+      data.forEach(function (col) {
+        var target = col[en] || '';
+        result.push(target);
+      });
+      return result;
+    };
+
+    /* 初始化 */
+    thiz.fn.Init = function (match) {
+
+      thiz.chartdata.type.forEach(function (inner, index) {
+        var type;
+        if (!inner.chart) return null;
+
+        if (inner.dicttype) type = inner.dicttype;
+        else type = inner.chart.split(',')[0];
+        if (match[type]) match[type](inner, index);
+      });
+    };
+
+    /* 数据合并 */
+    thiz.fn.combine = function () {
+      var modol, module, chart;
+      modol = thiz.modoldata;
+      module = thiz.moduledata;
+      chart = thiz.chartdata;
+
+      chart.data = $.extend(true, [], modol.data);
+
+    };
+
+    /* 更改类型  */
+    thiz.fn.changeType = function (newType) {
+      Echart(newType, thiz.moduledata, thiz.modoldata);
+    };
+
+    /* 编辑页面表格数据 */
+    thiz.fn.editData = function () {
+      var series, result = [];
+      series = thiz.chartoption.series;
+      series.forEach(function (inner, index) {
+        var o = {
+          cn: inner.cn,
+          en: inner.en,
+          next: inner.next,
+          view: inner.view,
+          unit: inner.unit,
+          dicttype: inner.dicttype,
+          type: inner.type,
+          chart: inner.chart,
+          chartlist: JSON.stringify(inner.chart.split(','))
+        };
+        result.push(o);
+      });
+      return result;
+    };
+
+    /* 获取x轴的type数据 */
+    thiz.fn.xbacktotype = function () {
+      var targetType = thiz.chartdata.type[0];
+      if (!targetType.chart) return targetType;
+      return null;
+    };
+
+    /* 从编辑页面返回数据 */
+    thiz.fn.fromEdit = function (newtype) {
+      var x = thiz.fn.xbacktotype();
+      if (x) newtype.type.unshift(x);
+
+      var result = [];
+
+      $.each(newtype.type, function (index, val) {
+        result.push(val);
+      });
+
+      Echart({type: result}, thiz.moduledata, thiz.modoldata);
+    };
+    
+    /* 钻取检测 */
+    thiz.fn.drillBtn = function (){
+      if(!module) return null;
+      var mod = module.fn.GetSelf();
+      thiz.chartoption.toolbox.feature.backtoparent.show = Boolean(mod.level);
+    };
+    
+    /* 图例 */
+    thiz.fn.legend = function(){
+      var type, data;
+      type = thiz.chartdata.type;
+      data = thiz.chartoption.legend.data;
+      type.forEach(function(inner){
+        if(inner.chart) data.push(inner.cn);
+      });
+    };
+    
+    /* 显示与否 */
+    thiz.fn.showornot = function(){
+      var type, selected;
+      type = thiz.chartdata.type;
+      selected = thiz.chartoption.legend.selected;
+      type.forEach(function(inner){
+        if(inner.chart){
+          var flag = Boolean(Number(inner.view));
+          selected[inner.cn] = flag;
+        }
+      });
+    };
+    
+    /* 往回钻取 !!!高阶函数处理计数问题!!!*/
+    thiz.fn.drillbackcount = function(){
+      var count = 0, all;
+      if(thiz.chartdata.type[0].chart){
+        all = thiz.chartdata.type.length;
+      }else{
+        all = thiz.chartdata.type.length - 1;
+      }
+      return function(innerseries, data, cb){
+        var flag = DataTypeCheck(innerseries, data);
+        if(flag){ 
+          count++; 
+        }else{
+          cb && cb();
+        }
+        
+        if(count == all){
+          if(module){  //回钻执行
+            var info = module.fn.GetSelf();
+            if(info.level){
+              zy.extend.msg('模块:' + info.modnm + ' 所有指标数据不正确,回退到上一个模块','w');
+              module.fn.DrillUp();
+            }
+          }
+        }
+      };
+    };
+
+    /* 执行合并 */
+    thiz.fn.combine();
+    
+    /* 执行图例 */
+    thiz.fn.legend();
+    
+    /* 执行显示判断 */
+    thiz.fn.showornot();
+    
+    /* 钻取检测 */
+    thiz.fn.drillBtn();
+    
+    /* 数据异常回钻 */
+    thiz.fn.drillback = thiz.fn.drillbackcount();
+  }
+
+  /* 直角基类 */
+  function DefaultXy(newType, modulemsg, modolmg) {
+    var thiz = this, match;
+    Base.call(thiz, newType, modulemsg, modolmg);
+
+    thiz.fn.setxAxis = function (x) {
+      thiz.fn.remxAxis();
+      thiz.chartoption.xAxis = [];
+      thiz.chartoption.xAxis[0] = x || {
+        type: 'category',
+        data: thiz.fn.getx()
+      };
+      console.log(thiz.chartoption.xAxis)
+    };
+
+    thiz.fn.remxAxis = function () {
+      delete thiz.chartoption.xAxis;
+    };
+
+    thiz.fn.setyAxis = function (y) {
+      thiz.fn.remyAxis();
+      thiz.chartoption.yAxis = [];
+      thiz.chartoption.yAxis[0] = y || {
+        type: 'category',
+        data: thiz.fn.getx()
+      };
+    };
+
+    thiz.fn.remyAxis = function () {
+      delete thiz.chartoption.yAxis;
+    };
+
+    /* 各种类型的直角系 */
+    thiz.fn.line = function (typeinner) {
+      var innerseries, data;
+      innerseries = thiz.fn.common(typeinner);
+
+      var xAxis, yAxis;
+      xAxis = thiz.chartoption.xAxis;
+      yAxis = thiz.chartoption.yAxis;
+
+      if (!yAxis || !xAxis) {
+        thiz.fn.setxAxis();  //设定x轴
+        thiz.fn.setyAxis({
+          type: 'value'
+        }); //设定y轴
+      }
+
+      innerseries.type = 'line';
+      innerseries.z = 10;
+      innerseries.zlevel = 10;
+      data = thiz.fn.typetodata(typeinner.en);
+      
+      data.forEach(function (num, index) {
+        innerseries.data[index] = num;
+      });
+      thiz.chartoption.series.push(innerseries);
+    };
+
+    thiz.fn.pie = function (typeinner) {
+      var innerseries, data, x;
+      x = thiz.fn.getx();
+      innerseries = thiz.fn.common(typeinner);
+      innerseries.type = 'pie';
+      data = thiz.fn.typetodata(typeinner.en);
+      data.forEach(function (num, index) {
+        innerseries.data.push({
+          value: num,
+          name: x[index]
+        });
+      });
+
+      thiz.chartoption.series.push(innerseries);
+    };
+
+    thiz.fn.bar = function (typeinner) {
+      var innerseries, data, y;
+      y = {
+        type: 'value'
+      };
+
+      thiz.fn.setxAxis();  //设定x轴
+      thiz.fn.setyAxis(y); //设定y轴
+
+      innerseries = thiz.fn.common(typeinner);
+      innerseries.type = 'bar';
+      data = thiz.fn.typetodata(typeinner.en);
+      
+      
+      data.forEach(function (num, index) {
+        innerseries.data[index] = num;
+      });
+
+      thiz.chartoption.series.push(innerseries);
+    };
+
+    thiz.fn.column = function (typeinner) {
+      var innerseries, data, x;
+      x = {
+        type: 'value'
+      };
+
+      thiz.fn.setxAxis(x);  //设定x轴
+      thiz.fn.setyAxis(); //设定y轴
+
+      innerseries = thiz.fn.common(typeinner);
+      innerseries.type = 'bar';
+      data = thiz.fn.typetodata(typeinner.en);
+      
+      data.forEach(function (num, index) {
+        innerseries.data[index] = num;
+      });
+
+      thiz.chartoption.series.push(innerseries);
+    };
+
+    thiz.fn.stagecolumn = function (typeinner) {
+      var innerseries, data, x;
+      x = {
+        type: 'value'
+      };
+
+      thiz.fn.setxAxis(x);  //设定x轴
+      thiz.fn.setyAxis(); //设定y轴
+
+      innerseries = thiz.fn.common(typeinner);
+      innerseries.type = 'bar';
+      innerseries.stack = '堆叠'; //堆叠关键属性
+      data = thiz.fn.typetodata(typeinner.en);
+      
+      data.forEach(function (num, index) {
+        innerseries.data[index] = num;
+      });
+
+      thiz.chartoption.series.push(innerseries);
+    };
+
+    thiz.fn.stagebar = function (typeinner) {
+      var innerseries, data, y;
+      y = {
+        type: 'value'
+      };
+
+      thiz.fn.setxAxis();  //设定x轴
+      thiz.fn.setyAxis(y); //设定y轴
+
+      innerseries = thiz.fn.common(typeinner);
+      innerseries.type = 'bar';
+      innerseries.stack = '堆叠'; //堆叠关键属性
+      data = thiz.fn.typetodata(typeinner.en);
+      
+      data.forEach(function (num, index) {
+        innerseries.data[index] = num;
+      });
+
+      thiz.chartoption.series.push(innerseries);
+    };
+
+    thiz.fn.arealine = function (typeinner) {
+      var innerseries, data;
+      innerseries = thiz.fn.common(typeinner);
+      innerseries.type = 'line';
+      innerseries.smooth = true;
+      innerseries.itemStyle = {normal: {areaStyle: {type: 'default'}}}; //面积图关键属性
+      data = thiz.fn.typetodata(typeinner.en);
+      
+      data.forEach(function (num, index) {
+        innerseries.data[index] = num;
+      });
+
+      thiz.chartoption.series.push(innerseries);
+    };
+    
+    /* 饼位置处理 */
+    thiz.fn.pies = function(){
+      
+      function Location(flag,pies){
+        if(flag){
+          switch(pies.length){
+            case 1:
+              pies[0].radius = '20%';
+              pies[0].center = ['20%','20%'];
+              break;
+            case 2:
+              pies[0].radius = '20%';
+              pies[0].center = ['20%','20%'];
+              pies[1].radius = '20%';
+              pies[1].center = ['50%','20%'];
+              break;
+            case 3:
+              pies[0].radius = '20%';
+              pies[0].center = ['20%','20%'];
+              pies[1].radius = '20%';
+              pies[1].center = ['50%','20%'];
+              pies[2].radius = '20%';
+              pies[2].center = ['80%','20%'];
+              break;
+          }
+        }else{
+          switch(pies.length){
+            case 1:
+              pies[0].radius = '55%';
+              pies[0].center = ['50%','60%'];
+              break;
+            case 2:
+              pies[0].radius = '40%';
+              pies[0].center = ['25%','60%'];
+              pies[1].radius = '40%';
+              pies[1].center = ['75%','60%'];
+              break;
+            case 3:
+              pies[0].radius = '20%';
+              pies[0].center = ['20%','60%'];
+              pies[1].radius = '20%';
+              pies[1].center = ['50%','60%'];
+              pies[2].radius = '20%';
+              pies[2].center = ['80%','60%'];
+              break;
+          }
+        }
+      }
+      
+      var flag = false, pies = [], series;
+      series = thiz.chartoption.series;
+      series.forEach(function(inner,index){
+        if(inner.type == 'pie') pies.push(inner);
+        else flag = true;
+      });
+      Location(flag, pies);
+    };
+
+    match = {
+      line: thiz.fn.line,
+      pie: thiz.fn.pie,
+      bar: thiz.fn.bar,
+      column: thiz.fn.column,
+      stagecolumn: thiz.fn.stagecolumn,
+      stagebar: thiz.fn.stagebar,
+      arealine: thiz.fn.arealine
+    };
+
+    thiz.fn.Init(match);
+    
+    thiz.fn.pies();
+  }
+
+  /* 雷达基类 */
+  function DefaultRadar(newType, modulemsg, modolmg) {
+    var thiz = this, match;
+    Base.call(thiz, newType, modulemsg, modolmg);
+    
+    thiz.fn.getmax=function(value){
+      var max;
+      var maxvalue=value[0];
+      var len = value.length; 
+       for (var i = 1; i < len; i++){   
+        if (value[i] > maxvalue) {      
+         maxvalue = value[i];   
+        } 
+       }  
+     max=Number(maxvalue);
+   
+      return max;
+    }
+
+    thiz.fn.setpolar = function () {
+      var x = thiz.fn.getx();
+      thiz.fn.rempolar();
+      thiz.chartoption.polar = [{
+        indicator: []
+      }];
+      var type = thiz.chartdata.type,data
+      x.forEach(function(name){
+          thiz.chartoption.polar[0].indicator.push({
+          text:name
+        });
+        })
+        
+      type.forEach(function(tinner,num){
+        data=thiz.fn.typetodata(tinner.en);
+        thiz.chartoption.polar[0].indicator.forEach(function(v){
+          v.max=thiz.fn.getmax(data);
+        })
+        console.log('maxdata:',data);
+      })
+    };
+
+    thiz.fn.rempolar = function () {
+      delete thiz.chartoption.polar;
+    };
+
+    thiz.fn.defaultR = function (typeinner) {
+      thiz.fn.setpolar(); 
+      var innerseries, data;
+      innerseries = thiz.fn.common(typeinner);
+      innerseries.type = 'radar';
+      data = thiz.fn.typetodata(typeinner.en);
+      innerseries.data.push({
+        value: data,
+        name: innerseries.cn
+      });
+      thiz.chartoption.series.push(innerseries);
+      zy.log(thiz.chartoption);
+      window.ss=thiz.chartoption
+    };
+
+    match = {
+      radar: thiz.fn.defaultR
+    };
+
+    thiz.fn.Init(match);
+  }
+
+  /* 散点基类 */
+  function DefaultScatter(newType, modulemsg, modolmg) {
+    var thiz = this, match;
+    // zy.log('newType=',newType);
+    // zy.log('modulemsg=',modulemsg);
+    // zy.log('modolmg=',modolmg);
+    Base.call(thiz, newType, modulemsg, modolmg);
+
+    thiz.fn.setxAxis = function () {
+      thiz.fn.remxAxis();
+      thiz.chartoption.xAxis = [{
+        type: 'value',
+        scale: true
+      }];
+    };
+
+    thiz.fn.remxAxis = function () {
+      delete thiz.chartoption.xAxis;
+    };
+    
+    thiz.fn.setdataZoom = function () {
+      thiz.fn.remdataZoom();
+      thiz.chartoption.dataZoom =  {
+        show: true,
+        start : 30,
+        end : 40
+      };
+    };
+
+    thiz.fn.remdataZoom = function () {
+      delete thiz.chartoption.dataZoom;
+    };
+
+    thiz.fn.setyAxis = function () {
+      thiz.fn.remyAxis();
+      thiz.chartoption.yAxis = [{
+        type: 'value',
+        scale: true
+      }];
+    };
+
+    thiz.fn.remyAxis = function () {
+      delete thiz.chartoption.yAxis;
+    };
+
+    // 默认处理
+    thiz.fn.defaultS = function (typeinner, typeindex) {
+      thiz.fn.setxAxis(); //添加X轴
+      thiz.fn.setyAxis(); //添加Y轴
+      thiz.fn.setdataZoom(); //添加缩放轴
+
+      var innerseries, data;
+      innerseries = thiz.fn.common(typeinner);
+      innerseries.type = 'scatter';
+      data = thiz.fn.typetodata(typeinner.en); //
+      
+      thiz.fn.drillback(innerseries, data, function(){
+        
+        // zy.log('innerseries=',innerseries);
+        // zy.log('data=',data);
+        data.forEach(function (datastr) {
+          innerseries.data.push(datastr.split(','));
+        });
+  
+        thiz.chartoption.series.push(innerseries);
+        zy.log(thiz.chartoption);
+      });
+    };
+    
+    //对结果集自行处理
+    thiz.fn.customS = function (typeinner, typeindex) {
+      thiz.fn.setxAxis(); //添加X轴
+      thiz.fn.setyAxis(); //添加Y轴
+      thiz.fn.setdataZoom(); //添加缩放轴
+      thiz.chartoption.legend.data = [];  //清空图例
+      
+      var innerseries;
+      innerseries = thiz.fn.common(typeinner);
+      innerseries.type = 'scatter';
+      
+      var _isBubble = false;  //气泡数据
+      if(thiz.chartdata.type[typeindex+2]){
+        var type1 = thiz.chartdata.type[typeindex+1]; //数组第一个元素
+        var type2 = thiz.chartdata.type[typeindex+2]; //数组第二个元素
+        var type3; //数组第三个元素
+        
+        if(thiz.chartdata.type[typeindex+3]){
+          _isBubble = true;
+          type3 = thiz.chartdata.type[typeindex+3]; //数组第三个元素
+        }
+        //循环数据结果集
+        thiz.chartdata.data.forEach(function(inner, index){
+          var _nameExist = false; //指标是否存在
+          var _refIndex;
+          thiz.chartoption.series.forEach(function(_inner, _index){
+            if(_inner.name == inner[typeinner.en]){
+              _nameExist = true;
+              _refIndex = _index;
+            }
+          });
+          if(_nameExist){
+            if(type3){
+              thiz.chartoption.series[_refIndex].data.push([inner[type1.en], inner[type2.en], inner[type3.en]]);
+            }else{
+              thiz.chartoption.series[_refIndex].data.push([inner[type1.en], inner[type2.en]]);
+            }
+          }else{
+            innerseries.name = inner[typeinner.en];
+            var tmp = $.extend(true,{},innerseries);
+            if(type3){
+              tmp.data.push([inner[type1.en], inner[type2.en], inner[type3.en]]);
+            }else{
+              tmp.data.push([inner[type1.en], inner[type2.en]]);
+            }
+            
+            thiz.chartoption.series.push(tmp);  //series
+            thiz.chartoption.legend.data.push(tmp.name);  //legend
+          }
+        });
+      }else{
+        zy.extend.msg(' 返回不正确的数据格式','w');
+        return false;
+      }
+    };
+
+    //路由 — 使用defaultS 或 customS
+    thiz.fn.routeS = function (typeinner, typeindex) {
+      var isCustom = false;
+      var _data = thiz.fn.typetodata(typeinner.en);
+      //检查是否是以逗号分隔的数据格式
+      _data.forEach(function(point, index){
+        if(point.trim() === ""){
+          return false;
+        }
+        var len = String(point).split(',').length;
+        if(len != 2 && len != 3){
+          isCustom = true;
+          return true;
+        }
+      });
+      if(isCustom){
+        thiz.fn.customS(typeinner, typeindex);
+      }else{
+        thiz.fn.defaultS(typeinner, typeindex);
+      }
+    };
+    match = {
+      scatter: thiz.fn.routeS
+    };
+
+    thiz.fn.Init(match);
+  }
+
+  /* 仪表盘基类 */
+  function DefaultGauge(newType, modulemsg, modolmg) {
+    var thiz = this, match;
+
+    Base.call(thiz, newType, modulemsg, modolmg);
+    
+    delete thiz.chartoption.legend;
+    delete thiz.chartoption.toolbox;
+
+    thiz.fn.settooltip = function () {
+      thiz.fn.remtooltip();
+      thiz.tooltip = {};
+    };
+
+    thiz.fn.remtooltip = function () {
+      delete thiz.tooltip;
+    };
+
+    thiz.fn.defaultG = function (typeinner) {
+
+      thiz.fn.settooltip();//添加tooltip
+
+      var innerseries, data;
+      innerseries = thiz.fn.common(typeinner);
+      data = thiz.fn.typetodata(typeinner.en);
+      innerseries.type = 'gauge';
+      innerseries.data.push({
+        value: data[0],
+        name: innerseries.cn
+      });
+
+      thiz.chartoption.series.push(innerseries);
+      zy.log(thiz.chartoption);
+    };
+
+    match = {
+      gauge: thiz.fn.defaultG
+    };
+
+    thiz.fn.Init(match);
+  }
+
+  /* 分类函数 */
+  function CheckClass(newType, modulemsg, modolmg) {
+    var flg, basetype, innertype, option;
+    console.log(newType.type);
+    basetype = newType.type[0].chart ? newType.type[0].chart.split(',')[0] : null;
+    nexttype = newType.type[1] ? (newType.type[1].dicttype ? newType.type[1].dicttype : newType.type[1].chart.split(',')[0]) : null;
+    if (basetype) {
+      if (match[basetype]) {
+        option = new match[basetype](newType, modulemsg, modolmg); //处理散点 or 仪表盘
+      }
+    } else {
+      if (match[nexttype]) {
+        option = new match[nexttype](newType, modulemsg, modolmg);//处理直角 or 雷达
+      }
+    }
+    return option;
+  }
+  
+  /* 数据格式检测 */
+  function DataTypeCheck(inner, data){
+    
+    console.log(inner, data);
+    
+    var match, type, flag = false;
+    
+    type = inner.type;
+    
+    /* 状态机 */
+    match = {
+      line: Default,
+      pie: Default,
+      bar: Default,
+      gauge: Default,
+      radar: Default,
+      scatter: Scatter
+    };
+    
+    function Default(){ //默认数据结构检测
+      data.forEach(function(point, index){
+        data[index] = Number(point);
+        if(data[index] != data[index]){ //NaN != NaN 
+          flag = true; 
+        }
+      });
+    }
+    
+    function Scatter(){ //散点数据结构检测
+      data.forEach(function(point, index){
+        if(point.trim() === ""){
+          return false;
+        }
+        var len = String(point).split(',').length;
+        if(len != 2 && len != 3){
+          flag = true;
+        }
+      });
+    }
+    
+    if(match[type]) match[type]();
+    if(flag) zy.extend.msg(inner.cn + ' 返回不正确的数据格式','w');
+    return flag;
+  }
+
+  /* Echarts 构造 也可用于内部重构 */
+  function Echart(newType, modulemsg, modolmg) {
+    
+    var chart, option,searchfield;
+    chart = echarts.init(con[0], 'macarons');
+    option = CheckClass(newType, modulemsg, modolmg);
+    searchfield=$('#simple_ele');
+    if(option){
+    }else{
+      zy.ui.msg('提示信息：','模型无图表类型信息！','w');
+      return;
+    }
+    console.log("option")
+    console.log(JSON.stringify(option.chartoption));
+    
+    //  2017.1.3 修改（echart因无类目出现程序错误）改为（生成错误提示信息） start
+    option.chartoption.series.forEach(function(inner){
+      if(inner.data.length > 1){
+        axisDataFlag = 0;
+      }
+    });
+    if(axisDataFlag === 0) {
+      // 判断x是否为类目轴
+      option.chartoption.xAxis.forEach(function(inner){
+        if(!inner.type || inner.type == 'category'){
+          axisMsg(inner);
+          return
+        }
+      });
+      // 判断y轴是否为类目轴
+      option.chartoption.yAxis.forEach(function(inner){
+        if(inner.type == 'category'){
+          axisMsg(inner);
+          return
+        }
+      });
+    }
+    // 类目轴的data数组为空则提示信息
+    function axisMsg(inner) {
+      if (inner.data.length > 1){
+      }else{
+        zy.ui.msg('提示信息：','模型无类目信息！','w');
+        option.chartoption.series.forEach(function(inner){
+          inner.data = [];
+        });
+      }
+    }
+    // end
+    
+    // zy.log('chart option=',option);
+    chart.setOption(option.chartoption);
+    con.unbind('resize').resize(function () {
+      chart.resize();
+    });
+
+    window.ww = chart;
+
+    if(module){
+      chart.on('click', function (param) {
+        console.log(param);
+        var index, series;
+        index = param.seriesIndex;
+        series = option.chartoption.series[index];
+        if(series.next && series.next != 'undefined'){
+          var o = {
+            modid: series.next,
+            searchparam: {}
+          };
+
+          o.searchparam[series.en] = param.value;
+          if(!option.chartdata.type[0].chart){
+            o.searchparam[option.chartdata.type[0].en] = param.name;
+            if(searchfield.length>0){
+              o.searchparam[$($('#simple_ele').children().children()[1]).children().attr('name')]=$($('#simple_ele').children().children()[1]).children().val()
+            }
+
+          }
+          console.log('before o',o)
+          module.fn.DrillDown(o);
+        }
+      });
+
+      module.fn.SetSelf({
+        chart: option
+      });
+    }
+  }
+
+  return Echart(newType, modulemsg, modolmg);
+}
+  
+</script>
+</body>
+</html>

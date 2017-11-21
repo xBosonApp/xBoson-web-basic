@@ -1,0 +1,28 @@
+<div class="row">
+  <div id="instance_dummy" class="col-xs-12 col-sm-12 col-md-12 col-lg-12"></div>
+</div>
+<script type="text/javascript">
+  (function(){
+    
+    //var url = 'http://'+ window.location.host+'/trs/yy.html';
+    var url = 'http://'+ location.host+'/eeb/ui/index.htm'; //+zy.g.comm.org+'&openid='+zy.g.comm.openid;
+    var pym_sc = pym.Parent('instance_dummy', url, { renderCallback: drawGraphic });
+    var jwin = $(window);
+    var jframe = $('#instance_dummy iframe');
+    jframe.attr('scrolling', 'yes');
+    
+    function drawGraphic(width) {
+      // DO NOT REMOVE : GLOBAL FUNCTIONS!
+      pageSetUp();
+      pym_sc.sendHeightToParent();
+    }
+    
+    
+    jwin.on('resize', reset_height);
+    reset_height();
+    
+    function reset_height() {
+      jframe.height(jwin.height() - 120);
+    }
+  })();
+</script>

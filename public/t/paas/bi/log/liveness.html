@@ -1,0 +1,182 @@
+<link rel="stylesheet" href="lib/js/plugin/datatables/media/css/jquery.dataTables.css" />
+	<div class="row"><section class="col-sm-12"><h1>活跃度</h1></section></div>
+<section id="widget-grid" class="">
+    <div class="row">
+		  <article class="col-sm-12">
+			<div class="jarviswidget" id="liveness_jsw" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+			<header>
+					<span class="widget-icon"> <i class="glyphicon glyphicon-stats txt-color-darken"></i> </span>
+					<h2>昨日关键指标</h2>
+				</header>
+				<div class="no-padding">
+					<div class="jarviswidget-editbox">
+					  test
+					</div>
+					<div class="widget-body">
+              <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 table-bordered ">
+                <h5>DAU(日活跃账号数)</h5>
+                <div class="txt-color-blue hidden-sm hidden-md">
+                  <h6 id="daylive"></h6>
+                </div>
+                <span class="easy-pie-title">
+                  日
+                  <i class="fa  fa-arrow-up icon-color-bad" id="day-icon"></i>
+                  <code id="dayChainlive"></code>
+                </span>
+              </div>
+              <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 table-bordered ">
+                <h5>WAU(周活跃账号数)</h5>
+                <div class="txt-color-blue hidden-sm hidden-md">
+                  <h6 id="weeklive"></h6>
+                </div>
+                <span class="easy-pie-title">
+                  周
+                  <i class="fa fa-arrow-up icon-color-bad" id="week-icon"></i>
+                  <code id="weekChainlive">1</code>
+                </span>
+              </div>
+              <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 table-bordered ">
+                <h5>MAU(月活跃账号数)</h5>
+                <div class="txt-color-blue hidden-sm hidden-md">
+                  <h6 id="monthlive"></h6>
+                </div>
+                <span class="easy-pie-title">
+                  月
+                  <i class="fa  fa-arrow-up icon-color-bad" id="month-icon"></i>
+                  <code id="monthChainlive"></code>
+                </span>
+              </div>
+              <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 table-bordered ">
+                <h5>DAU/MAU</h5>
+                <div class="txt-color-blue hidden-sm hidden-md">
+                  <h6 id="DMlive"></h6>
+                </div>
+                <span class="easy-pie-title">
+                  日/月
+                  <i class="fa  fa-arrow-up icon-color-bad" id="DM-icon"></i>
+                  <code id="DMChainlive"></code>
+                </span>
+              </div>
+					</div>
+				</div>
+			</div>
+		</article>
+    </div>
+	<div class="row">
+	<article class="col-sm-12">
+				<div class="jarviswidget" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+							<header>
+				  <span class="widget-icon"> </span>
+					<h2></h2>
+					<div class="widget-toolbar"> 
+					   <div class="row">
+      		    <section class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          			<span> <span class="onoffswitch-title">条件筛选</span> <span class="onoffswitch">
+          			<input type="checkbox" name="time_interval" class="onoffswitch-checkbox" id="time_interval">
+          			<label class="onoffswitch-label" for="time_interval"> 
+          			<span class="onoffswitch-inner" data-swchon-text="指定" data-swchoff-text="快捷"></span> 
+          			<span class="onoffswitch-switch"></span> </label> </span> </span>
+          		</section>
+            </div>	
+					</div>	
+				</header>
+  		  <form id="form_liveness" class="form_xzqujl smart-form" method="post" onsubmit="return false;" >
+  		    <fieldset>
+      			<div id="liveness_datapicker" class="row form-inline">
+      			         <section class="col col-2" id="nidaye" hidden="true">
+                <label class="input">
+                  <input type="hidden" id="nidaye" name="liveness_dept1" placeholder="下属机构"/>
+                </label>
+    		      </section>
+              <section class="col col-2">
+                <label class="input">
+                  <input type="text" index="dt_from"  placeholder="开始时间" value=now()/>        
+                </label>  
+              </section>
+              <section class="col col-2">
+              <label class="input">
+              <input type="text" index="dt_to"  placeholder="结束时间" value=now()/>
+              </label>
+              </section>
+     
+              <section class="col col-2">
+                <button class="btn btn-info btn-sm _search" type="submit" id="liveness_submit"><i class="fa fa-search fa-1"></i>&emsp;查 询&emsp;</button>
+                </section>
+            </div>
+            <div id='liveness_customdt' class="row">
+              <section class="col col-2" id="nidaye1" hidden="true">
+                <label class="input">
+                  <input type="hidden"  name="liveness_dept" placeholder="下属机构"/>
+                </label>
+    		      </section>
+              <section class="btn-group col">
+                <a class="btn btn-default btn-sm" href="javascript:void(0);" data-tag='-7' click='data_get()'>7天</a>
+                <a class="btn btn-default btn-sm" href="javascript:void(0);" data-tag='-14' click='data_get()'>14天</a>
+                <a class="btn btn-default btn-sm" href="javascript:void(0);" data-tag='-30' click='data_get()'>30天</a>
+              </section>
+            </div>
+    		  </fieldset> 
+        </form> 
+        </div>
+        </article>
+    </div>
+    
+    
+    
+		<div class="row">
+		<article class="col-sm-12">
+			<div class="jarviswidget" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+				<header>
+					<span class="widget-icon"> <i class="glyphicon glyphicon-stats txt-color-darken"></i> </span>
+					<h2>统计数据</h2>
+					<ul class="nav nav-tabs pull-right in" id="myTab">
+						<li class="active">
+							<a data-toggle="tab" href="#s1"><i class="fa fa-clock-o"></i> <span class="hidden-mobile hidden-tablet"></span></a>
+						</li>
+					</ul>
+				</header>
+				<div class="no-padding">
+					<div class="jarviswidget-editbox"></div>
+					<div class="widget-body">
+						<div id="myTabContent" class="tab-content">
+							<div class="tab-pane fade active in padding-10 no-padding-bottom" id="s1">
+								<div class="row no-space">
+									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+										<span class="demo-liveupdate-1"> <span class="onoffswitch-title">趋势图</span> 
+											 </span>
+										<div id="updating-chart" class="chart-large txt-color-blue"></div>
+
+									</div>
+									<div id='liveness_table' class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div id="chart_table_con">
+                    </div>
+                    <div id="chart_table_template" style="display:none;">
+                      <div class="row" style="padding-right: 15px">
+                        <!--<button index="outData" class="btn btn-default btn-xs pull-right">导出数据</button>-->
+                        <!--<button index="closeTable" class="btn btn-default btn-xs pull-right closed">关闭</button>-->
+                      </div>
+                      <div class="dataTables_wrapper" >
+                        <table id="chart_table" class="table table-bordered table-striped"></table>
+                        <table id ="chart_table_ods" class="table table-bordered table-striped"></table>
+                      </div>
+                      <div id="chart_table_slider_bar"></div>
+                    </div>  
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</article>
+	</div>
+</section>
+<script src="lib/js/plugin/datatables/media/js/jquery.dataTables.min.js"> </script>
+<script src="bi/echarts.js"></script>
+<script src="bi/html/table_custom.js"></script>
+<script src="bi/js/datetime_custom.js"></script>
+<script src="bi/log/liveness.js"></script>
+<script>
+  pageSetUp();
+  var liveNess  = new liveNess();
+</script>

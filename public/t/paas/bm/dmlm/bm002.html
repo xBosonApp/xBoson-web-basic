@@ -1,0 +1,1105 @@
+<div class="modal fade" id="bm_sys_md_mm002_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+     data-backdrop="static">
+  <div class="modal-dialog" style="width:70%">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title">业务模型(<span></span>)</h4>
+      </div>
+      <div class="modal-body no-padding">
+        <form onsubmit="return false;" class="smart-form">
+          <fieldset>
+            <!--第一部分-->
+            <header><i class="fa-fw fa fa-pencil-square-o"></i>基本信息 <i class="fa fa-fw fa-minus-circle txt-color-red" style="cursor:pointer" id="collapse_general_info" title="折叠"></i></header>
+            <div name="bm_general_info">
+              <div class="row">
+                <section class="col col-4">
+                  <label class="label">自定义ID</label>
+                  <label class="input col col-3"></label>
+                  <label class="input">
+                    <input class="col col-3" name ="definite" placeholder="自定义"/>
+                  </label>
+                </section>
+                <section class="col col-4">
+                  <label class="label">完整ID</label>
+                  <label class="input">
+                    <input type="text" name="modolcd"  readonly='readonly'>
+                  </label>
+                </section>
+                <section class="col col-4">
+                  <label class="label">模型名称</label>
+                  <label class="input">
+                    <input type="text" name="modolnm" placeholder="模型名称">
+                  </label>
+                </section>
+              </div>
+              <div class="row">
+                <section class="col col-4">
+                  <label class="label">SQL类型</label>
+                  <label class="input">
+                    <input type="hidden" name="sqltype" data-type="select2" placeholder="sql类型"/>
+                  </label>
+                </section>
+                <section class="col col-4">
+                  <label class="label">数据源</label>
+                  <label class="input">
+                    <input type="hidden" name="did" data-type="select2" placeholder="did"/>
+                  </label>
+                </section>
+                <section class="col col-4">
+                  <label class="label">物理表</label>
+                  <label class="input">
+                   <input type="hidden" name="tablenm" data-type="select2" placeholder="物理表"/>
+                 </label>
+                </section>
+              </div>
+              <div class="row">
+                <section class="col col-4">
+                  <label class="label">用于动态UI</label>
+                  <label class="input">
+                    <input type="hidden" name="isui" data-type="select2" placeholder="用于动态UI"/>
+                  </label>
+                </section>
+                <section class="col col-4">
+                  <label class="label">状态</label>
+                  <label class="input">
+                    <input type="hidden" name="status" data-type="select2" placeholder="状态"/>
+                  </label>
+                </section>
+              </div>
+              <div>
+                <section>
+                  <label class="label">说明</label>
+                  <label class="textarea">
+                    <textarea rows="2" name="mark" placeholder="说明">
+                    </textarea>
+                  </label>
+                </section>
+              </div>
+            </div>
+            <div id="tochange">
+              <!--项目-->
+              <div id="template" style="display:none;">
+                <div class="row" id="pro">
+                  <section class="col">
+                    <header><i class="fa-fw fa fa-pencil-square-o"></i>项目 <i class="fa fa-plus" style="cursor:pointer" id="add"></i> <i class="fa fa-fw fa-minus-circle txt-color-red" style="cursor:pointer" id="collapse_item" title="折叠"></i></header>
+                  </section>
+                </div>
+                <div id="prorow"></div>
+              </div>
+              <!--where条件-->
+              <div id="template2" style="display:none;">
+                <div class="row" id="whe">
+                  <section class="col">
+                    <header><i class="fa-fw fa fa-pencil-square-o"></i>WHERE 条件<i class="fa fa-plus" style="cursor:pointer" id="add"></i> <i class="fa fa-fw fa-minus-circle txt-color-red" style="cursor:pointer" id="collapse_whe" title="折叠"></i></header>
+                  </section>
+                </div>
+                <div id="wherow"></div>
+                <div id="bm_whearea" class="row">
+                  <!--style="padding:0 13px 0 13px;"-->
+                  <section>
+                    <label class="label">手动编辑<input type="checkbox" id="editornot"></label>
+                    <lable class="textarea">
+                      <textarea readonly="readonly" name="sqlwhere">
+                      </textarea>
+                    </lable>
+                  </section>
+                </div>
+              </div>
+            </div>
+            
+            <!--第四部分-->
+            <!--sql语句-->
+            <div class="row">
+              <section class="col col-md-12">
+                <header><i class="fa-fw fa fa-pencil-square-o"></i>SQL <button id="build_sql" class="btn btn-primary">&nbsp;预览&nbsp;</button></header>
+                <label name="bm_sql_textarea" class="textarea">
+                  <textarea readonly="readonly" name="sqltext">
+                    
+                  </textarea>
+                </label>
+              </section>
+            </div>
+            <!--sql参数-->
+            <div class="row">
+              <section id="_sql" class="col col-10">
+                <header><i class="fa-fw fa fa-pencil-square-o"></i>
+                  SQL 语句参数 (按参数顺序) <i class="fa fa-fw fa-minus-circle txt-color-red" style="cursor:pointer" id="collapse_sqlparam" title="折叠"></i>
+                </header>
+              </section>
+            </div>
+          </fieldset>
+          <footer>
+            <button class="btn btn-default" data-dismiss="modal">取消</button>
+            <button class="btn btn-primary" name="bm002_submit">保存</button>
+          </footer>
+        </form>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+
+<script type="text/javascript">
+
+var _bm_sys_md_mm002_modal = function(typecd,modolcd,cb){
+  
+  var Modal = $('#bm_sys_md_mm002_modal');
+  var Form = $('#bm_sys_md_mm002_modal form');
+  var Status = $('#bm_sys_md_mm002_modal [name=status]');
+  var SQLtype = $('#bm_sys_md_mm002_modal [name=sqltype]');
+  var IsUI = $('#bm_sys_md_mm002_modal [name=isui]');
+  var Table = $('#bm_sys_md_mm002_modal [name=tablenm]');
+  var Did = $('#bm_sys_md_mm002_modal [name=did]');
+  var Modolcd = $('#bm_sys_md_mm002_modal [name=modolcd]');
+  var Definite = $('#bm_sys_md_mm002_modal [name=definite]');
+  var SQLtext = $('#bm_sys_md_mm002_modal [name=sqltext]');
+  var Title = $('#bm_sys_md_mm002_modal .modal-title span');
+  
+  var BuildSql = $('#bm_sys_md_mm002_modal #build_sql');
+  var Submit = $('#bm_sys_md_mm002_modal [name=bm002_submit]');
+  
+  var sqltext,sqlparams;
+  
+  function InitTemplate(collist){
+    
+    function ProRow(row){
+      
+      var target = $('#bm_sys_md_mm002_modal #prorow');
+      
+      var div = $('<div>').addClass('row');
+      var label = $('<label>').addClass('label');
+      var section = $('<section>').addClass('col col-5');
+      var section2 = $('<section>').addClass('col col-1');
+      var section3 = $('<section>').addClass('col col-5').css('margin-left','-15px');
+      var section4 = $('<section>').addClass('col col-1');
+      var select = $('<input>').attr({
+        name:'nm'
+      })
+      
+      // var checkBox = $('<input>').attr({
+      //   type:'checkbox'
+      // });
+      var checkBox = $('<label class="toggle state-error" style="margin-left: -30px"><input type="checkbox" name="checkbox-toggle"><i data-swchoff-text="预设" data-swchon-text="参数"></i></label>')
+      var inputForCheckBox = $('<input>').attr({
+        name:'val',
+        type:'input'
+      });
+      var apiFuncSelect = $('<input>').attr({
+        name:'api_func',
+        type:'hidden',
+        'data-type':'select2',
+        placeholder: 'API方法'
+      });
+      
+      var remBtn = $('<h4><i class="fa fa-fw fa-times-circle txt-color-red" style="cursor:pointer;"></i></h4>');
+      
+      if(row.flag == '1'){
+        checkBox.find('input').prop('checked',true);
+        inputForCheckBox.hide();
+        apiFuncSelect.show();
+      }else{
+        checkBox.find('input').prop('checked',false);
+        inputForCheckBox.show();
+        apiFuncSelect.hide();
+      }
+      checkBox.find('i').click(function(){
+        var $this = $(this);
+        if($this.siblings('input').prop('checked')){
+          inputForCheckBox.show();
+          apiFuncSelect.prev().hide();
+        }
+        else {
+          inputForCheckBox.hide();
+          apiFuncSelect.prev().show();
+        }
+      });
+      inputForCheckBox.val(row.value);
+      
+      remBtn.click(function(){
+        var t = $(this).closest('div');
+        t.remove();
+      })
+      
+      var LaForSel = label.clone();
+      var LaForChe = $('<label>').addClass('input');
+      
+      section.append(LaForSel.append(select));
+      section2.append(checkBox);
+      section3.append(LaForChe.append(inputForCheckBox)).append(apiFuncSelect);
+      section4.append(remBtn);
+      
+      div.append(section).append(section2).append(section3).append(section4);
+      
+      
+      
+      target.append(div);
+      
+      select.zySelectCustomData('', false, {
+        width: '100%',
+        allowClear : false
+      }, collist);
+      row.column_name && select.select2('val',row.column_name);
+      
+      //api函数select2
+      apiFuncSelect.zySelectCustomData('', false, {
+        width: '100%',
+        allowClear : true
+      }, [{id:'uuid', name: 'uuid'},{id:'currentTimeString', name: 'currentTimeString'},{id:'nextId', name: 'nextId'},{id:'getUserIdByOpenId', name: 'getUserId'}]);
+      row.api_func && apiFuncSelect.select2('val',row.api_func);
+    }
+    
+    function WheRow(row){
+      
+      var target = $('#bm_sys_md_mm002_modal #wherow');
+      
+      var div = $('<div>').addClass('row');
+      var label = $('<label>').addClass('label');
+      var section = $('<section>').addClass('col col-2');
+      var section2 = $('<section>').addClass('col col-1');
+      var section3 = $('<section>').addClass('col col-2').css('margin-left','-15px');
+      var section4 = $('<section>').addClass('col col-2').css('margin-left','-15px');
+      var section5 = $('<section>').addClass('col col-1').css('margin-left','-40px');
+      var section6 = $('<section>').addClass('col col-2').css('margin-left','-15px');
+      var section7 = $('<section>').addClass('col col-2').css('margin-left','-15px');
+      var section8 = $('<section>').addClass('col col-1');
+      var select = $('<input>').attr({
+        name:'nm',
+        type :'input'
+      });
+      var contition = $('<input>').attr({
+        name:'contition',
+        type:'input'
+      });
+      
+      contition.change(function(){
+        var $this = $(this);
+        var $val = $(this).val();
+        
+        var flg1 = $this.closest('div.row').find('[name=first]').prop('checked');
+        
+        var flg2 = $this.closest('div.row').find('[name=second]').prop('checked');
+        
+        if($val == '14' || $val == '15'){
+          $this.closest('section').next().hide().next().hide().next().hide().next().hide();
+          return false;
+        }
+        
+        if($val == '12' || $val == '13'){
+          $this.closest('section').next().show().next().show().next().show().next().show();
+          inputForCheckBox.trigger('_change',[flg1]);
+          inputForCheckBox2.trigger('_change',[flg2]);
+          return false;
+        }
+        
+        $this.closest('section').next().show().next().show().next().hide().next().hide();
+        inputForCheckBox.trigger('_change',[flg1]);
+        
+        // $this.closest('div.row').siblings(':last').find('textarea').trigger('_change');
+      });
+      
+      section6.append(label.clone().append(contition));
+      
+      var btnGro2 = $('<div class="btn-group" name="and" _click="AND"><button data-toggle="dropdown" class="btn btn-primary btn-xs dropdown-toggle">And/Or<span class="caret"></span></button><ul class="dropdown-menu"><li><a href="javascript:void(0);">And</a></li><li><a href="javascript:void(0);">Or</a></li></ul></div>');
+      
+      if(row){
+        btnGro2.attr('_click',row.andor);
+      }
+      
+      var AndBtn = btnGro2.find('a:eq(0)');
+      var OrBtn = btnGro2.find('a:eq(1)');
+      
+      // 检查这一行的where条件是否输入完整
+      function checkInner(row){
+        var val1 = row.find('[name=val]');
+        var val2 = row.find('[name=val2]');
+        
+        if(val1.is(':visible') && val1.val() == '') return zy.extend.msg('请填写预设值','i');
+        if(val2.is(':visible') && val2.val() == '') return zy.extend.msg('请填写预设值','i');
+        
+        return true;
+      }
+      
+      AndBtn.click(function(){
+        var $this = $(this);
+        if(checkInner($this.closest('div.row'))){
+          $this.closest('.btn-group').attr('_click','AND');
+          $this.closest('#wherow').siblings(':last').find('textarea').trigger('_change');
+        }
+      });
+      
+      OrBtn.click(function(){
+        var $this = $(this);
+        if(checkInner($this.closest('div.row'))){
+          $this.closest('.btn-group').attr('_click','OR');
+          $this.closest('#wherow').siblings(':last').find('textarea').trigger('_change');
+        }
+      });
+      
+      // 预设/参数 切换按钮1
+      var checkBox = $('<label class="toggle state-error" style="margin-left: -30px"><input type="checkbox" name="first"><i data-swchoff-text="预设" data-swchon-text="参数"></i></label>');
+      // 预设/参数 切换按钮2
+      var checkBox2 = $('<label class="toggle state-error" style="margin-left: -30px"><input type="checkbox" name="second"><i data-swchoff-text="预设" data-swchon-text="参数"></i></label>');
+
+      // 预设值1
+      var inputForCheckBox = $('<input>').attr({
+        name:'val',
+        type: 'input'
+      });
+      // 预设值2
+      var inputForCheckBox2 = $('<input>').attr({
+        name:'val2',
+        type: 'input'
+      });
+      
+      inputForCheckBox.bind('_change',function(e,flag){
+        var $this = $(this);
+        if(flag) $this.closest('section').hide();
+        else $this.closest('section').show();
+      });
+      
+      inputForCheckBox2.bind('_change',function(e,flag){
+        var $this = $(this);
+        if(flag) $this.closest('section').hide();
+        else $this.closest('section').show();
+      });
+      
+      var remBtn = $('<h4><i class="fa fa-fw fa-times-circle txt-color-red" style="cursor:pointer;"></i></h4>');
+      
+      var flagA = row.flag?row.flag.split(','):[];
+      
+      switch(flagA.length){
+        case 1:
+          checkBox.find('input').prop('checked',Boolean(Number(flagA[0])));
+          inputForCheckBox.trigger('_change',[Number(flagA[0])]);
+          inputForCheckBox.val(row.value[0]);
+          break;
+        case 2:
+          checkBox.find('input').prop('checked',Boolean(Number(flagA[0])));
+          checkBox2.find('input').prop('checked',Boolean(Number(flagA[1])));
+          inputForCheckBox.trigger('_change',[Number(flagA[0])]);
+          inputForCheckBox2.trigger('_change',[Number(flagA[1])]);
+          if(row.value.length == 2){
+            inputForCheckBox.val(row.value[0]);
+            inputForCheckBox2.val(row.value[1]);
+          }
+          if(row.value.length == 1){
+            if(inputForCheckBox.is(':visible')){
+              inputForCheckBox.val(row.value[0]);
+            }else{
+              inputForCheckBox2.val(row.value[0]);
+            }
+          }
+          break;
+      }
+      
+      remBtn.click(function(){
+        var $this = $(this);
+        var t = $(this).closest('div');
+        var whe = $this.closest('#wherow');
+        t.remove();
+        whe.siblings(':last').find('textarea').trigger('_change');
+      })
+      
+      var LaForSel = label.clone();
+      var LaForChe = label.clone();
+      
+      section.append(LaForSel.append(select));
+      section2.append(checkBox);
+      section8.append(checkBox2);
+      section3.append($('<lable>').addClass('input').append(inputForCheckBox));
+      section7.append($('<lable>').addClass('input').append(inputForCheckBox2));
+      section4.append(btnGro2);
+      section5.append(remBtn);
+      
+      div.append(section).append(section6).append(section2).append(section3).append(section8).append(section7).append(section4).append(section5);
+      
+      target.append(div);
+      
+      checkBox.find('i').click(function(){
+        var $this = $(this);
+        var flag = $this.siblings('input').prop('checked');
+        inputForCheckBox.trigger('_change',[!flag]);
+        // 更新文本区内容
+        Modal.find('[name=sqlwhere]').trigger('_change');
+      });
+      
+      checkBox2.find('i').click(function(){
+        var $this = $(this);
+        var flag = $this.siblings('input').prop('checked');
+        inputForCheckBox2.trigger('_change',[!flag]);
+        // 更新文本区内容
+        Modal.find('[name=sqlwhere]').trigger('_change');
+      });
+      
+      zy.cache.initDicts('ZR.0049', function(){
+        contition.zySelect('ZR.0049', false, {
+          width: '100%',
+          allowClear:false
+        });
+        contition.select2('val',row.condition);
+        contition.trigger('change');
+      });
+
+      select.zySelectCustomData('', false, {
+        width: '100%',
+        allowClear : false
+      }, collist);
+      select.select2('val',row.column_name);
+      
+      // 输入值改变的时候更新where条件文本区
+      select.add(contition).add(inputForCheckBox).add(inputForCheckBox2).change(function(){
+        Modal.find('[name=sqlwhere]').trigger('_change');
+      });
+    }
+    
+    function SqlRow(row){
+      
+      var target = $('#bm_sys_md_mm002_modal #_sql');
+      
+      var div = $('<div>').addClass('row').css('margin','0px');
+      var label = $('<label>').addClass('input');
+      var section = $('<section>').addClass('col col-6');
+      var section2 = $('<section>').addClass('col col-6');
+      
+      var inputForCol = $('<input>').attr({
+        'readonly':'readonly',
+        'name':'c_nm'
+      });
+      
+      var inputForNm = $('<input>').attr({
+        'readonly':'readonly',
+        'name':'nm'
+      });
+      
+      section.append(label.clone().append(inputForCol));
+      section2.append(label.clone().append(inputForNm));
+      div.append(section).append(section2);
+      
+      target.after(div);
+      
+      inputForCol.zySelectCustomData('', false, {
+        width: '100%',
+        allowClear : false
+      }, collist);
+      row.column_name && inputForCol.select2('val',row.column_name);
+      row.name && inputForNm.val(row.name);
+    }
+    
+    // 事件等
+    var Pro = $('#template');
+    var Whe = $('#template2');
+    
+    var Padd = $('#template #add');
+    var Wadd = $('#template2 #add');
+    var Warea = $('#template2 textarea');
+    var editornot = $('#template2 #editornot');
+    
+    Padd.click(function(){
+      var target = $(this).closest('div.row');
+      ProRow(target);
+    });
+    
+    editornot.unbind('change').bind('change',function(){
+      var $this = $(this);
+      var flg = $this.prop('checked');
+      
+      if(flg){
+        $this.closest('div.row').find('textarea').removeAttr('readonly');
+      }else{
+        $this.closest('div.row').find('textarea').attr('readonly','readonly');
+        // 如果内容改变了，提示是否重新生成
+        var _tmp = getWheCont();
+        if(_tmp != $this.closest('div.row').find('textarea').val()){
+          // 为where条件添加遮罩层
+          zy.ui.layer.mask(Modal.find('#wherow'));
+          // 弹出框提示
+          zy.ui.mask('提示信息', '是否重新生成where条件？',function sure(){
+            $this.closest('div.row').find('textarea').trigger('_change');
+          },function cancel(){
+          },{
+            modal:false,
+            close: function(){
+              // 清除where条件遮罩层
+              zy.ui.layer.clearMask(Modal.find('#wherow'));
+            }
+          });
+        }
+      }
+    });
+    
+    
+    Wadd.click(function(){
+      var target = $(this).closest('div.row');
+      WheRow(target)
+    })
+    
+    // 生成where条件内容
+    function getWheCont(){
+      var target = Modal.find('#wherow').children();
+      var result = [];
+      target.each(function(i,row){
+        var $row = $(row);
+        if($row.find('[name=and]').attr('_click')){
+          var nm = $row.find('[name=nm]').val();
+          // sql条件select2选择的数据对象
+          var sql_con = $row.find('[name=contition]').select2('data');
+          var con;
+          if(sql_con){
+            con = sql_con.name;
+          }else{
+            return true;
+          }
+          
+          var cl = $row.find('[name=and]').attr('_click');
+          var check1 = $row.find('[name=first]');
+          var check2 = $row.find('[name=second]');
+          
+          var is_pre_val1 = $row.find('[name=val]').is(':visible');   // check1是预设值
+          var is_pre_val2 = $row.find('[name=val2]').is(':visible');  // check2是预设值
+          var val,val2;
+          
+          if($('[name=val]').is(':visible')){
+            val = $row.find('[name=val]').val();
+          }
+          
+          if($('[name=val2]').is(':visible')){
+            val2 = $row.find('[name=val2]').val();
+          }
+          
+          // 四种情况
+          // 两个都是预设值
+          if(is_pre_val1 && is_pre_val2){
+            if(check1.is(':visible') && check2.is(':visible')){
+              var str = nm + ' ' + con + ' \'' + val + '\' AND \'' + val2 +'\'';
+            }
+            if(check1.is(':visible') && !check2.is(':visible')){
+              var str = nm + ' ' + con + ' \'' + val + '\'';
+            }
+            if(!check1.is(':visible')){
+              var str = nm + ' ' + con;
+            }
+          }
+          // 第一个是预设值，第二个是参数
+          else if(is_pre_val1 && !is_pre_val2){
+            if(check1.is(':visible') && check2.is(':visible')){
+              var str = nm + ' ' + con + ' \'' + val + '\' AND {' + nm + '}';
+            }
+            if(check1.is(':visible') && !check2.is(':visible')){
+              var str = nm + ' ' + con + ' \'' + val + '\'';
+            }
+            if(!check1.is(':visible')){
+              var str = nm + ' ' + con;
+            }
+          }
+          //  第一个是参数，第二个是预设值
+          else if(!is_pre_val1 && is_pre_val2){
+            if(check1.is(':visible') && check2.is(':visible')){
+              var str = nm + ' ' + con + ' {' + nm + '} AND \'' + val2 + '\'';
+            }
+            if(check1.is(':visible') && !check2.is(':visible')){
+              var str = nm + ' ' + con + ' {' + nm + '}';
+            }
+            if(!check1.is(':visible')){
+              var str = nm + ' ' + con;
+            }
+          }
+          // 第一个是参数，第二个是参数
+          else if(!is_pre_val1 && !is_pre_val2){
+            if(check1.is(':visible') && check2.is(':visible')){
+              var str = nm + ' ' + con + ' {' + nm + '1} AND {' + nm + '2}';
+            }
+            if(check1.is(':visible') && !check2.is(':visible')){
+              var str = nm + ' ' + con + ' {' + nm + '}';
+            }
+            if(!check1.is(':visible')){
+              var str = nm + ' ' + con;
+            }
+          }
+          
+          if(result.length == 0) result.push(str);
+          else result.push(cl + ' ' +str);
+        }
+      });
+      return result.join(' ');
+    }
+    
+    Warea.bind('_change',function(){
+      var $this = $(this);
+      $this.val(getWheCont());
+    });
+    
+    return {
+      addPro : ProRow,
+      addWhe : WheRow,
+      addSql : SqlRow
+    }
+  }
+  
+  function HaderComm(result){
+    var t = result.modolcd.split('.');
+    result.definite = t[t.length - 2];
+  }
+  
+  function HaderData(jsondata,control){
+    var whearea = $('#tochange textarea');
+    var pro = jsondata.comm_fields;
+    var whe = jsondata.wherearea;
+    
+    $.each(pro,function(_i,row){
+      control.addPro(row);
+    });
+    
+    $.each(whe.params,function(_i,row){
+      control.addWhe(row);
+    });
+    
+    whearea.val(whe.content);
+    if(whe.chkbox=="1"){
+      $('#editornot').prop('checked','checked');
+      whearea.removeAttr('readonly');
+    }
+  }
+  
+  function HaderSql(sqlparams,control){
+    $.each(sqlparams,function(_i,row){
+      control.addSql(row);
+    })
+  }
+  
+  function GetFromServer(control){
+    if(modolcd){
+      zy.extend.get({
+        app:'c770045becc04c7583f626faacd3b456',
+        mod:'dmlm',
+        apinm:'getbm002upd'
+      },function(msg){
+        HaderComm(msg.result[0]);
+        Form.json2form(msg.result[0]);
+        SQLtype.trigger('change');
+        Did.trigger('change');
+        Form.json2form(msg.result[0]);
+        sqlparams = msg.result[0].sqlparams;
+        sqltext = msg.result[0].sqltext;
+        msg.result[0].jsondata && HaderData(JSON.parse(msg.result[0].jsondata),control);
+        msg.result[0].sqlparams && HaderSql(JSON.parse(msg.result[0].sqlparams),control);
+      },{modolcd:modolcd})
+    }else{
+      SQLtype.trigger('change');
+    }
+  }
+  
+  function init(cb){
+    //清空sqltype本地存储
+    var ls=zy.cache.get('_mdm_dict', 'ls');
+    //ls.remove('ZR.0054');
+    //异步计数 后期不建议使用
+    var async = zy.extend.async(3);
+    var done = async(function(result){
+      cb&&cb(result);
+    });
+    
+    zy.cache.initDicts('ZR.0001,ZR.0054,ZR.0045', function(){
+      Status.zySelect('ZR.0001', false, {
+        width: '100%',
+        allowClear : false
+      });
+      Status.select2('val','1');
+      SQLtype.zySelect('ZR.0054', false, {
+        width: '100%',
+        allowClear : false
+      });
+      SQLtype.select2('val', 'I');
+      IsUI.zySelect('ZR.0045', false, {
+        width: '100%',
+        allowClear : false
+      });
+      IsUI.select2('val', '0');
+      done();
+    });
+    
+    zy.extend.get({
+      app:'c879dcc94d204d96a98a34e0b7d75676',
+      mod:'tableandindex',
+      apinm:'datasource'
+    },function(msg){
+      Did.zySelectCustomData('', false, {
+        width: '100%',
+        allowClear : false
+      }, msg.data);
+      Did.select2('val',msg.data[0].id);
+      done();
+    },{});
+    
+    zy.extend.get({
+      app:'c879dcc94d204d96a98a34e0b7d75676',
+      mod:'indexinfo',
+      apinm:'columnselect2'
+    },function(msg){
+      done('columnlist',msg.result);
+    },{typecd:typecd});
+  }
+  
+  function SQLtypeControler(val){
+    switch(val){
+      case 'I':
+        $('#template').show();
+        $('#template2').hide();
+        break;
+      case 'U':
+        $('#template').show();
+        $('#template2').show();
+        break;
+      case 'D':
+        $('#template').hide();
+        $('#template2').show();
+        break;
+      case 'S':
+        $('#template').hide();
+        $('#template2').show();
+        break;
+    }
+  }
+  
+  function Event(control){
+    
+    function InnerParams(){
+      
+      var proT = Form.find('#prorow');
+      var wheT = Form.find('#wherow');
+      var wheArea = Form.find('#bm_whearea');
+      window.a = Form.find('#wherow');
+    
+      var jsondata = {
+        comm_fields : [],
+        wherearea:{
+          chkbox:'0',
+          content:'',
+          params:[]
+        }
+      };
+      // 是否手动编辑
+      if(wheArea.find('#editornot:checked').length==1){
+        zy.log(123333);
+        jsondata.wherearea.chkbox='1';
+      }
+      if(wheT.children().length > 0){
+        wheT.children().each(function(){
+          var row = $(this);
+          var firstcheck = row.find('[name=first]');
+          var secondcheck = row.find('[name=second]');
+          var firstval = row.find('[name=val]');
+          var secondval = row.find('[name=val2]');
+          if(CheckInner(row)){
+            var o = {
+              andor : row.find('[name=and]').attr('_click') || '',
+              column_name: row.find('[name=nm]').val(),
+              name: row.find('[name=nm]').val(),
+              condition: row.find('[name=contition]').val(),
+              flag:'',
+              value:[]
+            };
+            var checkboxflag = [];
+            
+            if(firstcheck.closest('section').css('display')!='none'){
+              checkboxflag.push(Number(firstcheck.prop('checked')));
+            }
+            
+            if(secondcheck.closest('section').css('display')!='none'){
+              checkboxflag.push(Number(secondcheck.prop('checked')));
+            }
+            
+            if(firstval.closest('section').css('display')!='none'){
+              o.value.push(firstval.val());
+            }
+            
+            if(secondval.closest('section').css('display')!='none'){
+              o.value.push(secondval.val());
+            }
+
+            o.flag = checkboxflag.join(',');
+            
+            jsondata.wherearea.params.push(o);
+          }
+        });
+      }
+      if(proT.children().length > 0){
+        proT.children().each(function(){
+          var $row = $(this);
+          var o = {
+            column_name:'',
+            value:'',
+            flag:'1',
+            datatype:'',
+            api_func:''
+          };
+          o.flag = Number($row.find('[name=checkbox-toggle]').prop('checked'));
+          if(!o.flag) o.value = $row.find('[name=val]').val();
+          o.flag = String(o.flag);
+          o.column_name = $row.find('[name=nm]').val();
+          o.api_func = $row.find('[name=api_func]').val();
+          
+          jsondata.comm_fields.push(o);
+        })
+      }
+      
+      jsondata.wherearea.content = Form.find('#tochange').children(':last').find('textarea').val();
+      
+      function CheckInner(row){
+        var flg = true;
+        zy.log('row.find(\'input[name][type=input]:visible\')=',row.find('input[name][type=input]:visible'));
+        row.find('input[name][type=input]:visible').each(function(){
+          var $this = $(this);
+          if($this.val()=='') flg = false;
+        });
+        return flg;
+      }
+      
+      return jsondata;
+    }
+    
+    Definite.bind('input',function(){
+      var $val = $(this).val();
+      Modolcd.trigger('_change',[$val,null]);
+    })
+    
+    Modolcd.bind('_change',(function(){
+      var oldval,oldsqltype;
+      return function(e,val,sqltype){
+        var $this = $(this);
+        oldval = val || '';
+        if(sqltype) oldsqltype = sqltype;
+        
+        if(oldsqltype){
+          var full = typecd + '.' + oldval + '.' + oldsqltype;
+          $this.val(full);
+        }
+      }
+    })());
+    
+    Did.change(function(){
+      var $val = $(this).val();
+      Table.trigger('_change',[$val]);
+    });
+    
+    SQLtype.change(function(){
+      var $val = $(this).val();
+      SQLtypeControler($val);
+      Modolcd.trigger('_change',[Definite.val(),$val]);
+    })
+    
+    BuildSql.click(function(){
+      var jsondata = InnerParams();
+      var did = Did.val();
+      var tablenm = Table.val();
+      if(did != '' && tablenm != ''){
+        var params = {
+          typecd:typecd,
+          did:did,
+          tablenm:tablenm,
+          sqltype:SQLtype.val(),
+          jsondata:JSON.stringify(jsondata)
+        };
+        
+        zy.extend.post({
+          apinm:'generating_sql',
+          mod:'dmlm',
+          app:'c770045becc04c7583f626faacd3b456'
+        },function(msg){
+          Form.find('#_sql').siblings().remove();
+          SQLtext.val(msg.result[0].sqltext);
+          sqltext = msg.result[0].sqltext;
+          sqlparams = msg.result[0].sqlparams;
+          $.each(JSON.parse(msg.result[0].sqlparams),function(i,row){
+            control.addSql(row);
+          })
+        },params)
+      }else{
+        zy.extend.msg('请选择数据源与物理表','i');
+      }
+    });
+    
+    Table.bind('_change',function(e,val){
+      var $this = $(this);
+      zy.extend.get({
+        app:'c770045becc04c7583f626faacd3b456',
+        mod:'dmlm',
+        apinm:'getdstables'
+      },function(msg){
+        $this.zySelectCustomData('', false, {
+          width: '100%',
+          allowClear : false
+        }, msg.result);
+        // 赋默认值
+        if(msg.result.length>0){
+          $this.select2('val',msg.result[0].id);
+        }
+      },{
+        typecd:typecd,
+        did:val
+      });
+    });
+    
+    Submit.click(function(){
+      var params = Form.form2json();
+      var apinm;
+      params.dstypecd = typecd;
+      params.sqltext = sqltext || '';
+      params.sqlparams = sqlparams || '';
+      params.jsondata = JSON.stringify(InnerParams());
+      params.typecd = typecd;
+      params.app = 'c770045becc04c7583f626faacd3b456';
+      params.mod = 'dmlm';
+      
+      if(!CheckParams(params)) return false;
+      
+      if(modolcd) apinm = 'updbm002';
+      else apinm = 'addbm002';
+      
+      zy.extend.post({
+        apinm:apinm,
+        mod:'dmlm',
+        app:'c770045becc04c7583f626faacd3b456'
+      },function(msg){
+        Modal.modal('hide');
+        zy.extend.msg('成功','s');
+        //更新表格
+        cb&&cb();
+      },params)
+    })
+    
+    function CheckParams(p){
+      if(p.definite == '') return zy.extend.msg('请输入自定义内容','i');
+      if(p.modolnm == '') return zy.extend.msg('请输入模型名称','i');
+      if(p.did == '') return zy.extend.msg('请选择数据源','i');
+      if(p.tablenm == '') return zy.extend.msg('请选择物理表','i');
+      if(p.sqltype == '') return zy.extend.msg('请选择SQL类型','i');
+      
+      var prorow = Form.find('#prorow');
+      var wherow = Form.find('#wherow');
+      var sqlwhe = Form.find('[name=sqlwhere]');
+      
+      if(p.sqltype == 'I' || p.sqltype == 'U'){
+        if(prorow.children().length == 0) return zy.extend.msg('至少有一个项目','i');
+      }
+      
+      if(p.sqltype == 'D' || p.sqltype == 'U'){
+        if(sqlwhe.val().trim()=='') return zy.extend.msg('至少一个 WHERE 条件','i');
+        
+        var isbreak = false;
+        wherow.children().each(function(){
+          var $row = $(this);
+          var target = $row.find('[name=val]');
+          if(target.is(':visible') && target.val() == ''){
+            zy.extend.msg('请填写项目中的预设值','i');
+            isbreak = true;
+            return false;
+          }
+        })
+        if(isbreak){
+          return false;
+        }
+      }
+      
+      return true;
+    }
+    
+  }
+  
+  /**初始化完成之后--折叠按钮事件和样式调整*/
+  function EndInitEvent(){
+    var General_info_collapse = Form.find('#collapse_general_info');
+    var General_info = Form.find('div[name=bm_general_info]');
+    
+    var Pcollapse = Form.find('#collapse_item');
+    var Prorow = Form.find('#prorow');
+    
+    var Wcollpase = Form.find('#collapse_whe');
+    var Wherow = Form.find('#wherow');
+    var Whearea = Form.find('#bm_whearea');
+    
+    var Sqltextarea = Form.find('[name=bm_sql_textarea]');
+    var Sqlparam = Form.find('#collapse_sqlparam');
+    var Sqlparam_div = Sqlparam.closest('div.row');
+    /**调整样式-缩进*/
+    (function(){
+      General_info.add(Prorow).add(Wherow).add(Whearea).add(Sqltextarea).add(Sqlparam_div.find('div.row')).css({'margin-left':General_info_collapse.closest('header').css('margin-left'),'margin-right':General_info_collapse.closest('header').css('margin-right')});
+    })();
+    /**基本信息折叠按钮*/
+    General_info_collapse.unbind('click').click(function(){
+      zy.log('General_info.is(\':hidden\')=',General_info.is(':hidden'));
+      if(General_info.is(':hidden')){
+        General_info.show();
+        $(this).removeClass().addClass('fa fa-fw fa-minus-circle txt-color-red');
+        $(this).attr('title','折叠');
+      }else{
+        General_info.hide();
+        $(this).removeClass().addClass('fa fa-fw fa-plus-circle txt-color-green');
+        $(this).attr('title','展开');
+      }
+    });
+    
+    /**项目折叠按钮*/
+    Pcollapse.unbind('click').click(function(){
+      zy.log('Prorow.is(\':hidden\')=',Prorow.is(':hidden'));
+      if(Prorow.is(':hidden')){
+        Prorow.show();
+        $(this).removeClass().addClass('fa fa-fw fa-minus-circle txt-color-red');
+        $(this).attr('title','折叠');
+      }else{
+        Prorow.hide();
+        $(this).removeClass().addClass('fa fa-fw fa-plus-circle txt-color-green');
+        $(this).attr('title','展开');
+      }
+    });
+    
+    /**where折叠按钮*/
+    Wcollpase.unbind('click').click(function(){
+      if(Wherow.is(':hidden')){
+        Wherow.show();
+        Whearea.show();
+        $(this).removeClass().addClass('fa fa-fw fa-minus-circle txt-color-red');
+        $(this).attr('title','折叠');
+      }else{
+        Wherow.hide();
+        Whearea.hide();
+        $(this).removeClass().addClass('fa fa-fw fa-plus-circle txt-color-green');
+        $(this).attr('title','展开');
+      }
+    });
+    
+    /**sql参数折叠按钮*/
+    Sqlparam.unbind('click').click(function(){
+      if(Sqlparam_div.find('div.row').is(':hidden')){
+        Sqlparam_div.find('div.row').show();
+        $(this).removeClass().addClass('fa fa-fw fa-minus-circle txt-color-red');
+        $(this).attr('title','折叠');
+      }else{
+        Sqlparam_div.find('div.row').hide();
+        $(this).removeClass().addClass('fa fa-fw fa-plus-circle txt-color-green');
+        $(this).attr('title','展开');
+      }
+    });
+  }
+  
+  init(function(collist){
+    var addObj = InitTemplate(collist.columnlist);
+    Event(addObj);
+    GetFromServer(addObj);
+    if(modolcd) {
+      Definite.attr('readonly','readonly');
+      SQLtype.attr('readonly','readonly');
+      Title.html('修改');
+    }else{
+      Title.html('新增');
+      Did.trigger('change');
+    }
+    // 折叠按钮事件和样式调整
+    EndInitEvent();
+    Modal.modal('show');
+  })
+}
+</script>

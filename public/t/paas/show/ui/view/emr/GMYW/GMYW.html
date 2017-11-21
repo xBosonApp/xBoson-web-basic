@@ -1,0 +1,103 @@
+<script type="text/javascript" language="JavaScript" src="/t/paas/show/ui/comm.js"></script>
+		
+<script type="text/javascript">
+var pageNum=1;
+var pagesize=10;
+var emrgmywdata;
+$(function () {
+   showDatacjcbg();
+
+});
+function gmywcallback(retData){
+emrgmywdata=retData;
+$('#jcbg').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+				title:'过敏药物记录',
+				singleSelect:true,
+				pagination:true,
+				pageNumber:pageNum,
+				pageSize: pagesize,
+				loadMsg:"正在载入...",
+                pageList: [10,20,50,100,200],
+                singleSelect:true,
+				data:emrgmywdata.dataList,
+				columns:[[
+				   //{field:'tablename',title:'序号',width:60,align:'center'},
+				   {field:'dc7003_zdrq',title:'诊断日期',width:100,align:'center',
+				   	   formatter:function(value){
+		                   return LC_FormatYMD(value);
+		               }
+		           },
+				   {field:'dc7003_mzbz',title:'门/住诊断',width:100,align:'center'},
+				   {field:'dc7003_ywmc',title:'过敏药物',width:100,align:'center'},
+				   {field:'dc7003_zdysxm',title:'诊断医生',width:100,align:'center'},
+				   {field:'dc7003_jgdm',title:'诊断医院',width:100,align:'center'},
+				   {field:'dc7003_jwbz',title:'既往标志',width:100,align:'center'}
+				]],                  
+                onDblClickRow: function (rowIndex) {
+                  openRoleDiv(rowIndex);
+                },
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true
+		}); 
+
+	   var pager = $('#jcbg').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pageNum=pageNumber;
+		           pagesize=pageSize;
+		           showDatacjcbg();
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:pagesize,pageNumber:pageNum,total:emrgmywdata.count});
+
+		};
+	
+	}
+	function showDatacjcbg(){
+
+// 数据格式验证通过以后		
+// *******************第二步请求数据***********************		
+ if(retCheckFlg){		
+        	var url ="emrywgm1/"; 	
+        	var itemsList=["primal_time","latest_time"];	
+			var info= new Map();	
+	        info.put("pageNum",pageNum);
+	        info.put("pageSize",pagesize);
+        	LC_AjaxGet(EMRBaseUrl+url,"gmyw","gmywcallback",info,itemsList);	
+        	
+ }		
+//********************第三步处理请求后的数据***************	
+
+	
+	}
+	
+
+</script>
+<div class="mainsW-912">
+	<!-- 检查报告列表 开始 -->
+	<table toolbar="#toolbar"  id="jcbg"></table>
+	<div id="toolbar" class="pad-5 clearfix">
+	 <form id="gmyw">
+		<div class="itemLW-96 padT-4">诊断日期:</div>
+		<div class="itemsW-96"><input class="Wdate" onClick="WdatePicker()" type="text" style="width:96px;" value="" id="primal_time"/></div>
+
+		<div class="itemCW-16 padT-4">至</div>
+		<div class="itemsW-96"><input class="Wdate" onClick="WdatePicker()" type="text" style="width:96px;" value="" id="latest_time"/></div>
+		<div class="itemCW-16 padT-4"></div>
+		<div class="itemsW-96"></div>
+		<div class="itemLW-64"><a href="javascript:;;;" class="easyui-linkbutton" onclick="showDatacjcbg()">查询</a></div>
+     
+	 </form>
+	</div>
+	<!-- 检查报告列表 结束 -->
+	<!-- 检查报告内容 开始 -->
+	
+	<!-- 检查报告内容 结束 -->
+</div>
+	

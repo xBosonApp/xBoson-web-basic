@@ -1,0 +1,93 @@
+<!--API请求耗时Demo-->
+<link href="lib/js/plugin/jsoneditor/dist/jsoneditor.min.css" rel="stylesheet" type="text/css">
+<style>
+  #jsoneditor {
+    width: 500px;
+    height: 500px;
+  }
+</style>
+<!-- widget grid -->
+<section id="widget-grid" class="">
+	<!-- row -->
+	<div class="row">
+		<!-- NEW WIDGET START -->
+		<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div id="api_elapsed_demo" class="jarviswidget jarviswidget-color-blueDark" data-widget-fullscreenbutton="false" data-widget-colorbutton="true" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-deletebutton="false">
+				<header>
+					<!--<span class="widget-icon"> <i class="fa fa-table"></i> </span>-->
+					<h2></h2>
+				</header>
+				<!-- widget div-->
+				<div>
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+					</div>
+					<!-- end widget edit box -->
+					<!-- widget content -->
+					<div class="widget-body">
+						<div class="row">
+							<button class="btn btn-info" name="orgmenu">菜单列表<span></span></button>
+							<button class="btn btn-info" name="personinfo">个人信息<span></span></button>
+						</div>
+						<div class="row">
+						  <div id="jsoneditor"></div>
+						</div>
+					</div>
+					<!-- end widget content -->
+				</div>
+				<!-- end widget div -->
+			</div>
+			<!-- end widget -->
+		</article>
+		<!-- WIDGET END -->
+	</div>
+	<!-- end row -->
+</section>
+<!-- end widget grid -->
+<script src="lib/js/plugin/jsoneditor/dist/jsoneditor.min.js"></script>
+<script type="text/javascript">
+	// DO NOT REMOVE : GLOBAL FUNCTIONS!
+	pageSetUp();
+	api_elapsed_demo();
+	function api_elapsed_demo(){
+	  
+	  var container = document.getElementById("jsoneditor");
+	  
+    var editor = new JSONEditor(container,{
+      'mode':'view',
+      'modes': ['form', 'text', 'tree', 'view'], // allowed modes
+      'error': function (err) {
+        alert(err.toString());
+      }
+    });
+    
+    
+	  $('#api_elapsed_demo').find('[name=orgmenu]').click(function(){
+	    getData('ZYAPP_LOGIN','ZYMODULE_LOGIN','api/orgmenu',$(this));
+	   // $(this).button('loading');
+	  });
+	  $('#api_elapsed_demo').find('[name=personinfo]').click(function(){
+	    getData('ZYAPP_LOGIN','ZYMODULE_LOGIN','api/getuserinfo',$(this));
+	   // $(this).button('loading');
+	  });
+    
+    function getData(app,mod,api,button){
+      if(app && mod && api){
+        button.button('loading');
+        var elapsedSt=Date.now();
+        zy.g.am.app=app;
+        zy.g.am.mod=mod;
+        zy.net.get(api,function(msg){
+          if(msg){
+            var elapsedEnd=Date.now();
+            button.button('reset');
+            button.find('span').text(' '+(elapsedEnd-elapsedSt)+'ms');
+            editor.set(msg); 
+          }
+        },{'ems':'1'});
+      }
+    }
+	}
+</script>

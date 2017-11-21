@@ -1,0 +1,110 @@
+﻿<script language="JavaScript" src="/t/paas/show/ui/comm.js" type="text/javascript"></script>
+<script>
+$(function () {
+getselectaoid();
+});
+ function  getselectaoid(){
+
+  var url="mdm/orgs/";
+  var infoa = new Map();
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"orgid","mdmSelectoid",infoa,itemsList);
+}
+
+function mdmSelectoid(data){
+  var info = new Map();
+  info.put("key",["orgId"]);
+  info.put("value",["orgNm"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("regist","orgid",info,data.dataList);
+  $("#orgid").val(self.parent.orgid);
+  $("#usertype").val(self.parent.usertype);
+ getselectaadid();
+}
+
+ function  getselectaadid(){
+  var url="mdm/org/listSta/";
+
+  var info = new Map();
+  info.put("stringsplit",$("#orgid").val());
+  var itemsList=[];
+  LC_AjaxGet(MDMBaseUrl+url,"staffid","mdmSelectadid",info,itemsList);
+}
+function mdmSelectadid(data){
+  var info = new Map();
+  info.put("key",["staffId","workerId"]);
+  info.put("value",["name"]);
+  
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("regist","staffid",info,data.dataList);
+}
+
+function regist(){
+	LC_Resetting("regist");
+	var checkpcthrItems=["password","staffid"];
+	LC_IsCheckLength("regist",checkpcthrItems,1,50);
+	if(retCheckFlg){
+	var url="regist/";
+		var itemsList = ["orgid","staffid","password","usertype","username"];
+		 var info = new Map();
+ 	 LC_AjaxGet(TRSBaseUrl+url,"regist","registcallback",info,itemsList);
+	}
+}
+function registcallback(reData){
+
+	if(reData.ret==0){
+		//alert("注册成功");
+		alert("注册成功,用户名为："+reData.username+",请牢记！");
+		
+	}
+	if(reData.ret==102){
+		alert(reData.msg);
+	}
+	if(reData.ret==104){
+		alert(reData.msg);
+	}
+}
+
+
+
+</script>
+<div class="itemsW-304">
+    <div class="easyui-panel" title="添加人员">
+    <form id="regist">
+	 <input type="hidden" id="username">
+    	<div class="padTB-10 clearfix">
+            <div class="itemLW-272">
+                <div class="itemLW-80 padT-4">机构：</div>
+                <div class="itemsW-192">
+                    <select class="textLW" name="dept" id="orgid" disabled="true">  
+                    </select>
+                </div>
+            </div>
+            <div class="itemLW-272">
+                <div class="itemLW-80 padT-4">人员：</div>
+                <div class="itemsW-192">
+                    <select class="textLW" name="dept" id="staffid" >  
+                    </select>
+                </div>
+            </div>
+			<div class="itemLW-80 padT-4">机构种类：</div>
+                <div class="itemsW-192">
+                    <select class="textLW" name="dept" id="usertype" disabled="true" >  
+                        <option value="1">医院</option>
+                        <option value="2">社区</option>
+                        
+                    </select>
+                </div>
+            </div>
+            <div class="itemLW-272">
+                <div class="itemLW-80 padT-4">密码：</div>
+                <div class="itemsW-192"><input class="textLW" type="password" id="password" /></div>
+            </div>
+            <div class="itemLW-272"><a class="easyui-linkbutton" onclick="regist();">添加</a></div>
+			</form>
+        </div>
+        
+    </div>
+</div>

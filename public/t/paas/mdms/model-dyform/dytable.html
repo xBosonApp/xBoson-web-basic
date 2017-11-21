@@ -1,0 +1,29 @@
+<div class="row">
+  <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div id="dydemo" class="row"></div>
+  </article>
+</div>
+<div class="row">
+    <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div id="dydemo2" class="row"></div>
+  </article>
+</div>
+<div class="row">
+    <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div id="dydemo3" class="row"></div>
+  </article>
+</div>
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script type="text/javascript" src="lib/html/zy_dyform.js"></script>
+<script type="text/javascript" src="lib/html/zy_dytable.js"></script>
+<script>
+  var _datatable=new dyTable({
+    app: 'd2c8511b47714faba5c71506a5029d94',
+    api: 'getdatatable',
+    mod: 'datadict'
+  },function(hander){
+    hander.init($("#dydemo"),{typecd:'ZR.0022'});
+    hander.init($("#dydemo2"),{typecd:'ZR.0014011'});
+    hander.init($("#dydemo3"),{typecd:'ZR.0025'});
+  });
+</script>

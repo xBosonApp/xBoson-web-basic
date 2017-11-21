@@ -1,0 +1,27 @@
+<div class="row">
+  <div class="alert alert-warning fade in" style="#display:none;">
+    <button class="close" data-dismiss="alert">×</button>
+    <strong>JavaScript开发规范：</strong><br>代码中采用'// todo:说明'做临时标记，JavaScript代码内字符串全部统一采用单引号; <hr>
+    <pre><code>&lt;div class="picture"&gt;&lt;img src="img.jpg" /&gt;&lt;/div&gt;</code></pre>
+    <pre><code>var $img = $('.picture').find('img');</code> 或 <code>var $img = $('img', '.picture');</code></pre>
+    经过测试发现前者在性能上比后者稍微快些，查看 jQuery 源码可发现后者会转成find方法，在转换时要花点时间。但当我们封装一个常用的方法时，使用 context 会比较合适（会提高我们的代码质量），如下：
+    <pre><code>reSize = function (div) {
+  $('img', div).width(100`);
+  $(div).find('img').width(100);
+}</code></pre>
+    <hr>
+    <strong>HTML开发规范：</strong><br>1、标签元素属性[id]值具有全局唯一特性，需要考虑页面loadHTML模式加载后的[id]值不能重复，建议附加页面名称做前缀；<br>2、一个页面内可以有多个[form]表单，但不能互相嵌套[form]表单，注意：[form]表单内的标签元素属性[name]值不能重复；<br>3、标签元素属性的[id]、[class]值对大小写敏感，多个单词组合时统一采用'-'连接符分割；<br>
+  </div>
+  <div class="alert alert-info fade in">
+    <button class="close" data-dismiss="alert">×</button>
+    <strong>下步任务： </strong><br>1、画面数据绑定（SELECT、WHERE以及select2下拉选择框项目[表名、字段名]）及事件绑定；<br>2、[图表]选项中的制域规则控制事件；
+  </div>
+</div>
+s
+<section id="widget-grid" class=""></section>
+
+<div class="modelform"></div>
+
+<script type="text/javascript">
+
+</script>

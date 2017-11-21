@@ -1,0 +1,502 @@
+<!-- Modal -->
+<div class="modal fade" id="user_manager" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title">个人信息（修改）</h4>
+      </div>
+      <div class="modal-body no-padding">
+        <!-- FORM Start -->
+        <form id="user_manager_form" method="post" onsubmit="return false;" class="smart-form">
+          <div id="tabs">
+            <ul>
+              <li>
+                <a href="#tabs-a"> 用户基本信息 </a>
+              </li>
+              <li>
+                <a href="#tabs-b"> 用户其他信息 </a>
+              </li>
+              <li>
+                <a href="#tabs-c"> 现住地址信息 </a>
+              </li>
+              <li>
+                <a href="#tabs-d"> 户籍地址信息 </a>
+              </li>
+            </ul>
+            <div id="tabs-a">
+              <div class="row">
+                <input type="hidden" name="pid" placeholder="个人编号">
+                <section class="col col-6">
+                  <label class="label">本人姓名</label>
+                  <label class="input has-warning">
+                    <input type="text" name="de0201039" placeholder="本人姓名">
+                    <b class="tooltip tooltip-bottom-right">本人姓名为必填项目</b>
+                  </label>
+                </section>
+                <section class="col col-6">
+                  <label class="label">曾用名</label>
+                  <label class="input">
+                    <input type="text" name="former_name" placeholder="曾用名">
+                  </label>
+                </section>
+              </div>
+              <div class="row">
+                <section class="col col-6">
+                  <label class="label">性别代码</label>
+                  <label class="input">
+                    <input type="hidden" name="de0201040" data-type="select2" placeholder="性别代码">
+                  </label>
+                </section>
+                <section class="col col-6">
+                  <label class="label">出生日期</label>
+                  <label class="input">
+                    <input type="text" name="de0201005" placeholder="出生日期" class="datepicker" readonly>
+                  </label>
+                </section>
+              </div>
+              <div class="row">
+                <section class="col col-6">
+                  <label class="label">国籍</label>
+                  <label class="input">
+                    <input type="hidden" name="de0201015" data-type="select2" placeholder="国籍">
+                  </label>
+                </section>
+                <section class="col col-6">
+                  <label class="label">民族</label>
+                  <label class="input">
+                    <input type="hidden" name="de0201025" data-type="select2" placeholder="民族">
+                  </label>
+                </section>
+              </div>
+              <div class="row">
+                <section class="col col-6">
+                  <label class="label">婚姻状况代码</label>
+                  <label class="input">
+                    <input type="hidden" name="de0201018" data-type="select2" placeholder="婚姻状况代码">
+                  </label>
+                </section>
+                <section class="col col-6">
+                  <label class="label">身份证号码</label>
+                  <label class="input">
+                    <input type="text" name="de0201030" placeholder="身份证号码">
+                  </label>
+                </section>
+              </div>
+              <div class="row">
+                <section class="col col-6">
+                  <label class="label">本人电话号码</label>
+                  <label class="input">
+                    <input type="text" name="de0201010" placeholder="本人电话号码">
+                  </label>
+                </section>
+                <section class="col col-6">
+                  <label class="label">电子邮件地址</label>
+                  <label class="input">
+                    <input type="text" name="de0201012" placeholder="电子邮件地址">
+                  </label>
+                </section>
+              </div>
+              <!--<div class="row">-->
+              <!--  <section class="col col-6">-->
+              <!--    <label class="label">状态</label>-->
+              <!--    <label class="input">-->
+              <!--      <input type="hidden" name="status" data-type="select2" placeholder="状态">-->
+              <!--    </label>-->
+              <!--  </section>-->
+              <!--</div>-->
+            </div>
+            <div id="tabs-b">
+              <div class="row">
+                <section class="col col-6">
+                  <label class="label">工作单位名称</label>
+                  <label class="input">
+                    <input type="text" name="de0810007" placeholder="工作单位名称">
+                  </label>
+                </section>
+                <section class="col col-6">
+                  <label class="label">参加工作时间</label>
+                  <label class="input">
+                    <input type="text" name="de0201001" placeholder="参加工作时间" class="datepicker" readonly>
+                  </label>
+                </section>
+              </div>
+              <div class="row">
+                <section class="col col-6">
+                  <label class="label">职业类别代码</label>
+                  <label class="input">
+                    <input type="hidden" name="de0201052" data-type="select2" placeholder="职业类别代码">
+                  </label>
+                </section>
+                <section class="col col-6">
+                  <label class="label">联系人</label>
+                  <label class="input">
+                    <input type="hidden" name="contact_pid" placeholder="联系人">
+                    <input type="text" name="contact_name" placeholder="请检索输入" style="width:80%;float:left" readonly>
+                    <input type="button" id='searchuser' class="btn" style="width:20%;float:right;" value="检索">
+                  </label>
+                </section>
+              </div>
+              <div class="row">
+                <section class="col col-6">
+                  <label class="label">学历代码</label>
+                  <label class="input">
+                    <input type="hidden" name="de0201041" data-type="select2" placeholder="学历代码">
+                  </label>
+                </section>
+                <section class="col col-6">
+                  <label class="label">学位代码</label>
+                  <label class="input">
+                    <input type="hidden" name="de0210042" data-type="select2" placeholder="学位代码">
+                  </label>
+                </section>
+              </div>
+            </div>
+            <div id="tabs-c">
+              <div class="row">
+                <section class="col col-6">
+                  <label class="label">现住地址-省（自治区、直辖市）</label>
+                  <label class="input">
+                    <input type="hidden" name="de020100901x" data-type="select2" placeholder="现住地址-省（自治区、直辖市）">
+                  </label>
+                </section>
+                <section class="col col-6">
+                  <label class="label">现住地址-市（地区、州）</label>
+                  <label class="input">
+                    <input type="hidden" name="de020100902x" data-type="select2" placeholder="现住地址-市（地区、州）">
+                  </label>
+                </section>
+              </div>
+              <div class="row">
+                <section class="col col-6">
+                  <label class="label">现住地址-县（区）</label>
+                  <label class="input">
+                    <input type="hidden" name="de020100903x" data-type="select2" placeholder="现住地址-县（区）">
+                  </label>
+                </section>
+                <section class="col col-6">
+                  <label class="label">现住地址-乡（镇、街道办事处）</label>
+                  <label class="input">
+                    <input type="hidden" name="de020100904x" data-type="select2" placeholder="现住地址-乡（镇、街道办事处）">
+                  </label>
+                </section>
+              </div>
+              <div class="row">
+                <section class="col col-6">
+                  <label class="label">现住地址-村（街、路、弄）</label>
+                  <label class="input">
+                    <input type="text" name="de020100905x" placeholder="现住地址-村（街、路、弄）">
+                  </label>
+                </section>
+                <section class="col col-6">
+                  <label class="label">现住地址-门牌号</label>
+                  <label class="input">
+                    <input type="text" name="de020100906x" placeholder="现住地址-门牌号">
+                  </label>
+                </section>
+              </div>
+              <div class="row">
+                <section class="col col-6">
+                  <label class="label">现住地址邮政编码</label>
+                  <label class="input">
+                    <input type="text" name="de0201047x" placeholder="现住地址邮政编码">
+                  </label>
+                </section>
+              </div>
+            </div>
+            <div id="tabs-d">
+              <div class="row">
+                <section class="col col-6">
+                  <label class="label">户籍地址-省（自治区、直辖市）</label>
+                  <label class="input">
+                    <input type="hidden" name="de020100901h" data-type="select2" placeholder="户籍地址-省（自治区、直辖市）">
+                  </label>
+                </section>
+                <section class="col col-6">
+                  <label class="label">户籍地址-市（地区、州）</label>
+                  <label class="input">
+                    <input type="hidden" name="de020100902h" data-type="select2" placeholder="户籍地址-市（地区、州）">
+                  </label>
+                </section>
+              </div>
+              <div class="row">
+                <section class="col col-6">
+                  <label class="label">户籍地址-县（区）</label>
+                  <label class="input">
+                    <input type="hidden" name="de020100903h" data-type="select2" placeholder="户籍地址-县（区）">
+                  </label>
+                </section>
+                <section class="col col-6">
+                  <label class="label">户籍地址-乡（镇、街道办事处）</label>
+                  <label class="input">
+                    <input type="hidden" name="de020100904h" data-type="select2" placeholder="户籍地址-乡（镇、街道办事处）">
+                  </label>
+                </section>
+              </div>
+              <div class="row">
+                <section class="col col-6">
+                  <label class="label">户籍地址-村（街、路、弄）</label>
+                  <label class="input">
+                    <input type="text" name="de020100905h" placeholder="户籍地址-村（街、路、弄）">
+                  </label>
+                </section>
+                <section class="col col-6">
+                  <label class="label">户籍地址-门牌号</label>
+                  <label class="input">
+                    <input type="text" name="de020100906h" placeholder="户籍地址-门牌号">
+                  </label>
+                </section>
+              </div>
+              <div class="row">
+                <section class="col col-6">
+                  <label class="label">户籍地址邮政编码</label>
+                  <label class="input">
+                    <input type="text" name="de0201047h" placeholder="户籍地址邮政编码">
+                  </label>
+                </section>
+              </div>
+            </div>
+          </div>
+          <footer>
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary">确定</button>
+          </footer>
+        </form>
+        <!-- FORM End -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<div id="search_user_modal"></div>
+<script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+<!-- SCRIPTS ON PAGE EVENT -->
+<script type="text/javascript">
+// DO NOT REMOVE : GLOBAL FUNCTIONS!
+pageSetUp();
+$('#tabs').tabs();
+//联系人检索
+$('#searchuser').click(function() {
+  $('#user_manager').modal('hide');
+  modalid = $('#user_manager');
+  userpid = $(this).siblings(":hidden");
+  usernm = $(this).siblings(":text");
+  userapp = 'd2c8511b47714faba5c71506a5029d94';
+  usermod = 'deptinfo';
+  userapi = 'personalselect';
+  zy.net.loadHTML("c9e98ea6fc7148d186289e8c33776f8a/search_user.html", $("#search_user_modal"));
+});
+//地址联动
+var match = {
+  'de020100901x': {
+    'name': 'de020100901x',
+    'nextname': 'de020100902x',
+  },
+  'de020100902x': {
+    'name': 'de020100902x',
+    'nextname': 'de020100903x',
+  },
+  'de020100903x': {
+    'name': 'de020100903x',
+    'nextname': 'de020100904x',
+  },
+  'de020100901h': {
+    'name': 'de020100901h',
+    'nextname': 'de020100902h',
+  },
+  'de020100902h': {
+    'name': 'de020100902h',
+    'nextname': 'de020100903h',
+  },
+  'de020100903h': {
+    'name': 'de020100903h',
+    'nextname': 'de020100904h',
+  }
+};
+
+$("#user_manager_form input").change(function() {
+  var key = $(this).attr('name');
+  if (match[key]) {
+    var nextname = match[key].nextname;
+    var val = $(this).val();
+    binddict(nextname, val);
+    $("#user_manager_form input[name=" + nextname + "]").trigger("change");
+  }
+});
+
+function binddict(nextname, val) {
+  var cb = function() {
+    $("#user_manager_form input[name=" + nextname + "]").val('');
+    $("#user_manager_form input[name=" + nextname + "]").zySelect(val, false, {
+      width: '100%'
+    });
+  }
+  zy.cache.initDicts("," + val + ",", cb);
+};
+
+(function() {
+  // 数据字典处理
+  var cb = function() {
+    $('#user_manager_form input[name=status]').zySelect('ZR.0001', false, {
+      width: '100%'
+    });
+    $('#user_manager_form input[name=de0201040]').zySelect('GBT.2261.1', false, {
+      width: '100%'
+    });
+    $('#user_manager_form input[name=de0201018]').zySelect('GBT.2261.2', false, {
+      width: '100%'
+    });
+    $('#user_manager_form input[name=de0201015]').zySelect('GBT.2659', false, {
+      width: '100%'
+    });
+    $('#user_manager_form input[name=de0201025]').zySelect('GBT.3304', false, {
+      width: '100%'
+    });
+    $('#user_manager_form input[name=de0201052]').zySelect('GBT.6565', false, {
+      width: '100%'
+    });
+    $('#user_manager_form input[name=de0201041]').zySelect('GBT.4658', false, {
+      width: '100%'
+    });
+    $('#user_manager_form input[name=de0210042]').zySelect('GBT.6864', false, {
+      width: '100%'
+    });
+    $("#user_manager_form input[name=de020100901h]").zySelect('GBT.2260', false, {
+      width: '100%'
+    });
+    $("#user_manager_form input[name=de020100901x]").zySelect('GBT.2260', false, {
+      width: '100%'
+    });
+    $("#user_manager_form input[name=de020100902h]").zySelect('', false, {
+      width: '100%'
+    });
+    $("#user_manager_form input[name=de020100903h]").zySelect('', false, {
+      width: '100%'
+    });
+    $("#user_manager_form input[name=de020100904h]").zySelect('', false, {
+      width: '100%'
+    });
+    $("#user_manager_form input[name=de020100902x]").zySelect('', false, {
+      width: '100%'
+    });
+    $("#user_manager_form input[name=de020100903x]").zySelect('', false, {
+      width: '100%'
+    });
+    $("#user_manager_form input[name=de020100904x]").zySelect('', false, {
+      width: '100%'
+    });
+  };
+  // 预处理该画面所需的字典类型，以 , 号分割
+  zy.cache.initDicts('ZR.0001,GBT.2261.1,GBT.2261.2,GBT.2659,GBT.3304,GBT.6565,GBT.4658,GBT.6864,GBT.2260', cb);
+  //修改
+  $('#user_manager_form').formDisable(true);
+  var callback = function(msg) {
+    $('#user_manager_form').formDisable(false);
+    if (msg) {
+      console.log("获取个人信息数据 = " + JSON.stringify(msg));
+      var jsonResult = eval(msg.result[0]);
+      
+      var cb = function() {
+        $("#user_manager_form input[name=de020100902x]").zySelect(jsonResult.de020100901x, false, {
+          width: '100%'
+        });
+        $("#user_manager_form input[name=de020100903x]").zySelect(jsonResult.de020100902x, false, {
+          width: '100%'
+        });
+        $("#user_manager_form input[name=de020100904x]").zySelect(jsonResult.de020100903x, false, {
+          width: '100%'
+        });
+        $("#user_manager_form input[name=de020100902h]").zySelect(jsonResult.de020100901h, false, {
+          width: '100%'
+        });
+        $("#user_manager_form input[name=de020100903h]").zySelect(jsonResult.de020100902h, false, {
+          width: '100%'
+        });
+        $("#user_manager_form input[name=de020100904h]").zySelect(jsonResult.de020100903h, false, {
+          width: '100%'
+        });
+        
+       
+        $('#user_manager_form').json2form(msg.result[0]);
+      }
+      zy.cache.initDicts(jsonResult.de020100901x + "," + jsonResult.de020100902x + "," + jsonResult.de020100903x + "," + jsonResult.de020100901h + "," + jsonResult.de020100902h + "," + jsonResult.de020100903h, cb);
+    }
+  };
+  //设置参数
+  var personalid = {
+    pid:user_view._g.param.pid
+  };
+  Console.close();
+  zy.g.am.app = 'c9e98ea6fc7148d186289e8c33776f8a';
+  zy.g.am.mod = 'user_manager';
+  zy.net.get("api/user_info", callback, personalid);
+})();
+$('#user_manager').modal('show');
+$("#user_manager_form").validate({
+  rules: {
+    //本人姓名
+    de0201039: {
+      required: true,
+      maxlength: 50
+    },
+    //身份证号码
+    de0201030: {
+      maxlength: 18,
+      isIdCardNo: true,
+    },
+    //本人电话号码
+    de0201010: {
+      maxlength: 20,
+      isPhone: true,
+    },
+    //电子邮件地址
+    de0201012: {
+      maxlength: 70,
+      email: true
+    },
+    //户籍地址邮政编码
+    de0201047h: {
+      maxlength: 6,
+      isZipCode: true
+    },
+    //现住地址邮政编码
+    de0201047x: {
+      maxlength: 6,
+      isZipCode: true
+    },
+    //工作单位名称
+    de0810007: {
+      maxlength: 70
+    },
+    //曾用名
+    former_name: {
+      maxlength: 50
+    }
+  },
+  // 验证成功后保存
+  submitHandler: function(form) {
+    var callback = function(msg) {
+      Console.open();
+      $('#user_manager_form').formDisable(false);
+      if (msg) {
+        Console.log("保存成功 = " + JSON.stringify(msg));
+        $('#user_manager').modal('hide');
+        user_view.UpDt();
+        zy.ui.msg("提示信息：", "保存成功！", "s");
+      }
+    };
+    zy.g.am.app = 'c9e98ea6fc7148d186289e8c33776f8a';
+    zy.g.am.mod = 'user_manager';
+    zy.net.post("api/user_manage", callback, $('#user_manager_form').serialize());
+    $('#user_manager_form').formDisable(true);
+  },
+  // Do not change code below
+  errorPlacement: function(error, element) {
+    error.insertAfter(element.parent());
+  }
+});
+</script>

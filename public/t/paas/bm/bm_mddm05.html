@@ -1,0 +1,276 @@
+ <div class="modal fade" id="bm_mddm05_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+        </button>
+        <h4 class="modal-title">配置信息</h4>
+      </div>
+      <div class="modal-body">
+        <!-- FORM Start -->
+        <form id="bm_mddm05_modal_form" method="post" onsubmit="return false;" class="smart-form">
+          <header>列信息(type)<i class="fa fa-fw fa-minus-circle txt-color-red" style="cursor:pointer" id="collapse_dy_type" title="折叠"></i></header>
+          <div name="dy-type"></div>
+          <header>查询条件(search)<i class="fa fa-fw fa-minus-circle txt-color-red" style="cursor:pointer" id="collapse_dy_search" title="折叠"></i></header>
+          <div name="dy-search"></div>
+          <div>
+            <label class="checkbox" title="en属性不可修改">
+							<input type="checkbox" name="custom_edit_check">
+							<i></i>手动编辑
+						</label>
+          </div>
+          <div>
+            <label class="textarea">
+              <textarea name="custom_edit_textarea" rows="3" style="resize: vertical;display: none;"></textarea>
+            </label>
+          </div>
+          <footer>
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary">确定</button>
+          </footer>
+        </form>
+        <!-- FORM End -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<script>
+  function bm_mddm05(modolcd){
+    if(!modolcd){
+      zy.ui.msg('提示信息：','缺少参数:模型ID','i');
+      return;
+    }
+    
+    var modal=$('#bm_mddm05_modal');
+    var form=$('#bm_mddm05_modal_form');
+    var dy_type=form.find('[name=dy-type]');
+    var dy_search=form.find('[name=dy-search]');
+    
+    var collapse_type=form.find('#collapse_dy_type'); //列信息折叠按钮
+    var collapse_search=form.find('#collapse_dy_search'); //查询条件信息折叠按钮
+    
+    var custom_edit_check=form.find(':checkbox[name=custom_edit_check]'); //手动编辑复选框
+    var custom_edit_textarea=form.find('textarea[name=custom_edit_textarea]');  //手动编辑文本区
+    //模型type和search
+    var typecontent;
+    
+    function main(){
+      //调接口取模型type和search
+      zy.g.am.app="c770045becc04c7583f626faacd3b456";
+      zy.g.am.mod="getmodelinfo";
+      zy.net.get('api/getbmsqltext',function(msg){
+        if(msg && msg.ret=='0'){
+          typecontent=JSON.parse(msg.result[0].typecontent);
+          //初始化配置UI
+          dy_type.html(ConfigUI_HTML_TYPE(typecontent.type));
+          dy_search.html(ConfigUI_HTML_SEARCH(typecontent.search));
+          //调接口取模型下拉数据
+          zy.g.am.app="c770045becc04c7583f626faacd3b456";
+          zy.g.am.mod="bmtree";
+          zy.net.get('api/getmddmtree',function(msg){
+            if(msg && msg.ret=='0'){
+              zy.g.am.app="c879dcc94d204d96a98a34e0b7d75676";
+              zy.g.am.mod="tools";
+              zy.net.get('api/getmdm002tree',function(msg2){
+                if(msg2&&msg2.ret=='0'){
+                  //初始化select2
+                  InitSelect2(msg.result,msg2.select2);
+                  //注册事件
+                  Event();
+                  modal.modal('show');
+                }
+              });
+            }
+          });
+        }
+      },{modolcd:modolcd});
+    }
+    
+    //根据search生成配置UI的html
+    function ConfigUI_HTML_SEARCH(search){
+      if(!search || search.length==0){
+        return '<center>空</center>';
+      }
+      var configUI='';
+      for(var i in search){
+        //header
+        var h='<header>参数'+(Number(i)+1)+'：'+search[i].cn+'('+search[i].en+')</header>';
+        //参数英文名
+        var a='<section class="col col-md-6"><label class="label">英文名(en)</label><label class="input"><input type="text" readonly="true" name="en" value="'+search[i].en+'"/></label></section>';
+        //参数中文名
+        var b='<section class="col col-md-6"><label class="label">中文名(cn)</label><label class="input"><input type="text" name="cn" value="'+search[i].cn+'"/></label></section>';
+        //参数UI元素类型
+        var c='<section class="col col-md-6"><label class="label">UI元素类型(elemtype)</label><label class="input"><input type="hidden" name="elemtype" data-type="select2" data-elemtype="'+search[i].elemtype+'"/></label></section>';
+        //参数数据源（取值范围）
+        var d='<section class="col col-md-6"><label class="label">自定义下拉数据源(modolcd)</label><label class="input"><input type="hidden" name="modolcd" data-type="select2" data-modolcd="'+search[i].modolcd+'"/></label></section>';
+        //数据字典
+        var e='<section class="col col-md-6"><label class="label">数据字典(dict)</label><label class="input"><input type="hidden" name="dict" data-type="select2" data-dict="'+search[i].dict+'"/></label></section>';
+        configUI=configUI+h+'<div name="onerow"><div class="row">'+a+b+'</div><div class="row">'+c+d+'</div><div class="row">'+e+'</div></div>';
+      }
+      return configUI;
+    }
+    
+    //根据type生成配置UI的html
+    function ConfigUI_HTML_TYPE(type){
+      var configUI='';
+      for(var i in type){
+        //header
+        var h='<header>列'+(Number(i)+1)+'：'+type[i].cn+'('+type[i].en+')</header>';
+        //参数英文名
+        var a='<section class="col col-md-6"><label class="label">英文名(en)</label><label class="input"><input type="text" readonly="true" name="en" value="'+type[i].en+'"/></label></section>';
+        //参数中文名
+        var b='<section class="col col-md-6"><label class="label">中文名(cn)</label><label class="input"><input type="text" name="cn" value="'+type[i].cn+'"/></label></section>';
+        configUI=configUI+h+'<div name="onerow"><div class="row">'+a+b+'</div></div>';
+      }
+      return configUI;
+    }
+    
+    //初始化配置UI的select2
+    function InitSelect2(modol_select2_data,dict_select2_data){
+      zy.cache.initDicts('ZR.0060',function(){
+        dy_search.find('[name=elemtype]').zySelect('ZR.0060',false,{width:'100%'});
+        dy_search.find('[name=modolcd]').zySelectCustomData('',false,{width:'100%'},modol_select2_data);
+        dy_search.find('[name=dict]').zySelectCustomData('',false,{width:'100%'},dict_select2_data);
+        //为每个select2赋值
+        dy_search.find('[name=elemtype]').each(function(i){
+          $(this).select2('val',$(this).data('elemtype'));
+        });
+        dy_search.find('[name=modolcd]').each(function(i){
+          $(this).select2('val',$(this).data('modolcd'));
+        });
+        dy_search.find('[name=dict]').each(function(i){
+          $(this).select2('val',$(this).data('dict'));
+        });
+      });
+    }
+    
+    //获取search配置数据
+    function getConfigData_SEARCH(){
+      var search=[];
+      dy_search.children('div[name=onerow]').each(function(i){
+        var $this = $(this);
+        search.push({
+          en:$this.find('[name=en]').val(),
+          cn:$this.find('[name=cn]').val(),
+          elemtype:$this.find('[name=elemtype]').val(),
+          modolcd:$this.find('[name=modolcd]').val(),
+          dict:$this.find('[name=dict]').val()
+        });
+      });
+      return search;
+    }
+    //获取type配置数据
+    function getConfigData_TYPE(){
+      var type=[];
+      dy_type.children('div[name=onerow]').each(function(i){
+        var $this = $(this);
+        type.push({
+          en:$this.find('[name=en]').val(),
+          cn:$this.find('[name=cn]').val()
+        });
+      });
+      return type;
+    }
+    
+    //根据配置更新typecontent数据
+    function upd_typecontent(){
+      var configData_search=getConfigData_SEARCH();
+      $.each(typecontent.search,function(i,v){
+        $.each(configData_search,function(ii,vv){
+          if(vv.en==v.en)
+            $.extend(v,vv);
+        });
+      });
+      var configData_type=getConfigData_TYPE();
+      $.each(typecontent.type,function(i,v){
+        $.each(configData_type,function(ii,vv){
+          if(vv.en==v.en)
+            $.extend(v,vv);
+        });
+      });  
+    }
+    
+    //事件
+    function Event(){
+      //确定按钮事件
+      form.find('button[type=submit]').click(function(e){
+        //search为空时，不用修改
+        if(typecontent.search.length==0){
+          modal.modal('hide');
+          return;
+        }
+        var params={
+          modolcd:modolcd,
+          typecontent:''
+        }
+        //获取提交参数typecontent
+        if(custom_edit_check.is(':checked')){
+          //验证是否为正确的json
+          try{
+            params.typecontent=JSON.stringify(JSON.parse(custom_edit_textarea.val()));
+          }catch(e){
+            zy.log('JSON.parse error='+e);
+            zy.ui.msg('提示：','手动编辑的内容非正确的JSON字符串','i');
+            return;
+          }
+        }else{
+          upd_typecontent();
+          params.typecontent=JSON.stringify(typecontent);
+        }
+        
+        zy.g.am.app="c770045becc04c7583f626faacd3b456";
+        zy.g.am.mod="mddm_view";
+        zy.net.post('api/upd_typecontent',function(msg){
+          if(msg && msg.ret=='0'){
+            zy.ui.msg('提示信息：','保存成功','s');
+            modal.modal('hide');
+          }
+        },params);
+      });
+      
+      //列信息折叠按钮
+      collapse_type.unbind('click').click(function(){
+        if(dy_type.is(':hidden')){
+          dy_type.show();
+          $(this).removeClass().addClass('fa fa-fw fa-minus-circle txt-color-red');
+          $(this).attr('title','折叠');
+        }else{
+          dy_type.hide();
+          $(this).removeClass().addClass('fa fa-fw fa-plus-circle txt-color-green');
+          $(this).attr('title','展开');
+        }
+      });
+      
+      //查询条件信息折叠按钮
+      collapse_search.unbind('click').click(function(){
+        if(dy_search.is(':hidden')){
+          dy_search.show();
+          $(this).removeClass().addClass('fa fa-fw fa-minus-circle txt-color-red');
+          $(this).attr('title','折叠');
+        }else{
+          dy_search.hide();
+          $(this).removeClass().addClass('fa fa-fw fa-plus-circle txt-color-green');
+          $(this).attr('title','展开');
+        }
+      });
+      
+      //手动编辑复选框change事件
+      custom_edit_check.change(function(){
+        var $this=$(this);
+        zy.log(11111,$this.is(':checked'));
+        if($this.is(':checked')){
+          upd_typecontent();
+          custom_edit_textarea.val(JSON.stringify(typecontent,null,4));
+          custom_edit_textarea.show();
+        }else{
+          custom_edit_textarea.hide();
+        }
+      });
+    }
+    
+    main();
+  }
+</script>

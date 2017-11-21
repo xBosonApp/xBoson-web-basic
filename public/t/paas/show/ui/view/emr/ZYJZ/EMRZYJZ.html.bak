@@ -1,0 +1,28 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <form id="fm">
+    <input type="hidden" id="dc2001_empi">
+    <input type="hidden" id="dc2001_jgdm">
+    <input type="hidden" id="dc2001_zylsh">
+<div class="mainsW-912" style="width:940px;">
+	<div id="tt" class="easyui-tabs" style="height:550px;">
+        <div title="住院首页1">
+        	<iframe name="emrzysy1" frameborder="0" scrolling="yes" src="EMRBASY1.html" style="width: 100%; height: 100%;"></iframe>
+        </div>
+        <div title="住院首页2">
+        	<iframe name="emrzysy2" frameborder="0" scrolling="yes" src="EMRBASY2.html" style="width: 100%; height: 100%;"></iframe>
+        </div>
+        <div title="住院记录" data-options="href:'EMRZYJZ1.html'"></div>
+        <div title="医嘱信息" data-options="href:'EMRZYJZ2.html'"></div>
+		<div title="检查报告" style="overflow:hidden">
+		    <iframe name="emrjcbg" frameborder="0" scrolling="yes" src="../JCBG/EMRJCBG.html" style="width: 100%; height: 100%;"></iframe>
+		</div>
+        <div title="检验报告" style="overflow:hidden">
+			<iframe name="emrjybg" frameborder="0" scrolling="yes" src="../JYBG/EMRJYBG.html" style="width: 100%; height: 100%;"></iframe>
+		</div>
+	    <div title="手术记录" style="overflow:hidden">
+			<iframe name="emrssjl" frameborder="0" scrolling="yes" src="../SSJL/EMRSSJL.html" style="width: 100%; height: 100%;"></iframe>
+		</div>
+        <div title="出院小结" data-options="href:'EMRZYJZ3.html'"></div>
+	</div>
+</div>
+</form>

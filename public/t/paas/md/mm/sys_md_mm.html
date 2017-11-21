@@ -1,0 +1,242 @@
+<div class="row">
+<div id="tab_container" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+    <ul>
+      <li class="active"><a href="#tab_first"  ><span>数据集模型</span></a></li>
+      <li ><a href="#tab_second" ><span>用户物理表</span></a></li>
+      <li><a href="#tab_third"><span>索引信息</span></a></li>
+      <li style="display:none" ><a href="#tab_forth" ><span>表格数据</span></a></li>
+      <li><a href="#tab_fifth"><span>引用信息</span></a></li>
+    </ul>
+  
+<!-- widget content -->
+  <div class="tab-content">
+  <div name="tab_first" id="tab_first">
+    <div class="row">
+      <form class="smart-form" onsubmit="return false;" method="post">
+      	<section class="col col-2">
+      		<label class="input">
+      			<input type="text" name="decd" placeholder="数据元编码">
+      		</label>
+      	</section>
+      	<section class="col col-2">
+      		<label class="input">
+      			<input type="text" name="en" placeholder="英文名称">
+      		</label>
+      	</section>
+      	<section class="col col-2">
+      		<label class="input">
+      			<input type="text" name="cn" placeholder="中文名称">
+      		</label>
+      	</section>
+      	<section class="col col-2">
+      		<label class="input">
+      			<input type="hidden" data-type="select2" name="mk" placeholder="主键">
+      		</label>
+      	</section>
+      	<section class="col col-2">
+      		<label class="input">
+      			<input type="hidden" data-type="select2" name="must" placeholder="必须">
+      		</label>
+      	</section>
+      	<!--<section class="col col-2">-->
+      	<!--	<label class="input">-->
+      	<!--		<input type="text" name="version" placeholder="版本">-->
+      	<!--	</label>-->
+      	<!--</section>-->
+      	<section class="col col-2">
+      		<button class="btn btn-default btn-sm btn-info btn-primary" name="search">&emsp;查 询&emsp;<i class="fa fa-search fa-1"></i>
+      		</button>
+      	</section>
+      </form>
+    </div>
+    <div class="btn-group">
+        <button name="add" class="btn btn-info btn-xs">&emsp;<i class="fa fa-magic"></i>&nbsp;添 加&emsp;
+        </button>
+        <button name="edit" class="btn btn-info btn-xs">&emsp;<i class="fa fa-edit"></i>&nbsp;修 改&emsp;
+        </button>
+        <button name="delete" class="btn btn-info btn-xs">&emsp;<i class="fa fa-trash-o "></i>&emsp;注 销&emsp;
+        </button>
+        <button name="sort" class="btn btn-info btn-xs">&emsp;<i class="fa fa-sort "></i>&emsp;排 序&emsp;
+        </button>
+        <button name="copy" class="btn btn-info btn-xs">&emsp;<i class="fa fa-copy "></i>&emsp;复 制&emsp;
+        </button>
+        <button name="export" class="btn btn-info btn-xs">&emsp;<i class="glyphicon glyphicon-export "></i>&emsp;导 出&emsp;
+        </button>
+      </div>
+    <div class="pull-right">
+      <b name="total_count"></b>
+    </div>
+    <!--<div></div>-->
+    <div class="table-responsive">
+      <table id="firstDt" name="table" class="table table-bordered table-striped">
+      </table>
+    </div>
+    <div name="pagination"></div>
+  </div>
+  
+  <div name="tab_second" id="tab_second">
+      <div class="row">
+        <form name="form" method="post" onsubmit="return false;" class="smart-form">
+          <section class="col col-2">
+            <label class="input">
+              <input type="text" name="cn" placeholder="中文名" class="form-control input-sm">
+            </label>
+          </section>
+          <section class="col col-2">
+            <label class="input">
+              <input type="text" name="en" placeholder="英文名" class="form-control input-sm">
+            </label>
+          </section>
+          <section class="col col-2">
+          <button name="search" class="btn btn-info btn-sm" type="submit"><i class="fa fa-search fa-1"></i>&emsp;查 询&emsp;</button>
+          </section>
+        </form>
+      </div>
+      <div class="btn-group">
+        <button name="add" class="btn btn-info btn-xs">&emsp;<i class="fa fa-magic"></i>&nbsp;创建物理表&emsp;
+        </button>
+        <button name="edit" class="btn btn-info btn-xs">&emsp;<i class="fa fa-edit"></i>&nbsp;修改表信息&emsp;
+        </button>
+        <button name="data" class="btn btn-info btn-xs">&emsp;<i class="fa fa-edit"></i>&nbsp;查看数据&emsp;
+        </button>
+        <button name="index" class="btn btn-info btn-xs">&emsp;<i class="fa fa-edit"></i>&nbsp;查看索引&emsp;
+        </button>
+        <button name="ddl" class="btn btn-info btn-xs">&emsp;<i class="fa fa-legal"></i>&nbsp;查看表定义语句&emsp;
+        </button>
+        <button name="delete" class="btn btn-info btn-xs">&emsp;<i class="fa fa-trash-o "></i>&emsp;删除物理表&emsp;
+        </button>
+        <button name="config-ui" class="btn btn-info btn-xs">&emsp;<i class="fa fa-magic"></i>&emsp;画面配置&emsp;</button>
+      </div>
+      <div class="pull-right">
+        <b name="total_count"></b>
+      </div>
+    <div class="dataTables_wrapper">
+      <table name="table" class="table table-bordered table-striped">
+      <thead></thead>
+      </table>
+    </div>
+    <div name="pagination"></div>
+  </div>
+  
+  <div name="tab_third" id="tab_third">
+      <div class="row">
+        <form name="form" method="post" onsubmit="return false;" class="smart-form">
+          <section class="col col-2">
+            <label class="input">
+              <input type="text" name="cn" placeholder="中文名" class="form-control input-sm">
+            </label>
+          </section>
+          <section class="col col-2">
+            <label class="input">
+              <input type="text" name="en" placeholder="英文名" class="form-control input-sm">
+            </label>
+          </section>
+          <section class="col col-2">
+            <label class="input">
+              <input type="text" name="fields" placeholder="字段物理名称" class="form-control input-sm">
+            </label>
+          </section>
+          <section class="col col-2">
+          <button name="search" class="btn btn-info btn-sm" type="submit"><i class="fa fa-search fa-1"></i>&emsp;查 询&emsp;</button>
+          </section>
+        </form>
+      </div>
+      <div class="btn-group">
+        <button name="add" class="btn btn-info btn-xs">&emsp;<i class="fa fa-magic"></i>&nbsp;添 加&emsp;
+        </button>
+         <button name="edit" class="btn btn-info btn-xs">&emsp;<i class="fa fa-edit"></i>&nbsp;修 改&emsp;
+        </button>
+        <button name="delete" class="btn btn-info btn-xs">&emsp;<i class="fa fa-trash-o "></i>&emsp;注 销&emsp;
+        </button>
+      </div>
+      <div class="pull-right">
+        <b name="total_count"></b>
+      </div>
+    <div class="dataTables_wrapper">
+      <table name="table" class="table table-bordered table-striped">
+      </table>
+    </div>
+    <div name="pagination"></div>
+  </div>
+  
+  <div name="tab_forth"  id="tab_forth">
+      <div class="row">
+        <form name="form" method="post" onsubmit="return false;" class="smart-form">
+          <section class="col col-6">
+            <label class="textarea">
+              <textarea rows="3" name="wherearea" placeholder="条件（a='1' order by b）"></textarea>
+            </label>
+          </section>
+          <section class="col col-2">
+          <button name="param" class="btn btn-info btn-sm" type="submit"><i class="fa fa-filter  fa-1"></i>&emsp;条 件&emsp;</button>
+          </section>
+          <section class="col col-2">
+          <button name="search" class="btn btn-info btn-sm" type="submit"><i class="fa fa-search fa-1"></i>&emsp;查 询&emsp;</button>
+          </section>
+        </form>
+      </div>
+      <div class="btn-group">
+        <button name="add" class="btn btn-info btn-xs">&emsp;<i class="fa fa-magic"></i>&nbsp;添 加&emsp;
+        </button>
+        <button name="edit" class="btn btn-info btn-xs">&emsp;<i class="fa fa-edit "></i>&emsp;修 改&emsp;
+        </button>
+        <button name="delete" class="btn btn-info btn-xs">&emsp;<i class="fa fa-trash-o "></i>&emsp;注 销&emsp;
+        </button>
+        <button name="export" class="btn btn-info btn-xs">&emsp;<i class="glyphicon glyphicon-export "></i>&emsp;导 出&emsp;
+        </button>
+        <button name="inport" class="btn btn-info btn-xs">&emsp;<i class="glyphicon glyphicon-import "></i>&emsp;导 入&emsp;
+        </button>
+      </div>
+      <div class="pull-right">
+        <b name="total_count"></b>
+      </div>
+      <div></div>
+  </div>
+  
+  <div name="tab_fifth" id="tab_fifth">
+      <div class="row">
+        <form name="form" method="post" onsubmit="return false;" class="smart-form">
+            <section class="col col-sm-3">
+              <label class="input">
+                <input type="text" name="bstype" placeholder="业务类型" class="form-control input-sm">
+              </label>
+            </section>
+            <section class="col col-2">
+            <button name="search" class="btn btn-info btn-sm" type="submit"><i class="fa fa-search fa-1"></i>&emsp;查 询&emsp;</button>
+            </section>
+        </form>
+      </div>
+      <div class="btn-group">
+        <!--<button name="add" class="btn btn-info btn-xs">&emsp;<i class="fa fa-magic"></i>&nbsp;添 加&emsp;-->
+        <!--</button>-->
+        <!-- <button name="edit" class="btn btn-info btn-xs">&emsp;<i class="fa fa-edit"></i>&nbsp;修 改&emsp;-->
+        <!--</button>-->
+        <!--<button name="delete" class="btn btn-info btn-xs">&emsp;<i class="fa fa-trash-o "></i>&emsp;注 销&emsp;-->
+        <!--</button>-->
+      </div>
+      <div class="pull-right">
+        <b name="total_count"></b>
+      </div>
+    <div class="dataTables_wrapper">
+      <table name="table" class="table table-bordered table-striped">
+      </table>
+    </div>
+    <div name="pagination"></div>
+  </div>
+  </div>
+
+</div>
+</div>
+
+<div id="modal_container"></div>
+<div id="modal_container1"></div>
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<!--<script src="lib/html/zy_tabs.js"></script>-->
+<script type="text/javascript" src="md/ex_inport/export.js"></script>
+<script src="lib/html/zy_dytable.js"></script>
+<script src="md/mm/sys_md_mm.js"></script>
+<script type="text/javascript">
+  // var md_mm= new sys_md_mm();
+  $('#tab_container').tabs();
+</script>

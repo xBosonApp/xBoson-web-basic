@@ -1,0 +1,303 @@
+<script type="text/javascript" language="JavaScript" src="/t/paas/show/ui/comm.js"></script>	
+<script type="text/javascript">
+var pagenum=1;
+var pagesize=10;
+var zzhzData;
+var rowno=0;
+var sexMap  = new Map();
+var aoidMap  = new Map();
+var tsMap  = new Map();
+$(function () {
+
+  
+  var tommorrow=new Date();
+   $("#startatime").val(LC_FormatYMD(tommorrow.setDate(tommorrow.getDate())));
+	$("#endatime").val(LC_FormatYMD(tommorrow.setDate(tommorrow.getDate())));
+
+
+getselectdaoid();
+getselectdts();
+getselectd();
+getselectaoid();
+});
+setTimeout(function(){
+	 showDatazzhz();
+	}, 1500);
+function  getselectdaoid(){
+  var url="mdm/orgs/";
+  var infoa = new Map();
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"formfix2","mdmSelectdaoid",infoa,itemsList);
+}
+
+function mdmSelectdaoid(data){
+  var info = new Map();
+  info.put("key",["orgId"]);
+  info.put("value",["orgNm"]);
+  aoidMap=LC_getDataMap(info,data.dataList);
+}
+function  getselectd(){
+  var url="mdm/dict/listget/";
+  var infoa = new Map();
+  infoa.put("stringsplit","VA0004.04");
+  var itemsList= [];
+
+  LC_AjaxGet(MDMBaseUrl+url,"formfix2","mdmSelectd",infoa,itemsList);
+
+}
+
+function mdmSelectd(data){
+
+  var info = new Map();
+  info.put("key",["typeCode2"]);
+  info.put("value",["typeName"]);
+// map获取
+  sexMap=LC_getDataMap(info,data.dataList["VA0004.04"]);
+
+}
+
+
+function zzhzcallback(retData){
+    zzhzData=retData;
+    $("#div-zzhz").datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+	            singleSelect:true,
+				pagination:true,
+				pageNumber:pagenum,
+				pageSize: pagesize,
+				loadMsg:"正在载入...",
+                pageList: [10,20,50,100,200],
+				data:zzhzData.dataList,
+				fitColumns:true,
+				columns:[[
+				   {field:'pname',title:'姓名',width:80,align:'center'},
+				   {field:'psex',title:'性别',width:32,align:'center',
+ 						formatter:function(value){
+  					return LC_getMapValue(value,sexMap);
+					 }},
+				   //{field:'psex',title:'性别',width:45,align:'center'},
+				   {field:'pbirthdday',title:'生日',width:110,align:'center',
+				   formatter:function(value){
+					  return LC_SubStr(value,0,10);
+					 }},
+				   {field:'eid',title:'身份证号',width:170,align:'center'},
+				   {field:'aoid',title:'转出医疗机构',width:130,align:'center',
+				    formatter:function(value){
+					  return LC_getMapValue(value,aoidMap);
+					 }},
+				   {field:'utime',title:'申请时间',width:110,align:'center',
+				   formatter:function(value){
+					  return LC_SubStr(value,0,10);
+					 }},
+				   {field:'ts',title:'申请状态',width:120,align:'center',
+					 formatter:function(value){
+					  return LC_getMapValue(value,tsMap);
+					 }},
+				   {field:'goalhid',title:'转入医疗结构',width:130,align:'center',
+				    formatter:function(value){
+					  return LC_getMapValue(value,aoidMap);
+					 }}
+				]],
+				onClickRow: function (rowIndex) {
+		          rowno=rowIndex;
+		        },                  
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true
+		}); 
+
+	   var pager = $('#div-zzhz').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pagenum=pageNumber;
+		           pagesize=pageSize;
+		           showDatazzhz();
+		        }
+			});	
+		 
+			$(pager).pagination({pageSize:pagesize,pageNumer:pagenum,total:zzhzData.count});
+
+		};
+    
+    }
+function showDatazzhz(){
+		LC_Resetting("zzhzform");
+		var checkpcthrItems=["startatime","endatime"];
+		LC_IsCheckNotNull("zzhzform",checkpcthrItems);
+		if(retCheckFlg){
+		var url ="zzhzjzjs/"; 
+        var itemsList=["pname","eid","startatime","endatime","pphone","aoid"];
+		
+		var info= new Map();	
+	    info.put("pagenum",pagenum);
+	    info.put("pagesize",pagesize);
+        LC_AjaxGet(TRSBaseUrl+url,"zzhzform","zzhzcallback",info,itemsList);	
+		}
+	}
+	
+	function qrjz(){  
+		$.messager.confirm('提示信息', '确认患者'+zzhzData.dataList[rowno].pname+'已经就诊?',
+		 function(r){
+			if (r){
+				var url="zzhzjzqrjz/";
+				var itemsList=[];
+				var info= new Map();	
+			    info.put("cthid",zzhzData.dataList[rowno].cthid);
+			    info.put("thid",zzhzData.dataList[rowno].thid);
+		        LC_AjaxGet(TRSBaseUrl+url,"zzhzform","callbackQRJZ",info,itemsList);	
+				setTimeout(function(){
+				 showDatazzhz();
+				}, 300);
+			}
+		});
+	}
+	function callbackQRJZ(retData){
+		if(retData.ret=="0"){
+			$.messager.alert('操作成功','就诊成功');
+			
+			}else{
+				$.messager.alert('操作失败','就诊失败');
+				}
+	}
+
+ function  getselectaoid(){
+
+  var url="mdm/osms004OrgId/";
+  var infoa = new Map();
+  infoa.put("orgid",self.parent.orgid);
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"aoid","mdmSelectoid",infoa,itemsList);
+}
+
+function mdmSelectoid(data){
+  var info = new Map();
+  info.put("key",["orgid"]);
+  info.put("value",["orgNm"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("zzhzform","aoid",info,data.dataList);
+}
+//转换申请状态
+
+function  getselectdts(){
+  var url="mdm/dict/listget/";
+  var infoa = new Map();
+  infoa.put("stringsplit","VA0004.912");
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"","mdmSelectdts",infoa,itemsList);
+}
+function mdmSelectdts(data){
+  var info = new Map();
+  info.put("key",["typeCode2"]);
+  info.put("value",["typeName"]);
+  tsMap=LC_getDataMap(info,data.dataList["VA0004.912"]);
+}
+</script> 
+<style>
+body{ font-size:12px;}
+.padding1{padding:10px 0 0 7px;}
+</style>
+<div class="padding1">
+<div class="mainsW-912" style="height:600px;">
+    <div class="mainsW-912">
+		<div class="easyui-panel" title="检索信息" style="height:130px;!height:100px;">
+            <div class="flPadTB-10">
+            <form id="zzhzform" style="margin:0;">
+            	<div class="clearfix">
+                    <div class="mainW-224" >
+                        <div class="itemLW-112 padT-4">开始时间：</div>
+                        <div class="itemRW-112"><input class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" style="width:112px;" id="startatime"/></div>
+                     </div>
+                     <div class="mainW-224" >
+                        <div class="itemLW-112 padT-4">结束时间：</div>
+                        <div class="itemRW-112"><input class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" type="text" style="width:112px;" id="endatime"/></div>
+                     </div>
+                     <div class="mainW-224" >
+                        <div class="itemLW-112 padT-4">姓名：</div>
+                        <div class="itemRW-112"><input class="textLW" type="text" id="pname"/></div>
+                     </div>
+                     <div class="mainW-224" >
+                            <div class="itemLW-112 padT-4">联系方式：</div>
+                            <div class="itemRW-112"><input class="textLW" type="text" id="pphone"/></div>
+                         </div>
+                     
+                     <div class="mainW-896">
+                       <div class="mainW-448" >
+                        <div class="itemLW-112 padT-4">身份证号：</div>
+                        <div class="itemRW-336"><input class="textLW" type="text" id="eid"/></div>
+                     </div>
+                         <div class="mainW-448">
+                            <div class="itemLW-112 padT-4">转出机构：</div>
+	                            <div class="itemRW-336">
+	                            	<select class="textLW" name="dept" id="aoid"></select>
+	                            </div>
+                         </div>
+                     </div>
+                 </div>
+               </form>
+                 <div class="itemLW-896"><a href="#" id="delaysearch" class="easyui-linkbutton" onclick="showDatazzhz();">检索</a></div>
+             </div>
+        </div>
+	</div>
+		<div class="mainsW-912">
+			<table id="div-zzhz" toolbar="#detailed-toolbar" ></table>
+		</div>
+        <div id="detailed-toolbar">
+            <!--<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="">查看档案</a>-->
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="qrjz()">确认就诊</a>
+        </div>
+</div>
+</div>
+
+
+
+<script type="text/javascript">
+//搜索延迟两秒
+var oInput = document.getElementById('delaysearch');
+        oInput.onclick = function(){
+				setTimeout(function(){
+				pagenum=1;
+				pagesize=10;
+				
+	showDatazzhz()
+}, 300);
+		$("#delaysearch").linkbutton({  
+			disabled:true  
+			}); 
+        setTimeout(function(){
+			$("#delaysearch").linkbutton({  
+			disabled:false  
+			}); 
+		},1000*2);
+}
+
+//添加修改延迟五秒
+var oInput = document.getElementById('delayalter');
+        oInput.onclick = function(){
+		$("#delayalter").linkbutton({  
+			disabled:true  
+			}); 
+        setTimeout(function(){
+			$("#delayalter").linkbutton({  
+			disabled:false  
+			}); 
+		},1000*5);
+}
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

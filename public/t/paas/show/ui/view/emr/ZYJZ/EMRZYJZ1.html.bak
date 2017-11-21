@@ -1,0 +1,223 @@
+
+  <script type="text/javascript">
+	var emrzyjz1data2;
+	$(function () {
+	   showDatacssjl();
+	});
+	function emrzyjz1callback(retData){
+		emrzyjz1data2=retData;
+		LC_SetMapData("emrzyjz1form",emrzyjz1data2.zyjz1data);
+		var timeList=["dc2001_ryrq","dc2001_cyrq"];
+		 LC_FormatTextYMD("emrzyjz1form",["dc2001_ryrq","dc2001_cyrq"]);
+	}
+	function showDatacssjl(){
+		if(retCheckFlg){	
+				var url ="emrzyjz1/"; 	
+				var itemsList=[];	
+				var info= new Map();	
+				if(self.parent.jgdm!=undefined){
+				info.put("jgdm",self.parent.jgdm);
+				info.put("zylsh",self.parent.zylsh);
+				info.put("pid",self.parent.zylsh);
+				}
+				LC_AjaxGet(EMRBaseUrl+url,"emrzyjz1form","emrzyjz1callback",info,itemsList);	
+		}		
+	}
+</script>
+
+<div class="mainsW-872">
+     <form  id="emrzyjz1form">
+     <input type="hidden" id="jgdm" />
+     <input type="hidden" id="zylsh" />
+        <div class="mainW">
+               <div class="itemsW-272">
+                    <div class="itemLW-112">
+                      入院日期：
+                    </div>
+ 		    <div class="itemRW-160">
+                       <input id="dc2001_ryrq"  class="textLW" />  
+                    </div>
+               </div>
+               <div class="itemsW-272">
+                    <div class="itemLW-112">
+                      结束时间：
+                    </div>
+ 		    <div class="itemRW-160">
+                        <input id="dc2001_cyrq"   class="textLW" /> 
+                    </div>
+               </div>
+               <div class="itemsW-272">
+                    <div class="itemLW-112">
+                     住院天数：
+                    </div>
+ 		    <div class="itemRW-160">
+                    <input id="dc2001_zyts"  class="textLW" />
+                    </div>
+               </div>              
+		        <div class="itemsW-272">
+                    <div class="itemLW-112">
+	               门(急)诊诊断：
+                    </div>
+ 		    <div class="itemRW-160">
+                   		<input id="dc2001_mzzd"  class="textLW"/>
+                    </div>
+               </div>	          
+		        <div class="itemsW-272">
+                    <div class="itemLW-112">
+	               入院方式：
+                    </div>
+ 		    <div class="itemRW-160">
+                   		<input id="dc2001_ryfs"   class="textLW" />
+                    </div>
+               </div>                
+		        <div class="itemsW-272">
+                    <div class="itemLW-112">
+	               入院情况：
+                    </div>
+ 		    <div class="itemRW-160">
+                   		<input id="dc2001_ryqk"  class="textLW"/>
+                    </div>
+               </div>    
+          <div class="itemsW-272">
+                    <div class="itemLW-112">
+	               入院科室：
+                    </div>
+ 		    <div class="itemRW-160">
+                   		<input id="dc2001_ryksmc"  class="textLW" />
+                    </div>
+               </div>    
+                <div class="itemsW-272">
+                    <div class="itemLW-112">
+	               出院科室：
+                    </div>
+ 		    <div class="itemRW-160">
+                   		<input id="dc2001_cyks" class="textLW" />
+                    </div>
+               </div>     
+            <div class="itemsW-272">
+                    <div class="itemLW-112">
+	              联系人：
+                    </div>
+ 		    <div class="itemRW-160">
+                   		<input id="dc2001_lxry"  class="textLW" />
+                    </div>
+               </div>     
+              <div class="itemsW-272">
+                    <div class="itemLW-112">
+	              联系关系：
+                    </div>
+ 		    <div class="itemRW-160">
+                   		<input id="dc2001_lxrgx" class="textLW" />
+                    </div>
+               </div>       
+              <div class="itemsW-272">
+                    <div class="itemLW-112">
+	              联系手机：
+                    </div>
+ 		    <div class="itemRW-160">
+                   		<input id="dc2001_lxrsj"  class="textLW" />
+                    </div>
+               </div>
+            <div class="itemsW-272">
+                    <div class="itemLW-112">
+	              联系人固话：
+                    </div>
+ 		    <div class="itemRW-160">
+                   		<input id="dc2001_lxrdh"  class="textLW" />
+                    </div>
+               </div>               
+           </div>
+       <div class="mainW">
+       		      <div class="itemsW-544">
+                    <div class="itemLW-112">
+	              联系人地址：
+                    </div>
+ 		    <div class="itemRW-432">
+                   		<input id="dc2001_lxrdz" class="textLW"/>
+                    </div>
+               </div>
+               
+       </div>      
+           <div class="mainW">
+       		      <div class="itemsW-272">
+                    <div class="itemLW-112">
+	              住院原因：
+                    </div>
+ 		    <div class="itemRW-160">
+                   		<input id="dc2001_zyyy"  class="textLW" >
+                    </div>
+               </div>              
+                 <div class="itemsW-272">
+                    <div class="itemLW-112">
+	              住院症状：
+                    </div>
+ 		    <div class="itemRW-160">
+                   		<input id="dc2001_zzmc"  class="textLW" >
+                    </div>
+               </div>              
+       </div>      
+           <div class="mainW">
+       		      <div class="itemsW-544">
+                    <div class="itemLW-112">
+	              入院诊断描述：
+                    </div>
+ 		    <div class="itemRW-432">
+                   		<input id="dc2001_ryzdms" class="textLW" />
+                    </div>
+               </div>              
+       </div>    
+             <div class="mainW">
+       		      <div class="itemsW-544">
+                    <div class="itemLW-112">
+	              入院情况：
+                    </div>
+ 		    <div class="itemRW-432">
+                   		<textarea id="dc2001_ryqkms" rows="5" cols="85"></textarea>
+                    </div>
+               </div>              
+       </div>
+         <div class="mainW">
+       		      <div class="itemsW-544">
+                    <div class="itemLW-112">
+	              出院情况：
+                    </div>
+ 		    <div class="itemRW-432">
+                   		<textarea id="dc2001_cyqkms" rows="5" cols="85"></textarea>
+                    </div>
+               </div>              
+       </div>
+         <div class="mainW">
+       		      <div class="itemsW-544">
+                    <div class="itemLW-112">
+	              诊疗经过：
+                    </div>
+ 		    <div class="itemRW-432">
+                   		<textarea id="dc2001_zljg" rows="5" cols="85"></textarea>
+                    </div>
+               </div>               
+       </div>
+       
+         <div class="mainW">
+       		      <div class="itemsW-544">
+                    <div class="itemLW-112">
+	              出院医嘱：
+                    </div>
+ 		    <div class="itemRW-432">
+                   		<textarea id="dc2001_cyyz" rows="5" cols="85"></textarea>
+                    </div>
+               </div>               
+       </div>
+       <div class="mainW">
+       		      <div class="itemsW-544">
+                    <div class="itemLW-112">
+	              随访要求：
+                    </div>
+ 		    <div class="itemRW-432">
+                   		<textarea id="dc2001_sfyq" rows="5" cols="85"></textarea>
+                    </div>
+               </div>               
+       </div>
+   </form>
+</div>
+     
+

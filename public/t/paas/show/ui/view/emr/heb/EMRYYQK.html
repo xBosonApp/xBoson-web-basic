@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script type="text/javascript" language="JavaScript" src="/t/paas/show/ui/comm.js"></script>
+<script type="text/javascript">
+var pageNum=1;
+var pageSize=10;
+var data1;
+var data2;
+$(function () {
+   showDatacfxx();
+});
+
+
+
+ 	function emrmzjz3callback(retData){
+ 	data1 = retData;
+ 	$('#cfxx').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+ 				singleSelect:true,
+				title:'处方信息',
+				pagination:true,
+				singleSelect:true,
+				pageNumber:pageNum,
+				pageSize: pageSize,
+				loadMsg:"正在载入...",
+                pageList: [10,20,50,100,200],
+				data:data1.dataList,
+				columns:[[
+				  // {field:'tablename',title:'序号',width:60,align:'center'},
+				   {field:'dc1003_cflb',title:'类型',width:100,align:'center'},
+				   {field:'dc1003_kdysxm',title:'开方医生',width:100,align:'center'},
+				   {field:'dc1003_kdksmc',title:'开方科室',width:100,align:'center'},
+				   {field:'dc1003_cfts',title:'开方帖数',width:100,align:'center'},
+				   {field:'dc1003_zyzf',title:'中药煮煎法',width:100,align:'center'},
+				   {field:'dc1003_kdrq',title:'开方日期',width:100,align:'center',
+				   	   formatter:function(value){
+		                   return LC_FormatYMD(value);
+		               }
+		           },
+				   {field:'dc1003_jgdm',title:'医院',width:160,align:'center'}
+				]],                  
+   
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true
+		}); 
+
+	   var pager = $('#cfxx').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pageNum=pageNumber;
+		           pageSize=pageSize;
+		           showDatacfxx();
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:pageSize,pageNumber:pageNum,total:data1.count});
+
+		};
+ 	
+ 	}
+
+	function showDatacfxx(){
+	
+		// ******************* 请求数据***********************		
+		
+			    //你的服务名
+	        var url ="emrmzjz3/"; 
+
+			var loadpid=LoadUrlParm.parm("pid");
+			var typeCode=LoadUrlParm.parm("typeCode");
+			//alert(EMRBaseUrl+url+"?callback=emrmzjz4callback&pageNum=1&pageSize=5&pid="+loadpid+"&typeCode="+typeCode);
+			$.ajax({
+			   type: "get",
+		       //contentType : 'application/json;charset=utf-8',
+			   url : EMRBaseUrl+url+"?callback=emrmzjz3callback&pageNum=1&pageSize=5&pid="+loadpid+"&typeCode="+typeCode,
+			   dataType:"jsonp",
+			   //jsonp: "jsoncallback",   
+			   async: false, 
+			   jsonpCallback: "emrmzjz3callback",
+			   success : function(data) {
+		
+			   },   
+			   error : function() {   
+				   self.parent.$.messager.alert('系统错误提示',"操作数据失败",'error'); 
+				   retData= undefined;
+			   }   
+			});
+	
+		 //******************** 处理请求后的数据***************	
+	
+	}
+
+</script>
+</head>
+<body>
+  <table id="cfxx" ></table>
+</body>
+</html>

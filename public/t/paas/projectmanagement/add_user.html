@@ -1,0 +1,70 @@
+<div class="modal fade" id="search_user" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" id="close_btn" class="close" aria-hidden="true">&times;</button>
+        <h4 class="modal-title"><span id="search_user_title">用户检索</span></h4>
+      </div>
+      <div class="modal-body no-padding">
+        <form id="search_user_form" method="post" onsubmit="return false;" class="smart-form">
+          <fieldset>
+            <section>
+              <h6>请输入至少一个除性别以外的查询条件</h6> </section>
+            <div class="row">
+              <section class="col col-4">
+                <label class="input">
+                  <input type="text" name="userid" placeholder="用户ID" class="form-control input-sm" />
+                </label>
+              </section>
+              <section class="col col-4">
+                <label class="input">
+                  <input type="text" name="de0201039" placeholder="姓名" class="form-control input-sm">
+                </label>
+              </section>
+              <section class="col col-4">
+                <label class="input">
+                  <input type="hidden" name="de0201040" data-type="select2" placeholder="性别">
+                </label>
+              </section>
+            </div>
+            <div class="row">
+              <section class="col col-4">
+                <label class="input">
+                  <input type="text" name="de0201010" placeholder="电话号码" class="form-control input-sm">
+                </label>
+              </section>
+              <section class="col col-4">
+                <label class="input">
+                  <input type="text" name="de0201012" placeholder="电子邮箱" class="form-control input-sm">
+                </label>
+              </section>
+              <section class="col col-4">
+                <button id="search_btn" class="btn btn-info btn-sm" type="submit"><i class="fa fa-search fa-1"></i> &emsp;查 询&emsp;</button>
+              </section>
+            </div>
+            <div class="dataTables_wrapper" style="display: none">
+              <table id="search_user_dt" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>用户ID</th>
+                    <th>姓名</th>
+                    <th>性别</th>
+                    <th>电话号码</th>
+                    <th>电子邮箱</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+            <div id="search_user_pagination"></div>
+          </fieldset>
+          <footer>
+            <button type="button" id="cancel_btn" class="btn btn-default">取消</button>
+            <button type="submit" id="confirm_btn" class="btn btn-primary">选择用户</button>
+          </footer>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal -->
+</div>
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>

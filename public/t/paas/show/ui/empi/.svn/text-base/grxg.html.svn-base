@@ -1,0 +1,309 @@
+
+<script type="text/javascript">
+
+
+
+var grxgdata;
+var grxgdata1;
+$(function () {
+	
+$("input").attr('disabled','disabled');
+$("select").attr('disabled','disabled');
+LC_SetMapData("grxg",self.parent.dataMap);
+   showDatagrxg(self.parent.dataMap);
+   showDatagrxg1(self.parent.dataMap);
+ getselect();
+});
+
+function agrxgcallback(retData){
+    grxgdata=retData;
+	$('#div-grxg').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+				title:'证件',
+			//	pagination:true,
+			//	pageNumber:pageNum,
+			//	pageSize: pageSize,
+				loadMsg:"正在载入...",
+           //     pageList: [10,20,50,100,200],
+                singleSelect:true, 
+				data:grxgdata.credentials,
+				fitColumns:true,
+				columns:[[
+				   {field:'type',title:'证件类型',width:120},
+				   {field:'num',title:'证件号',width:160  }
+				   	]],                  
+                onDblClickRow: function (rowIndex) {
+                  openRoleDiv(rowIndex);
+                },
+                onClickRow: function (rowIndex) {
+		          rowno=rowIndex;
+		        },
+                
+               fitColumns:false,
+			//   pagination:true,
+               rownumbers:true,
+               height:206,
+			   width:705
+
+		}); 
+ 
+	  /* var pager = $('#div-grxg').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pageNum=pageNumber;
+		           pageSize=pageSize;
+		           showDatagrxg();
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:pageSize,pageNumber:pageNum,total:grxgdata.count});
+
+		};*/
+	
+	}
+
+function showDatagrxg(data){
+          agrxgcallback(data);
+  		/*var url="getpersoninfo/";
+     	var itemsList=["type","num"];	
+    	var itemsList=[];
+		var info= new Map();	
+      	info.put("start",(pageNum*1-1)*pageSize);
+       	info.put("pagesize",pageSize);
+	
+      	LC_AjaxGet(EMPIUrl+url,"grxg","agrxgcallback",info,[]);
+      */
+	}
+
+
+function agrxgcallback1(retData){
+    grxgdata1=retData;
+	$('#div-grxg1').datagrid({
+	            nowrap: false,
+	         //   striped: true,
+	            collapsible:false,
+				title:'电话',
+			//	pagination:true,
+			//	pageNumber:pageNum,
+			//	pageSize: pageSize,
+				loadMsg:"正在载入...",
+              //pageList: [10,20,50,100,200],
+                singleSelect:true, 
+				data:grxgdata1.phones,
+				fitColumns:true,
+				columns:[[
+				   {field:'type',title:'电话类型',width:120},
+				   {field:'num',title:'电话号',width:160 }
+				   	]],                  
+                onDblClickRow: function (rowIndex) {
+                  openRoleDiv(rowIndex);
+                },
+                onClickRow: function (rowIndex) {
+		          rowno=rowIndex;
+		        },
+                
+               fitColumns:false,
+			   //pagination:true,
+             //  rownumbers:true,
+               height:206,
+			   width:705
+		}); 
+
+	 /*  var pager = $('#div-grxg1').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pageNum=pageNumber;
+		           pageSize=pageSize;
+		           showDatagrxg1();
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:pageSize,pageNumber:pageNum,total:grxgdata1.count});
+
+		};*/
+	
+	}
+
+function showDatagrxg1(data){
+        agrxgcallback1(data);
+  		/*var url="getpersoninfo/";
+     	var itemsList=["type","num"];	
+    	var itemsList=[];
+		var info= new Map();	
+      	info.put("start",(pageNum*1-1)*pageSize);
+       	info.put("pagesize",pageSize);
+	
+      	LC_AjaxGet(EMPIUrl+url,"grxg1","agrxgcallback",info,[]);
+      	*/
+	}
+
+
+ function  getselect(){
+
+  var url="mdm/dict/listget/";
+  var infoa = new Map();
+  infoa.put("stringsplit","VA0004.04");
+  var itemsList= [];
+
+  LC_AjaxGet(MDMBaseUrl+url,"grxg","mdmSelect",infoa,itemsList);
+//alert(self.parent.dataMap.gender);
+   setTimeout(function(){
+$("#grxg #gender").val(self.parent.dataMap.gender);
+}, 1500);
+
+
+}
+
+function mdmSelect(data){
+
+  var info = new Map();
+  info.put("key",["typeCode2"]);
+  info.put("value",["typeName"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("grxg","gender",info,data.dataList["VA0004.04"]);
+
+}
+$("#grxg").find("#birthday").val(LC_SubStr(self.parent.dataMap.birthday,0,10));
+</script>
+		 <div id="getpersons" class="flPadTB-10">	
+<form id="grxg">			
+<input type="hidden" id="pid"/>
+ 			<div class="mainW-736">
+			<div class="mainW-224" >
+				<div class="itemLW-96 padT-4" >姓名：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="pname" /></div>
+			</div>
+			
+			<div class="mainW-224" >
+				<div class="itemLW-96 padT-4" >性别代码：</div>	
+				<div class="itemRW-128"><!--<input class="textLW" type="text" id="gender" />--><select id="gender" name="dept"></select></div>
+			</div>
+			
+			<div class="mainW-224" >
+			    <div class="itemLW-96 padT-4" >出生日期：</div>	
+				<div class="itemLW-128"><input class="Wdate" onClick="WdatePicker()"  type="text" style="width:128px;" id="birthday" /></div>
+			</div>
+			</div>
+			
+ 			<div class="mainW-736">
+			<div class="mainW-224" >
+				<div class="itemLW-96 padT-4" >电子邮件地址：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="email" /></div>
+			</div>
+			
+			<div class="mainW-224" >
+				<div class="itemLW-96 padT-4" >身份证：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="idcard" /></div>
+	</div>
+			<div class="mainW-224" >
+				<div class="itemLW-96 padT-4" >昵称：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="nickname" /></div>
+			</div>
+			</div>
+			
+			<div class="mainW-736">
+			<div class="mainW-224" >
+				<div class="itemLW-96 padT-4" >户籍类型代码：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="registeretype" /></div>
+			</div>
+			
+			<div class="mainW-224" >
+				<div class="itemLW-96 padT-4" >地址-省：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="addrprovince" /></div>
+			</div>
+			
+			<div class="mainW-224" >
+				<div class="itemLW-96 padT-4" >地址-市：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="addrcity" /></div>
+			</div>
+			</div>
+			
+		    <div class="mainW-736">
+			<div class="mainW-224" >
+				<div class="itemLW-96 padT-4" >地址-县：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="addrcounty" /></div>
+			</div>	
+			
+			<div class="mainW-224" >
+			    <div class="itemLW-96 padT-4" >地址-村：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="addrvillage" /></div>
+			</div>	
+			
+			<div class="mainW-224" >
+			    <div class="itemLW-96 padT-4" >地址-门牌号码：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="addrhouseid" /></div>
+			</div>
+			</div>
+			
+			<div class="mainW-736">
+			<div class="mainW-224" >
+			    <div class="itemLW-96 padT-4" >国籍：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="nationality" /></div>
+			</div>
+						
+			<div class="mainW-224" >
+			    <div class="itemLW-96 padT-4" >婚姻状况代码：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="marriedstatuss" /></div>
+			</div>
+	
+			<div class="mainW-224" >
+			    <div class="itemLW-96 padT-4" >民族：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="nation" /></div>
+			</div>
+			</div>
+			
+			<div class="mainW-736">
+			<div class="mainW-224" >
+			    <div class="itemLW-96 padT-4" >年龄：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="age" /></div>
+			</div>
+			
+			<div class="mainW-224" >
+			    <div class="itemLW-96 padT-4" >ABO血型：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="booldtype" /></div>
+			</div>
+			
+			<div class="mainW-224" >
+			    <div class="itemLW-96 padT-4" >参加工作日期：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="workdate" /></div>
+			</div>
+			</div>
+			
+			<div class="mainW-736">			
+			<div class="mainW-224" >
+			    <div class="itemLW-96 padT-4" >职业类别代码：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="jobtypecode" /></div>
+			</div>
+			
+			<div class="mainW-224" >
+			    <div class="itemLW-96 padT-4" >学历代码：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="educationcode" /></div>
+			</div>
+			
+			<div class="mainW-224" >
+			    <div class="itemLW-96 padT-4" >学位代码：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="degreecode" /></div>
+			</div>
+			</div>
+			
+			
+			 
+</form>
+<div id="tt" class="easyui-tabs" style="width:720px;height:250px;">  
+    <div title="证件" style="padding:5px;">  
+        <table id="div-grxg" class="easyui-datagrid" ></table>
+    </div>  
+    <div title="电话" style="padding:5px;">  
+        <table id="div-grxg1" class="easyui-datagrid"></table> 
+    </div> 
+
+</div> 
+
+
+
+	</div>	   

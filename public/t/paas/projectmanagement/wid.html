@@ -1,0 +1,124 @@
+ <div class="jarviswidget" data-widget-colorbutton="false" data-widget-editbutton="false"	>
+				<!-- widget options:
+					usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+					
+					data-widget-colorbutton="false"	
+					data-widget-editbutton="false"
+					data-widget-togglebutton="false"
+					data-widget-deletebutton="false"
+					data-widget-fullscreenbutton="false"
+					data-widget-custombutton="false"
+					data-widget-collapsed="true" 
+					data-widget-sortable="false"
+					
+				-->
+				<header>
+					<h2></h2>
+					<div role="menu" id="edit_project" class="widget-toolbar" style="" title="修改"><i class="fa fa-edit"></i></div>
+				</header>
+
+				<!-- widget div-->
+				<div>
+					
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+						
+					</div>
+					<!-- end widget edit box -->
+					
+					<!-- widget content -->
+					<div class="widget-body">
+            <div class="tabs-left">
+              <ul class="nav nav-tabs tabs-left">
+              
+              <!--<span class="badge bg-color-greenLight txt-color-white">0</span>-->
+                <li class="active">
+                  <a data-toggle="tab" href="#tab-r1">基本信息 </a>
+                </li>
+                <li>
+                  <a data-toggle="tab" href="#tab-r2">API 管理 </a>
+                </li>
+                <li>
+                  <a data-toggle="tab" href="#tab-r3">人员管理 </a>
+                </li>
+              </ul>
+              <div class="tab-content">
+                <div id="tab-r1" class="tab-pane active">
+                  <div class="row">
+            
+                    <div class="col-sm-10">
+                      <h1><span id="projectName" class="semi-bold"></span></h1>
+                        <br>
+                        <!--<small> CEO, SmartAdmin</small></h1>-->
+            
+                      <ul class="list-unstyled">
+                        <!--<li>-->
+                        <!--  <p class="text-muted">-->
+                        <!--    <i class="fa fa-phone"></i>&nbsp;&nbsp;(<span class="txt-color-darken">313</span>) <span class="txt-color-darken">464</span> - <span class="txt-color-darken">6473</span>-->
+                        <!--  </p>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                        <!--  <p class="text-muted">-->
+                        <!--    <i class="fa fa-envelope"></i>&nbsp;&nbsp;<a href="mailto:simmons@smartadmin">ceo@smartadmin.com</a>-->
+                        <!--  </p>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                        <!--  <p class="text-muted">-->
+                        <!--    <i class="fa fa-skype"></i>&nbsp;&nbsp;<span class="txt-color-darken">john12</span>-->
+                        <!--  </p>-->
+                        <!--</li>-->
+                        <li>
+                          <p class="text-muted">
+                            <i class="fa fa-calendar"></i>&nbsp;&nbsp;<span class="txt-color-darken">创建时间 <p id="createdt" data-original-title="创建时间" data-placement="top" title="" rel="tooltip" style="cursor:default;"></p></span>
+                          </p>
+                        </li>
+                      </ul>
+                      <br>
+                      <p class="font-md">
+                        <i>项目描述</i>
+                      </p>
+                      <p id="projectDe">
+            
+                      </p>
+                      <br>
+            
+                    </div>
+                    <!--<div class="col-sm-2">-->
+                    <!--  <a class="btn btn-default btn-xs" id="edit_project"><i class="fa fa-pencil"></i> 修改 </a>-->
+                    <!--</div>-->
+            
+                  </div>
+                </div>
+                <div id="tab-r2" class="tab-pane row">
+                  <div class="col-xs-9"><ul id="apilist" class="ztree"></ul></div>
+                  <div class="col-xs-3">
+                  <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">API 操作 <span class="caret"></span></button>
+                  <ul class="dropdown-menu">
+    								<li>
+    									<a href="javascript:void(0);" id="up">上线</a>
+    								</li>
+    								<li>
+    									<a href="javascript:void(0);" id="down">下线</a>
+    								</li>
+    								<li>
+    									<a href="javascript:void(0);" id="redit">转开发</a>
+    								</li>
+    							</ul>
+                    <!--<button class="btn btn-default" >上线</button>-->
+                    <!--<button class="btn btn-default" >下线</button>-->
+                    <!--<button class="btn btn-default" >转开发</button>-->
+                  </div>
+                </div>
+                <div id="tab-r3" class="tab-pane">
+                  <ul id="rolegroup" class="ztree"></ul>
+                </div>
+              </div>
+            </div>
+					</div>
+					<!-- end widget content -->
+					
+				</div>
+				<!-- end widget div -->
+				
+			</div>

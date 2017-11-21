@@ -1,0 +1,138 @@
+<div class="modal fade" id="log_history" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+     data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+        </button>
+        <h4 class="modal-title"><span id="log_history_title"></span></h4>
+      </div>
+      <div class="modal-body no-padding">
+        <form id="log_history_form" method="post" onsubmit="return false;" class="smart-form">
+          <fieldset>
+            <div class="row">
+              <section class="col col-6">
+                <label class="label">登录状态</label>
+                <label class="input has-warning">
+                  <input type="hidden" name="access_cd" data-type="select2" placeholder="access_cd">
+                </label>
+                <input  type="hidden" name="userid">
+              </section>
+              <section class='col col-2'>
+              <label class="label">&nbsp;</label>
+                <button name="log_history_search" class="btn btn-info btn-sm" type="submit">
+                      <i class="fa fa-search fa-1"></i> &#12288;查 询
+                    </button>
+              </section>
+            </div>
+            <div class="dataTables_wrapper">
+              <table id="log_history_dt" class="table table-bordered table-striped" width="100%">
+
+              </table>
+            </div>
+            <div id="log_history_pagination"></div>
+
+          </fieldset>
+          <footer>
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary">确定</button>
+          </footer>
+        </form>
+
+        <!-- FORM Start -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<script type="text/javascript" src="lib/js/plugin/datatables/media/js/jquery.dataTables.min.js"></script>
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script type="text/javascript">
+  var modal = $('#log_history');
+  modal.modal('show');
+  select()
+  modal.find('[name=userid]').val(user_view._g.param.userid);
+  modal.find('[name=log_history_search]').click(function(){
+    Pagination(1)
+  })
+  var dt = $('#log_history_dt');
+  function Datatable(data) {
+    var columns = [
+      {
+        "title": "登录时间",
+        "data": "log_time"
+      },
+      {
+        "title": "日志内容",
+        "data": "log"
+      },
+      {
+        "title": "登录状态",
+        "render": function (data, type, row, meta) {
+
+          return  zy.cache.cd2name('ZR.0023', row.access_cd) ;
+        }
+      },{
+        "title": "应用ID",
+        "data": "clientid"
+      }
+    ];
+    //预设初始化参数
+    var options = {
+      "data": data,
+      "columns": columns
+    };
+    // 合并初始化参数选项
+    $.extend(options, zy.ui.dataTable);
+    //初始化 DataTable
+    dt.dataTable(options);
+  }
+  function Pagination(page){
+    $.jqPaginator('#log_history_pagination', {
+      totalCounts: 10,
+      pageSize: zy.g.page.pagesize,
+      currentPage: page,
+      onPageChange: function(num) {
+        SetDt(num);
+      }
+    });
+  }
+  function SetDt(page){
+    var cb = function(msg) {
+      if (msg) {
+        // widget.find('[name=total_count]').html('总数：'+msg.count);
+        Datatable(msg.result);
+        if (msg.count > 0 && msg.result.length > 0) {
+          $('#log_history_pagination').jqPaginator('option', {
+            totalCounts: msg.count,
+            pageSize: zy.g.page.pagesize,
+            currentPage: page
+          });
+        } else {
+          $('#log_history_pagination').jqPaginator('destroy');
+        }
+        // DO NOT REMOVE : GLOBAL FUNCTIONS!
+        pageSetUp();
+      }
+    };
+    Console.close();
+    zy.g.am.app = 'c9e98ea6fc7148d186289e8c33776f8a';
+    zy.g.am.mod = 'user_manager';
+    zy.net.get("api/get_user_access_his", cb, $('#log_history_form').serialize(), page);
+  }
+  function select(){
+    var cb = function () {
+
+      // 字典数据绑定
+      $("#log_history_form input[name=access_cd]").zySelect('ZR.0023', true, {
+        width: '100%'
+      });
+      $("#log_history_form input[name=access_cd]").select2('val','0');
+      };
+    
+    // 预处理该画面所需的字典类型，以 , 号分割
+    zy.cache.initDicts('ZR.0023', cb);
+  }
+  // Pagination(1)
+</script>

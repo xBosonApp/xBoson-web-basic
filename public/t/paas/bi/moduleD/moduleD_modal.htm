@@ -1,0 +1,231 @@
+<div class="modal fade" id="module_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog" >
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title"></h4>
+      </div>
+        <div class="modal-body no-padding">
+          <div id="module_modal_theme">
+            <form method="post" onsubmit="return false;" class="smart-form">
+  						<fieldset>					
+  							<section class="col col-6">
+  									<label class="label">主题目录名称</label>
+  									<label class="input">
+  										<input type="text" name="typenm">
+  									</label>
+  								</section>
+  							<section class="col col-6">
+  									<label class="label">上级主题目录</label>
+  									<label class="input">
+  										<input type="text" data-type="select2" name="parentcd">
+  									</label>
+  								</section>
+  						</fieldset>
+              <footer>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="submit" class="btn btn-primary">确定</button>
+              </footer>
+            </form>
+          </div>
+        
+          <div id="module_modal_copy">
+            <form method="post" onsubmit="return false;" class="smart-form">
+  						<fieldset>					
+  							<section class="col col-6">
+  									<label class="label">图表名称</label>
+  									<label class="input">
+  										<input type="text" name="modulenm">
+  									</label>
+  								</section>
+  							<section class="col col-6">
+  									<label class="label">图表主题分类</label>
+  									<label class="input">
+  										<input type="text" data-type="select2" name="moduletype">
+  									</label>
+  								</section>
+  							<input type="hidden" name="moduleshare" value="1"/>
+  						</fieldset>
+              <footer>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="submit" class="btn btn-primary">确定</button>
+              </footer>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<script>
+  function Module_modal(node, tree_refresh ,type){
+    
+    var Jq_module, Jq_module_name, Jq_module_type, Jq_module_share;
+    
+    Jq_module = $('#module_modal');
+    Jq_module_name = $('#module_modal [name=modulenm]');
+    Jq_module_type = $('#module_modal [name=moduletype]');
+    
+    function Init_Dom(){
+      zy.g.am.app = 'a6929eedff5c49e5a1a0f5b490873b39';
+      zy.g.am.mod = 'config';
+      zy.net.get("api/select2_chart_theme",function(msg){
+        
+        if(type=="copy"){
+          $("#module_modal").find(".modal-title").html("复制图表");
+          $("#module_modal_copy").show();
+          $("#module_modal_theme").hide();
+          $('#module_modal_copy [name=moduletype]').zySelectCustomData('', false, {
+            width: '100%'
+          }, msg.result,true);
+          $('#module_modal_copy [name=moduletype]').select2('val',node.parentcd);
+          Jq_module_name.val(node.name);
+          // Jq_module_type.val(node.modtype);
+        } else if(type=="themeEdit"){
+          var  _data = msg.result;
+          $("#module_modal").find(".modal-title").html("修改主题目录");
+          $("#module_modal_copy").hide();
+          $("#module_modal_theme").show();
+          $('#module_modal_theme [name=parentcd]').zySelectCustomData('', false, {
+            width: '100%'
+          }, _data);
+          $('#module_modal_theme [name=parentcd]').select2('val',node.parentcd).attr("readonly","readonly");
+          $('#module_modal_theme [name=typenm]').val(node.name);
+        }
+        else{
+          $("#module_modal").find(".modal-title").html("新建主题目录");
+          $("#module_modal_copy").hide();
+          $("#module_modal_theme").show();
+          $('#module_modal_theme [name=parentcd]').zySelectCustomData('', false, {
+            width: '100%'
+          }, msg.result,true);
+          $('#module_modal_theme [name=parentcd]').select2('val',node.id);
+        }
+
+      },{treetype:'0'});
+      
+      Jq_module.modal('show');
+    }
+    
+    function Get_Dom_Value(){
+      var val_module_name, val_module_type, val_module_share;
+      
+      val_module_name = Jq_module_name.val();
+      val_module_type = Jq_module_type.val();
+      // val_module_share = Jq_module_share.prop('checked');
+      
+      return {
+        module_name: val_module_name,
+        module_type: val_module_type
+        // module_share: val_module_share
+      }
+    }
+    
+    function Event(type){
+      
+      function Check_All(alldone){
+        var Dom_value = Get_Dom_Value();
+      
+        if(Dom_value.module_name == '') return zy.extend.msg('请输入图表名称','i');
+        if(Dom_value.module_type == '') return zy.extend.msg('请选择图表主题分类','i');
+        
+        function Check_Name(){
+          zy.extend.get({
+            apinm:'chartunit',
+            mod:'echart',
+            app:'a6929eedff5c49e5a1a0f5b490873b39'
+          },function(msg){
+            if(msg){
+              alldone && alldone(Dom_value);
+            }else{
+              zy.extend.msg('图表名称重复','w');
+            }
+          },{
+            modnm: Dom_value.module_name,
+            modtype: Dom_value.module_type 
+          })
+        }
+        
+        Check_Name();
+      }
+      
+      var Jq_Submit;
+      if(type=="copy"){
+        Jq_Submit = $('#module_modal_copy footer [type=submit]');
+        Jq_Submit.unbind().bind('click',function(){
+          Check_All(function(module){
+            var New_Module = {
+              modid: '',
+              modnm: module.module_name,
+              jsondata: node.jsondata,
+              modtype: module.module_type,
+              shareable: '0',
+              copy:node.id
+            };
+            
+            zy.extend.post({
+              apinm: 'mod_json_add',
+              mod:'echart',
+              app:'a6929eedff5c49e5a1a0f5b490873b39'
+            },function(msg){
+              zy.extend.msg('复制成功','s');
+              Jq_module.modal('hide');
+              tree_refresh && tree_refresh();
+            }, New_Module);
+          });
+        });
+      } else if(type=="themeEdit") {
+        Jq_Submit = $('#module_modal_theme footer [type=submit]');
+        Jq_Submit.unbind().bind('click',function(){
+          zy.extend.post({
+            apinm: 'chart_theme_edit',
+            mod:'config',
+            app:'a6929eedff5c49e5a1a0f5b490873b39'
+          },function(msg){
+            if(msg.ret=="0"){
+              zy.extend.msg('保存成功','s');
+              Jq_module.modal('hide');
+              tree_refresh && tree_refresh();
+            } else {
+              zy.extend.msg('保存失败','w');
+            }
+          }, {
+            typecd : node.id,
+            typenm : $('#module_modal_theme [name=typenm]').val(),
+            parentcd : $('#module_modal_theme [name=parentcd]').val(),
+            //shortkey : "",
+            //status : "",
+            //mark : ""
+          });
+        }); 
+      } else {
+        Jq_Submit = $('#module_modal_theme footer [type=submit]');
+        Jq_Submit.unbind().bind('click',function(){
+          zy.extend.post({
+            apinm: 'chart_theme_add',
+            mod:'config',
+            app:'a6929eedff5c49e5a1a0f5b490873b39'
+          },function(msg){
+            if(msg.ret=="0"){
+              zy.extend.msg('保存成功','s');
+              Jq_module.modal('hide');
+              tree_refresh && tree_refresh();
+            } else {
+              zy.extend.msg('保存失败','w');
+            }
+          }, {
+            typenm  : $('#module_modal_theme [name=typenm]').val(),
+            parentcd : $('#module_modal_theme [name=parentcd]').val(),
+            //shortkey : "",
+            //status : "",
+            //mark : ""
+          });
+        }); 
+      }
+    }
+    
+    Event(type);
+    Init_Dom();
+    
+  }
+</script>

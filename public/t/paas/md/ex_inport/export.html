@@ -1,0 +1,51 @@
+ <div class='modal fade' id='export' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true' data-backdrop='static'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+        <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;
+        </button>
+        <h4 class='modal-title'><span id='md_ex_inport_export_title'>导出(导出查询出的结果)</span></h4>
+      </div>
+      <div class='modal-body no-padding'>
+        <!-- FORM Start -->
+        <form id='md_ex_inport_export_form' method='post' onsubmit='return false;' class='smart-form'>
+          <fieldset>
+            <div class='row'>
+            
+              <section class='col col-6'>
+              <label class='label'>文件类型</label>
+                <div class='col col-6'>
+									<label class='radio state-success'>
+									  <input type='radio' value='1' checked='' name='radio'><i></i>CSV
+									</label>
+									<label class='radio state-success'>
+									  <input type='radio' value='2' name='radio'><i></i>JSON
+									</label>
+									<label class='radio state-success'>
+									  <input type='radio' value='3' name='radio'><i></i>EXCEL报表
+									</label>
+								</div>
+							</section>
+              <section class='col col-6'>
+                <label class='label'>字符集</label>
+                <label class="input">
+                  <input type="hidden" name="charset" data-type="select2" placeholder="字符集">
+                </label>
+              </section>
+            </div>
+            <div>
+            </div>
+          </fieldset>
+          <footer>
+            <button type='button' class='btn btn-default' data-dismiss='modal'>取消</button>
+            <button  type='submit' class='btn btn-primary'>导出</button>
+          </footer>
+        </form>
+        <!-- FORM End -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<script type="text/javascript" src="md/ex_inport/export.js"></script>

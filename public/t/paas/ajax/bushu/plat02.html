@@ -1,0 +1,23 @@
+-----------------单独部署UI&DB-------------------------------------
+文件解压tmp文件下
+tar -xvpzf plat-dep.tgz -C /tmp
+
+--mysql 更新
+cd /tmp/home/plat/.installer
+倒入数据 >  mysql < all-db-last.sql
+
+--缓存清理
+--缓存
+>  /home/plat/redis-2.8.19/src/redis-cli -p 6379 -a deaN9mizr_ZRzy1
+> FLUSHALL
+
+--UI更新
+> cd /home/plat
+> mv web4node web4node-back
+
+> cd /tmp/home/plat
+> mv web4node /home/plat/web4node
+
+>rm -rf /tmp/home
+
+>service paas restart

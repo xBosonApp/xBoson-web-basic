@@ -1,0 +1,195 @@
+<style type="text/css">
+    #treeDict{
+      display:none;
+      position:absolute;
+      z-index:10 ;
+      background-color:#FFFFFF;
+      overflow: auto;
+    }
+</style>
+
+<div class="modal fade" id="api_up" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title">API上线-测试完成API树</h4>
+      </div>
+      <div class="modal-body no-padding">
+      <div id="api_up_tree" class="ztree no-padding" style="max-height:300px;overflow-y:auto" > 
+      </div>
+      <div onsubmit="return false;" class="smart-form">
+        <footer>
+          <button class="btn btn-default" data-dismiss="modal">
+            取消
+          </button>
+          <button class="btn btn-primary" data-dismiss="modal" name='ide_submit' onclick="api_manage_up()">
+            确定
+          </button>
+          <button class="btn btn-default" id="expandAllBtn" title="展开"> <i class="fa fa-chevron-down"></i> </button>
+          <button class="btn btn-default" id="collapseAllBtn" title="折叠"> <i class="fa fa-chevron-up "></i> </button>
+        </footer>
+      </div>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<script type="text/javascript">
+  // 递归设置chkDisabled属性以及设置图标
+  function loopResult(jsonResult) {
+    for (var i = 0; i < jsonResult.length; i++) {
+      var tmp = jsonResult[i];
+      tmp.chkDisabled = jsonResult[i].chkdisabled;
+      if (tmp.isparient == 'true') {
+        tmp.icon = "lib/js/plugin/ztreev35/img/diy/9.png";
+      } else {
+        tmp.icon = "lib/js/plugin/ztreev35/img/diy/2.png";
+      }
+      var tmpChildren = tmp.children;
+      if (tmpChildren != null) {
+        loopResult(tmpChildren);
+      }
+    }
+  }
+  
+  function Tree_filter(zTree){
+      var nodes = zTree.transformToArray(zTree.getNodes()); //获取所有节点
+      //zy.log(nodes.length);
+      for(var i=0;i<nodes.length;i++){
+          if(nodes[i].children==undefined&&nodes[i].level<2){
+              zTree.hideNode(nodes[i]);
+          }
+      }
+  }
+
+  var tools = {
+    api: function(param, cb) {
+      var _cb = function(msg) {
+        cb && cb(msg);
+      };
+      zy.g.am.app = param.app;
+      zy.g.am.mod = param.mod;
+      zy.net.get("api/" + param.api, _cb, param.r_param, param.page);
+    }
+  };
+  
+  function tree(_params) {
+    var _tree = null;
+
+    function opt(_dbfunc) {
+      function Click(event, treeId, treeNode) {
+        //_typecd = treeNode.typecd;
+        _dbfunc && _dbfunc(treeNode);
+      }
+
+      function _addHoverDom(_id, _node) {
+        
+      }
+
+      function _removeHoverDom(_id, _node) {
+        
+      }
+      return {
+        view: {
+          dblClickExpand: false,
+          addHoverDom: _addHoverDom,
+          removeHoverDom: _removeHoverDom
+        },
+        data: {
+          key: {
+            name: "name",
+            title: "id"
+          },
+          simpleData: {
+            enable: true,
+            idKey: "id",
+            pIdKey: "pid"
+          }
+        },
+        callback: {
+          onClick: Click
+        }
+      }
+    }
+    
+    function init(treeContariner, dbclick) {
+      var option = opt(dbclick);
+      option.check={
+        enable: true,
+        chkDisabledInherit: true,
+        chkStyle: "checkbox",
+        chkboxType: {
+          "Y": "ps",
+          "N": "ps"
+        }
+      };
+      //zy.log(option);
+      tools.api(_params, function(msg) {
+        var jsonResult = eval(msg.result);
+        loopResult(jsonResult);
+        _tree = $.fn.zTree.init(treeContariner, option, jsonResult);
+      });
+    }
+    return {
+      init: init
+    };
+  }
+  
+  var _tree = tree({
+    app: "03229cbe4f4f11e48d6d6f51497a883b",
+    mod: "yyxxgl",
+    api: "api_up_tree"
+  });
+
+  _tree.init($('#api_up_tree'),function(treenode) {
+      //zy.log(treenode);
+    });
+  
+  var zTree = $.fn.zTree.getZTreeObj("api_up_tree");
+  Tree_filter(zTree);
+  
+  $("#expandAllBtn").bind("click", {}, function(){
+      zTree.expandAll(true);
+  });
+	
+	$("#collapseAllBtn").bind("click", {}, function(){
+	  	zTree.expandAll(false);
+	});
+  
+  pageSetUp();
+  
+  $('#api_up').modal('show');
+  
+  function api_manage_up() {
+    var nodes = zTree.getCheckedNodes();
+    var nodesRes = "";
+    for (var i = 0; i < nodes.length; i++) {
+        if(nodes[i].level==2){
+          nodesRes=nodesRes+","+nodes[i].id;
+        }
+    }
+    //zy.log("勾选的节点为" + JSON.stringify(nodesRes));
+    var api_up_cb = function(msg) {
+    if (msg) {
+        //更新htmlide-tree
+        htmlide_ref();
+        zy.ui.msg('提示信息', msg.msg , 's');
+        $('#api_up').modal('hide');
+      }
+    };
+    
+    zy.g.am.app = '03229cbe4f4f11e48d6d6f51497a883b';
+    zy.g.am.mod = 'yyxxgl';
+    var param = {
+      nodesRes: nodesRes.substring(1),
+    };
+    // 发送请求并注册回调函数
+    zy.net.post("api/api_manage_up", api_up_cb, param);
+    
+  }
+  
+</script>

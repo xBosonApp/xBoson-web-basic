@@ -1,0 +1,69 @@
+# 渲染动态 html 页面
+
+* 通过插件扩展功能
+* 全程使用 Buffer 且尽量减少内存复制
+* 静态文件最后修改日期缓存策略
+* 自定义文件获取器
+
+
+## Install
+
+`npm install masquerade-html-lib`
+
+
+## Usage
+
+```js
+var http = require('http');
+var mas = require('masquerade-html-lib');
+
+//
+// 当 `/www` url被调用时, mas 进行渲染, 这个路径是虚拟路径
+// 直接对应 [public] 目录中的文件
+//
+var mid = mas.mid('/www');
+//
+// 添加插件实现复杂标签, 见插件说明
+//
+mid.add_plugin(function());
+
+http.createServer(mid).listen(80);
+```
+
+
+## 目录结构
+
+> 这些配置在 config/config.js 中, 这些目录必须存在, 否则会出错
+
+```
+/[masquerade dir]           -- 项目根目录
+
+    /private                -- 浏览器不可以直接访问的目录
+        /include            -- 包含目录
+        /script             -- node 脚本目录
+        /tag                -- 自定义标签库目录
+
+    /public                 -- 浏览器可以直接访问的目录
+        /[some ohter]
+```
+
+
+## Html 模板说明
+
+* 配置文件中 masquerade.extname 指定的的扩展名称的文件作为模板进行解析
+* 模板中 `###A###` 的部分是 bird 表达式, 见下文
+* 标签分为三种:
+  - 1. 普通 html 标签, 不做特殊处理, 可以在标签体或属性中嵌入 bird 表达式
+  - 2. 系统标签, 这些标签有特殊的功能, 渲染结果也不是直观的, 具体见 [Html 模板特殊标签] 一节
+  - 3. 用户自定义标签, 这些标签使用 HTML 语法写成, 放在 [/private/tag] 目录中, 见下文
+
+
+## bird 表达式
+
+`###A.b###`
+
+* 表达式以 ### 作为开始, 以 ### 作为结束
+* 表达式中只支持从 '.' 运算符, 变量之间允许有空格
+* 表达式只在普通文本中生效, 特殊标签的属性, 有不同的行为, 具体查看特殊标签的定义
+* 上下文即 context 对象, 这个对象不需要在表达式中写出, 上下文参考 [上下文中的对象] 一节.
+* 在一些特殊标签中, `###` 这个符号是不需要写出的, 具体查看特殊标签的定义

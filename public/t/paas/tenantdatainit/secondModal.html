@@ -1,0 +1,66 @@
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" style="width:90%">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body no-padding">
+        <div class="row" style="margin: 0px 5px 0px 25px">
+          <div class="col-xs-3">
+            <ul id="tablelist" class="ztree"></ul>
+          </div>
+          <div class="col-xs-9">
+            <ul class="nav nav-tabs" role="tablist">
+              <li role="presentation" class="active"><a href="#tabledata" role="tab" data-toggle="tab">表数据</a></li>
+              <li role="presentation"><a href="#predata" role="tab" data-toggle="tab">预设数据</a></li>
+
+            </ul>
+
+            <div class="tab-content">
+              <div role="tabpanel" class="tab-pane active" id="tabledata">
+               <div style="display:none;">
+                  <div class="row">
+                  <h1></h1>
+                    <form class="smart-form" onsubmit="return false;" method="post" name="toolbar">
+                      <section class="col col-6">
+                        <label class="textarea">
+                          <textarea placeholder="条件" name="wherearea" rows="3"></textarea>
+                          <b class="tooltip tooltip-bottom-right">请输入有效SQL语句</b>
+                        </label>
+                      </section>
+                      <div class="btn-group">
+                      
+                      <button type="submit" class="btn btn-info btn-sm" name="param"><i class="fa fa-filter  fa-1"></i>&emsp;条 件&emsp;</button>
+                      <button type="submit" class="btn btn-info btn-sm" name="search"><i class="fa fa-search fa-1"></i>&emsp;查 询&emsp;</button>
+                      <button type="submit" class="btn btn-info btn-sm" name="save"><i class="fa fa-copy fa-1"></i>&emsp;保 存&emsp;</button>
+                       </div>
+                    </form>
+                  </div>
+                <div name="table"></div>
+               </div>
+              </div>
+              <div role="tabpanel" class="tab-pane" id="predata">
+               <div style="display:none;">
+               <div class="row">
+               <h1></h1>
+                <form class="smart-form" onsubmit="return false;" method="post" name="toolbar">
+                  <section class="col col-2">
+                   <button type="submit" class="btn btn-info btn-sm" name="delete">&emsp;删 除&emsp;</button>
+                  </section>
+                </form>
+                </div>
+                <div name="table"></div>
+               </div> 
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>

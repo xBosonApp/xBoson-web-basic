@@ -1,0 +1,34 @@
+<link rel="stylesheet" href="lib/js/plugin/datatables/media/css/jquery.dataTables.css" />
+<link rel="stylesheet" href="lib/js/plugin/ztreev35/zTreeStyle.css" type="text/css">
+
+<!-- widget grid -->
+<section id="widget-grid" class="" >
+</section>
+
+
+<!-- end widget grid -->
+<script type="text/javascript" src="lib/js/plugin/hCharts/highcharts-more.js"></script>
+<script type="text/javascript" src="lib/js/plugin/hCharts/drilldown.src.js" ></script>
+
+<script type="text/javascript" src="lib/js/plugin/datatables/media/js/jquery.dataTables.min.js" ></script>
+<script type="text/javascript" src="lib/js/plugin/hCharts/highchart_theme.js" ></script>
+
+<script type="text/javascript" src="lib/js/zy/zy_chart_common.js"></script>
+<!--<script type="text/javascript" src="bi/js/index.js" ></script>-->
+
+
+<script type="text/javascript">
+//开发临时用：初始化全局API请求参数
+zy.g.am.app = 'EWATERBI';
+zy.g.am.mod = 'scjk';
+// get UUID: http://www.famkruithof.net/uuid/uuidgen
+
+zy_chart.buildChartHandle($('#widget-grid'), function(handle) {
+  var app_name = null;
+
+    var _ch = handle.createChartCon('widget-row2', '', 12, '[未配置的图表]');
+
+}, zy.g.am.app, '27804c10-1c6d-11e4-8c21-0800200c9a66','e');
+
+
+</script>

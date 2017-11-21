@@ -1,0 +1,77 @@
+
+
+<!-- Widget ID (each widget will need unique ID)-->
+<div class="jarviswidget" id="moduleD_show" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+	<header>
+		<h2>图表管理</h2>
+	</header>
+	<div>
+		<div class="jarviswidget-editbox">
+			<!-- This area used as dropdown edit box -->
+
+		</div>
+		<div class="widget-body">
+		  <div id="nouislider" class="noUiSlider"></div>
+		  <div class="row">
+        <section id="moduleD_show_tree" class="col col-xs-12 col-sm-3">
+          <div>
+            <legend>
+              <i class="fa fa-hand-o-down">&nbsp;&nbsp;页面管理</i>
+            </legend>
+            <section>
+              <div class="row" style="min-height:450px">
+                <ul class="ztree" id="moduleD_show_widget_tree"></ul>
+              </div>
+            </section>
+          </div>
+        </section>
+        <section id="moduleD_show_chart" class="col col-xs-12 col-sm-9">
+          <div>
+            <legend>
+              <i class="fa fa-hand-o-right">&nbsp;&nbsp;页面图表配置</i>
+              <div class="btn-group pull-right">
+                <div class="btn-group">
+                  <button disabled="disabled" class="btn btn-primary btn-sm dropdown-toggle" id="add_project"
+                          style="margin-left:13px;margin-bottom:10px;" data-toggle="dropdown">创建新布局
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" style="margin-left:13px;margin-bottom:10px;" id="size">
+                    <li>
+                      <a id="4" href="javascript:void(0);">小布局</a>
+                    </li>
+                    <li>
+                      <a id="6" href="javascript:void(0);">中布局</a>
+                    </li>
+                    <li>
+                      <a id="8" href="javascript:void(0);">大布局</a>
+                    </li>
+                    <li>
+                      <a id="12" href="javascript:void(0);">行布局</a>
+                    </li>
+                  </ul>
+                </div>
+                <!--<button class="btn btn-sm btn-success" type="button">保存</button>-->
+              </div>
+            </legend>
+            
+            <section id="moduleD_show_widget_grid"></section>
+          </div>
+        </section>
+      </div>
+		</div>
+	</div>
+</div>
+
+<div id="module_show_modal"></div>
+
+<script src="bi/echarts.js"></script>
+<script src="lib/js/plugin/noUiSlider/jquery.nouislider.min.js"></script>
+<script src="bi/js/tableToCsv.js"></script>
+<script src="bi/moduleD/moduleD.js"></script>
+<script src="bi/moduleD/moduleD_show.js"></script>
+
+<script>
+  pageSetUp();
+  var _moduleD_show = new moduleD_show();
+</script>
+

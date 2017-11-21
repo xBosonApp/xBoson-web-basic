@@ -1,0 +1,99 @@
+<!-- Modal -->
+<div class="modal fade" id="dept_member" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title">部门成员信息</h4>
+      </div>
+      <div class="modal-body no-padding">
+        <!-- FORM Start -->
+        <form id="dept_member_form" method="post" onsubmit="return false;" class="smart-form">
+          <fieldset>
+            <div>
+              <input type="hidden" name="deptid">
+            </div>
+            <div class="row" id="org_member">
+              <section class="col col-12">
+                <label class="label">部门人员：</label>
+                <div name="dept"></div>
+                <br>
+                <label class="label">机构人员：</label>
+                <div name="org"></div>
+              </section>
+            </div>
+          </fieldset>
+          <footer>
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary">确定</button>
+          </footer>
+        </form>
+        <!-- FORM End -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+<!-- SCRIPTS ON PAGE EVENT -->
+<script type="text/javascript">
+// DO NOT REMOVE : GLOBAL FUNCTIONS!
+pageSetUp();
+
+$("#dept_member_form [name=deptid]").val(dept_view._g.param.deptid);
+
+function memberview(key) {
+  //alert(key);
+}
+var cb = function(msg) {
+  if (msg) {
+    if (msg.result) {
+      window.ee = msg.result;
+      //增加checked属性
+      for (var i in msg.result) {
+        if (msg.result[i].checked == 'true') {
+          var checkbox = "&nbsp;<label><input type='checkbox' name='id' value='" + msg.result[i].id + "' checked='true' /><a title='" + msg.result[i].title + "' onclick='memberview(\"" + msg.result[i].id + "\")'> " + msg.result[i].name + "</a></label>";
+          $("#org_member div[name=dept]").append(checkbox);
+        } else {
+          var checkbox = "&nbsp;<label><input type='checkbox' name='id' value='" + msg.result[i].id + "' /> <a  title='" + msg.result[i].title + "' onclick='memberview(\"" + msg.result[i].id + "\")'> " + msg.result[i].name + "</a></label>";
+          $("#org_member div[name=org]").append(checkbox);
+        }
+      }
+    } else {
+      $("#org_member").remove();
+    }
+  }
+};
+zy.g.am.app = 'c9e98ea6fc7148d186289e8c33776f8a';
+zy.g.am.mod = 'dept_manager';
+zy.net.post("api/dept_member_view", cb, $('#dept_member_form').serialize());
+
+$('#dept_member').modal('show');
+// Registration validation script
+$("#dept_member_form").validate({
+  // 验证成功后保存
+  submitHandler: function(form) {
+    var callback = function(msg) {
+      $('#dept_member_form').formDisable(false);
+      if (msg) {
+        Console.log("保存成功 = " + JSON.stringify(msg));
+        $('#dept_member').modal('hide');
+        zy.ui.msg("提示信息：", "保存成功！", "s");
+      }
+    };
+    zy.g.am.app = 'c9e98ea6fc7148d186289e8c33776f8a';
+    zy.g.am.mod = 'dept_manager';
+    zy.net.post("api/dept_member_manager", callback, $('#dept_member_form').serialize());
+
+    $('#dept_member_form').formDisable(true);
+  },
+  // Do not change code below
+  errorPlacement: function(error, element) {
+    error.insertAfter(element.parent());
+  }
+});
+</script>

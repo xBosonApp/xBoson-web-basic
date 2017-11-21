@@ -1,0 +1,291 @@
+﻿<script type="text/javascript" language="JavaScript" src="/comm.js"></script>
+<script type="text/javascript">
+    
+var pageNum=1;
+var pagesize=10;
+var grxxdata;
+var rowno;
+var sexMap  = new Map();
+$(function () {
+	getselectdsex();
+  	showDatagrxx();
+	
+}); 
+function agrxxcallback(retData){
+    grxxdata=retData;
+	$('#div-grxx').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+				title:'个人信息列表',
+				pagination:true,
+				pageNumber:pageNum,
+				pageSize: pagesize,
+				loadMsg:"正在载入...",
+                pageList: [10,20,50,100,200],
+                singleSelect:true, 
+				data:grxxdata.datalist,
+				fitColumns:true,
+				columns:[[
+				   {field:'pname',title:'姓名',width:120,align:'center'},
+				   {field:'gender',title:'性别代码',width:80,align:'center',
+					 formatter:function(value){
+					  return LC_getMapValue(value,sexMap);
+					 }},
+				   {field:'birthday',title:'出生日期',width:120,align:'center',
+					 formatter:function(value){
+					  return LC_SubStr(value,0,10);
+					 }},
+				   {field:'idcard',title:'身份证',width:170,align:'center'},
+				   {field:'addr',title:'地址',width:350,align:'center'},
+                                   {field:'pid',title:'操作',width:350,align:'center',formatter:function(value){
+                                       return '<a href="http://222.171.60.177:8183/view/emr/index.html?typeCode=-1&pid='+value+'" target=blank>调阅电子病历</a>' 
+                                      }}
+				   
+				   	]],                  
+                onDblClickRow: function (rowIndex) {
+					//rowno=rowIndex;
+                  openRoleDiv(rowIndex);
+                },
+				onClickRow: function (rowIndex) {
+		          rowno=rowIndex;
+		        },
+                
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true,
+               height:400,
+			   width:872
+		}); 
+
+	   var pager = $('#div-grxx').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pageNum=pageNumber;
+		           pagesize=pageSize;
+		           showDatagrxx();
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:pagesize,pageNumber:pageNum,total:grxxdata.count});
+
+		};
+	
+	}
+
+function showDatagrxx(){
+   	var url="getpersons/";
+     var itemsList=["pname","card","idcard","birthday","gender"];	
+    //var itemsList=[];
+	var info= new Map();	
+       info.put("start",(pageNum*1-1)*pagesize);
+       info.put("pagesize",pagesize);
+
+      	LC_AjaxGet(EMPIUrl+url,"grxx","agrxxcallback",info,itemsList);
+      	
+	}
+
+
+	/*function showDatagrxx() {
+	    var url = "personadd/";
+	    var itemsList = ["pname", "card", "idcard", "birthday", "gender"];
+	    //var itemsList=[];
+	    var info = new Map();
+	    info.put("start", (pageNum * 1 - 1) * pagesize);
+	    info.put("pagesize", pagesize);
+
+	    LC_AjaxGet(EMPIUrl + url, "grxx", "agrxxcallback1", info, itemsList);
+
+	}*/
+
+
+	/*function showDatagrxx() {
+	    var url = "personchange/";
+	    var itemsList = ["pname", "card", "idcard", "birthday", "gender"];
+	    //var itemsList=[];
+	    var info = new Map();
+	    info.put("start", (pageNum * 1 - 1) * pagesize);
+	    info.put("pagesize", pagesize);
+
+	    LC_AjaxGet(EMPIUrl + url, "grxx", "agrxxcallback2", info, itemsList);
+
+	}*/
+
+
+		           
+//双击
+function openRoleDiv(rowIndex){
+	//self.parent.showWiew=true;
+		//self.parent.dataMap=grxxdata.datalist[rowno];
+               //alert(grxxdata.datalist[rowno]+'pre');
+                var data=grxxdata.datalist[rowno];
+               localStorage.setItem('data',JSON.stringify(data));
+		var openRoleDiv = self.parent.$("#openRoleDiv");
+		openRoleDiv.window({
+				  href:"grxg.html",
+	              title: '查看信息',
+	              width: 750,
+	              height: 500
+	          });
+	      }
+
+function grremove(retData){
+  $.messager.confirm('撤销', '你确定要撤销吗!?', function(r){
+                if (r){
+                  
+				  var url ="personlock/"; 
+	var itemsList=[];	
+	var info= new Map();
+   	info.put("pid",grxxdata.datalist[rowno].pid);
+	//alert(grxxdata.datalist[rowno].pname);
+	LC_AjaxGet(EMPIUrl+url,"grxx","ztchexiaocallback",info,itemsList);
+				  
+                }
+            });
+        }
+
+             
+function ztchexiaocallback(retData){
+		showDatagrxx();
+	}
+
+
+	//添加
+	function personadd() {
+	   // self.parent.dataMap = "";
+           localStorage.setItem('data',"");
+	    var openRoleDiv = self.parent.$("#openRoleDiv");
+	    openRoleDiv.window({
+	        href: "grxz.html",
+	        title: '添加',
+	        width: 750,
+	        height: 500,
+	        onBeforeClose: function() {
+	        showDatagrxx();
+	        }
+	    });
+	}
+
+
+	//修改
+	function personchange() {
+	    //self.parent.showWiew = false;
+	   // self.parent.dataMap = grxxdata.datalist[rowno];
+               var data=grxxdata.datalist[rowno];
+               localStorage.setItem('data',JSON.stringify(data));
+	    if(rowno!=undefined){
+	    var openRoleDiv = self.parent.$("#openRoleDiv");
+	    openRoleDiv.window({
+	        href: "grx.html",
+	        title: '修改',
+	        width: 750,
+	        height: 500,
+	        onBeforeClose: function() {
+	            showDatagrxx();
+	        }
+	    });}
+	}
+
+	
+	
+	
+	
+	
+	
+	
+$(function () {
+getselect();
+});
+
+ function  getselect(){
+
+  var url="mdm/dict/listget/";
+  var infoa = new Map();
+  infoa.put("stringsplit","VA0004.04");
+  var itemsList= [];
+
+  LC_AjaxGet(MDMBaseUrl+url,"grxx","mdmSelect",infoa,itemsList);
+
+}
+
+function mdmSelect(data){
+
+  var info = new Map();
+  info.put("key",["typeCode2"]);
+  info.put("value",["typeName"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("grxx","gender",info,data.dataList["VA0004.04"]);
+
+}	
+	
+function  getselectdsex(){
+  var url="mdm/dict/listget/";
+  var infoa = new Map();
+  infoa.put("stringsplit","VA0004.04");
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"formfix2","mdmSelectdsex",infoa,itemsList);
+}
+function mdmSelectdsex(data){
+  var info = new Map();
+  info.put("key",["typeCode2"]);
+  info.put("value",["typeName"]);
+  sexMap=LC_getDataMap(info,data.dataList["VA0004.04"]);
+}	
+</script>
+<style>
+.padding1 {padding: 10px 0 0 7px;}
+</style>
+<div class="mainW-872 padding1">
+<form  id="grxx" style="margin:0;">
+<div class="mainsW-872">
+<div id="getpersons" class="easyui-panel pad-5" title="获取个人信息">
+
+    <div class="mainW-272" >
+        <div class="itemLW-112 padT-4">姓名：</div>
+        <div class="itemLW-160">
+        <input class="mainsW-160" type="text" id="pname" >
+    	</div>
+    </div>
+    <div class="mainW-272" >
+        <div class="itemLW-112 padT-4">一卡通：</div>
+        <div class="itemLW-160">
+        <input class="mainsW-160" type="text" id="card" disabled="disabled" >
+    	</div>
+    </div>
+    <div class="mainW-272" >
+        <div class="itemLW-112 padT-4" >身份证：</div>
+        <div class="itemLW-160">
+        <input class="mainW-160" type="text" id="idcard" >
+    	</div>
+    </div>
+                <div class="mainW-272" >
+                    <div class="itemLW-112 padT-4">出生日期：</div>
+                    <div class="itemLW-160">
+                    <input class="mainsW-160" type="text" id="birthday" >
+                </div>
+            </div>
+        <div class="mainW-272">
+            <div class="itemLW-112 padT-4">性别：</div>
+            <div class="itemRW-160" >
+            <select id="gender" class="mainsW-160" name="dept"></select>
+        </div>
+          </div>
+<div class="itemLW-272" ><a class="easyui-linkbutton" onclick="showDatagrxx()">查询</a></div>
+</div>
+</div>
+
+<div class="mainW-872">
+    <table id="div-grxx" class="easyui-datagrid" toolbar="#toolbar"></table>
+    <div id="toolbar"><a href="javascript:void(0)" class="easyui-linkbutton"  iconCls="icon-remove" plain="true" onclick="grremove()">撤销</a><a href="javascript:void(0)" class="easyui-linkbutton"  iconCls="icon-add" plain="true" onclick="personadd()">添加</a><a href="javascript:void(0)" class="easyui-linkbutton"  iconCls="icon-edit" plain="true" onclick="personchange()">修改</a></div>
+</div>
+
+
+    
+    
+    
+    
+    
+</form>
+</div>

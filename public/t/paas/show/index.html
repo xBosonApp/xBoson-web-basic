@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>区域人口健康信息平台-Login</title>
+    <meta name="keywords" content="senyint,心医国际" />
+    <meta name="description" content="官网 www.senyint.com | 心达于诚，医至于道" />
+    <meta name="author" content="官方网站, 官网, www.senyint.com">
+    <style type="text/css">
+*{
+  box-sizing:border-box;
+  -moz-box-sizing:border-box;
+  -webkit-box-sizing:border-box;
+  font-family:arial,"Microsoft YaHei";
+}
+body{
+  margin: 0;
+  min-height: 100%;
+  background: #76c2bd;
+  /*background: linear-gradient(#92a1ca,#76c2bd);*/
+}
+h1{
+  color: #655d37;
+  text-align: center;
+  text-shadow: 0px 2px 2px #e9f5e9;
+}
+.login-form{
+  width:350px;
+  padding:40px 30px;
+  background:rgba(235,235,205,0.7);
+  border-radius:4px;
+  -moz-border-radius:4px;
+  -webkit-border-radius:4px;
+  margin:50px auto;
+}
+.form-group{
+  position: relative;
+  margin-bottom:15px;
+}
+.form-control{
+  width:100%;
+  border:none;
+  padding:10px 7px 10px 15px;
+  background:#ECFDF0;
+  color:#666;
+  border:2px solid #ABC8A5;
+  border-radius:4px;
+  -moz-border-radius:4px;
+  -webkit-border-radius:4px;
+  font-size: 20px;
+}
+.form-control:focus, .form-control:focus + .fa{
+  border-color:#C2ECFF;
+  color:#1FC588;
+}
+.form-group .fa{
+  position: absolute;
+  right:15px;
+  top:17px;
+  color:#999;
+}
+.log-status.wrong-entry {
+  -webkit-animation: wrong-log 0.3s;
+  -moz-animation: wrong-log 0.3s;
+  -ms-animation: wrong-log 0.3s;
+  animation: wrong-log 0.3s;
+}
+.log-status.wrong-entry .form-control, .wrong-entry .form-control + .fa {
+  border-color: #ed1c24;
+  color: #ed1c24;
+}
+
+#divSmallBoxes {
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 9999
+}
+.SmallBox {
+  position: absolute;
+  right: 5px;
+  top: 20px;
+  width: 420px;
+  color: #fff;
+  z-index: 9999;
+  overflow: hidden;
+  border: 1px solid transparent
+}
+.SmallBox:hover {
+  border: 1px solid #fff;
+  cursor: pointer
+}
+.SmallBox .foto {
+  font-size: 50px;
+  position: absolute;
+  left: 17px
+}
+.SmallBox .textoFull {
+  width: 93%;
+  float: left;
+  padding-left: 20px
+}
+.SmallBox .textoFoto {
+  width: 78%;
+  margin: 3px 20px 3px 80px;
+  float: left
+}
+.miniPic {
+  position: absolute;
+  bottom: 8px;
+  right: 9px
+}
+.miniIcono {
+  height: 100%;
+  font-size: 20px
+}
+.SmallBox span {
+  font-size: 17px;
+  font-weight: 300;
+  letter-spacing: -1px;
+  display: block;
+  margin: 4px 0
+}
+.SmallBox p {
+  font-size: 13px;
+  margin-top: 2px
+}
+@keyframes wrong-log {
+  0% { left: 0px;}
+  20% {left: 15px;}
+  40% {left: -15px;}
+  60% {left: 15px;}
+  80% {left: -15px;}
+  100% {left: 0px;}
+}
+@-ms-keyframes wrong-log {
+  0% { left: 0px;}
+  20% {left: 15px;}
+  40% {left: -15px;}
+  60% {left: 15px;}
+  80% {left: -15px;}
+  100% {left: 0px;}
+}
+@-moz-keyframes wrong-log {
+  0% { left: 0px;}
+  20% {left: 15px;}
+  40% {left: -15px;}
+  60% {left: 15px;}
+  80% {left: -15px;}
+  100% {left: 0px;}
+}
+@-webkit-keyframes wrong-log {
+  0% { left: 0px;}
+  20% {left: 15px;}
+  40% {left: -15px;}
+  60% {left: 15px;}
+  80% {left: -15px;}
+  100% {left: 0px;}
+}
+.log-btn{
+  background:#0AC986;
+  dispaly:inline-block;
+  width:100%;
+  font-size:16px;
+  height:50px;
+  color:#fff;
+  text-decoration:none;
+  border:none;
+  border-radius:4px;
+  -moz-border-radius:4px;
+  -webkit-border-radius:4px;
+}
+
+.link{
+  text-decoration: none;
+  color: #85A588;
+  text-align: right;
+  font-size: 12px;
+  margin-bottom: 15px;
+  float: right!important;
+}
+.link:hover{
+  /*text-decoration:underline;*/
+  color:#5B765D;
+}
+.alert{
+  display:none;
+  font-size:12px;
+  color:#f00;
+  float:left;
+}
+    </style>
+  </head>
+  <body>
+    <form id="login-form" class="login-form smart-form client-form" onsubmit="return false;">
+      <img src="img/logo_xy.png" alt="心医国际" title="心医国际" /><h1>区域医疗健康<br>信息平台</h1>
+      <div class="form-group ">
+        <input type="text" class="form-control" placeholder="输入账号 " name="userid" value="show">
+        <i class="fa fa-user"></i>
+      </div>
+      <div class="form-group log-status">
+        <input type="password" class="form-control" placeholder="输入密码" name="password" value="show1234">
+        <i class="fa fa-lock"></i>
+      </div>
+      <section style="display:none;">
+        <label class="label">验证码</label>
+        <label class="label">
+          <img id="c" src="">
+          <label></label>
+        </label>
+        <label class="input">
+          <i class="icon-append fa fa-lock"></i>
+          <input type="text" name="c">
+          <b class="tooltip tooltip-top-right"><i class="fa fa-lock txt-color-teal"></i> 请输入验证码</b>
+        </label>
+      </section>
+      <section>
+        <label class="checkbox">
+        <input type="checkbox" name="remember"><i></i>保持登录</label>
+      </section>
+
+      <span class="alert">无效登录</span>
+      <!--<a class="link" href="#">忘记密码？</a>-->
+      <button type="submit" id="btnLogin" class="log-btn">登 录</button>
+    </form>
+    <script src="/ui/paas/lib/js/libs/jquery-1.11.0.min.js"></script>
+    <!-- CUSTOM NOTIFICATION -->
+		<script src="/ui/paas/lib/js/plugin/smart/SmartNotification.min.js"></script>
+		<!-- JQUERY COOKIE -->
+		<script src="/ui/paas/lib/js/plugin/jquery-cookie/jquery.cookie.js"></script>
+		<!-- JQUERY Storage API -->
+		<script src="/ui/paas/lib/js/plugin/jquery-storageapi/jquery.storageapi.min.js"></script>
+		<!-- JQUERY FORM -->
+		<script src="/ui/paas/lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+		<!-- JQUERY VALIDATE -->
+		<script src="/ui/paas/lib/js/plugin/jquery-validate/jquery.validate.min.js"></script>
+		<script src="/ui/paas/lib/js/plugin/jquery-validate/messages_zh.js"></script>
+
+		<script src="/ui/paas/lib/js/zy/zy.js"></script>
+		<script src="/ui/paas/lib/js/zy/zy_extend.js"></script>
+		<script src="/ui/paas/lib/js/zy/zy_md5.js"></script>
+
+		<!-- MAIN APP JS FILE -->
+		<!-- <script src="paas/lib/js/app_extend.js"></script> -->
+		<script src="login.js"></script>
+		<script type="text/javascript">
+      $(function() {
+        zy.g.host.ui = zy.net.getHttpUrl();
+        zy.g.host.api = zy.net.getHttpUrl("/ds/");
+        var login = new Login();
+        login.Init();
+      })
+    </script>
+  </body>
+</html>

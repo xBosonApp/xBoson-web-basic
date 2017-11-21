@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+ 
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Custom DataGrid Pager - jQuery EasyUI Demo</title>
+	<link rel="stylesheet" type="text/css" href="../../easyui/themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="../../easyui/themes/icon.css">
+	<link rel="stylesheet" type="text/css" href="../easyui/demo.css">
+	<script type="text/javascript" src="../../easyui/jquery-1.8.0.min.js"></script>
+	<script type="text/javascript" src="../../easyui/jquery.easyui.min.js"></script>
+</head>
+<body onload="loading()">
+	<h2>Custom DataGrid Pager</h2>
+	<div class="demo-info">
+		<div class="demo-tip icon-tip"></div>
+		<div>You can append some buttons to the stan44444dard datagrid pager ba333dd33dddeeeeddd333r.</div>
+	</div>
+	<div style="margin:10px 0;"></div>
+	<input type="text" value="et" />
+	<table id="tt" class="easyui-datagrid" title="Custom DataGrid Pager" style="width:700px;height:250px" data-options="rownumbers:true,singleSelect:true,pagination:true"></table>
+ 
+<!--window.location.reload();-->
+	<script type="text/javascript">
+	
+ var lkjl=getDate();
+    var dataShow;
+	var PageNumber=1;
+	var PageSize=10;
+	function loading(){
+	 $.ajax({
+		   type: "POST",
+		   contentType : 'application/json;charset=utf-8',
+	       url : 'http://localhost:8080/SpringRestful/service/empListAjax/',   
+	       data : '{"info":{"oid":"123","title":"46465","pageNum":'+PageNumber+',"pageSize":'+PageSize+'},"data":[{"passowrd":"男","username":"张三"},{"passowrd":"男","username":"张三"},{"passowrd":"男","username":"张三"}]}',   
+	       dataType : 'json',   
+	       success : function(data) { 
+
+		        if(ret=0){
+		        	       		
+		        showData(data);
+		        }else{
+		          setError(data);
+		        }
+	       },   
+	       error : function(data) {   
+	           alert("数据读取失败")   
+	       }   
+		});
+	}
+	
+	function showData(dataInfo){
+	
+		$('#tt').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:true,
+				title:'Load Data', 
+				iconCls:'icon-save', 
+				width:450, 
+				height:250, 
+				pagination:true,
+				pageNumber:PageNumber,
+				pageSize: PageSize,
+				loadMsg:"正在载入...",
+                //pageList: [10,20,50,100,200],
+				data:dataInfo.data,
+				singleSelect:false, 
+				//idField:'int2',
+				columns:[[
+				   {field:'ck',checkbox:true},
+				   {field:'int2',title:'cheeck',width:80},
+				   {field:'datetime1',title:'时间',width:80},
+				    {field:'datetime1',title:'姓名',width:80},
+				     {field:'datetime1',title:'datetime ID22221',width:80}
+				]],                  
+                onDblClickRow: function (rowIndex) {
+                  openRoleDiv(rowIndex);
+                },
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true
+				
+		}); 
+ 
+	   var pager = $('#tt').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+				buttons:[{ 
+				   iconCls:'icon-search', 
+				   handler:function(){ 
+				       alert('search'); 
+				   } 
+				},{ 
+				   iconCls:'icon-add', 
+				   handler:function(){ 
+				       alert('add'); 
+				   } 
+				},{ 
+				   iconCls:'icon-edit', 
+				   handler:function(){ 
+				       alert('edit'); 
+				   } 
+				}], 
+			    onSelectPage:function(pageNumber,pageSize){
+		           PageNumber=pageNumber;
+		           PageSize=pageSize;
+		           loading();
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:PageSize,pageNumber:PageNumber,total:dataInfo.info.count});
+
+		};
+	
+	}
+
+
+	function openRoleDiv(rowIndex){
+
+	   $("#datetime1").attr("value",dataShow.data[rowIndex].datetime1);
+	   $("#int2").attr("value",dataShow.data[rowIndex].int2+"的萨芬 ");
+
+		var openRoleDiv = self.parent.$("#openRoleDiv").html($("#ceshiid").html());
+		openRoleDiv.window({
+	              title: '修改信息',
+	              width: 900,
+	              height: 500
+	          });
+	
+	 }
+</script>
+	
+
+
+
+
+<div id="ceshiid" style="display: none;">
+
+ <script type="text/javascript" src="datagrid/ceshi.js" ></script>
+
+<input  type="button" onclick="ceshi()" value="测试" /></br>
+
+id:     <input id="int2"/></br>
+时间是： <input id="datetime1"/>
+
+</div>
+
+	<input type="button" onclick="loading()" value="查询" />
+
+ 
+</body>
+</html>

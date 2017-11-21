@@ -1,0 +1,287 @@
+  <div class="modal fade" id="bm_tree_node_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+        </button>
+        <h4 class="modal-title"><span id="bm_tree_node_modal_title"></span></h4>
+      </div>
+      <div class="modal-body no-padding">
+        <!-- FORM Start -->
+        <form id="bm_tree_node_modal_form" method="post" onsubmit="return false;" class="smart-form">
+          <input type="hidden" name="datatable">
+          <fieldset>
+            <div class="row">
+              <section class="col col-6">
+                <label class="label">类别编码</label>
+                <label class="input has-warning">
+                  <input type="text" name="typecd" placeholder="类别编码">
+                  <b id="bm_tree_node_modal_form_typecd" class="tooltip tooltip-bottom-right">类别编码为必填项目</b>
+                </label>
+              </section>
+              <section class="col col-6">
+                <label class="label">类别名称</label>
+                <label class="input has-warning">
+                  <input type="text" name="typenm" placeholder="类别名称">
+                  <b class="tooltip tooltip-bottom-right">类别名称为必填项目</b>
+                </label>
+              </section>
+            </div>
+            <div class="row">
+              <section class="col col-6">
+                <label class="label">父类别编码</label>
+                <label class="input has-warning">
+                  <input type="text" name="parentcd" placeholder="父类别编码" readonly="true"/>
+                  <b class="tooltip tooltip-bottom-right">父类别编码为必填项目</b>
+                </label>
+              </section>
+              <section class="col col-6">
+                <label class="label">标准</label>
+                <label class="input">
+                  <!--<input type="text" name="standard" placeholder="标准码">-->
+                  <input type="hidden" name="standard" data-type="select2" placeholder="标准码" />
+                  <b class="tooltip tooltip-bottom-right">标准为必填项目</b>
+                </label>
+              </section>
+            </div>
+            <div class="row">
+              <section class="col col-6">
+                <label class="label">快捷码</label>
+                <label class="input">
+                  <input type="text" name="shortkey" placeholder="快捷码">
+                </label>
+              </section>
+              <section class="col col-6">
+                <label class="label">版本</label>
+                <label class="input">
+                  <input type="text" name="version" placeholder="版本">
+                </label>
+              </section>
+            </div>
+            <div class="row">
+              <section class="col col-6">
+                <label class="label">状态</label>
+                <label class="input">
+                  <input type="hidden" name="status" data-type="select2" placeholder="状态" />
+                </label>
+              </section>
+            </div>
+            <div>
+              <section>
+                <label class="label">URL<span name="url_span"></span></label>
+                <label class="input">
+                  <input type="text" name="url" placeholder="URL"/>
+                </label>
+              </section>
+            </div>
+            <div>
+              <section>
+                <label class="label">说明</label>
+                <label class="textarea">
+                  <textarea rows="2" name="mark" id="mark" placeholder="说明"></textarea>
+                </label>
+              </section>
+            </div>
+          </fieldset>
+          <footer>
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary">确定</button>
+          </footer>
+        </form>
+        <!-- FORM End -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+<script type="text/javascript">
+
+  var bm_tree_node_modal=function(flag,node,ztreeObj){
+    
+    var formContainer = $("#bm_tree_node_modal_form");
+    //init
+    function init(cb){
+      if(flag=="i"){
+        $("#bm_tree_node_modal_title").text("添加");
+        $("#bm_tree_node_modal_form input[name=parentcd]").val(node.typecd);
+        $("#bm_tree_node_modal_form input[name=status]").select2("val", '1'); //默认值
+        $("#bm_tree_node_modal_form input[name=standard]").select2("val", '02'); //默认值
+        //显示模态
+        $("#bm_tree_node_modal").modal('show');
+        cb&&cb();
+      }else if(flag=="u"){
+        $("#bm_tree_node_modal_title").text("修改");
+        $("#bm_tree_node_modal_form input[name=typecd]").attr('readonly','readonly');
+        //铺数据
+        zy.g.am.app = 'c770045becc04c7583f626faacd3b456';
+        zy.g.am.mod = 'bmtree';
+        zy.net.get("api/getnodeupd",function(msg){
+          if(msg && msg.result && msg.result[0]){
+            formContainer.json2form(msg.result[0]);
+            //显示模态
+            $("#bm_tree_node_modal").modal('show');
+            cb&&cb();
+          }
+        },{"typecd":node.typecd});
+      }
+    }
+    //validate
+    function validate(){
+      formContainer.validate({
+          // Rules for form validation
+          rules: {
+            typecd: {
+              required: true,
+              maxlength: 100
+            },
+            typenm: {
+              required: true,
+              maxlength: 150
+            },
+            parentcd: {
+              required: true,
+              maxlength: 100
+            },
+            datatable: {
+              maxlength: 100
+            },
+            shortkey: {
+              maxlength: 100
+            },
+            standard: {
+              required: true,
+              maxlength: 2
+            },
+            version: {
+              maxlength: 100
+            },
+            status: {
+              required: true
+            },
+            mark: {
+              maxlength: 200
+            }
+          },
+          // 验证成功后保存
+          submitHandler: function(form) {
+            //为datatable赋值
+            var _url=formContainer.find('input[name=url]').val();
+            if(_url=="bm/bm_mddm01.html"){
+              formContainer.find('input[name=datatable]').val('sys_bm003');
+            }else if(_url=="bm/bm_mddm0401.html"){
+              formContainer.find('input[name=datatable]').val('sys_bm004');
+            }else{
+              formContainer.find('input[name=datatable]').val('');
+            }
+            if(flag=="i"){
+              var callback = function(msg) {
+                formContainer.formDisable(false);
+                if (msg) {
+                  zy.log("保存成功 = " + JSON.stringify(msg));
+                  $("#bm_tree_node_modal").modal('hide');
+                  zy.ui.msg("提示信息：", "保存成功！", "s");
+                  //更新树节点
+                  // var treeObj = $.fn.zTree.getZTreeObj("mdms_datadict_h1_tree");
+                  var newNode = {
+                    typecd: msg.data.typecd,
+                    typenm: msg.data.typenm,
+                    parentcd: msg.data.parentcd,
+                    // shownm: msg.data.shownm,
+                    datatable: msg.data.datatable,
+                    uri: msg.data.uri,
+                    new_node: true, 
+                    view_nodecd: ''   //上层的视图节点typecd,没有则为空
+                  };
+                  //向上遍历，获取view_nodecd
+                  var tmpNode=node;
+                  while(true){
+                    if(tmpNode.level==0){
+                      break;
+                    }
+                    if(tmpNode.bm003!='0'){
+                      newNode.view_nodecd=tmpNode.typecd;
+                      break;
+                    }else{
+                      tmpNode=tmpNode.getParentNode();
+                    }
+                  }
+                  zy.log('newNode=',newNode);
+                  if(node.children){
+                    ztreeObj.addNodes(node,newNode);
+                  }else{
+                    //异步展开树节点
+                    node.isParent = true;
+                    ztreeObj.expandNode(node, true, false, true, true);
+                  }
+                }
+              };
+              zy.g.am.app = 'c770045becc04c7583f626faacd3b456';
+              zy.g.am.mod = 'bmtree';
+              zy.net.post("api/addnode", callback, formContainer.serialize());
+              formContainer.formDisable(true);
+            }else if(flag=="u"){
+              var callback = function(msg) {
+                formContainer.formDisable(false);
+                if (msg) {
+                  zy.log("保存成功 = " + JSON.stringify(msg));
+                  $("#bm_tree_node_modal").modal('hide');
+                  zy.ui.msg("提示信息：", "保存成功！", "s");
+                  //更新树节点
+                  // var treeObj = $.fn.zTree.getZTreeObj("mdms_datadict_h1_tree");
+                  node.typecd=msg.data.typecd;
+                  node.typenm=msg.data.typenm;
+                  // shownm: msg.data.shownm,
+                  node.datatable=msg.data.datatable;
+                  node.uri=msg.data.uri;
+                  ztreeObj.updateNode(node);
+                }
+              };
+              zy.g.am.app = 'c770045becc04c7583f626faacd3b456';
+              zy.g.am.mod = 'bmtree';
+              zy.net.post("api/updnode", callback, formContainer.serialize());
+              formContainer.formDisable(true);
+            }
+            
+          },
+          // Do not change code below
+          errorPlacement: function(error, element) {
+            error.insertAfter(element.parent());
+          }
+        });
+    }
+    //页面事件
+    function Event(){
+      if(flag=="i"){
+        if((node.view_nodecd&&node.view_nodecd!='') || (node.bm003 && node.bm003 != '0')){
+          formContainer.find('[name=url]').val('bm/bm_mddm0401.html');
+          // formContainer.find('[name=url_span]').text('（维度视图）');
+        }else{
+          formContainer.find('[name=url]').val('bm/bm_mddm01.html');
+          // formContainer.find('[name=url_span]').text('（数据视图）');
+        }
+      }
+    }
+    //初始化页面数据字典
+    zy.cache.initDicts("ZR.0001,ZR.0039", function(){
+      $('#bm_tree_node_modal_form input[name=status]').zySelect("ZR.0001", false, {
+        width: '100%',
+        allowClear: false
+      });
+      $('#bm_tree_node_modal_form input[name=standard]').zySelect("ZR.0039", false, {
+        width: '100%',
+        allowClear: false
+      });
+      //form的validate设置
+      // validate();
+      //为form里的元素赋默认值或铺数据
+      init(validate);
+      Event();
+    });
+  };
+</script>
+
+      
+          

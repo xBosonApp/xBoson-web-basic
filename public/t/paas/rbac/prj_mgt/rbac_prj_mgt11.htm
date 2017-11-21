@@ -1,0 +1,76 @@
+<!-- rbac_prj_mgt11 项目页面管理 -->
+<div class="row" id="rbac_prj_mgt11_page">
+<fieldset>
+<section>
+  <div class="row">
+    <form id="rbac_prj_mgt11_search_form" method="post" onsubmit="return false;" class="smart-form">
+      <input type="hidden" name="prjid">
+      <section class="col col-2">
+        <label class="input">
+          <input type="text" name="pageid" placeholder="ID" class="form-control input-xs">
+        </label>
+      </section>
+      <section class="col col-2">
+        <label class="input">
+          <input type="text" name="pagenm" placeholder="名称" class="form-control input-xs">
+        </label>
+      </section>
+      <section class="col col-2">
+        <label class="input">
+          <input type="text" name="page_path" placeholder="路径" class="form-control input-xs">
+        </label>
+      </section>
+      <section class="col col-2">
+        <button id="rbac_prj_mgt11_search" class="btn btn-info btn-xs" type="submit"><i class="fa fa-search fa-1"></i>&emsp;查 询&emsp;</button>
+      </section>
+    </form>
+  </div>
+  <div class="btn-group">
+    <button id="rbac_prj_mgt11_add" class="btn btn-info btn-xs">&emsp;<i class="fa fa-magic"></i>&nbsp;添 加&emsp;
+    </button>
+    <button id="rbac_prj_mgt11_edit" class="btn btn-info btn-xs">&emsp;<i class="fa fa-edit"></i>&nbsp;修 改&emsp;
+    </button>
+    <button id="rbac_prj_mgt11_del" class="btn btn-info btn-xs">&emsp;<i class="fa fa-trash-o"></i>&nbsp;删 除&emsp;
+    </button>
+  </div>
+  <div class="pull-right">
+    <b name="rbac_prj_mgt11_total_count"></b>
+  </div>
+  <div class="dataTables_wrapper">
+    <table id="rbac_prj_mgt11_dt" class="table table-bordered table-condensed">
+      <thead>
+      <tr>
+        <th>页面ID</th>
+        <th>页面名称</th>
+        <th>页面路径</th>
+        <th>引用情况</th>
+      </tr>
+      </thead>
+    </table>
+  </div>
+  <div id="rbac_prj_mgt11_pagination"></div>
+</section>
+</fieldset>
+<div id="rbac_prj_mgt11_dialog" style="display: none;">
+  <div class="ui-dialog-content">
+    <table style="width:100%;">
+      <tr>
+        <td id="rbac_prj_mgt11_dlg_none" width="100%">&nbsp;&nbsp;该页面无引用方，可安全删除</td>
+        <td id="rbac_prj_mgt11_dlg_menu" width="50%"></td>
+        <td id="rbac_prj_mgt11_dlg_page" width="50%"></td>
+      </tr>
+    </table>
+  </div>
+</div>
+</div>
+<div id="rbac_prj_mgt11_prjid" data-prjid='###query.prjid###'></div>
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script src="rbac/prj_mgt/rbac_prj_mgt11.js"></script>
+<script>
+  (function () {
+    var divPrjId = $('#rbac_prj_mgt11_prjid').attr('id', zy.extend.random());
+    if (!rbac_prj_mgt11_cache[divPrjId.data('prjid')]) {
+      rbac_prj_mgt11_cache[divPrjId.data('prjid')] = new rbac_prj_mgt11(divPrjId.data('prjid'));
+    }
+  })();
+</script>

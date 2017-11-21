@@ -1,0 +1,189 @@
+<!--index的Tree详细信息-->
+<div class="btn-group">
+  <button style="display:none;" type="button" class="btn btn-primary" id="eeb_overview_lhis"> 执行历史 </button>
+</div>
+<div class="table-responsive">
+	<table id="eeb_overview_table" class="table table-bordered table-striped">
+	</table>
+</div>
+<script>
+  var eeb_overview_table=(function(){
+    var pt = eeb_overview_table.prototype;
+    var thiz;
+    
+    pt._g = {
+      treeNode:{},  //点击的tree节点对象
+      header:[],  //表头数据
+      data:[] //表格数据  
+    };
+    
+    function eeb_overview_table(treeNode){
+      thiz = this;
+      pt._g.treeNode=treeNode;
+      thiz.Init();
+    }
+    
+    var tableJq = $('#eeb_overview_table'); //table的jquery对象
+    
+    pt.Init = function(){
+      thiz.Get();
+      thiz.Datatable();
+      thiz.Toolbar();
+    }
+    
+    //获取数据
+    pt.Get = function(){
+      pt._g.data=pt._g.treeNode.children; //grid数据
+      if(pt._g.treeNode.level=='0'){
+        pt._g.header=[
+          {
+            'title':'用户名',
+            'data':'userid'
+          },
+          {
+            'title':'节点ID',
+            'data':'id'
+          },
+          {
+            'title':'节点IP',
+            'data':'ip'
+          },
+          {
+            'title':'节点端口',
+            'data':'port'
+          },
+          {
+            'title':'节点HOST',
+            'data':'host'
+          },
+          {
+            'title':'节点系统信息',
+            'data':'info'
+          },
+          {
+            'title':'是否在线',
+            "render": function(data, type, row, meta) {
+              return row.state=='1'?'在线':'离线';
+            }
+          },
+          {
+            'title':'最后登陆时间',
+            'data':'lastdt'
+          },
+          {
+            'title':'最后离线时间',
+            'data':'lastout'
+          }
+        ];
+      }
+      else if(pt._g.treeNode.level=='1'){
+        pt._g.header=[
+          {
+            'title':'类别',
+            'data':'treename'
+          }
+        ];
+      }
+      else if(pt._g.treeNode.level=='2'){
+        //流程图
+        if(pt._g.treeNode.treeid.match(/(run_conf)$/)){
+          pt._g.header=[
+            {
+              'title':'ID',
+              'data':'id'
+            },
+            {
+              'title':'流程名称',
+              'data':'name'
+            }
+          ];
+        }
+        //采集点
+        else if(pt._g.treeNode.treeid.match(/(jobgroup)$/)){
+          pt._g.header=[
+            {
+              'title':'ID',
+              'data':'id'
+            },
+            {
+              'title':'采集点名称',
+              'data':'name'
+            }
+          ];
+        }
+        //特例
+        else if(pt._g.treeNode.treeid.match(/(varnish)$/)){
+          pt._g.header=[
+            {
+              'title':'特例ID',
+              'data':'vid'
+            },
+            {
+              'title':'特例名称',
+              'data':'name'
+            },
+            {
+              'title':'模板ID（流程图ID）',
+              'data':'rid'
+            },
+            {
+              'title':'模板名称（流程图名称）',
+              'data':'rname'
+            }
+          ];
+        }
+        //作业计划
+        else if(pt._g.treeNode.treeid.match(/(sche)$/)){
+          pt._g.header=[
+            {
+              'title':'ID',
+              'data':'id'
+            },
+            {
+              'title':'作业计划名称',
+              'data':'name'
+            }
+          ];
+        }
+      }
+    }
+    
+    //生成table
+    pt.Datatable = function(){
+      var options = {
+        'data':pt._g.data,
+        'columns':pt._g.header
+      };
+      // 合并初始化参数选项
+      $.extend(options, zy.ui.dataTable);
+      options.ordering=true;
+      tableJq.dataTable(options);
+    }
+    
+    //Toolbar
+    pt.Toolbar = function(){
+      //tbody单击事件
+      tableJq.find('tbody').on('click','tr',function () {
+        if($(this).hasClass('active')){
+          $(this).removeClass('active');
+        }
+        else{
+          tableJq.find('tr.active').removeClass('active');
+          $(this).addClass('active');
+        }
+      });
+      
+      //执行历史按钮
+      if(pt._g.treeNode.level=='2' && (pt._g.treeNode.treeid.match(/(run_conf)$/) ||pt._g.treeNode.treeid.match(/(sche)$/))){
+        $('#eeb_overview_lhis').show();
+        $('#eeb_overview_lhis').click(function(){
+          zy.net.loadHTML("eeb/eeb_overview/his_run_conf.html",$('#eeb_overview_modal'),function(){
+            his_run_conf(tableJq.DataTable().row('.active').data());
+          });
+        });
+      }
+    }
+    
+    return eeb_overview_table;
+  })();
+</script>

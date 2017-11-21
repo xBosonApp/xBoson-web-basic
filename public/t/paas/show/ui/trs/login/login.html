@@ -1,0 +1,192 @@
+<script>
+//function check(){
+//	var url="logincheck/";
+//	var itemsList = ["username","orgid"];
+//	var info=new Map();
+//	LC_AjaxGet(TRSBaseUrl+url,"orgincheck","checkcallback",info,itemsList);
+//}
+//function checkcallback(){
+	
+//}
+
+function login(){
+	var url="login/";
+	var itemsList = ["username"];
+	var info = new Map();
+ 	LC_AjaxGet(TRSBaseUrl+url,"login","zzsqcallback",info,itemsList);
+}
+function loginin(){
+	LC_Resetting("login");
+	var checkNameItems=["username"];
+	LC_IsCheckLength("login",checkNameItems,1,18);
+	var checkpassItems=["password"];
+	LC_IsCheckLength("login",checkpassItems,1, 50);
+	var checkorgidItems=["orgid"];
+	LC_IsCheckLength("login",checkorgidItems,1, 32);
+		if(retCheckFlg){
+		var url="loginin/";
+		var itemsList = ["username","password","orgid"];
+		 var info = new Map();
+ 	 LC_AjaxGet(TRSBaseUrl+url,"login","logincallback",info,itemsList);
+ }
+}
+function logincallback(reData1){
+	if(reData1.flag===1){
+		self.parent.loginFlg=true;
+		self.parent.usertype=reData1.usertype;
+		self.parent.lev=reData1.lev;
+		self.parent.orgid=reData1.orgid;
+		self.parent.staffid=reData1.staffid;
+		localStorage.setItem('name',$("#username").val());
+		$("#openRoleDiv1").window("close");
+	}
+	 else{
+		alert("登陆失败");
+	}
+	
+}
+
+function zzsqcallback(reData){
+	    var codeList="";
+	    for(var i=0;i<reData.dataList.length;i++){
+	       if(codeList!=""){
+	          codeList=codeList+","+reData.dataList[i].orgid;
+	       }else{
+	          codeList=reData.dataList[i].orgid;
+	       }
+	    }
+	    $(".addorgan").show();
+	    var url="mdm/org/listgetorg/";
+		var infoa = new Map();
+		infoa.put("stringsplit",codeList);
+		var itemsList= [];
+		LC_AjaxGet(MDMBaseUrl+url,"login","orgSelect",infoa,itemsList);
+ }
+function orgSelect(retData){
+
+   var info = new Map();
+  info.put("key",["orgId"]);
+  info.put("value",["orgNm"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("login","orgid",info,retData.dataList);
+}
+function inquire(){
+	$(".addorgan").show();
+}
+
+</script>
+
+
+<form id="login" style="display: none;">
+  <div style="position:absolute; width:100%; height:474px; top:50%; margin:-237px 0 0 0;">
+    <table width="292" border="0" cellpadding="0" cellspacing="0">
+      <tr>
+        <td width="59" height="30" class="login_zi">用户名：</td>
+        <td width="233" height="30">
+          <input type="text" class="login_xian" size="35" id="username" onblur="login()" />
+        </td>
+      </tr>
+      <tr>
+        <td height="30" class="login_zi">机&nbsp;构：</td>
+        <td height="30">
+              <select id="orgid" name="dept" style="width:219px;"></select>
+        </td>
+      </tr>
+      <tr>
+        <td height="30" class="login_zi">密&nbsp;码：</td>
+        <td height="30">
+          <input name="textfield222" type="password" class="login_xian" size="35" id="password"/>
+        </td>
+      </tr>
+    </table>
+    <a  onclick="loginin()">
+      <img src="../images/login_01.gif" width="131" height="46" />
+    </a>
+  </div>
+</form>
+
+
+<form id="login2">
+		<input type="hidden" id="username" value="jgsq">
+		<input type="hidden" id="password" value="123456">
+		<input type="hidden" id="orgid" value="163ca50353e341658f60cc0e34c1ea8b">
+		<button id="but1" onclick="login2('login2')" style="
+    color: #fff;
+    background-color: #3276b1;
+    border-color: #2c699d;
+    margin: 10px 0 0 5px;
+    padding: 0 22px;
+    font: 300 38px/50px'Open Sans', Helvetica, Arial, sans-serif;
+    cursor: pointer;
+    border-radius: 2px;
+    box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .05);
+    -webkit-box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .05);
+    -webkit-tap-highlight-color: rgba(169, 3, 41, .5);
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    background-image: none;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    -webkit-user-select: none;">社区登录</button>
+</form>
+<form id="login3">
+		<input type="hidden" id="username" value="dlqrmyy">
+		<input type="hidden" id="password" value="dlqrmyy">
+		<input type="hidden" id="orgid" value="22a2e89105f0416ba2ea91aa4fe22c47">
+		<button id="but2" onclick="login2('login3')" style="
+    color: #fff;
+    background-color: #3276b1;
+    border-color: #2c699d;
+    margin: 10px 0 0 5px;
+    padding: 0 22px;
+    font: 300 38px/50px'Open Sans', Helvetica, Arial, sans-serif;
+    cursor: pointer;
+    border-radius: 2px;
+    box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .05);
+    -webkit-box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .05);
+    -webkit-tap-highlight-color: rgba(169, 3, 41, .5);
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    background-image: none;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    -webkit-user-select: none;">医院登录</button>
+</form>
+<script>
+function login2(f){
+		var url="loginin/";
+		var itemsList = ["username","password","orgid"];
+		var info = new Map();
+ 	  LC_AjaxGet(TRSBaseUrl+url,f,"logincallback",info,itemsList);
+}
+</script>
+
+
+
+<!--<div class="itemsW-304">-->
+<!--    <form id="login">-->
+<!--    	<div class="padTB-10 clearfix">-->
+<!--            <div class="itemLW-272">-->
+<!--                <div class="itemLW-80 padT-4">用户名：</div>-->
+<!--                <div class="itemsW-192"><input id="username" onblur="login()" class="textLW" type="text" /></div>-->
+<!--            </div>-->
+           
+            
+<!--                <div class="itemLW-80 padT-4">机构：</div>-->
+<!--                <div class="itemsW-192">-->
+<!--                    <select class="textLW" id="orgid" name="dept" >  -->
+                    
+<!--                    </select>-->
+<!--                </div>-->
+           
+<!--            <div class="itemLW-272">-->
+<!--                <div  class="itemLW-80 padT-4">密码：</div>-->
+<!--                <div class="itemsW-192"><input id="password" class="textLW" type="password" /></div>-->
+<!--            </div>-->
+<!--            <div class="itemLW-272"><a class="easyui-linkbutton" onclick="loginin()">登陆</a></div>-->
+<!--      </div>-->
+<!--    </form>-->
+<!--</div>-->
