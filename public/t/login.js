@@ -259,8 +259,11 @@ Login = (function() {
       ls_zy_user_info = zy.cache.get('_zy_user_info', 'ls');
 
     //检测httpUrl
-      zy.g.host.api = zy.net.getHttpUrl("/ds/");
-      zy.g.host.ui = zy.net.getHttpUrl();
+      // edit by J.ym
+      // zy.g.host.api = zy.net.getHttpUrl("/ds/");
+      // zy.g.host.ui = zy.net.getHttpUrl();
+      zy.g.host.ui = zy.net.getHttpUrl("/xboson/face/");
+      zy.g.host.api = zy.net.getHttpUrl("/xboson/");
 
       var errorTime = ls_zy_user_info.get('errorTimeout');
 
@@ -335,7 +338,6 @@ Login = (function() {
       if (msg) {
         zy.log("login.success: " + JSON.stringify(msg));
         if (msg.ret == "0") {
-
           ls_zy_user_info.remove('errorTimeout');
           zy.g.comm.openid = msg.openid;
           zy.g.comm.mdk = msg.mdk;
@@ -397,16 +399,20 @@ Login = (function() {
         ls_zy_user_info.set('errorTimeout',(new Date()).getTime());
         if (msg.ret === '1001') {
           zy.ui.msg("登录失败：", "用户名或密码错误请尝试重新输入", "e");
-          $('#c').closest('section').show();
-          Event($('#c'));
-          $('[name=c]').val('');
         }
-        if(msg.ret === '10'){
+        else if(msg.ret === '10'){
           zy.ui.msg("登录失败：", "验证码错误请重新输入", "e");
-          $('#c').closest('section').show();
-          Event($('#c'));
-          $('[name=c]').val('');
         }
+        else if (msg.code == 1002) { // 已经登录
+          msg.ret = "0";
+          callback(msg);
+        }
+        else {
+          zy.ui.msg("登录失败：", msg.data, "e");
+        }
+        $('#c').closest('section').show();
+        Event($('#c'));
+        $('[name=c]').val('');
       }
     };
     zy.log("登录之前 zy.g.comm.openid=" + zy.g.comm.openid);

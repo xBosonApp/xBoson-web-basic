@@ -10,8 +10,10 @@ index = (function() {
     ls_zy_user_info = zy.cache.get('_zy_user_info', 'ls');
 
     //根据url改变host
-    zy.g.host.api = zy.net.getHttpUrl("/ds/");
-    zy.g.host.ui = zy.net.getHttpUrl();
+    // zy.g.host.api = zy.net.getHttpUrl("/ds/");
+    // zy.g.host.ui = zy.net.getHttpUrl();
+    zy.g.host.api = zy.net.getHttpUrl("/xboson/");
+    zy.g.host.ui = zy.net.getHttpUrl("/xboson/face/");
 
     check();
     return this;

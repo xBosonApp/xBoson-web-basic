@@ -42,7 +42,7 @@ var zy = {
    * @return {String}
    */
   toString: function () {
-    return '{zy} version: 0.0.1';
+    return '{zy} version: 2.0.1';
   },
   /** 控制台log输出 */
   debug: false,
@@ -89,6 +89,14 @@ zy.tool = {
     // var check3 = /[A-Z]/; //包含大写字母
     // return !check1.test(str) && !check2.test(str) && !check3.test(str);
     return !check1.test(str) && !check2.test(str);
+  },
+  normalize: function(str) {
+    var tmp = str.split('/');
+    var out = [];
+    for (var i=0; i<tmp.length; ++i) {
+      if (tmp[i]) out.push(tmp[i]);
+    }
+    return out.join('/');
   },
   path:function(){
     if(location.href.indexOf(location.host + '/t'>-1))
@@ -621,6 +629,8 @@ zy.net = {
     }
     zy.log("zy.net.get.link :" + link);
     zy.log("zy.net.get.param:" + JSON.stringify(param));
+    if (!param) param = {};
+    param['$format'] = 'jsonp'; // add by J.ym
     var setting = {
       url: link,
       type: "get",
@@ -679,6 +689,9 @@ zy.net = {
     zy.log("zy.net.post.link: " + link);
     zy.log("zy.net.post.param: " + JSON.stringify(param));
     if (isJsonSubmit) {
+      if (!param) param = {};
+      param['$format'] = 'jsonp'; // add by J.ym
+
       var settingJson = {
         url: link,
         type: 'POST',
@@ -721,6 +734,9 @@ zy.net = {
    * @param {Object} param 发送请求参数json对象或表单对象：$('#formid').serialize();
    */
   normalGet: function (uri, callback, param) {
+    if (!param) param = {};
+    param['$format'] = 'jsonp'; // add by J.ym
+
     //设置Url及参数
     zy.log("zy.net.normalGet.param: " + JSON.stringify(param));
     $.ajax({
@@ -771,7 +787,9 @@ zy.net = {
    * @param {Function} error 服务器端传来错误信息时使用 error 回调函数处理错误，将返回出错 JSON 数据
    */
   postForm: function (uri, form, callback, error) {
+
     var prm = zy.tool.initParams(zy.g.comm, zy.g.am);
+    prm['$format'] = 'jsonp'; // add by J.ym
     zy.g.am = {};
     //设置Url及参数
     var link = zy.g.host.api + uri + "?" + zy.net.parseParam(prm);
@@ -836,18 +854,21 @@ zy.net = {
   },
 
   loadIndex : function() {
-    var _path = '/ui/paas/main.html';
+    var _path;
     //本地缓存获取orgtype
     var ls_zy_user_info = zy.cache.get('_zy_user_info', 'ls');
     var orgtype = ls_zy_user_info.get('user_selected_org_type');
-    if(orgtype && orgtype !== 'v')
-      _path = '/ui/saas/' + zy.g.comm.org + '/main.html';
+    if(orgtype && orgtype !== 'v') {
+      _path =  zy.g.host.ui + '/ui/saas/' + zy.g.comm.org + '/main.html';
+    } else {
+      _path =  zy.g.host.ui + '/ui/paas/main.html';
+    }
     window.location = _path;
   },
 
   loadLogin : function() {
     parent.$('body').addClass('animated fadeOutUp');
-    parent.location = '/ui/paas/login.html';
+    parent.location =  zy.g.host.ui + '/ui/paas/login.html';
   },
 
   /**
@@ -1289,6 +1310,8 @@ zyNet = (function () {
    * @param {Function} error 服务器端传来错误信息时使用 error 回调函数处理错误，将返回出错 JSON 数据
    */
   PT.get = function (uri, callback, param, pagenum, error) {
+    if (!param) param = {};
+    param['$format'] = 'jsonp'; // add by J.ym
     //关闭AJAX的缓存(全局属性)
     //$.ajaxSetup({cache: false});
     var prm = zy.tool.initParams(zy.g.comm, zy.g.am);
@@ -3716,6 +3739,7 @@ zy.org = {
 
 /** =====================扩展功能 */
 /** 在原生String对象基础上添加自定义函数，如：字符串处理工具常用API,包括空白处理、字符统计、字符容器等. */
+(function() {
 /**
  * 去掉字符串前面和最后的空格
  *
@@ -3864,6 +3888,9 @@ String.prototype.toDate = function () {
   //    return parseInt(a, 10) - 1;
   //  }).match(/\d+/g) + ')');
 };
+})();
+
+(function() {
 /**
  * 日期格式化函数
  * @method Date.toFormat
@@ -3977,7 +4004,7 @@ if (!Array.prototype.indexOf) {
     return -1;
   };
 }
-
+})();
 /** =====================FORM 表单对象功能扩展 */
 /**
  * json对象绑定到form表单中

@@ -498,8 +498,9 @@
 		<script src="login.js"></script>
 		<script type="text/javascript">
       $(function() {
-        zy.g.host.ui = zy.net.getHttpUrl();
-        zy.g.host.api = zy.net.getHttpUrl("/ds/");
+				// 在 login.js 中初始化 by J.ym
+        // zy.g.host.ui = zy.net.getHttpUrl();
+        // zy.g.host.api = zy.net.getHttpUrl("/ds/");
         var login = new Login();
  			  $('#form-password').hide();
         login.Init();
