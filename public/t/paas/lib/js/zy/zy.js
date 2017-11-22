@@ -48,10 +48,10 @@ var zy = {
   debug: false,
   /** 控制台log输出函数封装 */
   log: function () {
-      if (window.console && zy.debug) {
-          // http://stackoverflow.com/questions/8785624/how-to-safely-wrap-console-log
-          Function.apply.call(console.log, console, arguments);
-      }
+    if (window.console && zy.debug) {
+      // http://stackoverflow.com/questions/8785624/how-to-safely-wrap-console-log
+      Function.apply.call(console.log, console, arguments);
+    }
   },
   /** 全局参数 */
   //共通传参用
@@ -81,6 +81,55 @@ var zy = {
   }
 };
 
+//
+// xboson 系统兼容层
+//
+zy.fix_xboson_data = function(msg) {
+  if ((!msg.result) && (msg.data)) {
+    msg.result = msg.data;
+  }
+  if (!isNaN(msg.code)) {
+    msg.ret = msg.code+'';
+  }
+  return msg;
+};
+
+zy.fix_jsonp_parm = function(parm) {
+  if (!parm) parm = {};
+  parm['$format'] = 'jsonp';
+  return parm;
+};
+
+zy.fix_ui_type = function(uri) {
+  return (zy.debug ? "/t" : "/ui") + uri;
+};
+
+zy.fix_api_call = function(uri, prm) {
+  var api_prefix = "api/";
+  if (uri.indexOf(api_prefix) == 0) {
+    //Path format: /app/{org id}/{app id}/{module id}/{api name}
+    var apiname = uri.substr(api_prefix.length);
+    uri = ['app/', prm.org, '/', prm.app, '/', prm.mod, '/', apiname ].join('');
+    delete prm.org;
+    delete prm.app;
+    delete prm.mod;
+    console.error("fix api call::::::::::::::", uri, prm);
+  }
+  return uri;
+};
+
+(function() {
+  //
+  // 刷新后还原 debug 模式
+  //
+  $(window).on("unload", function() {
+    sessionStorage['zy.debug'] = zy.debug ? '1' : null;
+  });
+  setTimeout(function() {
+    zy.debug =  sessionStorage['zy.debug'] == '1'
+  }, 1);
+})();
+
 /** =====================共通方法 */
 zy.tool = {
   checkTableName:function(str){
@@ -100,7 +149,7 @@ zy.tool = {
   },
   path:function(){
     if(location.href.indexOf(location.host + '/t'>-1))
-      var u ='http://' + location.host+'/t/saas/'+zy.g.comm.org+'/';
+      var u ='http://' + location.host+ '/t/saas/'+zy.g.comm.org+'/';
     else
       var u ='http://' + location.host+'/ui/saas/'+zy.g.comm.org+'/';
     // return u;
@@ -621,6 +670,7 @@ zy.net = {
     }
     zy.g.am = {};
     //设置Url及参数
+    uri = zy.fix_api_call(uri, prm);
     var link;
     if (uri.indexOf('ETLServer') != -1) {
       link = zy.g.host.api.substring(0, zy.g.host.api.length - 3) + uri + "?" + zy.net.parseParam(prm);
@@ -629,8 +679,9 @@ zy.net = {
     }
     zy.log("zy.net.get.link :" + link);
     zy.log("zy.net.get.param:" + JSON.stringify(param));
-    if (!param) param = {};
-    param['$format'] = 'jsonp'; // add by J.ym
+    
+    param = zy.fix_jsonp_parm(param); // add by J.ym
+
     var setting = {
       url: link,
       type: "get",
@@ -642,7 +693,8 @@ zy.net = {
       jsonpCallback: "cb" + zy.tool.random(),
       data: param,
       success: function (msg) {
-        //zy.log("zy.net.get.success: " + JSON.stringify(msg));
+        // zy.log("zy.net.get.success: " + JSON.stringify(msg));
+        zy.fix_xboson_data(msg);
         zy.net.errorHandler(msg, callback, error);
       },
       error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -689,8 +741,7 @@ zy.net = {
     zy.log("zy.net.post.link: " + link);
     zy.log("zy.net.post.param: " + JSON.stringify(param));
     if (isJsonSubmit) {
-      if (!param) param = {};
-      param['$format'] = 'jsonp'; // add by J.ym
+      param = zy.fix_jsonp_parm(param)// add by J.ym
 
       var settingJson = {
         url: link,
@@ -705,6 +756,7 @@ zy.net = {
         data: JSON.stringify(param),
         success: function (msg) {
           //zy.log("zy.net.get.success: " + JSON.stringify(msg));
+          zy.fix_xboson_data(msg);
           zy.net.errorHandler(msg, callback, error);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -722,7 +774,8 @@ zy.net = {
       $.ajax(settingJson);
     } else {
       $.post(link, param, function (msg) {
-        zy.net.errorHandler(zy.tool.fromJson(msg), callback, error);
+        var _msg = zy.fix_xboson_data(zy.tool.fromJson(msg));
+        zy.net.errorHandler(_msg, callback, error);
       });
     }
   },
@@ -734,8 +787,7 @@ zy.net = {
    * @param {Object} param 发送请求参数json对象或表单对象：$('#formid').serialize();
    */
   normalGet: function (uri, callback, param) {
-    if (!param) param = {};
-    param['$format'] = 'jsonp'; // add by J.ym
+    param = zy.fix_jsonp_parm(param)// add by J.ym
 
     //设置Url及参数
     zy.log("zy.net.normalGet.param: " + JSON.stringify(param));
@@ -789,7 +841,7 @@ zy.net = {
   postForm: function (uri, form, callback, error) {
 
     var prm = zy.tool.initParams(zy.g.comm, zy.g.am);
-    prm['$format'] = 'jsonp'; // add by J.ym
+    prm = zy.fix_jsonp_parm(prm)// add by J.ym
     zy.g.am = {};
     //设置Url及参数
     var link = zy.g.host.api + uri + "?" + zy.net.parseParam(prm);
@@ -859,16 +911,16 @@ zy.net = {
     var ls_zy_user_info = zy.cache.get('_zy_user_info', 'ls');
     var orgtype = ls_zy_user_info.get('user_selected_org_type');
     if(orgtype && orgtype !== 'v') {
-      _path =  zy.g.host.ui + '/ui/saas/' + zy.g.comm.org + '/main.html';
+      _path =  zy.g.host.ui + fix_ui_type('/saas/') + zy.g.comm.org + '/main.html';
     } else {
-      _path =  zy.g.host.ui + '/ui/paas/main.html';
+      _path =  zy.g.host.ui + fix_ui_type('/paas/main.html');
     }
     window.location = _path;
   },
 
   loadLogin : function() {
     parent.$('body').addClass('animated fadeOutUp');
-    parent.location =  zy.g.host.ui + '/ui/paas/login.html';
+    parent.location =  zy.g.host.ui + fix_ui_type('/paas/login.html');
   },
 
   /**
@@ -1310,8 +1362,6 @@ zyNet = (function () {
    * @param {Function} error 服务器端传来错误信息时使用 error 回调函数处理错误，将返回出错 JSON 数据
    */
   PT.get = function (uri, callback, param, pagenum, error) {
-    if (!param) param = {};
-    param['$format'] = 'jsonp'; // add by J.ym
     //关闭AJAX的缓存(全局属性)
     //$.ajaxSetup({cache: false});
     var prm = zy.tool.initParams(zy.g.comm, zy.g.am);
@@ -1327,6 +1377,7 @@ zyNet = (function () {
     var link = zy.g.host.api + uri + "?" + zy.net.parseParam(prm);
     zy.log("zyNet.get.link: " + link);
     zy.log("zyNet.get.param: " + JSON.stringify(param));
+    param = zy.fix_jsonp_parm(param)// add by J.ym
     $.ajax({
       url: link,
       type: "get",

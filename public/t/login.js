@@ -335,65 +335,70 @@ Login = (function() {
     param.password = $.md5(param.password);
 
     var callback = function(msg) {
-      if (msg) {
-        zy.log("login.success: " + JSON.stringify(msg));
-        if (msg.ret == "0") {
-          ls_zy_user_info.remove('errorTimeout');
-          zy.g.comm.openid = msg.openid;
-          zy.g.comm.mdk = msg.mdk;
-          ls_zy_user_info.set('user_mdk', msg.mdk);
+      if (!msg) {
+        return;
+      }
 
-          checkCookie(msg.userkey);
+      zy.log("login.success: " + JSON.stringify(msg));
+      if (msg.ret == "0") {
+        ls_zy_user_info.remove('errorTimeout');
+        zy.g.comm.openid = msg.openid;
+        zy.g.comm.mdk = msg.mdk;
+        ls_zy_user_info.set('user_mdk', msg.mdk);
 
-          zy.log("登录之后 zy.g.comm.openid=" + zy.g.comm.openid);
-          // 检查用户所属机构 如多个，显示机构选择界面
-          var cb = function(msg) {
-            if (msg) {
-              ls_zy_user_info.set('user_org_list', msg.result);
-              if (msg.result.length > 1) {
-                // 当前用户所属机构列表
-                thiz._g.orgList = msg.result;
-                // 浏览器缓存中有上次选择过的机构，则直接跳转到主页面，否则显示机构选择界面
-                var lastSelectedOrgInCache = ls_zy_user_info.get('user_selected_org');
-                if (lastSelectedOrgInCache) {
-                  var matchedOrgID = $.grep(thiz._g.orgList, function(n, i) {
-                    return n.orgid === lastSelectedOrgInCache;
-                  });
-                  if (matchedOrgID.length > 0) {
-                    // 跳转到主页面
-                    zy.net.loadIndex();
-                  } else {
-                    showOrgSelection();
-                  }
-                } else {
-                  // 机构选择
-                  showOrgSelection();
-                }
-              } else if (msg.result.length == 1) {
-                // 当前用户所属机构列表
-                thiz._g.orgList = msg.result;
-                zy.g.comm.org = msg.result[0].orgid;
-                zy.g.comm.orgtype = msg.result[0].org_type;
-                var orgpath = msg.result[0].isplatorg? 'paas':'saas/' + msg.result[0].orgid;
-                zy.g.comm.orgpath = orgpath;
-                ls_zy_user_info.set('user_selected_org', msg.result[0].orgid);
-                ls_zy_user_info.set('user_selected_org_type', msg.result[0].org_type);
-                ls_zy_user_info.set('user_selected_org_path', orgpath);
-                // 转入 index
-                zy.net.loadIndex();
-              } else {
-                // 当前用户所属机构列表 清空
-                thiz._g.orgList = [];
-                zy.ui.msg("提示信息：", "您尚未被登记为属于任何一个机构的用户，将不能进行任何操作，请联系管理员！", "e");
-              }
-            }
-          };
-          zy.g.am.app = "ZYAPP_LOGIN";
-          zy.g.am.mod = "ZYMODULE_LOGIN";
-          zy.net.get("user/getuserorg", cb);
-        }
+        checkCookie(msg.userkey);
+
+        zy.log("登录之后 zy.g.comm.openid=" + zy.g.comm.openid);
+
+        // 检查用户所属机构 如多个，显示机构选择界面
+        zy.g.am.app = "ZYAPP_LOGIN";
+        zy.g.am.mod = "ZYMODULE_LOGIN";
+        zy.net.get("user/getuserorg", getuserorg_cb);
       }
     };
+
+    var getuserorg_cb = function(msg) {
+      if (!msg) { return; }
+    
+      ls_zy_user_info.set('user_org_list', msg.result);
+      if (msg.result.length > 1) {
+        // 当前用户所属机构列表
+        thiz._g.orgList = msg.result;
+        // 浏览器缓存中有上次选择过的机构，则直接跳转到主页面，否则显示机构选择界面
+        var lastSelectedOrgInCache = ls_zy_user_info.get('user_selected_org');
+        if (lastSelectedOrgInCache) {
+          var matchedOrgID = $.grep(thiz._g.orgList, function(n, i) {
+            return n.orgid === lastSelectedOrgInCache;
+          });
+          if (matchedOrgID.length > 0) {
+            // 跳转到主页面
+            zy.net.loadIndex();
+          } else {
+            showOrgSelection();
+          }
+        } else {
+          // 机构选择
+          showOrgSelection();
+        }
+      } else if (msg.result.length == 1) {
+        // 当前用户所属机构列表
+        thiz._g.orgList = msg.result;
+        zy.g.comm.org = msg.result[0].orgid;
+        zy.g.comm.orgtype = msg.result[0].org_type;
+        var orgpath = msg.result[0].isplatorg? 'paas':'saas/' + msg.result[0].orgid;
+        zy.g.comm.orgpath = orgpath;
+        ls_zy_user_info.set('user_selected_org', msg.result[0].orgid);
+        ls_zy_user_info.set('user_selected_org_type', msg.result[0].org_type);
+        ls_zy_user_info.set('user_selected_org_path', orgpath);
+        // 转入 index
+        zy.net.loadIndex();
+      } else {
+        // 当前用户所属机构列表 清空
+        thiz._g.orgList = [];
+        zy.ui.msg("提示信息：", "您尚未被登记为属于任何一个机构的用户，将不能进行任何操作，请联系管理员！", "e");
+      }
+    };
+
     var error = function(msg) {
       if (msg) {
         ls_zy_user_info.set('errorTimeout',(new Date()).getTime());
@@ -403,7 +408,7 @@ Login = (function() {
         else if(msg.ret === '10'){
           zy.ui.msg("登录失败：", "验证码错误请重新输入", "e");
         }
-        else if (msg.code == 1002) { // 已经登录
+        else if (msg.ret == '1002') { // 已经登录
           msg.ret = "0";
           callback(msg);
         }
@@ -415,6 +420,7 @@ Login = (function() {
         $('[name=c]').val('');
       }
     };
+
     zy.log("登录之前 zy.g.comm.openid=" + zy.g.comm.openid);
     zy.g.am.app = '';
     zy.g.am.mod = '';

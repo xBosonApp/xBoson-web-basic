@@ -1,6 +1,8 @@
 index = (function() {
   var ls_zy_user_info;
   var zm;
+  var ui_base = '';
+
 
   function index() {
     // 开启log控制台输出
@@ -13,7 +15,13 @@ index = (function() {
     // zy.g.host.api = zy.net.getHttpUrl("/ds/");
     // zy.g.host.ui = zy.net.getHttpUrl();
     zy.g.host.api = zy.net.getHttpUrl("/xboson/");
-    zy.g.host.ui = zy.net.getHttpUrl("/xboson/face/");
+    zy.g.host.ui = zy.net.getHttpUrl("/xboson/face");
+
+    if (zy.debug) {
+      ui_base = zy.g.host.ui + '/t';
+    } else {
+      ui_base = zy.g.host.ui + '/ui';
+    }
 
     check();
     return this;
@@ -46,36 +54,34 @@ index = (function() {
     // zy.g.comm.mdk = ls_zy_user_info.get('user_mdk');
     // zy.g.comm.userkeylocal = ls_zy_user_info.get('user_local_userkey');
 
-    if(zy.g.comm.openid)
-        getData({
-          api : 'getuserorg',
-          app : 'ZYAPP_LOGIN',
-          mod : 'ZYMODULE_LOGIN'
-        }, function(msg) {
-          if (msg && msg.result && msg.result.length > 0) {
-            ls_zy_user_info.set('user_org_list', msg.result);
-            var lastSelectedOrgInCache = ls_zy_user_info.get('user_selected_org');
-            if (lastSelectedOrgInCache) {
-              var matchedOrgID = $.grep(msg.result, function(n, i) {
-                return n.orgid === lastSelectedOrgInCache;
-              });
-              if (matchedOrgID.length > 0) {
-                zy.g.comm.org = lastSelectedOrgInCache;
-                initIndex();
-                initChangeOrg(msg.result);
-                getUserInfo();
-              } else {
-                window.location = '/ui/paas/login.html';
-              }
-            } else {
-              window.location = '/ui/paas/login.html';
+    if(zy.g.comm.openid) {
+      getData({
+        api : 'getuserorg',
+        app : 'ZYAPP_LOGIN',
+        mod : 'ZYMODULE_LOGIN'
+      }, function(msg) {
+        if (msg && msg.result && msg.result.length > 0) {
+          ls_zy_user_info.set('user_org_list', msg.result);
+          var lastSelectedOrgInCache = ls_zy_user_info.get('user_selected_org');
+
+          if (lastSelectedOrgInCache) {
+            var matchedOrgID = $.grep(msg.result, function(n, i) {
+              return n.orgid === lastSelectedOrgInCache;
+            });
+            if (matchedOrgID.length > 0) {
+              zy.g.comm.org = lastSelectedOrgInCache;
+              initIndex();
+              initChangeOrg(msg.result);
+              getUserInfo();
+              return;
             }
-          } else {
-            window.location = '/ui/paas/login.html';
           }
-        }, null);
-    else
-      window.location = '/ui/paas/login.html';
+        }
+        window.location = ui_base + '/login.html';
+      }, null);
+    } else {
+      window.location = ui_base + '/login.html';
+    }
   }
 
   //获取用户信息
