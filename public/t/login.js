@@ -413,7 +413,7 @@ Login = (function() {
           callback(msg);
         }
         else {
-          zy.ui.msg("登录失败：", msg.data, "e");
+          zy.ui.msg("登录失败：", msg.msg, "e");
         }
         $('#c').closest('section').show();
         Event($('#c'));

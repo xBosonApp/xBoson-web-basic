@@ -113,7 +113,7 @@ zy.fix_api_call = function(uri, prm) {
     delete prm.org;
     delete prm.app;
     delete prm.mod;
-    console.error("fix api call::::::::::::::", uri, prm);
+    console.warn("fix api call::::::::::::::", uri, prm);
   }
   return uri;
 };
@@ -911,16 +911,16 @@ zy.net = {
     var ls_zy_user_info = zy.cache.get('_zy_user_info', 'ls');
     var orgtype = ls_zy_user_info.get('user_selected_org_type');
     if(orgtype && orgtype !== 'v') {
-      _path =  zy.g.host.ui + fix_ui_type('/saas/') + zy.g.comm.org + '/main.html';
+      _path =  zy.g.host.ui + zy.fix_ui_type('/saas/') + zy.g.comm.org + '/main.html';
     } else {
-      _path =  zy.g.host.ui + fix_ui_type('/paas/main.html');
+      _path =  zy.g.host.ui + zy.fix_ui_type('/paas/main.html');
     }
     window.location = _path;
   },
 
   loadLogin : function() {
     parent.$('body').addClass('animated fadeOutUp');
-    parent.location =  zy.g.host.ui + fix_ui_type('/paas/login.html');
+    parent.location =  zy.g.host.ui + zy.fix_ui_type('/paas/login.html');
   },
 
   /**
