@@ -1274,9 +1274,7 @@ zy.log('checkURL.url= '+url);
 
 // LOAD AJAX PAGES
 function loadURL(url, container,path) {
-  
-  
-  var _u = 'http://'+location.host; // 绝对路径
+  var _u = zy.g.host.ui; // 绝对路径
   _u += zy.debug? '/t/':'/ui/'; // 调试用路径切换
   _u += path+'/'+url; // 完整路径
   _u += (url.indexOf('?')==-1?"?":"&")+"org="+zy.g.comm.org;

@@ -113,7 +113,7 @@ zy.fix_api_call = function(uri, prm) {
     delete prm.org;
     delete prm.app;
     delete prm.mod;
-    console.warn("fix api call::::::::::::::", uri, prm);
+    //console.debug("fix api call::::::::::::::", uri, prm);
   }
   return uri;
 };
@@ -958,8 +958,8 @@ zy.net = {
    * @param {Function} callback 回调函数
    */
   loadHTML: function (url, container, callback) {
-    var _u = 'http://'+location.host; // 绝对路径
-    _u += zy.debug? '/t':'/ui'; // 调试用路径切换
+    var _u = zy.g.host.ui; // 绝对路径
+    _u += zy.debug ? '/t': '/ui'; // 调试用路径切换
     _u += '/paas/' + url; // paas路径
     // if ('@' === url.charAt(0)) {
     //   flg = true;
@@ -1216,7 +1216,7 @@ zy.net = {
    * @return {String} url 返回处理好的链接地址
    */
   getOrgUrl: function (url) {
-    var _u = 'http://'+location.host; // 绝对路径
+    var _u = zy.g.host.ui; //'http://'+location.host; // 绝对路径
     _u += zy.debug? '/t':'/ui'; // 调试用路径切换
 
     if (!url) {
@@ -1373,6 +1373,7 @@ zyNet = (function () {
       };
       prm = zy.tool.initParams(prm, zy.g.pages);
     }
+    uri = zy.fix_api_call(uri, prm);
     //设置Url及参数
     var link = zy.g.host.api + uri + "?" + zy.net.parseParam(prm);
     zy.log("zyNet.get.link: " + link);
