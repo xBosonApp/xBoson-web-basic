@@ -91,8 +91,11 @@ zyMenu = (function() {
     });
     for (var i in _list) {
       var icon = _list[i].menu_icon;
-      if (icon)
+      if (icon) {
         icon = '<i class=\"fa fa-lg fa-fw ' + icon + '\"></i>';
+      } else {
+        icon = "";
+      }
       //如果有子节点，则遍历该子节点
       var children = _list[i].children;
       if ($(children).length > 0) {
