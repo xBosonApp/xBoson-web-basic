@@ -402,7 +402,8 @@
     $(a).closest('li').addClass('active');
     $(a).closest('li').parents('li').addClass('active open');
     $('#content').empty();
-    var host = location.host;
+    // var host = location.host;
+    var host = zy.g.host.ui;
     var href = location.href;
     var http = 'http://';
     var ui = '';

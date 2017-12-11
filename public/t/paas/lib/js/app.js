@@ -1273,11 +1273,12 @@ zy.log('checkURL.url= '+url);
 }
 
 // LOAD AJAX PAGES
-function loadURL(url, container,path) {
+function loadURL(url, container, path) {
   var _u = zy.g.host.ui; // 绝对路径
   _u += zy.debug? '/t/':'/ui/'; // 调试用路径切换
   _u += path+'/'+url; // 完整路径
   _u += (url.indexOf('?')==-1?"?":"&")+"org="+zy.g.comm.org;
+
   $.ajax({
     type: "GET",
     url: _u,
@@ -1308,12 +1309,20 @@ function loadURL(url, container,path) {
       // Console.log("success");
       var result = _out(data,path);
       var setHeight = $('#main').height();
-      container.css({
-        opacity: '0.0'
-      }).html(result).delay(50).animate({
-        opacity: '1.0',
-        'min-height': setHeight + 'px'
-      }, 300);
+
+      try {
+        container.css({
+          opacity: '0.0'
+        }).html(result).delay(50).animate({
+          opacity: '1.0',
+          'min-height': setHeight + 'px'
+        }, 300);
+      } catch(e) {
+        // add by J.ym [17.12.11]
+        var desc = "Load page fail: "+ url;
+        console.error(desc, e);
+        zy.ui.msg(desc, e.message, "e");
+      }
       // DO NOT REMOVE : GLOBAL FUNCTIONS!
       // pageSetUp();
     },
@@ -1326,10 +1335,10 @@ function loadURL(url, container,path) {
   //Console.log("ajax request sent");
 }
 
-function _out(str,path) {
+function _out(str, path) {
   var result = '';
   var htmlbuf = str;
-  var out_arr = extractCss(htmlbuf.toString(), out_arr,path);
+  var out_arr = extractCss(htmlbuf.toString(), out_arr, path);
   return out_arr;
 }
 
@@ -1339,34 +1348,35 @@ function extractCss(str, css_arr,path) {
   var html = str;
 
   var _u = zy.debug? '/t/':'/ui/'; // 调试用路径切换
+  _u = zy.g.host.ui + _u;
 
   zy.log('extractCss : _u == '+_u);
 
-    function findjs() {
-      find("<script ", '>', function(tag) {
-        if (tag.indexOf('src=') > 0) {
-          if (tag.indexOf('src="/') > 0) {
-            return tag;
-          } else if (tag.indexOf('src="http') > 0) {
-            return tag;
-          } else {
-            return tag.replace('src="','src="'+_u+path+'/');
-          }
-        }else{
+  function findjs() {
+    find("<script ", '>', function(tag) {
+      if (tag.indexOf('src=') > 0) {
+        if (tag.indexOf('src="/') > 0) {
           return tag;
-        }
-      });
-    }
-
-    function findcss() {
-      find("<link", ">",function(tag){
-        if (tag.indexOf('href="/') > 0) {
+        } else if (tag.indexOf('src="http') > 0) {
           return tag;
         } else {
-          return tag.replace('href="','href="'+_u+path+'/');
+          return tag.replace('src="','src="'+ _u + path +'/');
         }
-      });
-    }
+      }else{
+        return tag;
+      }
+    });
+  }
+
+  function findcss() {
+    find("<link", ">",function(tag){
+      if (tag.indexOf('href="/') > 0) {
+        return tag;
+      } else {
+        return tag.replace('href="','href="'+ _u + path +'/');
+      }
+    });
+  }
 
 	function find(st_tag, ed_tag, filter) {
 		var st = 0;
@@ -1379,7 +1389,7 @@ function extractCss(str, css_arr,path) {
 					var sub = html.substring(st, ed);
 					var reg = new RegExp(sub);
 					filter && (changesub = filter(sub));
-					html = html.replace(reg,changesub);
+					html = html.replace(reg, changesub);
 					st = ed;
 				} else {
 					st += st_tag.length;

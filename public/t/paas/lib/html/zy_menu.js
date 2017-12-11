@@ -84,7 +84,6 @@ zyMenu = (function() {
    * @param {Boolean} parent 为父节点对象
    */
   PT.menuView = function(_list, parent) {
-
     var ul = $("<ul></ul>");
     _list = _list.sort(function(a, b) {
       return (Number(a.sorting_order) - Number(b.sorting_order));
@@ -121,7 +120,7 @@ zyMenu = (function() {
             var t = uri.split('/');
             var path = t[0] + '/' +t[1];
             var tt = [];
-            for(ii in t){
+            for(var ii in t){
               if(ii > 1)
                 tt.push(t[ii]);
             }
