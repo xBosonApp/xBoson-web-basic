@@ -50,7 +50,19 @@ var zy = {
   log: function () {
     if (window.console && zy.debug) {
       // http://stackoverflow.com/questions/8785624/how-to-safely-wrap-console-log
-      Function.apply.call(console.log, console, arguments);
+      // Function.apply.call(console.log, console, arguments);
+      var args = [];
+      var hasErr = false;
+      for (var i=0; i<arguments.length; ++i) {
+        args.push(arguments[i]);
+        if (arguments[i] instanceof Error) {
+          hasErr = true;
+        }
+      }
+      if (hasErr) {
+        args.push('['+ new Error("stack").stack +']');
+      }
+      console.log.apply(console, args);
     }
   },
   /** 全局参数 */
@@ -91,12 +103,17 @@ zy.fix_xboson_data = function(msg) {
   if (!isNaN(msg.code)) {
     msg.ret = msg.code+'';
   }
+  //console.log(msg);
   return msg;
 };
 
 zy.fix_jsonp_parm = function(parm) {
   if (!parm) parm = {};
-  parm['$format'] = 'jsonp';
+  if (typeof parm == 'string') {
+    parm = parm + '&$format=jsonp';
+  } else {
+    parm['$format'] = 'jsonp';
+  }
   return parm;
 };
 
@@ -106,6 +123,7 @@ zy.fix_ui_type = function(uri) {
 
 zy.fix_api_call = function(uri, prm) {
   var api_prefix = "api/";
+  //console.log(uri, "uri..........");
   if (uri.indexOf(api_prefix) == 0) {
     //Path format: /app/{org id}/{app id}/{module id}/{api name}
     var apiname = uri.substr(api_prefix.length);
@@ -701,7 +719,7 @@ zy.net = {
         if (textStatus == "timeout") {
           zy.ui.msg("访问超时: ", link + "\r\n" + errorThrown, "e");
         }
-        zy.log("zy.net.get.error: " + XMLHttpRequest + "\r\n" + textStatus + "\r\n" + errorThrown);
+        zy.log("zy.net.get.error:", XMLHttpRequest, textStatus, errorThrown);
         throw {
           XMLHttpRequest: XMLHttpRequest,
           textStatus: textStatus,
@@ -737,12 +755,13 @@ zy.net = {
       prm = zy.tool.initParams(prm, zy.g.pages);
     }
     //设置Url及参数
+    zy.fix_api_call(uri, prm);
     var link = zy.g.host.api + uri + "?" + zy.net.parseParam(prm);
     zy.log("zy.net.post.link: " + link);
     zy.log("zy.net.post.param: " + JSON.stringify(param));
+
     if (isJsonSubmit) {
       param = zy.fix_jsonp_parm(param)// add by J.ym
-
       var settingJson = {
         url: link,
         type: 'POST',
@@ -756,7 +775,6 @@ zy.net = {
         data: JSON.stringify(param),
         success: function (msg) {
           //zy.log("zy.net.get.success: " + JSON.stringify(msg));
-          zy.fix_xboson_data(msg);
           zy.net.errorHandler(msg, callback, error);
         },
         error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -774,7 +792,7 @@ zy.net = {
       $.ajax(settingJson);
     } else {
       $.post(link, param, function (msg) {
-        var _msg = zy.fix_xboson_data(zy.tool.fromJson(msg));
+        var _msg = zy.tool.fromJson(msg);
         zy.net.errorHandler(_msg, callback, error);
       });
     }
@@ -1175,6 +1193,7 @@ zy.net = {
    */
   errorHandler: function (msg, success, error) {
     try {
+      msg = zy.fix_xboson_data(msg);
       var ret = msg.ret;
       zy.log("Response.msg: " + ret + " : " + msg.msg);
       if ("0" === ret) {
@@ -1416,6 +1435,7 @@ zyNet = (function () {
    */
   function errorHandler(msg, success, error) {
     try {
+      zy.fix_xboson_data(msg);
       var ret = msg.ret;
       zy.log("Response.msg: " + ret + " : " + msg.msg);
       if ("0" === ret) {
