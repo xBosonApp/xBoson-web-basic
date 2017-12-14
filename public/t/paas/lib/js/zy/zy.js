@@ -103,7 +103,9 @@ zy.fix_xboson_data = function(msg) {
   if (!isNaN(msg.code)) {
     msg.ret = msg.code+'';
   }
-  //console.log(msg);
+  if (msg.datatype && msg.datatype.indexOf("stack_trace_element")>=0) {
+    console.error("Service Error:", msg.data);
+  }
   return msg;
 };
 
@@ -122,17 +124,19 @@ zy.fix_ui_type = function(uri) {
 };
 
 zy.fix_api_call = function(uri, prm) {
-  var api_prefix = "api/";
-  //console.log(uri, "uri..........");
-  if (uri.indexOf(api_prefix) == 0) {
-    //Path format: /app/{org id}/{app id}/{module id}/{api name}
-    var apiname = uri.substr(api_prefix.length);
-    uri = ['app/', prm.org, '/', prm.app, '/', prm.mod, '/', apiname ].join('');
-    delete prm.org;
-    delete prm.app;
-    delete prm.mod;
-    //console.debug("fix api call::::::::::::::", uri, prm);
-  }
+  var api_prefixs = [ "api/", "ide/" ];
+
+  api_prefixs.forEach(function(api_prefix) {
+    if (uri.indexOf(api_prefix) == 0) {
+      //Path format: /app/{org id}/{app id}/{module id}/{api name}
+      var apiname = uri.substr(api_prefix.length);
+      uri = ['app/', prm.org, '/', prm.app, '/', prm.mod, '/', apiname ].join('');
+      delete prm.org;
+      delete prm.app;
+      delete prm.mod;
+      //console.log("fix api call::::::::::::::", uri, prm);
+    }
+  });
   return uri;
 };
 
@@ -755,7 +759,7 @@ zy.net = {
       prm = zy.tool.initParams(prm, zy.g.pages);
     }
     //设置Url及参数
-    zy.fix_api_call(uri, prm);
+    uri = zy.fix_api_call(uri, prm);
     var link = zy.g.host.api + uri + "?" + zy.net.parseParam(prm);
     zy.log("zy.net.post.link: " + link);
     zy.log("zy.net.post.param: " + JSON.stringify(param));
