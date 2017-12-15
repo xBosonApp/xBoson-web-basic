@@ -96,7 +96,24 @@ var zy = {
 //
 // xboson 系统兼容层
 //
+zy.isXBosonSystem = null;
+
+zy.check_xboson_system = function() {
+  if (location.pathname.indexOf('/xboson/') >= 0) {
+    zy.isXBosonSystem = true;
+    zy.g.host.api = zy.net.getHttpUrl("/xboson/");
+    zy.g.host.ui = zy.net.getHttpUrl("/xboson/face");
+  } else {
+    zy.isXBosonSystem = flase;
+    zy.g.host.api = zy.net.getHttpUrl("/ds/");
+    zy.g.host.ui = zy.net.getHttpUrl();
+  }
+};
+
 zy.fix_xboson_data = function(msg) {
+  if (! zy.isXBosonSystem) 
+    return msg;
+
   if ((!msg.result) && (msg.data)) {
     msg.result = msg.data;
   }
@@ -110,6 +127,9 @@ zy.fix_xboson_data = function(msg) {
 };
 
 zy.fix_jsonp_parm = function(parm) {
+  if (! zy.isXBosonSystem) 
+    return parm;
+
   if (!parm) parm = {};
   if (typeof parm == 'string') {
     parm = parm + '&$format=jsonp';
@@ -120,10 +140,16 @@ zy.fix_jsonp_parm = function(parm) {
 };
 
 zy.fix_ui_type = function(uri) {
+  if (! zy.isXBosonSystem) 
+    return uri;
+
   return (zy.debug ? "/t" : "/ui") + uri;
 };
 
 zy.fix_api_call = function(uri, prm) {
+  if (! zy.isXBosonSystem) 
+    return uri;
+
   var api_prefixs = [ "api/", "ide/" ];
 
   api_prefixs.forEach(function(api_prefix) {

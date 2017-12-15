@@ -284,8 +284,9 @@ Login = (function() {
     //检测httpUrl
       // zy.g.host.api = zy.net.getHttpUrl("/ds/");
       // zy.g.host.ui = zy.net.getHttpUrl();
-      zy.g.host.ui = zy.net.getHttpUrl("/xboson/face");
-      zy.g.host.api = zy.net.getHttpUrl("/xboson/");
+      // zy.g.host.ui = zy.net.getHttpUrl("/xboson/face");
+      // zy.g.host.api = zy.net.getHttpUrl("/xboson/");
+      zy.check_xboson_system();
 
       var errorTime = ls_zy_user_info.get('errorTimeout');
 

@@ -291,12 +291,18 @@
           }else{
             last = '';
           }
-          full = host + ds + atype + '/' + apiid + '?' + param + last + zy.net.parseParam(t);
+          //full = host + ds + atype + '/' + apiid + '?' + param + last + zy.net.parseParam(t);
+          full = zy.fix_api_call(atype + '/' + apiid, t);
+          full += '?' + param + last + zy.net.parseParam(t);
         }
         //post等
         else{
-          full = host + ds + atype + '/' + apiid + '?' + zy.net.parseParam(t);
+          //full = host + ds + atype + '/' + apiid + '?' + zy.net.parseParam(t);
+          full = zy.fix_api_call(atype + '/' + apiid, t);
+          full += '?' + zy.net.parseParam(t);
         }
+        // edit by J.ym 17.12.15
+        full = host + "/xboson/" + full;
           
         $this.val(param);
         fullc.val(full);
@@ -508,10 +514,18 @@
     function Ajax(url,param,type){
       
       function showResult(msg){
-        window.ee = msg;
+        // window.ee = msg;
+        // edit by J.ym 17.12.15
+        if (typeof msg == 'string') {
+          msg = JSON.parse(msg);
+        }
+        msg = zy.fix_xboson_data(msg);
+        if (msg.datatype && msg.datatype.indexOf("stack_trace_element") >= 0) {
+          zy.ui.msg("Stack Trace:", '<code><pre>'+ msg.data +'</pre></code>', "w");
+        }
+        editor.set(msg);
+        formatter.set(msg);
         
-        editor.set(JSON.parse(msg));
-        formatter.set(JSON.parse(msg));
         // $('[name=apiReturn]').val(msg);
         // $('[name=apiReturn]').trigger('input');
       }
