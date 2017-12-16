@@ -315,7 +315,7 @@ function NewIDE(roleid){
           if (_editor && _contendid) {
             $(this).btnDisable(true);
             _tools._api({
-              apiid : 'ucode',
+              apiid : zy.fix_api_name('ucode'),
               r_param : {
                 contentid : _contendid,
                 content : _editor.getValue(),
@@ -805,7 +805,7 @@ function NewIDE(roleid){
         if (editor && editor.contentid) {
           _btn.btnDisable(true);
           _tools._api({
-            apiid : 'ucode',
+            apiid : zy.fix_api_name('ucode'),
             r_param : {
               contentid : editor.contentid,
               content : editor.get(),
@@ -1269,7 +1269,7 @@ function NewIDE(roleid){
 
     function _code(_obj, _cb) {
       var _info = {
-        apiid : 'scode'
+        apiid : zy.fix_api_name('scode')
       }
       _info.r_param = _obj;
       _tools._api(_info, function(msg) {

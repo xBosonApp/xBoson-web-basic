@@ -22,12 +22,27 @@
                 width: 6
             }
         ]
+    };
+
+    //
+    // ADD by J.ym 17.12.16
+    //
+    var get_api_url;
+    if (zy.isXBosonSystem) {
+        get_api_url = function(_api_name) {
+            return zy.g.host.api +'app/'+ zy.g.comm.org 
+                +"/ZYAPP_IDE/ZYMODULE_UI_IDE/"+ _api_name;
+        };
+    } else {
+        get_api_url = function(_api_name) {
+            return  'http://' + location.host + '/api/' + _apinm;
+        };
     }
 
     var _tools = {
         _api: function (_apinm, _cb, _param, _str) {
             $.ajax({
-                url: 'http://' + location.host + '/api/' + _apinm,
+                url: get_api_url(_apinm), 
                 dataType: "jsonp",
                 data: _param || {},
                 type: _str || 'GET',
@@ -42,7 +57,7 @@
         },
         _apis:function(_apinm, _cb, _param, _str){
           $.ajax({
-                url: 'http://' + location.host + '/bry/' + _apinm,
+                url: get_api_url(_apinm), 
                 data: _param || {},
                 type: _str || 'GET',
                 success: function (data) {
@@ -54,7 +69,7 @@
             });
         },
         _formPost: function (apinm, form, callback) {
-            var link = 'http://' + location.host + '/api/' + apinm + '?' + zy.net.parseParam(zy.g.comm);
+            var link = get_api_url(_apinm)+ '?' + zy.net.parseParam(zy.g.comm);
             form.ajaxSubmit({
                 url: link,
                 type: "post",
@@ -68,11 +83,9 @@
             });
         },
         _post: function (_apinm, _cb, _param) {
-             $.post('http://' + location.host + '/api/' + _apinm, _param, function (data) {
+             $.post(get_api_url(_apinm), _param, function (data) {
                  _cb && _cb(data);
              });
-
-
         },
         _label: function (_str) {
             var _q = '<' + _str + '></' + _str + '>';

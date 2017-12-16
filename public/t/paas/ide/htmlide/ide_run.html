@@ -291,18 +291,24 @@
           }else{
             last = '';
           }
-          //full = host + ds + atype + '/' + apiid + '?' + param + last + zy.net.parseParam(t);
-          full = zy.fix_api_call(atype + '/' + apiid, t);
-          full += '?' + param + last + zy.net.parseParam(t);
+
+          // edit by J.ym 17.12.15
+          if (zy.isXBosonSystem) {
+            full = host + "/xboson/" + zy.fix_api_call(atype + '/' + apiid, t)
+                 + '?' + param + last + zy.net.parseParam(t);
+          } else {
+            full = host + ds + atype + '/' + apiid + '?' + param + last + zy.net.parseParam(t);
+          }
         }
         //post等
-        else{
-          //full = host + ds + atype + '/' + apiid + '?' + zy.net.parseParam(t);
-          full = zy.fix_api_call(atype + '/' + apiid, t);
-          full += '?' + zy.net.parseParam(t);
+        else {
+          if (zy.isXBosonSystem) {
+            full = host + "/xboson/" + zy.fix_api_call(atype + '/' + apiid, t)
+                 + '?' + zy.net.parseParam(t);
+          } else {
+            full = host + ds + atype + '/' + apiid + '?' + zy.net.parseParam(t);
+          }
         }
-        // edit by J.ym 17.12.15
-        full = host + "/xboson/" + full;
           
         $this.val(param);
         fullc.val(full);

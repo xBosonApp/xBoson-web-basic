@@ -98,6 +98,7 @@ var zy = {
 //
 zy.isXBosonSystem = null;
 
+// 路径中有 xboson 认为是新版系统
 zy.check_xboson_system = function() {
   if (location.pathname.indexOf('/xboson/') >= 0) {
     zy.isXBosonSystem = true;
@@ -110,6 +111,7 @@ zy.check_xboson_system = function() {
   }
 };
 
+// 对 http 返回值做兼容
 zy.fix_xboson_data = function(msg) {
   if (! zy.isXBosonSystem) 
     return msg;
@@ -126,6 +128,7 @@ zy.fix_xboson_data = function(msg) {
   return msg;
 };
 
+// 对请求类型是 jsonp 的请求参数做兼容
 zy.fix_jsonp_parm = function(parm) {
   if (! zy.isXBosonSystem) 
     return parm;
@@ -146,6 +149,7 @@ zy.fix_ui_type = function(uri) {
   return (zy.debug ? "/t" : "/ui") + uri;
 };
 
+// 将参数式转换为路径式
 zy.fix_api_call = function(uri, prm) {
   if (! zy.isXBosonSystem) 
     return uri;
@@ -164,6 +168,15 @@ zy.fix_api_call = function(uri, prm) {
     }
   });
   return uri;
+};
+
+// 给 api 名称打补丁, 因为新的 api 改动在老平台上无法运行
+// 让老平台运行原先的脚本, 新平台运行新的脚本.
+zy.fix_api_name = function(apiname) {
+  if (! zy.isXBosonSystem) 
+    return apiname;
+  
+  return apiname + '_x';
 };
 
 (function() {

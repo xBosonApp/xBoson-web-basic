@@ -358,7 +358,7 @@ var rbac_prj_mgt11_cache = {};
         mod: 'XMGL',
         up: {
           treeApi: 'prjapiuptree',
-          editApi: 'api_manage_up',
+          editApi: zy.fix_api_name('api_manage_up'),
           title: '待上线'
         },
         down: {

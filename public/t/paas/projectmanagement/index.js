@@ -368,7 +368,7 @@
          mod:'yyxxgl',
          up:{
            treeApi:'api_up_tree',
-           editApi:'api_manage_up',
+           editApi: zy.fix_api_name('api_manage_up'),
            title:'待上线'
          },
          down:{

@@ -188,7 +188,7 @@
       nodesRes: nodesRes.substring(1),
     };
     // 发送请求并注册回调函数
-    zy.net.post("api/api_manage_up", api_up_cb, param);
+    zy.net.post(zy.fix_api_name("api/api_manage_up"), api_up_cb, param);
     
   }
   
