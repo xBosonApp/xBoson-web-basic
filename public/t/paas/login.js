@@ -199,21 +199,25 @@ Login = (function() {
     });
 
     useridbtn.unbind('blur').blur(function(e){
-      var $this = $(this);$this.val($this.val().toLowerCase());
+      var $this = $(this);
+      $this.val($this.val().toLowerCase());
       var val = $this.val();
 
       if(ur.test(val)){
-        $this.next().remove();
-        zy.g.am.app = "ZYAPP_LOGIN";
-        zy.g.am.mod = "ZYMODULE_REG";
-        zy.net.post("user/get_havinguser", function(msg) {
-          if(msg.result && "1" == msg.result[0].count){
-//            form.trigger('_submit',[val,null]);
-            $this.next().remove();
-          }else{
-            $this.after($('<p>').html('用户ID已存在'));
-          }
-        },{userid:val})
+        // setTimeout(function() {
+        //   $this.next().remove();
+        //   zy.g.am.app = "ZYAPP_LOGIN";
+        //   zy.g.am.mod = "ZYMODULE_REG";
+
+        //   zy.net.post("user/get_havinguser", function(msg) {
+        //     console.log("!!!!!!!!!!!", msg);
+        //     if(msg.result && "1" == msg.result[0].count){
+        //       $this.next().remove();
+        //     }else{
+        //       $this.after($('<p>').html('用户ID已存在'));
+        //     }
+        //   },{userid:val});
+        // }, 100);
       }else{
         $this.after($('<p>').html('用户ID为4-16位数字,字母,_或-,以字母开头'));
       }
