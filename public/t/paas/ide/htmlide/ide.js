@@ -1048,6 +1048,11 @@ function NewIDE(roleid){
     editor.setTheme("ace/theme/ambiance");
     editor.getSession().setMode("ace/mode/sjs");
     editor.$blockScrolling = Infinity;
+    // editor.setOptions({
+    //   enableBasicAutocompletion: true,
+    //   enableSnippets: true,
+    //   enableLiveAutocompletion: true,
+    // });
    
    function _initsize(){
     editor.setShowPrintMargin(false);
@@ -1452,77 +1457,56 @@ function NewIDE(roleid){
     var _treeContainer = _c.tree.container;
     var _ideContainer = $('#zy_tabs').parent();
     var _fullBtn = _c.wid.find('.jarviswidget-fullscreen-btn');
+
     _fullBtn.click(function() {
       var _resultContainer = _c.result.find('div:has(ul)');
       window.ee = _resultContainer;
       var _preContainer = $('#zy_tabs').find('div.row:has(pre)');
       var _ideTrueC = $('#zy_tabs').find('p').children();
+
       if($('pre').length != 0){
-               var _pre=$('#zy_tabs').children('div:visible').find('pre');
-                var id=$('#zy_tabs').children('div:visible').find('pre').attr('id');
-                
-            }
+        var _pre=$('#zy_tabs').children('div:visible').find('pre');
+        var id=$('#zy_tabs').children('div:visible').find('pre').attr('id');
+      }
+
       if ($('#jarviswidget-fullscreen-mode').length > 0) {
-            if($('pre').length != 0){
-                        editor=ace.edit(id);
-                        $('#left-panel nav').bind('click', function() {
-                          editor.destroy();
-                          editor.container.remove();
-                        });
-                        editor.setOption('wrap',120);
-                        editor.setOption('tabSize',2);
-                        _ide(_pre);
-                      }
-                      
-                      var s = $($('.col-xs-12.col-sm-3')[0]).children(':last').attr('style');
-                s = s.replace(/530/,'435');
-                $($('.col-xs-12.col-sm-3')[0]).children(':last').attr('style',s);
-                
-        
-        _preContainer.css({
-          // 'height' : '400px'
-        });
-        _treeContainer.css({
-          // 'height' : '460px'
-        });
-        _ideTrueC.css({
-          // 'height' : '400px'
-        });
-        _resultContainer.css({
-          // 'height' : '370px'
-        });
+        if($('pre').length != 0){
+          editor=ace.edit(id);
+          $('#left-panel nav').bind('click', function() {
+            editor.destroy();
+            editor.container.remove();
+          });
+          editor.setOption('wrap',120);
+          editor.setOption('tabSize',2);
+          _ide(_pre);
+        }
+
+        var s = $($('.col-xs-12.col-sm-3')[0]).children(':last').attr('style');
+        s = s.replace(/530/,'435');
+        $($('.col-xs-12.col-sm-3')[0]).children(':last').attr('style',s);
+
+        bind_fix_size_event(false);
       } else {
-        
-                       if($('pre').length != 0){
-                        editor=ace.edit(id);
-                        $('#left-panel nav').bind('click', function() {
-                          editor.destroy();
-                          editor.container.remove();
-                        });
-                        editor.setOption('wrap',120);
-                        editor.setOption('tabSize',2);
-                        _ide(_pre);
-                      }
-                      
-                      var s = $($('.col-xs-12.col-sm-3')[0]).children(':last').attr('style');
-                s = s.replace(/435/,'530');
-                $($('.col-xs-12.col-sm-3')[0]).children(':last').attr('style',s);
-                
+        if($('pre').length != 0){
+          editor=ace.edit(id);
+          $('#left-panel nav').bind('click', function() {
+            editor.destroy();
+            editor.container.remove();
+          });
+          editor.setOption('wrap',120);
+          editor.setOption('tabSize',2);
+          _ide(_pre);
+        }
+
+        var s = $($('.col-xs-12.col-sm-3')[0]).children(':last').attr('style');
+        s = s.replace(/435/,'530');
+        $($('.col-xs-12.col-sm-3')[0]).children(':last').attr('style',s);
+
         var s = $($('.col-xs-12.col-sm-3')[0]).children(':last').attr('style');
         s = s.replace(/435/,'525');
         $($('.col-xs-12.col-sm-3')[0]).children(':last').attr('style',s);
-        _preContainer.css({
-          // 'height' : '500px'
-        });
-        _treeContainer.css({
-          // 'height' : '570px'
-        });
-        _ideTrueC.css({
-          // 'height' : '500px'
-        });
-        _resultContainer.css({
-          // 'height' : '470px'
-        });
+
+        bind_fix_size_event(true);
       }
     })
   }
