@@ -211,6 +211,39 @@ function NewIDE(roleid){
     }
   };
 
+
+  //
+  // Add by J.ym 17.12.19
+  // ide 窗口固定与浏览器窗口同步大小
+  //
+  var _height;
+  var _fix_height_now;
+  function bind_fix_size_event() {
+    var api_content = $('#api_ide_content');
+    var win = $(window).resize(fixsize).scroll(on_scroll);
+    var _tree_code_height;
+    var current_scroll = 0;
+
+    $.ready(fixsize);
+    fixsize();
+    
+    _fix_height_now = fixsize;
+    
+    function fixsize() {
+      _height = win.height();
+      _tree_code_height = _height - 220;
+      $('#maintree').css('height', _tree_code_height);
+      $('.fix_size').css('height', _tree_code_height);
+    }
+
+    function on_scroll() {
+      current_scroll = win.scrollTop();
+      api_content.css('margin-top', current_scroll);
+    }
+  }
+  bind_fix_size_event();
+
+
   /**工具方法*/
   var _tools = {
     // 调api
@@ -254,16 +287,19 @@ function NewIDE(roleid){
   }
 
   function _onLeave(_flg) {
-    if (_flg)
+    if (_flg) {
       // 关闭页面时提示
       window.onbeforeunload = function() {
         parent.$('body').removeClass('animated fadeOutUp');
         return '请确认代码已提交';
       };
-    else
+    } else {
       window.onbeforeunload = null;
-            $(window).unbind('resize');
+      $(window).unbind('resize');
+      bind_fix_size_event();
+    }
   }
+
   function browserRedirect() {
         var sUserAgent = navigator.userAgent.toLowerCase();
         var bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
@@ -284,9 +320,7 @@ function NewIDE(roleid){
     }
 
   function _dom(_id) {
-
     function _saveform() {
-
       function _formDom(_c) {
         var _form = _tools._label('form').attr('onsubmit', 'return false;').addClass('smart-form');
         var _sbtn = _tools._label('button').addClass('btn btn-primary').html('确定');
@@ -596,8 +630,7 @@ function NewIDE(roleid){
       var _tree = _tools._label('div').addClass('col-xs-12 col-sm-3');
       _innerHeader(_tree);
       var _ul = _tools._label('ul').addClass('ztree').attr('id', 'maintree');
-      _tree.append(_tools._label('div').attr('style','overflow: auto; height: 435px;').addClass('row').css('margin-top', '-15px').append(_ul));
-
+      _tree.append(_tools._label('div').attr('style','overflow: auto;').addClass('row').css('margin-top', '-15px').append(_ul));
       return {
         container : _tree,
         ul : _ul
@@ -679,9 +712,11 @@ function NewIDE(roleid){
       var _check = _tools._label('label').addClass('toggle state-error pull-left').attr('style','margin:4px 0 0 5px');
       _check.append(_tools._label('input').attr('type','checkbox')).append(_tools._label('i').attr({'data-swchoff-text':'off','data-swchon-text':'on','title':'区分大小写'}));
       _container.append(_tools._label('div').addClass('row').attr('style', 'margin-top:-10px;display:none').append(_tools._label('h').attr('style', 'margin-left:20px').html('查询结果')).append(_i));
-      var _style = 'overflow:auto;display:none;height:270px';
-      if(_flg)
-        _style = 'overflow:auto;display:none;height:360px';
+      
+      var _style;
+      if(_flg) _style = 'overflow:auto;display:none;height:360px';
+      else     _style = 'overflow:auto;display:none;height:270px';
+
       _container.append(_tools._label('div').addClass('row').attr('style', _style).append(_ulSearch));
       _search.append(_tools._label('label').addClass('textarea').append(_input));
       _search.append(_tools._label('div').addClass('row').attr('style','margin-bottom:-10px').append(_check).append(_btn));
@@ -953,7 +988,7 @@ function NewIDE(roleid){
     _mod._form = _form;
     var _row = _tools._label('div').addClass('row');
     var _ideC = _tools._label('div').addClass('col-xs-12 col-sm-9').css({
-      'height' : '460px'
+      // 'height' : '460px'
     });
     _ideC.unbind();
     _ideC.bind('size', function(e) {
@@ -1012,6 +1047,7 @@ function NewIDE(roleid){
     });
     editor.setTheme("ace/theme/ambiance");
     editor.getSession().setMode("ace/mode/sjs");
+    editor.$blockScrolling = Infinity;
    
    function _initsize(){
     editor.setShowPrintMargin(false);
@@ -1263,7 +1299,9 @@ function NewIDE(roleid){
           return;
         if (_f)
           _children(_result.value)
+
         _cb && _cb(_result.value);
+        _fix_height_now();
       })
     }
 
@@ -1407,7 +1445,8 @@ function NewIDE(roleid){
 
     $('#left-panel a[href]').one('click', function() {
       window.onbeforeunload = null;
-            $(window).unbind('resize');
+      $(window).unbind('resize');
+      bind_fix_size_event();
     });
 
     var _treeContainer = _c.tree.container;
@@ -1441,16 +1480,16 @@ function NewIDE(roleid){
                 
         
         _preContainer.css({
-          'height' : '400px'
+          // 'height' : '400px'
         });
         _treeContainer.css({
-          'height' : '460px'
+          // 'height' : '460px'
         });
         _ideTrueC.css({
-          'height' : '400px'
+          // 'height' : '400px'
         });
         _resultContainer.css({
-          'height' : '370px'
+          // 'height' : '370px'
         });
       } else {
         
@@ -1473,23 +1512,23 @@ function NewIDE(roleid){
         s = s.replace(/435/,'525');
         $($('.col-xs-12.col-sm-3')[0]).children(':last').attr('style',s);
         _preContainer.css({
-          'height' : '500px'
+          // 'height' : '500px'
         });
         _treeContainer.css({
-          'height' : '570px'
+          // 'height' : '570px'
         });
         _ideTrueC.css({
-          'height' : '500px'
+          // 'height' : '500px'
         });
         _resultContainer.css({
-          'height' : '470px'
+          // 'height' : '470px'
         });
       }
     })
   }
 
   function _initIde(_cb, _pre) {
-    zy.net.loadScript.call(this, "lib/js/ace/1.1.3/ace.js", function() {// loadScript方法改变了上下文..
+    zy.net.loadScript.call(this, "lib/js/ace/1.2.9/ace.js", function() {// loadScript方法改变了上下文..
       editor = _ide(_pre);
       _cb && _cb();
     })
@@ -1552,10 +1591,15 @@ function NewIDE(roleid){
       _onLeave(true);
       var _pre = _tools._label('pre');
       _pre.attr('style', 'font-family:Consolas,Microsoft YaHei,微软雅黑,sans-serif,宋体;top:-14;height:100%; width:100%;').attr('id', _id);
-      var _height = $('#jarviswidget-fullscreen-mode').length > 0 ? 'height:500px' : 'height:400px';
-      var _preheight = $('#jarviswidget-fullscreen-mode').length > 0 ? '500px' : '400px';
+
+      // var _height = $('#jarviswidget-fullscreen-mode').length > 0 ? 'height:500px' : 'height:400px';
+      // var _preheight = $('#jarviswidget-fullscreen-mode').length > 0 ? '500px' : '400px';
+      // var _height = _height
+      var _preheight = _height - 200;
+
       var _input = _tools._label('input').addClass('form-control').attr('readonly', 'readonly');
-      var _div = _tools._label('div').attr('style', _height).append(_tools._label('div').addClass('row').css('height', _preheight).append(_pre));
+      var _in_div = _tools._label('div').addClass('row').css('height', _preheight).append(_pre).addClass('fix_size');
+      var _div = _tools._label('div').attr('style', _height).append(_in_div);
       if (_contentid)
         _div.attr('id', _contentid);
       if (_stability)
@@ -1594,5 +1638,4 @@ function NewIDE(roleid){
   _treeClass(_d);
   pageSetUp();
   _event(_d);
-
 };
