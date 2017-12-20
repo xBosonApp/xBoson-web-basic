@@ -1224,7 +1224,8 @@ function checkURL() {
     return;
   //get the url by removing the hash
   var url = location.hash.replace(/^#/,'');
-zy.log('checkURL.url= '+url);
+  zy.log('checkURL.url= '+url);
+
   container = $('#content');
   // Do this if url exists (for page refresh, etc...)
   if (url) {
@@ -1308,7 +1309,9 @@ function loadURL(url, container, path) {
       // cog replaced here...
       // Console.log("success");
       var result = _out(data,path);
-      var setHeight = $('#main').height();
+      // edit by J.ym 17.12.20
+      //var setHeight = $('#main').height();
+      var setHeight = $(window).height() - $('#header').height() - $('#ribbon').height();
 
       try {
         container.css({

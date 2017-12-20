@@ -1,4 +1,7 @@
-<div id="UI_publish" class="jarviswidget jarviswidget-color-blue" data-widget-deletebutton="false" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-colorbutton="false" role="widget">
+<div id="UI_publish" class="jarviswidget jarviswidget-color-blue" 
+    sytle='margin:0 !important;'
+    data-widget-deletebutton="false" data-widget-togglebutton="false" 
+    data-widget-editbutton="false" data-widget-colorbutton="false" role="widget">
   <header role="heading">
     <div id="ui_publish"  role="menu" class="widget-toolbar" title="发布">
     
@@ -10,41 +13,68 @@
   </header>
   
   <div class="widget-body">
-          
-				<div class="row" >
-			<section class="col-sm-5" style="overflow: auto; height:455px;">
-			<h4 class="modal-title">待上线</h4>
-				<ul id="lefttree" class="ztree"></ul>
-				</section>
-				<section class="col-sm-1"></section>
-				<section class="col-sm-5" style="overflow: auto;height:455px; padding:0">
-				<h4 class="modal-title">待下线</h4>
-				<ul id="righttree" class="ztree"></ul>
-				</section>
-				</div>
-        </div>
+  <div class="row" >
+    <section class="col-sm-5 fix_size" style="overflow: auto; height:455px;">
+      <h4 class="modal-title">待上线</h4>
+      <ul id="lefttree" class="ztree"></ul>
+    </section>
+    <section class="col-sm-1"></section>
+    <section class="col-sm-5 fix_size" style="overflow: auto;height:455px; padding:0">
+      <h4 class="modal-title">待下线</h4>
+      <ul id="righttree" class="ztree"></ul>
+    </section>
+  </div>
+  </div>
 </div>
 <script type="text/javascript">
+(function() {
+
+  var win = $(window).resize(fixsize);
+  fixsize();
+  function fixsize() {
+    var _height = win.height();
+    $('.fix_size').css('height', _height - 190);
+  }
+
+  function get_api_url(_apinm) {
+    if (! zy.isXBosonSystem) {
+      return 'http://' + location.host + '/api/' + _apinm;
+    }
+    var __url = zy.g.host.api + 
+        'app/a297dfacd7a84eab9656675f61750078/ZYAPP_IDE/ZYMODULE_UI_IDE/'+ _apinm;
+    return __url;
+  }
 	
 	var _tools = {
 	  _api: function (_apinm, _cb, _param, _str) {
+      var __url = get_api_url(_apinm);
+      var jsonp_name = 'callback' + zy.tool.random();
+      _param = zy.fix_jsonp_parm(_param || {});
+      _param.cb = jsonp_name;
+
       $.ajax({
-        url: 'http://' + location.host + '/api/' + _apinm,
+        url: __url,
         dataType: "jsonp",
-        data: _param || {},
+        data: _param,
         type: _str || 'GET',
-        jsonpCallback: 'callback' + zy.tool.random(),
+        jsonpCallback: jsonp_name,
         success: function (data) {
+          zy.fix_xboson_data(data);
+          data.ret = data.code;
           _cb(data);
         },
         error: function (xhr, status, error) {
-          console.log('Error: ' + error.message);
+          console.log('Error: ' + error.stack);
         }
       });
     },
+
     _post: function (_apinm, _cb, _param) {
         // 拦截对 publish2 的调用, 修正其中的参数
         if (_apinm == 'publish2') {
+          if (zy.isXBosonSystem) {
+            return _in_post();
+          }
           var getp = $.extend(true, {}, zy.g.comm, {
             app: 'ZYAPP_LOGIN', mod: 'ZYMODULE_LOGIN'
           });
@@ -61,8 +91,11 @@
           var host = location.host;
           console.log('!', _apinm, _param);
           //host = '192.168.7.144'
-          $.post('http://' +host+ '/api/' + _apinm, _param, function (data) {
-              _cb && _cb(data);
+          var __url = get_api_url(_apinm);
+          $.post(__url, _param, function (data) {
+            zy.fix_xboson_data(data);
+            data.ret = data.code;
+            _cb && _cb(data);
           });
         }
     },
@@ -70,7 +103,6 @@
         var _q = '<' + _str + '></' + _str + '>';
         return $(_q);
     }
-	  
 	}
 	//设置ztree
 	var setting = {
@@ -110,7 +142,7 @@
           path:_path,
           branch:'t'
         };
-        if(_flag=='rightex')
+      if(_flag=='rightex')
         var _t={
           path:_path,
           branch:'ui'
@@ -121,28 +153,25 @@
           double:'double'
         };
       
-      
       _tools._api('getfilelist', function (_m) {
         if (!Boolean(_m.ret)) {
           if(_flag=='leftex' || _flag=='rightex')
-          var _mm = _m.result;
+            var _mm = _m.result;
           if(_flag=='left')
-          var _mm = _m.t;
-          if(_flag=='right'){
-          var _mm = _m.ui;
+            var _mm = _m.t;
+          if(_flag=='right') {
+            var _mm = _m.ui;
           }
-          
           
           if ($.isArray(_mm)) {
             _mm = _sort(_mm)
           } else {
             _mm.children = _sort(_mm.children)
           }
-
           _cb && _cb(_mm);
-
-        } else
+        } else {
           zy.ui.msg('提示', '接口执行失败:' + _m.msg, 'e');
+        }
       }, $.extend(true, _t, zy.g.comm));
     }
     function _sort(_arr) {
@@ -264,5 +293,5 @@
     });
 
 // 	_tree();
-
+})();
 </script>

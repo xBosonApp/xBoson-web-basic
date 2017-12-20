@@ -714,8 +714,9 @@ function NewIDE(roleid){
       _container.append(_tools._label('div').addClass('row').attr('style', 'margin-top:-10px;display:none').append(_tools._label('h').attr('style', 'margin-left:20px').html('查询结果')).append(_i));
       
       var _style;
-      if(_flg) _style = 'overflow:auto;display:none;height:360px';
-      else     _style = 'overflow:auto;display:none;height:270px';
+      if(_flg) _style = 'overflow:auto;display:none;height:';
+      else     _style = 'overflow:auto;display:none;height:';
+      _style += (_height-400) + 'px';
 
       _container.append(_tools._label('div').addClass('row').attr('style', _style).append(_ulSearch));
       _search.append(_tools._label('label').addClass('textarea').append(_input));
@@ -812,9 +813,10 @@ function NewIDE(roleid){
       var _btn = _tools._label('button').addClass('btn btn-default').html('查询');
       var _i = _tools._label('a').attr('href','javascript:void(0);').addClass('pull-right').append(_tools._label('i').addClass('fa fa-times')).attr('style', 'margin-right:13px');
       _container.append(_tools._label('div').addClass('row').attr('style', 'margin-top:-10px;display:none').append(_tools._label('h').attr('style', 'margin-left:20px').html('查询结果')).append(_i));
-      var _style = 'overflow:auto;display:none;height:355px';
+      var _style = 'overflow:auto;display:none;height:';
       if(_flg)
-        _style = 'overflow:auto;display:none;height:460px';
+        _style = 'overflow:auto;display:none;height:';
+      _style += (_height-300) + "px";
       _container.append(_tools._label('div').addClass('row').attr('style', _style).append(_ulSearch));
       _search.append(_tools._label('div').addClass('icon-addon addon-sm').append(_input).append(_label));
       _search.append(_tools._label('span').addClass('input-group-btn').append(_btn));

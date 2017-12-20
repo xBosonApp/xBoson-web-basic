@@ -654,9 +654,10 @@
                 'title': '区分大小写'
             }));
             _container.append(_tools._label('div').addClass('row').attr('style', 'margin-top:-10px;display:none').append(_tools._label('h').attr('style', 'margin-left:20px').html('查询结果')).append(_i));
-            var _style = 'overflow:auto;display:none;height:270px';
-            if (_flg)
-                _style = 'overflow:auto;display:none;height:360px';
+            var _style = 'overflow:auto;display:none;height:';
+            if (_flg) _style = 'overflow:auto;display:none;height:';
+            _style += (_height-400) + 'px';
+
             _container.append(_tools._label('div').addClass('row').attr('style', _style).append(_ulSearch));
             _search.append(_tools._label('label').addClass('textarea').append(_input));
             _search.append(_tools._label('div').addClass('row').attr('style', 'margin-bottom:-10px').append(_check).append(_btn));
@@ -735,9 +736,11 @@
             var _btn = _tools._label('button').addClass('btn btn-default').html('查询');
             var _i = _tools._label('a').attr('href', 'javascript:void(0);').addClass('pull-right').append(_tools._label('i').addClass('fa fa-times')).attr('style', 'margin-right:13px');
             _container.append(_tools._label('div').addClass('row').attr('style', 'margin-top:-10px;display:none').append(_tools._label('h').attr('style', 'margin-left:20px').html('查询结果')).append(_i));
-            var _style = 'overflow:auto;display:none;height:355px';
+            var _style = 'overflow:auto;display:none; height:';
             if (_flg)
-                _style = 'overflow:auto;display:none;height:560px';
+                _style = 'overflow:auto;display:none; height:';
+            _style += (_height-300) + "px";
+
             _container.append(_tools._label('div').addClass('row').attr('style', _style).append(_ulSearch));
             _search.append(_tools._label('div').addClass('icon-addon addon-sm').append(_input).append(_label));
             _search.append(_tools._label('span').addClass('input-group-btn').append(_btn));
@@ -750,7 +753,6 @@
             var _f = true;
             if (typeof _flag !== 'undefined')
                 _f = _flag;
-
 
             var _t = {};
             $.extend(true, _t, zy.g.comm);
@@ -903,9 +905,10 @@
             var _input = _tools._label('input').attr('type', 'file').addClass('input-group input-group-sm').attr('style', 'margin:-10px 0-5px').attr('name', 'file');
 
             var _i = _tools._label('a').attr('href', 'javascript:void(0);').addClass('pull-right').append(_tools._label('i').addClass('fa fa-times')).attr('style', 'margin-right:13px');
-            var _style = 'overflow:auto;display:none;height:355px';
+            var _style = 'overflow:auto;display:none;height:';
             if (_flg)
-                _style = 'overflow:auto;display:none;height:560px';
+                _style = 'overflow:auto;display:none;height:';
+            _style = (_height-400) + 'px';
             _container.append(_tools._label('div').addClass('row').attr('style', _style).append(_ulSearch));
             _search.append(_input1);
             _search.append(_tools._label('span').addClass('input-group-btn').append(_btn));
@@ -1183,7 +1186,7 @@
         _mod._form = _form;
         var _row = _tools._label('div').addClass('row');
         var _ideC = _tools._label('div').addClass('col-xs-12 col-sm-9').css({
-            'height': '560px'
+            // 'height': '560px'
         });
         _ideC.unbind();
         _ideC.bind('size', function (e) {
@@ -1712,9 +1715,13 @@
                     // zy.g.am.app = 'zyapp_login';
                     // zy.g.am.mod = 'zymodule_login';
                     // zy.net.get('api/getuserorgtype', cb, param);
-                     _path = '/web/zr/' + _node.path.substring(1);
-                        var _pre = _tab.add(_name, _node.path, _id,filelname,_path);
-                        _pre.inputc.val('');
+                    var __base;
+                    if (zy.isXBosonSystem) __base = zy.g.host.ui;
+                    else __base = '/web/zr';
+
+                    _path = __base + _node.path;
+                    var _pre = _tab.add(_name, _node.path, _id,filelname,_path);
+                    _pre.inputc.val('');
     
                 }else{
                     _tools._api('getcontent', function (_m) {

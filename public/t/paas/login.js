@@ -204,7 +204,8 @@ Login = (function() {
       var val = $this.val();
 
       if(ur.test(val)){
-        // setTimeout(function() {
+        // removed by J.ym 疯狂请求 get_havinguser
+        //
         //   $this.next().remove();
         //   zy.g.am.app = "ZYAPP_LOGIN";
         //   zy.g.am.mod = "ZYMODULE_REG";
@@ -217,7 +218,6 @@ Login = (function() {
         //       $this.after($('<p>').html('用户ID已存在'));
         //     }
         //   },{userid:val});
-        // }, 100);
       }else{
         $this.after($('<p>').html('用户ID为4-16位数字,字母,_或-,以字母开头'));
       }

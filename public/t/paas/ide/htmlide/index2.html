@@ -60,11 +60,11 @@
       }
       // var ex = $('#external-events').slideToggle();
       if (proListIsMin) {
-        $('#external-events').show();
-        proList.animate( {width: '98%', 'height': 'auto' });
+        $('#external-events').slideDown();
+        proList.animate({ width: $('#api_ide_content').width(), 'height': 'auto' });
       } else {
-        $('#external-events').hide();
-        proList.animate({width: '10%', 'height': '35px'});
+        $('#external-events').fadeOut();
+        proList.animate({width: '200px', 'height': '35px'});
       }
       proListIsMin = !proListIsMin;
     });
