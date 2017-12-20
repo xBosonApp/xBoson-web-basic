@@ -186,6 +186,17 @@ zy.setup_debug = function() {
   console.log("开启调试模式, UI 文件从 /t 下获取, API 加调试参数.");
 };
 
+// 修正预览画面 url 不正确
+zy.fix_preview_url = function(url) {
+  if (zy.isXBosonSystem) {
+    var sp = url.split('/');
+    // 删除多余的路径 by J.ym
+    sp.splice(1, 1); 
+    url = sp.join('/');
+  }
+  return url;
+};
+
 
 (function() {
   //

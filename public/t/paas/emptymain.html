@@ -182,9 +182,11 @@
     }
     
     $.extend(true,zy.g,parent.zy.g);
-    var url = location.hash;
+    zy.check_xboson_system();
+    var url = zy.fix_preview_url(location.hash);
+
     zy.debug = true;
-    zy.net.loadHTML(url.substr(1), $('#content'),function(){
+    zy.net.loadHTML(url.substr(1), $('#content'), function() {
       parent.$('iframe').css('min-height',$('body').css('min-height'));
       $('#content').resize(function(){
         var content = $(this).height();

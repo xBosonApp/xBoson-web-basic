@@ -465,10 +465,20 @@
                     var ls_zy_user_info = zy.cache.get('_zy_user_info', 'ls');
                     //orgpath
                     var orgpath = ls_zy_user_info.get('user_selected_org_path');
-                    var _u = 'http://'+location.host+'/t/'; // 设置或返回主机名和当前 URL 的端口号 + '/t'
-                    // _u += orgpath + '/emptymain.html#' + src;
-                    _u += isplatorg()?'paas':'saas/'+zy.g.comm.org;
-                    _u += '/emptymain.html#' + src;
+
+                    // edit by J.ym 17.12.20
+                    var _u;
+                    if (zy.isXBosonSystem) {
+                        _u = zy.g.host.ui + '/t/' 
+                           + ( isplatorg() ? 'paas' : 'saas/'+zy.g.comm.org )
+                           + '/emptymain.html#' + src;
+                    } else {
+                        _u = 'http://'+location.host+'/t/'; // 设置或返回主机名和当前 URL 的端口号 + '/t'
+                        // _u += orgpath + '/emptymain.html#' + src;
+                        _u += isplatorg()?'paas':'saas/'+zy.g.comm.org;
+                        _u += '/emptymain.html#' + src;
+                    }
+
                     zy.log('window.open  _u == '+_u);
                     window.open(_u, '');
 
