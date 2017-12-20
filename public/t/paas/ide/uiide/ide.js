@@ -83,6 +83,8 @@
                 type: _str || 'GET',
                 jsonpCallback: cb_name,
                 success: function (data) {
+                    zy.fix_xboson_data(data);
+                    data.ret = data.code;
                     _cb(data);
                 },
                 error: function (xhr, status, error) {
@@ -96,6 +98,8 @@
                 data: _param || {},
                 type: _str || 'GET',
                 success: function (data) {
+                    zy.fix_xboson_data(data);
+                    data.ret = data.code;
                     _cb(data);
                 },
                 error: function (xhr, status, error) {
@@ -113,12 +117,16 @@
                 cache: false,
                 dataType: "json",
                 success: function (msg) {
+                    zy.fix_xboson_data(msg);
+                    data.ret = data.code;
                     callback && callback(msg);
                 }
             });
         },
         _post: function (_apinm, _cb, _param) {
              $.post(get_api_url(_apinm), _param, function (data) {
+                zy.fix_xboson_data(data);
+                data.ret = data.code;
                  _cb && _cb(data);
              });
         },
@@ -494,17 +502,15 @@
                         $(this).btnDisable(true);
                         var _t = {
                             path: _path,
-                            content: _editor.getValue(),
+                            content: _editor.getValue().trim(),
                             reason: ''
                         }
                         
                         function saveFile(){
                           _tools._post('savefile', function (msg) {
-                              if (msg) {
-                                  $(this).btnDisable(false);
-                                  zy.ui.msg('提示信息', '文件保存成功', 's');
-                                  $('.modal').modal('hide');
-                              }
+                            $(this).btnDisable(false);
+                            zy.ui.msg('保存文件', msg.msg, parseInt(msg.ret)!=0 ? 'e': 's');
+                            $('.modal').modal('hide');
                           }, $.extend(true, _t, zy.g.comm));
                         }
                         
@@ -1219,13 +1225,13 @@
     function _ide(_pre, _filetype) {
       var _savebtn = $('#widget-grid').find('header .glyphicon-saved');
         function _setValue(_str, _flg) {
-            editor.setValue(_str);
+            editor.setValue(_str + "\n\n\n\n\n");
             editor.navigateFileStart();
             editor.setReadOnly(_flg);
         }
 
         function _getValue() {
-            return editor.getValue();
+            return editor.getValue().trim();
         }
 
         var _nid = _pre.attr('id');
@@ -1389,23 +1395,28 @@
                 var _filename;
                 if (_lname === '文件夹') {
                     _filename=_tname.toLowerCase();
+                    _lname = null;
                 } else {
-
                     var _nameexit=[_tname, _lname].join('.');
                     _filename =_nameexit.toLowerCase();
                 }
+
                 var _length = _tname.length;
                 if (!_checkContent(_form))
                     return;
                 var _type = $(this).closest('.modal-content').find('h4').text() === '修改' ? true : false;
                 var r_param = $.extend(true, {}, {
-                    path: _node.path
+                    path: _node.path,
                 }, _paramObject(_form), zy.g.comm);
-                if (!/(^[\u4e00-\u9fa5a-zA-Z0-9_\-\.]+$)/.test(_tname)) {
+                //
+                // edit by J.ym 新建文件扩展名
+                //
+                r_param.ext_name = _lname;
+                // console.debug("mk", _filename, _tname);
 
+                if (!/(^[\u4e00-\u9fa5a-zA-Z0-9_\-\.]+$)/.test(_tname)) {
                     zy.ui.msg('提示信息', '不准输入除中文、字母、数字以外的特殊字符', 'w');
                 } else {
-
                     if (_type) {
                         if (_length > 60) {
                             zy.ui.msg('提示信息', '名称必须在60个字以内', 'w');
@@ -1430,11 +1441,29 @@
                               })
                               if(!_flg){
                                 _tools._api('rename', function (_m) {
-
                                     if (!Boolean(_m.ret)) {
                                         _updateTwoTree(_node, 'e', _m.result);
-                                        zy.ui.msg('提示信息', '修改成功', 's');
+                                        zy.ui.msg('提示信息', '修改成功' + _m.msg, 's');
                                         $('.modal').modal('hide');
+
+                                        //
+                                        // 刷新目录 by J.ym
+                                        // 新的 rename 接口不返回 result 修改后的目录结构
+                                        //
+                                        if (!_m.result) {
+                                            _fromServer(parentnode.path, function (_mm) {
+                                                var _result = _mm;
+                                                if ($.isArray(_result)) {
+                                                    parentnode.children = _result;
+                                                } else {
+                                                    parentnode.children = _result.children;
+                                                }
+                                                parentnode.open = true;
+                                                _tree.updateNode(parentnode);
+                                                _tree.refresh();
+                                            }, false);
+                                        }
+
                                     } else {
                                         zy.ui.msg('提示信息', '接口执行失败:' + _m.msg, 'e');
                                     }
@@ -1609,6 +1638,7 @@
             $.extend(true, _t, zy.g.comm);
             _t.path = _path;
             _tools._api('getfilelist', function (_m) {
+                console.log(_m, !Boolean(_m.ret))
                 if (!Boolean(_m.ret)) {
                     var _mm = _m.result;
                     if ($.isArray(_mm)) {
@@ -1754,12 +1784,12 @@
                         _t.path = _node.path
                         function remove_file(){
                             _tools._api('remove', function (_m) {
-                            if (!Boolean(_m.ret)) {
-                                _updateTwoTree(_node, 'r');
-                                return zy.ui.msg('提示信息', '删除成功', 's');
-                            }
-                            return zy.ui.msg('提示信息', '接口执行失败', 'e');
-                        }, $.extend(true, _t, zy.g.comm))
+                                if (!Boolean(_m.ret)) {
+                                    _updateTwoTree(_node, 'r');
+                                    return zy.ui.msg('提示信息', _m.msg, 's');
+                                }
+                                return zy.ui.msg('提示信息', '接口执行失败,'+_m.msg, 'e');
+                            }, $.extend(true, _t, zy.g.comm))
                         }
                    
                           zy.g.am.app = 'ZYAPP_IDE';

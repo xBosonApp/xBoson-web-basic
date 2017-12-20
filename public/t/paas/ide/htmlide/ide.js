@@ -352,7 +352,7 @@ function NewIDE(roleid){
               apiid : zy.fix_api_name('ucode'),
               r_param : {
                 contentid : _contendid,
-                content : _editor.getValue(),
+                content : _editor.getValue().trim(),
                 updatecmt : _updatecmt
               }
             }, function(msg) {
@@ -1030,13 +1030,13 @@ function NewIDE(roleid){
   function _ide(_pre) {
     var _savebtn = $('#widget-grid').find('header .glyphicon-saved');
     function _setValue(_str, _flg) {
-      editor.setValue(_str);
+      editor.setValue(_str + "\n\n\n\n\n");
       editor.navigateFileStart();
       editor.setReadOnly(_flg);
     }
 
     function _getValue() {
-      return editor.getValue();
+      return editor.getValue().trim();
     }
 
     var _nid = _pre.attr('id');

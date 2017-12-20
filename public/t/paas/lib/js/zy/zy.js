@@ -179,6 +179,14 @@ zy.fix_api_name = function(apiname) {
   return apiname + '_x';
 };
 
+// 调用吧少年
+zy.setup_debug = function() {
+  zy.debug = 1;
+  zy.g.comm.s = 'd';
+  console.log("开启调试模式, UI 文件从 /t 下获取, API 加调试参数.");
+};
+
+
 (function() {
   //
   // 刷新后还原 debug 模式
