@@ -1,6 +1,6 @@
 <html>
 <body style='border:0; margin:0'>
-  <iframe src='/ui/paas/pivot_table/index.html' border='0' 
+  <iframe src='pivot_table/index.html' border='0' 
     style='border:0; width: 100%; height: 100%'
     id='_pivot_iframe'>
   </iframe>
@@ -11,6 +11,7 @@
       
       pwin.resize(fixsize);
       $.ready(fixsize);
+      setTimeout(fixsize, 1000);
       
       function fixsize() {
         ifr.height( pwin.height()-115 );

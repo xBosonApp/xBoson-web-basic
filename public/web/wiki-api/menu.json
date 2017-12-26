@@ -1,0 +1,9 @@
+[
+  { "name": "Welcome", "file": "docs/welcome.md", "default":true, "sub":[
+    { "name":"返回代码", "file": "docs/codes.md" }
+  ]},
+
+  { "name": "API", "file": "", "sub": [
+    {"name": "SYS", "file": "docs/api-sys.md" }
+  ]}
+]
