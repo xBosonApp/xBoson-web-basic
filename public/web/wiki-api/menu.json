@@ -1,9 +1,20 @@
 [
-  { "name": "Welcome", "file": "docs/welcome.md", "default":true, "sub":[
-    { "name":"返回代码", "file": "docs/codes.md" }
+  { "name": "基础", "file": "docs/welcome.md", "default":true, "sub":[
+    { "name": "授权许可协议", "file": "docs/license.html" },
+    { "name": "文档历史", "file": "docs/history.md" },
+    { "name": "返回数据", "file": "docs/rdata.md" },
+    { "name": "返回代码", "file": "docs/codes.md" },
+    { "name": "脚本兼容", "file": "docs/compatible.md"}
   ]},
 
-  { "name": "API", "file": "", "sub": [
-    {"name": "SYS", "file": "docs/api-sys.md" }
+  { "name": "API / 模块", "file": "docs/api.md", "sub": [
+    { "name": "sys 模块", "file": "docs/api-sys.md" },
+    { "name": "sql 模块", "file": "docs/api-sql.md" },
+    { "name": "cache 模块", "file": "docs/api-cache.md" },
+    { "name": "map 模块", "file": "docs/api-map.md" },
+    { "name": "list 模块", "file": "docs/api-list.md" },
+    { "name": "date 模块", "file": "docs/api-date.md" },
+    { "name": "http 模块", "file": "docs/api-http.md" },
+    { "name": "fs 模块", "file": "docs/api-fs.md" }
   ]}
 ]

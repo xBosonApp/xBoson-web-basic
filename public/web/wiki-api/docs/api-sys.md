@@ -2,10 +2,12 @@
 
 全局模块, 在脚本中立即可用.
 
+所有服务 API 都将使用这个模块与客户端浏览器来交互数据.
 
-## 可用属性
 
-### sys.request
+# 可用属性
+
+## sys.request
 
 获取 HTTP 请求参数.
 
@@ -14,7 +16,7 @@
 var name = sys.request.name;
 ```
 
-### sys.requestParameterMap
+## sys.requestParameterMap
 
 获取 HTTP 请求参数的数组, 由 HTTP 多个同名参数组成的数组.
 
@@ -24,15 +26,70 @@ var values = sys.requestParameterMap.checkbox_values;
 ```
 
 
-### sys.requestJson
+## sys.requestJson
 
-该方法在 2.0 中废弃.
-
-
-## 可用 API
+该属性在 2.0 中废弃, 无法访问.
 
 
-### sys.addRetData(object:Value [, string:KeyName])
+## sys.result
+
+应答数据集; 可以通过 addRetData() 方法绑定数据, 或通过 setRetData() 将数据应答给客户端.
+
+
+
+# 扩展 API 
+
+这些方法仅在 2.0 平台中可用.
+
+## sys.request.getString(string:name [, int:min, int:max])
+
+返回 string 类型的 http 请求参数, 带有值检测, 当值不符合检查条件会抛出异常.
+
+参数:
+
+  * name: 参数名
+  * min: 最小长度, 当 min <= 0 则允许返回 null, 否则值长度必须 >= min; 默认值 1.
+  * max: 最大长度, 值长度必须 <= max, 默认值 4096.
+
+
+## sys.request.getInteger(string:name [, boolean:allowNull, int:min, int:max])
+
+返回整数类型的 http 参数, 带有值检测, 当值不符合检查条件会抛出异常.
+
+参数:
+
+  * name: 参数名
+  * allowNull: 当参数为空时, true 返回 0, 否则会抛出异常; 默认 false.
+  * min: 值必须 >= min; 默认为 long 最小值.
+  * max: 值必须 <= max; 默认为 long 最大值.
+
+
+## sys.request.getFloat(string:name [, boolean:allowNull, double:min, double:max])
+
+返回浮点(小数)类型的 http 参数, 带有值检测, 当值不符合检查条件会抛出异常.
+
+参数: 
+
+  * name 参数名
+  * allowNull 允许空参数; 默认 false.
+  * min 值必须 >= min; 默认为 double 最小值
+  * max 值必须 <= max; 默认为 double 最大值
+
+
+## sys.request.getSafePath(string:name [, boolean:allowNull])
+
+路径字符串安全检查, 不安全的路径会抛出异常
+
+参数: 
+
+  * name 参数名
+  * allowNull 允许空参数; 默认 false.
+
+
+# 可用 API
+
+
+## sys.addRetData(object:Value [, string:KeyName])
 
 绑定数据到应答数据集, 应答数据集是当前 Api 请求上下文的隐含数据集, 由系统维护, 仅在当前请求上下文中有效.
 
@@ -47,7 +104,7 @@ sys.addRetData(list1, "list1");
 ```
 
 
-### sys.setRetData(int:Code [, string:Message, string...:KeyNames])
+## sys.setRetData(int:Code [, string:Message, string...:KeyNames])
 
 设置应答数据, 并从应答数据集中选择数据返回, 若在脚本中从未调用该方法, Api 将应答给客户端代码 999.
 
@@ -61,3 +118,365 @@ sys.addRetData(list1, "list1");
 // 设置返回数据, 并从应答数据集中选择 "list1" 返回给客户端.
 sys.setRetData(0, "OK", "list1");
 ```
+
+
+## sys.getUserPID([string...:userId])
+
+获取用户的PID, userID 是用户名, pid 是用户对应的唯一 UUID;  无参调用数返回当前用户 pid; 一个参数调用返回指定用户 pid; 多个参数调用返回 map, 键是 userID, 值是对应的 pid;
+
+参数:
+
+* userId: 动态参数, 或数组.
+
+```javascript
+var currentPId = sys.getUserPID();
+var pids = sys.getUserPID(["userid1", "userid2", "userid3"]);
+var pid1 = pids["userid1"];
+```
+
+
+## sys.getUserAdminFlag([string:userId, string:orgId])
+
+当前登录用户在当前机构的管理员标记，1：平台管理员 3：租户管理员 5：开发商管理员
+
+参数:
+
+* userId: 若省略该参数, 则返回当前用户的标记, 否则返回指定用户的标记
+* orgId: 若省略该参数, 则返回当前所在机构的标记.
+
+
+
+## sys.getUserIdByOpenId([string:openid])
+
+返回 openid 对应的 userid, 2.0 平台中 openid 就是 userid, 该函数仅为兼容性而存在; 无参调用返回当前调用 api 用户的 userid.
+
+参数:
+
+* openid: 就是 userid.
+
+
+## sys.getUserOrgList()
+
+返回调用 api 用户的所属机构集合.
+
+```javascript
+var orgList = sys.getUserOrgList();
+for (var i in orgList) {
+  var row = orgList[i];
+  var orgId = row.orgid;
+  var orgName = row.orgnm;
+  var orgType = row.org_type;  // "v":开发商, "t":租户										
+}																												
+```
+
+
+## sys.getUserLoginExpiration()
+
+返回用户登录会话最大时长, 单位: 秒.
+
+
+## sys.uuid(), sys.getUUID()
+
+生成一个没有 '-' 号的 32 长 UUID 字符串.
+
+
+## sys.nextId()
+
+返回长整型数字, 尽可能生成集群生命期中唯一数字.
+
+
+## sys.randomNumber([int:DigitLength])
+
+返回随机数字转换后的字符串. 生成的数小于 10^DigitLength.
+
+参数:
+
+* DigitLength: 可选的参数, 默认为 6, 10 的 DigitLength 次方, 2 时生成的数字小于 100, 3 小于 1000.
+
+
+## sys.randomDouble(int:precision, int:scale)
+
+返回随机数字转换后的字符串, 生成的数小于 (10^precision) / (10^scale).
+
+参数:
+
+* precision: 生成小于 10 的 precision 次方的数字.
+* scale: 处以 10 的 scale 次方.
+
+
+## sys.randomIntWithMaxValue(int:max)
+
+返回随机数字转换后的字符串, 生成的数小于 max.
+
+
+## sys.randomString(int:Length)
+
+返回生成的随机字符串, 长度小于 Length, 字符串中包含所有可见范围内的 ASCII 字符.
+
+
+## sys.pinyinFirstLetter(string:HZ)
+
+返回 HZ 字符串中, 中文字符的首字母.
+
+
+## sys.formattedNumber(number:Val, string:Pattern)
+
+返回格式化数字的字符串
+
+参数:
+
+* Val: 数字
+* Pattern: 格式字符串, 
+
+```javascript
+//
+// 返回 '12.35'
+//
+var formattedNumber = sys.formattedNumber(12.3456, "#.##");
+```
+
+## sys.instanceFromJson(string:Json)
+
+将字符串转换为 js 对象, 与 JSON.parse() 意义相同.
+
+
+## sys.jsonFromInstance(object:Obj)
+
+将对象序列化为字符串, 与 JSON.stringify() 意义相同.
+
+
+## sys.instanceFromXml(string:XmlStr)
+
+将字符串转换为 js 对象.
+
+
+## sys.xmlFromInstance(object:Obj) 
+
+将 js 对象序列化为 xml 字符串.
+
+
+## sys.emptyToNull(string:s) 
+
+传入参数转换为字符串并Trim后，如果是空字符串""或字符串的值是忽略大小写的"null"，返回 null，否则返回传入的原值.
+
+
+## sys.isNumber(object:v)
+
+传入的对象是数字或可以转换为数字返回 true, 否则返回 false.
+
+
+## sys.parseInt()
+
+用全局 parseInt() 替代.
+
+
+## sys.executeJavaScript()
+
+不支持
+
+
+## sys.printValue(object:o)
+
+直接将变量输出到结果集的 print 属性上, 多次输出, print 将成为数组.
+
+
+## sys.bytes(string:s)
+
+将字符串转换为字节数组, 并返回数组.
+
+
+## sys.encodeBase64(string|array:val), sys.encodeBase64String(string:val)
+
+将字符串或字节数组转换为 base64 编码的字符串
+
+
+## sys.decodeBase64(string|array:val), sys.decodeBase64String(string:val)
+
+将 base64 的字符串, 转换回原先的数据.
+
+
+## sys.md5(string:v)
+
+返回字符串 v 的 md5 值.
+
+
+## sys.encrypt(string:content, string:password)
+
+使用密钥加密字符串, 返回加密后的字符串.
+
+
+## sys.decrypt(string:content, string:password)
+
+使用密钥解密字符串, 返回解密后的字符串.
+
+
+## sys.regexFind(string:regex, string:str), sys.regexMatches(...)
+
+使用正则表达式查询 str, 找到匹配返回 true, 否则返回 false.
+
+```javascript
+//
+// 返回 true
+//
+var ret = sys.regexFind("Java.*", "测试Java测试");
+```
+
+
+## sys.regexSplit(string:regex, string:str)
+
+```javascript
+//
+// 返回 ['Java', 'Hello', 'World', 'Java', 'Hello', 'World', 'Sun']
+//
+var ret = sys.regexSplit("[, |]+", "Java Hello World  Java,Hello,,World|Sun");
+```
+
+
+## sys.regexReplaceFirst(string:regex, string:str, string:replacement)
+
+按正则表达式将 str 中的第一个匹配字符串替换为 replacement.
+
+
+## sys.regexReplaceAll(string:regex, string:str, string:replacement)
+
+按正则表达式将 str 中的全部匹配字符串替换为 replacement.
+
+
+## sys.lotteryRate(array:RateList[, array:IgnoreList])
+
+俄罗斯轮盘赌:
+  随机命中的比率列表中项的索引，从 0 开始，如果参数的比率列表中项的和小于100，则可能返回比率列表的 最大索引值 + 1, 忽略列表中索引指向的比率列表中的项不会被返回，忽略的项的比率将被分摊到非忽略项上项, 忽略列表通常用来在某项命中数已经达到限定值时防止再次返回该命中.
+
+```javascript
+//
+// 返回 0 的概率为 20.5% 但因为有忽略列表上升为 30%
+// 返回 1 的概率为 0%, 2 的概率为 60%
+// 返回 4 的概率为 10%, 因为定义的概率为 90%, 自动生成一个附加项.
+//
+var ret = sys.lotteryRate([20.5, 10.0, 50.5, 10.0], [1, 3]); 
+```
+
+
+## sys.bizLog(...)
+
+该方法未实现; 这个函数无法适应复杂的业务日志需要.
+
+
+## sys.csvToList(string|array:parseContent, string:delimiter, string:quoteChar, string:escape, string:header, int:preview)
+
+解析 csv 字符串或文件.
+
+参数:
+
+* parseContent: 当参数是字符串, 则直接解析字符串; 否则数组中定义文件的属性: [filePath, fileName, charsetName], 文件从临时文件系统中读取.
+* delimiter: 列分隔符, 通常为 ','.
+* quoteChar: CSV文件所用的引号符号, 通常为 '"'
+* escape: CSV文件所用的转义符号, 通常为 '/'
+* header: CSV的表头，类型为数组，设置为[],则从CSV里自动检测
+* preview: 输出 preview 行, 设置为 0 则输出全部行
+
+```javascript
+//
+// arr 将为 [{"a":"1","b":"2"},{"a":"11","b":"22"}]
+//
+var str = "a,b\n1,2\n11,12";
+var arr = sys.csvToList(["tmpCSV/","test.csv","UTF-8"],",","\"","\\",[],10);
+```
+
+
+## sys.listToCsv(string:filePath, string:fileName, string:charset, array:data)
+
+将 data 数据序列化为 csv 字符串, 并存入用户临时文件系统, 每个用户有独立文件系统.
+
+参数:
+
+* filePath: 文件路径
+* fileName: 文件名
+* charset: 文件编码
+* data: 数组, 每个元素是一行, 每行是一个对象, 键组成表头.
+
+
+## sys.setReportData(...)
+
+未实现
+
+
+## sys.convertCsvToXls(...)
+
+未实现
+
+
+## sys.setRetList(array:plist, array:clist, array:associate, string:keyname)
+
+将符合条件的 clist 中的元素附加到 plist 元素的 keyname 属性上.
+associate 可以设置多个属性, 他们是 '并且' 的关系.
+生成的 keyname 属性是一个数组, 数组中保存着复制来的 clist 中的元素.
+
+参数:
+
+* plist 元素是 object 对象
+* clist 元素是 object 对象
+* associate [[k1, k2],[...], ...] k1 是 plist 属性名, k2 是 clist 属性名.
+* keyname 在 plist 中创建的数组属性名称
+
+
+## sys.transformTreeData(array:tree, string:parentKey, string:childKey, string:key_name)
+
+将平行的 list 数据转换为深层 tree 格式; 数据对象根据属性 child_key 来寻找含有
+属性 parent_key 的数据对象, 并将自身附加到属性名 keyname 的数组上;
+如果数据对象 parent_key 为 null, 则认为是根节点;
+支持无限深层的 tree 数据格式.
+
+参数:
+
+* dataList 原始数据
+* parent_key 父节点属性名称
+* child_key 子节点属性名称
+* key_name 生成的子节点数组
+
+
+## sys.getRelatedTreeData(object:all, object:filter, string:parent_attr_, string:child_attr_)
+
+禁止使用, 该算法有缺陷.
+
+
+## sys.isEmpty(string|array|object:v)
+
+参数为null、空字符串、空集合、空数组时，返回true, 否则返回 false.
+
+
+## sys.toString(object:v)
+
+将任意对象转换为字符串
+
+
+## sys.toBool(object:v)
+
+返回指定参数转换成的布尔值；1、"1"、true、"true" 大小写皆可 返回 true，否则返回 false.
+
+
+## sys.format(string:formatString, array:parm)
+
+将参数绑定到 formatString 字符串上, 并返回.
+
+```javascript
+//
+// 返回 "hello xBoson"
+//
+sys.format("hello {0}", ['xBoson'])
+```
+
+
+## sys.currentTimeString(), sys.getCurrentTimeString()
+
+返回当前日期+时间的字符串, 格式为 "yyyy-MM-dd HH:mm:ss".
+
+
+## sys.encodePlatformPassword(string:pid, string:date, string:password)
+
+返回加密后的密码, password 已经 md5 处理.
+
+
+## sys.charAt(...), sys.indexOf(...), sys.size(...), sys.startWith(..), sys.endWith(...), sys.length(..), sys.subStringTo(..), sys.subString(..), sys.split(..), sys.contain(..), sys.toUpperCase(..), sys.toLowerCase(..), sys.replace(..), sys.trim(..), sys.trunc(..)
+
+这些方法不要再调用, 使用 js 原生方法替代.

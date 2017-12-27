@@ -17,13 +17,14 @@ body, window {
   background: rgb(226, 226, 226);
   margin-left: 80px;
   padding: 100px 70px;
-  border-left: 40px solid #868dbf;
+  border-left: 40px solid #575f9e;
   overflow-y: auto;
 }
 
 #content {
   padding: 100px;
   overflow-y: auto;
+  overflow-x: hidden;
   flex: 1;
 }
 
@@ -31,6 +32,7 @@ body, window {
   text-decoration: none;
   color: #999;
   display: block;
+  margin-top: 8px;
 }
 
 #menu a:hover {
@@ -59,11 +61,15 @@ pre {
   background-color: #563010;
   color: #ffebeb;
   border-radius:8px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  margin-top: 55px;
 }
 
 code {
   padding: 20px 10px;
   display: block;
+  font-family: monospace, monospace;
 }
 
 .firstLine {
@@ -74,4 +80,15 @@ code {
   color: #4d60ea;
   font-weight: bold;
   font-size: 15px;
+}
+
+em {
+  color: #999;
+}
+
+blockquote p {
+  padding: 20px;
+  background-color: #d6dbfb;
+  border-radius:8px;
+  font-family: '黑体', 'Times New Roman', Times, serif;
 }
