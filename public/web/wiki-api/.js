@@ -96,14 +96,17 @@ function open_doc(data) {
     content.html(html);
 
     var code = content.find("code");
-    code.wrap("<pre>");
     code.each(function() {
       var thiz = $(this);
       var all = thiz.text().split('\n');
-      var title = "<div class='firstLine'>" + all[0].toUpperCase() + "</div>";
-      all.splice(0, 1);
-      thiz.text(all.join('\n'));
-      thiz.before(title);
+
+      if (all.length > 1) {
+        thiz.wrap("<pre>").css('display', 'inline-block');
+        var title = "<div class='firstLine'>" + all[0].toUpperCase() + "</div>";
+        all.splice(0, 1);
+        thiz.text(all.join('\n'));
+        thiz.before(title);
+      }
     });
     setPage(data.file);
   });

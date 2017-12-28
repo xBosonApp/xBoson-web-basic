@@ -68,8 +68,7 @@ pre {
 
 code {
   padding: 20px 10px;
-  display: block;
-  font-family: monospace, monospace;
+  font-family: "Courier New", "Lucida Console";
 }
 
 .firstLine {

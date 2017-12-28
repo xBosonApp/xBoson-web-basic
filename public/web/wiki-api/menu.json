@@ -4,17 +4,26 @@
     { "name": "文档历史", "file": "docs/history.md" },
     { "name": "返回数据", "file": "docs/rdata.md" },
     { "name": "返回代码", "file": "docs/codes.md" },
-    { "name": "脚本兼容", "file": "docs/compatible.md"}
+    { "name": "脚本兼容", "file": "docs/compatible.md"},
+    { "name": "JavaScript 参考", "file": "docs/javascript-doc.htm"}
   ]},
 
-  { "name": "API / 模块", "file": "docs/api.md", "sub": [
-    { "name": "sys 模块", "file": "docs/api-sys.md" },
-    { "name": "sql 模块", "file": "docs/api-sql.md" },
-    { "name": "cache 模块", "file": "docs/api-cache.md" },
-    { "name": "map 模块", "file": "docs/api-map.md" },
-    { "name": "list 模块", "file": "docs/api-list.md" },
-    { "name": "date 模块", "file": "docs/api-date.md" },
-    { "name": "http 模块", "file": "docs/api-http.md" },
-    { "name": "fs 模块", "file": "docs/api-fs.md" }
+  { "name": "全局模块", "file": "docs/api.md", "sub": [
+    { "name": "sys", "file": "docs/api-sys.md" },
+    { "name": "sql", "file": "docs/api-sql.md" },
+    { "name": "cache", "file": "docs/api-cache.md" },
+    { "name": "map", "file": "docs/api-map.md" },
+    { "name": "list", "file": "docs/api-list.md" },
+    { "name": "date", "file": "docs/api-date.md" },
+    { "name": "http", "file": "docs/api-http.md" }
+  ]},
+
+  { "name": "扩展模块", "file": "docs/api.md", "sub": [
+    { "name": "fs", "file": "docs/api-fs.md" },
+    { "name": "assert", "file": "docs/api-assert.md" },
+    { "name": "uuid", "file": "docs/api-uuid.md" },
+    { "name": "Buffer", "file": "docs/api-buffer.md" },
+    { "name": "path", "file": "docs/api-path.md" },
+    { "name": "url", "file": "docs/api-url.md" }
   ]}
 ]
