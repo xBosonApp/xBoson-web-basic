@@ -34,7 +34,7 @@ fffffe9f-650f-1e2d-dd8e-3313083c275c
 
 ## uuid.v1obj(), uuid.v4obj()
 
-基于生成 UUID 对象句柄.
+生成 UUID 对象句柄.
 
 ```javascript
 var uuidHandle = uuid.v1obj();
