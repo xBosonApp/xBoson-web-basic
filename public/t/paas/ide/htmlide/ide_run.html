@@ -527,7 +527,14 @@
         }
         msg = zy.fix_xboson_data(msg);
         if (msg.datatype && msg.datatype.indexOf("stack_trace_element") >= 0) {
-          zy.ui.msg("Stack Trace:", '<code><pre>'+ msg.data +'</pre></code>', "w");
+          var content = '<pre style="background-color:#8a3737; color:#eee; border:0; word-wrap: break-word; white-space: pre-wrap;">' + msg.data +'</pre>'
+          $.smallBox({
+            title: "Stack Trace",
+            content: content,
+            color: "#8a3737",
+            timeout: 50000,
+            icon: "fa fa-frown-o bounce animated"
+          });
         }
         editor.set(msg);
         formatter.set(msg);

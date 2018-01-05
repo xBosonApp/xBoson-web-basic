@@ -1,6 +1,6 @@
 set path=c:\Program Files\7-Zip
 set src=D:\down1\web4ds\*
-set out=D:\down1\web4xboson-%TIME:~0,2%.%TIME:~3,2%.%TIME:~6,2%.7z
+set out=D:\down1\web4xboson-%DATE:~0,4%.%DATE:~5,2%.%DATE:~8,2%.7z
 set zexe=7z.exe
 
 del %out%

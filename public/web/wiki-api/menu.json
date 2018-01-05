@@ -24,6 +24,7 @@
     { "name": "uuid", "file": "docs/api-uuid.md" },
     { "name": "Buffer", "file": "docs/api-buffer.md" },
     { "name": "path", "file": "docs/api-path.md" },
-    { "name": "url", "file": "docs/api-url.md" }
+    { "name": "url", "file": "docs/api-url.md" },
+    { "name": "mongodb", "file": "docs/api-mongodb.md" }
   ]}
 ]
