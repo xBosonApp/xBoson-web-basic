@@ -154,7 +154,7 @@ zy.fix_api_call = function(uri, prm) {
   if (! zy.isXBosonSystem) 
     return uri;
 
-  var api_prefixs = [ "api/", "ide/" ];
+  var api_prefixs = [ "api/", "ide/", "download/" ];
 
   api_prefixs.forEach(function(api_prefix) {
     if (uri.indexOf(api_prefix) == 0) {
@@ -962,6 +962,9 @@ zy.net = {
    * @param {String} down_type 下载类型
    */
   postDownload: function (uri, param) {
+    if (zy.isXBosonSystem && uri.indexOf('download/') == 0) 
+      return this.xbosonDownload(uri, param);
+
     $('#tmpDownloadForm').remove();
     var container = $("<div>").attr('id','tmpDownloadForm').css('display','none');
     $('body').append(container);
@@ -983,6 +986,43 @@ zy.net = {
 			tmpDownloadForm.append(input);
 		}
     tmpDownloadForm.submit();           // 表单提交
+  },
+
+  /**
+   * 下载文件, 和 post 没有关系.
+   */
+  xbosonDownload: function(uri, param) {
+    this.get(uri, function(ret) {
+      if (ret.result[0].file_content) {
+        return makeJsonFile(ret.result[0].file_content);
+      }
+      var filename = ret.result[0].name;
+      $('#tmpDownloadForm').remove();
+
+      var form = $("<form id='tmpDownloadForm' style='display:none' "
+          +" method='get' target='_blank'>");
+      form.attr('action', zy.g.host.api + "files").appendTo("body");
+
+      var parm_file = $("<input type='hidden' name='file_name'>").appendTo(form);
+      parm_file.attr("value", ret.result[0].name);
+
+      var parm_dir = $("<input type='hidden' name='dir_name'>").appendTo(form);
+      parm_dir.attr("value", ret.result[0].path);
+
+      form.submit();
+    }, param);
+
+    function makeJsonFile(_content) {
+      console.log("makeJsonFile:", param);
+      var mainname = param.typecd || param.en || param.cn || 'Data';
+      var timestr  = new Date().toFormat("yyyy-MM-dd hh.mm.ss");
+      var filename = mainname + '-' + timestr + '.json';
+      var data = new Blob([ _content ], {type: "application/octet-binary"});
+      var url  = URL.createObjectURL(data, {oneTimeOnly: true});
+      var a    = $('<a class="mhide"></a>');
+      a.attr({ href: url, download: filename });
+      a[0].click();
+    }
   },
 
   loadIndex : function() {
