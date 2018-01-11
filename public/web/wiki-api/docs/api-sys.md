@@ -28,7 +28,8 @@ var values = sys.requestParameterMap.checkbox_values;
 
 ## sys.requestJson
 
-该属性在 2.0 中废弃, 无法访问.
+客户端使用 POST 请求递交 `ContentType: application/json` 类型的数据时,
+POST Body 中的数据将被解析成 js 对象并绑定在 requestJson 属性上, 其他时候该参数为 null.
 
 
 ## sys.result
@@ -87,7 +88,6 @@ var values = sys.requestParameterMap.checkbox_values;
 
 
 # 可用 API
-
 
 ## sys.addRetData(object:Value [, string:KeyName])
 

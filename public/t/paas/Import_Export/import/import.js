@@ -71,7 +71,8 @@ pageSetUp();
     $('[name=uploadfile]').unbind().bind('click', function () {
       zy.g.am.app = 'ac25e37830ec4e6cbe367a51a4005b7e';
       zy.g.am.mod = 'import';
-      zy.net.postForm("upload/upload", $('#filemsg'), function (msg) {
+      var url = zy.isXBosonSystem ? 'files' : 'upload/upload';
+      zy.net.postForm(url, $('#filemsg'), function (msg) {
         $('[name=filenm]').val(msg.result[0].file_name);
         getresult(msg);
       });

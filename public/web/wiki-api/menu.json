@@ -15,7 +15,8 @@
     { "name": "map", "file": "docs/api-map.md" },
     { "name": "list", "file": "docs/api-list.md" },
     { "name": "date", "file": "docs/api-date.md" },
-    { "name": "http", "file": "docs/api-http.md" }
+    { "name": "http", "file": "docs/api-http.md" },
+    { "name": "se", "file": "docs/api-se.md" }
   ]},
 
   { "name": "扩展模块", "file": "docs/api.md", "sub": [

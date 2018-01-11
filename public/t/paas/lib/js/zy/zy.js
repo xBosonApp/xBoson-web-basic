@@ -70,8 +70,8 @@ var zy = {
   g: {
     //主机IP地址
     host: {
-      api: 'http://zr-i.com:8088/ds/',
-      ui: 'http://zr-i.com:8088/'
+      api: 'http://localhost/xboson/',
+      ui: 'http://localhost/xboson/face'
     },
     //共通传参用
     comm: {
@@ -98,7 +98,7 @@ var zy = {
 //
 zy.isXBosonSystem = null;
 
-// 路径中有 xboson 认为是新版系统
+// 路径中有 '/xboson/' 认为是新版系统
 zy.check_xboson_system = function() {
   if (location.pathname.indexOf('/xboson/') >= 0) {
     zy.isXBosonSystem = true;
@@ -164,7 +164,7 @@ zy.fix_api_call = function(uri, prm) {
       delete prm.org;
       delete prm.app;
       delete prm.mod;
-      //console.log("fix api call::::::::::::::", uri, prm);
+      console.log("fix api call::::::::::::::", uri, prm);
     }
   });
   return uri;
@@ -919,7 +919,6 @@ zy.net = {
    * @param {Function} error 服务器端传来错误信息时使用 error 回调函数处理错误，将返回出错 JSON 数据
    */
   postForm: function (uri, form, callback, error) {
-
     var prm = zy.tool.initParams(zy.g.comm, zy.g.am);
     prm = zy.fix_jsonp_parm(prm)// add by J.ym
     zy.g.am = {};
@@ -1132,7 +1131,7 @@ zy.net = {
   loadHTMLs: function (url, container, callback) {
     var flg = false;
     // var _u = 'http://'+location.host; // 绝对路径
-    var _u = zy.debug? '/t':'/ui'; // 调试用路径切换
+    var _u = zy.g.host.ui + (zy.debug? '/t':'/ui'); // 调试用路径切换
 
     if ('/' === url.charAt(0)) {
       flg = true;
@@ -1211,7 +1210,7 @@ zy.net = {
   loadPages: function (url, callback) {
     var flg = false;
     // var _u = 'http://'+location.host; // 绝对路径
-    var _u = zy.debug? '/t':'/ui'; // 调试用路径切换
+    var _u = zy.g.host.ui + (zy.debug? '/t':'/ui'); // 调试用路径切换
 
     if ('/' === url.charAt(0)) {
       flg = true;
@@ -1395,7 +1394,7 @@ zy.net = {
   extractCss: function (str) {
     var html = str;
     // var _u = 'http://'+location.host; // 绝对路径
-    var _u = zy.debug? '/t':'/ui'; // 调试用路径切换
+    var _u = zy.g.host.ui + (zy.debug? '/t':'/ui'); // 调试用路径切换
     zy.log('extractCss : _u == '+_u);
 
     function findjs() {

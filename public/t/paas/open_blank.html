@@ -1,0 +1,18 @@
+<div>
+  在新页面中打开, 或<a href='#' class='open_blank'>点击打开</a>
+  <script>
+  (function() {
+    open();
+    $('.open_blank').click(open);
+
+    function open() {
+      var find = "page=";
+      var i = location.href.indexOf(find);
+      if (i >= 0) {
+        var page = location.href.substring(i + find.length);
+        window.open(page, "_blank");
+      }
+    }
+  })();
+  </script>
+</div>
