@@ -5,7 +5,8 @@
     { "name": "返回数据", "file": "docs/rdata.md" },
     { "name": "返回代码", "file": "docs/codes.md" },
     { "name": "脚本兼容", "file": "docs/compatible.md"},
-    { "name": "JavaScript 参考", "file": "docs/javascript-doc.htm"}
+    { "name": "JavaScript 参考", "file": "docs/javascript-doc.htm"},
+    { "name": "模块", "file":"docs/api.md" }
   ]},
 
   { "name": "全局模块", "file": "docs/api.md", "sub": [
@@ -26,6 +27,7 @@
     { "name": "Buffer", "file": "docs/api-buffer.md" },
     { "name": "path", "file": "docs/api-path.md" },
     { "name": "url", "file": "docs/api-url.md" },
-    { "name": "mongodb", "file": "docs/api-mongodb.md" }
+    { "name": "mongodb", "file": "docs/api-mongodb.md" },
+    { "name": "shell", "file": "docs/api-shell.md" }
   ]}
 ]

@@ -11,7 +11,6 @@ var path = require("path");
 ```
 
 
-
 # API
 
 ## path.checkSafe(string:pathStr)

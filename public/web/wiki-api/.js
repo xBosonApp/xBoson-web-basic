@@ -20,6 +20,9 @@ var content = $('#content');
 var current_select;
 var default_page;
 
+if (Math.random() * 100 <= 1) {
+  menu.addClass("black_menu");
+}
 load_menu();
 
 
