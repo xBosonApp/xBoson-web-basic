@@ -32,7 +32,11 @@
               <section>
                 <label class="label">完整 URL</label>
                 <label class="textarea">
-                  <textarea name="fullurl" readonly="readonly" oninput="this.style.height = this.scrollHeight + 'px';" onpropertychange="this.style.height = this.scrollHeight + 'px';" style=" background: none repeat scroll 0% 0% white; cursor: default; overflow-y: hidden; height: 48px;"></textarea>
+                  <textarea name="fullurl" readonly="readonly" 
+                    oninput="" 
+                    onpropertychange="" 
+                    style=" background: none repeat scroll 0% 0% white; 
+                    cursor: default; overflow-y: hidden; height: 200px;"></textarea>
                 </label>
               </section>
             </div>
@@ -215,7 +219,15 @@
             }else{
               CP = '&' + CP;
             }
-            var Full = Host + '/ds/' + type + '/' + api.api + '?' + param;
+
+            var Full;
+            if (zy.isXBosonSystem) {
+              Full = zy.g.host.api + 'app/' + zy.g.comm.org + '/' 
+                   + api.app + '/' + api.mod + '/' + api.api + "?" + param;
+            } else {
+              Full = Host + '/ds/' + type + '/' + api.api + '?' + param;
+            }
+
             $this.html(Full);
             api.url = Full + CP;
             zy.log(api);

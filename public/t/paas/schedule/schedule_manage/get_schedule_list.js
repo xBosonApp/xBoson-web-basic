@@ -30,6 +30,16 @@ ScheduleList = (function() {
   PT.Events = {};
 
   /**
+   * 模块id, 双系统兼容
+   */
+  var module_id;
+  if (zy.isXBosonSystem) {
+    module_id = 'cron_x';
+  } else {
+    module_id = 'cron';
+  }
+
+  /**
    * @class 
    * @constructor
    */
@@ -190,7 +200,7 @@ ScheduleList = (function() {
           scheduleid: data.scheduleid
         };
         zy.g.am.app = 'a20a0c6a82fb4cb085cb816e5526d4bc';
-        zy.g.am.mod = 'cron';
+        zy.g.am.mod = module_id;
         zy.net.get('api/delete', function(msg) {
           if (msg) {
             dt.DataTable().row('.active').remove().draw();
@@ -223,7 +233,7 @@ ScheduleList = (function() {
         thiz.Pagination(1);
       }
       zy.g.am.app = 'a20a0c6a82fb4cb085cb816e5526d4bc';
-      zy.g.am.mod = 'cron';
+      zy.g.am.mod = module_id;
       zy.net.get("api/starttask", cb, t,null,function(m){
         zy.ui.msg('提示信息',m.msg,'e');
         dialog.dialog("close");
@@ -247,7 +257,7 @@ ScheduleList = (function() {
         thiz.Pagination(1);
       }
       zy.g.am.app = 'a20a0c6a82fb4cb085cb816e5526d4bc';
-      zy.g.am.mod = 'cron';
+      zy.g.am.mod = module_id;
       zy.net.get("api/stoptask", cb, t, null, function(msg){
         dialog.dialog("close");
       });
@@ -305,7 +315,7 @@ ScheduleList = (function() {
       }
     };
     zy.g.am.app = 'a20a0c6a82fb4cb085cb816e5526d4bc';
-    zy.g.am.mod = 'cron';
+    zy.g.am.mod = module_id;
     zy.net.get("api/list", cb, conditions, page);
   };
   /**
@@ -357,7 +367,7 @@ ScheduleList = (function() {
     param.task_id = el.data('task_id');
     param.status = st;
     zy.g.am.app = 'a20a0c6a82fb4cb085cb816e5526d4bc';
-    zy.g.am.mod = 'cron';
+    zy.g.am.mod = module_id;
     zy.net.get('api/setsystemstatus', cb, param);
   };
   PT.Select = function(cbb) {

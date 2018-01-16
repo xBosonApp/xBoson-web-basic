@@ -23,9 +23,9 @@ body, window {
 
 #menu a {
   text-decoration: none;
-  color: #2e2e59;
+  color: #794e10;
   display: block;
-  margin-top: 8px;
+  margin-top: 5px;
 }
 
 .black_menu {
@@ -34,6 +34,10 @@ body, window {
 
 .black_menu a {
   color: #eee !important;
+}
+
+.black_menu .selected_menu {
+  border-bottom-color: #eee !important;
 }
 
 #menu a:hover {
