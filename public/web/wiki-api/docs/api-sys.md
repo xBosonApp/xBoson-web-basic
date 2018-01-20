@@ -101,6 +101,10 @@ POST Body 中的数据将被解析成 js 对象并绑定在 requestJson 属性�
 ```javascript
 var list1 = {1,2,3};
 sys.addRetData(list1, "list1");
+//
+// 这样写同样有效, 相当于调用 sys.addRetData(list1, "list1");
+//
+sys.addRetData("list1", list1);
 ```
 
 

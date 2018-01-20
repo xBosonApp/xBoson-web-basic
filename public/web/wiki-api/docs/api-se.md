@@ -180,3 +180,8 @@ content_id 有效并发出通知返回 true.
 * 返回 bool
 
 发送发布脚本通知, 生产环境中的对应脚本将被重新编译.
+
+
+## se.sendUITemplateReloadTag()
+
+当 html 模板标签库被修改后, 调用该方法使模板引擎重新加载标签库.

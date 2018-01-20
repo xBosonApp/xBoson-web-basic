@@ -5,6 +5,8 @@
 
 ### 1 月
 
+* 20. 更新 se.
+* 19. 更新 sys, path 模块; 完成 vm 模块.
 * 16. 完成 schedule 模块文档.
 * 15. 增加 api 导入/导出说明. 完成 shell 模块文档.
 * 11. 完成 se 模块文档; 更新 sys.requestJson.

@@ -34,3 +34,8 @@ path.normalize() 方法会规范化给定的 path，并解析 '..' 和 '.' 片�
 ## path.basename(string:pathStr)
 
 只返回文件部分, 目录被丢弃, 目录格式无效返回 null.
+
+
+## path.extname(string:pathStr)
+
+返回 path 的扩展名，即从 path 的最后一部分中的最后一个 .（句号）字符到字符串结束。 如果 path 的最后一部分没有 . 或 path 的文件名（见 path.basename()）的第一个字符是 .，则返回一个空字符串。

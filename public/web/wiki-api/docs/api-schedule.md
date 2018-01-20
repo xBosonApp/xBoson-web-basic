@@ -2,7 +2,7 @@
 
 文件系统需要引入 require 方可使用.
 每个机构有独立的任务池.
-任务日志输出到 'sys_pl_log_scheduler' 表中.
+任务日志输出到 `sys_pl_log_scheduler` 表中.
 
 ## 引入:
 
