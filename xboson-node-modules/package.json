@@ -13,6 +13,7 @@
   "author": "yanming",
   "license": "SEE LICENSE IN commercial.txt",
   "dependencies": {
-    "daffy": "^1.0.3"
+    "daffy": "^1.0.3",
+    "difflib": "^0.2.4"
   }
 }

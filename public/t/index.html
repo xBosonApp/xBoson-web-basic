@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -6,17 +6,17 @@
 </head>
 <body>
 <script type="text/javascript">
-
+  // 检查本地存储中是否有平台数据
   function _checklocalStorage(str) {
     if (!str)
-      return false;
+      return false; 
     var _o = JSON.parse(str);
     if (_o && _o["user_org_list"] && _o["user_selected_org"] && _o["user_selected_org_type"])
       return _o;
     return false;
   }
 
-  function _checkCookie(_cookie) {
+  function _checkCookie(_cookie) { 
     return _cookie.indexOf('openid') > 0
   }
 

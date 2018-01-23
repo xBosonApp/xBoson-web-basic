@@ -532,8 +532,12 @@
         _editor.destroy();
         _editor.container.remove();
       });
-      var _mode = ace.require('ace/mode/html').Mode;
-      _editor.getSession().setMode(new _mode());
+      //
+      // 若这里抛出异常可能是 ACE 版本冲突
+      //
+      //var _mode = ace.require('ace/mode/html').Mode;
+      _editor.getSession().setMode("ace/mode/html");
+      //_editor.getSession().setMode(new _mode());
       _editor.setOption("minLines", 15);
       _editor.setAutoScrollEditorIntoView(true);
       _editor.setOption("maxLines", 3000);

@@ -6,58 +6,26 @@
 </never>
 
 <webinfo />
-<!-- 运行在服务端的Javascript代码 -->
-<script runat='server'>
-  // 清除掉之前的变量， 防止污染
-  val('apiUrl',    null);
-  val('apiResult', null);
-  val('ui_items',  null);
-  val('ui_name',   null);
-  
-  // 获取请求参数
-  var location_host;
-  
-  // var configObject = val('config');
-  // if (configObject && configObject.ds_api_host) {
-  //   location_host = val('config').ds_api_host;
-  // } else {
-  //   location_host = query.location_host;
-  // }
-  location_host = val('info_host')&&val('info_host').val || query.location_host;
-  var org = val('info_org')&&val('info_org').val || query.org;
-  // location_host = query.location_host;
-  // var org = query.org;
-  var pageid = val('pageid');
-  val(pageid, null);
-  
-  if (pageid == null || location_host == null || org == null) {
-    throw new Error('未获取到合法的权限请求地址');
-  }
-
-  var url = 'http://' + location_host 
-    + '/ds/api/uiauth?app=ZYAPP_LOGIN&mod=ZYMODULE_LOGIN&org='+ org
-    + '&pageid=' + pageid;
-  val('apiUrl', url);
-  end();  // 处理结束 必须
-</script>
 
 <if var='apiUrl'>
   <api url='apiUrl' to='apiResult' exp='true' />
+  <auth page="###pageid###" to="auth" />
   <script runat='server'>
+    var apiResult = {
+      code : 0,
+      ret  : val("auth"),
+      result : [val("auth")],
+    }
     var STATE = {
       '1' : 'available',
       '2' : 'disabled',
       '3' : 'hide'
     };
-    var apiResult = val('apiResult');
-    if (apiResult.prototype === Error) {
-      return end();
-    }
     
     if (apiResult.code) {
       throw new Error('权限请求失败');
     } else if (apiResult.ret != '0') {
-      throw new Error(apiResult.msg);
+      throw new Error("您暂时没有被授权访问");
     }
 
     var pageid = val('pageid');
