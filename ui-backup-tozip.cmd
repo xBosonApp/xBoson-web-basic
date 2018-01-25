@@ -4,6 +4,6 @@ set out=P:\[project-backup]\xboson\web4xboson-%DATE:~0,4%.%DATE:~5,2%.%DATE:~8,2
 set zexe=7z.exe
 
 del %out%
-%zexe% a -xr!*\node_modules\* -xr!*\.git\* -x!*\.svn\* -x!*\*.o -x!.git\* -x!*.log -x!*.7z  -t7z %out% %src% -r
+%zexe% a  -xr!*\.git\* -x!*\.svn\* -x!*\*.o -x!.git\* -x!*.log -x!*.7z -x!xboson-db-dump.sql  -t7z %out% %src% -r
 
 pause

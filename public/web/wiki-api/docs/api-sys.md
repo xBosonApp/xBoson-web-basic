@@ -276,7 +276,7 @@ var formattedNumber = sys.formattedNumber(12.3456, "#.##");
 
 ## sys.executeJavaScript()
 
-不支持
+不支持, 使用 vm 模块可以实现该功能.
 
 
 ## sys.printValue(object:o)
@@ -400,14 +400,35 @@ var arr = sys.csvToList(["tmpCSV/","test.csv","UTF-8"],",","\"","\\",[],10);
 * data: 数组, 每个元素是一行, 每行是一个对象, 键组成表头.
 
 
-## sys.setReportData(...)
+## sys.setReportData(fileName, dataList, templatePath, savePath)
 
-未实现
+* fileName: 模板文件名
+* dataList: 数据集
+* templatePath: 模板路径
+* savePath: 输出文件保存路径
+* 返回: 文件名
+
+从 templatePath+fileName 文件中读取 EXCEL 模板, 并以该模板创建报表;
+dataList 可以是一个字符串, 描述从应答数据集中获取数据作为表格数据, 
+或 dataList 可以是字符串数组, 每个字符串都从应答数据集中返回一个数据作为表格数据并将他们合并到表格中,
+或 dataList 本身是报表数据直接压入表格中; 生成的数据保存在名称为 `data` 的表格中, 在必要时会创建该表格;
+最后将文件保存到 savePath 目录中, 并返回生成文件的文件名.
+
+```javascript
+//
+// 从应答数据集的 data 中获取填入表格中
+//
+var reportName = sys.setReportData(templateName, ["data"], tmpPath, downPatn);
+//
+// 数据集为两行两列, 表格头为 'id' 和 'name'
+//
+var reportName = sys.setReportData(templateName, [{'id': '00001', 'name': 'a'}, {'id': '00002', 'name': 'b'}], tmpPath, downPatn);
+```
 
 
-## sys.convertCsvToXls(...)
+## sys.convertCsvToXls(fileName, csvString, templatePath, savePath, queryCondition, rowNum, columnNum)
 
-未实现
+未实现, 通过其他函数组合可以实现该函数的功能.
 
 
 ## sys.setRetList(array:plist, array:clist, array:associate, string:keyname)
