@@ -39,3 +39,13 @@ path.normalize() 方法会规范化给定的 path，并解析 '..' 和 '.' 片�
 ## path.extname(string:pathStr)
 
 返回 path 的扩展名，即从 path 的最后一部分中的最后一个 .（句号）字符到字符串结束。 如果 path 的最后一部分没有 . 或 path 的文件名（见 path.basename()）的第一个字符是 .，则返回一个空字符串。
+
+
+## path.isAbsolute(string:pathStr)
+
+如果路径是绝对路径返回 true, 否则返回 false, 如果路径参数是 null 或空字符串返回 false.
+
+
+## path.join(...)
+
+将若干个路径片段连接成为一个完整路径.

@@ -11,6 +11,12 @@
 2. nodejs 模块, 这些模块使用原生 js 写成, 存储于 xboson-node-modules 目录中, 并可以根据需要使用 npm 安装, nodejs 模块要求不能依赖 native, 不能使用高于 es5 的语法.
 3. 另一个服务脚本, 一旦这么做, 这个脚本就不可以通过 http 请求来访问, 只能被 require() 导入使用.
 
+> 一个已经 '发布' 的脚本引用一个 '开发中' 且未 '发布' 过的脚本会返回 null,   
+> 从而可能抛出 `TypeError: Cannot call undefined` 异常.   
+> 因为开发环境和生产环境是独立的脚本上下文.
+
+
+
 ```javascript
 //
 // 导入系统模块

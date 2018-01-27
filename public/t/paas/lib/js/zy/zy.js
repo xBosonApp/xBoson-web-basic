@@ -4140,7 +4140,7 @@ Date.prototype.format = function (str) {
     str = str.replace(RegExp.$1, ((RegExp.$1.length > 1) ? (RegExp.$1.length > 2 ? "/u661f/u671f" : "/u5468") : "") + week[this.getDay() + ""]);
   }
   for (var k in o) {
-    if (new RegExp("(" + k + ")").test(fmt)) {
+    if (new RegExp("(" + k + ")").test(str)) {
       str = str.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
     }
   }
