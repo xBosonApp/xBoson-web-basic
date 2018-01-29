@@ -40,14 +40,34 @@ for (var i in allProcess) {
 ## pm.kill(pid)
 
 * pid: Number 类型, 进程 ID
-* 返回 bool
+* 返回 Number,  
 
-结束进程, 如果成功的结束了运行中的进程返回 true, 如果进程不存在或进程已经结束返回 false.
+结束进程, 如果成功的结束了运行中的进程返回 `pm.KILL_OK`, 
+如果进程不存在返回 `pm.KILL_NO_EXIST`, 进程已经结束返回 `pm.KILL_IS_KILLED`,
+进程未初始化完成不能 kill 则返回 `pm.KILL_NO_READY`.
+
+
+```javascript
+var state = pm.kill(19);
+if (state == pm.KILL_OK) {
+  console.log("Process killed.");
+} else {
+  console.log("fail code:", state);
+}
+```
 
 
 ## pm.stop(pid)
 
 pm.kill 的别名
+
+
+# 常量定义 
+
+## `pm.KILL_OK`  [Number = 0]
+## `pm.KILL_NO_EXIST`  [Number = 1]
+## `pm.KILL_NO_READY`  [Number = 2]
+## `pm.KILL_IS_KILLED`  [Number = 3]
 
 
 # class PublicProcessData

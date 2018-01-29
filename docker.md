@@ -20,6 +20,8 @@ mkdir ~/xboson/config
 wget http://download.oracle.com/otn-pub/java/jdk/8u162-b12/0da788060d494f5095bf8624735fa2f1/jdk-8u162-linux-x64.tar.gz
 ```
 
+(Docker 中国官方镜像加速)[https://www.docker-cn.com/registry-mirror]
+
 
 # docker
 

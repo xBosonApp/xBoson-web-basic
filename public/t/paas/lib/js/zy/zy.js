@@ -164,7 +164,7 @@ zy.fix_api_call = function(uri, prm) {
       delete prm.org;
       delete prm.app;
       delete prm.mod;
-      console.log("fix api call::::::::::::::", uri, prm);
+      zy.log("fix api call::::::::::::::", uri, prm);
     }
   });
   return uri;
