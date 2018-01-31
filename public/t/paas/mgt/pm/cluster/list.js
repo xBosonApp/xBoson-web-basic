@@ -1,9 +1,9 @@
 /**
- * @class ApiProcessManager
+ * @class ClusterManager
  */
-ApiProcessManager = (function() {
+ClusterManager = (function() {
 
-  var PT = ApiProcessManager.prototype;
+  var PT = ClusterManager.prototype;
   var thiz;
 
   /**
@@ -34,7 +34,7 @@ ApiProcessManager = (function() {
    * @class AuthRoleH8
    * @constructor
    */
-  function ApiProcessManager() {
+  function ClusterManager() {
     thiz = this;
     thiz.Init();
     return this;
@@ -48,30 +48,13 @@ ApiProcessManager = (function() {
     thiz.Select();
     thiz.Toolbar();
     thiz.Pagination(1);
-    $('#log_access_log_kill').btnDisable(true);
-    
-    $("#log_access_log_kill").click(function() {
-      zy.g.am.app = "e0ef1b25da204227b305fd40382693e6";
-      zy.g.am.mod = "api_manager";
-      
-      var parm = {
-        pid: currentSelect.processId, 
-        nid: currentSelect.nodeID,
-      };
-      
-      zy.net.get("api/kill", function(ret) {
-        $('#log_access_log_kill').btnDisable(true);
-        zy.ui.msg("结束进程", ret.msg, "i");
-        thiz.UpDt();
-      }, parm);
-    });
-  };
   /*窗口改变时，重新调整画面大小*/
   // function DynamicWidth() {
   //   $('.dataTables_scrollHeadInner').css('width', '100%');
   //   $('.dataTables_scrollBody table').css('width', '100%');
   //   $('.dataTables_scrollHeadInner table').css('width', '100%');
   // }
+  };
   
   function formatUseTime(usetime) {
     if (usetime < 1000) {
@@ -101,23 +84,28 @@ ApiProcessManager = (function() {
   PT.DataTable = function(data) {
     //定义绑定数据结构
     var columns = [
-      {
+      { "data": "osName", title: '操作系统' },
+      { "data": "osArch", title: "系统类型" },
+      { "data": "osVersion", title: "系统版本" },
+      { "data": "javaVendor", title: 'Java 厂商' },
+      { "data": "javaVersion", title: 'Java 版本' },
+      { "data": "nodeID", title: "运算节点 ID" },
+      { title: 'IP 地址',
         "render": function(data, type, row, meta) {
-          return formatUseTime(row.runningTime);
+          return row.ip ? row.ip.join("<br/>") : '';
         }
       },
-      { "data": "api" },
-      { "data": "mod" },
-      { "data": "app" },
-      { "data": "org" },
-      { "data": "callUser", },
-      { "data": "processId" },
-      { "data": "nodeID" },
-      {
+      { "data": "rpcPort", title: 'RPC 端口' },
+      { title: '开机时间',
         "render": function(data, type, row, meta) {
-          return new Date(row.beginAt).toLocaleString();
+          return new Date(row.startAt).toLocaleString();
         }
       },
+      { title: '运行时长',
+        render: function(data, type, row, meta) {
+          return formatUseTime(Date.now() - row.startAt);
+        }
+      }
     ];
     //预设初始化参数
     var options = {
@@ -207,7 +195,7 @@ ApiProcessManager = (function() {
       }
     };
     zy.g.am.app = "e0ef1b25da204227b305fd40382693e6";
-    zy.g.am.mod = "api_manager";
+    zy.g.am.mod = "cluster";
     zy.net.get("api/list", cb, $('#log_access_log_search_form').serialize(), page);
   };
   /**
@@ -227,5 +215,5 @@ ApiProcessManager = (function() {
   PT.Select = function() {
   };
   
-  return ApiProcessManager;
+  return ClusterManager;
 })();

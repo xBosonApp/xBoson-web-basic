@@ -98,6 +98,12 @@ ScheduleList = (function() {
       "render": function(data, type, row, meta) {
         return  zy.cache.cd2name("ZR.0055", row.schedule_cycle);
       }
+    }, {
+      "title": "下次执行时间",
+      "data": "next_run"
+    }, {
+      "title": "节点 ID",
+      "data": "node_id"
     }
     ];
     //预设初始化参数

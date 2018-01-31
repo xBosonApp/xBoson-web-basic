@@ -98,7 +98,9 @@ if (task.state == 2) {
 
 # Class Task
 
-## 属性 Task.state
+## Task.state()
+
+返回任务状态.
 
 * 0: 初始化后, 尚未运行过
 * 1: 运行的任务正在请求 api 但未返回
@@ -123,3 +125,7 @@ if (task.state == 2) {
 
 停止任务, 并删除.
 
+
+## Task.nodeID()
+
+当前任务运行的计算节点 ID.

@@ -37,8 +37,9 @@ for (var i in allProcess) {
 ```
 
 
-## pm.kill(pid)
+## pm.kill(nodid, pid)
 
+* nodeid: String, 集群节点 ID
 * pid: Number 类型, 进程 ID
 * 返回 Number,  
 
@@ -48,7 +49,7 @@ for (var i in allProcess) {
 
 
 ```javascript
-var state = pm.kill(19);
+var state = pm.kill("0", 19);
 if (state == pm.KILL_OK) {
   console.log("Process killed.");
 } else {
@@ -57,7 +58,7 @@ if (state == pm.KILL_OK) {
 ```
 
 
-## pm.stop(pid)
+## pm.stop(nodeid, pid)
 
 pm.kill 的别名
 
@@ -77,6 +78,10 @@ pm.kill 的别名
 ## 属性 processId : Number
 
 进程 ID, 可用于结束进程.
+
+## 属性 nodeID : String
+
+节点 ID, 用于结束进程.
 
 ## 属性 beginAt : Number
 
