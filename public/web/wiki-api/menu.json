@@ -31,6 +31,8 @@
     { "name": "shell", "file": "docs/api-shell.md" },
     { "name": "schedule", "file": "docs/api-schedule.md" },
     { "name": "vm", "file": "docs/api-vm.md" },
-    { "name": "pm", "file": "docs/api-pm.md" }
+    { "name": "pm", "file": "docs/api-pm.md" },
+    { "name": "cluster", "file": "docs/api-cluster.md" },
+    { "name": "fabric", "file": "docs/api-fabric.md" }
   ]}
 ]
