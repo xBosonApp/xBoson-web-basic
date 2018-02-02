@@ -13,4 +13,4 @@ set zipout=P:\[project-backup]\xboson\xboson-db-dump-%DATE:~0,4%.%DATE:~5,2%.%DA
 %zexe% a -t7z %zipout% %sqlout% 
 
 
-pause
+IF ERRORLEVEL 1 pause

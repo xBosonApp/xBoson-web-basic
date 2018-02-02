@@ -106,15 +106,31 @@ function open_doc(data) {
       if (all.length > 1) {
         thiz.wrap("<pre>").css('display', 'inline-block');
         var title = "<div class='firstLine'>" + all[0].toUpperCase() + "</div>";
+        thiz.addClass(aliasName(all[0]));
         all.splice(0, 1);
         thiz.text(all.join('\n'));
         thiz.before(title);
       }
     });
     setPage(data.file);
+    
+    hljs.initHighlighting.called = null;
+    hljs.initHighlighting();
   });
   console.debug("Open", data.file);
 } 
+
+
+function aliasName(name) {
+  name = name.toLowerCase()
+  switch (name) {
+    case 'sh':
+    case 'shell':
+      return 'bash';
+    default:
+      return name;
+  }
+}
 
 
 });

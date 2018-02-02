@@ -6,4 +6,4 @@ set zexe=7z.exe
 del %out%
 %zexe% a  -xr!*\.git\* -x!*\.svn\* -x!*\*.o -x!.git\* -x!*.log -x!*.7z -x!xboson-db-dump.sql  -t7z %out% %src% -r
 
-pause
+IF ERRORLEVEL 1

@@ -78,6 +78,10 @@ pre {
   margin-top: 55px;
 }
 
+.hljs {
+  background-color: #563010 !important;
+}
+
 code {
   padding: 20px 10px;
   font-family: "Courier New", "Lucida Console";
