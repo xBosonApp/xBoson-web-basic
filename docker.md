@@ -15,10 +15,11 @@ mkdir ~/xboson/web
 mkdir ~/xboson/app
 mkdir ~/xboson/java
 mkdir ~/xboson/config
-
-# 下载 java8
-wget http://download.oracle.com/otn-pub/java/jdk/8u162-b12/0da788060d494f5095bf8624735fa2f1/jdk-8u162-linux-x64.tar.gz
 ```
+
+# 下载 jdk8
+http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+
 
 (Docker 中国官方镜像加速)[https://www.docker-cn.com/registry-mirror]
 
@@ -31,7 +32,7 @@ wget http://download.oracle.com/otn-pub/java/jdk/8u162-b12/0da788060d494f5095bf8
 --name 容器名称
 -v 本地目录:容器目录    将本地目录映射到容器中, 如果容器有这个目录会被遮盖.
 -p 本地端口:容器端口    将容器中的端口映射到宿主机.
--e ?
+-e 环境变量设置
 -d 镜像名称:版本
 
 ## ps 列出运行中的容器
@@ -53,6 +54,7 @@ docker run --name mysql-x \
   -v ~/xboson/db:/init-data \
   -p 3306:3306 \
   -e MYSQL_ROOT_PASSWORD=AYMAf3EZ5EQNKDIr3gTkX7IydQ \
+  -e TZ="Asia/Shanghai" \
   -d mysql:5.7.8-rc
 
 #
@@ -90,6 +92,7 @@ docker run --name tomcat-x \
   -v ~/xboson/java:/docker-java-home \
   -v ~/xboson/config:/root/xBoson-config \
   -p 8800:8080 \
+  -e TZ="Asia/Shanghai" \
   -d tomcat:9.0.4-jre8
 ```
 
