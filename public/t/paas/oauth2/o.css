@@ -1,0 +1,18 @@
+/* Create By xBoson System */
+
+section {
+  border-radius: 5px;
+  border: 1px solid #999;
+  padding: 10px;
+  background-color: #f1e9f3;
+}
+
+button {
+  border-radius: 5px;
+  padding: 5px 30px;
+  background-color: #fbfbfb;
+}
+
+#appnm, #usernm {
+  color:blue;
+}

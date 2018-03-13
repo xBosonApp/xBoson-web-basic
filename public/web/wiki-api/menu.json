@@ -6,7 +6,8 @@
     { "name": "返回代码", "file": "docs/codes.md" },
     { "name": "脚本兼容", "file": "docs/compatible.md"},
     { "name": "JavaScript 参考", "file": "docs/javascript-doc.htm"},
-    { "name": "模块", "file":"docs/api.md" }
+    { "name": "模块", "file": "docs/api.md" },
+    { "name": "OAuth 2.0 登录", "file": "docs/oauth2.md" }
   ]},
 
   { "name": "全局模块", "file": "docs/api.md", "sub": [

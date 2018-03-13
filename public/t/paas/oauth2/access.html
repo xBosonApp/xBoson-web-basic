@@ -1,0 +1,42 @@
+<!-- Create By xBoson System -->
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>授权访问</title>
+  <link rel="stylesheet" type="text/css" href="o.css">	
+</head>
+<body>
+  <section>
+    <p>应用程序 <span id='appnm'></span> 
+        请求访问用户 <span id='usernm'></span> 的资源</p>
+    <p>确认无误请点击 <button id='access'>授权</button></p>
+  </section>
+  
+  <script src="../lib/js/libs/jquery-2.0.3.min.js"></script>
+  <script>
+    jQuery(function($) {
+      $("#appnm").text(getUrlParam('appnm'));
+      $("#usernm").text(getUrlParam('usernm'));
+      
+      $("#access").click(function() {
+        var uri   = getUrlParam('uri');
+        var state = getUrlParam('state');
+        var code  = getUrlParam('code');
+        if (uri.indexOf("http://") != 0) {
+          uri = 'http://' + uri;
+        }
+        
+        window.location = uri + '?state=' + encodeURIComponent(state) 
+                        + '&code=' + encodeURIComponent(code);
+      });
+      
+      function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); 
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return decodeURIComponent(r[2]);
+      }
+    });
+  </script>
+</body>
+</html>
