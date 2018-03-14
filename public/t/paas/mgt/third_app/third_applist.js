@@ -215,11 +215,29 @@ MgtThirdAppList = (function() {
             thiz.tab_h1.active(index);
           }
           $('#managed_user_search').click(); // 这里调用 h4 画面查询按钮事件
+          buildTokenList();
         }
       };
       zy.net.loadPage("mgt/third_app/managed_user.html", cb);
     });
   };
+  
+  function buildTokenList() {
+    zy.net.loadPage("mgt/third_app/tokens.html", function(msg) {
+      if (msg) {
+        // 当前选择行数据
+        var data = dt.DataTable().row('.active').data();
+        thiz._g.param.tp_appid = data.tp_appid;
+        thiz._g.param.orgid = data.orgid;
+        var index = thiz.tab_h1.AddTab('h3', '令牌管理', true, msg);
+        if (index) {
+          thiz.tab_h1.active(index);
+        }
+        $('#managed_token_search').click(); // 这里调用 h4 画面查询按钮事件
+      }
+    });
+  }
+  
   /**
    * 分页处理
    * @method Pagination
