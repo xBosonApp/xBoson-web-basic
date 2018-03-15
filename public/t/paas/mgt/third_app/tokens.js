@@ -129,6 +129,7 @@ ManagedToken = (function() {
         }
       }
     });
+    
     //查询
     $('#managed_token_search').click(function() {
       $('#managed_token_form input[name=tp_appid]').val(mgt_app._g.param.tp_appid);
@@ -143,12 +144,7 @@ ManagedToken = (function() {
       }
       thiz.Pagination(1);
     });
-    //添加
-    $('#managed_token_add').click(function() {
-      var rowIdx = dt.DataTable().row('.active').index();
-      var data = dt.DataTable().row('.active').data();
-      zy.net.loadHTML("mgt/third_app/add_uptmanaged_token.html", $("#managed_token_form2"));
-    });
+    
     //删除
     $('#managed_token_delete').click(function() {
       zy.ui.mask('删除确认', '数据删除后将不能再恢复，是否确定删除该数据？', function() {
@@ -157,13 +153,13 @@ ManagedToken = (function() {
         });
       });
     });
-    //导入
+    
     $('#managed_token_v').click(function() {
       zy.net.loadHTML("mgt/third_app/import_user.html", $("#managed_token_form2"), function(){
         tokenState('enable');
       });
     });
-    //导出
+    
     $('#managed_token_x').click(function() {
       zy.net.loadHTML("mgt/third_app/export_user.html", $("#managed_token_form2"), function(){
         tokenState('disable');
