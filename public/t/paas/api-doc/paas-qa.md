@@ -59,7 +59,7 @@ vi /etc/fstab
 
 最后一行追加以下后保存
 ```
-//192.168.7.19/zhirong/file/ /usr/local/src_share_path/ cifs defaults,auto,username=zhirong,password=zhirong
+//192.168.7.19/base/file/ /usr/local/src_share_path/ cifs defaults,auto,username=name,password=ps
 ```
 
 重启或执行以下命令
@@ -201,5 +201,3 @@ yum -y install libX11-devel.x86_64 libxml2-devel libxslt-devel \
 
 `scp key root@192.168.1.110:/home/plat/apache-tomcat-7.0.69/webapps/ds/WEB-INF/classes/`
 `scp pc  root@192.168.1.110:/home/plat/apache-tomcat-7.0.69/webapps/ds/WEB-INF/classes/`
-
-    
