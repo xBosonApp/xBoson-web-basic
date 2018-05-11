@@ -10,7 +10,7 @@ sys.addRetData(process.path, "path");
 sys.setRetData(process.code, process.output, "path");
 ```
 
-# 注意
+## 注意
 
 1. 不应该在脚本中有任何等待用户输入的操作.
 3. 不应该在脚本中输出过多内容.
@@ -46,7 +46,7 @@ var shell = require("shell");
 ## execute(string:path, string[]:args)
 
 执行外壳脚本目录中的脚本文件, 可以没有扩展名, 根据不同的操作系统附加不同的扩展名,  
-windows 平台使用 '.cmd' 扩展名, linux 平台使用 '.sh' 扩展名;  
+windows 平台使用 '.cmd'/'.bat'/'.exe' 扩展名, linux 平台使用 '.sh' 扩展名;  
 args 为脚本接收的参数数组;  
 返回一个结果集 Process de 的实例.
 

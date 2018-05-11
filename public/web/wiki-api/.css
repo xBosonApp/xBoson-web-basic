@@ -15,7 +15,7 @@ body, window {
 #menu {
   min-width: 270px;
   background: rgb(226, 226, 226);
-  margin-left: 80px;
+  margin-left: 0px;
   padding: 100px 70px;
   border-left: 40px solid #575f9e;
   overflow-y: auto;
@@ -63,6 +63,8 @@ h2, h3, h4, h5, h6 {
 
 h1 {
   margin: 120px 0;
+  border-right: 200px solid #7d6e1f;
+  border-top: 1px solid #7d6e1f;
 }
 
 h2 {
