@@ -33,7 +33,11 @@ var schedule = require("schedule");
   "run_times" : "运行次数",
   "task_api" : "URL",
   "start_time" : "开始时间",
-  "run_end_time" : "结束时间"
+  "run_end_time" : "结束时间",
+  
+  "inner_api" : "[1:0] 1为内部 api 调用",
+  "userid" : "内部调用需要, 用户",
+  "orgid" : "内部调用需要, 机构"
 }
 ```
 

@@ -1,0 +1,1 @@
+@echo %PLAT_JS_ENV%

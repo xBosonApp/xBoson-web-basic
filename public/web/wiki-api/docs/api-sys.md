@@ -169,8 +169,8 @@ for (var i in orgList) {
   var row = orgList[i];
   var orgId = row.orgid;
   var orgName = row.orgnm;
-  var orgType = row.org_type;  // "v":开发商, "t":租户										
-}																												
+  var orgType = row.org_type;  // "v":开发商, "t":租户
+}
 ```
 
 
