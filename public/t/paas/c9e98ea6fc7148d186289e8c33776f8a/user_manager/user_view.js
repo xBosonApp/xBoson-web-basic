@@ -56,6 +56,7 @@ User_view = (function() {
     /* thiz.dialogInit();*/
     $('#user_view_edit').btnDisable(true);
     $('#user_view_his').btnDisable(true);
+    $('#user_reset_pw').btnDisable(true);
     //$('#user_view_inituserid').btnDisable(true);
   };
   /*窗口改变时，重新调整画面大小*/
@@ -152,12 +153,14 @@ User_view = (function() {
         $(this).removeClass('active');
         $('#user_view_edit').btnDisable(true);
         $('#user_view_his').btnDisable(true);
+        $('#user_reset_pw').btnDisable(true);
         //$('#user_view_inituserid').btnDisable(true);
       } else {
         dt.DataTable().$('tr.active').removeClass('active');
         $(this).addClass('active');
         $('#user_view_edit').btnDisable(false);
         $('#user_view_his').btnDisable(false);
+        $('#user_reset_pw').btnDisable(false);
         //$('#user_view_inituserid').btnDisable(false);
       }
     });
@@ -173,6 +176,7 @@ User_view = (function() {
       }
       $('#user_view_edit').btnDisable(true);
       $('#user_view_his').btnDisable(true);
+      $('#user_reset_pw').btnDisable(true);
       $('#user_view_search').button('loading');
       thiz.Pagination(1);
     });
@@ -186,10 +190,12 @@ User_view = (function() {
       // $('#user_view_search').button('loading');
       // thiz.Pagination(1);
     });
+    
     //添加
     $('#user_view_add').click(function() {
       zy.net.loadHTML("c9e98ea6fc7148d186289e8c33776f8a/user_manager/user_add.html", $("#user_view_form2"));
     });
+    
     //修改
     $('#user_view_edit').click(function() {
       var rowIdx = dt.DataTable().row('.active').index();
@@ -198,6 +204,7 @@ User_view = (function() {
       thiz._g.param.pid = data.pid;
       zy.net.loadHTML("c9e98ea6fc7148d186289e8c33776f8a/user_manager/user_manager.html", $("#user_view_form2"));
     });
+    
     $('#user_view_his').click(function() {
       var rowIdx = dt.DataTable().row('.active').index();
       Console.log("当前选择行 = " + rowIdx);
@@ -205,12 +212,39 @@ User_view = (function() {
       thiz._g.param.userid = data.userid;
       zy.net.loadHTML("c9e98ea6fc7148d186289e8c33776f8a/user_manager/log_history.html", $("#user_view_form2"));
     });
+    
     //绑定用户
     $('#user_view_inituserid').click(function() {
       zy.net.loadHTML("c9e98ea6fc7148d186289e8c33776f8a/user_manager/user_init.html", $("#user_view_form2"));
     });
+    
     $('#user_view_ug').on('click', function() {
       zy.net.loadHTML("c9e98ea6fc7148d186289e8c33776f8a/user_manager/user_group.html", $("#user_view_form2"));
+    });
+    
+    // 重置密码
+    $('#user_reset_pw').on('click', function() {
+      var data = dt.DataTable().row('.active').data();
+      var conditions = { userid : data.userid };
+      if (! confirm("点击确定按钮, 会重置用户 "+ data.userid +' 的密码')) {
+        return;
+      }
+      zy.g.am.app = 'ZYAPP_LOGIN';
+      zy.g.am.mod = 'ZYMODULE_REG';
+      zy.net.get("api/rstpw", _cb, conditions);
+      
+      function _cb(msg) {
+        var dlg = $("<dialog style='width:30%'></dialog>");
+        dlg.appendTo(document.body);
+        var txt = ["<span style='float:right'>[ESC 关闭]</span>", msg.msg];
+        if (msg.code == 0) {
+          txt.push("<hr/>用户名: ", msg.userid);
+          txt.push("<br/>新密码: ", msg.passwd);
+        }
+        dlg[0].showModal();
+        dlg.html(txt.join(""));
+        console.log(msg)
+      }
     });
   };
 
@@ -218,6 +252,7 @@ User_view = (function() {
     conditions = $('#user_view_form').serialize();
     $('#user_view_edit').btnDisable(true);
     $('#user_view_his').btnDisable(true);
+    $('#user_reset_pw').btnDisable(true);
     $('#user_view_search').button('loading');
     thiz.Pagination(1);
   };
@@ -252,6 +287,7 @@ User_view = (function() {
       if (msg) {
         $('#user_view_edit').btnDisable(true);
         $('#user_view_his').btnDisable(true);
+        $('#user_reset_pw').btnDisable(true);
         //$('#user_view_inituserid').btnDisable(true);
         thiz._g.count = msg.count; //获取总记录数
         thiz._g.data = msg.result;
