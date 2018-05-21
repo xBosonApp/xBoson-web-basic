@@ -185,3 +185,23 @@ content_id 有效并发出通知返回 true.
 ## se.sendUITemplateReloadTag()
 
 当 html 模板标签库被修改后, 调用该方法使模板引擎重新加载标签库.
+
+
+## se.reloadUserRole(string[]:ids)
+
+[未实现] 更新已登录用户的角色.
+
+
+## se.reloadUserGroupRole(string[]:ids)
+
+[未实现] 更新已登录用户的角色.
+
+
+## se.reloadUserInfo(string[]:ids)
+
+[未实现] 更新已登录用户的角色.
+
+
+## se.reloadClientRole(string[]:ids)
+
+[未实现] 更新已登录用户的角色.

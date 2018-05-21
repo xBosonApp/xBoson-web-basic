@@ -176,17 +176,20 @@
   }
   
   function formPost(form, callback) {
+    var apisec = 'app/a297dfacd7a84eab9656675f61750078/ZYAPP_IDE/ZYMODULE_UI_IDE/upuserlogo'
     form.ajaxSubmit({
-      url: 'http://' + location.host + '/api/upuserlogo' + '?' + zy.net.parseParam(zy.g.comm),
+      url: zy.g.host.api + apisec  + '?' + zy.net.parseParam(zy.g.comm),
       type: "post",
       async: false,
       timeout: 10000,
       cache: false,
       dataType: "json",
       success: function(msg) {
-        if (msg.ret == 0) {
-          var path = msg.result.path;
-          
+        if (msg.code == 0) {
+          //var path = msg.result.path;
+          closeModal();
+          zy.ui.msg("成功", msg.msg, 'i');
+          /*
           zy.extend.get({
             app:'ZYAPP_LOGIN',
             mod:'personinfo',
@@ -195,9 +198,10 @@
             $('#imglogo').attr('src', path);
             $('#show-shortcut img').attr('src',path);
             closeModal();
-          },{image_path:path})
+          },{image_path:path})*/
         } else {
           Console.log("上传失败 = " + JSON.stringify(msg));
+          zy.ui.msg("上传失败", msg.msg, 'e');
         }
       }
     });

@@ -98,7 +98,7 @@ var updatedcount = sql.updateBatch(sqlIns, paramIns, "0");
 
 ```javascript
 // 执行后返回
-[ 																									
+[
   { "ColumnLabel" : 列的别名,
     "ColumnName" : 列名,
     "ColumnTypeName" : 列的SQL类型名称,
@@ -107,7 +107,7 @@ var updatedcount = sql.updateBatch(sqlIns, paramIns, "0");
     "TableName" : 列所属的表名,
     "SchemaName" : 列所属的Schema名,
     "CatalogName" : 列所属的Catalog名,
-  }											
+  }
   ...更多
 ]	
 ```

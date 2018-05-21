@@ -90,7 +90,7 @@ if (!attr) {
 如果目录已经存在会立即返回, 如果路径是文件会抛出异常.
 
 
-## fs.writeFile(string:path, byte[]:content)
+## fs.writeFile(string:path, {byte[] | Buffer}:content)
 
 > 只在块模式有效
 

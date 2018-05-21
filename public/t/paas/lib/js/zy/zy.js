@@ -42,7 +42,7 @@ var zy = {
    * @return {String}
    */
   toString: function () {
-    return '{zy} version: 2.0.1';
+    return '{zy} version: 2.2.1';
   },
   /** 控制台log输出 */
   debug: false,

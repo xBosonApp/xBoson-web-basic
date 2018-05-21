@@ -87,6 +87,46 @@ POST Body 中的数据将被解析成 js 对象并绑定在 requestJson 属性�
   * allowNull 允许空参数; 默认 false.
 
 
+## sys.request.body([int: limit])
+
+以 Buffer 对象的形式返回 http body 的二进制数据.  
+如果内容长度超过限制抛出异常; 如果没有 body 数据返回 null;
+
+参数 :
+
+  * limit body 字节长度限制.
+  * 返回 Buffer 对象.
+
+ 
+## sys.request.contentLength()
+
+返回 POST 内容字节长度.
+
+
+## sys.request.contentType()
+
+返回 HTTP 头域 'Content-Type' 的值.
+
+
+## sys.request.multipart()
+
+返回解析后的 BODY 数据, 此时 `Content-type` 为 `multipart/form-data`.
+body 长度为 0 会返回 null, 出现错误会抛出异常.
+
+返回数据结构:
+```json
+[{
+  /* 头域中的属性依请求不同而变 */
+  header: {
+    filename: 'string, 文件字段一定有这个头域'
+    name: 'string, 参数字段有这个头域'
+  }
+  content: Buffer /* 可以是文件内容或参数值 */
+}, 
+{.../*数组中元素为文件或参数*/}]
+```
+
+
 # 可用 API
 
 ## sys.addRetData(object:Value [, string:KeyName])
