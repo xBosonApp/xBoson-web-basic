@@ -79,7 +79,7 @@ var datadicdD_index = (function(zy, $) {
   function init_t2(){
     var index_mod = $("#mdms_datadictD_index_mod");
     var isManager = true;
-    isManager = index_mod.attr("data")=="available";
+    //isManager = index_mod.attr("data")=="available";
     if(!isManager){
       $("#mdms_datadictD_zydm_container .btn-group").html("");
     }
@@ -1117,5 +1117,3 @@ var datadicdD_index = (function(zy, $) {
   
   return datadicdD_index;
 })(zy, jQuery);
-
-

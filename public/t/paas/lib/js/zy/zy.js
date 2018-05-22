@@ -920,7 +920,7 @@ zy.net = {
    */
   postForm: function (uri, form, callback, error) {
     var prm = zy.tool.initParams(zy.g.comm, zy.g.am);
-    prm = zy.fix_jsonp_parm(prm)// add by J.ym
+    //prm = zy.fix_jsonp_parm(prm)// add by J.ym; not jsonp
     zy.g.am = {};
     //设置Url及参数
     var link = zy.g.host.api + uri + "?" + zy.net.parseParam(prm);

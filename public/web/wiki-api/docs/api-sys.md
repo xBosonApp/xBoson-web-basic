@@ -166,11 +166,13 @@ sys.setRetData(0, "OK", "list1");
 
 ## sys.getUserPID([string...:userId])
 
-获取用户的PID, userID 是用户名, pid 是用户对应的唯一 UUID;  无参调用数返回当前用户 pid; 一个参数调用返回指定用户 pid; 多个参数调用返回 map, 键是 userID, 值是对应的 pid;
+获取用户的PID, userID 是用户名, pid 是用户对应的唯一 UUID;  
+无参调用数返回当前用户 pid; 一个参数调用返回指定用户 pid;   
+多个参数调用返回 map, 键是 userID, 值是对应的 pid;
 
 参数:
 
-* userId: 动态参数, 或数组.
+* userId: 动态参数, 或数组, 该参数决定返回数据类型.
 
 ```javascript
 var currentPId = sys.getUserPID();
@@ -179,9 +181,19 @@ var pid1 = pids["userid1"];
 ```
 
 
+## sys.getUserIdByPID([string...:userPID])
+
+通过用户的 PID 获取用户的 id; 返回 map, key 是 pid, value 是 id.
+
+参数:
+
+* userPID: 用户 PID 的数组.
+
+
 ## sys.getUserAdminFlag([string:userId, string:orgId])
 
-当前登录用户在当前机构的管理员标记，1：平台管理员 3：租户管理员 5：开发商管理员
+当前登录用户在当前机构的管理员标记，
+1：平台管理员 3：租户管理员 5：开发商管理员
 
 参数:
 
@@ -258,7 +270,7 @@ for (var i in orgList) {
 返回生成的随机字符串, 长度小于 Length, 字符串中包含所有可见范围内的 ASCII 字符.
 
 
-## sys.pinyinFirstLetter(string:HZ)
+## sys.pinyinFirstLetter(string:HZ), sys.getPinyinFirstLetter(string:HZ)
 
 返回 HZ 字符串中, 中文字符的首字母.
 
@@ -487,9 +499,9 @@ associate 可以设置多个属性, 他们是 '并且' 的关系.
 
 ## sys.transformTreeData(array:tree, string:parentKey, string:childKey, string:key_name)
 
-将平行的 list 数据转换为深层 tree 格式; 数据对象根据属性 child_key 来寻找含有
-属性 parent_key 的数据对象, 并将自身附加到属性名 keyname 的数组上;
-如果数据对象 parent_key 为 null, 则认为是根节点;
+将平行的 list 数据转换为深层 tree 格式; 数据对象根据属性 `child_key` 来寻找含有
+属性 `parent_key` 的数据对象, 并将自身附加到属性名 `keyname` 的数组上;
+如果数据对象 `parent_key` 为 null, 则认为是根节点;
 支持无限深层的 tree 数据格式.
 
 参数:
@@ -500,7 +512,7 @@ associate 可以设置多个属性, 他们是 '并且' 的关系.
 * key_name 生成的子节点数组
 
 
-## sys.getRelatedTreeData(object:all, object:filter, string:parent_attr_, string:child_attr_)
+## sys.getRelatedTreeData(object:all, object:filter, string:parentAttr, string:childAttr)
 
 禁止使用, 该算法有缺陷.
 
@@ -542,6 +554,6 @@ sys.format("hello {0}", ['xBoson'])
 返回加密后的密码, password 已经 md5 处理.
 
 
-## sys.charAt(...), sys.indexOf(...), sys.size(...), sys.startWith(..), sys.endWith(...), sys.length(..), sys.subStringTo(..), sys.subString(..), sys.split(..), sys.contain(..), sys.toUpperCase(..), sys.toLowerCase(..), sys.replace(..), sys.trim(..), sys.trunc(..)
+## sys.charAt(...), sys.indexOf(...), sys.size(...), sys.startWith(..), sys.endWith(...), sys.length(..), sys.subStringTo(..), sys.subString(..), sys.split(..), sys.contain(..), sys.toUpperCase(..), sys.toLowerCase(..), sys.replace(..), sys.trim(..), sys.trunc(..), sys.httpGet(..)
 
 这些方法不要再调用, 使用 js 原生方法替代.

@@ -1,4 +1,4 @@
- md_mmD_index = (function(zy, $) {
+md_mmD_index = (function(zy, $) {
   
   var PT = md_mmD_index.prototype;
   var thiz;
@@ -393,6 +393,7 @@
                 did: "00000000000000000000000000000000",
                 en: optdate==="DE"?"sys_mdm003":"sys_md_mm002",
                 file_name: _file_name,
+                dir_name: msg[0].dir_name,
                 delimiter: InportModal.find("[name=delimiter]").val(),
                 quoteChar: InportModal.find("[name=quoteChar]").val(),
                 escape: InportModal.find("[name=escape]").val(),
@@ -491,7 +492,8 @@
                   
                   zy.g.am.app = 'c879dcc94d204d96a98a34e0b7d75676';
                   zy.g.am.mod = 'import_data';
-                  zy.net.postForm("upload/upload_file", InportModal.find("#filemsg"), cb,null,function(mm){
+                  // jym fix 2018.5.22 | upload/upload_file
+                  zy.net.postForm("files", InportModal.find("#filemsg"), cb,null,function(mm){
                     zy.ui.msg("提示信息",mm.msg,"w")
                   })
     
