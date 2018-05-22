@@ -29,7 +29,7 @@ zyMenu = (function() {
    * 初始化
    * @method init
    */
-  PT.Init = function() {
+  PT.Init = function(_success) {
     thiz.destroy();
     var callback = function(msg) {
       if (msg) {
@@ -64,6 +64,7 @@ zyMenu = (function() {
           window.location.hash = "emptyhome.html";
           zy.ui.msg('错误', '菜单项不存在', 'e');
         }
+        if (typeof _success == 'function') _success();
       }
     };
 

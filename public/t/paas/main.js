@@ -71,9 +71,11 @@ index = (function() {
             });
             if (matchedOrgID.length > 0) {
               zy.g.comm.org = lastSelectedOrgInCache;
-              initIndex();
-              initChangeOrg(msg.result);
-              getUserInfo();
+              // edit JYM; 利用回调调整加载顺序
+              getUserInfo(function() {
+                initIndex();
+                initChangeOrg(msg.result);  
+              });
               return;
             }
           }
@@ -86,7 +88,7 @@ index = (function() {
   }
 
   //获取用户信息
-  function getUserInfo() {
+  function getUserInfo(_success) {
     getData({
       api : 'getuserinfo',
       app : 'ZYAPP_LOGIN',
@@ -96,21 +98,19 @@ index = (function() {
       $('#login_userid').html(msg.result[0].name);
       if(msg.result[0].image_path === '') return false;
       $('#show-shortcut img').attr('src',msg.result[0].image_path);
+      if (typeof _success == 'function') _success();
     });
   }
 
   //初始化主页
-  function initIndex() {
-
+  function initIndex(_success) {
      //初始化菜单
     zm = new zyMenu("#left-panel nav");
-    zm.Init();
-
+    zm.Init(_success);
 //    var socket = io.connect('http://zr-i.com:8090');
 //    socket.on(zy.g.comm.org + '2', function(msg) {
 //      $.fn.alarm.init(msg.datas);
 //    });
-
   }
 
   //机构切换

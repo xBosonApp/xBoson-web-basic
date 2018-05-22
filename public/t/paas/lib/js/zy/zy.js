@@ -183,12 +183,15 @@ zy.fix_api_name = function(apiname) {
 zy.setup_debug = function() {
   zy.debug = 1;
   zy.g.comm.s = 'd';
-  console.log("开启调试模式, UI 文件从 /t 下获取, API 加调试参数.");
+  var debug_msg = "开启调试模式, UI 文件从 /t 下获取, API 加调试参数.";
+  console.log(debug_msg);
+  zy.ui.msg("开发提示", debug_msg, 's');
+
 };
 
 // 修正预览画面 url 不正确
 zy.fix_preview_url = function(url) {
-  if (zy.isXBosonSystem) {
+  if (zy.isXBosonSystem && location.pathname.indexOf("saas") < 0) {
     var sp = url.split('/');
     // 删除多余的路径 by J.ym
     sp.splice(1, 1); 
@@ -234,6 +237,13 @@ zy.tool = {
       var u ='http://' + location.host+'/ui/saas/'+zy.g.comm.org+'/';
     // return u;
     return '';
+  },
+  xpath:function(){
+    if(location.href.indexOf(location.host + '/t'>-1))
+      var u ='http://' + zy.g.host.ui + '/t/saas/'+zy.g.comm.org+'/';
+    else
+      var u ='http://' + zy.g.host.ui +'/ui/saas/'+zy.g.comm.org+'/';
+    return u;
   },
   /**
    * 初始化参数：JSON对象合并 defaults、options 的成员属性
@@ -1139,7 +1149,7 @@ zy.net = {
     } else {
       _u += '/saas/' + zy.g.comm.org + '/' + url;
     }
-    zy.log('loadHTML : _u == '+_u);
+    zy.log('loadHTMLs : _u == '+_u);
 
     $.ajax({
       type: "get",
@@ -1156,7 +1166,7 @@ zy.net = {
 		},*/
       success: function (data) {
         // cog replaced here...
-        zy.log("loadHTML: success "+_u);
+        zy.log("loadHTMLs: success "+_u);
         var htm = flg?data:zy.net.extractCss(data);
         container.css({
           opacity : '0.0'
@@ -1227,7 +1237,7 @@ zy.net = {
       async: false,
       success: function (data) {
         // cog replaced here...
-        zy.log("loadPage: success " + _u);
+        zy.log("loadPages: success " + _u);
         if (callback)
           callback(flg?data:zy.net.extractCss(data));
       },

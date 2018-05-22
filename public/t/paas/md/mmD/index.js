@@ -265,14 +265,22 @@ md_mmD_index = (function(zy, $) {
             for(i=0;i<length;i++){
               var en=$(input[i]).attr("en");
               var option=$(select[i]).children();
+              var finden = false;
+              
               $.each(option,function(i,v){
                 $(v).removeAttr("selected");
-                if(en==$(v).val()){
+                if(en == $(v).val()){
                   $(v).attr("selected","");
+                  finden = true;
                 }
-               
-              })
-          }
+              });
+              
+              if (! finden) {
+                $(select[i])
+                  .find("[value='[[Empty]]']")
+                  .attr("selected", "");
+              }
+            }
           }
           
           function update(){
@@ -441,10 +449,11 @@ md_mmD_index = (function(zy, $) {
                 var _mapping = {};
                 $.each(input, function (i, v) {
                   $.each(select, function (ii, vv) {
-                    if (i == ii)
-                      _mapping[$(v).attr("en")] = $(vv).val()
-                  })
-                })
+                    if (i == ii) {
+                      _mapping[$(v).attr("en")] = $(vv).val();
+                    }
+                  });
+                });
                 return _mapping
               }
     
