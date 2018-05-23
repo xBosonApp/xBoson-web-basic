@@ -59,9 +59,9 @@ var zy = {
           hasErr = true;
         }
       }
-      if (hasErr) {
-        args.push('['+ new Error("stack").stack +']');
-      }
+      // if (hasErr) {
+      //   args.push('\n['+ new Error("stack").stack +']');
+      // }
       console.log.apply(console, args);
     }
   },
@@ -811,7 +811,7 @@ zy.net = {
    * @param {Number} pagenum 页码;
    * @param {Function} error 服务器端传来错误信息时使用 error 回调函数处理错误，将返回出错 JSON 数据
    */
-  post: function (uri, callback, param, pagenum, error) {
+  post: function (uri, callback, param, pagenum, error, _outError) {
     var isJsonSubmit = false;
     if (zy.g.am.json===true) {
       isJsonSubmit = true;
@@ -863,9 +863,10 @@ zy.net = {
       };
       $.ajax(settingJson);
     } else {
+      var out = _outError || new Error();
       $.post(link, param, function (msg) {
         var _msg = zy.tool.fromJson(msg);
-        zy.net.errorHandler(_msg, callback, error);
+        zy.net.errorHandler(_msg, callback, error, out);
       });
     }
   },
@@ -1121,7 +1122,11 @@ zy.net = {
         }, 300);
         setTimeout(function() {
           if (callback) {
-            callback(data);
+            try {
+              callback(data);
+            } catch(e) {
+              console.log('Load page:', _u, e);
+            }
           }
         }, 300);
       },
@@ -1175,7 +1180,11 @@ zy.net = {
         }, 300);
         setTimeout(function() {
           if (callback) {
-            callback(htm);
+            try {
+              callback(htm);
+            } catch(e) {
+              console.log('Load page:', _u, e);
+            }
           }
         }, 300);
       },
@@ -1201,9 +1210,14 @@ zy.net = {
       async: false,
       success: function (data) {
         // cog replaced here...
-        zy.log("loadPage: success " + url);
-        if (callback)
-          callback(data);
+        if (callback) {
+          try {
+              callback(data);
+              zy.log("loadPage: success " + url);
+          } catch(e) {
+            console.log('Load page:', url, e);
+          }
+        }
       },
       error: function (xhr, ajaxOptions, thrownError) {
         zy.ui.msg('找不到网页：', '<h4 style="margin-top:10px; display:block; text-align:left"><i class="fa fa-warning txt-color-orangeDark"></i> Error 404! 找不到网页。<br>' + url + '</h4>', 'e');
@@ -1237,9 +1251,14 @@ zy.net = {
       async: false,
       success: function (data) {
         // cog replaced here...
-        zy.log("loadPages: success " + _u);
-        if (callback)
-          callback(flg?data:zy.net.extractCss(data));
+        if (callback) {
+          try {
+            callback(flg?data:zy.net.extractCss(data));
+            zy.log("loadPages: success " + _u);
+          } catch(e) {
+            console.log("Load page:", _u, e);
+          }
+        }
       },
       error: function (xhr, ajaxOptions, thrownError) {
         zy.ui.msg('找不到网页：', '<h4 style="margin-top:10px; display:block; text-align:left"><i class="fa fa-warning txt-color-orangeDark"></i> Error 404! 找不到网页。<br>' + url + '</h4>', 'e');
@@ -1280,7 +1299,11 @@ zy.net = {
     } else if (callback) { // changed else to else if(callback)
       zy.log("zy.net.loadScript().callback(): " + url + " JS 文件已经加载!");
       //execute function
-      callback();
+      try {
+        callback();
+      } catch(e) {
+        console.log("Load script:", url, e);
+      }
     }
   },
   /**
@@ -1301,8 +1324,9 @@ zy.net = {
    * @param {Function} success 无错误时的回调函数，该回调将获得处理过后的 JSON 数据
    * @param {Boolean} error 服务器端传来错误信息时使用 error 回调函数处理错误，将返回出错 JSON 数据，
    *                      undefined为使用系统弹窗显示错误，然后再调用error回调处理
+   * @param outterError 提供一个 Error 对象用于提取堆栈, 解决异步中找不到源文件的问题
    */
-  errorHandler: function (msg, success, error) {
+  errorHandler: function (msg, success, error, outterError) {
     try {
       msg = zy.fix_xboson_data(msg);
       var ret = msg.ret;
@@ -1325,16 +1349,9 @@ zy.net = {
         }
       }
     } catch (e) {
-      if (typeof e.stack != 'undefined') {
-        zy.log("Response.json.Error.stack: " + e.stack + "\r\n" + e.message);
-        if(zy.debug){
-          zy.ui.msg("Response.json.Error: ", e.stack + "\r\n" + e.message, "e");
-        }
-      } else {
-        zy.log("Response.json.Error.message: " + e.message);
-        if(zy.debug){
-          zy.ui.msg("Response.json.Error.message: ", e.message, "e");
-        }
+      zy.log("Response.Error: ", e, "\nOutter Stack:", outterError && outterError.stack);
+      if(zy.debug){
+        zy.ui.msg("Response.Error.message: ", e.message, "e");
       }
     }
   },

@@ -439,6 +439,7 @@ bm_mddm01 = (function () {
         mod:'mddm_view',
         apinm:'getviewmodalupd'
       },function(msg){
+      try {
         if(msg && msg.result){
           if(msg.result[0].editingtype=='1'){
             pt.v.setup.hide();
@@ -484,7 +485,10 @@ bm_mddm01 = (function () {
 
           // 修改场合：更新画面
           fn.update(true);
-        }
+        } 
+      } catch(e) {
+        console.log('bm_mddm01.js', e);
+      }
       },{'typecd':pt.opts.node.typecd});
     },
     /** 更新画面 */
@@ -494,7 +498,7 @@ bm_mddm01 = (function () {
         // 修改视图模型场合
         // 设置该视图模型对应的数据源select2赋值[did]
         pt.v.did.select2('val', pt.m.did.val);
-        pt.m.did.name = pt.v.did.select2('data').name;
+        pt.m.did.name = pt.v.did.select2('data') && pt.v.did.select2('data').name;
         // 是否手动编辑select2
         pt.v.editingtype.select2('val', pt.m.data.editingtype);
         //是否为图表专用
