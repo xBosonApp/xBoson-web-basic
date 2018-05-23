@@ -156,6 +156,7 @@ index = (function() {
         $('#divMiniIcons').empty();
         // 重新加载加载菜单
         zm.Init();
+        zy.g.comm.org = selectedOrg;
       });
     }
   }
