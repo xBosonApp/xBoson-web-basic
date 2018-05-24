@@ -834,6 +834,7 @@ zy.net = {
 
     if (isJsonSubmit) {
       param = zy.fix_jsonp_parm(param)// add by J.ym
+      link += "&$format=jsonp";
       var settingJson = {
         url: link,
         type: 'POST',
@@ -2907,8 +2908,93 @@ zy.ui.dataTable = {
   "destroy": true,
   "scrollY": false,
   "scrollCollapse": false,
-  "scrollX": true
+  "scrollX": true,
+  "initComplete": dataTableXScrollFix
 };
+//
+// by JYM. 当水平滚动过长, 显示左右移动把手
+//
+function dataTableXScrollFix(settings, json) {
+  var thiz       = $(this);
+  var scrollDiv  = thiz.parents(".dataTables_scroll");
+  var scrollBody = scrollDiv.find('.dataTables_scrollBody');
+  
+  if (thiz.width()-10 < scrollDiv.width())
+    return;
+  if (thiz.height() < window.innerHeight)
+    return;
+  
+  var x1=0, x2=0, y=-1000;
+  var moveScrollStep = 100;
+  var opacityOnTable = '0.3';
+  var left  = $("<div class='fa fa-chevron-left'></div>");
+  var right = $("<div class='fa fa-chevron-right'></div>");
+  var style = { "position": "absolute",
+    "background-color": "#ccc", 'border-radius': '5px',
+    "padding": "50px 5px", 'opacity': opacityOnTable, 'cursor': 'pointer',
+    'font-size': '12px'};
+    
+  if (scrollDiv.length < 1) scrollDiv = thiz;
+  left.css(style).appendTo(scrollDiv);
+  right.css(style).appendTo(scrollDiv);
+  
+  onresize();
+  
+  this.find("th").each(function() {
+    // 取所有列宽度的 1.5 倍的平均值作为滑动步长
+    moveScrollStep = (moveScrollStep + $(this).width() * 1.5) / 2;
+  });
+  
+  thiz.mousemove(function(e) {
+    y = e.pageY - 50 - 13;
+    left.offset({left: x1, top: y});
+    right.offset({left: x2, top: y});
+  });
+  
+  var inButton = false;
+  thiz.mouseenter(function() {
+    inButton = true;
+    left.show();
+    right.show();
+  }).mouseleave(function() {
+    inButton = false;
+    setTimeout(function() {
+      if (inButton) return;
+      left.hide();
+      right.hide();
+    }, 100);
+  });
+  
+  left.click(function() {
+    scrollBody.animate({scrollLeft: 
+        scrollBody.scrollLeft() - moveScrollStep}, 100);
+  }).mouseenter(getFocus).mouseleave(lostFocus);
+  
+  right.click(function() {
+    scrollBody.animate({scrollLeft: 
+        scrollBody.scrollLeft() + moveScrollStep}, 100);
+  }).mouseenter(getFocus).mouseleave(lostFocus);
+  
+  $(window).resize(onresize);
+  
+  function onresize() {
+    var pos = scrollDiv.offset();
+    x1 = pos.left;
+    x2 = x1 + scrollDiv.width() - left.outerWidth();
+    left.offset({left: x1, top: y});
+    right.offset({left: x2, top: y});
+  }
+  
+  function getFocus() {
+    inButton = true;
+    $(this).animate({ 'opacity':  0.8, 'border-width': 1 });
+  }
+  
+  function lostFocus() {
+    inButton = false;
+    $(this).animate({ 'opacity': opacityOnTable, 'border-width': 0 });
+  }
+}
 /** =====================Select2 */
 zy.ui.Select2 = {
   /**

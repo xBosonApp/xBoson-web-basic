@@ -447,16 +447,22 @@ rbac_role_mgt01 = (function () {
         menus: menus,
         pages: pages
       };
-      zy.net.post('api/saverolemenu', function(msg){
-        if (msg) {
-          // 同步check状态
-          setCheckedNodes(thiz._g.currentMenuTreeOjb.getNodes());
-          thiz._g.currentMenuData = _.cloneDeep(thiz._g.currentMenuTreeOjb.getNodes());
-          clearCache();
-          setMenuTreeButton();
-          zy.ui.msg('提示信息：', '保存成功！', 's');
-        }
-      }, submitData, null, null);
+      try {
+        zy.net.post('api/saverolemenu', function(msg){
+          if (msg && msg.code == 0) {
+            // 同步check状态
+            setCheckedNodes(thiz._g.currentMenuTreeOjb.getNodes());
+            thiz._g.currentMenuData = _.cloneDeep(thiz._g.currentMenuTreeOjb.getNodes());
+            clearCache();
+            setMenuTreeButton();
+            zy.ui.msg('提示信息：', msg.msg || '保存成功！', 's');
+          } else {
+            zy.ui.msg("错误", (msg && msg.msg) || '未知的错误', "e");
+          }
+        }, submitData, null, null);
+      } catch(e) {
+        console.log('Fail', e, e.XMLHttpRequest && e.XMLHttpRequest.responseText);
+      }
     }
   });
 
