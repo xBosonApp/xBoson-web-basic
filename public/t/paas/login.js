@@ -1,4 +1,4 @@
- /**
+/**
  * 数据字典类型
  * @class Login
  */
@@ -387,16 +387,9 @@ Login = (function() {
                   var matchedOrgID = $.grep(thiz._g.orgList, function(n, i) {
                     return n.orgid === lastSelectedOrgInCache;
                   });
-                  if (matchedOrgID.length > 0) {
-                    // 跳转到主页面
-                    zy.net.loadIndex();
-                  } else {
-                    showOrgSelection();
-                  }
-                } else {
-                  // 机构选择
-                  showOrgSelection();
                 }
+                // 机构选择
+                showOrgSelection();
               } else if (msg.result.length == 1) {
                 // 当前用户所属机构列表
                 thiz._g.orgList = msg.result;

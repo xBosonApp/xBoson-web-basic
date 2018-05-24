@@ -71,11 +71,10 @@ index = (function() {
             });
             if (matchedOrgID.length > 0) {
               zy.g.comm.org = lastSelectedOrgInCache;
-              // edit JYM; 利用回调调整加载顺序
-              getUserInfo(function() {
-                initIndex();
-                initChangeOrg(msg.result);  
-              });
+              
+              getUserInfo();
+              initIndex();
+              initChangeOrg(msg.result); 
               return;
             }
           }

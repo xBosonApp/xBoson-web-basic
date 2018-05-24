@@ -3,6 +3,7 @@
     // 如果历史记录功能不正确, 则修改这个配置
     var splitBasePath = 'web4node'
     var basePathOnServer = '$';
+    var enableFileType = { '':1, 'html':1, 'htm':1 };
     
     
     var _domLabel = {
@@ -1737,7 +1738,6 @@
                 }else{
                     _tools._api('getcontent', function (_m) {
                         if (!Boolean(_m.ret)) {
-
                             var _pre = _tab.add(_name, _node.path, _id);
                             _pre.inputc.val('');
                             _initIde(function () {
@@ -1745,7 +1745,8 @@
                                 editor.initSize();
                                 _savebtn.show();
                             }, _pre.pre, _m.result.filetype);
-                            if (_m.result.filetype == '' || _m.result.filetype == 'html') {
+                            
+                            if (enableFileType[_m.result.filetype]) {
                                 _previewbtn.show();
                             } else {
                                 _previewbtn.hide();
@@ -2033,7 +2034,7 @@
             var _previewbtn = $('#widget-grid').find('header .glyphicon-play').parent();
             _previewbtn.unbind('visible');
             _previewbtn.bind('visible', function (e, _filetype) {
-                if (_filetype == 'htm' || _filetype == 'html') {
+                if (enableFileType[_filetype]) {
                     _previewbtn.show();
                 } else {
                     _previewbtn.hide();
