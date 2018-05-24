@@ -658,11 +658,12 @@
             var _btn = _tools._label('button').addClass('btn btn-default btn-xs pull-right').attr('style', 'margin-top:5px;margin-right:14px').html('查询');
             var _i = _tools._label('i').addClass('fa fa-times pull-right').attr('style', 'margin-right:13px');
             var _check = _tools._label('label').addClass('toggle state-error pull-left').attr('style', 'margin:4px 0 0 5px');
-            _check.append(_tools._label('input').attr('type', 'checkbox')).append(_tools._label('i').attr({
+            _check.append(_tools._label('input').attr('type', 'checkbox').attr('checked', 1))
+              .append(_tools._label('i').attr({
                 'data-swchoff-text': 'off',
                 'data-swchon-text': 'on',
                 'title': '区分大小写'
-            }));
+              }));
             _container.append(_tools._label('div').addClass('row').attr('style', 'margin-top:-10px;display:none').append(_tools._label('h').attr('style', 'margin-left:20px').html('查询结果')).append(_i));
             var _style = 'overflow:auto;display:none;height:';
             if (_flg) _style = 'overflow:auto;display:none;height:';

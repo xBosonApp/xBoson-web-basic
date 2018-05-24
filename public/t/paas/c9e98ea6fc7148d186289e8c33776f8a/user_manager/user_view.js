@@ -252,7 +252,7 @@ User_view = (function() {
     
     //删除
     $('#user_view_del').click(function() {
-      zy.ui.mask('删除确认', '是否确认删除此条数据', function sure() {
+      zy.ui.mask('确认', '将用户从机构解除绑定', function sure() {
         var data = dt.DataTable().row('.active').data();
         thiz._g.param.pid = data.pid;
         zy.g.am.app = 'c9e98ea6fc7148d186289e8c33776f8a';

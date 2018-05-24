@@ -80,10 +80,12 @@ index = (function() {
             }
           }
         }
-        window.location = ui_base + '/login.html';
+        // window.location = ui_base + '/login.html';
+        zy.net.loadLogin();
       }, null);
     } else {
-      window.location = ui_base + '/login.html';
+      // window.location = ui_base + '/login.html';
+      zy.net.loadLogin();
     }
   }
 
