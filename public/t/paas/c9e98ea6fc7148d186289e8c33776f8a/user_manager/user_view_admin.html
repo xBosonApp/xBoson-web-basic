@@ -5,7 +5,7 @@
     <!-- NEW WIDGET START -->
     <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <!-- Widget ID (each widget will need unique ID)-->
-      <div id="user_view_wid1" class="jarviswidget jarviswidget-color-blueDark" data-widget-fullscreenbutton="false" data-widget-colorbutton="true" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-deletebutton="false">
+      <div id="user_view_admin_wid1" class="jarviswidget jarviswidget-color-blueDark" data-widget-fullscreenbutton="false" data-widget-colorbutton="true" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-deletebutton="false">
         <header>
           <span class="widget-icon"> <i class="fa fa-table"></i>
           </span>
@@ -21,7 +21,7 @@
           <!-- widget content -->
           <div class="widget-body no-padding">
             <div class="widget-body-toolbar">
-              <form id="user_view_form" method="post" onsubmit="return false;" class="smart-form">
+              <form id="user_view_admin_form" method="post" onsubmit="return false;" class="smart-form">
                 <div class="row">
                   <section class="col col-3">
                     <label class="input">
@@ -34,27 +34,22 @@
                     </label>
                   </section>
                   <section class="col col-3">
-                    <button id="user_view_search" class="btn btn-info btn-sm" type="submit"><i class="fa fa-search fa-1"></i>&emsp;查 询&emsp;</button>
+                    <button id="user_view_admin_search" class="btn btn-info btn-sm" type="submit"><i class="fa fa-search fa-1"></i>&emsp;查 询&emsp;</button>
                   </section>
                 </div>
               </form>
               <div class="btn-group">
-                <button id="user_view_add" class="btn btn-info btn-xs">&emsp;<i class="fa fa-magic"></i>&nbsp;用户注册&emsp;</button>
-                <button id="user_view_inituserid" class="btn btn-info btn-xs">&emsp;<i class="fa fa-plus"></i>&nbsp;用户绑定&emsp;</button>
-                <button id="user_view_ug" class="btn btn-info btn-xs">&emsp;<i class="fa fa-group"></i>&nbsp;用户组设定&emsp;</button>
-                <button id="user_view_edit" class="btn btn-info btn-xs">&emsp;<i class="fa fa-edit"></i>&nbsp;详细修改&emsp;</button>
-                <button id="user_view_his" class="btn btn-info btn-xs">&emsp;<i class="fa fa-edit"></i>&nbsp;登陆历史&emsp;</button>
-                <button id="user_reset_pw" class="btn btn-info btn-xs">&emsp;<i class="fa fa-edit"></i>&nbsp;重置密码&emsp;</button>
-                <button id="user_view_del" class="btn btn-info btn-xs">&emsp;<i class="fa fa-del"></i>&nbsp;用户删除&emsp;</button>
+                <button id="user_view_admin_del" class="btn btn-info btn-xs">&emsp;<i class="fa fa-del"></i>&nbsp;用户删除&emsp;</button>
               </div>
               <div class="pull-right">
                 <b name="total_count"></b>
               </div>
             </div>
             <div class="dataTables_wrapper">
-              <table id="user_view_dt" class="table table-bordered table-striped ">
+              <table id="user_view_admin_dt" class="table table-bordered table-striped ">
                 <thead>
                   <tr>
+                    <th>orgid</th>
                     <th>姓名</th>
                     <th>用户ID</th>
                     <th>电话</th>
@@ -70,7 +65,7 @@
             </div>
           </div>
           <!-- end widget content -->
-          <div id="user_view_pagination"></div>
+          <div id="user_view_admin_pagination"></div>
         </div>
         <!-- end widget div -->
       </div>
@@ -80,13 +75,13 @@
   </div>
   <!-- end row -->
 </section>
-<!--<div id="user_view_dialog_div"></div>-->
+<!--<div id="user_view_admin_dialog_div"></div>-->
 <!-- end widget grid -->
-<div id="user_view_form2"></div>
+<div id="user_view_admin_form2"></div>
 <script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
-<script src="c9e98ea6fc7148d186289e8c33776f8a/user_manager/user_view.js"></script>
+<script src="c9e98ea6fc7148d186289e8c33776f8a/user_manager/user_view_admin.js"></script>
 <script type="text/javascript">
 // DO NOT REMOVE : GLOBAL FUNCTIONS!
 pageSetUp();
-var user_view = new User_view();
+var user_view_admin = new user_view_admin();
 </script>

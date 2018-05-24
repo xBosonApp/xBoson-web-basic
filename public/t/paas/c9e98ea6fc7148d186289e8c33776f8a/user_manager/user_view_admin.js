@@ -1,13 +1,13 @@
-/**
+ /**
  * Created by liufengyuan on 2014/10/16.
  */
 /**
  * 个人信息
- * @class User_view
+ * @class user_view_admin
  */
-User_view = (function() {
+user_view_admin = (function() {
 
-  var PT = User_view.prototype;
+  var PT = user_view_admin.prototype;
   var thiz;
   var conditions;
   /**
@@ -24,9 +24,9 @@ User_view = (function() {
   };
 
   //表格元素对象
-  var dt = $('#user_view_dt');
+  var dt = $('#user_view_admin_dt');
   //widget
-  var widget = $('#user_view_wid1');
+  var widget = $('#user_view_admin_wid1');
 
   /**
    * 事件绑定规则定义
@@ -35,11 +35,10 @@ User_view = (function() {
   PT.Events = {};
 
   /**
-   * @class User_view
+   * @class user_view_admin
    * @constructor
    */
-  function User_view() {
-    Console.log("new User_view()");
+  function user_view_admin() {
     thiz = this;
     thiz.Init();
     thiz.Select();
@@ -53,12 +52,17 @@ User_view = (function() {
   PT.Init = function() {
     thiz.DataTable();
     thiz.Toolbar();
-    /* thiz.dialogInit();*/
-    $('#user_view_edit').btnDisable(true);
-    $('#user_view_his').btnDisable(true);
-    $('#user_reset_pw').btnDisable(true);
-    $('#user_view_del').btnDisable(true);
-    //$('#user_view_inituserid').btnDisable(true);
+    $('#user_view_admin_del').btnDisable(true);
+    
+    var callbackUser = function(msg) {
+      if (msg) {
+        //为adminFlag赋值
+        thiz._g.adminFlag=msg.result[0].adminflag;
+      }
+    };
+    zy.g.am.app = 'ZYAPP_LOGIN';
+    zy.g.am.mod = 'ZYMODULE_LOGIN';
+    zy.net.get("api/usertype", callbackUser);
   };
   /*窗口改变时，重新调整画面大小*/
   function DynamicWidth() {
@@ -74,6 +78,9 @@ User_view = (function() {
   PT.DataTable = function(data) {
     //定义绑定数据结构
     var columns = [
+      {
+        "data": "orgid"
+      },
       {
         "data": "de0201039"
       },
@@ -117,7 +124,7 @@ User_view = (function() {
           }
           str = '<div class=\'radio\'><label><input type=\'radio\' name=\'status\' value=\'0\' ' + str0 + '><span>无效</span></label></div>';
           str += '<div class=\'radio\'><label><input type=\'radio\' name=\'status\' value=\'1\' ' + str1 + '><span>有效</span></label></div>';
-          return '<a href=\"javascript:void(0);\" rel=\"popover\" data-placement=\"left\" data-original-title=\"<i class=\'fa fa-fw fa-pencil\'></i> 修改状态\" data-content=\"<form id=\'user_view_status_form\' onsubmit=\'return false;\' ' + _data + ' style=\'min-width:170px\'>' + str + '<div class=\'form-actions\'><div class=\'row\'><div class=\'col-md-12\'><button id=\'user_view_status\' class=\'btn btn-primary btn-sm\' type=\'submit\'>保存</button></div></div></div></form>\" data-html=\"true\">' + zy.cache.cd2name("ZR.0001",row.status) + '</a>';
+          return '<a href=\"javascript:void(0);\" rel=\"popover\" data-placement=\"left\" data-original-title=\"<i class=\'fa fa-fw fa-pencil\'></i> 修改状态\" data-content=\"<form id=\'user_view_admin_status_form\' onsubmit=\'return false;\' ' + _data + ' style=\'min-width:170px\'>' + str + '<div class=\'form-actions\'><div class=\'row\'><div class=\'col-md-12\'><button id=\'user_view_admin_status\' class=\'btn btn-primary btn-sm\' type=\'submit\'>保存</button></div></div></div></form>\" data-html=\"true\">' + zy.cache.cd2name("ZR.0001",row.status) + '</a>';
         }
       }
     ];
@@ -140,11 +147,9 @@ User_view = (function() {
     // 单击事件
     dt.on('click', 'tr', function(e) {
       // 当前选择行 index
-      Console.log('this.is("tr") = ' + $(this).find('th').is('th') + ' : ' + $(this).find('td').hasClass('dataTables_empty'));
       if ($(this).find('th').is('th') || $(this).find('td').hasClass('dataTables_empty'))
         return false;
 
-      Console.log($(e.target).is('button') + '==== ' + $(e.target).parents("form").html());
       //【修改状态,保存按钮】事件托管
       if ($(e.target).is('button')) {
         thiz.SaveStatus($(e.target).parents("form"));
@@ -152,24 +157,16 @@ User_view = (function() {
       // 变换选择行状态颜色
       if (!$(this).find('div').hasClass('popover') && $(this).hasClass('active')) {
         $(this).removeClass('active');
-        $('#user_view_edit').btnDisable(true);
-        $('#user_view_his').btnDisable(true);
-        $('#user_reset_pw').btnDisable(true);
-        $('#user_view_del').btnDisable(true);
-        //$('#user_view_inituserid').btnDisable(true);
+        $('#user_view_admin_del').btnDisable(true);
       } else {
         dt.DataTable().$('tr.active').removeClass('active');
         $(this).addClass('active');
-        $('#user_view_edit').btnDisable(false);
-        $('#user_view_his').btnDisable(false);
-        $('#user_reset_pw').btnDisable(false);
-        $('#user_view_del').btnDisable(thiz._g.adminFlag=="0");
-        //$('#user_view_inituserid').btnDisable(false);
+        $('#user_view_admin_del').btnDisable(thiz._g.adminFlag!="1");
       }
     });
     // 注册日期th单击事件
     widget.find('th[name=createdt]').click(function(){
-      conditions = $('#user_view_form').serialize();
+      conditions = $('#user_view_admin_form').serialize();
       if($(this).hasClass('sorting_desc')){
         conditions=conditions+encodeURI('&orderby=createdt&ascdesc=asc');
         $(this).removeClass('sorting_desc').addClass('sorting_asc');
@@ -177,87 +174,25 @@ User_view = (function() {
         conditions=conditions+encodeURI('&orderby=createdt&ascdesc=desc');
         $(this).removeClass('sorting_asc').addClass('sorting_desc');
       }
-      $('#user_view_edit').btnDisable(true);
-      $('#user_view_his').btnDisable(true);
-      $('#user_reset_pw').btnDisable(true);
-      $('#user_view_search').button('loading');
+      $('#user_view_admin_edit').btnDisable(true);
+      $('#user_view_admin_his').btnDisable(true);
+      $('#user_view_admin_search').button('loading');
       thiz.Pagination(1);
     });
 
     //查询
-    $('#user_view_search').click(function() {
+    $('#user_view_admin_search').click(function() {
       widget.find('th[name=createdt]').click();
-      // conditions = $('#user_view_form').serialize();
-      // $('#user_view_edit').btnDisable(true);
-      // //$('#user_view_inituserid').btnDisable(true);
-      // $('#user_view_search').button('loading');
-      // thiz.Pagination(1);
-    });
-    
-    //添加
-    $('#user_view_add').click(function() {
-      zy.net.loadHTML("c9e98ea6fc7148d186289e8c33776f8a/user_manager/user_add.html", $("#user_view_form2"));
-    });
-    
-    //修改
-    $('#user_view_edit').click(function() {
-      var rowIdx = dt.DataTable().row('.active').index();
-      Console.log("当前选择行 = " + rowIdx);
-      var data = dt.DataTable().row('.active').data();
-      thiz._g.param.pid = data.pid;
-      zy.net.loadHTML("c9e98ea6fc7148d186289e8c33776f8a/user_manager/user_manager.html", $("#user_view_form2"));
-    });
-    
-    $('#user_view_his').click(function() {
-      var rowIdx = dt.DataTable().row('.active').index();
-      Console.log("当前选择行 = " + rowIdx);
-      var data = dt.DataTable().row('.active').data();
-      thiz._g.param.userid = data.userid;
-      zy.net.loadHTML("c9e98ea6fc7148d186289e8c33776f8a/user_manager/log_history.html", $("#user_view_form2"));
-    });
-    
-    //绑定用户
-    $('#user_view_inituserid').click(function() {
-      zy.net.loadHTML("c9e98ea6fc7148d186289e8c33776f8a/user_manager/user_init.html", $("#user_view_form2"));
-    });
-    
-    $('#user_view_ug').on('click', function() {
-      zy.net.loadHTML("c9e98ea6fc7148d186289e8c33776f8a/user_manager/user_group.html", $("#user_view_form2"));
-    });
-    
-    // 重置密码
-    $('#user_reset_pw').on('click', function() {
-      var data = dt.DataTable().row('.active').data();
-      var conditions = { userid : data.userid };
-      if (! confirm("点击确定按钮, 会重置用户 "+ data.userid +' 的密码')) {
-        return;
-      }
-      zy.g.am.app = 'ZYAPP_LOGIN';
-      zy.g.am.mod = 'ZYMODULE_REG';
-      zy.net.get("api/rstpw", _cb, conditions);
-      
-      function _cb(msg) {
-        var dlg = $("<dialog style='width:30%'></dialog>");
-        dlg.appendTo(document.body);
-        var txt = ["<span style='float:right'>[ESC 关闭]</span>", msg.msg];
-        if (msg.code == 0) {
-          txt.push("<hr/>用户名: ", msg.userid);
-          txt.push("<br/>新密码: ", msg.passwd);
-        }
-        dlg[0].showModal();
-        dlg.html(txt.join(""));
-        console.log(msg)
-      }
     });
     
     //删除
-    $('#user_view_del').click(function() {
+    $('#user_view_admin_del').click(function() {
       zy.ui.mask('删除确认', '是否确认删除此条数据', function sure() {
         var data = dt.DataTable().row('.active').data();
         thiz._g.param.pid = data.pid;
         zy.g.am.app = 'c9e98ea6fc7148d186289e8c33776f8a';
         zy.g.am.mod = 'user_manager';
-        zy.net.get("api/user_unbind", function(){
+        zy.net.get("api/user_unbind_admin", function(){
           thiz.Pagination(1);
         }, {user_pid:data.pid});
       });
@@ -265,11 +200,8 @@ User_view = (function() {
   };
 
   PT.search = function(orderby) {
-    conditions = $('#user_view_form').serialize();
-    $('#user_view_edit').btnDisable(true);
-    $('#user_view_his').btnDisable(true);
-    $('#user_reset_pw').btnDisable(true);
-    $('#user_view_search').button('loading');
+    conditions = $('#user_view_admin_form').serialize();
+    $('#user_view_admin_search').button('loading');
     thiz.Pagination(1);
   };
 
@@ -280,7 +212,7 @@ User_view = (function() {
    */
   PT.Pagination = function(page) {
     Console.log('Pagination page = ' + page);
-    $.jqPaginator('#user_view_pagination', {
+    $.jqPaginator('#user_view_admin_pagination', {
       totalCounts: thiz._g.count,
       pageSize: zy.g.page.pagesize,
       currentPage: page,
@@ -297,21 +229,19 @@ User_view = (function() {
    * @param {Number} page 页码
    */
   PT.SetDt = function(page) {
-    Console.log('SetDt page = ' + page);
     var cb = function(msg) {
-      $('#user_view_search').button('reset');
+      $('#user_view_admin_search').button('reset');
       if (msg) {
-        $('#user_view_edit').btnDisable(true);
-        $('#user_view_his').btnDisable(true);
-        $('#user_reset_pw').btnDisable(true);
-        //$('#user_view_inituserid').btnDisable(true);
+        $('#user_view_admin_edit').btnDisable(true);
+        $('#user_view_admin_his').btnDisable(true);
+        //$('#user_view_admin_inituserid').btnDisable(true);
         thiz._g.count = msg.count; //获取总记录数
         thiz._g.data = msg.result;
         widget.find('[name=total_count]').html('总数：'+msg.count);
         thiz.DataTable(msg.result);
         Console.log('if (msg) thiz._g.count = ' + thiz._g.count);
         if (msg.count > 0 && msg.result.length > 0) {
-          $('#user_view_pagination').jqPaginator('option', {
+          $('#user_view_admin_pagination').jqPaginator('option', {
             totalCounts: thiz._g.count,
             pageSize: zy.g.page.pagesize,
             currentPage: page
@@ -319,16 +249,15 @@ User_view = (function() {
         } else {
           thiz._g.count = 1;
           thiz._g.page = 1;
-          $('#user_view_pagination').jqPaginator('destroy');
+          $('#user_view_admin_pagination').jqPaginator('destroy');
         }
         // DO NOT REMOVE : GLOBAL FUNCTIONS!
         pageSetUp();
       }
     };
-    Console.close();
     zy.g.am.app = 'c9e98ea6fc7148d186289e8c33776f8a';
     zy.g.am.mod = 'user_manager';
-    zy.net.get("api/user_view", cb, conditions, page);
+    zy.net.get("api/user_view_admin", cb, conditions, page);
   };
   /**
    * 更新表格数据
@@ -343,7 +272,6 @@ User_view = (function() {
    * @param {Object} msg 数据对象 $('#form_id').form2json()
    */
   PT.SetRow = function(msg) {
-    Console.log("SetRow msg = " + JSON.stringify(msg));
     // 当前选择行数据
     var data = dt.DataTable().row('.active').data();
     // 修改数据并刷新 dataTable
@@ -353,7 +281,6 @@ User_view = (function() {
     } else {
       data.statusnm = '失效';
     }
-    Console.log("更新后的行数据 = " + JSON.stringify(data));
     dt.DataTable().rows().invalidate().draw();
   };
   /**
@@ -364,7 +291,7 @@ User_view = (function() {
   PT.SaveStatus = function(el) {
     var param = {};
     var st = zy.ui.form.getRadioValue('status', el);
-    // 状态值是否有变化
+    // 状态值有变化
     if (st == el.data("status")) return;
     var cb = function(msg) {
       if (msg) {
@@ -385,14 +312,14 @@ User_view = (function() {
     // 数据字典处理
     var cb = function() {
       // 字典数据绑定
-      $("#user_view_form input[name=status]").zySelect('ZR.0001', true, {
+      $("#user_view_admin_form input[name=status]").zySelect('ZR.0001', true, {
         width: '100%'
       });
-      $("#user_view_form input[name=status]").select2('val','1');
+      $("#user_view_admin_form input[name=status]").select2('val','1');
       // thiz.search();
     };
     // 预处理该画面所需的字典类型，以 , 号分割
     zy.cache.initDicts('ZR.0001,ZR.0008', cb);
   };
-  return User_view;
+  return user_view_admin;
 })();
