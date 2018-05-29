@@ -1,0 +1,266 @@
+ <!-- Modal -->
+<div class="modal fade" id="search_user" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" id="close_btn" class="close" aria-hidden="true">&times;</button>
+        <h4 class="modal-title"><span id="search_user_title">用户检索</span></h4>
+      </div>
+      <div class="modal-body no-padding">
+        <form id="search_user_form" method="post" onsubmit="return false;" class="smart-form">
+          <fieldset>
+            <section>
+              <h6>请输入至少一个除性别以外的查询条件</h6> </section>
+            <div class="row">
+              <section class="col col-4">
+                <label class="input">
+                  <input type="text" name="userid" placeholder="用户ID" class="form-control input-sm" />
+                </label>
+              </section>
+              <section class="col col-4">
+                <label class="input">
+                  <input type="text" name="de0201039" placeholder="姓名" class="form-control input-sm">
+                </label>
+              </section>
+              <section class="col col-4">
+                <label class="input">
+                  <input type="hidden" name="de0201040" data-type="select2" placeholder="性别">
+                </label>
+              </section>
+            </div>
+            <div class="row">
+              <section class="col col-4">
+                <label class="input">
+                  <input type="text" name="de0201010" placeholder="电话号码" class="form-control input-sm">
+                </label>
+              </section>
+              <section class="col col-4">
+                <label class="input">
+                  <input type="text" name="de0201012" placeholder="电子邮箱" class="form-control input-sm">
+                </label>
+              </section>
+              <section class="col col-4">
+                <button id="search_btn" class="btn btn-info btn-sm" type="submit"><i class="fa fa-search fa-1"></i> &emsp;查 询&emsp;</button>
+              </section>
+            </div>
+            <div class="dataTables_wrapper" style="display: none">
+              <table id="search_user_dt" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>用户ID</th>
+                    <th>姓名</th>
+                    <th>性别</th>
+                    <th>电话号码</th>
+                    <th>电子邮箱</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+            <div id="search_user_pagination"></div>
+          </fieldset>
+          <footer>
+            <button type="button" id="cancel_btn" class="btn btn-default">手动输入</button>
+            <button type="submit" id="confirm_btn" class="btn btn-primary">选择用户</button>
+          </footer>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- /.modal -->
+</div>
+<script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script type="text/javascript">
+$('#search_user').modal('show');
+IndexUser = (function() {
+  var PT = IndexUser.prototype;
+  var thiz;
+  var conditions;
+  var dt = $('#search_user_dt');
+  PT._g = {
+    data: [],
+    param: {},
+    page: 1, //开始页数
+    count: 1 //总记录数
+  };
+
+  function IndexUser() {
+    thiz = this;
+    Init();
+    return this;
+  }
+
+  function Init() {
+    Check();
+    DataTable();
+    Toolbar(modalid, userpid, usernm);
+    Select();
+    $('#search_btn').btnDisable(true);
+    $('#confirm_btn').btnDisable(true);
+  };
+
+  function DynamicWidth() {
+    $('.dataTables_scrollHeadInner').css('width', '100%');
+    $('.dataTables_scrollBody table').css('width', '100%');
+    $('.dataTables_scrollHeadInner table').css('width', '100%');
+  }
+
+  function DataTable(data) {
+    var columns = [{
+      "data": "userid"
+    }, {
+      "data": "de0201039"
+    }, {
+      "render": function(data, type, row, meta) {
+        return zy.cache.cd2name('GBT.2261.1', row.de0201040);
+      }
+    }, {
+      "data": "de0201010"
+    }, {
+      "data": "de0201012"
+    }, ];
+    //预设初始化参数
+    var options = {
+      "data": data,
+      "columns": columns
+    };
+    // 合并初始化参数选项
+    $.extend(options, zy.ui.dataTable);
+    //初始化 DataTable
+    dt.dataTable(options);
+    DynamicWidth();
+  };
+
+  function Check() {
+    $('#search_user_form input:text').blur(function() {
+      $(this).each(function() {
+        if ($(this).val().length == 0) {
+          $('#search_btn').btnDisable(true);
+        } else {
+          $('#search_btn').btnDisable(false);
+        }
+      });
+    }).keyup(function() {
+      $(this).triggerHandler('blur');
+    }).focus(function() {
+      $(this).triggerHandler('blur');
+    });
+  }
+
+  function Toolbar(modalid, userpid, usernm) {
+    // 单击事件
+    dt.on('click', 'tr', function(e) {
+      // 当前选择行 index
+      if ($(this).find('th').is('th') || $(this).find('td').hasClass('dataTables_empty'))
+        return false;
+      // 变换选择行状态颜色
+      if (!$(this).find('div').hasClass('popover') && $(this).hasClass('active')) {
+        $(this).removeClass('active');
+        $('#confirm_btn').btnDisable(true);
+      } else {
+        dt.DataTable().$('tr.active').removeClass('active');
+        $(this).addClass('active');
+        $('#confirm_btn').btnDisable(false);
+      }
+    });
+
+    //关闭
+    $('#close_btn').click(function() {
+      $('#search_user').modal('hide');
+      modalid.modal('show');
+    });
+
+    //查询
+    $('#search_btn').click(function() {
+      conditions = $('#search_user_form').serialize();
+      $('.dataTables_wrapper').removeAttr('style');
+      $('#confirm_btn').btnDisable(true);
+      $('#search_btn').button('loading');
+      Pagination(1);
+    });
+
+    //确认选择
+    $('#confirm_btn').click(function() {
+      var rowIdx = dt.DataTable().row('.active').index();
+      var data = dt.DataTable().row('.active').data();
+      userpid.val(data.pid);
+      usernm.val(data.de0201039).attr({
+        readonly: true,
+        placeholder: '请检索输入'
+      });;
+      $('#search_user').modal('hide');
+      modalid.modal('show');
+    });
+
+    //手动输入
+    $('#cancel_btn').click(function() {
+      userpid.val('');
+      usernm.val('').attr({
+        readonly: false,
+        placeholder: '请手动输入'
+      });;
+      $('#search_user').modal('hide');
+      modalid.modal('show');
+    });
+  };
+
+  function Pagination(page) {
+    Console.log('Pagination page = ' + page);
+    $.jqPaginator('#search_user_pagination', {
+      totalCounts: thiz._g.count,
+      pageSize: 5,
+      currentPage: page,
+      onPageChange: function(num) {
+        Console.log('onPageChange num = ' + num);
+        SetDt(num, userapp, usermod, userapi);
+      }
+    });
+  };
+
+  function SetDt(page, userapp, usermod, userapi) {
+    Console.log('SetDt page = ' + page);
+    var cb = function(msg) {
+      $('#search_btn').button('reset');
+      if (msg) {
+        $('#confirm_btn').btnDisable(true);
+        thiz._g.count = msg.count; //获取总记录数
+        thiz._g.data = msg.result;
+        DataTable(msg.result);
+        Console.log('if (msg) thiz._g.count = ' + thiz._g.count);
+        if (msg.count > 0 && msg.result.length > 0) {
+          $('#search_user_pagination').jqPaginator('option', {
+            totalCounts: thiz._g.count,
+            pageSize: 5,
+            currentPage: page
+          });
+        } else {
+          thiz._g.count = 1;
+          thiz._g.page = 1;
+          $('#search_user_pagination').jqPaginator('destroy');
+        }
+        // DO NOT REMOVE : GLOBAL FUNCTIONS!
+        pageSetUp();
+      }
+    };
+    zy.g.am.pagesize = 5; //设置每个分页显示5条数据
+    zy.g.am.app = userapp;
+    zy.g.am.mod = usermod;
+    zy.net.get("api/" + userapi, cb, conditions, page);
+  };
+
+  function UpDt() {
+    Pagination(1);
+  };
+
+  function Select() {
+    var cb = function() {
+      $('#search_user_form input[name=de0201040]').zySelect('GBT.2261.1', true, {
+        width: '100%'
+      });
+    };
+    zy.cache.initDicts('GBT.2261.1', cb);
+  }
+  return IndexUser;
+})();
+var index_user = new IndexUser();
+</script>

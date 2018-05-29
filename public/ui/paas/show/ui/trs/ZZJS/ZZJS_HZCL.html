@@ -1,0 +1,709 @@
+<script type="text/javascript" language="JavaScript" src="/t/paas/show/ui/comm.js"></script>	 
+<script type="text/javascript">
+    var goalhsubidMap = new Map();
+    var sexMap = new Map();
+    getselectdcoid();
+   	$(function () {
+//开始时间与结束时间 差6天
+		 
+	  	$("#atime").html(LC_FormatYMD(new Date()));
+	  	$("#endatime").val(LC_FormatYMD(new Date()));
+      $("#startatime").val(LC_FormatYMD(excuteDate($("#endatime").val(),-6)));
+//时间控制结束		
+		//初始加载
+			showDatahzcl();
+			// jrc add
+			getselectd();
+			selectaosidkjr();
+
+			selectKs();
+			
+			setTimeout(function(){
+				selectaosidkjr1();
+				selectStaffid();
+			},300);
+			
+			$("#formapjz").find("#vdid").val(self.parent.staffid);
+
+			$("#formapjz").find("#vosid").change(function(){
+				selectStaffid();
+			});
+});
+function loading(){
+	//changeTh($("#startatime").val());
+  	showDatahzcl();
+}
+
+
+//yyyy-MM-dd 格式
+function getDate(strDate){
+	var arr = strDate.split("-");
+	var date = new Date(arr[0],arr[1]-1,arr[2]);
+	return date;
+}
+//date是加减天数
+function excuteDate(strDate,date){
+	var longTime = getDate(strDate).getTime();
+	var dateTime = date*24*60*60*1000;
+	return new Date(longTime+dateTime);
+}
+
+function showDatahzcl(){
+	LC_Resetting("formhzcl");
+	var checkpcthrItems=["startatime","endatime"];
+	LC_IsCheckNotNull("formhzcl",checkpcthrItems);
+	if(retCheckFlg){
+	var url = "zzhzcljs/";
+	var info = new Map();
+	var itemsList = ["startatime","endatime"];
+	LC_AjaxGet(TRSBaseUrl+url,"formhzcl","hzclCallback",info,itemsList);
+}
+}
+function message(){
+	alert("已经安排完转诊");
+}
+function hzclCallback(data){
+		$("#countTs").html(data.countTs);
+		$("#unCountTs").html(data.unCountTs);
+		var rq=	[];
+		var xq= [];
+		debugger;
+		rq.push({align:'center'});
+		xq.push({field:'sxw',title:'上/下午',align:'center'});
+		for(var i=0;i<data.rqList.length;i++){
+		var strRq=data.rqList[i];
+		var strXq=data.xqMap[strRq];
+ 
+		  rq.push({title:strRq,align:'center'});
+		  xq.push({field:strRq,title:strXq,align:'center',
+		     formatter:function(value){
+					if(value.ts=="05"){//完成状态
+							  return '<a  id="'+value.thid+','+value.cthid+'" onclick=" message();" title="完成转诊" style="color:green">'+value.pname+'</a>';
+					}else if(value.thtype=="1"){//紧急转诊类型
+							  return '<a  id="'+value.thid+','+value.cthid+'" onclick=" divhzxx(this);" title="紧急转诊" style="color:red">'+value.pname+'</a>';
+					}else if(value.thtype=="0"){//普通转诊类型
+							  return '<a  id="'+value.thid+','+value.cthid+'" onclick=" divhzxx(this);" title="普通转诊" style="color:orange">'+value.pname+'</a>';
+					}else if(value.thtype=="2"){//预约转诊类型
+							  return '<a  id="'+value.thid+','+value.cthid+'" onclick=" divhzxx(this);" title="预约转诊" style="color:blue">'+value.pname+'</a>';
+					}else if(value.thtype=="3"){//其他转诊类型
+							  return '<a  id="'+value.thid+','+value.cthid+'" onclick=" divhzxx(this);" title="其他转诊" style="color:brown">'+value.pname+'</a>';
+					}else{
+							  return '<a  id="'+value.thid+','+value.cthid+'" onclick=" divhzxx(this);" title="其他转诊">'+value.pname+'</a>';
+					}
+				}
+			});
+		}
+
+			
+        $('#div-hzcl').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+				loadMsg:"正在载入...",
+				pageNumber:1,
+				pageSize:50,
+				//border:false,
+				singleSelect:true,
+				data:data.retDataList,
+				columns:[rq,xq],                  
+				fitColumns:false,
+				rownumbers:true
+		}); 
+	}
+	//安排就诊 点击确定
+	function revocationDialog(){
+		LC_Resetting("formapjz");
+		var checkInsList=["ins"]
+		var checkNotNull=["rt","vosid","vdid"]
+		LC_IsCheckLengthMax("formapjz",checkInsList,500);
+		LC_IsCheckNotNull("formapjz",checkNotNull);
+		if(retCheckFlg){
+		var url= "apzz2/";
+		var info = new Map();
+		var itemsList = ["rt","vosid","vdid","ins"];
+		info.put("cosid",$("#formsqxz").find("#cosid").val());
+		info.put("thid",$("#thid").val());
+   		info.put("cthid",$("#cthid").val());	
+
+		LC_AjaxGet(TRSBaseUrl+url,"formapjz","apzz2Callback",info,itemsList);
+	}
+}
+	function apzz2Callback(data){
+	
+		if(data.ret=="0"){
+			alert("成功");
+			$('#div-personal').dialog('close');
+			$('#div-apjz').dialog('close');
+			showDatahzcl();
+		}else{
+			alert("失败");
+		}
+	}
+	function apjzCallback(data){
+		LC_SetMapData("formapjz",data.data1);
+		$("#formapjz").find("#ins").val("请携带身份证件");
+		$("#rt").val(LC_SubStr($("#rt").val(),0,16));
+	}
+	//点击安排转诊**********************************************************************************
+	function divApzz(){
+	//	 getselectaoido1();
+		 selectKs();
+		 setTimeout(function(){
+			selectaosidkjr1();
+		 },300);
+		 selectStaffid();
+		$("#formapjz").find("#vdid").val(self.parent.staffid);
+		var url = "apzz1/";
+		var itemsList = [];
+		var info = new Map();
+		info.put("thid",$("#thid").val());
+   		info.put("cthid",$("#cthid").val());
+		LC_AjaxGet(TRSBaseUrl+url,"formapjz","apjzCallback",info,itemsList);
+		//打开界面
+		$('#div-apjz').dialog('open');
+		//打开后 进行修改 点击确定 修改数据
+	}
+	//拒绝转诊
+	function submitjjzz(){
+		LC_Resetting("formjjzz");
+		var checkInsList=["ins"]
+		LC_IsCheckLength("formjjzz",checkInsList,1,500);
+		if(retCheckFlg){
+		var url = "jjzz/";
+		var itemsList = ["ins"];
+		var info = new Map();
+		info.put("thid",$("#thid").val());
+   		info.put("cthid",$("#cthid").val());
+		LC_AjaxGet(TRSBaseUrl+url,"formjjzz","jjzzCallback",info,itemsList);
+	}
+}
+	function jjzzCallback(data){
+		if(data.ret=="0"){
+			alert("成功");
+			$('#div-personal').dialog('close');
+			$('#div-jjzz').dialog('close');
+			showDatahzcl();
+		}else{
+			alert("失败");
+		}
+	}
+//打开拒绝转诊界面
+	function divJjzz(){
+		$("#formjjzz").find("#ins").val("");
+		$(".pname3").html($(".pname1").html());
+		$('#div-jjzz').dialog('open');
+	}
+//打开续转界面
+	function divSqxz(){
+		$("#vvoid").val("");
+		$("#vdid").val("");
+		$("#vosid").val("");
+		$("#formsqxz").find("#ins").val("申请续转");
+		$(".pname4").html($(".pname1").html());
+		$('#div-sqxz').dialog('open');
+	}
+	//申请续转
+	function submitsqxz(){
+		LC_Resetting("formsqxz");
+		var checkInsList=["ins"]
+		LC_IsCheckLengthMax("formsqxz",checkInsList,500);
+		if(retCheckFlg){
+		var url = "sqxz/";
+		var itemsList = ["vvoid","vdid","vosid","ins","cosid"];
+		var info = new Map();
+		info.put("thid",$("#thid").val());
+   		info.put("cthid",$("#cthid").val());
+		LC_AjaxGet(TRSBaseUrl+url,"formsqxz","sqxzCallback",info,itemsList);
+	}
+}
+	function sqxzCallback(data){
+		if(data.ret=="0"){
+			alert("成功");
+			$('#div-personal').dialog('close');
+			$('#div-sqxz').dialog('close');
+			showDatahzcl();
+		}else{
+			alert("失败");
+		}
+	}
+	
+	//最后删除掉
+	function divhzxx(dom){
+		var id = $(dom).attr("id");
+		var arrId = id.split(",");
+		$("#thid").val(arrId[0]);
+		$("#cthid").val(arrId[1]); 		
+   		var info = new Map();
+   		var itemsList=[];
+   		info.put("thid",$("#thid").val());
+   		info.put("cthid",$("#cthid").val());
+   		var url="zzhzcx/";
+   		LC_AjaxGet(TRSBaseUrl+url,"formjcxx","reCallBack",info,itemsList);
+		$('#div-personal').dialog('open');
+	}
+//**************jrc start****************
+var tsbzMap= new Map();
+var fffsMap = new Map();
+var zzmdMap= new Map();
+
+//转换性别
+function  getselectd(){
+  var url="mdm/dict/listget/";
+  var infoa = new Map();
+  infoa.put("stringsplit","VA0004.04,VA0004.907,VA0004.179,VA0004.908");
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"formfix2","sexmdmSelectd",infoa,itemsList);
+}
+function sexmdmSelectd(data){
+  var info = new Map();
+  info.put("key",["typeCode2"]);
+  info.put("value",["typeName"]);
+  sexMap=LC_getDataMap(info,data.dataList["VA0004.04"]);
+  tsbzMap=LC_getDataMap(info,data.dataList["VA0004.907"]);
+  fffsMap=LC_getDataMap(info,data.dataList["VA0004.179"]);
+  zzmdMap=LC_getDataMap(info,data.dataList["VA0004.908"]);
+}
+
+
+	function  reCallBack(data){
+		if(data.ret=="109"){
+			alert("此人已经在另一处被安排完毕");
+			$('#div-personal').dialog('close');
+			showDatahzcl();
+		}
+  		LC_SetMapData("formjcxx",data.data);
+   		var itemList=[["psex",sexMap],["aoid",orgsMap],["goalhid",orgsMap],["siid",tsbzMap],["ppayway",fffsMap],["thgoal",zzmdMap],["goalhsubid",goalhsubidMap]];
+   		LC_getMapTextValue("formjcxx",itemList);
+		//LC_SubTextStr("formjcxx",["pbirthdday",0,10]);
+
+   	}
+//**************jrc end******************
+$(function () {
+	getselectaoid();
+});
+
+function  getselectaoid(){
+  var url="mdm/orgs/";
+  var infoa = new Map();
+  infoa.put("stringsplit","CV0000.01");
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"vvoid","mdmSelectoid",infoa,itemsList);
+}
+
+function mdmSelectoid(data){
+  var info = new Map();
+  info.put("key",["orgId"]);
+  info.put("value",["orgNm"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("formsqxz","vvoid",info,data.dataList);
+  // jrc**************
+  orgsMap=LC_getDataMap(info,data.dataList);
+}
+//-----------------------------------------------------------------------------------------------------------------------------
+function divDaxx(){
+//	$("#formjcxx").find("#eid").val(self.parent.eid);
+//		var url = "apzz1/";
+//		var itemsList = [];
+//		var info = new Map();
+//		info.put("thid",$("#eid").text());
+////   		info.put("cthid",$("#cthid").val());
+//		LC_AjaxGet(TRSBaseUrl+url,"formjcxx","apjzCallback1",info,itemsList);
+	var cthidval=$("#eid").text();
+	console.info(cthidval);
+//	showModalDialog("http://www.baidu.com", "values");
+	showModalDialog("/t/paas/show/ui/view/emr/index.html?oid=&app=&empi=&pid="+cthidval+"&typeCode=01", "values");
+//	var eid=$("#formjcxx #eid").text();
+//	alert("未正确连接链接EMRView");
+//	
+//	
+//	var openRoleDiv = self.parent.$("#openRoleDiv");
+//	openRoleDiv.window({
+//			  href:"",
+//			  title: '查看信息',
+//			  width: 760,
+//			  height: 500
+//		  });
+}
+function apjzCallback1(data){
+	LC_SetMapData("formapjz",data.data1);
+}
+
+  //获取科室id通过机构id和人员id
+function  selectaosidkjr(){
+  var url="mdm/staffInfo/";
+  var info = new Map();
+  info.put("orgId",self.parent.orgid);
+  info.put("staffId",self.parent.staffid);
+  var itemsList=[];
+  LC_AjaxGet(MDMBaseUrl+url,"","setSelectkjr",info,itemsList);
+}
+function setSelectkjr(data){
+  $("#formsqxz").find("#cosid").val(data.dataList[0].departmentId);
+}
+
+
+//转换科室
+function  getselectdcoid(){
+  var url="mdm/officeList/";
+  var info = new Map();
+  info.put("osms003_orgid",self.parent.orgid);
+  var itemsList=[];
+  LC_AjaxGet(MDMBaseUrl+url,"","mdmSelectdcoid",info,itemsList);
+}
+function mdmSelectdcoid(data){
+  var info = new Map();
+  info.put("key",["osms003_scd"]);
+   info.put("value",["osms003_sname"]);
+  goalhsubidMap=LC_getDataMap(info,data.dataList);
+}
+
+
+//修改------联动
+//转出机构-科室-人员
+//机构
+ /*function  getselectaoido1(){
+  var url="mdm/orgs/";
+  var infoa = new Map();
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"","mdmSelectoido1",infoa,itemsList);
+}
+
+function mdmSelectoido1(data){
+
+  var info = new Map();
+  info.put("key",["orgId"]);
+  info.put("value",["orgNm"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("formapjz","aoid",info,data.dataList);
+ // alert(self.parent.orgid);
+  $("#formapjz #aoid").val(self.parent.orgid);
+  setTimeout(function(){
+ selectJg1();
+}, 300); 
+}
+//人员
+function  selectJg1(){
+  var url="mdm/org/listSta/";
+  var info = new Map();
+  info.put("stringsplit",$("#formapjz #aoid").val());
+  var itemsList=[];
+  LC_AjaxGet(MDMBaseUrl+url,"","mdmSelectaosid1",info,itemsList);
+}
+function mdmSelectaosid1(data){
+  var info = new Map();
+  info.put("key",["staffId"]);
+  info.put("value",["name"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("formapjz","vdid",info,data.dataList);
+   $("#formapjz #vdid").val(self.parent.staffid);
+    setTimeout(function(){
+		selectaosid1();
+	}, 300);
+}*/
+//科室
+/*function  selectaosid1(){
+  var url="mdm/officeList/";
+  var info = new Map();
+  info.put("osms003_orgid",self.parent.orgid);
+  var itemsList=[];
+  LC_AjaxGet(MDMBaseUrl+url,"","setSelectkss1",info,itemsList);
+}
+function setSelectkss1(data){
+  var info = new Map();
+  info.put("key",["osms003_scd"]);
+   info.put("value",["osms003_sname"]);
+  LC_GetSelect("formapjz","vosid",info,data.dataList);
+   $("#vosid").val(self.parent.departmentId);
+   selectaosidkjr1();
+}
+*/
+//两个function 是 通过登录机构 找到科室
+ function  selectKs(){
+  var url="mdm/officeList/";
+  var info = new Map();
+  info.put("osms003_orgid",self.parent.orgid);
+  var itemsList=[];
+  LC_AjaxGet(MDMBaseUrl+url,"adid","setSelectKs",info,itemsList);
+}
+
+function setSelectKs(data){
+  var info = new Map();
+  info.put("key",["osms003_scd"]);
+  info.put("value",["osms003_sname"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("formapjz","vosid",info,data.dataList);
+}
+
+//两个function  通过科室找到人员
+function selectStaffid(){
+	var url = "/mdm/staff/getStaffList";
+	var info = new Map();
+	info.put("orgId",self.parent.orgid);
+	info.put("departmentId",$("#formapjz").find("#vosid").val());
+	var itemsList=[];
+	LC_AjaxGet(MDMBaseUrl+url,"vdid","setSelectStaffId",info,itemsList);
+	
+}
+function setSelectStaffId(data){
+	var $a =  $("#formapjz").find("#vdid");
+	$a.empty();
+	for(var i=0;i<data.dataList.length;i++){
+		$a.append("<option value="+data.dataList[i].staffId+">"+data.dataList[i].name+"</option>");
+	} 
+}
+
+
+//获取当前科室id 通过机构id和人员id
+function  selectaosidkjr1(){
+  var url="mdm/staffInfo/";
+  var info = new Map();
+  info.put("orgId",self.parent.orgid);
+  info.put("staffId",self.parent.staffid)
+  var itemsList=[];
+  LC_AjaxGet(MDMBaseUrl+url,"","setSelectkjr1",info,itemsList);
+}
+function setSelectkjr1(data){
+   $("#formapjz #vosid").val(data.dataList[0].departmentId);
+}
+
+  	
+</script>
+<style>
+body{ font-size:12px;}
+.padding1{padding:10px 0 0 7px;}
+</style>
+<input type="hidden" id="thid"/>
+<input type="hidden" id="cthid"/>
+<div class="mainsW-912" style="height:600px;">
+<div class="padding1">
+ <form id="formhzcl" style="margin:0;">
+    <div class="easyui-panel" title="检索信息">
+        <div class="mainsW-896" style="padding:5px 0 0 0;">
+            <div class="mainW-192" >
+                <div class="itemLW-80 padT-4">当前时间：</div>
+                <div class="itemRW-112 padT-4" id="atime">2012-05-05</div>
+             </div>
+             <div class="mainW-192" >
+                <div class="itemLW-80 padT-4">开始时间：</div>
+                <div class="itemRW-112"><input  class="Wdate" onClick="WdatePicker()" type="text" style="width:112px;" id="startatime"/></div>
+             </div>
+             <div class="mainW-192" >
+                <div class="itemLW-80 padT-4">结束时间：</div>
+                <div class="itemRW-112"><input   class="Wdate" onClick="WdatePicker()" type="text" style="width:112px;" id="endatime"/></div>
+             </div>		
+             <div class="itemRW-192" style="padding:0 0 0 50px;"><a href="javascript:void(0)" id="delaysearch" class="easyui-linkbutton" onclick="showDatahzcl();">检索</a></div>
+         </div>
+         <div class="mainsW-896" style="padding:0 0 5px 0;">
+             <div class="mainW-192" >
+                <div class="itemLW-80 padT-4">已完成转诊：</div>
+                <div class="itemRW-112 padT-4" id="countTs">1000</div>
+            </div>
+            <div class="mainW-192" >
+                <div class="itemLW-80 padT-4">待完成转诊：</div>
+                <div class="itemRW-112 padT-4" id="unCountTs">1000</div>
+            </div><!--
+            <div class="mainW-192" >
+                <div class="itemLW-80 padT-4">即将过期：</div>
+                <div class="itemRW-112 padT-4">1000</div>
+            </div>
+            <div class="mainW-192" >
+                <div class="itemLW-80 padT-4">经过期：</div>
+                <div class="itemRW-112 padT-4">1000</div>
+            </div>
+         --></div>
+    </div>
+  </form> 
+  
+  <table id="div-hzcl"></table>
+    
+    <!-- 点击患者弹出对话框 -->   
+
+<div id="div-personal" class="easyui-dialog" data-options="width:600,noheader:true,closed:true">
+    <form id="formjcxx">
+    	<div class="easyui-panel" title="个人基本信息" data-options="width:586" >
+        	<div class="flPadTB-10">
+                <div class="mainW-192" >
+                    <div class="itemLW-80 padT-4">姓名：</div>
+                    <div class="itemRW-112 padT-4"><span class="pname1" id="pname">姓名</span></div>
+                 </div>
+                 <div class="mainW-192" >
+                    <div class="itemLW-80 padT-4">性别：</div>
+                    <div class="itemRW-112 padT-4"><span id="psex">男</span></div>
+                 </div>
+                 <div class="mainW-192" >
+                    <div class="itemLW-80 padT-4">出生日期：</div>
+                    <div class="itemRW-112 padT-4"><span id="pbirthdday" style=" width:80px; height:20px; overflow:hidden; float:left;">1983-01-01</span></div>
+                 </div>
+                 <div class="mainW-192" >
+                    <div class="itemLW-80 padT-4">联系电话：</div>
+                    <div class="itemRW-112 padT-4"><span id="pphone">12345678901</span></div>
+                 </div>
+                 <div class="mainW-192" >
+                    <div class="itemLW-80 padT-4">付费方式：</div>
+                    <div class="itemRW-112 padT-4"><span id="ppayway">医保</span></div>
+                 </div>
+                 <div class="mainW-192" >
+                    <div class="itemLW-80 padT-4">身份证：</div>
+                    <div class="itemRW-112 padT-4"><span id="eid"></span></div>
+                 </div>
+             </div>
+        </div>
+        <div class="easyui-panel" title="转诊信息" data-options="width:586">
+        	<div class="flPadTB-10 mainW-448">
+                 <div class="mainW-448" >
+                    <div class="itemLW-112 padT-4">转诊医院：</div>
+                    <div class="itemRW-336 padT-4"><span id="goalhid">转诊医院转诊医院转诊医院转诊医院</span></div>
+                 </div>
+                 <div class="mainW-448" >
+                    <div class="itemLW-112 padT-4">转诊科室：</div>
+                    <div class="itemRW-336 padT-4"><span id="goalhsubid">男</span></div>
+                 </div>
+                 <div class="mainW-224" >
+                    <div class="itemLW-112 padT-4">转诊目的：</div>
+                    <div class="itemRW-112 padT-4"><span id="thgoal">**********</span></div>
+                 </div>
+                 <div class="mainW-224" >
+                    <div class="itemLW-112 padT-4">特殊病种：</div>
+                    <div class="itemRW-112 padT-4"><span id="siid">**********</span></div>
+                 </div>
+                 <div class="mainW-448" >
+                    <div class="itemLW-112 padT-4">特殊病种个人史：</div>
+                    <div class="itemRW-336 padT-4"><span id="siph">个人情况描述......</span></div>
+                 </div>
+                 <div class="mainW-448" >
+                    <div class="itemLW-112 padT-4">特殊病种现病史：</div>
+                    <div class="itemRW-336 padT-4"><span id="ssnm">现病史......</span></div>
+                 </div>
+                 <div class="mainW-448" >
+                    <div class="itemLW-112 padT-4">特殊病种家族史：</div>
+                    <div class="itemRW-336 padT-4"><span id="sifh">家族史......</span></div>
+                 </div>
+                 <div class="mainW-448" >
+                    <div class="itemLW-112 padT-4">转出机构：</div>
+                    <div class="itemRW-336 padT-4"><span id="aoid">卫生服务中心</span></div>
+                 </div>
+             </div>
+        </div>
+        <div class="butCenter flPadTB-10">
+        	<a href="javascript:void(0)" class="easyui-linkbutton" onClick="divDaxx()">查看诊疗记录</a>
+        	<a href="javascript:void(0)" class="easyui-linkbutton" onClick="divApzz()">安排转诊</a>
+        	<a href="javascript:void(0)" class="easyui-linkbutton" onClick="divJjzz()">拒绝转诊</a>
+        	<!--<a href="javascript:void(0)" class="easyui-linkbutton" onClick="divSqxz()">申请续转</a>-->
+        	<a href="javascript:void(0)" class="easyui-linkbutton" onclick="javascript:$('#div-personal').dialog('close')">关闭</a>
+        </div>
+   </form>
+    </div>
+
+ 
+    <!-- 安排转诊 -->
+    <div id="div-apjz" class="easyui-dialog" title="安排转诊" data-options="width:400,closed:true" draggable="false">
+    <form id="formapjz">
+    	<div class="mainW-368 flPadTB-10" >
+    	      <select id="aoid" class="textLW" name="dept" onchange="selectJg1()" disabled="true" style="display:none;"></select>
+            <div class="itemLW-112 padT-4">患者姓名：</div>
+            <div class="itemRW-240 padT-4"><span class="pname2" id="pname">张三</span></div>
+            <div class="itemLW-112 padT-4">就诊时间：</div>
+            <div class="itemRW-240 padT-4"><input class="Wdate" onClick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm'})"  type="text" id="rt"/></div>
+            <div class="itemLW-112 padT-4">就诊科室：</div>
+            <div class="itemRW-240 padT-4"><select class="textLW" name="dept" id="vosid" style="width:155px;height:22px;"></select></div>
+            <div class="itemLW-112 padT-4">就诊医生：</div>
+            <div class="itemRW-240 padT-4"><select class="textLW" name="dept" id="vdid" style="width:155px;height:22px;" onchange="selectaosid1()"></select></div>
+            <div class="itemLW-112 padT-4">备注说明：</div>
+            <div class="itemRW-240 padT-4"><textarea class="textLW" name="" cols="" rows="" id="ins"></textarea></div>
+		</div>
+        <div class="butCenter flPadTB-10">
+            <span class="padLR-10"><a href="javascript:void(0)" class="easyui-linkbutton" onClick="revocationDialog()">确定</a></span>
+            <span class="padLR-10"><a href="javascript:void(0)" class="easyui-linkbutton" onclick="javascript:$('#div-apjz').dialog('close')">取消</a></span>
+        </div>
+       </form>
+    </div>
+    <!-- 拒绝就诊 -->
+    <div id="div-jjzz" class="easyui-dialog" title="拒绝转诊" data-options="width:400,closed:true" draggable="false">
+  <form id="formjjzz">
+    	<div class="mainW-368 flPadTB-10" >
+            <div class="itemLW-112 padT-4">患者姓名：</div>
+            <div class="itemRW-240 padT-4"><span class="pname3" id="pname">张三</span></div>
+            <div class="itemLW-112 padT-4">拒绝原因：</div>
+            <div class="itemRW-240"><textarea class="textLW" name="" cols="" rows="" id="ins"></textarea></div>
+		</div>
+        <div class="butCenter flPadTB-10">
+            <span class="padLR-10"><a href="javascript:void(0)" class="easyui-linkbutton" onClick="submitjjzz()">确定</a></span>
+            <span class="padLR-10"><a href="javascript:void(0)" class="easyui-linkbutton" onclick="javascript:$('#div-jjzz').dialog('close')">取消</a></span>
+        </div>
+	 </form>
+    </div>
+    <!-- 申请续转 -->
+    <div id="div-sqxz" class="easyui-dialog" title="申请续转" data-options="width:400,closed:true" draggable="false">
+ <form id="formsqxz">
+    	<div class="mainW-368 flPadTB-10" >
+			<input type="hidden" id="cosid"/>
+            <div class="itemLW-112 padT-4">患者姓名：</div>
+            <div class="itemRW-240 padT-4"><span  class="pname4" id="pname">张三</span></div>
+            <div class="itemLW-112 padT-4">续转机构：</div>
+            <div class="itemRW-240 padT-4"><select class="textLW" name="dept" id="vvoid" style="width:155px;height:22px;"></select></div>
+            <div class="itemLW-112 padT-4">续转科室：</div>
+            <div class="itemRW-240 padT-4"><input class="textLW" name="dept" id="vosid" style="width:155px;height:22px;" disabled="disabled"/></div>
+            <div class="itemLW-112 padT-4">续转医生：</div>
+            <div class="itemRW-240 padT-4"><input class="textLW" name="dept" id="vdid" style="width:155px;height:22px;" disabled="disabled"/></div>
+            <div class="itemLW-112 padT-4">备注说明：</div>
+            <div class="itemRW-240 padT-4"><textarea class="textLW" name="" cols="" rows="" id="ins"></textarea></div>
+		</div>
+        <div class="butCenter flPadTB-10">
+            <span class="padLR-10"><a href="javascript:void(0)" class="easyui-linkbutton" onClick="submitsqxz()">确定</a></span>
+            <span class="padLR-10"><a href="javascript:void(0)" class="easyui-linkbutton" onclick="javascript:$('#div-sqxz').dialog('close')">取消</a></span>
+        </div>
+       </form>
+    </div>
+    </div>
+</div>
+
+
+
+
+<script type="text/javascript">
+//搜索延迟两秒
+var oInput = document.getElementById('delaysearch');
+oInput.onclick = function(){
+	
+			setTimeout(function(){
+ showDatahzcl();
+}, 300);
+	
+		$("#delaysearch").linkbutton({  
+			disabled:true  
+			}); 
+setTimeout(function(){
+			$("#delaysearch").linkbutton({  
+			disabled:false  
+			}); 
+		},1000*2);
+}
+
+//添加修改延迟五秒
+var oInput = document.getElementById('delayalter');
+oInput.onclick = function(){
+		$("#delayalter").linkbutton({  
+			disabled:true  
+			}); 
+setTimeout(function(){
+			$("#delayalter").linkbutton({  
+			disabled:false  
+			}); 
+		},1000*5);
+}
+</script>
+
+
+
+
+
+
+
+
+
+
+

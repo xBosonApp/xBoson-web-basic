@@ -1,0 +1,70 @@
+<link rel="stylesheet" href="lib/js/plugin/datatables/media/css/jquery.dataTables.css" />
+
+<div class="btn-group" style='margin-bottom: 10px'>
+
+    <div class="btn-group" style='margin-right: 5px'>
+      <button class="btn btn-primary create_new_chart" data-chart-width='12'>
+          创建一个新的图表窗口
+      </button>
+      <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+          <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu">
+          <li>
+              <a href="javascript:void(0);" class='create_new_chart' data-chart-width='12'>长度为整行的</a>
+          </li>
+          <li>
+              <a href="javascript:void(0);" class='create_new_chart' data-chart-width='6'>长度为半行的</a>
+          </li>
+          <li>
+              <a href="javascript:void(0);" class='create_new_chart' data-chart-width='8'>三分之二行</a>
+          </li>
+          <li>
+              <a href="javascript:void(0);" class='create_new_chart' data-chart-width='4'>三分之一行</a>
+          </li>
+          <li class="divider"></li>
+          <li>
+              <a href="javascript:void(0);">取消</a>
+          </li>
+      </ul>
+    </div>
+
+    <!--<button class="btn btn-primary save_chart_setting" data-chart-width='12'>
+        保存当前页面设置
+    </button>-->
+
+</div>
+
+<!-- widget grid -->
+<section id="widget-grid" class="" >
+</section>
+
+
+<!-- end widget grid -->
+<script type="text/javascript" src="lib/js/plugin/hCharts/highcharts-more.js"></script>
+<script type="text/javascript" src="lib/js/plugin/hCharts/drilldown.src.js" ></script>
+
+<script type="text/javascript" src="lib/js/plugin/datatables/media/js/jquery.dataTables.min.js" ></script>
+<script type="text/javascript" src="lib/js/plugin/hCharts/highchart_theme.js" ></script>
+<script type="text/javascript" src="lib/js/zy/zy_chart_common.js"></script>
+<!--<script type="text/javascript" src="bi/js/index.js" ></script>-->
+
+
+<script type="text/javascript">
+//开发临时用：初始化全局API请求参数
+zy.g.am.app = 'qywsjg';
+
+zy_chart.buildChartHandle($('#widget-grid'), function(handle) {
+  var app_name = null;
+
+  $('.create_new_chart').click(function() {
+    var w = $(this).data('chart-width');
+    var _ch = handle.createChartCon('widget-row2', '', w, '[未配置的图表]');
+  });
+
+  $('.save_chart_setting').click(function() {
+    handle.save_config();
+  });
+}, zy.g.am.app, 'a783f520-05b5-11e4-9191-0800200e9b66');
+
+</script>

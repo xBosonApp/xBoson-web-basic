@@ -1,0 +1,39 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>智云 - Web Portal</title>
+</head>
+<body>
+<script type="text/javascript">
+  // 检查本地存储中是否有平台数据
+  function _checklocalStorage(str) {
+    if (!str)
+      return false; 
+    var _o = JSON.parse(str);
+    if (_o && _o["user_org_list"] && _o["user_selected_org"] && _o["user_selected_org_type"])
+      return _o;
+    return false;
+  }
+
+  function _checkCookie(_cookie) { 
+    return _cookie.indexOf('openid') > 0
+  }
+
+  var _zyLocal = '_zy_user_info';
+  var _host = document.domain;
+  var _localStorage = window.localStorage.getItem(_host + _zyLocal);
+  var _cookie = document.cookie;
+  var _local = _checklocalStorage(_localStorage);
+  if (_local) {
+    var _orgtype = _local["user_selected_org_type"];
+    if (_orgtype === 'v')
+      window.location = 'paas/main.html';
+    else
+      window.location = 'saas/' + _o['user_selected_org'] + '/main.html';
+  } else {
+    window.location = 'login.html';
+  }
+</script>
+</body>
+</html>

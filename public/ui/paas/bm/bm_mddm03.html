@@ -1,0 +1,162 @@
+<!--<link rel="stylesheet" href="lib/js/plugin/datatables/media/css/jquery.dataTables.css" />-->
+<div class="modal fade" id="bm_mddm03_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+        </button>
+        <h4 class="modal-title">模型设置</h4>
+      </div>
+      <div class="modal-body">
+        <div id="bm_mddm03_tabs">
+          <ul>
+            <li>
+              <a href="#bm_mddm03_tabs-a"> 导出数据 </a>
+            </li>
+            <li>
+              <a href="#bm_mddm03_tabs-b"> 创建表 </a>
+            </li>
+          </ul>
+          <div id="bm_mddm03_tabs-a">
+            <div class="row">
+              <form id="bm_mddm03_upd_form" class="smart-form" onsubmit="return false;" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="typecd">
+                <section class="col col-5">
+                  <label class="label">导出类型：</label>
+                  <label class="input"> 										
+          				  <input name="export-type" type="hidden" data-type="select2" placeholder="导出类型">
+          			  </label>
+                </section>
+                <section name="upload-file" class="col col-5">
+                  <label class="label">上传模板：</label>
+                  <label class="input input-file">
+    								<div class="button">
+    								  <input type="file" name="file" onchange="this.parentNode.nextElementSibling.value = this.value">选择新模板
+    								</div>
+    								<input type="text" name="fileName" readonly="">
+    							</label>
+  							</section>
+  							<section class="col col-md-2">
+                  <label class="label">&emsp;</label>
+    							<div class="">
+      						  <button class="form-control btn btn-default" name="upfile">上传模板</button>
+      						</div>
+  							</section>
+              </form>
+            </div>
+            <form id="bm_mddm03_tab1_form" onsubmit="return false;" method="post">
+              <!--<input type="hidden" name="typecd">-->
+              <div class="row">
+                <label class="col-md-3">
+                  <input type="radio" name="dataway" value="1" checked="true"> 查询模型SQL语句
+                </label>
+                <label class="col-md-3">
+                  <input type="radio" name="dataway" value="2"> 查询模型物理表<span id="bm_mddm03_tbl"></span>
+                </label>
+                <div class="col-md-2 col-md-offset-1">
+                  <button id="bm_mddm03_dataBtn" type="submit" class="btn btn-default">查询数据</button>
+                </div>
+              </div>
+              <fieldset name="sqlinfo">
+                <div>
+                  <section>
+                    <label>SQL语句：</label>									
+            				  <textarea name="sqltext" rows="3" style="resize: vertical" class="form-control"></textarea>
+                  </section>
+                </div>
+                <div>
+                  <section>
+                    <label>SQL参数：</label>
+                  </section>
+                </div>
+                <div id="bm_mddm03_sqlparams"></div>
+              </fieldset>
+            </form>
+            <div class="row">
+              <div class="col col-md-12">
+                <div class="text-center"><b>数据（data）</b></div>
+                <div class="pull-right"><b name="total_count1"></b></div>
+                <div class="table-responsive">
+                <!--class="table table-striped cell-border"-->
+                  <table id="bm_mddm03_tab1_table" class="table table-bordered table-striped"></table>
+                </div>
+                <div id="bm_mddm03_tab1_pagination"></div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col col-md-12">
+                <div class="text-center"><b>列类型（type）</b></div>
+                <div class="pull-right"><b name="total_count2"></b></div>
+                <div class="table-responsive">
+                  <table id="bm_mddm03_tab1_tbl_type" class="table table-bordered table-striped"></table>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col col-md-12">
+                <div class="text-center"><b>搜索条件（search）</b></div>
+                <div class="pull-right"><b name="total_count3"></b></div>
+                <div class="table-responsive">
+                  <table id="bm_mddm03_tab1_tbl_search" class="table table-bordered table-striped"></table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="bm_mddm03_tabs-b">
+          <div>
+            <form class="smart-form" onsubmit="return false;" method="post" id='bm_mddm03_tab2_form'>
+              <input type="hidden" name="typecd">
+              <div class="row">
+                <section class="col col-4">
+                  <label class="label">表数据源</label>
+                  <label class="input has-warning">
+                    <input type="hidden" name="did" data-type="select2" placeholder="选择数据源...">
+                  </label>
+                </section>
+                <section class="col col-4">
+                  <label class="label">表英文名</label>
+                  <label class="input has-warning">
+                    <input type="text" name="en" placeholder="表英文名">
+                  </label>
+                </section>
+                <section class="col col-4">
+                  <label class="label">表中文名</label>
+                  <label class="input has-warning">
+                    <input type="text" name="cn" placeholder="表中文名">
+                  </label>
+                </section>
+              </div>
+              <div class="row">
+                <section class="col col-4">
+                  <label class="label">数据元类别</label>
+                  <label class="input has-warning">
+                    <input type="text" name="dedir" readonly="true" placeholder="选择数据元类别">
+                  </label>
+                </section>
+                <section class="col col-4">
+                  <label class="label">数据集类别</label>
+                  <label class="input has-warning">
+                    <input type="text" name="dsdir" readonly="true" placeholder="选择数据集类别">
+                  </label>
+                </section>
+              </div>
+            </form>
+            </div>
+            <div id="bm_mddm03_deTree" class="ztree" style="display:none;"></div>
+            <div id="bm_mddm03_dsTree" class="ztree" style="display:none;"></div>
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover table-striped dataTable" id="bm_mddm03_table">
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="bm_mddm03_submit" class="btn btn-primary">导出数据</button>
+        <button class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script src="bm/bm_mddm03.js"></script>

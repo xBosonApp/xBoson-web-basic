@@ -1,0 +1,147 @@
+<meta http-equiv="Content-Type" charset="UTF-8" />
+<div class="modal fade" id="addr_h8h9" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title">绑定管理员</h4>
+      </div>
+      <div class="modal-body no-padding">
+        <!-- FORM Start -->
+        <form id="addr_h8h9_form" method="post" onsubmit="return false;" class="smart-form">
+          <fieldset>
+            <div class="row">
+              <section class="col col-6">
+                <label class="label">开发商（租户）机构</label>
+                <label class="input has-warning">
+                  <input type="hidden" name="orgid" data-type="select2" placeholder="开发商（租户）机构" />
+                  <input type="hidden" name="admintype" />
+                  <b id="addr_h8h9_orgid" class="tooltip tooltip-bottom-right">开发商（租户）机构为必填项目</b> </label>
+              </section>
+              <section class="col col-6">
+                <label class="label">用户账号</label>
+                <label class="input has-warning">
+                  <input type="hidden" name="userid"  placeholder="请输入用户帐户、邮箱或手机号码" data-type="select2"/>
+                 </label>
+              </section>
+            </div>
+            <div class="row">
+              <section  class="col col-6">
+                <label class="label">状态</label>
+                <label class="input">
+                  <input type="hidden" name="status" data-type="select2" placeholder="状态" />
+                </label>
+              </section>
+            </div>
+          </fieldset>
+          <footer>
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+              取消
+            </button>
+            <button type="submit" class="btn btn-primary">
+              确定
+            </button>
+          </footer>
+        </form>
+        <!-- FORM End -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+<!-- SCRIPTS ON PAGE EVENT -->
+<script type="text/javascript">
+  // DO NOT REMOVE : GLOBAL FUNCTIONS!
+  pageSetUp();
+
+  (function() {
+    // 数据字典处理
+    var cb = function() {
+      // 字典数据绑定
+      $("#addr_h8h9_form input[name=status]").zySelect('ZR.0001', false, {
+        width : '100%'
+      });
+      $('#addr_h8h9_form input[name=status]').select2("val", '1');
+      //默认值
+     
+      if (md_h7._g.param.org_type == 'v') {
+        $("#addr_h8h9_form input[name=admintype]").val('5');
+      } else if (md_h7._g.param.org_type == 't') {
+        $("#addr_h8h9_form input[name=admintype]").val('3');
+      }
+
+     
+
+    };
+    var cborg=function(msg){
+        $("#addr_h8h9_form input[name=orgid]").zySelectCustomData('', false, {
+        width : '100%'
+      }, msg.result);
+       $("#addr_h8h9_form input[name=orgid]").select2('val', md_h7._g.param.orgid);
+       $('#addr_h8h9_form input[name=orgid]').attr('readonly', true);
+    };
+    	zy.g.am.app = 'd2c8511b47714faba5c71506a5029d94';
+    	zy.g.am.mod = 'orginfo';
+    	zy.net.post("api/orgselect2", cborg, $('#addr_h8h9_form').serialize());
+    // 预处理该画面所需的字典类型，以 , 号分割
+    zy.cache.initDicts('ZR.0001', cb);
+  })();
+
+  $('#addr_h8h9').modal('show');
+
+  $('#addr_h8h9_form input[name=userid]').select2({
+    width : '100%',
+    placeholder : "请输入",
+    minimumInputLength : 1,
+    maximumSelectionSize : 5, // 限制数量
+    query : function(option) {
+    	zy.g.am.app = 'c9e98ea6fc7148d186289e8c33776f8a';
+    	zy.g.am.mod = 'user_manager',
+    	zy.net.get.call(option,"api/getusersel2", function(_m){
+    		var _d = {results : _m.result}
+    		option.callback(_d);
+    	}, {mailAtel : option.term});
+    }
+  });
+  // Registration validation script
+  $("#addr_h8h9_form").validate({
+    // Rules for form validation
+    rules : {
+      orgid : {
+        required : true,
+        maxlength : 100
+      },
+      org_type : {
+        required : true,
+        maxlength : 100
+      }
+    },
+    // Messages for form validation
+    // 验证成功后保存
+    submitHandler : function(form) {
+      var callback = function(msg) {
+        $('#addr_h8h9_form').formDisable(false);
+        if (msg) {
+          Console.log("保存成功 = " + JSON.stringify(msg));
+          $('#addr_h8h9').modal('hide');
+          zy.ui.msg("提示信息：", "保存成功！", "s");
+        }
+      };
+      zy.g.am.app = '0418a865dac144cfa77a1e4573e3f549';
+      zy.g.am.mod = 'user_manager';
+
+      zy.net.post("api/init_orgadmin", callback, $('#addr_h8h9_form').serialize());
+
+      $('#addr_h8h9_form').formDisable(true);
+    },
+    // Do not change code below
+    errorPlacement : function(error, element) {
+      error.insertAfter(element.parent());
+    }
+  });
+</script>

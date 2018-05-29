@@ -1,0 +1,261 @@
+<script type="text/javascript" src="/t/paas/show/ui/comm.js"></script>	
+
+<script type="text/javascript">
+var pageNum=1;
+var pagesize=10;
+var ryxxlData;
+var ryxxrData;
+var rowno;
+var sexMap  = new Map();
+$(function () {
+    getselect();
+	getselectd();
+	dataryxxl();
+	//dataryxxr();
+	
+	
+});
+function ryxxlcallback(retData){
+    ryxxlData=retData;
+    $('#div-ryxxl').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+	            singleSelect:true,
+				pagination:true,
+				border:true,
+				title:'检索结果',
+				pageNumber:pageNum,
+				pageSize: pagesize,
+				loadMsg:"正在载入...",
+                pageList: [10,20,50,100,200],
+				data:ryxxlData.datalist,
+				fitColumns:true,
+				columns:[[
+				   {field:'pname',title:'姓名',width:60,align:'center'},
+				   {field:'gender',title:'性别',width:40,align:'center',
+					 formatter:function(value){
+					  return LC_getMapValue(value,sexMap);
+					 }},
+				   {field:'birthday',title:'出生日期',width:100,align:'center'},
+				   {field:'idcard',title:'身份证号码',width:102,align:'center'},
+				   {field:'addr',title:'地址',width:100,align:'center'}
+				]],
+                onDblClickRow: function (rowIndex){
+                	rowno=rowIndex;
+                  	ryxxopenRoleDiv(rowIndex);
+                },
+               fitColumns:false,//宽度自适应
+			   pagination:true,//分页插件
+               rownumbers:true,//行数
+			   height:300,
+			   width:435
+		}); 
+
+	   var pager = $('#div-ryxxl').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		          pageNum=pageNumber;
+		   		 pagesize=pageSize;
+		           dataryxxl();
+		        }
+			});		
+		 
+		$(pager).pagination({pageSize:pagesize,pageNumber:pageNum,total:ryxxlData.count});
+
+		};
+    
+    
+    }
+   
+	function dataryxxl(){
+	    	var url="getsimilarities/";
+          	var itemsList=["pname","card","idcard","birthday","gender"];	
+          	//var itemsList=[];
+			var info= new Map();	
+	        info.put("start",(pageNum-1)*pagesize);
+	        info.put("pagesize",pagesize);
+        	LC_AjaxGet(EMPIUrl+url,"ryxxform","ryxxlcallback",info,itemsList);
+	}
+	function ryxxopenRoleDiv(rowIndex){
+			
+		  //双击事件
+		 $("#pidno").val(ryxxlData.datalist[rowIndex].pid);
+		 var url="getsimilaritbypid/";
+		 var itemsList=[];	
+		 var info = new Map();		 
+		 info.put("pid",ryxxlData.datalist[rowIndex].pid);
+		 info.put("pidno",ryxxlData.datalist[rowIndex].pid)
+         console.log(itemsList);
+		 console.log(info);
+		 LC_AjaxGet(EMPIUrl+url,"ryxxform","ryxxrcallback",info,itemsList);		
+		 
+	}
+	
+
+function ryxxrcallback(retData){
+			
+
+     ryxxrData=retData;
+    $('#div-ryxxr').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+	            singleSelect: false,
+				selectOnCheck: true,
+				checkOnSelect: true,
+				pagination:true,
+				border:true,
+				title:'相似人信息',
+				pageNumber:pageNum,
+				pageSize: pagesize,
+				loadMsg:"正在载入...",
+            pageList: [10,20,50,100,200],
+				data:ryxxrData.datalist,
+				fitColumns:true,
+				columns:[[
+				   {field:'ck',width:20,checkbox:true},
+				   {field:'pname',title:'姓名',width:60,align:'center'},
+				   {field:'gender',title:'性别',width:30,align:'center'},
+				   {field:'birthday',title:'出生日期',width:90,align:'center'},
+				   {field:'idcard',title:'身份证号码',width:102,align:'center'},
+				   {field:'addr',title:'地址',width:100,align:'center'}
+				]],                   
+               fitColumns:false,//宽度自适应
+			   pagination:true,//分页插件
+               rownumbers:true,//行数
+			   height:300,
+			   width:435
+		}); 
+
+	   var pager = $('#div-ryxxr').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pageNum=pageNumber;
+		           pagesize=pageSize;
+		          
+		        }
+			});
+		$(pager).pagination({pageSize:pagesize,pageNumer:pageNum,total:ryxxrData.count});
+		};
+   		}
+   		//function dataryxxr(){
+   		
+	    	//var url="mergerpersons/";
+          	//var itemsList=["pid"];	
+			//var info= new Map();
+        	//LC_AjaxGet(EMPIUrl+url,"ryxxform","ryxxrcallback",info,itemsList);
+		//}
+		
+   		function hbbutton(){
+			var checkedItems = $('#div-ryxxr').datagrid('getChecked');
+			var names = "";
+			$.each(checkedItems, function(index, item){
+				if(names!=""){
+				   names=names+","+item.pid;
+				}else{
+				  names=item.pid;
+				};
+			}); 
+			var url="mergerpersons/";
+   			var itemsList=["sdfsdf","sdfsdfsd","sdfsdf"];	
+   		    var info= new Map();  
+			info.put("subpids",names);
+   			info.put("pid",$("#pidno").val());
+   			LC_AjaxGet(EMPIUrl+url,"ryxxform","abc",info,itemsList);
+   		}
+   		
+   		function abc(ret){
+   		   ryxxopenRoleDiv(rowno);
+   		}
+
+ function  getselect(){
+
+  var url="mdm/dict/listget/";
+  var infoa = new Map();
+  infoa.put("stringsplit","VA0004.04");
+  var itemsList= [];
+
+  LC_AjaxGet(MDMBaseUrl+url,"ryxxform","mdmSelect",infoa,itemsList);
+
+}
+
+function mdmSelect(data){
+
+  var info = new Map();
+  info.put("key",["typeCode2"]);
+  info.put("value",["typeName"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("ryxxform","gender",info,data.dataList["VA0004.04"]);
+
+}	
+//转换性别
+
+function  getselectd(){
+
+  var url="mdm/dict/listget/";
+  var infoa = new Map();
+  infoa.put("stringsplit","VA0004.04");
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"ryxxformg","mdmSelectd",infoa,itemsList);
+}
+function mdmSelectd(data){
+  var info = new Map();
+  info.put("key",["typeCode2"]);
+  info.put("value",["typeName"]);
+  sexMap=LC_getDataMap(info,data.dataList["VA0004.04"]);
+}
+
+		
+</script>
+	<div class="mainW-872">
+		 <div id="jz11" class="easyui-panel" title="获取相关人员信息">
+		 <form id="ryxxform">
+			<div class="flPadTB-10">	
+				<div class="mainsW-864">
+					<div class="mainW-272" >
+                    <input type="hidden" id="pidno">
+						<div class="itemLW-112 padT-4">姓名：</div>	
+						<div class="itemLW-160"><input class="textLW" type="text" id="pname"></div>
+					</div>
+					<div class="mainW-272" >
+						<div class="itemLW-112 padT-4">一卡通：</div>	
+						<div class="itemLW-160"><input class="textLW" type="text" id="card" disabled="disabled" /></div>
+					</div>
+					<div class="mainW-272" >
+						<div class="itemLW-112 padT-4" >身份证：</div>	
+						<div class="itemLW-160"><input class="textLW" type="text" id="idcard"></div>
+					</div>	
+					<div class="mainW-272" >
+						<div class="itemLW-112 padT-4">出生日期：</div>	
+						<div class="itemLW-160"><input class="textLW" type="text" id="birthday"></div>
+					</div>
+					<div class="mainW-272" >
+					    <div class="itemLW-112 padT-4">性别：</div> 
+						<div class="itemRW-160" >
+                         <select id="gender" class="mainsW-160" name="dept"></select>
+					</div>
+					</div>
+            		<div class="itemLW-272" ><a class="easyui-linkbutton" onclick="dataryxxl();">查询</a></div>
+            	</div>
+        	</div>
+        	
+        	</div>
+        </form>
+        <div style="width:435px; float:left;">
+        <form id="ryxxformg">	
+			<table id="div-ryxxl" ></table>
+			</form>
+		</div>
+        <div style="width:435px; float:left">
+			<table id="div-ryxxr" toolbar="#type-toolbar" ></table>
+			<div id="type-toolbar">
+                <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="hbbutton()">合并</a>
+            </div>
+       </div>
+    </div> 
+ </div>
+

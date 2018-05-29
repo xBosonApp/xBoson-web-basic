@@ -1,0 +1,456 @@
+<style type="text/css">
+#timecx{ display: none;}	
+table{ font-size:12px; font-weight:normal; text-align:left;}
+table thead{background:linear-gradient(to bottom, #f9f9f9 0px, #efefef 100%) repeat-x; border-top:1px solid #dddddd; height:24px; line-height:24px;}
+.z-bg{background:linear-gradient(to bottom, #f9f9f9 0px, #efefef 100%) repeat-x;}
+table td,table th{ border-right:1px dotted #ccc; border-bottom:1px dotted #ccc; padding:0 0 0 5px;height:24px;}
+</style>
+<div id="etbjglda-m"  class="portlet box grey">
+    <div class="portlet-title">
+        <div class="caption" id="yetj-name"><!-- 可以设置图标<i class="icon-globe"></i> -->绩效汇总</div>
+        <!-- 设置关闭和刷新--> 
+        <!-- <div class="tools">
+            <div class="tools-chart">
+            	<a title="柱形图" rel="column"><i class="icon-bar-chart"></i></a> <a title="饼形图" rel="pie"><i class="icon-adjust"></i></a>
+                <span class="reload" title="数据图表"><i class="icon-file-text-alt"></i></span>
+            </div>
+        </div> -->
+        
+    </div>
+    <div class="portlet-body">
+        <div class="lc-inquire">
+            <form id="org_etbjglda" class="form-inline" action="">
+                <input type="hidden" id="groupby" value="tablename"/>
+                <input type="hidden" id="pagenum"/>
+                <input type="hidden" id="pagesize"/>
+                <input type="hidden" id="sa"/>
+                <input type="hidden" id="MM"/>
+                <div class="row-fluid">
+                	<div class="span2" style="display:none;"><select id="zhuanqu" class="selectpicker"><option value="1">按机构</option></select></div>
+                    <div class="span1">机构名称</div>
+                    <div class="span2"><select id="dimorg" class="selectpicker"></select></div>
+                    <div class="span1 displayb">开始时间</div>
+                    <div class="span2 displayb">
+                    	<div class="datebegin"></div>
+                    </div>
+                    <div class="span1 displayb">结束时间</div>
+                    <div class="span2 displayb">
+                    	<div class="dateend"></div>
+                    </div>
+                    <div class="span1"><a id="jgcx" onclick="setData2EtbjgldaNew('tablename')" class="btn blue">查询</a></div>
+                    <div class="span1"><a onclick="loading111()" class="btn blue">查询1</a></div>
+                </div>
+            </form>
+        </div>
+<!-- 新 开始
+        <div class="row-fluid">
+			<div class="span12">
+                 <table id="logywlltj"></table>
+            </div>
+        </div> -->
+<!-- 新 结束 -->
+        <div id="rowtable" class="row-fluid">
+            <div class="span12">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+					<thead>
+					    <tr>
+					        <th>名称</th>
+					        <th>考核标准</th>
+					        <th align="center" width="100">数量</th>
+					        <th>名称</th>
+					        <th>考核标准</th>
+					        <th align="center" width="100">名称</th>
+					    </tr>
+					</thead>
+					  <tr>
+					    <td class="z-bg">健康档案（份）</td>
+					    <td class="z-bg">新建健康档案数量</td>
+					    <td align="center" class="z-data1">0</td>
+					    <td class="z-bg">口腔卫生服务管理</td>
+					    <td class="z-bg">口腔健康档案</td>
+					    <td align="center" class="z-data2">0</td>
+					  </tr>
+					  <tr>
+					    <td rowspan="2" class="z-bg">健康教育（次）</td>
+					    <td class="z-bg">咨询数</td>
+					    <td align="center" class="z-data3">0</td>
+					    <td rowspan="2" class="z-bg">中医药健康管理服务</td>
+					    <td class="z-bg">0-36个月龄儿童中医药健康管理服务 </td>
+					    <td align="center" class="z-data5">0</td>
+					  </tr>
+					  <tr>
+					    <td class="z-bg">讲座数</td>
+					    <td align="center" class="z-data4">0</td>
+					    <td class="z-bg">65岁以上老年人中医药健康管理服务</td>
+					    <td align="center" class="z-data6">0</td>
+					  </tr>
+					  <tr>
+					    <td rowspan="6" class="z-bg">儿童保健（次）</td>
+					    <td class="z-bg">0-6岁儿童口腔保健</td>
+					    <td align="center" class="z-data7">0</td>
+					    <td rowspan="6" class="z-bg">妇女保健</td>
+					    <td rowspan="2" class="z-bg">产后42天健康检查</td>
+					    <td rowspan="2" align="center" class="z-data13">0</td>
+					  </tr>
+					  <tr>
+					    <td class="z-bg">1-3岁儿童健康体检</td>
+					    <td align="center" class="z-data8">0</td>
+					  </tr>
+					  <tr>
+					    <td class="z-bg">1岁以下儿童健康体检</td>
+					    <td align="center" class="z-data9">0</td>
+					    <td rowspan="2" class="z-bg">孕产妇早期健康状况评估</td>
+					    <td rowspan="2" align="center" class="z-data14">0</td>
+					  </tr>
+					  <tr>
+					    <td class="z-bg">新生儿满月访视</td>
+					    <td align="center" class="z-data10">0</td>
+					  </tr>
+					  <tr>
+					    <td class="z-bg">新生儿访视</td>
+					    <td align="center" class="z-data11">0</td>
+					    <td rowspan="2" class="z-bg">孕期、产后随访</td>
+					    <td rowspan="2" align="center" class="z-data15">0</td>
+					  </tr>
+					  <tr>
+					    <td class="z-bg">血常规检测</td>
+					    <td align="center" class="z-data12">0</td>
+					  </tr>
+					  <tr>
+					    <td class="z-bg">死因监测</td>
+					    <td class="z-bg">死因监测</td>
+					    <td align="center" class="z-data16">0</td>
+					    <td class="z-bg">结核病管理</td>
+					    <td class="z-bg">结核病管理</td>
+					    <td align="center" class="z-data17">0</td>
+					  </tr>
+					  <tr>
+					    <td class="z-bg">计划生育技术服务咨询指导</td>
+					    <td class="z-bg">计划生育技术服务咨询</td>
+					    <td align="center" class="z-data18">0</td>
+					    <td class="z-bg">结核病人随访</td>
+					    <td class="z-bg">结核病人随访</td>
+					    <td align="center" class="z-data19">0</td>
+					  </tr>
+					  <tr>
+					    <td class="z-bg">健康体检</td>
+					    <td class="z-bg">健康体检</td>
+					    <td align="center" class="z-data20">0</td>
+					    <td class="z-bg">推荐疑似结核病人</td>
+					    <td class="z-bg">推荐疑似结核病人</td>
+					    <td align="center" class="z-data21">0</td>
+					  </tr>
+					  <tr>
+					    <td class="z-bg">慢性病患者健康管理</td>
+					    <td class="z-bg">糖尿病、35岁以上高血压患者季度随访</td>
+					    <td align="center" class="z-data22">0</td>
+					    <td class="z-bg">4-6岁生长发育评估</td>
+					    <td class="z-bg">4-6岁生长发育评估</td>
+					    <td align="center" class="z-data23">0</td>
+					  </tr>
+					  <tr>
+					    <td rowspan="2" class="z-bg">残疾人管理</td>
+					    <td class="z-bg">残疾人建档</td>
+					    <td align="center" class="z-data24">0</td>
+					    <td rowspan="2" class="z-bg">0-6岁儿童口腔保健</td>
+					    <td rowspan="2" class="z-bg">0-6岁儿童口腔保健</td>
+					    <td rowspan="2" align="center" class="z-data26">0</td>
+					  </tr>
+					  <tr>
+					    <td class="z-bg">残疾人访视</td>
+					    <td align="center" class="z-data25">0</td>
+					  </tr>
+					  <tr>
+					    <td rowspan="2" class="z-bg">重性精神疾病患者健康管理</td>
+					    <td class="z-bg">新发现重性精神疾病患者建档</td>
+					    <td align="center" class="z-data27">0</td>
+					    <td>&nbsp;</td>
+					    <td>&nbsp;</td>
+					    <td align="center">&nbsp;</td>
+					  </tr>
+					  <tr>
+					    <td class="z-bg">重性精神疾病患者随访</td>
+					    <td align="center" class="z-data28">0</td>
+					    <td>&nbsp;</td>
+					    <td>&nbsp;</td>
+					    <td align="center">&nbsp;</td>
+					  </tr>
+					</table> 
+                 
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+var dataShow;
+var PageNumber=1;
+var PageSize=10;
+
+
+/* 新添加js
+function loading111(){
+	$("#pagenum").val(PageNumber);
+	$("#pagesize").val(PageSize);
+	var mapInfo = new Map();
+	mapInfo.put("sqlid","selectfy");
+	mapInfo.put("pagenum",PageNumber);
+	mapInfo.put("pagesize",PageSize);
+	var itemsList=[];
+	if($("#datebegin").val()!=""&&$("#dateend").val()!=""){
+		itemsList.push("datebegin");
+		itemsList.push("dateend");
+	}
+	if($("#hospunitorgcode").val()!=""){
+		itemsList.push("hospunitorgcode");
+	}
+	var url = "CUS002";
+	sys_AjaxGet(MDMBaseUrl+url,"org_etbjglda","reCallback",mapInfo,itemsList);
+}
+function reCallback(dataInfo){
+	if(dataInfo.ret=="103"){
+        alert("用户登录超时，请重新登陆！");
+        $('#trigger').scojs_modal();
+    }
+		$('#logywlltj').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+				singleSelect:true, 
+				pagination:true,
+				pageNumber:PageNumber,
+				pageSize: PageSize,
+				loadMsg:"正在载入...",
+                pageList: [10,20,50,100,200],
+				data:dataInfo.dataList,
+				columns:[[
+				   {field:'appid',title:'appid',align:'center'},
+				   {field:'checkname',title:'checkname',align:'center'},
+				   {field:'checkrepid',title:'checkrepid',align:'center'},
+				   {field:'status',title:'status',align:'center'},
+				   {field:'formula',title:'formula',align:'center'}
+				]],                  
+                onDblClickRow: function (rowIndex) {
+                  openRoleDiv(rowIndex);
+                },
+               fitColumns:true,
+               rownumbers:true
+		}); 
+
+	   var pager = $('#logywlltj').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+				
+			    onSelectPage:function(pageNumber,pageSize){
+		           PageNumber=pageNumber;
+		           PageSize=pageSize;
+		           loading111();
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:PageSize,pageNumber:PageNumber,total:dataInfo.count});
+
+		};
+	}
+
+
+ */
+
+
+function setData2Etbjglda(data){
+	$(".loadshow").show(); 
+	var url ="JXHZ"; 
+	var itemsList;
+	if($("#datebegin").val()!=""&&$("#dateend").val()!=""){
+		itemsList=["datebegin","dateend","dimorg"];
+	}else{
+		itemsList=[];
+	}
+	//空数据 会出现 小bug
+	var info= new Map();
+	info.put("sqlid","select");
+	info.put("pagenum",PageNumber);
+	info.put("pagesize",PageSize);
+	if(data==="tablename"){
+	   LXtype="tablename";
+	}else if(data==="createdate"){
+	   LXtype="createdate";
+	}else{
+	   LXtype="hospunitorgcode"
+	}
+	info.put("groupby",data);
+	sys_AjaxGet(BIASUrl+url,"org_etbjglda","reCallback101",info,itemsList);
+}
+
+function reCallback101(dataInfo){
+	if(dataInfo.ret=="103"){
+        alert("用户登录超时，请重新登陆！");
+        $('#trigger').scojs_modal();
+    }
+//切换图形是grid时候，如果没有对应数据
+if(dataInfo.dataMap.data.length==0)
+	{
+		alert("无此数据！")
+	}else{
+		$(".reload").click(function(){
+			$("#rowtable").removeClass("rowtable");
+		});
+	}
+//将dataAll添加到数据里面
+var zhuanqu=$("#zhuanqu").val();
+if (zhuanqu=="1") {
+var datapush=dataInfo.dataMap.data;
+dataInfo.dataMap.dataAll[0].机构="合计";
+datapush.push(dataInfo.dataMap.dataAll[0]);	
+};
+$(".z-data1").html(dataInfo.dataMap.data[0]['新建健康档案数量']);
+$(".z-data2").html(dataInfo.dataMap.data[0]['口腔健康档案']);
+$(".z-data3").html(dataInfo.dataMap.data[0]['咨询数']);
+$(".z-data4").html(dataInfo.dataMap.data[0]['讲座数']);
+$(".z-data5").html(dataInfo.dataMap.data[0]['0-36个月龄儿童中医药健康管理服务']);
+$(".z-data6").html(dataInfo.dataMap.data[0]['65岁以上老年人中医药健康管理服务']);
+$(".z-data7").html(dataInfo.dataMap.data[0]['0-6岁儿童口腔保健']);
+$(".z-data8").html(dataInfo.dataMap.data[0]['1-3岁儿童健康体检']);
+$(".z-data9").html(dataInfo.dataMap.data[0]['1岁以下儿童健康体检']);
+$(".z-data10").html(dataInfo.dataMap.data[0]['新生儿满月访视']);
+$(".z-data11").html(dataInfo.dataMap.data[0]['新生儿访视']);
+$(".z-data12").html(dataInfo.dataMap.data[0]['血常规检测']);
+$(".z-data13").html(dataInfo.dataMap.data[0]['产后42天健康检查']);
+$(".z-data14").html(dataInfo.dataMap.data[0]['孕产妇早期健康状况评估']);
+$(".z-data15").html(dataInfo.dataMap.data[0]['孕期、产后随访']);
+$(".z-data16").html(dataInfo.dataMap.data[0]['死因监测']);
+$(".z-data17").html(dataInfo.dataMap.data[0]['结核病管理']);
+$(".z-data18").html(dataInfo.dataMap.data[0]['计划生育技术服务咨询']);
+$(".z-data19").html(dataInfo.dataMap.data[0]['结核病人随访']);
+$(".z-data20").html(dataInfo.dataMap.data[0]['健康体检']);
+$(".z-data21").html(dataInfo.dataMap.data[0]['推荐疑似结核病人']);
+$(".z-data22").html(dataInfo.dataMap.data[0]['糖尿病、35岁以上高血压患者季度随访']);
+$(".z-data23").html(dataInfo.dataMap.data[0]['4-6岁生长发育评估']);
+$(".z-data24").html(dataInfo.dataMap.data[0]['残疾人建档']);
+$(".z-data25").html(dataInfo.dataMap.data[0]['残疾人访视']);
+$(".z-data26").html(dataInfo.dataMap.data[0]['0-6岁儿童口腔保健']);
+$(".z-data27").html(dataInfo.dataMap.data[0]['新发现重性精神疾病患者建档']);
+$(".z-data28").html(dataInfo.dataMap.data[0]['重性精神疾病患者随访']);
+	
+//删除新增的dataAll	
+if (zhuanqu=="1") {
+datapush.splice(datapush.length-1);
+}
+}
+</script>
+<script>
+$(function(){
+$(window).resize(function(){
+$('#ttEtbjglda').datagrid('resize');
+});
+});
+</script>
+<script>
+//机构
+$(function () {
+getselectdaoid101();
+});
+function  getselectdaoid101(){
+  sys_BI_getDaoidList("mdmSelectdaoid101");
+}
+function mdmSelectdaoid101(data){
+  var info = new Map();
+  info.put("key",["hospunitorgcode"]);
+  info.put("value",["hospunitorgnm"]);
+  sys_GetSelect("org_etbjglda","dimorg",info,sys_BI_getCacheDaoidData());
+  $("#dimorg option:first").remove()
+}
+
+//loadingEtbjglda();
+//setDataCy('tablename');
+
+var zhuanqu=$("#zhuanqu").val();
+if (zhuanqu=="1") {
+	$(".datebegin").html("");
+	$(".dateend").html("");
+	$(".datebegin").append("<input id='datebegin' type='text' value='2012-09-09' class='dateday'>");
+	$(".dateend").append("<input id='dateend' type='text' value='2012-09-09' class='dateday'>");
+	$('.dateday').datetimepicker({
+		format: 'yyyy-mm-dd',
+		autoclose:true,
+		startView:2,
+		minView:2
+	});
+	today=new Date(); 
+	var ymd=sys_FormatYMD(today);
+	var vMon = today.getMonth() + 1;
+var dateendymd=today.getFullYear()-1+"-"+(vMon<10 ? "0" + vMon : vMon)+"-"+today.getDate();
+$("#datebegin").val(dateendymd);
+	$("#dateend").val(ymd);
+    setData2Etbjglda();
+    $("#jgcx").show();
+    $("#timecx").hide();
+}else{
+	$(".datebegin").html("");
+	$(".dateend").html("");
+	$(".datebegin").append("<input id='datebegin' type='text' value='2012-09' class='datemonth'>");
+	$(".dateend").append("<input id='dateend' type='text' value='2012-09' class='datemonth'>");
+	$('.datemonth').datetimepicker({
+		format: 'yyyy-mm',
+		autoclose:true,
+		startView:3,
+		minView:3
+	});
+	today=new Date();
+	var vMon = today.getMonth() + 1;
+	var dateendymd=today.getFullYear()-1+"-"+(vMon<10 ? "0" + vMon : vMon);
+	var ymd=today.getFullYear()+"-"+(vMon<10 ? "0" + vMon : vMon);
+	$("#datebegin").val(dateendymd);
+	$("#dateend").val(ymd); 
+    /*Etbjgltime();*/
+    $("#jgcx").hide();
+    $("#timecx").show();
+};
+$("#zhuanqu").change(function(){
+    var zhuanqu=$("#zhuanqu").val();
+    if (zhuanqu=="1") {
+    	$(".datebegin").html("");
+    	$(".dateend").html("");
+    	$(".datebegin").append("<input id='datebegin' type='text' value='2012-09-09' class='dateday'>");
+		$(".dateend").append("<input id='dateend' type='text' value='2012-09-09' class='dateday'>");
+		$('.dateday').datetimepicker({
+			format: 'yyyy-mm-dd',
+			autoclose:true,
+			startView:2,
+			minView:2
+		});
+		today=new Date(); 
+		var ymd=sys_FormatYMD(today);
+		var vMon = today.getMonth() + 1;
+var dateendymd=today.getFullYear()-1+"-"+(vMon<10 ? "0" + vMon : vMon)+"-"+today.getDate();
+$("#datebegin").val(dateendymd);
+		$("#dateend").val(ymd);
+	    setData2Etbjglda();
+	    $("#jgcx").show();
+    	$("#timecx").hide();
+    }else{
+    	$(".datebegin").html("");
+    	$(".dateend").html("");
+    	$(".datebegin").append("<input id='datebegin' type='text' value='2012-09' class='datemonth'>");
+		$(".dateend").append("<input id='dateend' type='text' value='2012-09' class='datemonth'>");
+		$('.datemonth').datetimepicker({
+			format: 'yyyy-mm',
+			autoclose:true,
+			startView:3,
+			minView:3
+		});
+		today=new Date();
+		var vMon = today.getMonth() + 1;
+		var dateendymd=today.getFullYear()-1+"-"+(vMon<10 ? "0" + vMon : vMon);
+		var ymd=today.getFullYear()+"-"+(vMon<10 ? "0" + vMon : vMon);
+		$("#datebegin").val(dateendymd);
+		$("#dateend").val(ymd);
+        /*Etbjgltime();*/
+        $("#jgcx").hide();
+    	$("#timecx").show();
+    };
+
+});
+</script>
+
+
+

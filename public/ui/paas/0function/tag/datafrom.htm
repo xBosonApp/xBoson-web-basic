@@ -1,0 +1,19 @@
+<never>
+  将后端变量导出到前端.
+  
+  参数: 
+    `var` 要导出的变量名.
+</never>
+
+<script runat='server'>
+  var name = val('var');
+  if (name) {
+    var data = JSON.stringify(val(name));
+    // 必须把 </ 和 script> 分开写
+    var html = '<script> var ' + name + '=' + data + '</' + 'script>';
+    write(html);
+  } else {
+    write('<div>datafrom 标签缺少 var 参数</div>');
+  }
+  end();
+</script>  

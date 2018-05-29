@@ -1,0 +1,41 @@
+<style type="text/css">
+/*.ztree * {*/
+/*  font-family: Consolas, Microsoft YaHei, SimHei, STHeiti, SimSun, STSong, sans-serif;*/
+/*  font-size: 14px;*/
+/*  font-weight: 400;*/
+/*}*/
+/*.ztree li span.button {*/
+/*  margin-left: 5px;*/
+/*  background-position: -144px 0;*/
+/*  vertical-align: top;*/
+/*  *vertical-align: middle*/
+/*}*/
+</style>
+<section id="widget-grid">
+  <div id="eeb_overview_index" class="jarviswidget jarviswidget-color-blue" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+    <header name="eeb_overview_menu_header"><h2>EEB一览</h2></header>
+    <!-- widget div-->
+    <div>
+      <!-- widget content -->
+      <div class="widget-body">
+        <div class="row">
+          <div id="eeb_overview_nouislider" class="noUiSlider"></div>
+        </div>
+        <div class="row">
+          <div id="eeb_overview_ztree" class="col-xs-3"><ul class="ztree"></ul></div>
+          <div id="innercontent" class="col-xs-9"></div>
+        </div>
+      </div>
+    <!-- end widget content -->
+    </div>
+  <!-- end widget div -->
+  </div>
+</section>
+<div id="eeb_overview_modal"></div>
+<script src="lib/js/plugin/noUiSlider/jquery.nouislider.min.js"></script>
+<script src="eeb/eeb_overview/index.js"></script>
+<script>
+  // 页面初始化设置
+  pageSetUp();
+  var eeb_overview_indexObj = new eeb_overview_index();
+</script>

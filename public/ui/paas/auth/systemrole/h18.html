@@ -1,0 +1,52 @@
+<!-- Modal -->
+<div class="modal fade" id="auth_h18_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">
+          服务信息列表
+        </h4>
+      </div>
+      <div class="modal-body no-padding">
+        <div id="auth_h18">
+          <!-- FORM Start -->
+          <form id="auth_h18_form" method="post" onsubmit="return false;" class="smart-form">
+            <fieldset>
+              <div class="dataTables_wrapper">
+                <table id="auth_h18_dt" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>服务ID</th>
+                      <th>服务名称</th>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+              <br/>
+            </fieldset>
+            
+            <footer>
+              <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+              <button type="submit" class="btn btn-primary">确定</button>
+            </footer>
+          </form>
+          <!-- FORM End -->
+        </div>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<!--<script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>-->
+<script src="auth/systemrole/h18.js"></script>
+<!-- SCRIPTS ON PAGE EVENT -->
+<script type="text/javascript">
+  //DO NOT REMOVE : GLOBAL FUNCTIONS!
+  pageSetUp();
+//	$('#auth_h18_modal').modal('show');
+//	var AuthGetSysList=new AuthGetsystemlist();
+</script>

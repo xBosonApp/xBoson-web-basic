@@ -1,0 +1,431 @@
+﻿<script type="text/javascript" src='/comm/commonJs/getUrlParam.js'></script>
+<script type="text/javascript" src='in.js'></script>
+<script type="text/javascript">
+$(function(){
+
+		$("#siph").attr("disabled",true);
+		$("#ssnm").attr("disabled",true);
+		$("#sifh").attr("disabled",true);
+	radnomath();
+});
+function radnomath(){
+	var a=MathRand(4);
+	var d=new Date();
+	$("#cthid").val(d.getTime()+a);
+
+}
+function save(){
+  // 默认为添加机构信息
+  LC_Resetting("zzsqform");
+  	var checkNotNull=["cthid","pname","psex","pbirthdday","pphone","eid","goalhid","urdata"];
+	LC_IsCheckNotNull("zzsqform",checkNotNull);
+	//转诊单号只能是数字
+	var checkcthidItems=["cthid"];
+	LC_IsCheckLength("zzsqform",checkcthidItems,1,50);
+	LC_IsNumCheck("zzsqform",checkcthidItems);
+	var checkssnmItems=["ssnm","siph","sifh"];
+	LC_IsCheckLengthMax("zzsqform",checkssnmItems,500);
+	//身份证只能是正整数18位
+	var checktheidItems=["eid"];
+	LC_IsNumCheck("zzsqform",checktheidItems);
+	LC_IsNumCheckPos("zzsqform",checktheidItems,18,18);
+	var checkhidItems=["hid"];
+	LC_IsCheckLengthMax("zzsqform",checkhidItems,17);
+	var checkphidItems=["phid","pphone"];
+	LC_IsCheckLengthMax("zzsqform",checkphidItems,30);
+	var checkgoalhsubidItems=["goalhsubid"];
+	LC_IsCheckLengthMax("zzsqform",checkgoalhsubidItems,4);
+	var checkpnameItems=["pname"];
+	LC_IsCheckLengthMax("zzsqform",checkpnameItems,50);
+	var checkpaddressItems=["paddress"];
+	LC_IsCheckLengthMax("zzsqform",checkpaddressItems,100);
+	if(retCheckFlg){
+	var url="zzsqadd/";
+	var itemsList = [ "cthid","goalhid","thgoal", "siid", "siph",
+			"ssnm", "sifh", "thtype","urdata",
+			"pid", "eid", "hid","phid","goalhsubid",
+			"pname", "psex", "pbirthdday", "pphone",
+			"paddress", "ppayway","aosid","adid"
+			];
+	var info = new Map();
+	LC_AjaxGet(TRSBaseUrl+url,"zzsqform","zzsqcallback",info,itemsList);
+	}
+ }
+ function zzsqcallback(reData){
+  if (reData.ret=="0") {
+    self.parent.$.messager.alert('提示',reData.msg,'info');
+    $("#openRoleDiv").window("close");
+  } else {
+    self.parent.$.messager.alert('错误提示',reData.msg,'error');
+  }
+ }
+ 
+$(function () {
+  getselect();
+});
+
+ function getselect(){
+
+  var url="mdm/dict/listget/";
+  var infoa = new Map();
+  infoa.put("stringsplit","VA0004.04,VA0004.179,VA0004.908,VA0004.909,VA0004.907,VA0004.910");
+  var itemsList= [];
+
+  LC_AjaxGet(MDMBaseUrl+url,"zzsqform","mdmSelect",infoa,itemsList);
+
+}
+
+function mdmSelect(data){
+
+  var info = new Map();
+  info.put("key",["typeCode2"]);
+  info.put("value",["typeName"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("zzsqform","psex",info,data.dataList["VA0004.04"]);
+  LC_GetSelect("zzsqform","ppayway",info,data.dataList["VA0004.179"]);
+  //LC_GetSelect("zzsqform","goalhid",info,data.dataList["VA0004.774"]);
+ // LC_GetSelect("zzsqform","thgoal",info,data.dataList["VA0004.908"]);
+  LC_GetSelect("zzsqform","thtype",info,data.dataList["VA0004.909"]);
+  LC_GetSelect("zzsqform","siid",info,data.dataList["VA0004.907"]);
+  LC_GetSelect("zzsqform","urdata",info,data.dataList["VA0004.910"]);
+//  var infoa = new Map();
+  //infoa.put("key","typeCode2");
+  //infoa.put("value",["typeCode2","typeName"]);
+  //infoa.put("valueSplit","|");
+  //var getMap=LC_getDataMap(infoa,data.dataList["CV0000.01"]);
+  
+  //var key="";
+  //	if(getMap.get(key)===false){
+	//	return "无此编码|"+key;
+	//}else{
+	  //  return getMap.get(key);;
+	//}
+
+	// alert("11111111111111111传来的参数：" + window.dialogArguments);
+	if(UrlParm.parm("oid")!=undefined&&UrlParm.parm("sid")!=undefined){
+
+    // $("#app").val(UrlParm.parm("app"));//调用者的系统ID
+	  // $("#oid").val(UrlParm.parm("oid"));//机构ID
+	  // $("#sid").val(UrlParm.parm("sid"));//操作者ID
+	  // $("#empi").val(UrlParm.parm("empi"));//主索引ID
+	  self.parent.orgid=UrlParm.parm("oid");
+	  self.parent.staffid=UrlParm.parm("sid");
+	  $("#cthid").val(UrlParm.parm("cthid"));//转诊单号（任意字符，最大50位）
+	  $("#eid").val(UrlParm.parm("eid"));//18位有效身份证号码
+	  $("#hid").val(UrlParm.parm("hid"));//健康档案号
+	  $("#phid").val(UrlParm.parm("phid"));//患者医疗卡号
+	  $("#pname").val(UrlParm.parm("pname"));//患者姓名
+	  $("#psex").val(UrlParm.parm("psex"));//患者性别
+	  $("#pbirthdday").val(UrlParm.parm("pbirthdday"));//患者出生日期
+	  $("#pphone").val(UrlParm.parm("pphone"));//患者电话
+	  $("#paddress").val(UrlParm.parm("paddress"));//患者联系地址
+	  $("#ppayway").val(UrlParm.parm("ppayway"));//患者付费方式
+	    
+	}
+}
+
+//转诊医院--->转诊科室
+$(function () {
+getselectaoid();
+});
+ function  getselectaoid(){
+  var url="mdm/osms004ChOrgId/";
+  var infoa = new Map();
+  infoa.put("changorgid",self.parent.orgid);
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"","mdmSelectoid",infoa,itemsList);
+}
+
+function mdmSelectoid(data){
+ 	
+  var info = new Map();
+  info.put("key",["orgid"]);
+  info.put("value",["orgNm"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("zzsqform","goalhid",info,data.dataList);
+}
+ function  selectKs(){
+   if($("#goalhid").val()==""){
+	$("#goalhsubid").empty();
+	return;
+}
+  var url="mdm/officeList/";
+  var info = new Map();
+  info.put("osms003_orgid",$("#goalhid").val());
+  var itemsList=[];
+  LC_AjaxGet(MDMBaseUrl+url,"adid","setSelectKs",info,itemsList);
+}
+
+function setSelectKs(data){
+
+  var info = new Map();
+  info.put("key",["osms003_scd"]);
+  info.put("value",["osms003_sname"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("zzsqform","goalhsubid",info,data.dataList);
+
+}
+
+//转出机构-科室-人员
+//机构
+$(function () {
+getselectaoido();
+});
+ function  getselectaoido(){
+  var url="mdm/orgs/";
+  var infoa = new Map();
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"","mdmSelectoido",infoa,itemsList);
+}
+
+function mdmSelectoido(data){
+  var info = new Map();
+  info.put("key",["orgId"]);
+  info.put("value",["orgNm"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("zzsqform","aoid",info,data.dataList);
+  
+  setTimeout(function(){
+  $("#aoid").val(self.parent.orgid);
+ selectJg();
+}, 300); 
+}
+//人员
+function  selectJg(){
+  var url="mdm/org/listSta/";
+  var info = new Map();
+  info.put("stringsplit",$("#aoid").val());
+  var itemsList=[];
+  LC_AjaxGet(MDMBaseUrl+url,"","mdmSelectaosid",info,itemsList);
+}
+function mdmSelectaosid(data){
+  var info = new Map();
+  info.put("key",["staffId"]);
+  info.put("value",["name"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("zzsqform","adid",info,data.dataList);
+
+   setTimeout(function(){
+	  $("#adid").val(self.parent.staffid);
+      selectaosid();
+   }, 300);
+}
+//科室
+function  selectaosid(){
+  var url="mdm/officeList/";
+  var info = new Map();
+  info.put("osms003_orgid",self.parent.orgid);
+  var itemsList=[];
+  LC_AjaxGet(MDMBaseUrl+url,"","setSelectkss",info,itemsList);
+}
+function setSelectkss(data){
+  var info = new Map();
+  info.put("key",["osms003_scd"]);
+   info.put("value",["osms003_sname"]);
+  LC_GetSelect("zzsqform","aosid",info,data.dataList);
+   $("#aosid").val(self.parent.departmentId);
+   selectaosidkjr();
+}
+//获取科室id通过机构id和人员id
+function  selectaosidkjr(){
+  var url="mdm/staffInfo/";
+  var info = new Map();
+  info.put("orgId",self.parent.orgid);
+  info.put("staffId",self.parent.staffid)
+  var itemsList=[];
+  LC_AjaxGet(MDMBaseUrl+url,"","setSelectkjr",info,itemsList);
+}
+function setSelectkjr(data){
+   $("#aosid").val(data.dataList[0].departmentId);
+}
+
+function showsss(){
+	if($("#siid").val()==""||$("#siid").val()=="0"){
+		$("#siph").attr("disabled",true);
+		$("#ssnm").attr("disabled",true);
+		$("#sifh").attr("disabled",true);
+		$("#siph").val("");
+		$("#ssnm").val("");
+		$("#sifh").val("");
+	}else{
+	$("#siph").attr("disabled",false);
+		$("#ssnm").attr("disabled",false);
+		$("#sifh").attr("disabled",false);
+	
+	}
+}
+
+
+</script>
+<div class="mainsW-912" style="padding:5px 0 0 0;">
+<form id="zzsqform">
+	<div class="mainsW-912 clearfix">
+    	<div class="itemLW-80 padT-4"><div class="itemLW-16" style="color:#FF0000">*</div>转诊单号：</div><div class="itemsW-208"><input id="cthid" class="textLW" type="text"  disabled="true"/></div>
+        <div class="" style="float:right;">
+        	<a href="javascript:void(0)" class="easyui-linkbutton">读健康卡</a><a href="javascript:void(0)" class="easyui-linkbutton" data-options="disabled:true">从档案读取</a> 
+        </div>
+    </div>
+    <div class="mainsW-912 flPadTB-10">
+      
+		<div class="easyui-panel" title="个人基本信息">
+            <div class="flPadTB-10">
+                <div class="mainW-224" >
+                    <div class="itemLW-112 padT-4"><span style="color:#FF0000">*</span>姓名：</div>
+                    <div class="itemRW-112"><input id="pname" class="textLW" type="text" ></div>
+                 </div>
+                 <div class="mainW-224" >
+                    <div class="itemLW-112 padT-4"><span style="color:#FF0000">*</span>性别：</div>
+                    <div class="itemRW-112">
+	                    <select id="psex" class="textLW" name="dept"></select>
+                   </div>
+                 </div>
+                 <div class="mainW-224" >
+                    <div class="itemLW-112 padT-4" ><span style="color:#FF0000">*</span>出生日期：</div>
+                    <div class="itemRW-112"><input class="Wdate" style="height:15px;"  onClick="WdatePicker()" id="pbirthdday" class="textLW" type="text" ></div>                   
+                 </div>
+                 <div class="mainW-224" >
+                    <div class="itemLW-112 padT-4"><span style="color:#FF0000">*</span>联系电话：</div>
+                    <div class="itemRW-112"><input id="pphone" class="textLW" type="text" ></div>
+                 </div>
+                 <div class="mainW-448">
+                    <div class="itemLW-112 padT-4">地址：</div>
+                    <div class="itemRW-336"><input id="paddress" class="textLW" type="text" ></div>
+                 </div>
+                 <div class="mainW-224" >
+                    <div class="itemLW-112 padT-4">付费方式：</div>
+                    <div class="itemRW-112">
+	                    <select id="ppayway" class="textLW" name="dept">
+	                    </select>
+                   </div>
+                 </div>
+                 <div class="mainW-224" >
+                    <div class="itemLW-112 padT-4">卡号：</div>
+                    <div class="itemRW-112"><input id="phid" class="textLW" type="text" ></div>
+                 </div>
+                 <div class="mainW-448" >
+                    <div class="itemLW-112 padT-4"><span style="color:#FF0000">*</span>身份证：</div>
+                    <div class="itemRW-336"><input id="eid" class="textLW" type="text" ></div>
+                 </div>
+                 <div class="mainW-448" >
+                    <div class="itemLW-112 padT-4">健康档案号：</div>
+                    <div class="itemRW-336"><input id="hid" class="textLW" type="text" ></div>
+                 </div>
+                 
+             </div>
+         
+        </div>
+        <div class="easyui-panel" title="转诊信息">
+            <div class="flPadTB-10">
+                 <div class="mainW-448" >
+                    <div class="itemLW-112 padT-4" ><span style="color:#FF0000">*</span>转诊医院：</div>
+                    <div class="itemRW-336">
+                    	<select id="goalhid" class="textLW" name="dept" onchange="selectKs()">
+                    	</select>
+                    </div>
+                 </div>
+                 <div class="mainW-448" >
+                    <div class="itemLW-112 padT-4">转诊科室：</div>
+                    <div class="itemRW-336"><select id="goalhsubid" class="textLW" name="dept">
+                    	</select>
+                    </div>
+                 </div>
+                 <div class="mainW-224" >
+                    <div class="itemLW-112 padT-4">转诊目的：</div>
+                    <div class="itemRW-112">
+                    	<select id="thgoal" class="textLW" name="dept" disabled="true">
+                    	  <option value="0">转诊</option>
+                    	</select>
+                        
+                   </div>
+                 </div>
+                 <div class="mainW-224" >
+                    <div class="itemLW-112 padT-4">转诊类型：</div>
+	                    <div class="itemRW-112"><select id="thtype" class="textLW" name="dept">
+	                    </select>
+	                  </div>
+                 </div>
+                 <div class="mainW-448" >
+                    <div class="itemLW-112 padT-4"><span style="color:#FF0000">*</span>转诊原因：</div>
+                    <div class="itemRW-336">
+                    	<select id="urdata" class="textLW" name="dept">
+                    	</select>
+                    </div>
+                 </div>
+                 <div class="mainW-224" >
+                    <div class="itemLW-112 padT-4">特殊病种：</div>
+                    <div class="itemRW-112">
+                    	<select id="siid" class="textLW" name="dept" onchange="showsss()">
+                    	</select>
+                    </div>
+                 </div>
+                 <div class="mainW-896" >
+                    <div class="itemLW-112 padT-4">特殊病种个人史：</div>
+                    <div class="itemRW-784"><textarea id="siph" class="textLW" name="" cols="" rows=""></textarea></div>
+                 </div>
+                 <div class="mainW-896" >
+                    <div class="itemLW-112 padT-4">特殊病种现病史：</div>
+                    <div class="itemRW-784"><textarea id="ssnm" class="textLW" name="" cols="" rows=""></textarea></div>
+                 </div>
+                 <div class="mainW-896" >
+                    <div class="itemLW-112 padT-4">特殊病种家族史：</div>
+                    <div class="itemRW-784"><textarea id="sifh" class="textLW" name="" cols="" rows=""></textarea></div>
+                 </div>
+                 <div class="mainW-448" >
+                    <div class="itemLW-112 padT-4">转出机构：</div>
+                    <div class="itemRW-336">
+                    	<select id="aoid" class="textLW" name="dept" onchange="selectJg()" disabled="true"></select>
+                    </div>
+                 </div>
+                 <div class="mainW-224" >
+                    <div class="itemLW-112 padT-4">转出机构科室：</div>
+                    <div class="itemRW-112"><select id="aosid" class="textLW" name="dept" disabled="true"></select></div>
+                 </div>
+                 <div class="mainW-224" >
+                    <div class="itemLW-112 padT-4">转诊医生：</div>
+                    <div class="itemRW-112"><select id="adid" class="textLW" name="dept" onchange="selectaosid()" disabled="true"></select></div>
+                 </div>
+                 <div class="itemLW-896 flPadTB-10"><a href="javascript:void(0)" id="delayalter" class="easyui-linkbutton" onclick="save();">提交记录</a></div>
+             </div>
+        </div>
+        
+    </div>
+ </form>
+    
+</div>
+
+
+
+
+<script type="text/javascript">
+//添加修改延迟五秒
+var oInput = document.getElementById('delayalter');
+        oInput.onclick = function(){
+		setTimeout(function(){
+		 save();
+		}, 300);
+		$("#delayalter").linkbutton({  
+			disabled:true  
+			}); 
+        setTimeout(function(){
+			$("#delayalter").linkbutton({  
+			disabled:false  
+			}); 
+		},1000*5);
+}
+</script>
+
+
+
+
+
+
+
+
+
+
+

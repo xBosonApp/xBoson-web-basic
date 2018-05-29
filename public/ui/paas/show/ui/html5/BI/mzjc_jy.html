@@ -1,0 +1,231 @@
+<div id="zdzd-m"  class="portlet box grey">
+    <div class="portlet-title">
+        <div class="caption" id="yetj-name"><!-- 可以设置图标<i class="icon-globe"></i> -->门诊检验</div>
+        <!-- 设置关闭和刷新--> 
+        <div class="tools">
+            <div class="tools-chart">
+            	<a title="柱形图" rel="column"><i class="icon-bar-chart"></i></a> <a title="饼形图" rel="pie"><i class="icon-adjust"></i></a>
+                <span class="reload" title="数据图表"><i class="icon-file-text-alt"></i></span>
+            </div>
+        </div>
+        
+    </div>
+    <div class="portlet-body">
+        <div class="lc-inquire">
+            <form id="org_zdzd" class="form-inline" action="">
+                <input type="hidden" id="groupby" value="tablename"/>
+                <input type="hidden" id="pagenum"/>
+                <input type="hidden" id="pagesize"/>
+                <input type="hidden" id="dimtype" value="1" />
+                <div class="row-fluid">
+                    <div class="span1">机构名称</div>
+                    <div class="span2"><select id="dimorg" class="selectpicker"></select></div>
+                    <div class="span1">开始时间</div>
+                    <div class="span2"><input id="datebegin" type="text" class="dateday"></div>
+                	<div class="span1">结束时间</div>
+                    <div class="span2"><input id="dateend" type="text" class="dateday"></div> 
+                    <div class="span1"><a onclick="setData2ZdzdNew('tablename')" class="btn blue">查询</a></div>
+                </div>
+            </form>
+        </div>
+        <div id="lc-rowtable" class="row-fluid">
+            <div class="span12">
+                <div id="contextZdzd"></div>
+            </div>
+        </div>
+        <div id="rowtable" class="row-fluid rowtable">
+            <div class="span12">
+                 <table id="ttZdzd"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	if($(window).width()>765){
+		$("#contextZdzd").height($(window).height()-207);
+	}
+});
+function setData2Zdzd(data){
+	$(".loadshow").show();
+	var url ="JY001"; 
+	var itemsList;
+	if($("#datebegin").val()!=""&&$("#dateend").val()!=""){
+		itemsList=["datebegin","dateend","dimorg","dimtype"];
+	}else{
+		itemsList=[];
+	}
+	//空数据 会出现 小bug
+	var info= new Map();
+	info.put("sqlid","select");
+	info.put("pagenum",PageNumber);
+	info.put("pagesize",PageSize);
+	if(data==="tablename"){
+	   LXtype="tablename";
+	}else if(data==="createdate"){
+	   LXtype="createdate";
+	}else{
+	   LXtype="hospunitorgcode"
+	}
+	info.put("groupby",data);
+	sys_AjaxGet(BIASUrl+url,"org_zdzd","reCallback215",info,itemsList);
+	
+}
+</script>
+<script type="text/javascript">
+var dataShow;
+var PageNumber=1;
+var PageSize=10;
+function loadingZdzd(){
+	$("#pagenum").val(PageNumber);
+  	$("#pagesize").val(PageSize);
+	var mapInfo = new Map();
+	mapInfo.put("sqlid","select");
+	mapInfo.put("pagenum",PageNumber);
+	mapInfo.put("pagesize",PageSize);
+	var itemsList;
+	//itemsList = [];
+	if($("#datebegin").val()==""&&$("#dateend").val()==""){
+		itemsList=["groupby"];
+	}else{
+		itemsList = ["datebegin","dateend","dimorg","dimtype"];
+	}
+	var url = "JY001";
+	sys_AjaxGet(BIASUrl+url,"org_zdzd","reCallback215",mapInfo,itemsList);
+	
+}
+function reCallback215(dataInfo){
+	if(dataInfo.ret=="103"){
+        alert("用户登录超时，请重新登陆！");
+        $('#trigger').scojs_modal();
+    }
+	//切换图形-----------------------------------20131213---开始
+var chartselect="";
+$("#zdzd-m .tools-chart a").click(function(){
+	$("#zdzd-m #rowtable").addClass("rowtable");
+	$("#zdzd-m #lc-rowtable").removeClass("rowtable");
+		var charttitle=$(this).attr("rel");
+		chartselect=charttitle;
+		reCallback(dataInfo, chartselect, "#contextZdzd");
+});		
+if(chartselect===""){
+	reCallback(dataInfo, chartselect, "#contextZdzd");
+	$(".loadshow").hide();
+	}
+//切换图形-----------------------------------20131213---结束
+//动态获得grid的数据---------------------------开始
+var xq= [];
+var im=0;
+$.each(dataInfo.dataMap.data[0], function(key, value){
+	//将“机构”的列值转移到第一列
+	if(im==0){
+		xq.push({field:"机构",title:"机构",align:'center',width:200});
+	}
+	im++;	
+	if(key!="机构"){
+	    xq.push({field:key,title:key,align:'center',
+		         formatter:function(value){
+		         	if (value=='') {
+		         		value=0;
+		         	};
+					 return parseData(value);  //数据缺失的时候用到。如：.2323 添加后0.2323  chart_common.js里面已经有定义parseData(data)
+			     }
+			});
+	}
+});
+//动态获得grid的数据---------------------------结束	
+//将dataAll添加到数据里面
+var datapush=dataInfo.dataMap.data;
+dataInfo.dataMap.dataAll[0].机构="合计";
+datapush.push(dataInfo.dataMap.dataAll[0]);	
+
+	$('#ttZdzd').datagrid({
+			nowrap: false,
+			striped: true,
+			collapsible:false,
+			//pagination:true,
+			pageNumber:PageNumber,
+			pageSize: PageSize,
+			singleSelect:true, 
+			loadMsg:"正在载入...",
+			pageList: [10,20,50,100,200],
+			data:dataInfo.dataMap.data,
+			columns:[xq],//对应上面的定义grid数据
+			onDblClickRow: function (rowIndex) {
+				// openRoleDiv(rowIndex);
+			},
+		   fitColumns:false,
+		   rownumbers:true
+	}); 
+   var pager = $('#ttZdzd').datagrid('getPager');
+	   if(pager){
+		$(pager).pagination({
+			
+			onSelectPage:function(pageNumber,pageSize){
+			   PageNumber=pageNumber;
+			   PageSize=pageSize;
+			   loadingZdzd();
+			}
+		});		
+		$(pager).pagination({pageSize:PageSize,pageNumber:PageNumber,total:dataInfo.count});
+	};
+//删除新增的dataAll	
+datapush.splice(datapush.length-1);
+}
+function loading1Zdzd(){
+	loadingZdzd();
+}
+</script>
+<script>
+$(function(){
+$(window).resize(function(){
+$('#ttZdzd').datagrid('resize');
+});
+});
+</script>
+<script>
+$(function(){
+
+//日期控件
+$('.dateday').datetimepicker({
+		format: 'yyyy-mm-dd',
+		autoclose:true,
+		startView:2,
+		minView:2
+	});
+//获取当前年-月-日
+today=new Date();
+var ymd=sys_FormatYMD(today);
+var vMon = today.getMonth() + 1;
+var dateendymd=today.getFullYear()-1+"-"+(vMon<10 ? "0" + vMon : vMon)+"-"+today.getDate();
+$("#datebegin").val(dateendymd);
+$("#dateend").val(ymd); 
+
+$("#zdzd-m .reload").click(function(){
+	$("#zdzd-m #rowtable").toggleClass("rowtable");
+	$("#zdzd-m #lc-rowtable").toggleClass("rowtable");
+	});
+
+})
+//机构
+$(function () {
+getselectdaoid215();
+});
+function  getselectdaoid215(){
+  sys_BI_getDaoidList("mdmSelectdaoid215");
+}
+function mdmSelectdaoid215(data){
+  var info = new Map();
+  info.put("key",["hospunitorgcode"]);
+  info.put("value",["hospunitorgnm"]);
+  sys_GetSelect("org_zdzd","dimorg",info,sys_BI_getCacheDaoidData());
+}
+
+
+loadingZdzd();
+//setDataCy('tablename');
+
+</script>
+
+
+

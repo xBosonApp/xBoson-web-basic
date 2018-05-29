@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" media="screen" href='../css/md01.css' />
+	<script src='/ui/paas/lib/js/libs/jquery-1.11.0.min.js'></script>
+	<script src='/ui/paas/lib/js/libs/showdown.min.js'></script>
+  <style>
+    .SR{
+      display:none;
+    }
+    .SC{
+      width:36%;
+      height:100%;
+      /*font-size:24px;*/
+      /*color: #fff;*/
+      font-weight: bolder;
+      position: absolute;
+      right:0;
+      top:0;
+    }
+  </style> 
+	<script>
+    $(function(){
+      showdown.setOption('noHeaderId', true);
+      showdown.setOption('strikethrough', true);
+      showdown.setOption('tables', true);
+      showdown.setOption('tasklists', true);
+      // showdown.setFlavor('vanilla');
+      //showdown.setFlavor('github');
+      var converter = new showdown.Converter();
+      var  te = $(".SR").html();
+      var  ht = converter.makeHtml(te);
+      $(".SC").empty();
+      $(".SC").html(ht);
+      $(".modal_img").css({
+        width:"60%",
+        height:"88%",
+        position: "fixed",
+        top:"5%",
+        left:"20px",
+      })
+    })
+  </script>
+</head>
+<body class='bg-1'>
+<img src='../img/46312.jpg' class='modal_img' />
+<p class="SR">
+### 国家卫生、计生资源整合顶层设计规划——`4631-2工程`
+
+`4` 级卫生信息平台，分别是：国家级人口健康管理平台，省级人口健康信息平台、地市级人口健康区域信息平台及区县级人口健康区域信息平台;
+
+`6` 项业务应用，分别是：公共卫生、医疗服务、医疗保障、药品管理、计划生育、综合管理;
+
+`3` 个基础数据库，分别是：电子健康档案数据库、电子病历数据库和全员人口个案数据库;
+
+`1` 个融合网络，即人口健康统一网络;
+
+`2` 是人口健康信息标准体系和信息安全防护体系。
+
+---
+依托中西医协同公共卫生信息系统、基层医疗卫生管理信息系统、医疗健康公共服务系统打造全方位、立体化的国家卫生计生资源体系。
+
+而居民健康卡则是依托于`4`级平台实现便民惠民的应用。
+
+</p>
+<div class="SC"></div>
+</body>
+</html>

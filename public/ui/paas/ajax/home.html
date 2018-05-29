@@ -1,0 +1,277 @@
+<div class="row">
+  <div class="alert alert-warning fade in" style="#display:none;">
+    <button class="close" data-dismiss="alert">×</button>
+    <strong>JavaScript开发规范：</strong><br>代码中采用'todo:'做标记，JavaScript代码内字符串全部统一采用单引号; <hr>
+    <pre><code>&lt;div class="picture"&gt;&lt;img src="img.jpg" /&gt;&lt;/div&gt;</code></pre>
+    <pre><code>var $img = $('.picture').find('img');</code> 或 <code>var $img = $('img', '.picture');</code></pre>
+    经过测试发现前者在性能上比后者稍微快些，查看 jQuery 源码可发现后者会转成find方法，在转换时要花点时间。但当我们封装一个常用的方法时，使用 context 会比较合适（会提高我们的代码质量），如下：
+    <pre><code>reSize = function (div) {
+  $('img', div).width(100);
+  $(div).find('img').width(100);
+}</code></pre>
+    <hr>
+    <strong>HTML开发规范：</strong><br>1、标签元素属性[id]值具有全局唯一特性，需要考虑页面loadHTML模式加载后的[id]值不能重复，建议附加页面名称做前缀；<br>2、一个页面内可以有多个[form]表单，但不能互相嵌套[form]表单，注意：[form]表单内的标签元素属性[name]值不能重复；<br>3、标签元素属性的[id]、[class]值对大小写敏感，多个单词组合时统一采用'-'连接符分割；<br>
+  </div>
+  <div class="alert alert-info fade in">
+    <button class="close" data-dismiss="alert">×</button>
+    <strong>下步任务： </strong><br>1、画面数据绑定（SELECT、WHERE以及select2下拉选择框项目[表名、字段名]）及事件绑定；<br>2、[图表]选项中的制域规则控制事件；
+  </div>
+</div>
+
+						<div class="row">
+							<div class="col-lg-6 col-md-6 col-sm-6">
+								<h1>Mision</h1>
+								<p>We are Canada's leading owner, developer and manager of well located, high quality, urban retail-centered properties where people live and shop for everyday life.</p>
+							</div>
+							<div class="col-lg-6 col-md-6 col-sm-6">
+								<h1>Vision</h1>
+								<p>To be renowned for creating sustainable shopping environments that become the heart of our communities.</p>
+							</div>
+						</div>
+						<!-- widget grid -->
+						<section id="widget-grid" class="">
+							
+							<!-- row -->
+							<div class="row">
+								<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									<!-- new widget -->
+									<div class="jarviswidget" id="widget-id-0">
+									    <header>
+									    	<span class="widget-icon"><i class="icon-calendar"></i></span>
+									        <h2>Full Length Widget</h2>     
+									        <div class="widget-toolbar">
+												
+												<ul class="nav nav-tabs in" id="myTab2">
+													<li class="active">
+														<a data-toggle="tab" href="#home">Home</a>
+													</li>
+		
+													<li>
+														<a data-toggle="tab" href="#profile">Profile</a>
+													</li>
+		
+													<li>
+														<a data-toggle="tab" href="#info">Info</a>
+													</li>
+												</ul>
+												
+											</div>                     
+									    </header>
+									    
+									    <!-- widget div-->
+									    <div>
+									    	<!-- widget edit box -->
+									        <div class="jarviswidget-editbox">
+
+									            <div>
+									                <label>Styles:</label>
+									                <span data-widget-setstyle="purple" class="purple-btn"></span>
+									                <span data-widget-setstyle="navyblue" class="navyblue-btn"></span>
+									                <span data-widget-setstyle="green" class="green-btn"></span>
+									                <span data-widget-setstyle="yellow" class="yellow-btn"></span>
+									                <span data-widget-setstyle="orange" class="orange-btn"></span>
+									                <span data-widget-setstyle="pink" class="pink-btn"></span>
+									                <span data-widget-setstyle="red" class="red-btn"></span>
+									                <span data-widget-setstyle="darkgrey" class="darkgrey-btn"></span>
+									                <span data-widget-setstyle="black" class="black-btn"></span>
+									            </div>
+									        </div>
+									        <!-- end widget edit box -->
+            
+									        <div class=""> 
+									        <!-- content -->	
+												Widget Content
+										       		
+											<!-- end content -->	
+									        </div>
+									        
+									    </div>
+									    <!-- end widget div -->
+									</div>
+									<!-- end widget -->
+
+								</article>
+							</div>
+							
+							<!-- end row -->
+							
+							<!-- row -->
+							
+							<div class="row">
+								
+								<article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+									<!-- new widget -->
+									<div class="jarviswidget" id="widget-id-1">
+									    <header>
+									        <h2>Half Widget</h2>                           
+									    </header>
+									    
+									    <!-- widget div-->
+									    <div>
+									    	<!-- widget edit box -->
+									        <div class="jarviswidget-editbox">
+									            <div>
+									                <label>Title:</label>
+									                <input type="text" />
+									            </div>
+									            <div>
+									                <label>Styles:</label>
+									                <span data-widget-setstyle="purple" class="purple-btn"></span>
+									                <span data-widget-setstyle="navyblue" class="navyblue-btn"></span>
+									                <span data-widget-setstyle="green" class="green-btn"></span>
+									                <span data-widget-setstyle="yellow" class="yellow-btn"></span>
+									                <span data-widget-setstyle="orange" class="orange-btn"></span>
+									                <span data-widget-setstyle="pink" class="pink-btn"></span>
+									                <span data-widget-setstyle="red" class="red-btn"></span>
+									                <span data-widget-setstyle="darkgrey" class="darkgrey-btn"></span>
+									                <span data-widget-setstyle="black" class="black-btn"></span>
+									            </div>
+									        </div>
+									        <!-- end widget edit box -->
+            
+									        <div class=""> 
+									        <!-- content goes here -->
+											
+											Widget Content
+											
+											<!-- end content -->
+									        </div>
+									        
+									    </div>
+									    <!-- end widget div -->
+									</div>
+									<!-- end widget -->
+								</article>
+								
+								
+								<article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+									<!-- new widget -->
+									<div class="jarviswidget" id="widget-id-2">
+									    <header>
+									        <h2>Half Widget</h2>                           
+									    </header>
+									    
+									    <!-- widget div-->
+									    <div>
+									    	<!-- widget edit box -->
+									        <div class="jarviswidget-editbox">
+									            <div>
+									                <label>Title:</label>
+									                <input type="text" />
+									            </div>
+									            <div>
+									                <label>Styles:</label>
+									                <span data-widget-setstyle="purple" class="purple-btn"></span>
+									                <span data-widget-setstyle="navyblue" class="navyblue-btn"></span>
+									                <span data-widget-setstyle="green" class="green-btn"></span>
+									                <span data-widget-setstyle="yellow" class="yellow-btn"></span>
+									                <span data-widget-setstyle="orange" class="orange-btn"></span>
+									                <span data-widget-setstyle="pink" class="pink-btn"></span>
+									                <span data-widget-setstyle="red" class="red-btn"></span>
+									                <span data-widget-setstyle="darkgrey" class="darkgrey-btn"></span>
+									                <span data-widget-setstyle="black" class="black-btn"></span>
+									            </div>
+									        </div>
+									        <!-- end widget edit box -->
+            
+									        <div class=""> 
+									        <!-- content goes here -->
+											
+											<p>asdad</p>Widget Content
+											<p>asdad</p>Widget Content<p>asdad</p>Widget Content
+											<!-- end content -->
+									        </div>
+									        
+									    </div>
+									    <!-- end widget div -->
+									</div>
+									<!-- end widget -->
+								</article>
+										
+							</div>
+							
+							<!-- end row -->
+							
+
+						</section>
+						<!-- end widget grid -->
+
+
+<script>
+
+	pageSetUp();
+	
+	/* ---------------------------------------------------------------------- */
+	/*	Widgets Desktop
+	/* ---------------------------------------------------------------------- */	
+	
+	function setup_widgets_desktop() {
+		
+		if ($('#widget-grid').length){
+			
+			$('#widget-grid').jarvisWidgets({	
+							
+				grid: 'article',
+				widgets: '.jarviswidget',
+				localStorage: true,
+				deleteSettingsKey: '#deletesettingskey-options',
+				settingsKeyLabel: 'Reset settings?',
+				deletePositionKey: '#deletepositionkey-options',
+				positionKeyLabel: 'Reset position?',
+				sortable: true,
+				buttonsHidden: false,
+				//
+				toggleButton: true,
+				toggleClass: 'icon-minus open | icon-plus closed',
+				toggleSpeed: 200,
+				onToggle: function(){},
+				//
+				deleteButton: true,
+				deleteClass: 'icon-remove',
+				deleteSpeed: 200,
+				onDelete: function(){},
+				//
+				editButton: true,
+				editPlaceholder: '.jarviswidget-editbox',
+				editClass: 'icon-cog | icon-cog',
+				editSpeed: 200,
+				onEdit: function(){},
+				//
+				fullscreenButton: true,
+				fullscreenClass: 'icon-resize-full | icon-resize-small',	
+				fullscreenDiff: 3,		
+				onFullscreen: function(){},
+				//
+				customButton: false,
+				customClass: 'folder-10 | next-10',
+				customStart: function(){ alert('Hello you, this is a custom button...') },
+				customEnd: function(){ alert('bye, till next time...') },
+				//
+				buttonOrder: '%refresh% %custom% %edit% %toggle% %fullscreen% %delete%',
+				opacity: 1.0,
+				dragHandle: '> header',
+				placeholderClass: 'jarviswidget-placeholder',
+				indicator: true,
+				indicatorTime: 600,
+				ajax: true,
+				timestampPlaceholder:'.jarviswidget-timestamp',
+				timestampFormat: 'Last update: %m%/%d%/%y% %h%:%i%:%s%',
+			    refreshButton: true,
+			    refreshButtonClass: 'icon-refresh icon-spin',
+				labelError:'Sorry but there was a error:',
+				labelUpdated: 'Last Update:',
+				labelRefresh: 'Refresh',
+				labelDelete: 'Delete widget:',
+				afterLoad: function(){},
+				rtl: false
+				
+			});
+			
+		} // end if
+		
+	}
+	
+	/* end widgets desktop */
+
+
+</script>	

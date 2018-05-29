@@ -1,0 +1,98 @@
+<!-- widget grid -->
+<section id="widget-grid" class="">
+  <!-- row -->
+  <div class="row">
+    <!-- NEW WIDGET START -->
+    <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <!-- Widget ID (each widget will need unique ID)-->
+      <div id="etl_gettasklist_div" class="jarviswidget jarviswidget-color-blueDark" data-widget-editbutton="false" data-widget-deletebutton="false">
+        <header>
+          <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+          <h2>脚本列表</h2>
+        </header>
+        <!-- widget div-->
+        <div>
+          <!-- widget edit box -->
+          <div class="jarviswidget-editbox">
+            <!-- This area used as dropdown edit box -->
+          </div>
+          <!-- end widget edit box -->
+          <!-- widget content -->
+          <div class="widget-body no-padding">
+            <div class="widget-body-toolbar">
+              <div id="etl_tree_div" class="row">
+                <ul>
+                  资源库路径：
+                  <input id="etl_routeSel" type="text" value="" />&nbsp;
+                  <a id="etl_menuBtn" href="#">选择</a>
+                </ul>
+                <div id="etl_menuContent" class="menuContent" style="display:none; ">
+                  <ul id="tree_api" class="ztree" style="margin-top:0; width:160px;"></ul>
+                </div>
+              </div>
+              <form id="etl_gettasklist_form" method="post" onsubmit="return false;" class="smart-form">
+                <input name="dir" type="text" value="" hidden="true" />
+                <div class="row">
+                  <section class="col col-sm-2">
+                    <label class="input">
+                      <input type="hidden" name="status" data-type="select2" placeholder="状态" />
+                    </label>
+                  </section>
+                  <section class="col col-3">
+                    <label class="input">
+                      <input type="text" name="taskname" placeholder="脚本名" class="form-control input-sm">
+                    </label>
+                  </section>
+                  <section class="col col-sm-2">
+                    <label class="input">
+                      <input type="hidden" name="tasktype" data-type="select2" placeholder="脚本类型（job）">
+                    </label>
+                  </section>
+                  <section class="col col-sm-2">
+                  <button id="etl_gettasklist_search" class="btn btn-info btn-sm" type="submit"><i class="fa fa-search fa-1"></i>&emsp;查 询&emsp;</button>
+                  </section>
+                </div>
+              </form>
+              <button id="etl_gettasklist_start" class="btn btn-info btn-sm" type="submit"><i class="fa fa-toggle-right"></i>&emsp;启 动&emsp;</button>
+            </div>
+            <div class="dataTables_wrapper">
+              <table id="etl_gettasklist_dt" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>序号</th>
+                    <th>路径</th>
+                    <th>名称</th>
+                    <th>版本</th>
+                    <th>描述</th>
+                    <th>创建者</th>
+                    <th>创建时间</th>
+                    <th>更新者</th>
+                    <th>更新时间</th>
+                    <th>状态</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+          <!-- end widget content -->
+          <div id="etl_gettasklist_pagination"></div>
+        </div>
+        <!-- end widget div -->
+      </div>
+      <!-- end widget -->
+    </article>
+    <!-- WIDGET END -->
+  </div>
+  <!-- end row -->
+</section>
+<!-- end widget grid -->
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script src="etl/serverscript/gettasklist.js"></script>
+<link rel="stylesheet" href="lib/js/plugin/ztreev35/zTreeStyle.css" type="text/css">
+<script type="text/javascript" src="lib/js/plugin/ztreev35/jquery.ztree.core-3.5.min.js"></script>
+<script type="text/javascript" src="lib/js/plugin/ztreev35/jquery.ztree.excheck-3.5.min.js"></script>
+<script type="text/javascript">
+  // DO NOT REMOVE : GLOBAL FUNCTIONS!
+  pageSetUp();
+  var md_gettaskList = new EtlGetTaskList();
+</script>

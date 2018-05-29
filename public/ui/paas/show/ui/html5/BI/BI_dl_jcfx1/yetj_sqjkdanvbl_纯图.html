@@ -1,0 +1,74 @@
+﻿<style type="text/css">
+#timecx{ display: none;}	
+</style>
+<div id="etbjglda-m"  class="portlet box grey">
+    <div class="portlet-title">
+        <div class="caption" id="yetj-name"><!-- 可以设置图标<i class="icon-globe"></i> -->健康档案中性别比例情况</div>
+        <!-- 设置关闭和刷新--> 
+        <div class="tools">
+            <div class="tools-chart">
+            	<a class="qht"><i class="icon-bar-chart"></i></a>
+            	<span class="reload"><i class="icon-file-text-alt"></i></span>
+            </div>
+        </div>
+        
+    </div>
+    <div class="portlet-body">
+        <div id="lc-rowtable" class="row-fluid">
+            <div class="span12">
+                <div id="contextEtbjglda"></div>
+            </div>
+        </div>
+        <div id="rowtable" class="row-fluid rowtable">
+            <div class="span12">
+                 <table id="ttEtbjglda"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	if($(window).width()>765){
+		$("#contextEtbjglda").height($(window).height()-207);
+	}
+});
+$(function () {
+    $('#contextEtbjglda').highcharts({
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false
+        },
+        title: {
+            text: '健康档案中性别比例情况'
+        },
+        tooltip: {
+    	    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    color: '#000000',
+                    connectorColor: '#000000',
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                }
+            }
+        },
+        series: [{
+            type: 'pie',
+            name: '比例',
+            data: [
+                ['男',   25],
+                ['女',       25],
+                ['未知性别',    50]
+            ]
+        }]
+    });
+});	
+</script>
+
+
+

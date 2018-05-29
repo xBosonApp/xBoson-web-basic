@@ -1,0 +1,175 @@
+<meta charset="utf-8">
+<style type="text/css">
+  #mdm-menu,
+  #mdm-menu ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-align: center;
+  }
+  #mdm-menu {
+    margin: 0px auto;
+    border: 1px solid #222;
+    background-color: #111;
+    background-image: linear-gradient(#444, #111);
+    box-shadow: 0 1px 1px #777;
+    position: relative;
+    zoom: 1;
+    border-radius: 3px;
+  }
+  #mdm-menu:before,
+  #mdm-menu:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  #mdm-menu li {
+    float: left;
+    border-right: 1px solid #222;
+    box-shadow: 1px 0 0 #444;
+    position: relative;
+  }
+  #mdm-menu .active a {
+    color: #fafafa;
+    background-color: #336666;
+    background-image: linear-gradient(#336666, #334D66);
+  }
+  #mdm-menu a {
+    float: left;
+    padding: 6px 14px;
+    color: #999;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-decoration: none;
+    text-shadow: 0 1px 0 #000;
+  }
+  #mdm-menu li:hover > a {
+    color: #fafafa;
+    background-color: #336666;
+    background-image: linear-gradient(#336666, #334D66);
+  }
+  #mdm-menu li:first-child > a {
+    border-radius: 3px 0 0 3px;
+  }
+  #mdm-menu li a:hover {
+    /* IE6 only */
+    color: #fafafa;
+    background-color: #336666;
+    background-image: linear-gradient(#336666, #334D66);
+  }
+  #mdm-menu ul {
+    margin: 20px 0 0 0;
+    /*IE6 only*/
+    opacity: 0.9;
+    visibility: hidden;
+    position: absolute;
+    top: 38px;
+    left: 0px;
+    z-index: 1;
+    background: #444;
+    background: linear-gradient(#444, #111);
+    box-shadow: 0 -1px 0 rgba(255, 255, 255, .3);
+    border-radius: 3px;
+    transition: all .2s ease-in-out;
+  }
+  #mdm-menu li:hover > ul {
+    visibility: visible;
+    margin: 0;
+  }
+  #mdm-menu ul ul {
+    top: 0;
+    left: 160px;
+    margin: 0 0 0 20px;
+    opacity: 1;
+    /*IE6 only*/
+    box-shadow: -1px 0 0 rgba(255, 255, 255, .3);
+  }
+  #mdm-menu ul li {
+    /*    padding: 0 5px 0 5px;*/
+    float: none;
+    display: block;
+    border: 0;
+    /*IE6 only*/
+    box-shadow: 0 1px 0 #111, 0 2px 0 #666;
+  }
+  #mdm-menu ul li:last-child {
+    box-shadow: none;
+  }
+  #mdm-menu ul a {
+    padding: 8px;
+    /*IE6 only*/
+    display: block;
+    white-space: nowrap;
+    float: none;
+    text-transform: none;
+  }
+  #mdm-menu ul a:hover {
+    background-color: #336666;
+    background-image: linear-gradient(#336666, #334D66);
+  }
+  #mdm-menu ul li:first-child > a {
+    border-radius: 3px 3px 0 0;
+  }
+  #mdm-menu ul li:first-child > a:after {
+    content: '';
+    position: absolute;
+    left: 40%;
+    top: -6px;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid #444;
+  }
+  #mdm-menu ul ul li:first-child a:after {
+    left: -6px;
+    top: 50%;
+    margin-top: -6px;
+    border-left: 0;
+    border-bottom: 6px solid transparent;
+    border-top: 6px solid transparent;
+    border-right: 6px solid #3b3b3b;
+  }
+  #mdm-menu ul li:first-child a:hover:after {
+    border-bottom-color: #336666;
+  }
+  #mdm-menu ul ul li:first-child a:hover:after {
+    border-right-color: #336666;
+    border-bottom-color: transparent;
+  }
+  #mdm-menu ul li:last-child > a {
+    border-radius: 0 0 3px 3px;
+  }
+</style>
+<div class="row">
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <ul id="mdm-menu">
+      <li class="active"><a href="#" data-url="etl/serverscript/serverslist.html"><i class="fa fa-cubes"></i>&nbsp;服务器列表</a>
+      </li>
+      <li>
+        <a href="#" data-url="etl/serverscript/gettasklist.html">&nbsp;脚本列表</a>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="row">&nbsp;</div>
+<div id="mdm_div"></div>
+<script type="text/javascript">
+  // DO NOT REMOVE : GLOBAL FUNCTIONS!
+  pageSetUp();
+  (function () {
+    $('#mdm-menu * > a').click(function (e) {
+      var $this = $(this);
+      $('#mdm-menu li.active').removeClass('active');
+      $this.parents('#mdm-menu li').addClass('active');
+      Console.log('data-url = ' + $this.data('url'));
+      if ($this.data('url')) {
+        //Load 画面
+        zy.net.loadHTML($this.data('url'), $('#mdm_div'));
+      }
+      e.preventDefault();
+      return false;
+    });
+
+    //Load 服务器列表画面
+    zy.net.loadHTML('etl/serverscript/serverslist.html', $('#mdm_div'));
+  })();
+</script>

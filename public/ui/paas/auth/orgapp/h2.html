@@ -1,0 +1,82 @@
+<style type="text/css">
+	.ztree * {
+		font-family: Consolas,Microsoft YaHei,SimHei,STHeiti,SimSun,STSong,sans-serif;
+		font-size: 14px;
+		font-weight: 100;
+	}
+</style>
+<!-- widget grid -->
+<section id="widget-grid" class="">
+  <!-- row -->
+  <div class="row">
+    <!-- NEW WIDGET START -->
+    <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <!-- Widget ID (each widget will need unique ID)-->
+      <div id="auth_orgapp_h2" class="jarviswidget jarviswidget-color-blueDark" data-widget-fullscreenbutton="false" data-widget-colorbutton="true" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-deletebutton="false">
+        <header>
+          <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+          <h2>机构应用管理</h2>
+        </header>
+        <!-- widget div-->
+        <div>
+          <!-- widget edit box -->
+          <div class="jarviswidget-editbox">
+            <!-- This area used as dropdown edit box -->
+          </div>
+          <!-- end widget edit box -->
+          <!-- widget content -->
+          <div class="widget-body no-padding">
+            <div class="widget-body-toolbar">
+							<span style="color:#666">请选择机构，并操作相关机构的应用</span>
+              <div class="btn-group" style="position:absolute;left:26%">
+                <button id="auth_orgapp_h2_save" class="btn btn-info btn-xs dropdown-toggle" data-toggle="dropdown" title="<i class='text-warning fa fa-magic'></i> 注意：只保存当前页修改">&emsp;<i class="fa fa-save"></i>&nbsp;保 存&emsp;</button>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-bordered table-striped table-condensed">
+                <tr>
+                  <td valign="top" width="26%"><span style="font-size:15px;color:#666">选择机构：</span>
+                    <div>
+                      <ul id="auth_h1_tree" class="ztree"></ul>
+                    </div>
+                  </td>
+                  <td align="justify" width="74%">
+                    <div class="dataTables_wrapper">
+                      <table id="auth_orgapp_h2_dt" class="table table-bordered table-striped table-condensed">
+                        <thead>
+                          <tr>
+                            <th>状态</th>
+                            <th>应用名称</th>
+                            <th>平台/第三方</th>
+                            <th>分配方</th>
+                            <th>应用状态</th>
+                          </tr>
+                        </thead>
+                      </table>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <!-- end widget content -->
+          <div id="auth_orgapp_h2_pagination"></div>
+        </div>
+        <!-- end widget div -->
+      </div>
+      <!-- end widget -->
+    </article>
+    <!-- WIDGET END -->
+  </div>
+  <!-- end row -->
+</section>
+<!-- end widget grid -->
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<!-- BOOTSTRAP UI + Slider -->
+<!-- <script src="lib/js/plugin/bootstrap-editable/js/bootstrap-editable.min.js"></script> -->
+<script src="auth/orgapp/h2.js"></script>
+<script type="text/javascript">
+  // DO NOT REMOVE : GLOBAL FUNCTIONS!
+  pageSetUp();
+  var auth_h2 = new AuthOrgAppH2();
+</script>

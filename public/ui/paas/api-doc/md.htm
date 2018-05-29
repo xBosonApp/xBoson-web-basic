@@ -1,0 +1,43 @@
+<link rel="stylesheet" href="/ui/paas/api-doc/css/md01.css" type="text/css" />
+<style>
+  #SC{overflow:auto;}
+</style>
+<div>
+  <!--<div id="SR" style="display:none" data-uri="api-doc/demo.html"></div>-->
+  <if var='query.doc'>
+    <div id="SR" style="display:none" data-uri="###query.doc###"></div>
+  </if>
+  <if var='query.doc' not='true'>
+    <div id="SR" style="display:none" data-uri="api-doc/demo.md"></div>
+  </if>
+  <!--<div id="SR" style="display:none" data-uri="###query.id###.html"></div>-->
+  <div id="SC" class="alert alert-warning markdown"></div>
+</div>
+
+<!--<script src="/ui/paas/lib/js/libs/jquery-1.11.0.min.js"></script>-->
+<script src="/ui/paas/api-doc/css/showdown.min.js"></script>
+<!--<script src="/ui/paas/lib/js/zy/zy.js"></script>-->
+<script>
+  //$(set_markdown_file);
+  
+  function set_markdown_file(_, _, _docpath){
+    var docpath = _docpath || $("#SR").data("uri");
+    var cb = function(data) {
+      // showdown.setOption('noHeaderId', true);
+      // showdown.setOption('strikethrough', true);
+      // showdown.setOption('tables', true);
+      // showdown.setOption('tasklists', true);
+      // showdown.setFlavor('vanilla');
+      showdown.setFlavor('github');
+      var converter = new showdown.Converter();
+      // var  te = $("#SR").html();
+      // 解析 mackdown文档内容
+      var  ht = converter.makeHtml(/*te*/ data);
+      $("#SC").empty();
+      $("#SC").html(ht);
+    }
+    // 获取mackdown文档内容
+    zy.debug = true;
+    zy.net.loadHTML(docpath, $("#SR"), cb);
+  }
+</script>

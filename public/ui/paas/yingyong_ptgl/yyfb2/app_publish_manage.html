@@ -1,0 +1,145 @@
+<div class="modal fade" id="app_publish" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title">发布应用（<span id="app_publish_title"></span>）</h4>
+      </div>
+      <div class="modal-body no-padding">
+        <!-- FORM Start -->
+        <form id="app_publish_form" method="post" onsubmit="return false;" class="smart-form">
+          <fieldset>
+            <section>
+              <input type="hidden" name="applicationid" placeholder="应用ID">
+              <label class="label">应用名称</label>
+              <label class="input has-warning">
+                <input type="text" name="applicationnm" placeholder="应用名称">
+                <b class="tooltip tooltip-bottom-right">应用名称为必填项目</b>
+              </label>
+            </section>
+            <section>
+              <label class="label">应用描述</label>
+              <label class="input has-warning">
+                <input type="text" name="application_desc" placeholder="应用描述">
+                <b class="tooltip tooltip-bottom-right">应用描述为必填项目</b>
+              </label>
+            </section>
+            <section>
+              <label class="label">标准版应用ID</label>
+              <label class="input">
+                <input type="text" name="p_applicationid" placeholder="标准版应用ID">
+              </label>
+            </section>
+            <section>
+              <label class="label">状态</label>
+              <label class="input">
+                <input type="hidden" name="status" data-type="select2" placeholder="状态" />
+              </label>
+            </section>
+          </fieldset>
+          <footer>
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary">确定</button>
+          </footer>
+        </form>
+        <!-- FORM End -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+<!-- SCRIPTS ON PAGE EVENT -->
+<script type="text/javascript">
+// DO NOT REMOVE : GLOBAL FUNCTIONS!
+pageSetUp();
+
+(function() {
+  // 数据字典处理
+  var cb = function() {
+    // 字典数据绑定
+    $("#app_publish_form input[name=status]").zySelect('ZR.0001', false, { width: '100%' });
+    if (application_view._g.param.flg == 'i') {
+        //添加
+        $("#app_publish_title").text('添加');
+        $("#app_publish_form input[name=status]").select2("val", '1'); //默认值
+      } else if (application_view._g.param.flg == 'u') {
+        //修改
+        $('#app_publish_title').text('修改');
+        var data = application_view._g.param.view;
+        $('input[name=applicationid]').val(data.applicationid);
+        $('input[name=applicationnm]').val(data.applicationnm);
+        $('input[name=application_desc]').val(data.application_desc);
+        $('input[name=p_applicationid]').val(data.p_applicationid);
+        $('input[name=status]').select2("val", data.status);
+      }
+  };
+  // 预处理该画面所需的字典类型，以 , 号分割
+  zy.cache.initDicts('ZR.0001', cb);
+})();
+
+$('#app_publish').modal('show');
+// Registration validation script
+
+//自定义APP重复验证
+$.validator.addMethod("appunion", function(value, element) {
+  var flag;
+  if(application_view._g.param.flg == 'u'){
+    flag=true;
+  } else {
+    $.ajaxSetup({
+      async: false // 设置同步
+    });
+    zy.g.am.app = "03229cbe4f4f11e48d6d6f51497a883b";
+    zy.g.am.mod = "yyfb";
+    zy.net.post("api/app_name_validate", function(msg) {
+      flag = (msg.result && "1" == msg.result[0].count);
+    }, {
+      applicationnm: value
+    });
+    $.ajaxSetup({
+      async: true // 设置异步
+    });
+  }
+  return this.optional(element) || flag;
+}, "该应用名称已被使用");
+
+$("#app_publish_form").validate({
+  rules: {
+    applicationnm: {
+      required: true,
+      maxlength: 100,
+      appunion: true
+    },
+    application_desc: {
+      required: true,
+      maxlength: 100
+    },
+  },
+  onfocusout: function(element) {
+    $(element).valid();
+  },
+  errorPlacement: function(error, element) {
+    error.insertAfter(element.parent());
+  },
+  // 验证成功后保存
+  submitHandler: function(form) {
+    var callback = function(msg) {
+      $('#app_publish_form').formDisable(false);
+      if (msg) {
+        $('#app_publish').modal('hide');
+        application_view.Pagination(application_view._g.curpage);//更新当前页
+        zy.ui.msg("提示信息：", "保存成功！", "s");
+      }
+    };
+    zy.g.am.app = '03229cbe4f4f11e48d6d6f51497a883b';
+    zy.g.am.mod = 'yyfb';
+    zy.net.post("api/application_manage", callback, $('#app_publish_form').serialize());
+    $('#app_publish_form').formDisable(true);
+  }
+});
+</script>

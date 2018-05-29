@@ -1,0 +1,50 @@
+<div class="row">
+  <div class="col col-md-5">
+    <input type="text" class="form-control" placeholder="模型ID" name="mdms_model_dyform_modelid"/>
+    <button class="btn btn-default" name="mdms_model_dyform_submit" value="dy2">查询</button>
+  </div>
+</div>
+<button class="btn btn-default" name="mdms_model_dyform_person" value="dy1">人员（示例）</button>
+<button class="btn btn-default" name="mdms_model_dyform_org" value="dy2">机构（示例）</button>
+
+<div class="modal fade" id="mdms_model_dyform" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+        </button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body no-padding">
+        <!-- FORM Start -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<script src="lib/html/zy_dyform.js"></script>
+<script>
+  (function(){
+    function get_model(modelid){
+      zy.g.am.app='c770045becc04c7583f626faacd3b456';
+      zy.g.am.mod='commapi';
+      zy.net.get('api/exc_select',function(msg){
+        // 使用平台dyform控件
+        var dy = new dyForm();
+        var jqform = dy.modalform(msg.type,null,function(){$("#mdms_model_dyform").modal('hide');});
+        $("#mdms_model_dyform").find('.modal-body').html('');
+        $("#mdms_model_dyform").find('.modal-body').append(jqform);
+        jqform.json2form(msg.data[0]);
+        $("#mdms_model_dyform").modal('show');
+      },{'modolcd':modelid});
+    }
+    
+    $('button[name=mdms_model_dyform_person]').add($('button[name=mdms_model_dyform_org]')).click(function(){
+      get_model($(this).val());
+    });
+    $('button[name=mdms_model_dyform_submit]').click(function(){
+      get_model($('[name=mdms_model_dyform_modelid]').val());
+    });
+  })();
+</script>

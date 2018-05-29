@@ -1,0 +1,85 @@
+<div id="EWATERBI_pdmr_prodcplan_info" class="widget-body no-padding" style="margin: -10px -13px 28px -13px;">
+  <div class="widget-body-toolbar">
+    <div class="row">
+      <form id="EWATERBI_pdmr_prodcplan_info_form" method="post" onsubmit="return false;" class="smart-form">
+        <section class="col col-2">
+          <label class="input">
+            <input type="hidden" name="status" data-type="select2" placeholder="状态"/>
+          </label>
+        </section>
+        <section class="col col-2">
+          <label class="input">
+            <input type="hidden" name="p_finish_usr_typecd" data-type="select2" placeholder="计划完成者类型">
+          </label>
+        </section>
+        <section class="col col-2">
+          <label class="input">
+            <input type="hidden" name="p_finish_usr" data-type="select2" placeholder="计划完成者">
+          </label>
+        </section>
+        <section class="col col-2">
+          <label class="input">
+            <button id="EWATERBI_pdmr_prodcplan_info_search" class="btn btn-info btn-sm" type="submit"><i
+              class="fa fa-search fa-1"></i>&emsp;查 询&emsp;</button>
+          </label>
+        </section>
+
+        <section class="col col-2" style="display: none">
+          <label class="input">
+            <input type="hidden" name="p_nm" placeholder="计划名称" class="form-control">
+          </label>
+        </section>
+        <section class="col col-2" style="display: none">
+          <label class="input">
+            <input type="hidden" name="p_sn" placeholder="计划序列号" class="form-control">
+          </label>
+        </section>
+
+
+      </form>
+    </div>
+    <div class="btn-group">
+      <button id="EWATERBI_pdmr_prodcplan_info_add" class="btn btn-info btn-xs">&emsp;<i class="fa fa-magic"></i>&nbsp;添
+        加&emsp;
+      </button>
+      <button id="EWATERBI_pdmr_prodcplan_info_edit" class="btn btn-info btn-xs">&emsp;<i class="fa fa-edit"></i>&nbsp;修
+        改&emsp;
+      </button>
+    </div>
+  </div>
+  <div class="dataTables_wrapper">
+    <table id="EWATERBI_pdmr_prodcplan_info_dt" class="table table-bordered table-striped">
+      <thead>
+      <tr>
+        <th>计划完成者类型</th>
+        <th>计划完成者</th>
+        <th>计划完成值</th>
+        <th>计划完成值单位</th>
+        <th>创建时间</th>
+        <th>状态</th>
+      </tr>
+      </thead>
+    </table>
+  </div>
+  <div id="EWATERBI_pdmr_prodcplan_info_pagination"></div>
+</div>
+<div id="EWATERBI_pdmr_prodcplan_info_form1"></div>
+<!-- end widget content -->
+
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script src="plan/plan_info.js"></script>
+<script type="text/javascript">
+
+  // DO NOT REMOVE : GLOBAL FUNCTIONS!
+  pageSetUp();
+  var info1 = new Info1();
+  var options = {
+    width: '80%'
+  };
+</script>
+<!--<script type="text/javascript">-->
+<!--// DO NOT REMOVE : GLOBAL FUNCTIONS!-->
+<!--pageSetUp();-->
+<!--var md_h4 = new MdmDatadictH4();-->
+<!--</script>-->
+

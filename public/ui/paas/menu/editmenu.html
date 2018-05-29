@@ -1,0 +1,63 @@
+<section>
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="well">
+				<h1>菜单管理</h1>
+				<div class="alert alert-info">
+					<div class="row">
+						<div class="col-sm-5">
+							机构菜单如下：
+							<!--<input id="zrlist1" />-->
+						</div>
+						<!--<div class="col-sm-2">-->
+						<!--	<button class="btn btn-default" name="copy"  style="display: none;">-->
+						<!--		复制-->
+						<!--	</button>-->
+						<!--</div>-->
+						<!--<div class="col-sm-5" style="display: none;">-->
+						<!--	请选择参照机构菜单-->
+						<!--	<input id="zrlist2"/>-->
+						<!--</div>-->
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-5">
+						<ul id="Stree" class="ztree"></ul>
+					</div>
+					<div class="col-sm-2">
+						<div class="row">
+							<label>排序</label>
+							<button id="closeCtree" style="float: right;">
+								<i class="fa fa-times"></i>
+							</button>
+							<button name="sort" style="float: right;">
+								<i class="fa fa-check"></i>
+							</button>
+						</div>
+						<div class="row">
+							<ul id="Ctree" class="ztree"></ul>
+						</div>
+					</div>
+					<!--<div class="col-sm-3">-->
+					<!--	<ul id="Btree" class="ztree"></ul>-->
+					<!--</div>-->
+					<div class="col-sm-3">
+					  <label>机构应用菜单：</label>
+					  <!--机构app菜单-->
+						<ul id="Ptree" class="ztree"></ul>
+					</div>
+				</div>
+				<div class="row">
+					<div id="menu_getmenu_form2" class="col-sm-12">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- end row -->
+</section>
+<script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+<script type="text/javascript" src="menu/editmenu.js"></script>
+<SCRIPT type="text/javascript">
+var menu_getmenu = new MenuGetMenu();
+</SCRIPT>

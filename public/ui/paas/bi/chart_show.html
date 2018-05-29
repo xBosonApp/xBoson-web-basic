@@ -1,0 +1,107 @@
+<div class="btn-group" style='margin-bottom: 10px'>
+  <div class="row btn-group">
+    <button class="btn btn-primary  btn-sm dropdown-toggle" id="add_project"
+            style="margin-left:13px;margin-bottom:10px;" data-toggle="dropdown">创建新布局
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" style="margin-left:13px;margin-bottom:10px;" id="size">
+      <li>
+        <a id="3" href="javascript:void(0);">小布局</a>
+      </li>
+      <li>
+        <a id="6" href="javascript:void(0);">中布局</a>
+      </li>
+      <li>
+        <a id="9" href="javascript:void(0);">大布局</a>
+      </li>
+      <li>
+        <a id="12" href="javascript:void(0);">行布局</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<section id="widget-grid"></section>
+
+<article id="template" style="display:none;">
+  <div class="jarviswidget" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-editbutton="false">
+    <!-- widget options:
+      usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+      
+      data-widget-colorbutton="false"	
+      data-widget-editbutton="false"
+      data-widget-togglebutton="false"
+      data-widget-deletebutton="false"
+      data-widget-fullscreenbutton="false"
+      data-widget-custombutton="false"
+      data-widget-collapsed="true" 
+      data-widget-sortable="false"
+      
+    -->
+    <header>
+      <h2><strong></strong><i></i></h2>
+    </header>
+    <div>
+
+      <!-- widget edit box -->
+      <div class="jarviswidget-editbox">
+        <!--<input class="form-control" type="text">-->
+        <!--<span class="note"><i-->
+        <!--  class="fa fa-check text-success"></i> Change title to update and save instantly!</span>-->
+      </div>
+      <div class="widget-body">
+        <div class="col-md-6">
+          <!--<div class="row" style="margin-bottom: 10px">-->
+          <!--  <div class="col-lg-3 col-md-3 col-sm-3">-->
+          <!--    <div class="input-group">-->
+          <!--      <span class="input-group-addon"> 模块名称 </span>-->
+          <!--      <input type="text" index="modTitle" class="form-control">-->
+          <!--    </div>-->
+          <!--  </div>-->
+          <!--  <div class="col-lg-3 col-md-3 col-sm-3">-->
+          <!--    <div class="input-group">-->
+          <!--      <span class="input-group-addon"> 模块分类 </span>-->
+          <!--      <input type="text" index="modClass" class="form-control">-->
+          <!--    </div>-->
+          <!--  </div>-->
+          <!--  <div class="col-lg-2 col-md-2 col-sm-2">-->
+          <!--    <div class="smart-form">-->
+          <!--      <label class="checkbox">-->
+          <!--        <label class="text">分享</label>-->
+          <!--        <input type="checkbox" index="share">-->
+          <!--        <i></i>-->
+          <!--      </label>-->
+          <!--    </div>-->
+          <!--  </div>-->
+          <!--</div>-->
+          <div class='row chart_form_div'></div>
+          <div class="row" id="module_con" style='padding-bottom: 50px'></div>
+        </div>
+        <div class="col-md-6">
+          <div class="input-group input-group-sm" style="width:100%;margin-bottom:-15px">
+            <header>
+              <label>模块列表</label>
+              <a href="javascript:void(0);" class="pull-right">
+                <i class="fa fa-times"></i>
+              </a>
+            </header>
+          </div>
+          <legend></legend>
+          <div class="row" style="overflow: auto; min-height: 300px; margin-top: -15px;">
+            <ul class="ztree" id=""></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+
+<script src="bi/echarts.js"></script>
+<script src="bi/new_class.js"></script>
+<script src="bi/chart_show.js"></script>
+<script type="text/javascript" src="bi/js/tableToCsv.js" ></script>
+<script>
+  var pageid = 'bdeec9c0-05b5-11e4-9191-0800200c9a66';
+  zy.chart.pagecontrol(pageid);
+</script>

@@ -1,0 +1,145 @@
+<!--RBAC改版-->
+<div id="project_list" class="well well-sm" style="
+    position: absolute;
+    z-index: 100;
+    width: 98%;">
+  <form>
+    <legend style="padding:0 !important; font-size: 8px;">
+      项目列表
+      <a class="pull-right"><i id="pro_list_min" class="fa fa-minus" style="cursor: pointer;">
+        </i></a>
+    </legend>
+    <ul id='external-events' class="list-unstyled"></ul>
+  </form>
+</div>
+<div id="api_ide_content">
+  <div style="text-align: center; min-height:300px; 
+    font-size: 30px; padding-top: 200px; padding-bottom: 500px;" id='please_draw'>
+    <span>请</span>
+    <span>从</span>
+    <span>项</span>
+    <span>目</span>
+    <span>列</span>
+    <span>表</span>
+    <span>中</span>
+    <span>拖</span>
+    <span>拽</span>
+    <span>一</span>
+    <span>个</span>
+    <span>项</span>
+    <span>目</span>
+    <span>到</span>
+    <span>此</span>
+    <span>处</span>
+  </div>
+</div>
+<script>
+  (function () {
+    var ls_zy_user_info = zy.cache.get('_zy_user_info', 'ls');
+    var select_pro = ls_zy_user_info.get('last_select_project');
+    var proList = $('#project_list');
+    var proListIsMin = false;
+    var stopanim = false;
+
+    zy.g.am.app = '03229cbe4f4f11e48d6d6f51497a883b';
+    zy.g.am.mod = 'XMGL';
+    zy.net.get('api/ideprj', function (msg) {
+      buildProject(msg.result);
+    });
+
+    //
+    // Edit by J.ym 17.12.19
+    // 缩小项目列表, 打开项目自动收缩列表
+    //
+    var pro_list_min = $('#pro_list_min').click(function () {
+      var $this = $(this);
+      if ($this.hasClass('fa-plus')) {
+        $this.removeClass('fa-plus').addClass('fa-minus');
+      } else {
+        $this.removeClass('fa-minus').addClass('fa-plus');
+      }
+      // var ex = $('#external-events').slideToggle();
+      if (proListIsMin) {
+        $('#external-events').slideDown();
+        proList.animate({ width: $('#api_ide_content').width(), 'height': 'auto' });
+      } else {
+        $('#external-events').fadeOut();
+        proList.animate({width: '200px', 'height': '35px'});
+      }
+      proListIsMin = !proListIsMin;
+    });
+
+    function buildProject(Array) {
+      if (!$.isArray(Array)) return;
+      var ul = proList.find('.list-unstyled');
+      $.each(Array, function (i, v) {
+        var li = $('<li>').attr({
+          class: 'ui-draggable'
+        });
+        var span = $('<span class="bg-color-darken txt-color-white" data-icon="fa-time"></span>')
+            .attr('data-description', _.isEmpty(v.mark) ? '无' : v.mark);
+        li.draggable({
+          zIndex: 999,
+          revert: true,
+          revertDuration: 0
+        });
+
+        li.data('prjid', v.prjid);
+        li.data('roleid', v.roleid);
+        // zy.log(li.data('roleid'));
+
+        if (v.prjid === select_pro) {
+          zy.net.loadHTML('ide/htmlide/htmlide.html', $('#api_ide_content'), function () {
+            NewIDE(v.roleid);
+            pro_list_min.click();
+          })
+        }
+        span.html(v.prjnm).appendTo(li);
+        ul.append(li);
+      })
+    }
+
+    $('#api_ide_content').droppable({
+      drop: function (event, ui) {
+        if (($('#project_list').has(ui.draggable[0])).length === 0) {
+          return false;
+        }
+        $(this).html('');
+        zy.net.loadHTML('ide/htmlide/htmlide.html', $(this), function () {
+          NewIDE(ui.draggable.data('roleid'));
+          ls_zy_user_info.set('last_select_project', ui.draggable.data('prjid'));
+          pro_list_min.click();
+          stopanim = true;
+        })
+      }
+    });
+
+
+    setTimeout(function() {
+      $('#please_draw').find("span").css('display', 'inline-block').each(function() {
+        var thiz = $(this);
+        var t = 0, l = 0, s = 1, f = 30;
+        next_frame();
+
+        function next_frame() {
+          var i = parseInt(Math.random()*6);
+          switch (i) {
+            case 0: t+=s; break;
+            case 1: t-=s; break;
+            case 2: l+=s; break;
+            case 3: l-=s; break;
+            case 4: f+=s; break;
+            case 5: f-=s; break;
+          }
+          thiz.css({ "margin-top": t, 'margin-left': l, "font-size": f});
+          if (!stopanim) setTimeout(next_frame, 20);
+        }
+      });
+
+      setTimeout(function() { 
+        stopanim = true; 
+      }, 15e3);
+    }, 5e3);
+
+  })();
+</script>

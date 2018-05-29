@@ -1,0 +1,107 @@
+﻿
+		<script type="text/javascript">
+		
+		$(function () {
+      $("#typeCode").focus();
+          //$("#typeCode").val(self.parent.typeCode);
+        //  if(self.parent.typeCode!=""){
+              
+        //  }
+       //   alert($("#typeCode").val())
+   		// var url="mdm/dict/details/";
+		//  var itemsList=["typeCode"];
+		//  var info = new Map();
+        //  LC_AjaxPost(MDMBaseUrl+url,"fm","callbackabc",info,itemsList);
+        
+        if(self.parent.dataMap===""){
+        $("#update").hide();
+        }else{
+        $("#add").hide();
+        $("#typeCode").attr('disabled','disabled');
+        }
+        
+        
+        LC_SetMapData("fm",self.parent.dataMap);
+
+});
+	//	function callbackabc(retData){
+	 //     LC_SetMapData("fm",retData.dataList[0]);
+	//	}
+
+
+function update(){
+	LC_Resetting("fm");
+	var checkNameItems=["typeName"];
+	var checkExpItems=["explicate"];
+	var checkstatus=["status"];
+	LC_IsCheckLength("fm",checkNameItems,1,100);
+	LC_IsCheckLength("fm",checkstatus,1,100);
+	
+	if(retCheckFlg){
+		var url="mdm/dict/type/stat/";
+		var itemsList = ["typeCode", "typeName","explicate", "status"];
+		var info = new Map();
+		LC_AjaxGet(MDMBaseUrl+url,"fm","callback",info,itemsList);
+	}
+	
+
+}		
+function callback(reData){
+  if (reData.ret=="0") {
+    self.parent.$.messager.alert('提示',reData.msg,'info');
+    $("#openRoleDiv").window("close");
+  } else {
+    self.parent.$.messager.alert('错误提示',reData.msg,'error');
+  }
+  
+ }
+
+
+function add(){
+	
+	LC_Resetting("fm");
+	var checkNameItems=["sname"];
+	var checkCoidItems=["lns"];
+	var checkExpItems=["status"];
+	LC_IsCheckLength("fm",checkCoidItems,1,10);
+	LC_IsCheckLength("fm",checkNameItems,1,100);
+	LC_IsCheckLength("fm",checkExpItems,1,2);
+	if(retCheckFlg){
+	var url="mdm/officeInsert/";
+	var itemsList = ["sname", "lns", "status"];
+	var info = new Map();
+	LC_AjaxGet(MDMBaseUrl+url,"fm","callback1",info,itemsList);
+	}
+}
+
+function callback1(reData){
+  if (reData.ret=="0") {
+    self.parent.$.messager.alert('提示',reData.msg,'info');
+    $("#openRoleDiv").window("close");
+  } else {
+    self.parent.$.messager.alert('错误提示',reData.msg,'error');
+  }
+ }
+
+
+</script>
+
+<div class="padTB-5">
+    <form id="fm">
+   <!--  <input type="hidden" id="orgId"> -->
+    <div class="mainW-288" style="padding-top:30px;">
+        <div class="itemLW-80 padT-4">科室名称：</div>
+        <div class="itemRW-208"><input id="sname" class="textLW" type="text" ></div>
+    </div>
+    <div class="mainW-288" >
+        <div class="itemLW-80 padT-4">说明：</div>
+        <div class="itemRW-208"><input id="lns"  class="textLW" type="text" ></div>
+    </div>
+    <div class="mainW-288" >
+        <div class="itemLW-80 padT-4">状态：</div>
+        <div class="itemRW-208"><input id="status"  class="textLW" type="text" ></div>
+    </div>
+    <div class="itemLW-288 padTB-10"><a id="update" href="#" class="easyui-linkbutton" onclick="update()">修改</a><a id="add" href="#" class="easyui-linkbutton" onclick="add()">添加</a></div>
+
+    </form>
+</div>

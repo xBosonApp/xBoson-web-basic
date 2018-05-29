@@ -1,0 +1,97 @@
+<!-- rbac_role_mgt01 角色管理 -->
+<div style="opacity: 1;" id="rbac_role_mgt01">
+  <div class="row" id="rbac_role_mgt01_role">
+    <div class="col-sm-6">
+      <div class="well padding-10">
+        <div class="row padding-10">
+				  <div class="btn-group">
+						<button id="rbac_role_mgt01_add" class="btn btn-info btn-xs">&emsp;<i class="fa fa-magic"></i>&nbsp;添加&emsp;</button>
+						<button id="rbac_role_mgt01_edit" class="btn btn-info btn-xs">&emsp;<i class="fa fa-edit"></i>&nbsp;修改&emsp;</button>
+						<button id="rbac_role_mgt01_copy" class="btn btn-info btn-xs">&emsp;<i class="fa fa-file-o"></i>&nbsp;复制&emsp;</button>
+						<button id="rbac_role_mgt01_del" class="btn btn-info btn-xs">&emsp;<i class="fa fa-trash-o"></i>&nbsp;删除&emsp;</button>
+						<button id="rbac_role_mgt01_effect" class="btn btn-info btn-xs">&emsp;<i class="fa fa-male"></i>&nbsp;授权情况&emsp;</button>
+					</div>
+        </div>
+      </div>
+      <div id="rbac_role_mgt01_role_container">
+        <script id="rbac_role_mgt01_tmpl" type="text/x-jsrender">
+          <div class="well well-sm padding-10" data-rg_id="{{: rg_id}}">
+            <h5 class="margin-top-0"><strong>{{: rg_nm}}</strong></h5>
+            <div class="row">
+            {{if children && children.length}}
+              <div class="list-group padding-10">
+              {{for children}}
+                {{if status=='1'}}
+                  <a data-roleid="{{: roleid}}" data-status="{{: status}}" class="list-group-item" title="{{: role_desc}}" href="javascript:void(0);">
+                    {{: rolenm}}
+                    <span class="label label-success pull-right">停用</span>
+                  </a>
+                {{else}}
+                  <a data-roleid="{{: roleid}}" data-status="{{: status}}" class="list-group-item list-group-item-warning" title="{{: role_desc}}" href="javascript:void(0);">
+                    {{: rolenm}}
+                    <span class="label label-warning pull-right">已停用</span>
+                  </a>
+                {{/if}}
+              {{/for}}
+              </div>
+            {{/if}}
+            </div>
+          </div>
+        </script>
+      </div>
+    </div>
+    <!--菜单Tree-->
+    <div class="col-sm-6">
+      <div id="rbac_role_mgt01_menu_container" class="well well-sm well-light padding-10" style="display:none;">
+        <div class="row" id="rbac_role_mgt01_menu_alert" style="display:none;">
+          <div class="col-lg-12">
+            <div class="alert alert-warning alert-dismissible" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <strong>提示</strong>&nbsp;已经停用的角色不可修改
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <section>
+              <div>
+                <p>&nbsp;菜单</p>
+                <ul id="rbac_role_mgt01_menu" class="ztree"></ul>
+              </div>
+            </section>
+          </div>
+        </div>
+        <div class="row" id="rbac_role_mgt01_menu_buttons" style="display:none;">
+          <hr>
+          <div class="col-lg-12 pull-right">
+            <button id="rbac_role_mgt01_menu_save" class="btn btn-primary btn-xs">
+              &emsp;<i class="fa fa-save"></i>&nbsp;确定&emsp;
+            </button>
+            <button id="rbac_role_mgt01_menu_refresh" class="btn btn-success btn-xs">
+              &emsp;<i class="fa fa-refresh"></i>&nbsp;重置&emsp;
+            </button>
+            <button id="rbac_role_mgt01_srv" class="btn btn-info btn-xs">
+              &emsp;<i class="fa fa-wrench"></i>&nbsp;服务确认&emsp;
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="rbac_role_mgt01_dialog"></div>
+  <div id="rbac_role_mgt01_roleid" data-roleid='###query.roleid###'></div>
+  <auth page="rbac_role_mgt01" />
+  <div id="rbac_role_mgt01_auth" data-auth='###auth###'></div>
+</div>
+<div id="rbac_role_mgt01_role_effect_modal_container"></div>
+<div id="rbac_role_mgt01_role_maint_modal_container"></div>
+<div id="rbac_role_mgt01_role_srv_modal_container"></div>
+<script src="lib/js/plugin/jquery-jsrender/jsrender.min.js"></script>
+<script src="rbac/role_mgt/rbac_role_mgt01.js"></script>
+<script>
+	// DO NOT REMOVE : GLOBAL FUNCTIONS!
+	pageSetUp();
+	var rbac_role_mgt01Obj = new rbac_role_mgt01($('#rbac_role_mgt01_roleid').attr('data-roleid'));
+</script>

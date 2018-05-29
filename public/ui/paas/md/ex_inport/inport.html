@@ -1,0 +1,174 @@
+<div class="modal fade" id="inport" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+     data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+       <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title">导入</h4>
+      </div> 
+      <div class="modal-body">
+
+        <div id="wizard-1">
+          <div id="rootwizard">
+            <div class="form-bootstrapWizard">
+              <ul class="bootstrapWizard form-wizard">
+                <li class="active" data-target="#step1">
+                  <a href="#tab1" data-toggle="tab" style="cursor:default"> <span class="step">1</span> <span
+                    class="title">文件信息</span> </a>
+                </li>
+                <li data-target="#step2">
+                  <a href="#tab2" data-toggle="tab" style="cursor:default"> <span class="step">2</span> <span
+                    class="title">预览数据及配置数据映射</span> </a>
+                </li>
+              </ul>
+            </div>
+            <div class="tab-content">
+              <div class="tab-pane active" id="tab1">
+                <h3><br><br></h3>
+
+                <div class="tab-pane" id="fileinfo">
+                  <div class="panel-group smart-accordion-default smart-form">
+                    <div class="panel-body" style="padding: 10px">
+                    <div class="row">
+                      <section class="col col-md-4">
+                        <button name="download_template" class="btn btn-info btn-sm">下载导入模板</button>
+                      </section>
+                    </div>
+                    <hr/>
+                    <div class='row'>
+                      <section class='col col-sm-10'>
+                          <label class='label'>操作类型</label>
+
+                          <div class='col col-sm-3'>
+                            <label class='radio state-success' title='导入数据'><input type='radio' value='insert' checked='checked'
+                                                                      name='operation' ><i></i>导入</label>
+                          </div>
+                          <div class='col col-sm-5'>
+                            <label class='radio state-success' title='根据主键更新'><input type='radio' value='update' 
+                                                                      name='operation' ><i></i>导入更新</label>
+                          </div>
+                          <div class='col col-sm-4'>
+                            <label class='radio state-success' title='根据主键删除'><input type='radio' value='delete' 
+                                                                      name='operation'><i></i>导入删除</label>
+                          </div>
+                        </section>
+                    </div>
+                    <form id='filemsg'>
+                    
+                      <div class='row'>
+                        <section class='col col-sm-6'>
+                          <label class='label'>文件类型</label>
+
+                          <div class='col col-sm-3'>
+                            <label class='radio state-success'><input type='radio' value='1' checked=''
+                                                                      name='radio'><i></i>CSV</label>
+                          </div>
+                        </section>
+                        <section class='col col-sm-6'>
+                          <label class='label'>是否有标题行</label>
+                          <label class="input">
+                            <input type="hidden" name="header" data-type="select2" placeholder="标题行">
+                          </label>
+                        </section>
+                      </div>
+                      <section>
+                        <label class='label'>选择文件</label>
+                        <label class="input input-file" for="file">
+										<div class="button"><input type="file" onchange="this.parentNode.nextElementSibling.value = this.value" name='file_name'>Browse</div><input type="text" readonly="">
+									</label>
+                      </section>
+                      <div class='row'>
+
+                        <section class='col col-sm-6'>
+                          <label class='label'>分隔符</label>
+                          <label class="input">
+                            <input type="hidden" name="delimiter" data-type="select2" placeholder="分隔符">
+                          </label>
+                        </section>
+                        <section class='col col-sm-6'>
+                          <label class='label'>转义符号</label>
+                          <label class="input">
+                            <input type="text" name="escape" placeholder="转义符号">
+                          </label>
+                        </section>
+                      </div>
+                      <div class='row'>
+                        <section class='col col-sm-6'>
+                          <label class='label'>引号符号</label>
+                          <label class="input">
+                            <input type="hidden" name="quoteChar" data-type="select2" placeholder="引号符号">
+                          </label>
+                        </section>
+                        <section class='col col-sm-6'>
+                <label class='label'>字符集</label>
+                <label class="input">
+                  <input type="hidden" name="charset" data-type="select2" placeholder="字符集">
+                </label>
+              </section>
+
+                      </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane active" id="tab2">
+                <h3><br><br></h3>
+
+                <div class="tab-pane" id="datainfo">
+                  <div class="panel-group smart-accordion-default smart-form">
+                    <div class="panel-body" style="padding: 10px">
+                      <section>
+                        <label class='label'>预览数据</label>
+                        <div id='inporttable' style="overflow: auto; position: relative; border: 0px none; width: 100%;"></div>
+                      </section>
+                      <div class='row'>
+                        <section class='col col-6'>
+                          <label class='label'>配置数据映射(<span id='optionrationtitle'></span>)<span id='op_title'></span></label>
+                        </section>
+                      </div>
+                      <div class='row'>
+                        
+                        <section class='col col-6'>
+                          <label class='label'>要导入表的列</label>
+                          <div id='table_col'></div>
+                        </section>
+                        <section class='col col-6'>
+                          <label class='label'>CSV列</label>
+                          <div id='csv_col'></div>
+                        </section>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <ul class="pager wizard no-margin">
+                      <li class="previous disabled">
+                        <a href="javascript:void(0);"> 上一步 </a>
+                      </li>
+                      <li class="pull-right" name="nexttab">
+                        <a href="javascript:"> 下一步 </a>
+                      </li>
+                      <li class="next finish" style="display:none;"><a href="javascript:;"> 开始导入 </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type='text/javascript'>
+  
+
+
+</script>

@@ -1,0 +1,603 @@
+<link rel="stylesheet" href="lib/js/plugin/ztreev35/zTreeStyle.css" type="text/css">
+<style type="text/css">
+  /*.ztree * {*/
+  /*  font-family: Consolas, Microsoft YaHei, SimHei, STHeiti, SimSun, STSong, sans-serif;*/
+  /*  font-size: 14px;*/
+  /*  font-weight: 400;*/
+  /*}*/
+
+  /*.ztree li span.button {*/
+  /*  margin-left: 5px;*/
+  /*  background-position: -144px 0;*/
+  /*  vertical-align: top;*/
+  /*  *vertical-align: middle*/
+  /*}*/
+
+  .ztree li {
+    padding: 3px 0;
+  }
+</style>
+<!-- widget grid -->
+<section id="widget-grid" class="">
+  <!-- row -->
+  <div class="row">
+    <!-- NEW WIDGET START -->
+    <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <!-- Widget ID (each widget will need unique ID)-->
+      <div id="app_view_wid" class="jarviswidget jarviswidget-color-blueDark" data-widget-fullscreenbutton="false"
+           data-widget-colorbutton="true" data-widget-togglebutton="false" data-widget-editbutton="false"
+           data-widget-deletebutton="false">
+        <header>
+          <span class="widget-icon"> <i class="fa fa-table"></i> 
+          </span>
+
+          <h2>ETL流量统计</h2>
+        </header>
+        <!-- widget div-->
+        <div>
+          <!-- widget edit box -->
+          <div class="jarviswidget-editbox">
+            <!-- This area used as dropdown edit box -->
+          </div>
+          <!-- end widget edit box -->
+          <!-- widget content -->
+          <div class="widget-body no-padding">
+            <div class="widget-body-toolbar">
+              <div id='first'>
+                <div id='orginal_1' name='orginal_1'>
+                  <!--显示-->
+                    <form name='eeb_etltraffic_form' method='post' onsubmit='return false;' class='form-horizontal'>
+                    <div class="form-group">
+                        <label class="col-md-1 control-label">日期&nbsp;&nbsp;&nbsp;&nbsp;</label>
+
+                        <div class="col-md-2">
+                        <label class="control-label" name='dt'></label>
+                        </div>
+                       <label class="col-md-2 control-label">集群节点&nbsp;&nbsp;&nbsp;</label>
+
+                        <div class="col-md-3">
+                          <input type="text" name="instanceid" data-type="select2" placeholder="集群节点">
+                        </div>
+                        <div class="col-md-1">
+                        <button name="search" class="btn btn-info btn-sm"><i class="fa fa-search fa-1"></i>&emsp;查 询&emsp;
+                        </button>
+                        </div>
+                      </div>
+                    <div class="form-group">
+                        <label class="col-md-1 control-label">处理总数:</label>
+
+                        <div class="col-md-2">
+                          <label class="control-label" name='p'>0</label>
+                        </div>
+                        <label class="col-md-2 control-label">处理成功数:</label>
+
+                        <div class="col-md-1">
+                          <label class="control-label" name='s'>0</label>
+                        </div>
+                        <label class="col-md-2 control-label">处理失败数:</label>
+
+                        <div class="col-md-1">
+                          <label class="control-label" name='f'>0</label>
+                        </div>
+
+                      </div>  
+                  </form>
+                  
+                    <form style='display:none' name='eeb_etltraffic_form' method='post' onsubmit='return false;' class='other1'>
+                        <input type="text" name="dt" >
+                        <input type="text" name="instanceid" data-type="select2">
+                    </form>
+                  <!--图表-->
+                  <!--<div class="">-->
+                    <div id="chart" style="width:96%; min-height:350px;position: relative; overflow: hidden;"></div>
+                  <!--</div>-->
+                  <div class="widget-body-toolbar" style='display:none'>
+                    <div class="btn-group">
+                      <label class="checkbox-inline">
+											<input type="checkbox" name='abnormal' >
+											只看异常 </label>
+                    </div>
+      
+                  </div>
+                  <div class="dataTables_wrapper">
+                    <table name="table" class="table table-bordered table-striped">
+                      <thead></thead>
+                    </table>
+                  </div>
+                  <div>
+                    
+                  </div>
+                  
+                  <br>
+                  <button class='btn btn-primary' name='history'>查看历史</button>
+                </div>
+                  
+                <!--历史部分-->
+                <div _index='his' name='his_1' style='display:none'>
+                  <legend></legend>
+                  <!--显示-->
+                    <form name='eeb_etltraffic_form_his' method='post' onsubmit='return false;' class='form-horizontal'>
+                      <div class="form-group" name='display'>
+                        <label class="col-md-1 control-label">开始日期&nbsp;</label>
+
+                        <div class="col-md-2 form_yes">
+                          <input  type="text" class="form-control" name='dt_from' id="starttime" index="dt_from"
+                                 placeholder="开始时间">
+                        </div>
+                        <label class="col-md-2 control-label">结束日期&nbsp;&nbsp;&nbsp;</label>
+
+                        <div class="col-md-2 form_now">
+                          <input  value="now()" index="dt_from" name='dt_to' id="endtime" placeholder="结束时间"
+                                 class="form-control" style="cursor: cell;">
+                        </div>
+                        
+                      </div>
+                      <div class="form-group">
+                        <label class="col-md-1 control-label">集群节点&nbsp;</label>
+
+                        <div class="col-md-3">
+                        
+                          <input type="text" name="instanceid" data-type="select2" placeholder="集群节点">
+                        </div>
+                        <div class="col-md-1">
+                        <button name="search" class="btn btn-info btn-sm"><i class="fa fa-search fa-1"></i>&emsp;查 询&emsp;
+                        </button>
+                        </div>
+                      </div>
+
+
+                      <div class="form-group">
+                        <label class="col-md-1 control-label">处理总数:</label>
+
+                        <div class="col-md-2">
+                          <label class=" control-label" name='p'>0</label>
+                        </div>
+                        <label class="col-md-2 control-label">处理成功数:</label>
+
+                        <div class="col-md-1">
+                          <label class=" control-label" name='s'>0</label>
+                        </div>
+                        <label class="col-md-2 control-label">处理失败数:</label>
+
+                        <div class="col-md-1">
+                          <label class="control-label" name='f'>0</label>
+                        </div>
+
+                      </div>
+                    </form>
+                    
+                    <form method='post' style='display:none' onsubmit='return false;' class='other2'>
+                      <input type="text" class="form-control" name='dt_from' _index="dt_from">
+                      <input type="text" class="form-control" name='dt_to' _index="dt_from">
+                      <input type="text" name="instanceid" data-type="select2" placeholder="集群节点">
+                    </form>
+                  <!--图表-->
+                  <!--<div class="">-->
+                    <div id="chart" style="width:96%; min-height:350px;position: relative; overflow: hidden;"></div>
+                  <!--</div>-->
+                  <!--table-->
+                  <div class="widget-body-toolbar" style='display:none'>
+                    <div class="btn-group">
+                      <label class="checkbox-inline pull-right">
+											<input type="checkbox" name='abnormal' >
+											只看异常 </label>
+                    </div>
+      
+                  </div>
+                  <div class="dataTables_wrapper">
+                    <table name="table" class="table table-bordered table-striped">
+                      <thead></thead>
+                    </table>
+                  </div>
+                  <div></div>
+                  <br>
+                  <br>
+                </div>
+              </div>
+              <!--第二个-->
+              <div id='second'>
+                <div id='orginal_2' name='orginal_2' style='display:none'>
+                 <!--显示-->
+                <form name='eeb_etltraffic_form' method='post' onsubmit='return false;' class='form-horizontal'>
+                      <div class="form-group">
+                        <label class="col-md-1 control-label">日期&nbsp;&nbsp;&nbsp;&nbsp;</label>
+
+                        <div class="col-md-3">
+                        <label class="control-label" name='dt'></label>
+                          </div>
+
+                      </div>
+                      <div class="form-group">
+                        <label class="col-md-1 control-label">集群节点&nbsp;</label>
+                        <div class="col-md-2">
+                        <label class="control-label" name="instancenm" _index='instancenm'></label>
+                        </div>
+                         <label class="col-md-2 control-label">采集节点&nbsp;&nbsp;&nbsp;</label>
+                        <div class="col-md-3">
+                          <input type="text" name="daqid" _index='daqid' data-type="select2" placeholder="采集节点">
+                        </div>
+                        <div class="col-md-1">
+                        <button name="search" class="btn btn-info btn-sm"><i class="fa fa-search fa-1"></i>&emsp;查 询&emsp;
+                        </button>
+                        </div>
+                        <div class="col-md-1">
+                        <button name="goback" class="btn btn-info btn-sm">&emsp;返 回&emsp;
+                        </button>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label class="col-md-1 control-label">处理总数:</label>
+
+                        <div class="col-md-2">
+                          <label class="control-label" name='p'>0</label>
+                        </div>
+                        <label class="col-md-2 control-label">处理成功数:</label>
+
+                        <div class="col-md-1">
+                          <label class="control-label" name='s'>0</label>
+                        </div>
+                        <label class="col-md-2 control-label">处理失败数:</label>
+
+                        <div class="col-md-1">
+                          <label class="control-label" name='f'>0</label>
+                        </div>
+
+                      </div>
+
+                    </form>
+                    
+                    <form method='post' style='display:none' onsubmit='return false;' class='other3'>
+                        <input name="dt"  class='form-control' >
+                        <input name="instanceid" _index='instanceid'>
+                        <input name="daqid" _index='daqid'>
+                    </form>
+                 
+                  <!--图表-->
+                    <div id="chart" style="width:96%; min-height:350px;position: relative; overflow: hidden;"></div>
+                    <div class="widget-body-toolbar" style='display:none'>
+                    <div class="btn-group">
+                      <label class="checkbox-inline pull-right">
+											<input type="checkbox" name='abnormal' >
+											只看异常 </label>
+                    </div>
+      
+                  </div>
+                  <div class="dataTables_wrapper">
+                    <table name="table" class="table table-bordered table-striped">
+                      <thead></thead>
+                    </table>
+                  </div>
+                  <div></div>
+                  <br>
+                  <button class='btn btn-primary' name='history'>查看历史</button>
+                </div>
+                
+
+                <!--历史部分-->
+                <div _index='his' name='his_2' style='display:none'>
+                  <legend></legend>
+                  <!--显示-->
+                  <form name='eeb_etltraffic_form_his' method='post' onsubmit='return false;' class='form-horizontal'>
+                      <div class="form-group" name='display'>
+                        <label class="col-md-1 control-label">开始日期&nbsp;</label>
+
+                        <div class="col-md-2 form_yes">
+                          <input  type="text" class="form-control" name='dt_from' id="starttime" index="dt_from"
+                                 placeholder="开始时间">
+                        </div>
+                        <label class="col-md-2 control-label">结束日期&nbsp;&nbsp;&nbsp;</label>
+
+                        <div class="col-md-2 form_now">
+                          <input  value="now()" index="dt_from" name='dt_to' id="endtime" placeholder="结束时间"  class="form-control" style="cursor: cell;">
+                        </div>
+                        
+                      </div>
+                      <div class="form-group" name='sigelhis'>
+                        <label class="col-md-1 control-label">集群节点&nbsp;</label>
+                        <div class="col-md-2">
+                        
+                          <label class="control-label" name="instancenm" _index='instancenm'></label>
+                        </div>
+                         <label class="col-md-2 control-label">采集节点&nbsp;&nbsp;&nbsp;</label>
+                        <div class="col-md-3">
+                          <input type="text" name="daqid" _index='daqid' data-type="select2" placeholder="采集节点">
+                        </div>
+                        <div class="col-md-1">
+                        <button name="search" class="btn btn-info btn-sm"><i class="fa fa-search fa-1"></i>&emsp;查 询&emsp;</button>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label class="col-md-1 control-label">处理总数:</label>
+
+                        <div class="col-md-2">
+                          <label class="control-label" name='p'>0</label>
+                        </div>
+                        <label class="col-md-2 control-label">处理成功数:</label>
+
+                        <div class="col-md-1">
+                          <label class="control-label" name='s'>0</label>
+                        </div>
+                        <label class="col-md-2 control-label">处理失败数:</label>
+
+                        <div class="col-md-1">
+                          <label class="control-label" name='f'>0</label>
+                        </div>
+
+                      </div>
+                    </form>
+                    
+                    <form style='display:none' method='post' onsubmit='return false;' class='other3'>
+                      <input type="text" name='dt_from' _index="dt_from">
+                      <input type="text" name='dt_to' _index="dt_from">
+                      <input type="text" name="instanceid" _index='instanceid'>
+                      <input type="text" name="daqid" _index='daqid'>
+                    </form>
+                  <!--图表-->
+                    <div id="chart" style="width:96%; min-height:350px;position: relative; overflow: hidden;"></div>
+                  <!--table-->
+                  <div class="widget-body-toolbar" style='display:none'>
+                    <div class="btn-group">
+                      <label class="checkbox-inline pull-right">
+											<input type="checkbox" name='abnormal' >
+											只看异常 </label>
+                    </div>
+      
+                  </div>
+                  <div class="dataTables_wrapper">
+                    <table name="table" class="table table-bordered table-striped">
+                      <thead></thead>
+                    </table>
+                  </div>
+                  <div></div>
+                  <br>
+                  <br>
+                </div>
+              </div>
+              <!--第三个-->
+              <div id='third'>
+                <div id='orginal_3' name='orginal_3' style='display:none'>
+                  <!--显示-->
+                  <form name='eeb_etltraffic_form' method='post' onsubmit='return false;' class='form-horizontal'>
+                      <div class="form-group">
+                        <label class="col-md-1 control-label">日期&nbsp;&nbsp;&nbsp;&nbsp;</label>
+
+                        <div class="col-md-3">
+                        <label class="control-label" name='dt'></label>
+                          </div>
+
+                      </div>
+                      <div class="form-group">
+                        <label class="col-md-1 control-label">集群节点&nbsp;</label>
+                        <div class="col-md-2">
+                        <label class="control-label" name="instancenm" _index='instancenm'></label>
+                        </div>
+                         <label class="col-md-2 control-label">采集节点&nbsp;&nbsp;&nbsp;</label>
+                         
+                        <div class="col-md-1">
+                        <label class="control-label" name="daqnm" _index='daqnm'></label>
+                        </div>
+                        <label class="col-md-2 control-label">作业&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <div class="col-md-2">
+                        <label class="control-label" name="jobnm" _index='jobnm'></label>
+                        </div>
+                        <div class="col-md-1">
+                        <button name="search" class="btn btn-info btn-sm"><i class="fa fa-search fa-1"></i>&emsp;查 询&emsp;
+                        </button>
+                        </div>
+                        <div class="col-md-1">
+                        <button name="goback" class="btn btn-info btn-sm">&emsp;返 回&emsp;
+                        </button>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-md-1 control-label">处理总数:</label>
+
+                        <div class="col-md-2">
+                          <label class="col-md-2 control-label" name='p'>0</label>
+                        </div>
+                        <label class="col-md-2 control-label">处理成功数:</label>
+
+                        <div class="col-md-1">
+                          <label class="col-md-2 control-label" name='s'>0</label>
+                        </div>
+                        <label class="col-md-2 control-label">处理失败数:</label>
+
+                        <div class="col-md-1">
+                          <label class="col-md-2 control-label" name='f'>0</label>
+                        </div>
+
+                      </div>
+
+                    </form>
+                       
+                    <form method='post' style='display:none' onsubmit='return false;' class='other3'>
+                        <input name="dt"  class='form-control' >
+                        <input name="instanceid" _index='instanceid'>
+                        <input name="daqid" _index='daqid'>
+                        <input name="jobid" _index='jobid'>
+                    </form>
+                  <!--图表-->
+                    <div id="chart" style="width:96%; min-height:350px;position: relative; overflow: hidden;"></div>
+                    <div class="widget-body-toolbar" style='display:none'>
+                    <div class="btn-group">
+                      <label class="checkbox-inline pull-right">
+											<input type="checkbox" name='abnormal' >
+											只看异常 </label>
+                    </div>
+      
+                  </div>
+                  <div class="dataTables_wrapper">
+                    <table name="table" class="table table-bordered table-striped">
+                      <thead></thead>
+                    </table>
+                  </div>
+                  <div></div>
+                  <br>
+                  <button class='btn btn-primary' name='history'>查看历史</button>
+                </div>
+                
+
+                <!--历史部分-->
+                <div _index='his' name='his_3' style='display:none'>
+                  <legend></legend>
+                  <!--显示-->
+                  <form name='eeb_etltraffic_form' method='post' onsubmit='return false;' class='form-horizontal'>
+                      <div class="form-group" name='display'>
+                        <label class="col-md-1 control-label">开始日期&nbsp;</label>
+
+                        <div class="col-md-2 form_yes">
+                          <input type="text" class="form-control" name='dt_from' id="starttime" index="dt_from" placeholder="开始时间">
+                        </div>
+                        <label class="col-md-2 control-label">结束日期&nbsp;&nbsp;&nbsp;</label>
+
+                        <div class="col-md-2 form_now">
+                          <input value="now()" index="dt_from" name='dt_to' id="endtime" placeholder="结束时间"  class="form-control" style="cursor: cell;">
+                        </div>
+                        
+                      </div>
+                      <div class="form-group" name='sigelhis'>
+                        <label class="col-md-1 control-label">集群节点&nbsp;</label>
+                        <div class="col-md-2">
+                        <label class="control-label" name="instancenm" _index='instancenm'></label>
+                        </div>
+                         <label class="col-md-2 control-label">采集节点&nbsp;&nbsp;&nbsp;</label>
+                         
+                        <div class="col-md-1">
+                        <label class="control-label" name="daqnm" _index='daqnm'></label>
+                        </div>
+                        <label class="col-md-2 control-label">作业&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                        <div class="col-md-2">
+                        <label class="control-label" name="jobnm" _index='jobnm'></label>
+                        </div>
+                        <div class="col-md-1">
+                        <button name="search" class="btn btn-info btn-sm"><i class="fa fa-search fa-1"></i>&emsp;查 询&emsp;</button>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label class="col-md-1 control-label">处理总数:</label>
+
+                        <div class="col-md-2">
+                          <label class="control-label" name='p'>0</label>
+                        </div>
+                        <label class="col-md-2 control-label">处理成功数:</label>
+
+                        <div class="col-md-1">
+                          <label class="control-label" name='s'>0</label>
+                        </div>
+                        <label class="col-md-2 control-label">处理失败数:</label>
+
+                        <div class="col-md-1">
+                          <label class="control-label" name='f'>0</label>
+                        </div>
+
+                      </div>
+
+                    </form>
+                    
+                    <form method='post' style='display:none' onsubmit='return false;' class='other3'>
+                        <input type="text" name='dt_from' _index="dt_from">
+                      <input type="text" name='dt_to' _index="dt_from">
+                        <input name="instanceid" _index='instanceid'>
+                        <input name="daqid" _index='daqid'>
+                        <input name="jobid" _index='jobid'>
+                    </form>
+                  <!--图表-->
+                    <div id="chart" style="width:96%; min-height:350px;position: relative; overflow: hidden;"></div>
+                  <!--table-->
+                  <div class="widget-body-toolbar" style='display:none'>
+                    <div class="btn-group">
+                      <label class="checkbox-inline pull-right">
+											<input type="checkbox" name='abnormal' >
+											只看异常 </label>
+                    </div>
+      
+                  </div>
+                  <div class="dataTables_wrapper">
+                    <table name="table" class="table table-bordered table-striped">
+                      <thead></thead>
+                    </table>
+                  </div>
+                  <div></div>
+                  <br>
+                  <br>
+                </div>
+              </div>
+
+              <!--失败-->
+              <div  name='failure' style='display:none'>
+                <legend></legend>
+                <form class='form-horizontal' method='post' onsubmit='return false;'>
+                  <div class="form-group">
+                        <label class="col-md-1 control-label">集群节点&nbsp;</label>
+                        <div class="col-md-2">
+                        <label class="control-label" name="instancenm" _index='instancenm'></label>
+                        </div>
+                         <label class="col-md-2 control-label">采集节点&nbsp;&nbsp;</label>
+                         
+                        <div class="col-md-1">
+                        <label class="control-label" name="daqnm" _index='daqnm'></label>
+                        </div>
+                        <label class="col-md-1 control-label">作业</label>
+                        <div class="col-md-2">
+                        <label class="control-label" name="jobnm" _index='jobnm'></label>
+                        </div>
+                      </div>
+                      
+                  <div class="form-group">
+                    <label class="col-md-1 control-label">失败数&nbsp;&nbsp;&nbsp;</label>
+                    <div class="col-md-2">
+                    <label class="control-label" name="failedcnt" ></label>
+                    </div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-3">
+										<label class="checkbox-inline">
+											<input type="checkbox" name='isdetail' checked='checked'>
+											详细信息 </label>
+										<label class="checkbox-inline">
+											<input type="checkbox" name='withdata' checked='checked'>
+											失败数据 </label>
+									</div>
+									<div class="col-md-2">
+                    <button name="download" class="btn btn-info btn-sm"><i class="fa fa-download "></i>&emsp;下载&emsp;
+                    </button>
+                    </div>
+
+                  </div>
+                  <div class="dataTables_wrapper">
+                    <table name="table" class="table table-bordered table-striped">
+                      <thead></thead>
+                    </table>
+                  </div>
+                  <div></div>
+                  <br>
+                  <br>
+                </form>
+              </div>
+
+            </div>
+
+          </div>
+          <!-- end widget content -->
+          <div id="app_view_pagination"></div>
+        </div>
+        <!-- end widget div -->
+      </div>
+      <!-- end widget -->
+    </article>
+    <!-- WIDGET END -->
+  </div>
+  <!-- end row -->
+</section>
+
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script src="bi/js/datetime_custom.js"></script>
+<script src="bi/echarts.js"></script>
+<script type="text/javascript" src="bi/js/tableToCsv.js"></script>
+<script src="eeb/statistics/etl/ETL_Trafficstatistics.js"></script>
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script src="lib/html/zy_tabs.js"></script>
+
+<script src="bi/html/table_custom.js"></script>

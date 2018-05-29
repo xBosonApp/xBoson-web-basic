@@ -1,0 +1,111 @@
+<!-- Modal -->
+<div class="modal fade" id="add_uptmanaged_user" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title">托管用户（添加）</h4>
+      </div>
+      <div class="modal-body no-padding">
+        <!-- FORM Start -->
+        <form id="add_uptmanaged_user_form" method="post" onsubmit="return false;" class="smart-form">
+          <fieldset>
+            <div>
+              <input type="hidden" name="tp_appid" placeholder="应用ID">
+              <section>
+                <label class="label">平台用户ID</label>
+                <label class="input">
+                  <input type="hidden" name="userid" data-type="select2" placeholder="平台用户ID">
+                </label>
+              </section>
+              <section>
+                <label class="label">第三方应用用户ID</label>
+                <label class="input has-warning">
+                  <input type="text" name="uid" placeholder="第三方应用用户ID">
+                </label>
+              </section>
+              <section>
+                <label class="label">状态</label>
+                <label class="input">
+                  <input type="hidden" name="status" data-type="select2" placeholder="状态">
+                </label>
+              </section>
+            </div>
+          </fieldset>
+          <footer>
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary">确定</button>
+          </footer>
+        </form>
+        <!-- FORM End -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+<!-- SCRIPTS ON PAGE EVENT -->
+<script type="text/javascript">
+// DO NOT REMOVE : GLOBAL FUNCTIONS!
+pageSetUp();
+(function() {
+  // 字典数据绑定
+  zy.g.am.app = 'ZYAPP_SYSMGT';
+  zy.g.am.mod = 'third_app_mgt';
+  zy.net.get('api/select2user', function(msg) {
+    if (msg) {
+      $("#add_uptmanaged_user_form input[name=userid]").zySelectCustomData('', false, {
+        width: '100%'
+      }, msg.result);
+    }
+  }, zy.g.comm.org);
+  var cb = function() {
+    $("#add_uptmanaged_user_form input[name=status]").zySelect('ZR.0001', false, {
+      width: '100%'
+    });
+    $("#add_uptmanaged_user_form input[name=status]").select2("val", '1');
+    $("#add_uptmanaged_user_form input[name=tp_appid]").val(mgt_app._g.param.tp_appid);
+  };
+  zy.cache.initDicts('ZR.0001', cb);
+})();
+$('#add_uptmanaged_user').modal('show');
+// Registration validation script
+$("#add_uptmanaged_user_form").validate({
+  // Rules for form validation
+  rules: {
+    userid: {
+      required: true,
+    },
+    uid: {
+      required: true,
+      maxlength: 64
+    },
+    status: {
+      required: true,
+    }
+  },
+  // 验证成功后保存
+  submitHandler: function(form) {
+    var callback = function(msg) {
+      $('#add_uptmanaged_user_form').formDisable(false);
+      if (msg) {
+        $('#add_uptmanaged_user').modal('hide');
+        app_managed.Pagination(app_managed._g.crt_page); //更新当前页
+        zy.ui.msg("提示信息：", "保存成功！", "s");
+      }
+    };
+    zy.g.am.app = 'ZYAPP_SYSMGT';
+    zy.g.am.mod = 'third_app_mgt';
+    zy.net.post("api/adduid", callback, $('#add_uptmanaged_user_form').serialize());
+    $('#add_uptmanaged_user_form').formDisable(true);
+  },
+  // Do not change code below
+  errorPlacement: function(error, element) {
+    error.insertAfter(element.parent());
+  }
+});
+</script>

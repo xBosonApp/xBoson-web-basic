@@ -1,0 +1,97 @@
+ <div class='modal fade' id='tp_app_user_export' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true' data-backdrop='static'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+        <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;
+        </button>
+        <h4 class='modal-title'><span id='md_ex_inport_export_title'>托管用户导出</span></h4>
+      </div>
+      <div class='modal-body no-padding'>
+        <!-- FORM Start -->
+        <form id='tp_app_user_export_form' method='post' onsubmit='return false;' class='smart-form'>
+          <fieldset>
+            <div class='row'>
+              <section class='col col-6'>
+                <label class='label'>文件类型</label>
+                <div class='col col-3'>
+									<label class='radio state-success'>
+									  <input type='radio' value='1' checked='' name='radio'><i></i>CSV
+									</label>
+									<label class='radio state-success'>
+									  <input type='radio' value='2' name='radio'><i></i>JSON
+									</label>
+								</div>
+							</section>
+              <section class='col col-6'>
+                <label class='label'>字符集</label>
+                <label class="input">
+                  <input type="hidden" name="charset" data-type="select2" placeholder="字符集">
+                </label>
+              </section>
+            </div>
+            <div>
+            </div>
+          </fieldset>
+          <footer>
+            <button type='button' class='btn btn-default' data-dismiss='modal'>取消</button>
+            <button  type='submit' class='btn btn-primary'>导出</button>
+          </footer>
+        </form>
+        <!-- FORM End -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!--<script src='browseFolder.js'></script>-->
+<script type='text/javascript'>
+  function export_user(rowdata){
+    var export_modal = $('#tp_app_user_export');
+    var export_form = $('#tp_app_user_export_form');
+    
+    function Init(){
+      if(!rowdata || !rowdata.tp_appid){
+        zy.ui.msg('提示信息：','缺少必要参数','w');
+        return;
+      }
+      InitDict();
+      Event();
+    }
+    
+    function InitDict(){
+      zy.cache.initDicts('charset01',function(){
+        //字符集
+        export_form.find('[name=charset]').zySelect('charset01',false,{'width':'100%'});
+        export_form.find('[name=charset]').select2('val','UTF-8');
+        export_modal.modal('show');
+      });
+    }
+    
+    function Event(){
+      //form提交
+      export_form.validate({
+        // Rules for form validation
+		    rules: {},
+    		// 验证成功后保存
+    		submitHandler: function (form) {
+    		  zy.g.am.app='ZYAPP_SYSMGT';
+          zy.g.am.mod='third_app_mgt';
+          var params = {
+            tp_appid:rowdata.tp_appid,
+            type:export_form.find('[name=radio]:checked').val(),
+            charset:export_form.find('[name=charset]').val()
+          };
+          zy.net.postDownload('download/export_tpuser',params);
+          export_modal.modal('hide');
+    		},
+    		// Do not change code below
+    		errorPlacement: function (error, element) {
+    			error.insertAfter(element.parent());
+    		}
+      });
+    }
+    
+    Init();
+  }
+</script>

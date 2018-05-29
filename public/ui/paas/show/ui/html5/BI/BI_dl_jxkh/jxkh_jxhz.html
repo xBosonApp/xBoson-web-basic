@@ -1,0 +1,485 @@
+<style type="text/css">
+#timecx{ display: none;}	
+</style>
+<div id="etbjglda-m"  class="portlet box grey">
+    <div class="portlet-title">
+        <div class="caption" id="yetj-name"><!-- 可以设置图标<i class="icon-globe"></i> -->绩效汇总</div>
+        <!-- 设置关闭和刷新--> 
+        <!-- <div class="tools">
+            <div class="tools-chart">
+            	<a title="柱形图" rel="column"><i class="icon-bar-chart"></i></a> <a title="饼形图" rel="pie"><i class="icon-adjust"></i></a>
+                <span class="reload" title="数据图表"><i class="icon-file-text-alt"></i></span>
+            </div>
+        </div> -->
+        
+    </div>
+    <div class="portlet-body">
+        <div class="lc-inquire">
+            <form id="org_etbjglda" class="form-inline" action="">
+                <input type="hidden" id="groupby" value="tablename"/>
+                <input type="hidden" id="pagenum"/>
+                <input type="hidden" id="pagesize"/>
+                <input type="hidden" id="sa"/>
+                <input type="hidden" id="MM"/>
+                <div class="row-fluid">
+                	<div class="span2" style="display:none;"><select id="zhuanqu" class="selectpicker"><option value="1">按机构</option></select></div>
+                    <div class="span1">机构名称</div>
+                    <div class="span2"><select id="dimorg" class="selectpicker"></select></div>
+                    <div class="span1 displayb">开始时间</div>
+                    <div class="span2 displayb">
+                    	<div class="datebegin"></div>
+                    </div>
+                    <div class="span1 displayb">结束时间</div>
+                    <div class="span2 displayb">
+                    	<div class="dateend"></div>
+                    </div>
+                    <div class="span1"><a id="jgcx" onclick="setData2EtbjgldaNew('tablename')" class="btn blue">查询</a></div>
+                    <!-- <div class="span1"><a id="timecx" onclick="EtbjgltimeNew('tablename')" class="btn blue">查询</a></div> -->
+                </div>
+            </form>
+        </div>
+        <div id="rowtable" class="row-fluid">
+            <div class="span12">
+                 <table id="ttEtbjglda" style="height:450px;"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+var dataShow;
+var PageNumber=1;
+var PageSize=10;
+function setData2Etbjglda(data){
+	$(".loadshow").show(); 
+	var url ="JXHZ"; 
+	var itemsList;
+	if($("#datebegin").val()!=""&&$("#dateend").val()!=""){
+		itemsList=["datebegin","dateend","dimorg"];
+	}else{
+		itemsList=[];
+	}
+	//空数据 会出现 小bug
+	var info= new Map();
+	info.put("sqlid","select");
+	info.put("pagenum",PageNumber);
+	info.put("pagesize",PageSize);
+	if(data==="tablename"){
+	   LXtype="tablename";
+	}else if(data==="createdate"){
+	   LXtype="createdate";
+	}else{
+	   LXtype="hospunitorgcode"
+	}
+	info.put("groupby",data);
+	sys_AjaxGet(BIASUrl+url,"org_etbjglda","reCallback101",info,itemsList);
+}
+
+function reCallback101(dataInfo){
+//切换图形是grid时候，如果没有对应数据
+if(dataInfo.dataMap.data.length==0)
+	{
+		alert("无此数据！")
+	}else{
+		$(".reload").click(function(){
+			$("#rowtable").removeClass("rowtable");
+		});
+	}
+//将dataAll添加到数据里面
+var zhuanqu=$("#zhuanqu").val();
+if (zhuanqu=="1") {
+var datapush=dataInfo.dataMap.data;
+dataInfo.dataMap.dataAll[0].机构="合计";
+datapush.push(dataInfo.dataMap.dataAll[0]);	
+}
+	$('#ttEtbjglda').datagrid({
+			nowrap: false,
+			striped: true,
+			collapsible:false,
+			//pagination:true,
+			pageNumber:PageNumber,
+			pageSize: PageSize,
+			singleSelect:true, 
+			loadMsg:"正在载入...",
+			pageList: [10,20,50,100,200],
+			data:dataInfo.dataMap.data,
+			//columns:[xq],//对应上面的定义grid数据
+			frozenColumns:[[
+		        {field:'机构',title:'机构',align:'center',width:200},
+		      ]],
+			columns:[[
+		      {field:'孕期、产后随访',title:'孕期、产后随访',align:'center',
+		  		formatter: function(value, row, index){
+					    if (value == "" || value == undefined) {
+					        return '0';
+					    }
+					    else {
+					        return value;
+					    }
+					}},
+		      {field:'0-36个月龄儿童中医药健康管理服务',title:'0-36个月龄儿童中医药健康管理服务',align:'center',
+		  		formatter: function(value, row, index){
+					    if (value == "" || value == undefined) {
+					        return '0';
+					    }
+					    else {
+					        return value;
+					    }
+					}
+				},
+		      {field:'血常规检测',title:'血常规检测',align:'center',
+		  		formatter: function(value, row, index){
+					    if (value == "" || value == undefined) {
+					        return '0';
+					    }
+					    else {
+					        return value;
+					    }
+					}},
+		      {field:'死因监测',title:'死因监测',align:'center',
+		  		formatter: function(value, row, index){
+					    if (value == "" || value == undefined) {
+					        return '0';
+					    }
+					    else {
+					        return value;
+					    }
+					}},
+		      {field:'讲座数',title:'讲座数',align:'center',
+		  		formatter: function(value, row, index){
+					    if (value == "" || value == undefined) {
+					        return '0';
+					    }
+					    else {
+					        return value;
+					    }
+					}},
+		      {field:'健康体检（包含65岁以上老人重点慢病筛查，残疾人、精神病',title:'健康体检（包含65岁以上老人重点慢病筛查，残疾人、精神病',align:'center',
+		  		formatter: function(value, row, index){
+					    if (value == "" || value == undefined) {
+					        return '0';
+					    }
+					    else {
+					        return value;
+					    }
+					}},
+		      {field:'糖尿病、35岁以上高血压患者季度随访',title:'糖尿病、35岁以上高血压患者季度随访',align:'center',
+		  		formatter: function(value, row, index){
+					    if (value == "" || value == undefined) {
+					        return '0';
+					    }
+					    else {
+					        return value;
+					    }
+					}},
+		      {field:'结核病人随访',title:'结核病人随访',align:'center',
+		  		formatter: function(value, row, index){
+					    if (value == "" || value == undefined) {
+					        return '0';
+					    }
+					    else {
+					        return value;
+					    }
+					}},
+		      {field:'重性精神疾病患者随访',title:'重性精神疾病患者随访',align:'center',
+		  		formatter: function(value, row, index){
+					    if (value == "" || value == undefined) {
+					        return '0';
+					    }
+					    else {
+					        return value;
+					    }
+					}},
+		      {field:'残疾人访视',title:'残疾人访视',align:'center',
+		  		formatter: function(value, row, index){
+					    if (value == "" || value == undefined) {
+					        return '0';
+					    }
+					    else {
+					        return value;
+					    }
+					}},
+		      {field:'4-6岁生长发育评估',title:'4-6岁生长发育评估',align:'center',
+		  		formatter: function(value, row, index){
+					    if (value == "" || value == undefined) {
+					        return '0';
+					    }
+					    else {
+					        return value;
+					    }
+					}},
+		      {field:'0-6岁儿童口腔保健',title:'0-6岁儿童口腔保健',align:'center',
+		  		formatter: function(value, row, index){
+					    if (value == "" || value == undefined) {
+					        return '0';
+					    }
+					    else {
+					        return value;
+					    }
+					}},
+		      {field:'口腔健康档案',title:'口腔健康档案',align:'center',
+		  		formatter: function(value, row, index){
+					    if (value == "" || value == undefined) {
+					        return '0';
+					    }
+					    else {
+					        return value;
+					    }
+					}},
+		      {field:'计划生育技术服务咨询',title:'计划生育技术服务咨询',align:'center',
+		  		formatter: function(value, row, index){
+					    if (value == "" || value == undefined) {
+					        return '0';
+					    }
+					    else {
+					        return value;
+					    }
+					}},
+		      {field:'新生儿访视',title:'新生儿访视',align:'center',
+		  		formatter: function(value, row, index){
+					    if (value == "" || value == undefined) {
+					        return '0';
+					    }
+					    else {
+					        return value;
+					    }
+					}},
+		      {field:'咨询数',title:'咨询数',align:'center',
+		  		formatter: function(value, row, index){
+					    if (value == "" || value == undefined) {
+					        return '0';
+					    }
+					    else {
+					        return value;
+					    }
+					}},
+		      {field:'结核病管理',title:'结核病管理',align:'center',
+		  		formatter: function(value, row, index){
+					    if (value == "" || value == undefined) {
+					        return '0';
+					    }
+					    else {
+					        return value;
+					    }
+					}},
+		      {field:'新生儿满月访视',title:'新生儿满月访视',align:'center',
+		  		formatter: function(value, row, index){
+					    if (value == "" || value == undefined) {
+					        return '0';
+					    }
+					    else {
+					        return value;
+					    }
+					}},
+		      {field:'新建健康档案数量',title:'新建健康档案数量',align:'center',
+		  		formatter: function(value, row, index){
+					    if (value == "" || value == undefined) {
+					        return '0';
+					    }
+					    else {
+					        return value;
+					    }
+					}},
+		      {field:'1岁以下儿童健康体检',title:'1岁以下儿童健康体检',align:'center',
+		  		formatter: function(value, row, index){
+					    if (value == "" || value == undefined) {
+					        return '0';
+					    }
+					    else {
+					        return value;
+					    }
+					}},
+		      {field:'新发现重性精神疾病患者建档',title:'新发现重性精神疾病患者建档',align:'center',
+		  		formatter: function(value, row, index){
+					    if (value == "" || value == undefined) {
+					        return '0';
+					    }
+					    else {
+					        return value;
+					    }
+					}},
+		      {field:'孕产妇早期健康状况评估',title:'孕产妇早期健康状况评估',align:'center',
+		  		formatter: function(value, row, index){
+					    if (value == "" || value == undefined) {
+					        return '0';
+					    }
+					    else {
+					        return value;
+					    }
+					}},
+		      {field:'残疾人建档',title:'残疾人建档',align:'center',
+		  		formatter: function(value, row, index){
+					    if (value == "" || value == undefined) {
+					        return '0';
+					    }
+					    else {
+					        return value;
+					    }
+					}},
+		      {field:'65岁以上老年人中医药健康管理服务',title:'65岁以上老年人中医药健康管理服务',align:'center',
+		  		formatter: function(value, row, index){
+					    if (value == "" || value == undefined) {
+					        return '0';
+					    }
+					    else {
+					        return value;
+					    }
+					}},
+		      {field:'推荐疑似结核病人',title:'推荐疑似结核病人',align:'center',
+		  		formatter: function(value, row, index){
+					    if (value == "" || value == undefined) {
+					        return '0';
+					    }
+					    else {
+					        return value;
+					    }
+					}},
+		      {field:'1-3岁儿童健康体检',title:'1-3岁儿童健康体检',align:'center',
+		  		formatter: function(value, row, index){
+					    if (value == "" || value == undefined) {
+					        return '0';
+					    }
+					    else {
+					        return value;
+					    }
+					}}
+		    ]],
+
+			onDblClickRow: function (rowIndex) { //双击
+				// openRoleDiv(rowIndex);
+			},
+		   fitColumns:false,
+		   rownumbers:true
+	}); 
+   var pager = $('#ttEtbjglda').datagrid('getPager');
+	   if(pager){
+		$(pager).pagination({
+			
+			onSelectPage:function(pageNumber,pageSize){
+			   PageNumber=pageNumber;
+			   PageSize=pageSize;
+			   }
+		});		
+		$(pager).pagination({pageSize:PageSize,pageNumber:PageNumber,total:dataInfo.count});
+	};
+//删除新增的dataAll	
+if (zhuanqu=="1") {
+datapush.splice(datapush.length-1);
+}
+}
+</script>
+<script>
+$(function(){
+$(window).resize(function(){
+$('#ttEtbjglda').datagrid('resize');
+});
+});
+</script>
+<script>
+//机构
+$(function () {
+getselectdaoid101();
+});
+function  getselectdaoid101(){
+  sys_BI_getDaoidList("mdmSelectdaoid101");
+}
+function mdmSelectdaoid101(data){
+  var info = new Map();
+  info.put("key",["hospunitorgcode"]);
+  info.put("value",["hospunitorgnm"]);
+  sys_GetSelect("org_etbjglda","dimorg",info,sys_BI_getCacheDaoidData());
+}
+
+//loadingEtbjglda();
+//setDataCy('tablename');
+
+var zhuanqu=$("#zhuanqu").val();
+if (zhuanqu=="1") {
+	$(".datebegin").html("");
+	$(".dateend").html("");
+	$(".datebegin").append("<input id='datebegin' type='text' value='2012-09-09' class='dateday'>");
+	$(".dateend").append("<input id='dateend' type='text' value='2012-09-09' class='dateday'>");
+	$('.dateday').datetimepicker({
+		format: 'yyyy-mm-dd',
+		autoclose:true,
+		startView:2,
+		minView:2
+	});
+	today=new Date(); 
+	var ymd=sys_FormatYMD(today);
+	var vMon = today.getMonth() + 1;
+var dateendymd=today.getFullYear()-1+"-"+(vMon<10 ? "0" + vMon : vMon)+"-"+today.getDate();
+$("#datebegin").val(dateendymd);
+	$("#dateend").val(ymd);
+    setData2Etbjglda();
+    $("#jgcx").show();
+    $("#timecx").hide();
+}else{
+	$(".datebegin").html("");
+	$(".dateend").html("");
+	$(".datebegin").append("<input id='datebegin' type='text' value='2012-09' class='datemonth'>");
+	$(".dateend").append("<input id='dateend' type='text' value='2012-09' class='datemonth'>");
+	$('.datemonth').datetimepicker({
+		format: 'yyyy-mm',
+		autoclose:true,
+		startView:3,
+		minView:3
+	});
+	today=new Date();
+	var vMon = today.getMonth() + 1;
+	var dateendymd=today.getFullYear()-1+"-"+(vMon<10 ? "0" + vMon : vMon);
+	var ymd=today.getFullYear()+"-"+(vMon<10 ? "0" + vMon : vMon);
+	$("#datebegin").val(dateendymd);
+	$("#dateend").val(ymd); 
+    /*Etbjgltime();*/
+    $("#jgcx").hide();
+    $("#timecx").show();
+};
+$("#zhuanqu").change(function(){
+    var zhuanqu=$("#zhuanqu").val();
+    if (zhuanqu=="1") {
+    	$(".datebegin").html("");
+    	$(".dateend").html("");
+    	$(".datebegin").append("<input id='datebegin' type='text' value='2012-09-09' class='dateday'>");
+		$(".dateend").append("<input id='dateend' type='text' value='2012-09-09' class='dateday'>");
+		$('.dateday').datetimepicker({
+			format: 'yyyy-mm-dd',
+			autoclose:true,
+			startView:2,
+			minView:2
+		});
+		today=new Date(); 
+		var ymd=sys_FormatYMD(today);
+		var vMon = today.getMonth() + 1;
+var dateendymd=today.getFullYear()-1+"-"+(vMon<10 ? "0" + vMon : vMon)+"-"+today.getDate();
+$("#datebegin").val(dateendymd);
+		$("#dateend").val(ymd);
+	    setData2Etbjglda();
+	    $("#jgcx").show();
+    	$("#timecx").hide();
+    }else{
+    	$(".datebegin").html("");
+    	$(".dateend").html("");
+    	$(".datebegin").append("<input id='datebegin' type='text' value='2012-09' class='datemonth'>");
+		$(".dateend").append("<input id='dateend' type='text' value='2012-09' class='datemonth'>");
+		$('.datemonth').datetimepicker({
+			format: 'yyyy-mm',
+			autoclose:true,
+			startView:3,
+			minView:3
+		});
+		today=new Date();
+		var vMon = today.getMonth() + 1;
+		var dateendymd=today.getFullYear()-1+"-"+(vMon<10 ? "0" + vMon : vMon);
+		var ymd=today.getFullYear()+"-"+(vMon<10 ? "0" + vMon : vMon);
+		$("#datebegin").val(dateendymd);
+		$("#dateend").val(ymd);
+        /*Etbjgltime();*/
+        $("#jgcx").hide();
+    	$("#timecx").show();
+    };
+
+});
+</script>
+
+
+

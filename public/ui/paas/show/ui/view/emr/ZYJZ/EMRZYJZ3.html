@@ -1,0 +1,85 @@
+
+<script type="text/javascript">
+	var emrzyjz3data2;
+	$(function () {
+	   showDatacssjl();	
+	});
+	function emrzyjz3callback(retData){
+		emrzyjz3data2=retData;
+		LC_SetMapData("chuyuan",emrzyjz3data2.zyjz3data);
+		LC_FormatTextYMD("chuyuan",["dc7004_ryrq","dc7004_cyrq"]);
+
+	}
+	
+	function showDatacssjl(){
+		if(retCheckFlg){	
+			var url ="emrzyjz3/"; 	
+			var itemsList=[];	
+			var info= new Map();	
+			
+			if(self.parent.jgdm!=undefined){
+				info.put("jgdm",self.parent.jgdm);
+				info.put("zylsh",self.parent.zylsh);
+				info.put("pid",self.parent.pid);
+				}
+			
+			
+			LC_AjaxGet(EMRBaseUrl+url,"chuyuan","emrzyjz3callback",info,itemsList);
+		}		
+	}
+</script>
+
+<div class="mainsW-872">
+    <form id="chuyuan">
+		<div class="easyui-panel" title="出院小结" style="width:872px;">
+			<div class="flPadTB-20">
+			 <div class="mainW-864 padTB-20" >
+			 	<div class="c-18"><span id="DC_jgdm"></span></div>
+			 	<div class="c-18">出院小结</div>
+			 </div>
+			<div class="itemsW-656" >
+					<div class="itemLW-80 padT-4">姓名：</div>
+					<div class="itemRW-96"><input class="textLW" type="text" id="name" ></div>
+			 </div>
+				 <div class="itemsW-192" >
+					<div class="itemLW-80 padT-4">住院号码：</div>
+					<div class="itemRW-96"><input class="textLW" type="text" id="dc7004_bshm" ></div>
+				 </div>
+				 <div class="itemsW-192" >
+					<div class="itemLW-80 padT-4">科室：</div>
+					<div class="itemRW-96"><input class="textLW" type="text" id="dc7004_brksmc" ></div>
+				 </div>
+				 <div class="itemsW-160" >
+					<div class="itemLW-48 padT-4">病区：</div>
+					<div class="itemRW-96"><input class="textLW" type="text" id="dc7004_brbqmc" ></div>
+				 </div>
+				 <div class="itemsW-144">
+					<div class="itemLW-48 padT-4">床号：</div>
+					<div class="itemRW-80"><input class="textLW" type="text" id="dc7004_brch" ></div>
+				 </div>
+				 <div class="itemsW-160">
+					<div class="itemLW-80 padT-4">入院时间：</div>
+					<div class="itemRW-80"><input class="textLW" type="text" id="dc7004_ryrq" ></div>
+				 </div>
+				 <div class="itemsW-176">
+					<div class="itemLW-80 padT-4">出院时间：</div>
+					<div class="itemRW-96"><input class="textLW" type="text" id="dc7004_cyrq" ></div>
+				 </div>
+				 
+				 <div class="mainW-864 flPadTB-20">
+					<div class="itemLW-80 padT-4">入院情况：</div>
+					<div class="itemRW-548"><textarea rows="5" cols="90" id="dc7004_ryzztz" ></textarea> </div>
+				 </div>
+				 <div class="mainW-864">
+					<div class="itemLW-80 padT-4">出院情况：</div>
+					<div class="itemRW-548"><textarea rows="5" cols="90" id="dc7004_cyqk" ></textarea> </div>
+				 </div>
+				 <div class="mainW-864">
+					<div class="itemLW-80 padT-4">出院医嘱：</div>
+					<div class="itemRW-548"><textarea rows="5" cols="90" id="dc7004_cyyz" ></textarea> </div>
+				 </div>
+			 </div>
+		</div>
+	</form>
+</div>
+

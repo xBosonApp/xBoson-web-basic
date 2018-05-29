@@ -1,0 +1,99 @@
+<link rel="stylesheet" href="lib/js/plugin/datatables/media/css/jquery.dataTables.css" />
+<section id="widget-grid" class="">
+    <div class="row" >
+		  <article class="col-sm-12">
+			<div class="jarviswidget" id="app_realtemes_jsw" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+				<header>
+					<span class="widget-icon"> <i class="glyphicon glyphicon-stats txt-color-darken"></i> </span>
+					<h2>关键指标</h2>
+					<div class="widget-toolbar"> 
+						<div class="label label-success">
+							<i class="fa fa-tachometer"></i><lable class='real_times'></lable>
+						</div>
+					</div>	
+				</header>
+				<div class="no-padding">
+					<div class="jarviswidget-editbox"></div>
+					<div class="widget-body text-align-center">
+              <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 table-bordered ">
+                <h5>登录&注册</h5>
+                <div class="txt-color-blue hidden-sm hidden-md">
+                  <h6 id="login_register"></h6>
+                </div>
+              </div>
+              <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 table-bordered ">
+                <h5>登录&注册失败</h5>
+                <div class="txt-color-blue hidden-sm hidden-md">
+                  <h6 id="register_fail"></h6>
+                </div>
+              </div>
+              <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 table-bordered ">
+                <h5>未授权请求</h5>
+                <div class="txt-color-blue hidden-sm hidden-md">
+                  <h6 id="unaccredit"></h6>
+                </div>
+              </div>
+					</div>
+				</div>
+			</div>
+		</article>
+    </div>
+		<div class="row">
+		<article class="col-sm-12">
+			<div class="jarviswidget" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+				<header>
+					<span class="widget-icon"> <i class="glyphicon glyphicon-stats txt-color-darken"></i> </span>
+					<h2>小时数据</h2>
+					<ul class="nav nav-tabs pull-right in" id="myTab">
+						<li class="active">
+							<a data-toggle="tab" href="#s1"><i class="fa fa-clock-o"></i> <span class="hidden-mobile hidden-tablet"></span></a>
+						</li>
+					</ul>
+				</header>
+				<div class="no-padding">
+					<div class="jarviswidget-editbox"></div>
+					<div class="widget-body">
+						<div id="myTabContent" class="tab-content">
+							<div class="tab-pane fade active in padding-10 no-padding-bottom" id="s1">
+								<div class="row no-space">
+									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+										<span class="demo-liveupdate-1"> <span class="onoffswitch-title">自动刷新</span> <span class="onoffswitch">
+												<input type="checkbox" name="start_interval" class="onoffswitch-checkbox" id="start_interval">
+												<label class="onoffswitch-label" for="start_interval"> 
+													<span class="onoffswitch-inner" data-swchon-text="ON" data-swchoff-text="OFF"></span> 
+													<span class="onoffswitch-switch"></span> </label> </span> </span>
+										<div id="updating-chart" class="chart-large txt-color-blue"></div>
+
+									</div>
+									<div id='app_realtemes_table' class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div id="chart_table_con">
+                    </div>
+                    <div id="chart_table_template" style="display:none;">
+                      <div class="row" style="padding-right: 15px">
+                        <button index="outData" class="btn btn-default btn-xs pull-right">导出数据</button>
+                        <!--<button index="closeTable" class="btn btn-default btn-xs pull-right closed">关闭</button>-->
+                      </div>
+                      <div class="dataTables_wrapper" >
+                        <table id="chart_table" class="table table-bordered table-striped"></table>
+                        <table id ="chart_table_ods" class="table table-bordered table-striped"></table>
+                      </div>
+                      <div id="chart_table_slider_bar"></div>
+                    </div>  
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</article>
+	</div>
+</section>
+<script src="lib/js/plugin/datatables/media/js/jquery.dataTables.min.js"> </script>
+<script src="bi/echarts.js"></script>
+<script src="bi/html/table_custom.js"></script>
+<script src="bi/log/app_realtimes.js"></script>
+<script>
+  pageSetUp();
+  var apprealtimes = new Apprealtimes();
+</script>

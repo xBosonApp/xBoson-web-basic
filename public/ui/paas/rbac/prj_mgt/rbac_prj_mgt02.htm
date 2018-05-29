@@ -1,0 +1,157 @@
+<!-- rbac_prj_mgt02 项目widget -->
+<div class="jarviswidget" data-widget-colorbutton="false" data-widget-editbutton="false">
+  <header>
+    <h2></h2>
+    <div role="menu" id="edit_project" class="widget-toolbar" style="" title="修改"><i class="fa fa-edit"></i></div>
+  </header>
+  <!-- widget div-->
+  <div>
+    <!-- widget edit box -->
+    <div class="jarviswidget-editbox">
+      <!-- This area used as dropdown edit box -->
+    </div>
+    <!-- end widget edit box -->
+    <!-- widget content -->
+    <div class="widget-body">
+      <div class="tabs-left">
+        <ul class="nav nav-tabs tabs-left">
+          <li class="active">
+            <a data-toggle="tab" href="#tab-r1">基本信息 </a>
+          </li>
+          <li>
+            <a data-toggle="tab" href="#tab-r2">API 管理 </a>
+          </li>
+          <li>
+            <a data-toggle="tab" href="#tab-r4">菜单管理 </a>
+          </li>
+          <li> 
+            <a data-toggle="tab" href="#tab-r5">页面管理 </a>
+          </li> 
+          <li>
+            <a data-toggle="tab" href="#tab-r3">人员管理 </a>
+          </li>
+          <li>
+            <a data-toggle="tab" href="#tab-r6">API历史</a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div id="tab-r1" class="tab-pane active">
+            <div class="row">
+              <div class="col-sm-10">
+                <h1><span id="projectName" class="semi-bold"></span></h1>
+                <br>
+                <ul class="list-unstyled">
+                  <li>
+                    <p class="text-muted">
+                      <i class="fa fa-calendar"></i>&nbsp;&nbsp;
+                      <span class="txt-color-darken">
+                        创建时间
+                        <p id="createdt" data-original-title="创建时间" data-placement="top" title="" rel="tooltip" style="cursor:default;"></p>
+                      </span>
+                    </p>
+                  </li>
+                </ul>
+                <br>
+                <p class="font-md">
+                  <i>项目描述</i>
+                </p>
+                <p id="projectDe"></p>
+                <br>
+              </div>
+            </div>
+          </div>
+          <div id="tab-r2" class="tab-pane">
+            <div class="row">
+            <div class="col-xs-9">
+              <ul id="apilist" class="ztree"></ul>
+            </div>
+            <div class="col-xs-3">
+              <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">API&nbsp;操作&nbsp;<span
+                class="caret"></span></button>
+              <ul class="dropdown-menu">
+                <li>
+                  <a href="javascript:void(0);" id="up">上线</a>
+                </li>
+                <li>
+                  <a href="javascript:void(0);" id="down">下线</a>
+                </li>
+                <li>
+                  <a href="javascript:void(0);" id="redit">转开发</a>
+                </li>
+              </ul>
+            </div>
+            </div>
+          </div>
+          <div id="tab-r4" class="tab-pane">
+            <div id="prj_menu"></div>
+          </div>
+          <div id="tab-r5" class="tab-pane">
+            <div id="prj_page"></div>
+          </div>
+          <div id="tab-r3" class="tab-pane">
+            <ul id="rolegroup" class="ztree"></ul>
+          </div>
+          <div id="tab-r6" class="tab-pane">
+            <fieldset>
+              <section>
+                <h6>查询条件</h6>
+              </section>
+              <form id="rbac_prj_mgt02r6_form" method="post" onsubmit="return false;" class="smart-form"> 
+                <div class="row">
+                  <section class="col col-3">
+                    <label class="input">
+                      <input type="select2" name="appnm" placeholder="App名称" class="form-control input-sm">
+                    </label>
+                  </section>
+                  <section class="col col-3">
+                    <label class="input">
+                      <input type="select2" name="modnm" placeholder="模块名称" class="form-control input-sm" readonly="readonly">
+                    </label>
+                  </section>
+                  <section class="col col-3">
+                    <label class="input">
+                      <input type="select2" name="apinm" placeholder="Api名称" class="form-control input-sm" readonly="readonly">
+                    </label>
+                  </section>
+                  <section class="col col-3">
+                  <label class="input">
+                    <input type="select2" name="apizt" placeholder="API状态" class="form-control input-sm">
+                  </label>
+                </section>
+                </div>
+                <div class="row">
+                <!--<section class="col col-3">-->
+                <!--  <label class="input">-->
+                <!--    <input type="select2" name="kfz" placeholder="开发组/开发者" class="form-control input-sm">-->
+                <!--  </label>-->
+                <!--</section>-->
+                <section class="col col-3">
+                  <label class="input">
+                    <input type="text" name="dtstart" placeholder="开始时间" class="form-control input-sm">
+                  </label>
+                </section>
+                <section class="col col-3">
+                  <label class="input">
+                    <input type="text" name="dtend" placeholder="结束时间" class="form-control input-sm">
+                  </label>
+                </section>
+                <section class="col col-3">
+                  <button id="tab-r6-query" type="button" class="btn btn-sm btn-primary">查询</button>
+                </section>
+                </div>
+              </form>
+            </fieldset>
+            <!--<div id="prj_api_history">-->
+            <div class="table-responsive">
+    			    <div class="pull-right" style="margin-top: 35px;margin-right: 15px;"><b name="total_count"></b></div>
+            	<table name="prj_api_history_table" class="table table-bordered table-striped">
+            	</table>
+            </div>
+            <div id="prj_api_history_pagination"></div>
+            <!--</div>-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

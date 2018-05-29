@@ -1,0 +1,267 @@
+﻿<script type="text/javascript">
+$(function() {
+  $("#orgId").focus();
+  if(self.parent.showWiew){
+    $("#jz11 input").attr('disabled','disabled');
+    $("#update").hide();
+  }
+  if(self.parent.dataMap===""){
+          $("#update").hide();
+        }else{
+          $("#add").hide();
+          $("#orgId").attr('disabled','disabled');
+        }
+//console.info(self.parent.dataMap);
+  LC_SetMapData("xxxg1",self.parent.dataMap);
+  $("#jobDt").val(LC_FormatYMD(self.parent.dataMap.jobDt));
+  getselect();
+
+});
+
+function chk(){
+  // 用户输入校验
+  var _oid = $.trim($("#orgId").val());
+  var _pid = $.trim($("#workerId").val());
+  var _pnm = $.trim($("#name").val());
+  if (_oid==="") {
+    $.messager.alert('输入提示','【机构】不能为空！','warning',function(){$("#orgId").focus();});
+    return true;
+  }
+  if (_pid==="") {
+    $.messager.alert('输入提示','【工号】不能为空！','warning',function(){$("#workerId").focus();});
+    return true;
+  }
+  if (_pnm==="") {
+    $.messager.alert('输入提示','【姓名】不能为空！','warning',function(){$("#name").focus();});
+    return true;
+  }
+  return false; 
+}
+
+function update(){
+  if (chk()){
+    return;
+  }
+  LC_Resetting("xxxg1");
+	var checkItemsList=["staffId","orgId"]
+	var checkWidList=["workerId"]
+	var checkEidList=["eid"]
+	var checkNnList=["name","phoneNo","mobileNo"]
+	var checkMailList=["mail"]
+	LC_IsCheckLength("xxxg1",checkItemsList,1,32);
+	LC_IsCheckLengthMax("xxxg1",checkWidList,50);
+	LC_IsCheckLengthMax("xxxg1",checkEidList,18);
+	LC_IsNumCheckPos("xxxg1",checkEidList);
+	LC_IsNumCheckPos("xxxg1",checkWidList);
+	LC_IsCheckLengthMax("xxxg1",checkNnList,30);
+	LC_IsCheckLengthMax("xxxg1",checkMailList,100);
+	if($("#mail").val()!=""){
+	var checkmailItems=["mail"];
+	LC_IsEmailCheck("xxxg1",checkmailItems);
+	}
+	
+  if(retCheckFlg){
+	var url="mdm/staff/set/";
+	var itemsList = ["jz11","staffId","orgId","workerId","eid",
+			"name", "jobDt", "departmentId",
+			"dutiesCd", "professional", "cwCd",
+			"phoneNo", "mobileNo","jobType","mail",
+			"status"];
+	var info = new Map();
+	LC_AjaxGet(MDMBaseUrl+url,"xxxg1","callback",info,itemsList);
+	}
+}
+function callback(reData){
+  if (reData.ret=="0") {
+    self.parent.$.messager.alert('提示',reData.msg,'info');
+    $("#openRoleDiv").window("close");
+  } else {
+    self.parent.$.messager.alert('错误提示',reData.msg,'error');
+  }
+}
+
+function add(){
+  if (chk()){
+    return;
+  }
+  
+	LC_Resetting("xxxg1");
+	var checkItemsList=["orgId"];
+	LC_IsCheckLength("xxxg1",checkItemsList,1,32);
+	var checkWidList=["workerId"];
+	LC_IsCheckLengthMax("xxxg1",checkWidList,50);
+	LC_IsNumCheckPos("xxxg1",checkWidList);
+	var checkEidList=["eid"];
+	var checkNnList=["name","phoneNo","mobileNo"];
+	var checkMailList=["mail"];
+	LC_IsNumCheckPos("xxxg1",checkEidList);
+	LC_IsCheckLengthMax("xxxg1",checkEidList,18);
+	LC_IsCheckLengthMax("xxxg1",checkNnList,30);
+	
+	LC_IsCheckLengthMax("xxxg1",checkMailList,100);
+	if($("#mail").val()!=""){
+	var checkmailItems=["mail"];
+	LC_IsEmailCheck("xxxg1",checkmailItems);
+	}
+	
+	if(retCheckFlg){
+	var url="mdm/staff/add/";
+	var itemsList = ["jz11","orgId","workerId",
+		"eid","name", "jobDt",
+		"departmentId","dutiesCd",
+		"professional", "cwCd","phoneNo",
+		"mobileNo", "jobType", "mail","status"];
+	var info = new Map();
+	LC_AjaxGet(MDMBaseUrl+url,"xxxg1","callback1",info,itemsList);
+	}
+}
+function callback1(reData){
+  if (reData.ret=="0") {
+    self.parent.$.messager.alert('提示',reData.msg,'info');
+    $("#openRoleDiv").window("close");
+  } else {
+    self.parent.$.messager.alert('错误提示',reData.msg,'error');
+  }
+}
+
+// 获取下拉选项数据
+function getselect(){
+  var url="mdm/dict/listget/";
+  var infoa = new Map();
+  infoa.put("stringsplit","VA0004.62,VA0004.02,VA0004.01,VA0004.231");
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"xxxg1","mdmSelect",infoa,itemsList);
+}
+// 回调函数
+function mdmSelect(data){
+  var info = new Map();
+  info.put("key",["typeCode2"]);
+  info.put("value",["typeName"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("xxxg1","status",info,data.dataList["VA0004.62"]);//有效标记
+  //LC_GetSelect("xxxg1","departmentId",info,data.dataList["VA0004.920"]);//科室代码
+  LC_GetSelect("xxxg1","dutiesCd",info,data.dataList["VA0004.02"]);//职务代码
+  LC_GetSelect("xxxg1","jobType",info,data.dataList["VA0004.01"]);//职业类别代码（国际）
+  LC_GetSelect("xxxg1","professional",info,data.dataList["VA0004.231"]);//专业技术职称
+
+  getselectaoid();
+}
+
+// 获取机构下拉选项数据
+function getselectaoid(){
+  var url="mdm/orgs/";
+  var infoa = new Map();
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"xxxg1","mdmSelectoid",infoa,itemsList);
+}
+function mdmSelectoid(data){
+  var info = new Map();
+  info.put("key",["orgId"]);
+  info.put("value",["orgNm"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("xxxg1","orgId",info,data.dataList);
+
+  LC_SetMapData("xxxg1",self.parent.dataMap);
+  selectKs();
+}
+
+// 获取科室下拉选项数据
+function selectKs(my){
+  var url="mdm/officeList/";
+  var info = new Map();
+  var itemsList=[];
+  if ($("#orgId").val() != '') {
+    info.put("osms003_orgid",$("#orgId").val());
+    LC_AjaxGet(MDMBaseUrl+url,"xxxg1","setSelectKs",info,itemsList);
+  }
+}
+function setSelectKs(data){
+  var info = new Map();
+  info.put("key",["osms003_scd"]);
+  info.put("value",["osms003_sname"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("xxxg1","departmentId",info,data.dataList);
+  if (self.parent.dataMap.departmentId != ''){
+    $("#departmentId").val(self.parent.dataMap.departmentId);
+  }
+  $("#jobType").val(self.parent.dataMap.jobType);
+}
+</script>
+<form id="xxxg1">
+  <div id="jz11" class="flPadTB-10"><input id="staffId" hidden="hidden" type="text">
+    <div class="mainW-736">
+      <div class="mainW-224">
+        <div class="itemLW-96 padT-4">机构：</div>
+        <div class="itemLW-128"><select id="orgId" class="textLW" name="dept" onchange="selectKs(this);"></select></div>
+      </div>
+      <div class="mainW-272">
+        <div class="itemLW-96 padT-4">工号：</div>
+        <div class="itemLW-128"><input id="workerId" class="textLW" type="text"></div>
+      </div>
+    </div>
+    <div class="mainW-736">
+      <div class="mainW-224">
+        <div class="itemLW-96 padT-4">姓名：</div>
+        <div class="itemLW-128"><input id="name" class="textLW" type="text"></div>
+      </div>
+      <div class="mainW-272">
+        <div class="itemLW-96 padT-4">身份证号码：</div>
+        <div class="itemLW-128"><input id="eid" class="textLW" type="text"></div>
+      </div>
+      <div class="mainW-224">
+        <div class="itemLW-96 padT-4">参加工作日期：</div>
+        <div class="itemLW-128"><input id="jobDt" class="Wdate" onclick="WdatePicker()" type="text"></div>
+      </div>
+    </div>
+    <div class="mainW-736">
+      <div class="mainW-224">
+        <div class="itemLW-96 padT-4">科室：</div>
+        <div class="itemLW-128"><select id="departmentId" class="textLW"></select></div>
+      </div>
+      <div class="mainW-224">
+        <div class="itemLW-96 padT-4">职务：</div>
+        <div class="itemLW-128"><select id="dutiesCd" class="textLW"></select></div>
+      </div>
+      <div class="itemLW-144 padT-4">医师中西医标识代码：</div>
+      <div class="itemLW-128">
+        <select id="cwCd" class="textLW">
+          <option value=""></option>
+          <option value="0">西医医师</option>
+          <option value="1">中医医师</option>
+        </select> </div>
+    </div>
+    <div class="mainsW-736">
+      <div class="mainW-224">
+        <div class="itemLW-96 padT-4">专业技术职称：</div>
+        <div class="itemLW-128"><select id="professional" class="textLW"></select></div>
+      </div>
+      <div class="mainW-224">
+        <div class="itemLW-96 padT-4">状态：</div>
+        <div class="itemLW-128"><select id="status" class="textLW"></select> </div>
+      </div>
+      <div class="mainW-148">
+        <div class="itemLW-144 padT-4">职业类别代码（国际）：</div>
+        <div class="itemLW-128"><select id="jobType" class="textLW"></select></div>
+      </div>
+    </div>
+    <div class="mainW-736">
+      <div class="mainW-224">
+        <div class="itemLW-96 padT-4">办公电话号码：</div>
+        <div class="itemLW-128"><input id="phoneNo" class="textLW" type="text"></div>
+      </div>
+      <div class="mainW-224">
+        <div class="itemLW-96 padT-4">移动电话号码：</div>
+        <div class="itemLW-128"><input id="mobileNo" class="textLW" type="text"></div>
+      </div>
+      <div class="mainW-272">
+        <div class="itemLW-144 padT-4">电子邮件地址：</div>
+        <div class="itemLW-128"><input id="mail" class="textLW" type="text"></div>
+      </div>
+    </div>
+    <div class="itemLW-736" style="padding-top: 12px">
+      <a id="update" class="easyui-linkbutton" href="#" onclick="update()">修改</a><a id="add" class="easyui-linkbutton" href="#" onclick="add()">添加</a></div>
+  </div>
+</form>

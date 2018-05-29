@@ -1,0 +1,136 @@
+ <div class="modal fade" id="md_mm_h7" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+        </button>
+        <h4 class="modal-title"><span id="md_mm_h7_title"></span></h4>
+      </div>
+      <div class="modal-body no-padding">
+      <form id="md_mm_h7_form" method="post" onsubmit="return false;" class="smart-form">
+          <fieldset>
+          <div class="row">
+            <section class="col col-6">
+              <label class="label">模型编码</label>
+                <label class="input has-warning">
+                  <input type="text" name="typecd" placeholder="模型编码">
+                  <b id="md_mm_h7_typecd" class="tooltip tooltip-bottom-right">模型编码为必填项目</b>
+                </label>
+                </section>
+                <section class="col col-6">
+                <label class="label" style="display: inline" >数据元编码</label>
+                <button  type="button" id="mm_h7_add" class="btn btn-labeled btn-info btn-xs" style="float:right;"> <i class="fa fa-magic"></i>帮助</button>
+                <label class="input has-warning" style="margin-top: 6px">
+                  <input type="text" name="decd" placeholder="数据元编码">
+                  <b id="md_mm_h7_decd" class="tooltip tooltip-bottom-right">数据元编码为必填项目</b>
+                </label>
+            </section>
+            </div>
+            <div class="row">
+            <section class="col col-6">
+             
+              <label class="label">英文名称</label>
+                <label class="input has-warning">
+                  <input type="text" name="en" placeholder="英文名称">
+                  <b id="md_mm_h7_en" class="tooltip tooltip-bottom-right">英文名称为必填项目</b>
+                </label>
+                </section>
+                <section class="col col-6">
+                <label class="label">中文名称</label>
+                <label class="input has-warning">
+                  <input type="text" name="cn" placeholder="中文名称">
+                  <b id="md_mm_h7_cn" class="tooltip tooltip-bottom-right">中文名称为必填项目</b>
+                </label>
+            </section>
+            </div>
+            <div class="row">
+            <section class="col col-6">
+              <label class="label">主键</label>
+               <label class="input">
+                  <input type="hidden" name="mk" data-type="select2" placeholder="主键" />
+                </label>
+                </section>
+                <section class="col col-6">
+                <label class="label">必须</label>
+                <label class="input">
+                  <input type="hidden" name="must" data-type="select2" placeholder="必须" />
+                </label>
+            </section>
+            </div>
+            <div class="row">
+             <section class="col col-6">
+                <label class="label">状态</label>
+                <label class="input">
+                  <input type="hidden" name="status" data-type="select2" placeholder="状态" />
+                </label>
+              </section>
+            <section class="col col-6" id="md_mm_h7_sorting">
+                <label class="label">排序</label>
+                <label class="input">
+                  <input type="text" name="sorting" placeholder="排序">
+                </label>
+            </section>
+           
+              </div>
+              <div >
+                <section>
+                <label class="label">说明</label>
+                <label class="textarea">
+                  <textarea rows="3" name="mark" id="mark" ></textarea>
+                </label>
+              </section>
+              </div>
+          </fieldset>
+          <footer>
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary">确定</button>
+          </footer>
+      </form>
+        <!-- FORM Start -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+<script type="text/javascript" >
+  $('#md_mm_h7').modal('show');
+  function select()
+  {
+     var cb = function() {
+      // 字典数据绑定
+      $("#md_mm_h7_form input[name=status]").zySelect('ZR.0001', true, {
+        width: '100%'
+      });
+       $("#md_mm_h7_form input[name=mk]").zySelect('ZR.0045', true, {
+        width: '100%'
+      });
+       $("#md_mm_h7_form input[name=must]").zySelect('ZR.0045', true, {
+        width: '100%'
+      });
+    };
+    // 预处理该画面所需的字典类型，以 , 号分割
+    $("#md_mm_h7_form input[name=status]").val('1');
+    $("#md_mm_h7_form input[name=mk]").val('0');
+    $("#md_mm_h7_form input[name=must]").val('1');
+    zy.cache.initDicts('ZR.0001,ZR.0045', cb);
+  }
+  select();
+  $('#mm_h7_add').click(function(){
+    $('#md_mm_h7').modal('hide');
+    //加载模态框
+    zy.net.loadHTML("md/mm/h8.html", $("#md_mm_h1_modal1"), function() {
+      $('#md_mm_h8').modal('show');
+      //此事件在模态框已经显示出来（并且同时在 CSS 过渡效果完成）之后被触发
+      // $('#md_mm_h4').on('shown.bs.modal', function(e) {
+      //   Console.log("此事件在模态框已经显示出来之后被触发");
+      //   var Mdm_mh4 = new Mdmmh4(mm_h4);
+      //   var mm_h4 = null;
+      // });
+    });
+  });
+
+  
+</script>

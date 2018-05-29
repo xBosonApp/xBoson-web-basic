@@ -1,0 +1,217 @@
+<div class="modal fade" id="app_logo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" onClick="closeModal()" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title">上传LOGO</h4>
+      </div>
+      <div class="modal-body no-padding">
+        <!-- FORM Start -->
+        <form id="app_logo_form" method="post" onsubmit="return false" class="smart-form">
+          <fieldset>
+            <section>
+              <label for="file" class="input input-file state-success">
+                <div class="button">
+                  <input type="file" id="image_file" name="file" onchange="fileSelect()">浏览</div>
+                <input type="text" id="image_path" readonly>
+              </label>
+              <b class="error" style="color:red"></b>
+            </section>
+            <label class="input">
+              <input type="hidden" id="x" name="x" />
+              <input type="hidden" id="y" name="y" />
+              <input type="hidden" id="width" name="width" />
+              <input type="hidden" id="height" name="height" />
+            </label>
+            <div class="row">
+              <section class="col col-10">
+                <div id="fullpreview-pane" style="width:450px;float:left">
+                  <img src='lib/img/mybg.png' id="fullpreview" />
+                </div>
+              </section>
+              <section id='small' class="col col-2 padding">
+                <div id="preview-pane" style="float:right">
+                  <div class="preview-container">
+                    <img src='lib/img/mybg.png' id="preview" class="jcrop-preview" />
+                  </div>
+                </div>
+              </section>
+            </div>
+          </fieldset>
+          <footer>
+            <button type="button" class="btn btn-default" onClick="closeModal()">取消</button>
+            <button type="submit" class="btn btn-primary" onClick="submitForm()">确定</button>
+          </footer>
+        </form>
+        <!-- FORM End -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<style type="text/css">
+.preview-container {
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+}
+;
+#fullpreview {
+  max-width: 450;
+  height: auto;
+  width: expression(this.width > 450 ? "450": this.width);
+}
+;
+</style>
+<link rel="stylesheet" href="yingyong_ptgl/yyfb2/jquery.Jcrop.min.css" type="text/css" />
+<script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+<script type="text/javascript" src="yingyong_ptgl/yyfb2/jquery.Jcrop.min.js"></script>
+<script>
+  function closeModal() {
+    $('#app_logo').modal('hide');
+    modal.modal('show');
+  };
+  var jcrop_api, boundx,
+    boundy,
+    $preview = $('#preview-pane'),
+    $pcnt = $('#preview-pane .preview-container'),
+    $pimg = $('#preview-pane .preview-container img'),
+    xsize = $pcnt.width(),
+    ysize = $pcnt.height();
+  
+  $('#app_logo').modal('show');
+  //图片自适应
+  function imgAdapt(src) {
+    var img = new Image();
+    img.src = src;
+    if (img.width < 450) {
+      $('#fullpreview').attr("style", "width: auto");
+    } else {
+      $('#fullpreview').attr("style", "width: 100%");
+      zoom = img.width / 450; //缩放比例
+    }
+  }
+  
+  function fileSelect() {
+    zoom = '';
+    $('#width').val('');
+    var path = $('#image_file').val();
+    $('#image_path').val(path);
+    var oFile = $('#image_file')[0].files[0];
+    $('.error').hide();
+    var rFilter = /^(image\/jpeg|image\/jpg|image\/png)$/i;
+    if (!rFilter.test(oFile.type)) {
+      $('.error').html('请选择有效的图片格式(jpg、jpeg、png)').show();
+      return;
+    }
+    if (oFile.size > 2048 * 1024) {
+      $('.error').html('请选择较小的图片').show();
+      return;
+    }
+    var oImage = document.getElementById('fullpreview');
+    var sImage = document.getElementById('preview');
+  
+    oImage.onload = function() {
+      $('#fullpreview').attr("style", "");
+      if (jcrop_api)
+        jcrop_api.destroy();
+  
+        var $this = $(this);
+        imgAdapt($this[0].src);
+  
+      $('#fullpreview').Jcrop({
+        onChange: updatePreview,
+        onSelect: updatePreview,
+        onRelease: clearPreview,
+        aspectRatio: 1,
+      }, function() {
+        var bounds = this.getBounds();
+        boundx = bounds[0];
+        boundy = bounds[1];
+        jcrop_api = this;
+        $('.jcrop-keymgr').remove();
+        $preview.appendTo(small);
+      });
+  
+      function updatePreview(coords) {
+        if (zoom == '') {
+          $('#x').val(coords.x);
+          $('#y').val(coords.y);
+          $('#width').val(coords.w);
+          $('#height').val(coords.h);
+        } else {
+          $('#x').val(coords.x * zoom);
+          $('#y').val(coords.y * zoom);
+          $('#width').val(coords.w * zoom);
+          $('#height').val(coords.h * zoom);
+        }
+        if (parseInt(coords.w) > 0) {
+          var rx = xsize / coords.w;
+          var ry = ysize / coords.h;
+          $pimg.css({
+            width: Math.round(rx * boundx) + 'px',
+            height: Math.round(ry * boundy) + 'px',
+            marginLeft: '-' + Math.round(rx * coords.x) + 'px',
+            marginTop: '-' + Math.round(ry * coords.y) + 'px'
+          });
+        }
+      }
+    }
+  
+    var oReader = new FileReader();
+    oReader.onload = function(e) {
+      oImage.src = e.target.result;
+      sImage.src = e.target.result;
+    };
+    oReader.readAsDataURL(oFile);
+  }
+  
+  function clearPreview() {
+    $('#width').val('');
+    $('#height').val('');
+  }
+  
+  function formPost(form, callback) {
+    var apisec = 'app/a297dfacd7a84eab9656675f61750078/ZYAPP_IDE/ZYMODULE_UI_IDE/upuserlogo'
+    form.ajaxSubmit({
+      url: zy.g.host.api + apisec  + '?' + zy.net.parseParam(zy.g.comm),
+      type: "post",
+      async: false,
+      timeout: 10000,
+      cache: false,
+      dataType: "json",
+      success: function(msg) {
+        if (msg.code == 0) {
+          //var path = msg.result.path;
+          closeModal();
+          zy.ui.msg("成功", msg.msg, 'i');
+          /*
+          zy.extend.get({
+            app:'ZYAPP_LOGIN',
+            mod:'personinfo',
+            apinm:'uploadimg'
+          },function(m){
+            $('#imglogo').attr('src', path);
+            $('#show-shortcut img').attr('src',path);
+            closeModal();
+          },{image_path:path})*/
+        } else {
+          Console.log("上传失败 = " + JSON.stringify(msg));
+          zy.ui.msg("上传失败", msg.msg, 'e');
+        }
+      }
+    });
+  }
+
+  function submitForm() {
+    if (parseInt($('#width').val())) {
+      formPost($('#app_logo_form'));
+    } else {
+      $('.error').html('请选择裁剪区域并上传').show();
+    }
+  }
+</script>

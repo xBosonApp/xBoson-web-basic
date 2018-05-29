@@ -1,0 +1,248 @@
+<div class="modal fade" id="third_app_import_user">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          &times;
+        </button>
+        <h4 class="modal-title">托管用户导入</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col col-md-4">
+            <button name="download_template" class="btn btn-info btn-sm">下载导入模板</button>
+          </div>
+        </div>
+        <hr/>
+        <form id='third-app-filemsg' class='smart-form' onsubmit="return false;">
+          <div class='row'>
+            <section class='col col-md-12'>
+              <label class='label'>操作类型</label>
+              <div class='row'>
+                <div class='col col-md-4'>
+                  <label class='radio state-success' title='导入数据'><input type='radio' value='insert' checked='checked' name='operation' ><i></i>导入</label>
+                </div>
+                <div class='col col-md-4'>
+                  <label class='radio state-success' title='导入删除'><input type='radio' value='delete' name='operation'><i></i>导入删除</label>
+                </div>
+              </div>
+            </section>
+          </div>
+          <div class="row">
+            <section class='col col-md-10'>
+              <label class='checkbox state-success' title='同时创建平台用户'><input type='checkbox' value='1' name='is_create_platuser'><i></i>同时创建平台用户</label>
+            </section>
+          </div>
+          <section>
+            <label class='label'>选择文件</label>
+            <label class="input input-file" for="file">
+      				<div class="button"><input type="file" onchange="this.parentNode.nextElementSibling.value = this.value" name='file_name'>Browse</div><input type="text" readonly="">
+      			</label>
+          </section>
+          <div class='row'>
+            <section class='col col-sm-6'>
+              <label class='label'>分隔符</label>
+              <label class="input">
+                <input type="hidden" name="delimiter" data-type="select2" placeholder="分隔符">
+              </label>
+            </section>
+            <section class='col col-sm-6'>
+              <label class='label'>转义符号</label>
+              <label class="input">
+                <input type="text" name="escape" placeholder="转义符号">
+              </label>
+            </section>
+          </div>
+          <div class='row'>
+            <section class='col col-sm-6'>
+              <label class='label'>引号符号</label>
+              <label class="input">
+                <input type="hidden" name="quoteChar" data-type="select2" placeholder="引号符号">
+              </label>
+            </section>
+            <section class='col col-sm-6'>
+              <label class='label'>字符集</label>
+              <label class="input">
+                <input type="hidden" name="charset" data-type="select2" placeholder="字符集">
+              </label>
+            </section>
+          </div>
+          <footer>
+						<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+						<button type="submit" class="btn btn-primary">导入</button>
+					</footer>
+        </form>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!--错误信息显示模态-->
+<div class="modal fade" id="third_app_import_user_error">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+        <p name="info"></p>
+      </div>
+      <div class="modal-footer">
+        <button name="closebtn" type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script type='text/javascript'>
+  function import_user(rowdata){
+    var import_modal = $('#third_app_import_user'); //模态
+    var down_temp_btn = import_modal.find('[name=download_template]');  //下载模板按钮
+    var import_form = $('#third-app-filemsg');  //form
+    
+    var error_modal=$('#third_app_import_user_error');
+    
+    function Init(){
+      if(!rowdata || !rowdata.tp_appid){
+        zy.ui.msg('提示信息：','缺少必要参数','w');
+        return;
+      }
+      InitDict();
+      Event();
+      import_modal.modal('show');
+    }
+    
+    function InitDict(){
+      zy.cache.initDicts('csv01,csv03,charset01',function(){
+        //分隔符
+        import_form.find('[name=delimiter]').zySelect('csv01',false,{'width':'100%'});
+        import_form.find('[name=delimiter]').select2('val','01');
+        //引号符号
+        import_form.find('[name=quoteChar]').zySelect('csv03',false,{'width':'100%'});
+        import_form.find('[name=quoteChar]').select2('val','01');
+        //字符集
+        import_form.find('[name=charset]').zySelect('charset01',false,{'width':'100%'});
+        import_form.find('[name=charset]').select2('val','UTF-8');
+      });
+    }
+    
+    function Event(){
+      //下载模板按钮
+      down_temp_btn.click(function(){
+        zy.g.am.app='ZYAPP_SYSMGT';
+        zy.g.am.mod='third_app_mgt';
+        zy.net.postDownload('download/import_tpuser_csv_template',[]);
+      });
+      //form提交
+      import_form.validate({
+        // Rules for form validation
+		    rules: {},
+    		// 验证成功后保存
+    		submitHandler: function (form) {
+    		  if(checkFile()){
+    		    return ;
+    		  }
+    		  import_modal.modal('hide');
+    		  //1.上传文件
+    			zy.g.am.app='c879dcc94d204d96a98a34e0b7d75676';
+          zy.g.am.mod='import_data';
+    			zy.net.postForm('upload/upload_file',import_form,function(msg){
+    			  if(msg){
+    			    //2.获取CSV数据
+    			    zy.g.am.app='ZYAPP_SYSMGT';
+              zy.g.am.mod='third_app_mgt';
+              var params = import_form.serialize()+'&file_name='+encodeURIComponent(msg.result[0].file_name)+'&tp_appid='+encodeURIComponent(rowdata.tp_appid)+'&is_just_return_data=1';
+              zy.net.post('api/import_tpuser',function(msg2){
+                if(msg2){
+                  //3.显示csv数据
+                  var tbodyStr='';
+                  var tableStr='';
+                  $.each(msg2.result,function(i,v){
+                    tbodyStr=tbodyStr+'<tr><td>'+v.userid+'</td><td>'+v.uid+'</td><td>'+v.email+'</td><td>'+v.tel+'</td></tr>';
+                  });
+                  tableStr='<div class="table-responsive"><table class="table table-striped"><thead><tr><th>userid</th><th>uid</th><th>email</th><th>tel</th></tr></thead><tbody>'+tbodyStr+'</tbody></table></div>';
+                  zy.ui.mask('请确认',tableStr,function(){
+            		    import_modal.modal('show');
+          			    //4.导入文件
+          			    zy.g.am.app='ZYAPP_SYSMGT';
+                    zy.g.am.mod='third_app_mgt';
+                    var params = import_form.serialize()+'&file_name='+encodeURIComponent(msg.result[0].file_name)+'&tp_appid='+encodeURIComponent(rowdata.tp_appid);
+                    zy.net.post('api/import_tpuser',function(msg3){
+                      if(msg3){
+                        if(error_code_cb(msg3)){
+                          zy.ui.msg('提示信息：',msg3.msg,'s');
+                          import_modal.modal('hide');
+                        }
+                      }
+                    },params);
+            			},function(){
+            			  import_modal.modal('show');
+            			});
+        		    }
+              },params);
+    			  }
+    			});
+    		},
+    		// Do not change code below
+    		errorPlacement: function (error, element) {
+    			error.insertAfter(element.parent());
+    		}
+      });
+      
+      //radio事件
+      import_form.find('[name=operation]').click(function(e){
+        if(e.target.value=='delete'){
+          import_form.find('[name=is_create_platuser]').closest('div').hide();
+        }else{
+          import_form.find('[name=is_create_platuser]').closest('div').show();
+        }
+      });
+      
+      function error_code_cb(msg){
+        error_modal.find('.modal-title').html(msg.msg); //标题
+        if(msg.code=='80'){
+          error_modal.find('[name=info]').text(JSON.stringify(msg.result,null,4));
+        }else if(msg.code=='81'){
+          error_modal.find('[name=info]').text(JSON.stringify(msg.result,null,4));
+        }else if(msg.code=='82'){
+          error_modal.find('[name=info]').text(JSON.stringify(msg.result,null,4));
+        }else if(msg.code=='83'){
+          error_modal.find('[name=info]').text(JSON.stringify(msg.result,null,4));
+        }else{
+          return true;
+        }
+        import_modal.modal('hide');
+        error_modal.modal('show');
+      }
+      
+      function checkFile() {
+        var filename = import_modal.find('[type=file]').val();
+        var finalname=filename.split('.')[1];
+        var escapename=import_modal.find('[name=escape]').val();
+        if(escapename.length>1){
+          zy.ui.msg('提示信息','转义字符的长度为1','w');
+          return true
+        }
+        if (filename == '') {
+          zy.ui.msg('提示信息', "请选择要导入的文件", 'w');
+          return true;
+        } else {
+          if(finalname!='csv'){
+            zy.ui.msg('提示信息', "请选择csv类型的文件", 'w');
+            return true;
+          }else{
+            return false;
+          } 
+        }
+      }
+      
+      error_modal.find('[name=closebtn]').click(function(e){
+        error_modal.modal('hide');
+        import_modal.modal('show');
+      });
+    }
+    
+    Init();
+  }
+</script>

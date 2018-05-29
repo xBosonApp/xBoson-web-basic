@@ -1,0 +1,54 @@
+<!-- Modal -->
+<div class="modal fade" id="get_system_org_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">
+          服务所属机构信息
+        </h4>
+      </div>
+      <div class="modal-body no-padding">
+        <div id="get_system_org">
+          <!-- FORM Start -->
+          <form id="get_system_org_form" method="post" onsubmit="return false;" class="smart-form">
+            <fieldset>
+              <div class="dataTables_wrapper">
+                <table id="get_system_org_dt" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>机构ID</th>
+                      <th>机构名称</th>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+              <br/>
+            </fieldset>
+            <footer>
+          <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+            </footer>
+          </form>
+          <!-- FORM End -->
+        </div>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+<script src="mgt/sys_system/get_system_org_list.js"></script>
+<!-- SCRIPTS ON PAGE EVENT -->
+<script type="text/javascript">
+  //DO NOT REMOVE : GLOBAL FUNCTIONS!
+  pageSetUp();
+  $('#get_system_org_modal').modal('show');
+//  var mgtGetsystemorglist=new MgtGetsystemorglist();
+//  var mgtSystemList=new MgtSystemList();
+  var options = {
+    width: '80%'
+  };
+</script>

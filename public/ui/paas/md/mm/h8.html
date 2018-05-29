@@ -1,0 +1,59 @@
+<div class="modal fade bs-example-modal-lg" id="md_mm_h8" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" id="md_mm_btn_exit" class="close" data-dismiss="modal" aria-hidden="true">&times;
+        </button>
+        <h4 class="modal-title"><span id="md_mm_h8_title">数据元编码表</span></h4>
+      </div>
+      <div class="modal-body">
+        <form id="md_mm_h8_form" method="post" onsubmit="return false;" class="smart-form">
+          <div class="row">
+            <section class="col col-2">
+              <label class="input">
+                <input id="md_mm_typecd" type="text" name="typecd" placeholder="类别编码" class="form-control input-sm" />
+              </label>
+            </section>
+            <section class="col col-2">
+              <label class="input">
+                <input type="text" name="decd" placeholder="数据元编码" class="form-control input-sm">
+                </label>
+              </section>
+            <section class="col col-2">
+              <label class="input">
+                <input type="text" name="en" placeholder="英文名称" class="form-control input-sm">
+              </label>
+            </section>
+            <section class="col col-2">
+              <label class="input">
+                <input type="text" name="cn" placeholder="中文名称" class="form-control input-sm">
+              </label>
+            </section>
+            <section class="col col-2">
+              <label class="input">
+                <input type="text" name="datatype" placeholder="数据类型" class="form-control input-sm">
+              </label>
+            </section>
+            <section class="col col-2">
+              <button id="md_mm_h8_search" class="btn btn-info btn-sm" type="submit"><i class="fa fa-search fa-1"></i>&emsp;查 询&emsp;</button>
+            </section>
+          </div>
+        </form>
+        <div id="menuContent"  style="display:none;">
+          <ul id="md_mm_tree" class="ztree" style="margin-top:0; width:140px;"></ul>
+        </div>
+        <div id="md_mm_h8_table"></div>
+      </div>
+      <div class="modal-footer">
+          <button id="btn_ok" type="submit" class="btn btn-primary" style="float:right;">确定</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal -->
+</div>
+<script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script type="text/javascript" src="lib/html/zy_dytable.js"></script>
+<!--<script src="md/mm/h8.js"></script>-->
+<script type="text/javascript">
+ $('#md_mm_h8').modal('show');
+</script>

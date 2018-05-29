@@ -1,0 +1,32 @@
+/* Create By xBoson System */
+
+body {
+  min-width: 300px;
+}
+
+section {
+  border-radius: 5px;
+  border: 1px solid #999;
+  padding: 10px;
+  background-color: #f1e9f3;
+}
+
+button {
+  border-radius: 5px;
+  padding: 5px 30px;
+  background-color: #fbfbfb;
+}
+
+#appnm, #usernm {
+  color:blue;
+}
+
+.logo1 {
+  line-height: 33px;
+  width: 328px;
+  color: #04888D;
+  text-shadow: 0 1px #021B1B;
+  font-weight: bold;
+  font-size: 24px;
+  padding-bottom: 20px;
+}

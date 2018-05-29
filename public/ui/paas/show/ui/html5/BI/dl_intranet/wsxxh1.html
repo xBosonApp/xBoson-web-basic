@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<title>哈尔滨市道里区卫生服与健康管理</title>
+<link rel="stylesheet" type="text/css" href="style/reset.css" / >
+<!--<link rel="stylesheet" type="text/css" href="../style/demo.css" />-->
+<style type="text/css">
+.wrap{text-align:center; }
+.wrap .top{height:85px; overflow:hidden;}
+.wrap .mid{height:760px;overflow:hidden;margin:20px auto 0px;}
+.mid .mid_left{width:321px;margin:0 10px ;float:left;text-align:left;text-indent:15px;}
+.mid .mid_left h3{height:40px;font: 14px/40px "微软雅黑";color:#fff;background-color:#24439b}
+.mid .mid_left li{height:30px;font:12px/30px "宋体";background-color:#b5d3fb;}
+.mid .mid_right{width:1020px;float:left;}
+.mid .mid_right #iCenter{width:100%;height:600px;}
+#selecttype{ height:400px;overflow-y:auto;overflow-x:hidden;}
+</style>
+<script src="http://webapi.amap.com/maps?v=1.3&key=e6796b6609e325308623dbc8ff82e31a"></script>
+</head>
+
+<body onLoad="mapInit()">
+
+<div style="width:1400px; height:900px; background:url(images/三级医疗机构.jpg) no-repeat; position:relative;">
+<div class="wrap">
+<div class="top"></div>
+<div class="mid clearfix">
+<div class="mid_left ">
+<ul>
+<h3>机构列表--道里</h3>
+<!--<li><a href="" onclick="getVal(this.innerHTML)">哈尔滨市道里区卫生局</a></li>
+<li>哈尔滨市第一医院</li>
+<li>共乐社区卫生服务中心</li>
+<li>安和安静社区卫生服务中心</li>-->
+<form id="selecttype">
+<li><input type="radio" name="_name" value="哈尔滨市道里区卫生局" onClick="getType('道里区卫生局')"/> 哈尔滨市道里区卫生局</li>
+<li><input type="radio" name="_name" value="哈尔滨市第一医院" onClick="getType('哈尔滨市第一医院')"/> 哈尔滨市第一医院</li>
+<li><input type="radio" name="_name" value="哈尔滨市道里区中医院" onClick="getType('哈尔滨市道里区中医院')"/> 哈尔滨市道里区中医院</li>
+<li><input type="radio" name="_name" value="安和社区卫生服务中心" onClick="getType('安和社区卫生服务中心')"/> 安和社区卫生服务中心</li>
+<li><input type="radio" name="_name" value="共乐社区卫生服务中心" onClick="getType('共乐社区卫生服务中心')"/> 共乐社区卫生服务中心</li>
+<li><input type="radio" name="_name" value="城乡社区卫生服务中心" onClick="getType('城乡社区卫生服务中心')"/> 城乡社区卫生服务中心</li>
+<li><input type="radio" name="_name" value="工程社区卫生服务中心" onClick="getType('工程社区卫生服务中心')"/> 工程社区卫生服务中心</li>
+<li><input type="radio" name="_name" value="通江社区卫生服务中心" onClick="getType('通江社区卫生服务中心')"/> 通江社区卫生服务中心</li>
+<li><input type="radio" name="_name" value="群力民生尚都社区卫生服务中心" onClick="getType('群力民生尚都社区卫生服务中心')"/> 群力民生尚都社区卫生服务中心</li>
+<li><input type="radio" name="_name" value="尚志社区卫生服务中心" onClick="getType('尚志社区卫生服务中心')"/> 尚志社区卫生服务中心</li>
+<li><input type="radio" name="_name" value="榆树镇卫生院" onClick="getType('榆树镇卫生院')"/> 榆树镇卫生院</li>
+<li><input type="radio" name="_name" value="安静社区卫生服务中心" onClick="getType('安静社区卫生服务中心')"/> 安静社区卫生服务中心</li>
+<li><input type="radio" name="_name" value="建国社区卫生服务中心" onClick="getType('建国社区卫生服务中心')"/> 建国社区卫生服务中心</li>
+<li><input type="radio" name="_name" value="斯大林社区卫生服务中心" onClick="getType('斯大林社区卫生服务中心')"/> 斯大林社区卫生服务中心</li>
+<li><input type="radio" name="_name" value="经纬社区卫生服务中心" onClick="getType('经纬社区卫生服务中心')"/> 经纬社区卫生服务中心</li>
+<li><input type="radio" name="_name" value="光华社区卫生服务中心" onClick="getType('光华社区卫生服务中心')"/> 光华社区卫生服务中心</li>
+<li><input type="radio" name="_name" value="兆麟社区卫生服务中心" onClick="getType('兆麟社区卫生服务中心')"/> 兆麟社区卫生服务中心</li>
+<li><input type="radio" name="_name" value="工农社区卫生服务中心" onClick="getType('工农社区卫生服务中心')"/> 工农社区卫生服务中心</li>
+<li><input type="radio" name="_name" value="新农镇卫生院" onClick="getType('新农镇卫生院')"/> 新农镇卫生院</li>
+<li><input type="radio" name="_name" value="新华社区卫生服务中心" onClick="getType('新华社区卫生服务中心')"/> 新华社区卫生服务中心</li>
+<li><input type="radio" name="_name" value="新阳社区卫生服务中心" onClick="getType('新阳社区卫生服务中心')"/> 新阳社区卫生服务中心</li>
+<li><input type="radio" name="_name" value="康安社区卫生服务中心" onClick="getType('康安社区卫生服务中心')"/> 康安社区卫生服务中心</li>
+<li><input type="radio" name="_name" value="爱建社区卫生服务中心" onClick="getType('爱建社区卫生服务中心')"/> 爱建社区卫生服务中心</li>
+<li><input type="radio" name="_name" value="抚顺社区卫生服务中心" onClick="getType('抚顺社区卫生服务中心')"/> 抚顺社区卫生服务中心</li>
+<li><input type="radio" name="_name" value="正阳社区卫生服务中心" onClick="getType('正阳社区卫生服务中心')"/> 正阳社区卫生服务中心</li>
+</form>
+</ul>
+
+    
+</div>
+<div class="mid_right " >
+<div class="mid_top " id="iCenter">
+
+</div>
+<div class="mid_bom ">
+<a href="index.html" class="item1"></a>
+<a href="" class="item2"></a>
+<a href="" class="item3"></a>
+<a href="" class="item4"></a>
+</div>
+</div>
+</div>
+<div class="footer"></div>
+</div>
+<script >
+  
+var mapObj;  
+var filter;
+var cloudDataLayer
+/* 
+ *初始化地图对象，加载地图 
+ */  
+function mapInit(){  
+    mapObj = new AMap.Map("iCenter",{center:new AMap.LngLat(126.610222,45.762493),level:13,doubleClickZoom:false  });      
+    addCloudLayer();  
+}
+
+/* 叠加云数据图层   551e06afe4b0a18f12e6266a*/ 
+
+function addCloudLayer() {  
+        mapObj.clearMap( );
+
+    //加载云图层插件  
+    mapObj.plugin('AMap.CloudDataLayer', function () {  
+        var layerOptions = {   
+            query:{filter: ''}, 
+			
+            clickable:true 
+			
+        };  
+        cloudDataLayer = new AMap.CloudDataLayer('551e06afe4b0a18f12e6266a', layerOptions); //实例化云图层类  
+        cloudDataLayer.setMap(mapObj); //叠加云图层到地图  
+          
+        AMap.event.addListener(cloudDataLayer, 'click', function (result) {  
+											   
+            var clouddata = result.data;
+			var img= new Image();
+			img=clouddata._image;
+            var infoWindow = new AMap.InfoWindow({  
+                content:"<h3 style='background:url("+img[0]._url+") 0 0 no-repeat; padding:0 0 0 25px'><font face=\"微软雅黑\"color=\"#3366FF\">"+ clouddata._name +"</font></h3><hr />地址："+ clouddata._address + "<br />" + "电话号码：" + clouddata.phonenumber + "<br />" + "联系人：" + clouddata.contact+ "<br />" + '官网：<a href='+clouddata.webset+'  target="_blank">'+ clouddata.webset+'</a>',  
+                size:new AMap.Size(300, 0),  
+                autoMove:true,  
+                offset:new AMap.Pixel(0,-5)  
+            });  
+              
+            infoWindow.open(mapObj, clouddata._location);  
+        }); 
+		
+    });  
+} 
+
+
+function getType(_name){
+    var op={
+        /*map:mapObj,*/
+        query:{filter:"_name:"+_name}
+    }
+	cloudDataLayer.setOptions(op);
+	
+}
+
+
+
+
+
+
+</script>
+<a href="index.html" style="width:92px; height:140px; position:absolute; right:10px; bottom:55px;"></a>
+<a href="wsxxh.html" style="width:290px; height:140px; position:absolute; right:102px; bottom:55px;"></a>
+</div>
+
+</body>
+</html>

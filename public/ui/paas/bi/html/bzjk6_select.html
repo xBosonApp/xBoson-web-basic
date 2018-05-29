@@ -1,0 +1,108 @@
+<!-- Button trigger modal
+<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+  <a data-toggle="modal" href="#my_modal" class="btn btn-success btn-lg pull-right header-btn hidden-mobile"><i class="fa fa-circle-arrow-up fa-lg"></i> 弹出 Form 表单</a>
+</div>
+-->
+<link rel="stylesheet" href="../../lib/js/plugin/bootstrap-datepicker/datepicker3.css" type="text/css" />
+<!-- Modal -->
+<div class="modal fade" id="my_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title"><i class="fa fa-user"></i>自定义筛选</h4>
+      </div>
+      <div class="modal-body no-padding">
+        <!-- FORM Start -->
+        <form id="user_form" method="post" onsubmit="return false;" class="smart-form">
+          <fieldset>
+             <div class="row">
+              <section class="col col-1"></section>  
+              <section class="col col-2">                                
+                <label class="select">
+                  <select name="datetype" class="zy_datetype">
+                    <option value="d" selected="">日</option>
+                    <option value="m">月</option>
+                    <option value="y">年</option>
+                  </select> <i></i> </label>
+              </section>
+              <section class="col col-8">
+	             <!-- --------------------------------------------------------------------->
+	              <div class="input-daterange input-group" id="datepicker">
+	                <input type="text" class="input-sm form-control" name="start" />
+	                <span class="input-group-addon"> 到 </span>
+	                <input type="text" class="input-sm form-control" name="end" />
+	              </div>
+	            <!-- --------------------------------------------------------------------->
+            	</section>
+             </div>
+          </fieldset>
+          <footer>
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button id="my_save" type="submit" class="btn btn-primary">确定</button>
+          </footer>
+        </form>
+        <!-- FORM End -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<!--<script type="text/javascript" src="../../lib/js/plugin/jquery-form/jquery.form.min.js"></script>-->
+<script type="text/javascript" src="../../lib/js/plugin/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+<script type="text/javascript" src="../../lib/js/plugin/bootstrap-datepicker/bootstrap-datepicker.zh-CN.js"></script>
+
+<!-- SCRIPTS ON PAGE EVENT -->
+<script type="text/javascript">
+// 初始化--------------------------------------------------------------------- 
+$('.input-sm').datepicker({
+format: "yyyy-mm-dd",
+language: "zh-CN",
+autoclose: true  });
+
+$('#my_modal').modal('show');
+
+// dropdown值变化时清空原值并重新设定 option--------------------------------------
+$('.zy_datetype').on('change', function() {  	 
+if ($('.zy_datetype').val() == "y") {
+    $('.input-sm').val('');
+    $('.input-sm').datepicker('remove');
+    $('.input-sm').datepicker({
+    format: "yyyy",
+    startView: 1,
+    minViewMode: 2,
+    language: "zh-CN",
+    forceParse: false,
+    autoclose: true});
+} else if ($('.zy_datetype').val() == "m") {
+      $('.input-sm').val('');
+      $('.input-sm').datepicker('remove');
+      $('.input-sm').datepicker({
+         format: "yyyy-mm",
+         minViewMode: 1,
+         language: "zh-CN",
+         forceParse: false,
+         autoclose: true});
+  }
+  else{
+        $('.input-sm').val('');
+        $('.input-sm').datepicker('remove');			
+        $('.input-sm').datepicker({
+            format: "yyyy-mm-dd",
+            language: "zh-CN",
+            autoclose: true});
+  }    
+});
+
+// chart ---------------------------------------------------------------------
+
+
+
+// DO NOT REMOVE : GLOBAL FUNCTIONS!
+pageSetUp();
+</script>

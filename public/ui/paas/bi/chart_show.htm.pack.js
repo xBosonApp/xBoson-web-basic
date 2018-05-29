@@ -1,0 +1,1 @@
+var pageid="###query.id###";zy.chart.pagecontrol(pageid);

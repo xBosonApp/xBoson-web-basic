@@ -1,0 +1,93 @@
+<div class="modal fade" id="user_group" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title">用户组管理</h4>
+      </div>
+      <div class="modal-body no-padding">
+        <div class="row padding-10" id="user_group_staffinfo">
+          <div class="col-sm-5">
+            <div class="row">
+              <div class="col-sm-12">
+                <section>
+                  <div>
+                    <label>&nbsp;人员</label>
+                    <ul id="user_group_staff" class="ztree"></ul>
+                  </div>
+                </section>
+              </div>
+            </div>
+            <br>
+          </div>
+          <div class="col-sm-7" id="user_group_staff_organize">
+            <fieldset class="smart-form">
+              <div class="row">
+                <section class="col col-sm-8">
+                  <label class="label">选择用户组</label>
+                  <label class="input">
+                    <input type="hidden" name="ugid" data-type="select2" placeholder="选择用户组" />
+                  </label>
+                </section>
+                <section class="col col-sm-4">
+                  <label class="label">&nbsp;</label>
+                  <button id="user_group_ug_op" class="btn btn-primary btn-sm">用户组操作</button>
+                </section>
+              </div>
+              <div class="row">
+                <section class="col col-sm-12">
+                  <label class="checkbox">
+                    <input type="checkbox" name="removeflag"/>同时从现用户组移出<i></i>
+                  </label>
+                </section>
+  						</div>
+						</fieldset>
+						<hr>
+            <div class="row">
+              <div class="col-lg-12 pull-right">
+                <button id="user_group_save" class="btn btn-primary">
+                  &emsp;<i class="fa fa-save"></i>&nbsp;确定&emsp;
+                </button>
+                <button id="user_group_refresh" class="btn btn-success">
+                  &emsp;<i class="fa fa-refresh"></i>&nbsp;重置&emsp;
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                  &emsp;<i class="fa fa-reply"></i>&nbsp;取消&emsp;
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <form id="user_group_ug_info" method="post" onsubmit="return false;" class="smart-form" style="display:none;">
+          <fieldset>
+            <div class="row">
+              <section class="col col-6">
+                <label class="label" for="ugnm">用户组名称</label>
+                <label class="input has-warning">
+                  <input type="text" name="ugnm" id="ugnm" placeholder="用户组名称">
+                  <b class="tooltip tooltip-bottom-right">用户组名称为必填项目</b>
+                </label>
+              </section>
+					  </div>
+				  </fieldset>
+          <footer>
+            <button id="user_group_ug_cancel" class="btn btn-default btn-sm">取消</button>
+            <button id="user_group_ug_del" class="btn btn-danger btn-sm">删除</button>
+            <button id="user_group_ug_edit" class="btn btn-info btn-sm">更新</button>
+            <button id="user_group_ug_add" class="btn btn-success btn-sm">添加</button>
+          </footer>
+				</form>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="c9e98ea6fc7148d186289e8c33776f8a/user_manager/user_group.js"></script>
+<script>
+(function(){
+  // DO NOT REMOVE : GLOBAL FUNCTIONS!
+  pageSetUp();
+  var user_groupObj = new user_group();
+})();
+</script>

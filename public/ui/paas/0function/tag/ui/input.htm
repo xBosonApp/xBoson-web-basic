@@ -1,0 +1,54 @@
+<never>
+    使用:
+    <ui:input type='表单类型: text|textarea|select|...'
+           label='输入框标签' 
+           id='表单的id' 
+           class='section的 class'
+           md='宽度1-12'
+           name='表单的name' 
+           placeholder='提示'>
+        如果是 textarea 这里写 textarea 的内容,
+        如果是 select 这里写 options,
+    </ui:input>
+</never>
+
+<script runat='server'>
+  var type = val('type');
+  var lclass;
+  switch(type) {
+    case 'textarea':
+      lclass = 'textarea';
+      val('textarea', 1); break;
+    case 'select':
+      lclass = 'select';
+      val('select', 1); break;
+    default:
+      lclass = 'input';
+      val('input', 1); break;
+  }
+  val('lclass', lclass);
+  end();
+</script>
+
+<section class="col col-md-###md### ###class###">
+  <label class="label">###label###</label>
+  <label class="###lclass###">
+    <if var='icon'>
+      <i class="icon-append fa ###icon###"></i>
+      <del to='icon'/>
+    </if>
+    <if var="textarea">
+      <textarea id='###id###' placeholder='###placeholder###' name='###name###'><pit/></textarea>
+      <del to='textarea'/>
+    </if>
+    <if var="select">
+      <select id='###id###' placeholder='###placeholder###' name='###name###'><pit/></select>
+      <del to='select'/>
+    </if>
+    <if var='input'>
+      <input type='type' id='###id###' placeholder='###placeholder###' name='###name###'>
+      <del to='input'/>
+    </if>
+    
+  </label>
+</section>

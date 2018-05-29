@@ -1,0 +1,252 @@
+ <div class="modal fade" id="md_operation_log" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title">操作记录</h4>
+			</div>
+			<div class="modal-body">
+			  <form class="smart-form" name="md_operation_log_form" onsubmit="return false;">
+			    <div class="row">
+				    <section class="col col-4">
+							<div class="input-group">
+							  <span class="input-group-addon">开始日期</span>
+								<input class="form-control" type="text" name="dt_from" placeholder="开始日期">
+							</div>
+						</section>
+						<section class="col col-2">
+						  <div class="input-group">
+							  <input class="form-control" type="text" name="time_from" placeholder="开始时间"/>
+							</div>
+						</section>
+						<section class="col col-4">
+							<div class="input-group">
+							  <span class="input-group-addon">结束日期</span>
+								<input class="form-control" type="text" name="dt_to" placeholder="结束日期">
+							</div>
+						</section>
+						<section class="col col-2">
+						  <div class="input-group">
+							  <input class="form-control" type="text" name="time_to" placeholder="结束时间"/>
+							</div>
+						</section>
+						
+				  </div>
+				  <div class='row'>
+				    <section class="col col-4">
+							<label class="input">
+								<input type="text" name="operation_type" data-type="select2" placeholder="操作类型">
+							</label>
+						</section>
+						<section class="col col-3">
+							<label class="input">
+								<input type="text" name="userid" placeholder="用户ID">
+							</label>
+						</section>
+						<section class="col col-3">
+							<label class="input">
+								<input type="text" name="typecd" placeholder="类别编码">
+							</label>
+						</section>
+						<section class="col col-2">
+						<button type="button" class="btn btn-primary btn-sm" name="modalsearch">查询</button>
+						</section>
+				  </div>
+			  </form>
+			  <div class="table-responsive">
+			  <div class="pull-right"><b name="total_count"></b></div>
+        	<table name="md_operation_log_table" class="table table-bordered table-striped">
+        	</table>
+        </div>
+        <div id="md_operation_log_pagination"></div>
+			</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+		</div>
+	</div>
+</div>
+<!-- end widget grid --> 
+
+<script src="lib/js/plugin/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script>
+  (function(){
+    var modal = $('#md_operation_log');
+    var query_form = modal.find('[name=md_operation_log_form]');
+    var dt = modal.find('[name=md_operation_log_table]');
+    var querysearch=query_form.find('[name=modalsearch]');
+    modal.modal('show');
+    function init(){
+      Toolbar();
+      select();
+      querysearch.unbind().bind('click',function(){
+        Pagination(1);
+      })
+    }
+    function Toolbar(){
+          //开始日期
+    query_form.find('[name=dt_from]').datepicker({
+      language:'zh-CN',
+      format:'yyyy-mm-dd'
+    });
+    query_form.find('[name=dt_from]').datepicker('setDate',Date());
+    //结束日期
+    query_form.find('[name=dt_to]').datepicker({
+      language:'zh-CN',
+      format:'yyyy-mm-dd'
+    });
+    query_form.find('[name=dt_to]').datepicker('setDate',Date());
+    //开始时间
+    query_form.find('[name=time_from]').timepicker({
+      'showMeridian':false,
+      'showSeconds':true,
+      'defaultTime':'00:00:00',
+      'minuteStep':5,
+      'secondStep':5
+    });
+    query_form.find('[name=time_from]').on('show.timepicker', function(e) {
+      var tar=$('.bootstrap-timepicker-widget ');
+       tar.css('z-index', '999999');
+    });
+    //结束时间
+    query_form.find('[name=time_to]').timepicker({
+      'showMeridian':false,
+      'showSeconds':true,
+      'defaultTime':'23:59:59',
+      'minuteStep':5,
+      'secondStep':5
+    });
+    query_form.find('[name=time_to]').on('show.timepicker', function(e) {
+      var tar=$('.bootstrap-timepicker-widget ');
+       tar.css('z-index', '999999');
+    });
+    }
+    function Pagination(page){
+      zy.log('Pagination page = ' + page);
+      $.jqPaginator('#md_operation_log_pagination', {
+        totalCounts: 1,
+        pageSize: 10,
+        currentPage: page,
+        onPageChange: function(num) {
+          zy.log('onPageChange num = ' + num);
+          SetDt(num);
+        }
+      });
+    }
+    
+    function SetDt(num){
+      zy.g.am.app = "d2c8511b47714faba5c71506a5029d94";
+      zy.g.am.mod = "operation_log";
+      zy.g.am.pagesize = 10;
+      zy.net.get("api/query", function(msg){
+        if(msg){
+          Datatable(msg.data);
+          if (msg.count > 0) {
+            modal.find('[name=total_count]').html('总数：'+msg.count)
+          $('#md_operation_log_pagination').jqPaginator('option', {
+            totalCounts: msg.count,
+            pageSize: 10,
+            currentPage: num
+          });
+        } else {
+
+          $('#md_operation_log_pagination').jqPaginator('destroy');
+        }
+        }
+      }, query_form.serialize(), num);
+    }
+    
+    function Datatable(data){
+      var columns = [
+      {
+        'title':'类别编码',
+        "data": "typecd"
+      },
+      {
+        'title':'类别名称',
+        "data": "typenm"
+      },
+      {'title':'操作类型',
+        "render": function(data, type, row, meta) {
+          return zy.cache.cd2name('mdm001', row.operation_type);
+        }
+      },
+      // {
+      //   'title':'操作前JSON',
+      //   "render": function (data, type, row, meta) {
+      //     var _data, str, str0, str1;
+      //     if(row.before_json=='')
+      //     var str='无';
+      //     else
+      //     var str=JSON.stringify(JSON.parse(row.before_json),null,4);
+
+      //     return "<a href=\'javascript:void(0);\' rel=\'popover\' data-placement=\'left\' data-original-title=\'查看\' data-content=\'<pre>"+str + "</pre>\' data-html=\'true\'>查看</a>";
+      //   }
+      // },
+      // {
+      //   'title':'操作后JSON',
+      //   "render": function (data, type, row, meta) {
+      //     var _data, str, str0, str1;
+      //     if(row.after_json=='')
+      //     var str='无';
+      //     else
+      //     var str=JSON.stringify(JSON.parse(row.after_json),null,4);
+      //     return "<a href=\'javascript:void(0);\' rel=\'popover\' data-placement=\'left\' data-original-title=\'查看\' data-content=\'<pre>"+  str+ "</pre>\' data-html=\'true\'>查看</a>";
+      //   }
+      // },
+      {
+        'title':'操作详细',
+        "data": "operation_detail"
+      },
+      {
+        'title':'平台用户ID',
+        "data": "userid"
+      },
+      {
+        'title':'创建时间',
+        "data": "createdt"
+      },
+      
+      
+    ];
+    //预设初始化参数
+    var options = {
+      "data": data,
+      "columns": columns
+    };
+    // 合并初始化参数选项
+    $.extend(options, zy.ui.dataTable);
+    //初始化 DataTable
+    dt.dataTable(options);
+    }
+    
+    function select(){
+      zy.cache.initDicts('mdm001',function(){
+        var ls=zy.cache.get('_mdm_dict', 'ls');
+        var arr=ls.get().mdm001;
+        var obj={};
+        $.each(arr,function(i,v){
+          if(v.id.length==5){
+            var str=v.id.substr(0,3)
+            if(typeof obj[str] == 'undefined'){
+              obj[str]=[v];
+            } else {
+              obj[str].push(v);
+            }
+          } 
+            
+        });
+        var data=[]
+        $.each(arr,function(index,col){
+          if(obj[col.id]) col.children=(obj[col.id]);
+          if(col.id.length!=5) data.push(col);
+        })
+      query_form.find('[name=operation_type]').zySelectCustomData('',false ,{width:'100%'},data);
+    });
+    }
+    init();
+  })();
+</script>

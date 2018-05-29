@@ -1,0 +1,448 @@
+<script type="text/javascript">
+
+    $(function() {
+		if(self.parent.dataMap===""){
+        $("#save1").hide();
+        }else{
+        $("#save").hide();
+        }
+        LC_SetMapData("grxg1", self.parent.dataMap);
+
+    });
+    
+ // 添加或保存处理
+    function save() {
+            var url = "personadd/";
+            var itemsList = ["pname","gender","birthday","workdate","email","credentials","idcard","phones","nickname","registeretype","addrprovince","addrcity","addrcounty","addrvillage","addrhouseid","nationality","marriedstatus","nation","age","booldtype","jobtypecode","educationcode","degreecode"];
+            var info = new Map();
+			//证件类型
+			var ss = [];
+			var rows = $('#dg').datagrid('getSelections');
+			for(var i=0; i<rows.length; i++){
+				var row = rows[i];
+				ss.push(row.type+"_"+row.num);
+			}
+			//console.info(ss.join(','));
+			$("#credentials").val(ss.join(','));
+			//------------------------------------------------------------
+			//电话类型
+			var zz = [];
+			var pzzs = $('#hp').datagrid('getSelections');
+			for(var i=0; i<pzzs.length; i++){
+				var row = pzzs[i];
+				zz.push(row.type+"_"+row.num);
+			}
+			$("#phones").val(zz.join(','));
+            LC_AjaxGet(EMPIUrl + url, "grxg1", "callback", info, itemsList);
+    }
+    function callback(reData) {
+        if (reData.ret == "0") {
+            self.parent.$.messager.alert('提示', reData.msg, 'info');
+            $("#openRoleDiv").window("close");
+			showDatagrxx();
+        } else {
+            self.parent.$.messager.alert('错误提示', reData.msg, 'error');
+        }
+
+    }
+
+function save1() {
+	if(retCheckFlg){
+		var url = "personchange/";
+		var itemsList = ["pname","gender","birthday","email","credentials","idcard","phones","nickname","registeretype","addrprovince","addrcity","addrcounty","addrvillage","addrhouseid","nationality","marriedstatus","nation","age","booldtype","jobtypecode","educationcode","degreecode"];
+		
+            var info = new Map();
+			
+			
+		info.put("pid",self.parent.dataMap.pid);
+		LC_AjaxGet(EMPIUrl + url, "grxg1", "callback1", info, itemsList);
+	}
+}
+function callback1(reData){
+	$("#openRoleDiv").window("close");
+	showDatagrxx();
+}
+
+
+$(function () {
+getselect();
+});
+
+ function  getselect(){
+
+  var url="mdm/dict/listget/";
+  var infoa = new Map();
+  infoa.put("stringsplit","VA0004.04");
+  var itemsList= [];
+
+  LC_AjaxGet(MDMBaseUrl+url,"grxg1","mdmSelect",infoa,itemsList);
+
+}
+
+function mdmSelect(data){
+
+  var info = new Map();
+  info.put("key",["typeCode2"]);
+  info.put("value",["typeName"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("grxg1","gender",info,data.dataList["VA0004.04"]);
+
+}	
+
+
+</script>
+
+		 <div id="personadd" class="flPadTB-10">	
+<form id="grxg1">
+<input type="hidden" id="credentials"/>
+<input type="hidden" id="pid"/>
+<input type="hidden" id="phones"/>
+ 			<div class="mainW-736">
+			<div class="mainW-224" >
+				<div class="itemLW-96 padT-4" >姓名：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="pname" /></div>
+			</div>
+			
+			<div class="mainW-224" >
+				<div class="itemLW-96 padT-4" >性别：</div>	
+				<div class="itemRW-128"><select id="gender" name="dept"></select></div>
+			</div>
+			
+			<div class="mainW-224" >
+				<div class="itemLW-96 padT-4" >出生日期：</div>	
+				<div class="itemLW-128"><input class="Wdate" onClick="WdatePicker()"  type="text" style="width:128px;" id="birthday" /></div>
+			</div>
+			</div>
+			
+ 			<div class="mainW-736">
+			<div class="mainW-224" >
+				<div class="itemLW-96 padT-4" >电子邮件地址：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="email" /></div>
+			</div>
+			
+			<div class="mainW-224" >
+				<div class="itemLW-96 padT-4" >身份证：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="idcard" /></div>
+	</div>
+    			<div class="mainW-224" >
+			    <div class="itemLW-96 padT-4" >年龄：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="age" /></div>
+			</div>
+
+			</div>
+			
+			<div class="mainW-736">
+			<div class="mainW-224" >
+				<div class="itemLW-96 padT-4" >昵称：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="nickname" /></div>
+			</div>
+			
+			<div class="mainW-224" >
+				<div class="itemLW-96 padT-4" >户籍类型代码：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="registeretype" /></div>
+			</div>
+			
+			<div class="mainW-224" >
+				<div class="itemLW-96 padT-4" >地址-省：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="addrprovince" /></div>
+			</div>
+			</div>
+			
+		    <div class="mainW-736">
+			<div class="mainW-224" >
+				<div class="itemLW-96 padT-4" >地址-市：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="addrcity" /></div>
+			</div>	
+			
+			<div class="mainW-224" >
+			    <div class="itemLW-96 padT-4" >地址-县：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="addrcounty" /></div>
+			</div>	
+			
+			<div class="mainW-224" >
+			    <div class="itemLW-96 padT-4" >地址-村：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="addrvillage" /></div>
+			</div>
+			</div>
+			
+			<div class="mainW-736">
+			<div class="mainW-224" >
+			    <div class="itemLW-96 padT-4" >地址-门牌号码：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="addrhouseid" /></div>
+			</div>				
+            
+	      <div class="mainW-224" style="height:22px;">
+		<div class="itemLW-96 padT-4">国籍：</div>
+		<div class="itemRW-128" >
+			<select class="textLW" name="dept" id="nationality">  
+			    <option>中国</option>  
+			</select>
+		</div>
+          </div>    
+			<div class="mainW-224" >
+			    <div class="itemLW-96 padT-4" >婚姻状况代码：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="marriedstatus" /></div>
+			</div>
+			</div>
+			
+			<div class="mainW-736">
+			<div class="mainW-224" >
+			    <div class="itemLW-96 padT-4" >民族：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="nation" /></div>
+			</div>
+			
+
+			
+			<div class="mainW-224" >
+			    <div class="itemLW-96 padT-4" >ABO血型：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="booldtype" /></div>
+			</div>
+	
+           <div class="mainW-224" >
+                <div class="itemLW-96 padT-4">参加工作时间：</div>
+                <div class="itemRW-128"><input id="workdate"  class="Wdate" onClick="WdatePicker()"  type="text" style="width:128px;" />  </div>
+              </div>
+              </div>
+           <div class="mainW-736">
+			<div class="mainW-224" >
+			    <div class="itemLW-96 padT-4" >职业类别代码：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="jobtypecode" /></div>
+			</div>
+			
+			<div class="mainW-224" >
+			    <div class="itemLW-96 padT-4" >学历代码：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="educationcode" /></div>
+			</div>
+					
+			<div class="mainW-224" >
+			    <div class="itemLW-96 padT-4" >学位代码：</div>	
+				<div class="itemLW-128"><input class="textLW" type="text" id="degreecode" /></div>
+			</div>
+			</div>
+            
+        <div class="mainW-736">
+	      <div class="mainW-224">
+		<div class="itemLW-96 padT-4"> RH血型：</div>
+		<div class="itemRW-128" >
+			<select class="textLW" name="dept" id="rh">  
+			    <option>阴性</option>  
+                <option>阳性</option>  
+			</select>
+		</div>
+        
+			</div>
+			</div><div style="clear:both;"></div>
+			<div class="itemLW-640"></div>
+
+<div id="tt" class="easyui-tabs" style="width:720px;">  
+    <div title="证件" style="padding:5px;">  
+        <!-- 证件添加 -->
+        <table id="dg" class="easyui-datagrid" title="证件" style="width:700px;height:auto" data-options="singleSelect:false,toolbar: '#tb',onClickRow: onClickRow1">
+		<thead>
+			<tr>
+				<th data-options="field:'type',width:100,formatter:productFormatter,  
+                        editor:{  
+                            type:'combobox',  
+                            options:{  
+                                valueField:'type',  
+                                textField:'name',  
+                                data:products 
+                            }  
+                        }">证件类型</th>
+				<th data-options="field:'num',width:80,align:'right',editor:'numberbox'">证件号</th>
+			</tr>
+		</thead>
+	</table>
+	<div id="tb" style="height:auto">
+		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()">添加</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="accept()">保存</a>
+        <!--<a href="#" class="easyui-linkbutton" onclick="getSelections()">获取信息</a>-->
+	</div>
+    </div>  
+    
+    <!-- 证件添加   结束 -->
+    <!--<div title="电话" style="padding:5px;">  
+        <table id="div-grxg1" class="easyui-da tagrid"toolbar="#toolba1"></table> 
+        <div id="toolbar1"><a href="javascript:void(0)" class="easyui-linkbutton"  iconCls="icon-add" plain="true" onclick="personadd11111111()">新增</a></div>
+    </div> -->
+
+  <div title="电话" style="padding:5px;">  
+        <!-- 电话添加 -->
+        <table id="hp" class="easyui-datagrid" title="电话" style="width:700px;height:auto" data-options="singleSelect:false,toolbar: '#hj',onClickRow: onClickRow">
+		<thead>
+			<tr>
+				<th data-options="field:'type',width:100,formatter:phoneFormatter,  
+                        editor:{  
+                            type:'combobox',  
+                            options:{  
+                                valueField:'type',  
+                                textField:'name',  
+                                data:phonedata 
+                            }  
+                        }">电话类型</th>
+				<th data-options="field:'num',width:80,align:'right',editor:'numberbox'">电话号</th>
+			</tr>
+		</thead>
+	</table>
+	<div id="hj" style="height:auto">
+		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="appen()">添加</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="accep()">保存</a>
+        <!--<a href="#" class="easyui-linkbutton" onclick="getSelections()">获取信息</a>-->
+	</div>
+    </div>  
+</div> 
+<div style="padding:10px 0; text-align:right;">
+<a id="save" href="#" onclick="save()"   class="easyui-linkbutton">保存</a>
+</div>
+</form>
+
+
+
+
+</div>
+
+
+<!--处理 证件-->
+<script type="text/javascript">
+	var products = [  
+            {type:'01',name:'居民身份证'},  
+            {type:'02',name:'港澳居民身份证'},
+            {type:'03',name:'居民户口簿'},  
+            {type:'04',name:'护照'},
+            {type:'05',name:'军官证'},  
+            {type:'06',name:'文职干部证'},
+            {type:'07',name:'士兵证'},  
+            {type:'08',name:'驾驶执照'},
+            {type:'09',name:'残疾证'},  
+            {type:'10',name:'医疗保险证'},
+            {type:'11',name:'出生证明'},  
+            {type:'12',name:'家庭标识'},
+            {type:'13',name:'住院病案'},  
+            {type:'14',name:'住院床位'},
+            {type:'15',name:'门诊病历'},  
+            {type:'16',name:'死亡证明'},
+            {type:'70',name:'社保卡'},  
+            {type:'71',name:'一卡通'},
+            {type:'72',name:'健康卡'},  
+            {type:'73',name:'学生证'},
+            {type:'80',name:'母亲身份证'},
+            {type:'81',name:'父亲身份证'},  
+            {type:'90',name:'本地唯一标识'},
+            {type:'91',name:'合作医疗卡'},  
+            {type:'92',name:'自费卡'},
+            {type:'99',name:'其他标识'} 
+        ];  
+        function productFormatter(value){  
+            for(var i=0; i<products.length; i++){  
+                if (products[i].type == value) return products[i].name;  
+            }  
+            return value;  
+        }
+		var editIndex = undefined;
+		function endEditing(){
+			if (editIndex == undefined){return true}
+			if ($('#dg').datagrid('validateRow', editIndex)){
+				$('#dg').datagrid('endEdit', editIndex);
+				editIndex = undefined;
+				return true;
+			} else {
+				return false;
+			}
+		}
+		function onClickRow1(index){
+			if (editIndex != index){
+				if (endEditing()){
+					$('#dg').datagrid('selectRow', index)
+							.datagrid('beginEdit', index);
+					editIndex = index;
+				} else {
+					$('#dg').datagrid('selectRow', editIndex);
+				}
+			}
+		}
+		function append(){
+			if (endEditing()){
+				$('#dg').datagrid('appendRow',{status:'P'});
+				editIndex = $('#dg').datagrid('getRows').length-1;
+				$('#dg').datagrid('selectRow', editIndex)
+						.datagrid('beginEdit', editIndex);
+			}
+		}
+		function accept(){
+			if (endEditing()){
+				$('#dg').datagrid('acceptChanges');
+			}
+		}
+
+	</script>
+
+
+<script type="text/javascript">
+	var phonedata = [  
+            {type:'01',name:'本人电话'},  
+            {type:'02',name:'配偶电话'},
+            {type:'03',name:'监护人电话'},  
+            {type:'04',name:'家庭电话'},
+            {type:'05',name:'本人工作单位电话'},  
+            {type:'06',name:'居委会电话'},
+            {type:'07',name:'传真'},  
+            {type:'08',name:'QQ'},
+            {type:'09',name:'MSN'},  
+            {type:'10',name:'电子邮件'},
+            {type:'99',name:'其他'} 
+        ];  
+        function phoneFormatter(value){  
+            for(var i=0; i<phonedata.length; i++){  
+                if (phonedata[i].type == value) return phonedata[i].name;  
+            }  
+            return value;  
+        }
+		var editIndex = undefined;
+		function endEditing(){
+			if (editIndex == undefined){return true}
+			if ($('#hp').datagrid('validateRow', editIndex)){
+				$('#hp').datagrid('endEdit', editIndex);
+				editIndex = undefined;
+				return true;
+			} else {
+				return false;
+			}
+		}
+		function onClickRow(index){
+			if (editIndex != index){
+				if (endEditing()){
+					$('#hp').datagrid('selectRow', index)
+							.datagrid('beginEdit', index);
+					editIndex = index;
+				} else {
+					$('#hp').datagrid('selectRow', editIndex);
+				}
+			}
+		}
+		function appen(){
+			if (endEditing()){
+				$('#hp').datagrid('appendRow',{status:'P'});
+				editIndex = $('#hp').datagrid('getRows').length-1;
+				$('#hp').datagrid('selectRow', editIndex)
+						.datagrid('beginEdit', editIndex);
+			}
+		}
+		function accep(){
+			if (endEditing()){
+				$('#hp').datagrid('acceptChanges');
+			}
+		}
+
+	</script>
+
+
+
+
+
+
+
+
+
+
+    

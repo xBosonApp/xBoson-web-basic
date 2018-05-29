@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<title>EMR View</title>
+<script src="/t/paas/show/ui/comm.js" type="text/javascript"></script>
+<style type="text/css">
+.active {
+  background-color: #f7941d;
+}
+.active a {
+  background-color: #f7941d;
+}
+</style>
+</head>
+
+<body class="easyui-layout">
+
+<div id="openRoleDiv" autoopen="false" cache="false" closed="false" collapsible="false" minimizable="false" modal="true" resizable="true" stack="true" zindex="9999">
+</div>
+<div border="true" class="cs-north heads" region="north">
+  <div class="cs-north-bg">
+    <div class="cs-north-logo" style="width: 600px;">
+      <img alt="" height="30" src="/images/lclogo.png" style="padding-top: 14px">　　<span>EMR View</span></div>
+    <script src="/comm/ui-skin-nav.js" type="text/javascript"></script>
+  </div>
+</div>
+<div border="true" class="cs-west" region="west" split="true" title="导航">
+    <div id="index" border="false" class="easyui-accordion" fit="true">
+      <div title="个人信息">
+        <ul>
+          <li><a class="cs-navi-tab" href="javascript:void(0);" src="SQZZ/zzsq.html">转诊申请</a></li>
+          <li><a class="cs-navi-tab" href="javascript:void(0);" src="SQZZ/SQZZ_TJBB.html">统计报表</a></li>
+          <li><a class="cs-navi-tab" href="javascript:void(0);" src="SQZZ/SQZZ_HFJL.html">回访记录</a></li>
+          <!--
+				<li><a class="cs-navi-tab" src="TRSView/SQZZ/SQZZ_TJBBXX.html" href="javascript:void(0);">详细</a></li>
+				<li><a class="cs-navi-tab" src="TRSView/SQZZ/SQZZ_TJBBXG.html" href="javascript:void(0);">修改</a></li>-->
+        </ul>
+      </div>
+      <div title="转诊接受平台">
+        <ul>
+          <li><a class="cs-navi-tab" href="javascript:void(0);" src="ZZJS/ZZJS_HZCL.html">转诊患者处理</a></li>
+        </ul>
+      </div>
+      <div title="医院转诊查询">
+        <ul>
+          <li><a class="cs-navi-tab" href="javascript:void(0);" src="YYXZ/YYXZ_ZZHZ.html">转诊患者就诊</a></li>
+          <li><a class="cs-navi-tab" href="javascript:void(0);" src="YYXZ/YYXZ_QXJZ.html">转诊患者取消就诊</a></li>
+          <li><a class="cs-navi-tab" href="javascript:void(0);" src="YYXZ/YYXZ_HZXZ.html">转诊患者下转</a></li>
+        </ul>
+      </div>
+      <div title="统计报表">
+        <ul>
+          <li><a class="cs-navi-tab" href="javascript:void(0);" src="TJBB/TJBB_ZZTJ.html">社区转诊统计</a></li>
+          <li><a class="cs-navi-tab" href="javascript:void(0);" src="TJBB/TJBB_ZZHB.html">社区转诊环比</a></li>
+          <li><a class="cs-navi-tab" href="javascript:void(0);" src="TJBB/TJBB_ZZXX.html">病人转诊信息</a></li>
+        </ul>
+      </div>
+      <div title="用户管理">
+        <ul>
+          <li><a class="cs-navi-tab" href="javascript:void(0);" src="YHGL/YHGL_XXBJ.html">用户信息编辑</a></li>
+        </ul>
+      </div>
+      <div title="机构管理">
+        <ul>
+          <li><a class="cs-navi-tab" href="javascript:void(0);" src="JGGL/JGGL_JGBJ.html">医疗机构编辑</a></li>
+          <li><a class="cs-navi-tab" href="javascript:void(0);" src="JGGL/JGGL_DYGX.html">转诊对应关系</a></li>
+        </ul>
+      </div>
+      <div title="系统日志查询">
+        <ul>
+          <li><a class="cs-navi-tab" href="javascript:void(0);" src="XTRZ/XTRZ_XTRZ.html">系统日志查询</a></li>
+        </ul>
+      </div>
+    </div>
+</div>
+<div id="mainPanle" region="center">
+  <div id="tabs" border="false" class="easyui-tabs" fit="true">
+    <div title="转诊申请">
+      <iframe frameborder="0" scrolling="yes" src="SQZZ/zzsq.html" style="width: 100%; height: 100%;"></iframe></div>
+  </div>
+</div>
+<div border="false" class="cs-south" region="south">
+  乐辰科技有限公司</div>
+<div id="ssa" title="">
+</div>
+<div id="mm" class="easyui-menu cs-tab-menu">
+  <div id="mm-tabupdate">
+    刷新</div>
+  <div class="menu-sep">
+  </div>
+  <div id="mm-tabclose">
+    关闭</div>
+  <div id="mm-tabcloseother">
+    关闭其他</div>
+  <div id="mm-tabcloseall">
+    关闭全部</div>
+</div>
+
+</body>
+
+</html>

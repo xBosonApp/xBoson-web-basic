@@ -1,0 +1,298 @@
+﻿<script type="text/javascript">
+
+ // 修改的场合画面数据初始化回调函数
+ function callbackabc(retData){
+  LC_SetMapData("orgDo",retData.dataList[0]);
+ }
+
+ // 添加或保存处理
+ function save(){
+  // 校验用户输入
+  var _orgCd = $.trim($("#orgCd").val());
+  var _orgNm = $.trim($("#orgNm").val());
+  if (_orgCd==="") {
+    $.messager.alert('输入提示','【组织机构代码】不能为空！','warning',function(){$("#orgCd").focus();});
+    return;
+  }
+  if (_orgNm==="") {
+    $.messager.alert('输入提示','【机构名称】不能为空！','warning',function(){$("#orgNm").focus();});
+    return;
+  }
+	if ($("#orgId").val()==="") {
+	LC_Resetting("orgDo");
+	var checkorgCdItems=["orgCd"];
+	LC_IsCheckLengthMax("orgDo",checkorgCdItems,9);
+	LC_IsNumCheckPos("orgDo",checkorgCdItems);
+	var checkorgNmItems=["orgNm"];
+	LC_IsCheckLength("orgDo",checkorgNmItems,1,100);
+	if($("#url").val()!="") {
+	var checkurlItems=["url"];
+	LC_IsUrlCheck("orgDo",checkurlItems);
+	}
+	if($("#mail").val()!=""){
+	var checkmailItems=["mail"];
+	LC_IsEmailCheck("orgDo",checkmailItems);
+	}
+	var checkmanagOrgNmItems=["managOrgNm","mail","url","regOrg"];
+    LC_IsCheckLengthMax("orgDo",checkmanagOrgNmItems,100);
+	var checkaddressItems=["address"];
+    LC_IsCheckLengthMax("orgDo",checkaddressItems,200);
+	var checkzipCdItems=["zipCd"];
+    LC_IsCheckLengthMax("orgDo",checkzipCdItems,6);
+    LC_IsNumCheckPos("orgDo",checkzipCdItems);
+	var checkephoneNoItems=["phoneNo","faxNo","legalPerson","regCd"];
+    LC_IsCheckLengthMax("orgDo",checkephoneNoItems,30);
+	var checkopenYearItems=["openYear"];
+    LC_IsCheckLengthMax("orgDo",checkopenYearItems,4);
+	var checkcapItems=["capital"];
+    LC_IsCheckLengthMax("orgDo",checkcapItems,10);
+	
+	if(retCheckFlg){
+  // 默认为添加机构信息
+  var url="mdm/org/add";
+  var info = new Map();
+  var itemsList = ["orgCd", "orgNm", "orgClass",
+			"orgType", "economicType", "orgFlg",
+			"managOrgNm", "region", "nationalityCd",
+			"address", "zipCd", "phoneNo","faxNo",
+			"mail", "url", "openYear", "legalPerson",
+			"capital", "regOrg", "regCd", "sponsor",
+			"subordination"];
+	LC_AjaxGet(MDMBaseUrl+url,"orgDo","callbacksave",info,itemsList);
+	}
+	}
+  // 修改状态：判断机构ID是否存在
+  if ($("#orgId").val()!="") {
+	
+	LC_Resetting("orgDo");
+	var checkorgCdItems=["orgCd"];
+	LC_IsCheckLengthMax("orgDo",checkorgCdItems,9);
+	LC_IsNumCheckPos("orgDo", checkorgCdItems);
+	var checkorgNmItems=["orgNm"];
+	LC_IsCheckLength("orgDo",checkorgNmItems,1,100);
+	if($("#url").val()!="") {
+	var checkurlItems=["url"];
+	LC_IsUrlCheck("orgDo",checkurlItems);
+	}
+	if($("#mail").val()!=""){
+	var checkmailItems=["mail"];
+	LC_IsEmailCheck("orgDo",checkmailItems);
+	}
+	var checkmanagOrgNmItems=["managOrgNm","mail","url","regOrg"];
+    LC_IsCheckLengthMax("orgDo",checkmanagOrgNmItems,100);
+	var checkaddressItems=["address"];
+    LC_IsCheckLengthMax("orgDo",checkaddressItems,200);
+	var checkzipCdItems=["zipCd"];
+    LC_IsCheckLengthMax("orgDo",checkzipCdItems,6);
+	LC_IsNumCheckPos("orgDo",checkzipCdItems);
+	var checkephoneNoItems=["phoneNo","faxNo","legalPerson","regCd"];
+    LC_IsCheckLengthMax("orgDo",checkephoneNoItems,30);
+	var checkopenYearItems=["openYear"];
+    LC_IsCheckLengthMax("orgDo",checkopenYearItems,4);
+	var checkcapItems=["capital"];
+    LC_IsCheckLengthMax("orgDo",checkcapItems,10);
+	if(retCheckFlg){
+		   url="mdm/org/set";
+		   itemsList = ["orgId","orgCd", "orgNm", "orgClass",
+   		"orgType", "economicType", "orgFlg",
+   		"managOrgNm", "region", "nationalityCd",
+   		"address", "zipCd", "phoneNo", "faxNo",
+   		"mail", "url", "openYear", "legalPerson",
+   		"capital", "regOrg", "regCd", "sponsor",
+   		"subordination","status"];
+				    var info = new Map();
+  LC_AjaxGet(MDMBaseUrl+url,"orgDo","callbacksave",info,itemsList);
+		  }
+  }
+
+ }
+
+ // 保存回调函数
+ function callbacksave(reData){
+  if (reData.ret=="0") {
+    self.parent.$.messager.alert('提示',reData.msg,'info');
+    $("#openRoleDiv").window("close");
+    //获取返回机构ID
+    //$("#orgId").val(reData.orgId);
+    //获取返回状态值
+    //$("#orgId").val(reData.status);
+    $("#sts").show();
+  } else {
+    self.parent.$.messager.alert('错误提示',reData.msg,'error');
+  }
+ }
+
+// 获取下拉选项数据
+function getselect(){
+  var url="mdm/dict/listget/";
+  var infoa = new Map();
+  infoa.put("stringsplit","VA0004.62,VA0004.905,VA0004.906,VA0004.430,VA0004.917,VA0004.03,VA0004.918,VA0004.919");
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"orgDo","mdmSelect",infoa,itemsList);
+}
+// 回调函数
+function mdmSelect(data){
+  var info = new Map();
+  info.put("key",["typeCode2"]);
+  info.put("value",["typeName"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("orgDo","region",info,data.dataList["VA0004.03"]);//行政划区代码
+  LC_GetSelect("orgDo","status",info,data.dataList["VA0004.62"]);//有效标记
+  LC_GetSelect("orgDo","orgClass",info,data.dataList["VA0004.430"]);//机构等级
+  LC_GetSelect("orgDo","economicType",info,data.dataList["VA0004.905"]);//经济类型代码
+  LC_GetSelect("orgDo","orgType",info,data.dataList["VA0004.906"]);//卫生机构(组织)组织类别
+  LC_GetSelect("orgDo","orgFlg",info,data.dataList["VA0004.917"]);//机构分类管理
+  LC_GetSelect("orgDo","sponsor",info,data.dataList["VA0004.918"]);//主办单位
+  LC_GetSelect("orgDo","subordination",info,data.dataList["VA0004.919"]);//卫生机构隶属关系
+
+  // 取得画面URI参数
+  $("#orgId").val(self.parent.orgId);
+  // 机构ID不为空时，为修改状态，获取改机构ID的机构信息
+  if($("#orgId").val()!="") {
+  	$("#sts").show();
+    var url="mdm/org";
+    var itemsList=["orgId"];
+    var info = new Map();
+    LC_AjaxGet(MDMBaseUrl+url,"orgDo","callbackabc",info,itemsList);
+  }
+}
+</script>
+
+	<div class="flPadTB-10">
+      <form id="orgDo">
+		<input type="hidden" id="orgId">
+			<div class="mainsW">
+				<div class="mainW">
+					<div class="itemsW-352">
+						<div class="itemLW-176">组织机构代码：</div>
+						<div class="itemRW-160"><input class="textLW" type="text" id="orgCd" maxlength="9"></div>
+					</div>
+					<input type="hidden" id="VA0004.403">
+					<div class="itemsW-352">
+						<div class="itemLW-176">机构等级：</div>
+						<div class="itemRW-160"><select class="textLW"  id="orgClass"></select></div>
+					</div>
+
+					<div class="itemsW-704">
+						<div class="itemLW-176">机构名称：</div>
+						<div class="itemRW-512"><input class="textLW"  type="text" id="orgNm" maxlength="100"></div>
+					</div>
+
+					<div class="itemsW-352">
+						<div class="itemLW-176">经济类型：</div>
+						<div class="itemRW-160"><select class="textLW"  id="economicType"></select></div>
+					</div>
+
+					<div class="itemsW-352">
+						<div class="itemLW-176">卫生机构(组织)组织类别：</div>
+						<div class="itemRW-160"><select class="textLW"  id="orgType"></select></div>
+					</div>
+
+					<div class="itemsW-352">
+						<div class="itemLW-176">机构分类管理：</div>
+						<div class="itemRW-160"><select class="textLW"  id="orgFlg"></select></div>
+					</div>
+
+					<div class="itemsW-352">
+						<div class="itemLW-176">上级主管机构名称：</div>
+						<div class="itemRW-160"><input class="textLW"  type="text" id="managOrgNm"></div>
+					</div>
+
+					<div class="itemsW-352">
+						<div class="itemLW-176">行政划区：</div>
+						<div class="itemRW-160"><select class="textLW" id="region"></select></div>
+					</div>
+
+					<div class="itemsW-352">
+						<div class="itemLW-176">国籍：</div>
+						<div class="itemRW-160">
+							<select class="textLW" id="nationalityCd"><option value="CHN">中国</option></select>
+						</div>
+					</div>
+
+					<div class="itemsW-352">
+						<div class="itemLW-176">机构地址：</div>
+						<div class="itemRW-160"><input class="textLW" id="address" type="text"></div>
+					</div>
+
+					<div class="itemsW-352">
+						<div class="itemLW-176">邮政编码：</div>
+						<div class="itemRW-160"><input class="textLW" id="zipCd" type="text"></div>
+					</div>
+
+					<div class="itemsW-352">
+						<div class="itemLW-176">电话：</div>
+						<div class="itemRW-160"><input class="textLW" id="phoneNo" type="text"></div>
+					</div>
+
+					<div class="itemsW-352">
+						<div class="itemLW-176">传真：</div>
+						<div class="itemRW-160"><input class="textLW" id="faxNo" type="text"></div>
+					</div>
+
+					<div class="itemsW-352">
+						<div class="itemLW-176">电子邮箱：</div>
+						<div class="itemRW-160"><input class="textLW"  id="mail" type="text"></div>
+					</div>
+
+					<div class="itemsW-352">
+						<div class="itemLW-176">网站域名：</div>
+						<div class="itemRW-160"><input class="textLW"  id="url" type="text"></div>
+					</div>
+
+					<div class="itemsW-352">
+						<div class="itemLW-176">机构成立时间(年)：</div>
+						<div class="itemRW-160"><input class="textLW"  id="openYear" type="text"></div>
+					</div>
+
+					<div class="itemsW-352">
+						<div class="itemLW-176">法定代表人（单位负责人）：</div>
+						<div class="itemRW-160"><input class="textLW"  id="legalPerson" type="text"></div>
+					</div>
+
+					<div class="itemsW-352">
+						<div class="itemLW-176">注册资金（万元）：</div>
+						<div class="itemRW-160"><input class="textLW"  id="capital" type="text"></div>
+					</div>
+
+					<div class="itemsW-352">
+						<div class="itemLW-176">等级批准机构：</div>
+						<div class="itemRW-160"><input class="textLW"  id="regOrg" type="text"></div>
+					</div>
+
+					<div class="itemsW-352">
+						<div class="itemLW-176">批准文号或注册号：</div>
+						<div class="itemRW-160"><input class="textLW" id="regCd" type="text"></div>
+					</div>
+
+					<div class="itemsW-352">
+						<div class="itemLW-176">主办/单位：</div>
+						<div class="itemRW-160"><select class="textLW" id="sponsor"></select></div>
+					</div>
+
+					<div class="mainsW-704">
+					<div class="itemsW-352">
+						<div class="itemLW-176">卫生机构隶属关系：</div>
+						<div class="itemRW-160"><select class="textLW"  id="subordination"></select></div>
+					</div>
+					
+					<div class="itemsW-352" id="sts" style="display: none">
+						<div class="itemLW-176">有效标记：</div>
+						<div class="itemRW-160"><select class="textLW" id="status"></select></div>
+					</div>
+				</div>
+				</div>
+			</div>
+			<div class="itemLW-704" style="padding-top:12px"><a href="#" onclick="save()" class="easyui-linkbutton">保存</a></div>
+</form>
+
+</div>
+
+<script type="text/javascript">
+ // 画面初始化处理
+ $(function () {
+  $("#orgCd").focus();
+  getselect();  // 获取下拉选项数据
+ });
+</script>

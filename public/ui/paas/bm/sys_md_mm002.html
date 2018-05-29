@@ -1,0 +1,456 @@
+<hr class="simple">
+<div class="row">
+  <form class="smart-form" onsubmit="return false;" method="post" id='sys_md_mm002_search'>
+    <section class="col col-2">
+      <label class="input">
+        <input type="text" name="status" placeholder="状态">
+      </label>
+    </section>
+    <section class="col col-3">
+      <label class="input">
+        <input type="text" name="sqltype" placeholder="SQL操纵类型">
+      </label>
+    </section>
+    <section class="col col-2">
+      <label class="input">
+        <input type="text" name="mark" placeholder="说明">
+      </label>
+    </section>
+    <section class="col col-2">
+      <button class="btn btn-default btn-sm btn-info btn-primary" name="search">&emsp;查 询&emsp;<i
+        class="fa fa-search fa-1"></i></button>
+    </section>
+  </form>
+</div>
+<div class="btn-group" id="sys_md_mm002_edit">
+        <button type="submit" class="btn btn-info btn-xs" name="add">&emsp;<i class="fa fa-magic fa-1"></i>&emsp;添 加&emsp;</button>
+        <button type="submit" class="btn btn-info btn-xs" name="build_modal">&emsp;<i class="fa fa-edit fa-1"></i>&emsp;生成基础模型&emsp;</button>
+        <button type="submit" class="btn btn-info btn-xs" name="edit">&emsp;<i class="fa fa-edit fa-1"></i>&emsp;修 改&emsp;</button>
+        <button type="submit" class="btn btn-info btn-xs" name="run">&emsp;<i class="fa fa-play"></i>&emsp;测试运行&emsp;</button>
+        <button type="submit" class="btn btn-info btn-xs" name="del" style="display: block;">&emsp;<i class="fa fa-trash-o "></i>&emsp;删 除&emsp;</button>
+</div>
+<hr class="simple">
+<div class="row">
+ <div style="margin-left: 12px;margin-right: 12px;">
+    <div class="table-responsive dataTables_wrapper" style="overflow:scroll;">
+      <table class="table table-bordered table-hover table-striped dataTable" id="sys_md_mm002_table">
+      </table>
+    </div>
+    <div id="sys_md_mm002_page"></div>
+  </div>
+</div>
+
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+
+<script>
+function main(node){
+  
+  var ModalUrl = 'bm/dmlm/bm002.html';
+  var ModalCon = $('#bm_modal');
+
+  var tableHead = [
+    {
+      data:'modolcd',
+      title:'模型ID'
+    },
+    {
+      data:'sqltype',
+      title:'SQL操纵类型',
+      cd2name:'ZR.0054'
+    },
+    {
+      data:'sqltext',
+      title:'SQL语句'
+    },
+    {
+      data:'isui',
+      title:'用于动态UI',
+      cd2name:'ZR.0045'
+    },
+    {
+      data:'mark',
+      title:'说明'
+    },
+    {
+      data:'updatedt',
+      title:'更新时间',
+      format:'date'
+    },
+    {
+      data:'status',
+      cd2name:'ZR.0001',
+      title:'状态'
+    }
+  ];
+  
+  var pagesize = 10;
+  var pagefun = null;
+  
+  var search_form = $('#sys_md_mm002_search');
+  var table = $('#sys_md_mm002_table');
+  var page = $('#sys_md_mm002_page');
+  var edit_form = $('#sys_md_mm002_edit');
+  
+  var addBtn = edit_form.find('[name=add]');
+  var editBtn = edit_form.find('[name=edit]');
+  var buildBtn = edit_form.find('[name=build_modal]');
+  var runBtn = edit_form.find('[name=run]');
+  var delBtn = edit_form.find('[name=del]');
+  
+  
+  function Event(){
+    var searchBtn = search_form.find('[name=search]');
+    
+    addBtn.click(function(){
+      zy.net.loadHTML(ModalUrl,ModalCon,function(){
+        _bm_sys_md_mm002_modal(node.typecd,null,function(){
+          //刷新表格
+          Page(function(){});
+          //按钮状态
+          editBtn.btnDisable(true);
+          delBtn.btnDisable(true);
+          runBtn.btnDisable(true);
+        });
+      });
+    });
+    
+    buildBtn.click(function(){
+      zy.extend.get({
+        apinm:'generate_default',
+        mod:'dmlm',
+        app:'c770045becc04c7583f626faacd3b456'
+      },function(msg){
+        zy.extend.msg('成功','i');
+        searchBtn.click();
+      },{
+        typecd:node.typecd
+      },function(msg){
+        zy.extend.msg('失败','i');
+        searchBtn.click();
+      })
+    });
+    
+    editBtn.bind('_change',function(e,data){
+      var $this = $(this);
+      
+      $this.unbind('click');
+      $this.btnDisable(true);
+      
+      if(data){
+        $this.btnDisable(false);
+        $this.click(function(e){
+          zy.net.loadHTML(ModalUrl,ModalCon,function(){
+            _bm_sys_md_mm002_modal(node.typecd,data.modolcd,function(){
+              //刷新表格
+              Page(function(){});
+              //按钮状态
+              editBtn.btnDisable(true);
+              delBtn.btnDisable(true);
+            });
+          });
+        })
+      }
+    })
+    
+    delBtn.bind('_change',function(e,data){
+      var $this = $(this);
+      
+      $this.unbind('click');
+      $this.btnDisable(true);
+      
+      if(data){
+        $this.btnDisable(false);
+        $this.click(function(e){
+          zy.log(data);
+          zy.ui.mask('删除确认', '是否确认删除此条数据', function sure() {
+            zy.g.am.app = "c770045becc04c7583f626faacd3b456";
+            zy.g.am.mod = "dmlm";
+            zy.net.get('api/delbm002', function(msg){
+              if(msg && msg.ret=="0"){
+                zy.ui.msg('提示', '删除成功', 's');
+                //刷新表格
+                Page(function(){});
+                //按钮状态
+                editBtn.btnDisable(true);
+                delBtn.btnDisable(true);
+              }
+            }, {
+              modolcd: data.modolcd
+            });
+          });
+        })
+      }
+    })
+    
+    runBtn.bind('_change',function(e,data){
+      var $this = $(this);
+      
+      $this.unbind('click');
+      $this.btnDisable(true);
+      
+      if(data){
+        $this.btnDisable(false);
+        $this.click(function(e){
+          zy.log(data);
+          zy.net.loadHTML('ide/htmlide/ide_run.html',ModalCon,function(){
+            var api = {
+              'appid':'c770045becc04c7583f626faacd3b456',
+              'moduleid':'commapi',
+              'apiid':'excuteapi'
+            };
+            var help_info = {param:[]};
+            
+            var typecontent = JSON.parse(data.typecontent);
+            //添加固定参数
+            help_info.param.push({
+              'key':'modolcd',
+              'value':data.modolcd,
+              'desc':''
+            });
+            // help_info.param.push({
+            //   'key':'_source',
+            //   'value':'0',
+            //   'desc':''
+            // });
+            // help_info.param.push({
+            //   'key':'pagenum',
+            //   'value':'1',
+            //   'desc':''
+            // });
+            // help_info.param.push({
+            //   'key':'pagesize',
+            //   'value':'10',
+            //   'desc':''
+            // });
+            // for(var r in typecontent.type){
+            //   help_info.param.push({
+            //     'key':typecontent.type[r].en,
+            //     'value':'',
+            //     'desc':''
+            //   });
+            // }
+            if(data.sqltype!='SELECT'){
+              for(var r in typecontent.type){
+                help_info.param.push({
+                  'key':typecontent.type[r].en,
+                  'value':'',
+                  'desc':''
+                });
+              }
+            }
+            for(var r in typecontent.search){
+              help_info.param.push({
+                'key':typecontent.search[r].en,
+                'value':'',
+                'desc':''
+              });
+            }
+            help_info = JSON.stringify(help_info);
+            RunApi(api,help_info);
+          });
+        })
+      }
+    });
+    
+    editBtn.trigger('_change');
+    delBtn.trigger('_change');
+    runBtn.trigger('_change');
+    
+    searchBtn.click(function(e){
+      var param = search_form.form2json();
+      
+      FromServer(param,function(msg){
+        pagefun(msg.count,1);
+        Grid(msg.result);
+      })
+    })
+  }
+  
+  function vue(option){
+    
+    this.$data = option.data;
+    this.el = option.el
+    
+    return this;
+  }
+  
+  function Grid(data){
+    
+    table.empty();
+    
+    function buildHead(Array){
+      var match = {};
+      var thead = $('<thead>');
+      var tr = $('<tr>');
+      $.each(Array,function(i,v){
+        var th = $('<th>');
+        th.html(v.title);
+        if(!match[v.data]) match[v.data] = v;
+        th.appendTo(tr);
+      });
+      thead.append(tr).appendTo(table);
+      
+      buildBody(match);
+    }
+    
+    function buildBody(match){
+      
+      var tbody = $('<tbody>');
+      
+      if(data.length == 0){
+        var tr = $('<tr>');
+        var emptytd = $('<td>');
+        emptytd.attr({
+          valign:'top',
+          colspan:'8',
+          class:'dataTables_empty'
+        }).html('表中数据为空');
+        emptytd.appendTo(tr);
+        tr.appendTo(tbody);
+      }
+      
+     var vm = [];
+     $.each(data,function(i,row){
+       var tr = $('<tr>');
+       $.each(match,function(i,col){
+         if(row[i] || row[i] == ''){
+           var role = match[i];
+           var td = $('<td>');
+           row[i] = format(role,row[i]);
+           td.html(row[i]);
+           tr.append(td);
+         }
+       });
+       zy.log(row);
+       vm[i] = new vue({
+         el:tr[0],
+         data:row
+       });
+       tbody.append(tr);
+       tr.click(function(event){
+         var $this = $(this);
+         $this.siblings().removeClass('active');
+         var flg = $this.hasClass('active');
+         if(flg){
+           $this.removeClass('active');
+           editBtn.trigger('_change');
+           delBtn.trigger('_change');
+           runBtn.trigger('_change');
+         }else{
+           window.ee=vm[i].$data;
+           $this.addClass('active');
+           editBtn.trigger('_change',[vm[i].$data]);
+           delBtn.trigger('_change',[vm[i].$data]);
+           runBtn.trigger('_change',[vm[i].$data]);
+         }
+       })
+     });
+      
+      // $.each(data,function(i,v){
+      //   var tr = $('<tr>');
+      //   $.each(v,function(ii,vv){
+      //     if(match[ii]){
+      //       var role = match[ii];
+      //       var td = $('<td>');
+      //       format(role,vv);
+      //       td.html(vv);
+      //       td.appendTo(tr);
+      //     }
+      //   })
+        
+        
+      //   tr.appendTo(tbody);
+      // })
+      tbody.appendTo(table);
+    }
+    
+    function format(role,data){
+      
+      if(role.cd2name) data = zy.cache.cd2name(role.cd2name,data);
+      
+      if(role.format){
+        switch(role.format){
+          case 'date':
+            data = $.format.date(data,'yyyy-MM-dd HH:mm:ss');
+        }
+      }
+      
+      return data;
+    }
+    
+    if($.isArray(data)){
+      buildHead(tableHead);
+    }else{
+      zy.log('数据异常');
+    }
+  }
+  
+  function FromServer(param,cb){
+    var p = $.extend({},param,{typecd:node.typecd});
+    
+    zy.extend.get({
+      app:'c770045becc04c7583f626faacd3b456',
+      mod:'dmlm',
+      apinm:'getbm002list'
+    },function(msg){
+      cb&&cb(msg);
+    },p);
+  }
+  
+  function Page(cb){
+    $.jqPaginator(page, {
+      totalCounts: 1,
+      pageSize: pagesize,
+      currentPage: 1,
+      onPageChange: function (num) {
+        FromServer({
+          pagenum:num,
+          pagesize:pagesize
+        },function(msg){
+          Grid(msg.result);
+        })
+        cb&&cb(num);
+      }
+    });
+    
+    pagefun = config;
+
+    function config(count,cp){
+      page.jqPaginator('option', {
+        totalCounts: count,
+        pageSize: 10,
+        currentPage: cp
+      });
+    }
+  }
+  
+  function init(cb){
+    zy.cache.initDicts('ZR.0001,ZR.0054',function(){
+      search_form.find('[name=status]').zySelect('ZR.0001', false, {
+        width: '100%'
+      });
+      
+      search_form.find('[name=sqltype]').zySelect('ZR.0054', false, {
+        width: '100%'
+      });
+      
+      cb&&cb()
+    })
+  }
+  
+  init(function(){
+    
+    Page(function(){});
+    
+    Event();
+    FromServer({
+      pagenum:1,
+      pagesize:10
+    },function(msg){
+      Grid(msg.result);
+    })
+  })
+  
+}
+</script>
+ 

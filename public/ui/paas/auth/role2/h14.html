@@ -1,0 +1,181 @@
+<!--页面一览-->
+<div class="modal" id="role2_h14" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title">页面一览</h4>
+			</div>
+			<div class="modal-body">
+			  <form id="role2_h14_form" onsubmit="return false;">
+  			  <div class="row">
+  			    <section class="col col-md-3">
+			        <input class="form-control" type="text" name="pageid" placeholder="页面ID"/>
+  			    </section>
+  			    <section class="col col-md-3">
+			        <input class="form-control" type="text" name="pagenm" placeholder="页面名称"/>
+  			    </section>
+  			    <section class="col col-md-3">
+			        <input class="form-control" type="text" name="page_path" placeholder="页面路径"/>
+  			    </section>
+  			    <section class="col col-md-3">
+			        <button class="btn btn-info btn-sm" name="queryBtn">查询</button>
+  			    </section>
+  			  </div>
+			  </form>
+			  <br/>
+			  <div class="btn-group">
+					<button id="role2_h14_add" class="btn btn-info btn-xs">&emsp;<i class="fa fa-magic"></i>&nbsp;添 加&emsp;</button>
+					<button id="role2_h14_edit" class="btn btn-info btn-xs">&emsp;<i class="fa fa-edit"></i>&nbsp;修 改&emsp;</button>
+					<button id="role2_h14_del" class="btn btn-info btn-xs">&emsp;<i class="fa fa-trash-o"></i>&nbsp;删 除&emsp;</button>
+				</div>
+			  <div class="pull-right">
+          <b name="total_count"></b>
+        </div>
+			  <div class="responsive">
+			    <table id="role2_h14_table" class="table table-bordered table-striped">
+			    </table>
+			  </div>
+			</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+		</div>
+	</div>
+</div>
+<div id="role2_h14_add_edit_modal"></div>
+<script>
+  (function(){
+    var modal = $('#role2_h14');
+    var query_form = $('#role2_h14_form');
+    var dt = $('#role2_h14_table');
+    
+    var addeditModal = $('#role2_h14_add_edit_modal');
+    
+    function Init(){
+      Event();
+      DisableBtn(true);
+      modal.modal('show');
+    }
+    
+    function Datatable(data){
+      var columns=[
+        {
+          'title':'页面ID',
+          'data':'pageid'
+        },
+        {
+          'title':'页面名称',
+          'data':'pagenm'
+        },
+        {
+          'title':'页面路径',
+          'data':'page_path'
+        },
+        {
+          'title':'创建时间',
+          'data':'createdt'
+        },
+        {
+          'title':'更新时间',
+          'data':'updatedt'
+        }
+      ];
+      
+      //预设初始化参数
+      var options = {
+        "data": data,
+        "columns": columns
+      };
+      // 合并初始化参数选项
+      $.extend(options, zy.ui.dataTable);
+      options.ordering=true;
+      options.scrollY='300px';
+      //初始化 DataTable
+      dt.dataTable(options);
+    }
+    
+    function Event(){
+      //查询
+      query_form.find('[name=queryBtn]').click(function(){
+        zy.g.am.app='auth';
+	      zy.g.am.mod='role_page';
+        zy.net.get('api/querypage',function(msg){
+          if(msg){
+            Datatable(msg.result);
+            modal.find('[name=total_count]').text('总数：'+msg.result.length);
+            DisableBtn(true);
+          }
+        },query_form.serialize());
+      });
+      //添加
+      $('#role2_h14_add').click(function(){
+        modal.modal('hide');
+        zy.net.loadHTML('auth/role2/h14_1.html',addeditModal,function(){
+          role2_h14_1('i',{},function(){
+            modal.modal('show');
+            query_form.find('[name=queryBtn]').click();
+          },function(){
+            modal.modal('show');
+          });
+        });
+      });
+      //修改
+      $('#role2_h14_edit').click(function(){
+        // 当前选择行数据
+        var data = dt.DataTable().row('.active').data();
+        modal.modal('hide');
+        zy.net.loadHTML('auth/role2/h14_1.html',addeditModal,function(){
+          role2_h14_1('u',data,function(){
+            modal.modal('show');
+            query_form.find('[name=queryBtn]').click();
+          },function(){
+            modal.modal('show');
+          });
+        });
+      });
+      //删除
+      $('#role2_h14_del').click(function(){
+        // 当前选择行数据
+        var data = dt.DataTable().row('.active').data();
+        modal.modal('hide');
+        zy.ui.mask('确认','确认删除？',function(){
+          zy.g.am.app='auth';
+		      zy.g.am.mod='role_page';
+          zy.net.get('api/delpage',function(msg){
+            if(msg){
+              zy.ui.msg('提示信息：','删除成功','s');
+              modal.modal('show');
+              query_form.find('[name=queryBtn]').click();
+            }
+          },{'pageid':data.pageid});
+        });
+      });
+      //行点击事件
+      dt.on('click', 'tr', function(e) {
+        // 当前选择行 index
+        if ($(this).find('th').is('th') || $(this).find('td').hasClass('dataTables_empty'))
+          return false;
+        // 变换选择行状态颜色
+        if (!$(this).find('div').hasClass('popover') && $(this).hasClass('active')) {
+          $(this).removeClass('active');
+          DisableBtn(true);
+        } else {
+          dt.DataTable().$('tr.active').removeClass('active');
+          $(this).addClass('active');
+          DisableBtn(false);
+        }
+      });
+    }
+    
+    function DisableBtn(disabled){
+      $('#role2_h14_edit').btnDisable(disabled);
+      $('#role2_h14_del').btnDisable(disabled);
+    }
+    
+    Init();
+    
+  })();
+</script>

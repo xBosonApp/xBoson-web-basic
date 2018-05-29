@@ -1,0 +1,210 @@
+<script type="text/javascript" language="JavaScript" src="/comm.js"></script>
+
+
+
+<script type="text/javascript">
+var pageNum=1;
+var pageSize=10;
+var ryxxlData;
+var ryxxrData;
+$(function () {
+	dataryxxl();
+	//dataryxxr();
+	
+});
+function ryxxlcallback(retData){
+    ryxxlData=retData;
+    $('#div-ryxxl').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+	            singleSelect:true,
+				pagination:true,
+				border:true,
+				title:'搜索结果',
+				pageNumber:pageNum,
+				pageSize:pageSize,
+				loadMsg:"正在载入...",
+                pageList: [10,20,50,100,200],
+				data:ryxxlData.datalist,
+				fitColumns:true,
+				columns:[[
+				   {field:'pname',title:'姓名',width:60,align:'center'},
+				   {field:'gender',title:'性别',width:40,align:'center'},
+				   {field:'birthday',title:'出生日期',width:100,align:'center'},
+				   {field:'idcard',title:'身份证号码',width:102,align:'center'},
+				   {field:'addr',title:'地址',width:100,align:'center'}
+				]],                  
+                onDblClickRow: function (rowIndex){
+                  ryxxopenRoleDiv(rowIndex);  
+                },
+               fitColumns:false,//宽度自适应
+			   pagination:true,//分页插件
+               rownumbers:true,//行数
+			   height:300,
+			   width:435
+		}); 
+
+	   var pager = $('#div-ryxxl').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pageNum=pageNumber;
+		           pageSize=pageSize;
+		           dataryxxl();
+		        }
+			});		
+		 
+		$(pager).pagination({pageSize:pageSize,pageNumer:pageNum,total:ryxxlData.count});
+
+		};
+    
+    
+    }
+   
+	function dataryxxl(){
+	    	var url="getsimilarities/";
+          	var itemsList=["pname","card","idcard","birthday","gender"];	
+          	//var itemsList=[];
+			var info= new Map();	
+	        info.put("start",(pageNum-1)*pageSize);
+	        info.put("pagesize",pageSize);
+        	LC_AjaxGet(EMPIUrl+url,"ryxxform","ryxxlcallback",info,itemsList);
+	}
+	function ryxxopenRoleDiv(rowIndex){
+			
+		  //双击事件
+		 $("#pidno").val(ryxxlData.datalist[rowIndex].pid);
+		 var url="getsimilaritbypid/";
+		 var itemsList=["pidno"];	
+		 var info = new Map();		 
+		 info.put("pid",ryxxlData.datalist[rowIndex].pid);		
+		 LC_AjaxGet(EMPIUrl+url,"ryxxform","ryxxrcallback",info,itemsList);		
+		 
+	}
+	
+
+function ryxxrcallback(retData){
+     ryxxrData=retData;
+    $('#div-ryxxr').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+	            singleSelect: false,
+				selectOnCheck: true,
+				checkOnSelect: true,
+				pagination:true,
+				border:true,
+				title:'相似人信息',
+				pageNumber:pageNum,
+				pageSize:pageSize,
+				loadMsg:"正在载入...",
+                pageList: [10,20,50,100,200],
+				data:ryxxrData.datalist,
+				fitColumns:true,
+				columns:[[
+				   {field:'ck',width:20,checkbox:true},
+				   {field:'pname',title:'姓名',width:60,align:'center'},
+				   {field:'gender',title:'性别',width:30,align:'center'},
+				   {field:'birthday',title:'出生日期',width:90,align:'center'},
+				   {field:'idcard',title:'身份证号码',width:102,align:'center'},
+				   {field:'addr',title:'地址',width:100,align:'center'}
+				]],                   
+               fitColumns:false,//宽度自适应
+			   pagination:true,//分页插件
+               rownumbers:true,//行数
+			   height:300,
+			   width:435
+		}); 
+
+	   var pager = $('#div-ryxxr').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pageNum=pageNumber;
+		           pageSize=pageSize;
+		          
+		        }
+			});		
+		$(pager).pagination({pageSize:pageSize,pageNumer:pageNum,total:ryxxrData.count});
+		};
+   		}
+   		function dataryxxr(){
+	    	var url="mergerpersons/";
+          	var itemsList=[];	
+			var info= new Map();
+        	LC_AjaxGet(EMPIUrl+url,"ryxxform","ryxxrcallback",info,itemsList);
+		}
+		
+   		function hbbutton(){
+
+		var checkedItems = $('#div-ryxxr').datagrid('getChecked');
+ 
+		var names = "";
+		 
+		$.each(checkedItems, function(index, item){
+		 
+		if(names!=""){
+		   names=names+","+item.pid;
+		}else{
+		  names=item.pid;
+		};
+		 
+		});  
+
+   			var url="mergerpersons/";
+   			var itemsList=[];	
+   		    var info= new Map();  
+			info.put("subpids",names);
+			info.put("pid",$("#pidno").val());
+   			
+   			LC_AjaxGet(EMPIUrl+url,"ryxxform","ryxxrcallback",info,itemsList);
+   			
+   			dataryxxr();
+   		}
+
+
+		
+</script>
+	<div class="mainW-872">
+		 <div id="jz11" class="easyui-panel" title="获取相关人员信息">
+		 <form id="ryxxform">
+			<div class="flPadTB-10">	
+				<div class="mainsW-864">
+					<div class="mainW-224" >
+						<div class="itemLW-80 padT-4">姓名：</div>	
+						<div class="itemLW-80"><input class="textLW" type="text" id="pname"></div>
+					</div>
+					<div class="mainW-224" >
+						<div class="itemLW-80 padT-4">一卡通：</div>	
+						<div class="itemLW-144"><input class="textLW" type="text" id="card"></div>
+					</div>
+					<div class="mainW-224" >
+						<div class="itemLW-80 padT-4" >身份证：</div>	
+						<div class="itemLW-144"><input class="textLW" type="text" id="idcard"></div>
+					</div>	
+					<div class="mainW-224" >
+						<div class="itemLW-80 padT-4">出生日期：</div>	
+						<div class="itemLW-96"><input class="textLW" type="text" id="birthday"></div>
+					</div>
+					<div class="mainW-224" >
+						<div class="itemLW-80 padT-4">性别：</div>	
+						<div class="itemLW-64"><input class="textLW" type="text" id="gender"></div>
+					</div>
+            		<div class="itemLW-224" ><a class="easyui-linkbutton" onclick="dataryxxl();">查询</a></div>
+            	</div>
+        	</div>
+        </form>
+        <div style="width:435px; float:left;">
+        	<input type="hidden" id="pidno">
+			<table id="div-ryxxl" ></table>
+		</div>
+        <div style="width:435px; float:left">
+			<table id="div-ryxxr" toolbar="#type-toolbar" ></table>
+			<div id="type-toolbar">
+                <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="hbbutton()">合并</a>
+            </div>
+       </div>
+    </div> 
+ </div>
+

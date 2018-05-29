@@ -1,0 +1,47 @@
+ <!--查询导出api-->
+<div class="modal fade" name="mdms-usage-api-modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">数据字典查询/导出API</h4>
+      </div>
+      <div class="modal-body">
+        <h3>API：</h3>
+        <pre>
+          app：d2c8511b47714faba5c71506a5029d94
+          mod：DataDict
+          api：getdatatable
+        </pre>
+        <h3>参数：</h3>
+        <pre>
+          typecd：类别编码
+          
+            数据字典查询参数：
+          version：版本
+          dictcd：字典码
+          dictnm：字典名称
+          shortkey：快捷码
+          status：状态
+          
+          pagenum：分页查询（非必需）
+          pagesize：分页查询（非必需）
+          
+          _is_download：是否下载（非必需）{1,0}
+          type：下载类型（非必需）{1:CSV,2:JSON,3:Excel}
+          charset：字符集（非必需）
+        </pre>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script type="text/javascript">
+(function(){
+  var modal=$('[name="mdms-usage-api-modal"]');
+  modal.modal('show');
+})();
+</script>

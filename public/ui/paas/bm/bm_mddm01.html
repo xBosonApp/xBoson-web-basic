@@ -1,0 +1,95 @@
+<div class="row">
+  <form id='bm-mddm01' class="smart-form" onsubmit="return false;" method="post">
+    <header><i class="fa-fw fa fa-pencil-square-o"></i>基本配置</header>
+    <fieldset>
+      <div class="row">
+        <section class="col col-4">
+          <!--<label class="input"></label>-->
+            <label>数据源设置</label>
+            <input type="hidden" name="did" data-type="select2" placeholder="请选择..."/>
+        </section>
+        <section class="col col-4">
+            <label>手写SQL语句</label>
+            <input type="hidden" name="editingtype" data-type="select2" placeholder="请选择..."/>
+        </section>
+        <section class="col col-4">
+            <label>图表专用</label>
+            <input type="hidden" name="onlychart" data-type="select2" placeholder="请选择..."/>
+        </section>
+      </div>
+    </fieldset>
+    <div class="progress progress-micro">
+      <div class="progress-bar progress-bar-primary" role="progressbar" style="width: 100%;"></div>
+    </div>
+    <div id="bm-mddm01-setup">
+    <header><i class="fa-fw fa fa-pencil-square-o"></i>数据视图(SELECT)项目定义&emsp;<button id="bm-mddm01-items" class="btn btn-primary">&nbsp;编辑项目&nbsp;</button></header>
+    <fieldset>
+      <section>
+        <div class="dd" id="bm-mddm01-nestable1">
+          <ol class="dd-list">
+          </ol>
+        </div>
+      </section>
+    </fieldset>
+  <div id="bm-mddm01-json"></div>
+    <div class="progress progress-micro">
+      <div class="progress-bar progress-bar-primary" role="progressbar" style="width: 100%;"></div>
+    </div>
+    <header><i class="fa-fw fa fa-pencil-square-o"></i>数据视图(FROM)相关表定义</header>
+    <fieldset>
+      <section>
+        <label class="textarea">
+				  <textarea name="tables" rows="2" style="resize: vertical" placeholder="相关表名，尽量不要修改！"></textarea>
+			  </label>
+      </section>
+    </fieldset>
+    <div class="progress progress-micro">
+      <div class="progress-bar progress-bar-primary" role="progressbar" style="width: 100%;"></div>
+    </div>
+    <header><i class="fa-fw fa fa-pencil-square-o"></i>数据视图(WHERE)查询条件定义&emsp;<button id="bm-mddm01-where-join" disabled class="btn btn-primary">&nbsp;添加表关联&nbsp;</button>&emsp;<button id="bm-mddm01-where-item" disabled class="btn btn-primary">&nbsp;添加查询条件&nbsp;</button></header>
+    <fieldset id="bm-mddm01-where-list"></fieldset>
+    </div>
+    <div id="bm-mddm01-sql" style="display: none;">
+    <header><i class="fa-fw fa fa-pencil-square-o"></i>数据视图SQL语句编辑</header>
+    <fieldset>
+      <div class="row">
+        <section class="col col-md-6">
+          <label class="label">图表类型</label>
+          <input type="hidden" data-type="select2" name="chart_type" placeholder="图表类型"/>
+        </section>
+        <section class="col col-md-6">
+          <label class="label">第一列是否为X轴</label>
+          <input type="hidden" data-type="select2" name="first_is_x" placeholder="第一列是否为X轴"/>
+        </section>
+      </div>
+      <section>
+        <label class="textarea"> 										
+				  <textarea name="sqltext" rows="8" style="resize: vertical" placeholder="SQL语句！"></textarea>
+				  <b class="tooltip tooltip-bottom-left">请通过调用模型时的pagesize,pagenum参数实现分页查询（此处不支持'limit'）</b>
+			  </label>
+      </section>
+    </fieldset>
+    </div>
+    <div class="progress progress-micro">
+      <div class="progress-bar progress-bar-primary" role="progressbar" style="width: 100%;"></div>
+    </div>
+    <footer>
+      <button id='bm-mddm01-save' type="submit" class="btn btn-primary">保存视图定义</button>
+    </footer>
+  </form>
+</div>
+<div class="row">
+  <div class="table-responsive dataTables_wrapper" style="margin-left: 12px;margin-top: 5px">
+    <table class="table table-bordered table-hover table-striped dataTable" id="bm-mddm01-table">
+    </table>
+  </div>
+</div>
+<div id="bm-mddm01-modal"></div>
+<script src="lib/js/plugin/state-machine/state-machine.min.js"></script>
+<script src="lib/js/plugin/jquery-nestable/jquery.nestable.js"></script>
+<script src="bm/bm_mddm01.js"></script>
+<script type="text/javascript">
+  function main(node){
+    var _bm_mddm01 = new bm_mddm01({node:node});
+  }
+</script>

@@ -1,0 +1,90 @@
+<!-- widget grid -->
+<section id="widget-grid" class="">
+  <!-- row -->
+  <div class="row">
+    <!-- NEW WIDGET START -->
+    <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <!-- Widget ID (each widget will need unique ID)-->
+      <div id="etl_server_serverslist_div" class="jarviswidget jarviswidget-color-blueDark" data-widget-editbutton="false" data-widget-deletebutton="false">
+        <header>
+          <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+          <h2>服务器列表</h2>
+        </header>
+        <!-- widget div-->
+        <div>
+          <!-- widget edit box -->
+          <div class="jarviswidget-editbox">
+            <!-- This area used as dropdown edit box -->
+          </div>
+          <!-- end widget edit box -->
+          <!-- widget content -->
+          <div class="widget-body no-padding">
+            <div class="widget-body-toolbar">
+              <div class="row">
+                <form id="serverslist_form" method="post" onsubmit="return false;" class="smart-form">
+
+                  <section class="col col-3">
+                    <label class="input">
+                      <input type="text" name="slavename" placeholder="服务器名称" class="form-control input-sm">
+                    </label>
+                  </section>
+
+                  <section class="col col-4">
+                    <label class="input">
+                      <input type="text" name="hostname" placeholder="IP地址" class="form-control input-sm">
+                    </label>
+                  </section>
+
+                  <section class="col col-3">
+                    <label class="input">
+                      <input type="text" name="port" placeholder="端口" class="form-control input-sm">
+                    </label>
+                  </section>
+                  <section class="col col-3">
+                  <button id="etl_serverscript_search" class="btn btn-info btn-sm" type="submit"><i class="fa fa-search fa-1"></i>&emsp;查 询&emsp;</button>
+                  </section>
+                </form>
+              </div>
+              <div>
+                <button id="etl_serverscript_detail" class="btn btn-info btn-sm" type="submit"><i class="fa fa-search fa-1"></i>&emsp;服务器详细信息&emsp;</button>
+              </div>
+            </div>
+            <div class="dataTables_wrapper">
+              <table id="etl_serverscript_dt" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>序号</th>
+                    <th>名称</th>
+                    <th>IP地址</th>
+                    <th>端口</th>
+                    <th>WEB应用名称</th>
+                    <th>代理地址</th>
+                    <th>代理端口</th>
+                    <th>主服务器</th>
+                    <th></th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+          <!-- end widget content -->
+          <div id="etl_serverscript_pagination"></div>
+          <div></div>
+        </div>
+        <!-- end widget div -->
+      </div>
+      <!-- end widget -->
+    </article>
+    <!-- WIDGET END -->
+  </div>
+  <!-- end row -->
+</section>
+<!-- end widget grid -->
+<div style="text-align:center" id="serverslist_form2"></div>
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script src="etl/serverscript/serverslist.js"></script>
+<script type="text/javascript">
+  // DO NOT REMOVE : GLOBAL FUNCTIONS!
+  pageSetUp();
+  var md_serversList = new EtlServersList();
+</script>

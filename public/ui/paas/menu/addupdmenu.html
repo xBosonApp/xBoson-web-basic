@@ -1,0 +1,298 @@
+<div class="modal fade" id="menu_apmenu" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title"></h4>
+			</div>
+			<div class="modal-body no-padding">
+				<form id="memu_apmenu_form" method="post" onsubmit="return false;" class="smart-form">
+					<fieldset>
+						<input type="hidden" name="menuid">
+						<input type="hidden" name="p_menuid">
+						<input type="hidden" name="orgid">
+						<div class="row">
+							<section class="col col-6">
+								<label class="label">菜单名称</label>
+								<label class="input">
+									<input type="text" name="menunm" placeholder="菜单名称">
+								</label>
+							</section>
+							<section class="col col-6">
+								<label class="label">所属上级菜单</label>
+								<label class="input">
+									<input name="p_menunm" placeholder="所属上级菜单（为空时为顶层菜单）">
+								</label>
+							</section>
+						</div>
+						<div class="row">
+							<section class="col col-6">
+								<label class="label">菜单层级</label>
+								<label class="input">
+									<input type="text" name="levels" placeholder="菜单层级">
+								</label>
+							</section>
+							<section class="col col-6">
+								<label class="label">菜单图标</label>
+								<label class="input">
+									<input type="hidden" name="menu_icon" placeholder="图标选择" style="width:100%" />
+								</label>
+							</section>
+						</div>
+						<!--<div>-->
+						<!--	<section></section>-->
+						<!--</div>-->
+						<!--
+						<div class="row">
+							<section class="col col-6">
+								<label class="label">应用名称</label>
+								<label class="input">
+									<input type="hidden" name="appid" data-type="select2" placeholder="应用名称">
+								</label>
+							</section>
+							<section class="col col-6">
+								<label class="label">模块名称</label>
+								<label class="input">
+									<input type="hidden" name="moduleid" data-type="select2" placeholder="模块名称">
+								</label>
+							</section>
+						</div>
+-->
+						<div class="row">
+							<section class="col col-6">
+								<label class="label">页面</label>
+								<p id="pagenm"></p>
+								<!--<label class="input">-->
+								<!--	<input type="hidden" name="pageid" data-type="select2" placeholder="页面">-->
+								<!--</label>-->
+							</section>
+							<section class="col col-6">
+								<label class="label">URI</label>
+								<label class="input">
+									<input type="text" name="uri" placeholder="URI">
+								</label>
+							</section>
+						</div>
+						<!--<div class="row">-->
+						<!--	<section class="col col-6">-->
+						<!--		<label class="label">状态</label>-->
+						<!--		<label class="input">-->
+						<!--			<input type="hidden" name="status" data-type="select2" placeholder="状态">-->
+						<!--		</label>-->
+						<!--	</section>-->
+						<!--	<section class="col col-6">-->
+						<!--		<label class="label">角色</label>-->
+						<!--		<label class="input">-->
+						<!--			<input type="text" name="role" data-type="select2" placeholder="角色">-->
+						<!--		</label>-->
+						<!--	</section>-->
+						<!--</div>-->
+						<div>
+							<section>
+								<label class="label">菜单描述</label>
+								<label class="textarea">
+									<textarea rows="2" name="menu_desc" id="menu_desc" placeholder="菜单描述"></textarea>
+								</label>
+							</section>
+						</div>
+					</fieldset>
+					<footer>
+						<button type="button" class="btn btn-default" index="reset">
+							取消
+						</button>
+						<button type="submit" class="btn btn-primary">
+							保 存
+						</button>
+					</footer>
+				</form>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<script>
+	$('#menu_apmenu').modal('show');
+
+	(function () {
+		var _menu_g = menu_getmenu._g;
+			if (_menu_g.param.flg == 'u') {
+				$('.modal-title').html('修改菜单');
+				menu_getmenu._get_data({
+					api: 'getmenuupt',
+					app: 'ZYAPP_MENU',
+					mod: 'ZYMODULE_MENU',
+					r_parm: {
+						orgid: _menu_g.Sorgid,
+						menuid: _menu_g.treeNode.menuid
+					}
+				}, function (msg) {
+					var temp = msg.result[0];
+					$('#memu_apmenu_form').json2form(temp);
+					$("#memu_apmenu_form input[name=menuid]").val(_menu_g.treeNode.menuid);
+					$("#memu_apmenu_form input[name=orgid]").val(_menu_g.Sorgid);
+					$("input[name=menu_icon]").select2('val', temp.menu_icon);
+					$("#memu_apmenu_form input[name=levels]").val(Number(_menu_g.treeNode.level));
+					$("#memu_apmenu_form input[name=p_menunm]").val(_menu_g.treeNode.getParentNode().menunm);
+					if (_.isEmpty(temp.pageid)) {
+					  $('#pagenm').html('未指定');
+					} else {
+					  $('#pagenm').html(temp.pageid + '&nbsp;' + temp.pagenm);
+					}
+					if (!_menu_g.treeNode.isParent) {
+					} else {
+					  $("#pagenm").closest('section').hide();
+						$("#memu_apmenu_form input[name=uri]").closest('section').hide();
+						// $("#memu_apmenu_form input[name=role]").closest('section').hide();
+					}
+				})
+			} else {
+				$('.modal-title').html('添加菜单');
+				$("#memu_apmenu_form").clearForm();
+				$("#memu_apmenu_form input[name=menu_icon]").select2('val', '');
+				$("#memu_apmenu_form input[name=orgid]").val(_menu_g.Sorgid);
+				$("#memu_apmenu_form input[name=p_menunm]").val(_menu_g.treeNode.menunm);
+				$("#memu_apmenu_form input[name=levels]").val(Number(_menu_g.treeNode.level) + 1);
+        $("#pagenm").closest('section').hide();
+        $("#memu_apmenu_form input[name=uri]").closest('section').removeClass('col-6').addClass('col-sm-12');
+			}
+
+
+		$("#memu_apmenu_form input[name=levels]").attr('readonly', 'true');
+		$("#memu_apmenu_form input[name=p_menunm]").attr('readonly', 'true');
+
+		
+		$("input[name=menu_icon]").zySelectIcons();
+		
+		$('[index="reset"]').click(function () {
+			$("#menu_apmenu").modal('hide');
+			$("#memu_apmenu_form").clearForm();
+			$("#memu_apmenu_form input[name=menu_icon]").select2('val', '');
+		})
+
+		$("#memu_apmenu_form").validate({
+			// Rules for form validation
+			rules: {
+				menunm: {
+					required: true,
+					maxlength: 50
+				},
+				uri: {
+					maxlength: 100
+				},
+				levels: {
+					required: true,
+					digits: true,
+					maxlength: 11
+				},
+				menu_desc: {
+					maxlength: 200
+				},
+				menu_icon: {
+					maxlength: 50
+				}
+			},
+			// Messages for form validation
+			submitHandler: function (form) {
+				var zTree = $.fn.zTree.getZTreeObj("Stree");
+				var node = zTree.getSelectedNodes();
+				if (menu_getmenu._g.param.flg == 'i') {
+					$("#memu_apmenu_form input[name=p_menuid]").val(node[0].menuid);
+					$("#memu_apmenu_form input[name=menuid]").val('');
+
+					menu_getmenu._checkNameAndSort('', node[0].menuid, $("#memu_apmenu_form input[name=menunm]").val(), $("#memu_apmenu_form input[name=sorting_order]").val(), function (result) {
+						if (!result.menunm_c && !result.sorting_order_c) {
+							zy.g.am = {
+								app: 'ZYAPP_MENU',
+								mod: 'ZYMODULE_MENU'
+							};
+
+							zy.net.get("api/addmenu", function (msg) {
+								if (msg) {
+									if (msg.result[0].flag) {
+										var newNode = {
+											menunm: $("#memu_apmenu_form input[name=menunm]").val(),
+											p_menuid: node[0].menuid,
+											menuid: msg.result[0].menuid,
+											levels: $("#memu_apmenu_form input[name=levels]").val(),
+											menu_icon: $("#memu_apmenu_form input[name=menu_icon]").val(),
+											sorting_order: $("#memu_apmenu_form input[name=sorting_order]").val(),
+											pageid: '',
+											uri: $("#memu_apmenu_form input[name=uri]").val().replace(/\\/g, '/'),
+											orgid: $("#memu_apmenu_form input[name=orgid]").val()
+										//,status: $("#memu_apmenu_form input[name=status]").val(),
+										//role: $("#memu_apmenu_form input[name=role]").val(),
+										//checked: $("#memu_apmenu_form input[name=status]").val()=="1" ? true : false
+										};
+										newNode = zTree.addNodes(node[0], newNode);
+										$('#menu_apmenu').modal('hide');
+									} else {
+										zy.ui.msg('提示信息', '请选择模块', 'w');
+									}
+								}
+							}, $('#memu_apmenu_form').serialize());
+						} else {
+							if (result.menunm_c) {
+								zy.ui.msg('error', '菜单名重复', 's');
+							}
+							if (result.sorting_order_c) {
+								zy.ui.msg('error', '排序号重复', 's');
+							}
+						}
+					});
+				} else if (menu_getmenu._g.param.flg == 'u') {
+				  var _node = node[0];
+				  var _menuid = _node.getParentNode().menuid;
+					$("#memu_apmenu_form input[name=p_menuid]").val(_menuid);
+					menu_getmenu._checkNameAndSort(_node.menuid, _menuid, 
+					$("#memu_apmenu_form input[name=menunm]").val(), 
+					$("#memu_apmenu_form input[name=sorting_order]").val(), function (result) {
+						if (!result.menunm_c && !result.sorting_order_c) {
+							zy.g.am = {
+								app: 'ZYAPP_MENU',
+								mod: 'ZYMODULE_MENU',
+								org: zy.g.comm.org
+							};
+							zy.net.get("api/setmenu", function (msg) {
+								if (msg) {
+									if (msg.result[0].flag) {
+										var zTree = $.fn.zTree.getZTreeObj("Stree");
+										var node = zTree.getSelectedNodes();
+										if (msg) {
+											if (node.length > 0) {
+												node[0].menunm = $("#memu_apmenu_form input[name=menunm]").val();
+									
+												zy.ui.msg("提示信息：", "保存成功！", "s");
+												zTree.updateNode(node[0]);
+												$('#menu_apmenu').modal('hide');
+											}
+										}
+									} else {
+										zy.ui.msg('提示信息', '请选择模块', 'w');
+									}
+								}
+							}, $('#memu_apmenu_form').serialize());
+						} else {
+							if (result.menunm_c) {
+								zy.ui.msg('error', '菜单名重复', 's');
+							}
+							if (result.sorting_order_c) {
+								zy.ui.msg('error', '排序号重复', 's');
+							}
+						}
+					});
+				} else {
+					$('#memu_apmenu_form').formDisable(false);
+					zy.ui.msg("提示信息：", "菜单名称或菜单排序号不可重复！", "w");
+				}
+			},
+			// Do not change code below
+			errorPlacement: function (error, element) {
+				error.insertAfter(element.parent());
+			}
+		});
+	})();
+</script>

@@ -1,0 +1,69 @@
+<!-- Create By xBoson System -->
+<!-- widget grid -->
+<section id="widget-grid" class="">
+	<!-- row -->
+	<div class="row">
+		<!-- NEW WIDGET START -->
+		<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div id="log_access_log_wid" class="jarviswidget jarviswidget-color-blueDark" data-widget-fullscreenbutton="false" data-widget-colorbutton="true" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-deletebutton="false">
+				<header>
+					<!--<span class="widget-icon"> <i class="fa fa-table"></i> </span>-->
+					<h2>运算节点管理</h2>
+				</header>
+				<!-- widget div-->
+				<div>
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+					</div>
+					<!-- end widget edit box -->
+					<!-- widget content -->
+					<div class="widget-body no-padding">
+						<div class="widget-body-toolbar">
+							<div class="row"></div>
+						  <div class="btn-group">
+						    <form id="log_access_log_search_form" method="post" onsubmit="return false;" class="smart-form">
+  								<button id="log_access_log_search" class="btn btn-info btn-sm" type="submit">
+  								  <i class="fa fa-search fa-1"></i>&emsp;刷 新&emsp;</button>
+						    </form>
+							</div>
+								
+							<div class="row">
+								<div class="col-md-12">
+									<div class="pull-right">
+									<b name="total_count"></b>
+									</div>
+								</div>
+							</div>
+						</div>
+						 <!--class="dataTables_wrapper"-->
+						<div class="table-responsive">
+							<table id="log_access_log_dt" class="table table-bordered table-striped">
+								<thead>
+								</thead>
+							</table>
+						</div>
+					</div>
+					<!-- end widget content -->
+					<div id="log_access_log_pagination"></div>
+				</div>
+				<!-- end widget div -->
+			</div>
+			<!-- end widget -->
+		</article>
+		<!-- WIDGET END -->
+	</div>
+	<!-- end row -->
+</section>
+<!-- end widget grid -->
+<script src="lib/js/plugin/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<!-- BOOTSTRAP UI + Slider -->
+<!-- <script src="lib/js/plugin/bootstrap-editable/js/bootstrap-editable.min.js"></script> -->
+<script src="mgt/pm/cluster/list.js"></script>
+<script type="text/javascript">
+	// DO NOT REMOVE : GLOBAL FUNCTIONS!
+	pageSetUp();
+	var ClusterManager = new ClusterManager();
+</script>

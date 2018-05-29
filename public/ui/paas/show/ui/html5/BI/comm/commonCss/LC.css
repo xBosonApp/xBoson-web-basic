@@ -1,0 +1,22 @@
+#inline{ float:right;list-style-type:none; margin:10px 0 0 0;}
+#inline li{ float:left; width:20px; height:20px; background:#FFF; text-align:center; margin:0 5px; cursor:pointer;}
+#inline li#default{ background:#3D3D3D;}
+#inline li#blue{ background:#1570A6;}
+#inline li#brown{ background:#623F18;}
+#inline li#purple{ background:#701584;}
+#inline li#grey{ background:#666666;}
+.brand{color:#fff; font-family:微软雅黑; font-size:16px;}
+/*.lc-inquire{border-bottom:1px solid #9D9C9C;}
+.border-r{border-right:1px solid #9D9C9C;}*/
+.portlet{ margin:10px 0 0 0;}
+.toolsmore,.toolsmore:hover{ color:#fff;}
+.rowtable{ height:0px; overflow:hidden;}
+.tools-chart a,.tools-chart a:hover{ color:#fff; text-decoration:none; cursor:pointer;}
+.tools-chart a i{cursor:pointer;}
+
+.datagrid-body table{width: 100%;}
+table{max-width:auto;white-space:nowrap;}
+.datagrid-header-inner table.datagrid-htable{ width:100%;}
+.modal-body{word-wrap:break-word;word-break:break-all; font-size: 12px;}
+.rowtable{ height:0px; overflow:hidden;}
+.portlet-title a,.portlet-title a:hover{ color:#fff; text-decoration:none;}

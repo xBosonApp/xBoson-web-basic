@@ -1,0 +1,49 @@
+ <div id="widget-grid" class="row">
+  <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="jarviswidget jarviswidget-color-blue" id="ide" data-widget-colorbutton="true" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-editbutton="false">
+      <header>
+      </header>
+      <div>
+        <div class="jarviswidget-editbox"></div>
+        <div class="widget-body">
+          <div class="widget-body no-padding">
+            <div class="widget-body-toolbar">
+              <form name="searchparam" method="post" onsubmit="return false;" class="smart-form">
+                <div class="row">
+                  <section class="col col-3">
+                    <label class="input">
+                      <input type="hidden" name="status" data-type="select2" placeholder="状态" />
+                    </label>
+                  </section>
+                  <section class="col col-3">
+                    <label class="input">
+                      <input type="text" name="presetnm" placeholder="初始化名称" class="form-control input-sm">
+                    </label>
+                  </section>
+                  <section class="col col-3">
+                    <button class="btn btn-info btn-sm" type="submit"><i class="fa fa-search fa-1"></i>&emsp;查 询&emsp;</button>
+                  </section>
+                </div>
+              </form>
+              <div class="btn-group">
+                <button name="create" class="btn btn-info btn-xs">&emsp;<i class="fa fa-plus" style="width:12px"></i>&nbsp;<span id="title">创建设定</span>&emsp;</button>
+                <button name="copy" class="btn btn-info btn-xs">&emsp;<i class="fa fa-copy"></i>&nbsp;复制设定&emsp;</button>
+                <button name="update" class="btn btn-info btn-xs">&emsp;<i class="fa fa-edit"></i>&nbsp;修改设定&emsp;</button>
+                 <button name="delete" class="btn btn-info btn-xs">&emsp;<i class="fa fa-times"></i>&nbsp;删除设定&emsp;</button>
+                 <button name="content" class="btn btn-info btn-xs">&emsp;<i class="fa fa-list"></i>&nbsp;设定内容&emsp;</button>
+              </div>
+            </div>
+            <div class="dataTables_wrapper">
+              <table name="table" class="table table-bordered table-striped"></table>
+            </div>
+          </div>
+          <!-- end widget content -->
+          <div name="pagenation"></div>
+        </div>
+      </div>
+    </div>
+  </article>
+</div>
+ <div id="tenantInitFirst"></div>
+ <div id="tenantInitSecond"></div>
+<script src="tenantdatainit/index.js"></script>

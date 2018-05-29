@@ -1,0 +1,147 @@
+<div class="modal fade" id="md_mm005" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+        </button>
+        <h4 class="modal-title">画面设置</h4>
+      </div>
+      <div class="modal-body">
+        <form class="smart-form">
+          <fieldset>
+            <div class="dd">
+              <ol class="dd-list">
+              </ol>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" name="save" class="btn btn-primary">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="lib/js/plugin/jquery-nestable/jquery.nestable.js"></script>
+<script type="text/javascript">
+  //params为选择行数据
+  function md_mm005_main(params){
+    var modal=$('#md_mm005');
+    
+    var dd=$('.dd');
+    var ddlist=$('.dd-list');
+    
+    var comm={
+      elemtype:[] //元素标签select2
+    };
+    
+    zy.cache.initDicts('ZR.0045,ZR.0060',function(){
+      //铺数据
+      zy.g.am.app='c879dcc94d204d96a98a34e0b7d75676';
+      zy.g.am.mod='tableandindex';
+      zy.net.get('api/uiconfig',function(msg){
+        if(msg.result){
+          var ls = zy.cache.get('_mdm_dict', 'ls');
+          //comm.elemtype=ls.get('ZR.0060');
+          comm.elemtype=ls.get(['ZR.0060'])['ZR.0060'];
+          for(var i in msg.result){
+            gene_row(msg.result[i]);
+          }
+          
+          dd.nestable();  //nestable初始化
+          modal.modal('show');
+        }
+      },params);
+    });
+    
+    //生成一行
+    function gene_row(json){
+      //li-dd-item
+      var tmpItem=$('<li></li>');
+      tmpItem.attr({
+        'class':'dd-item dd3-item',
+        'data-field':json.field,
+        'data-elemtype':json.elemtype?json.elemtype:'',
+        'data-readonly':json.readonly?json.readonly:'0',
+        'data-filter':json.filter?json.filter:'0'
+      });
+      ddlist.append(tmpItem);
+      //div-dd-handle
+      var tmpHandle=$('<div class="dd-handle dd3-handle">Drag<div>');
+      //div-dd3-content
+      var tmpContent = $('<div class="dd3-content"></div>');
+      tmpItem.append(tmpHandle);
+      tmpItem.append(tmpContent);
+      //div-row
+      var tmpDiv=$('<div class="row"><div>');
+      tmpContent.append(tmpDiv);
+      //div-field
+      var tmpDiv1=$('<div class="col col-md-3"></div>');
+      tmpDiv1.append(json.fieldcn);
+      
+      //div-select
+      var tmpDiv2=$('<div class="col col-md-3"></div>');
+      //select-元素标签类型
+      var tmpElemtype=$('<select class="form-control"></select>');
+      for(var j in comm.elemtype){
+        tmpElemtype.append($('<option></option>').attr({'value':comm.elemtype[j].id}).html(comm.elemtype[j].name));
+      }
+      tmpElemtype.val(json.elemtype);
+      tmpDiv2.append(tmpElemtype);
+      
+      //div-readonly
+      var tmpDiv3=$('<div class="col col-md-3"></div>');
+      //label
+      var tmpLabel=$('<label></label>');
+      //readonly-修改时是否只读
+      var tmpReadonly=$('<input name="readonly" type="checkbox">');
+      if(json.readonly=='1')
+        tmpReadonly.attr({'checked':'checked'});
+      tmpLabel.append(tmpReadonly).append('修改时是否只读');
+      tmpDiv3.append(tmpLabel);
+      
+      //div-filter
+      var tmpDiv4=$('<div class="col col-md-3"></div>');
+      // //label
+      var tmpLabel4=$('<label></label>');
+      // //filter-查询时是否过滤条件
+      var tmpFilter=$('<input name="filter" type="checkbox">');
+      if(json.filter=='1')
+        tmpFilter.attr({'checked':'checked'});
+      tmpLabel4.append(tmpFilter).append('查询时是否过滤条件');
+      tmpDiv4.append(tmpLabel4);
+      
+      tmpDiv.append(tmpDiv1).append(tmpDiv2).append(tmpDiv3).append(tmpDiv4);
+      
+      //注册事件
+      tmpElemtype.change(function(){
+        tmpItem.attr('data-elemtype',$(this).val());
+      });
+      tmpReadonly.change(function(){
+        tmpItem.attr('data-readonly',$(this).is(':checked')?'1':'0');
+      });
+      tmpFilter.change(function(){
+        tmpItem.attr('data-filter',$(this).is(':checked')?'1':'0');
+      });
+    }
+    
+    //保存按钮事件
+    modal.find('[name=save]').click(function(){
+      var _params={
+        'typecd':params.typecd,
+        'did':params.did,
+        'en':params.en,
+        'json':JSON.stringify(dd.nestable('serialize'))
+      };
+      zy.g.am.app='c879dcc94d204d96a98a34e0b7d75676';
+      zy.g.am.mod='tableandindex';
+      zy.net.get('api/uiconfig',function(msg){
+        if(msg){
+          zy.ui.msg('提示信息：','保存成功！','s');
+          modal.modal('hide');
+        }
+      },_params);
+    });
+  }
+</script>

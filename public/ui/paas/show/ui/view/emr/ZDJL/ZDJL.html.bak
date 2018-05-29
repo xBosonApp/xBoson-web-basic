@@ -1,0 +1,148 @@
+﻿<script type="text/javascript" language="JavaScript" src="/comm.js"></script>
+<script type="text/javascript">
+var pageNum=1;
+var pagesize=10;
+var emrzdjldata;
+$(function () {
+   showDatazdjl();
+});
+function zdjlcallback(retData){
+emrzdjldata=retData;
+
+$('#zdjl').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+				title:'诊断记录',
+				pagination:true,
+				pageNumber:pageNum,
+				pageSize: pagesize,
+				loadMsg:"正在载入...",
+                pageList: [10,20,50,100,200],
+                singleSelect:true,
+				data:emrzdjldata.dataList,
+				columns:[[
+				  // {field:'tablename',title:'序号',width:48,align:'center'},
+				  {title:'',field:'dc7001_ssid',width:30,align:'center',
+						 formatter:function(value){
+		                   if(value>"0"){
+								return '<span style="color:red;font-weight:bold">术</span>';
+						   }
+						   //if(value=="0"){
+							//	return '<span>普</span>';
+						   //}
+		               }
+				   },
+				   {field:'dc7001_zdrq',title:'诊断日期',width:80,align:'center',
+				   	   formatter:function(value){
+		                   return LC_FormatYMD(value);
+		               }
+		            },
+				   {field:'dc7001_zdms',title:'诊断描述项目',width:98,align:'center'},
+				   {field:'dc7001_zdbw',title:'诊断部位',width:64,align:'center'},
+				   {field:'dc7001_zhdm',title:'中医症候',width:64,align:'center'},
+				   {field:'dc7001_zdyj',title:'诊断依据',width:64,align:'center'},
+				   {field:'dc7001_yjms',title:'诊断依据描述',width:128,align:'center'},
+				   {field:'dc7001_zdlb',title:'诊断类别',width:64,align:'center'},
+				   {field:'dc7001_jbzg',title:'疾病转归',width:58,align:'center'},
+				   {field:'dc7001_zdysxm',title:'医生',width:48,align:'center'},
+				   {field:'dc7001_zdksmc',title:'科室',width:64,align:'center'},
+				   {field:'dc7001_jgdm',title:'医院',width:110,align:'center'}
+				]],                  
+                onDblClickRow: function (rowIndex) {
+                  openRoleDiv(rowIndex);
+                },
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true
+		}); 
+
+	   var pager = $('#zdjl').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pageNum=pageNumber;
+		           pagesize=pageSize;
+		           showDatazdjl();
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:pagesize,pageNumber:pageNum,total:emrzdjldata.count});
+
+		};
+	
+	}
+	function showDatazdjl(){
+	// 数据格式验证通过以后		
+// *******************第二步请求数据***********************		
+ if(retCheckFlg){		
+        	var url ="emrzdjl1/"; 	
+        	var itemsList=["primal_time","latest_time","mzbz","zdlb","zyzd","ssid"];	
+			var info= new Map();	
+	        info.put("pageNum",pageNum);
+	        info.put("pageSize",pagesize);
+			info.put("pid",pid);
+        	LC_AjaxGet(EMRBaseUrl+url,"fzdjl","zdjlcallback",info,itemsList);	
+        	
+ }		
+//********************第三步处理请求后的数据***************
+		
+	}
+	
+
+</script>
+<div class="mainsW-912">
+	<!-- 检查报告列表 开始 -->
+	<table toolbar="#toolbar"  id="zdjl"></table>
+	<div id="toolbar" class="pad-5 clearfix">
+	 <form id="fzdjl">
+		<div class="itemLW-64 padT-4">类型:</div>
+		<div class="itemsW-96">
+			<select class="textLW" name="dept" id="mzbz"> 
+			    <option value="">全部</option>   
+			    <option value="1">门诊</option>  
+			    <option value="2">住院</option>  
+			    <option value="3">体检</option>
+			</select>
+		</div>
+		<div class="itemLW-64 padT-4">类别:</div>
+		<div class="itemsW-96">
+			<select class="textLW" name="dept" id="zdlb">  
+				<option value="">全部</option> 
+			    <option value="01">出院诊断</option>  
+			    <option value="02">门诊诊断</option>
+			    <option value="03">入院初步诊断</option>
+			    <option value="04">术前诊断</option>
+			    <option value="05">术后诊断</option>
+			    <option value="06">尸检诊断</option>
+			    <option value="07">放射诊断</option>
+			    <option value="08">超声诊断</option>
+			    <option value="09">病理诊断</option>
+			    <option value="10">并发症诊断</option>
+			    <option value="11">院内感染诊断</option>
+			    <option value="12">主要诊断</option>
+			    <option value="13">次要诊断</option> 
+			    <option value="99">其他</option>
+			    <option value="14">其他</option> 
+			</select>
+		</div>
+		<div class="itemLW-160 padT-4">
+		
+		
+		<input type="checkbox" name="zyzd" id="zyzd" value="1"/>中医诊断
+		<input type="checkbox" name="ss" id="ssid" value="2"/>手术诊断
+		
+		</div>
+		<div class="itemLW-64 padT-4">日期:</div>
+		<div class="itemsW-96"><input class="Wdate" onClick="WdatePicker()" type="text" style="width:96px;" id="primal_time"/></div>
+		<div class="itemCW-16 padT-4">至</div>
+		<div class="itemsW-96"><input class="Wdate" onClick="WdatePicker()" type="text" style="width:96px;" id="latest_time"/></div>
+		<div class="itemLW-64"><a href="javascript:;;;" class="easyui-linkbutton" onclick="showDatazdjl()">查询</a></div>
+     </form>
+	</div>
+	<!-- 检查报告列表 结束 -->
+	<!-- 检查报告内容 开始 -->
+	
+	<!-- 检查报告内容 结束 -->
+</div>
+

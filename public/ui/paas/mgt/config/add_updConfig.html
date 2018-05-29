@@ -1,0 +1,57 @@
+<div class="modal fade" id="add_updConfig" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title">平台配置属性（<span id="add_updConfig_title"></span>）</h4>
+      </div>
+      <div class="modal-body no-padding">
+        <!-- FORM Start -->
+        <form id="add_updConfig_form" method="post" onsubmit="return false;" class="smart-form">
+          <fieldset>
+            <div>
+              <section>
+                <label class="label">配置属性键</label>
+                <label class="input has-warning">
+                  <input type="text" name="config_key" placeholder="配置属性键">
+                  <b id="add_updConfig_b" class="tooltip tooltip-bottom-right">配置属性键为必填项目</b> </label>
+              </section>
+              <section>
+                <label class="label">配置属性值</label>
+                <label class="input has-warning">
+                  <input type="text" name="config_value" placeholder="配置属性值">
+                </label>
+              </section>
+
+              <section>
+                <label class="label">配置属性说明</label>
+                <label class="textarea">                   <textarea type="textarea" rows="1" name="config_desc" placeholder="说明"></textarea> </label>
+              </section>
+              <section class=" col-6">
+                <label class="label">状态</label>
+                <label class="input">
+                  <input type="hidden" name="status" data-type="select2" placeholder="状态">
+                </label>
+              </section>
+            </div>
+          </fieldset>
+          <footer>
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+              取消
+            </button>
+            <button type="submit" class="btn btn-primary">
+              确定
+            </button>
+          </footer>
+        </form>
+        <!-- FORM End -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+

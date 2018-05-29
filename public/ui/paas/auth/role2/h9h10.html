@@ -1,0 +1,196 @@
+ <div class="modal fade" id="auth_role_h9h10" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title">角色（<span id="auth_role_h9h10_title"></span>）</h4>
+			</div>
+			<div class="modal-body no-padding">
+				<!-- FORM Start -->
+				<form id="auth_role_h9h10_form" method="post" onsubmit="return false;" class="smart-form">
+					<fieldset>
+						<input type="hidden" name="roleid" />
+						<input type="hidden" name="orgid" />
+						<div class="row">
+							<section class="col col-6">
+								<label class="label">角色名称</label>
+								<label class="input has-warning">
+									<input type="text" name="rolenm" placeholder="角色名称">
+									<b class="tooltip tooltip-bottom-right">角色名称为必填项目</b>
+								</label>
+							</section>
+							<section class="col col-6">
+								<label class="label has-warning">操作类型</label>
+								<label class="input">
+									<input type="hidden" name="op_type" data-type="select2" placeholder="操作类型">
+									<b class="tooltip tooltip-bottom-right">操作类型为必填项目</b>
+								</label>
+							</section>
+						</div>
+						<div class="row">
+							<section class="col col-6">
+								<label class="label">角色类型（通常选择"普通角色"即可）</label>
+								<label class="input">
+									<input type="hidden" name="role_type" data-type="select2" placeholder="角色类型">
+									<b class="tooltip tooltip-bottom-right">角色类型为必填项目</b>
+								</label>
+							</section>
+							<section class="col col-6">
+								<label class="label">状态</label>
+								<label class="input">
+									<input type="hidden" name="status" data-type="select2" placeholder="状态">
+								</label>
+							</section>
+						</div>
+						<section>
+							<label class="label">角色描述</label>
+							<label class="textarea">
+								<textarea rows="4" name="role_desc" placeholder="说明"></textarea>
+							</label>
+						</section>
+					</fieldset>
+					<footer>
+						<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+						<button type="submit" class="btn btn-primary">确定</button>
+					</footer>
+				</form>
+				<!-- FORM End -->
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+<!-- SCRIPTS ON PAGE EVENT -->
+<script type="text/javascript">
+	// DO NOT REMOVE : GLOBAL FUNCTIONS!
+	pageSetUp();
+	(function () {
+		// 数据字典处理
+		var cb = function () {
+			// 字典数据绑定
+			$("#auth_role_h9h10_form input[name=status]").zySelect('ZR.0001', false, {
+				width: '100%', allowClear : false
+			});
+			$("#auth_role_h9h10_form input[name=op_type]").zySelect('ZR.0010', false, {
+				width: '100%', allowClear : false
+			});
+			$("#auth_role_h9h10_form input[name=role_type]").zySelect('ZR.0046', false, {
+				width: '100%', allowClear : false
+			});
+			$("#auth_role_h9h10_form input[name=status]").select2("val", '1'); //默认值
+			$("#auth_role_h9h10_form input[name=role_type]").select2("val", '01'); //默认值
+			$("#auth_role_h9h10_form input[name=op_type]").select2("val", '0'); //默认值
+			(function () {
+				if (auth_h8._g.param.flg == 'i') {
+					//添加
+					$('#auth_role_h9h10_form').clearForm();
+					$("#auth_role_h9h10_title").text('添加');
+
+				} else if (auth_h8._g.param.flg == 'u') {
+					$('#auth_role_h9h10_form').formDisable(true);
+					//修改
+					var callback = function (msg) {
+						$('#auth_role_h9h10_form').formDisable(false);
+						if (msg) {
+							$('#auth_role_h9h10_form').json2form(msg.result[0]);
+						}
+					};
+					//设置参数
+					var h9h10 = {
+						roleid: auth_h8._g.param.roleid
+					};
+					zy.g.am.app = 'auth';
+					zy.g.am.mod = 'role';
+					zy.net.get("api/getrole", callback, h9h10);
+					$("#auth_role_h9h10_title").text('修改');
+				}
+			})();
+		};
+		// 预处理该画面所需的字典类型，以 , 号分割
+		zy.cache.initDicts('ZR.0001,ZR.0010,ZR.0046', cb);
+	})();
+	//根据用户类型决定是否显示是否通用角色字段
+// 	zy.g.am.app = 'ZYAPP_LOGIN';
+// 	zy.g.am.mod = 'ZYMODULE_LOGIN';
+//   zy.net.get("api/usertype",function(msg){
+// 		if(msg){
+// 			if(msg.result[0].adminflag=="1"){
+// 				$('#auth_role_h9h10').modal('show');
+// 			}else{
+// 				$("#h9h10_comm_flag").remove();
+// 				$('#auth_role_h9h10').modal('show');
+// 			}
+// 		}
+// 	});
+	
+  $('#auth_role_h9h10').modal('show');
+	// Registration validation script
+	$("#auth_role_h9h10_form").validate({
+		// Rules for form validation
+		rules: {
+			rolenm: {
+				required: true,
+				maxlength: 100
+			},
+			op_type: {
+				required: true
+			},
+			status: {
+				required: true
+			},
+			role_desc: {
+				maxlength: 200
+			}
+		},
+		// 验证成功后保存
+		submitHandler: function (form) {
+			var callback = function (msg) {
+				$('#auth_role_h9h10_form').formDisable(false);
+				if (msg) {
+					if (auth_h8._g.param.flg == 'u') {
+						auth_h8.SetRow($('#auth_role_h9h10_form').form2json());
+					} else if (auth_h8._g.param.flg == 'i') {
+						auth_h8.UpDt();
+					}
+					$('#auth_role_h9h10').modal('hide');
+					zy.ui.msg("提示信息：", "保存成功！", "s");
+				}
+			};
+
+			var error = function (msg) {
+				$('#auth_role_h9h10_form').formDisable(false);
+				if (msg) {
+					if ("8" === msg.ret) {
+						if (auth_h8._g.param.flg == 'i') {
+							zy.ui.msg("角色添加失败", msg.msg, "e");
+						} else if (auth_h8._g.param.flg == 'u') {
+							zy.ui.msg("角色修改失败", msg.msg, "e");
+						}
+					} else {
+						zy.ui.msg("服务器请求失败", msg.ret + " : " + msg.msg, "e");
+					}
+				}
+			};
+			//设置orgid,roleid
+			$("#auth_role_h9h10_form input[name=orgid]").val(auth_h8._g.param.orgid);
+			$("#auth_role_h9h10_form input[name=roleid]").val(auth_h8._g.param.roleid);
+			zy.g.am.app = 'auth';
+			zy.g.am.mod = 'role';
+			if (auth_h8._g.param.flg == 'i') {
+				zy.net.post("api/addrole", callback, $('#auth_role_h9h10_form').serialize(), null, error);
+			} else if (auth_h8._g.param.flg == 'u') {
+				zy.net.post("api/updrole", callback, $('#auth_role_h9h10_form').serialize(), null, error);
+			}
+			$('#auth_role_h9h10_form').formDisable(true);
+		},
+		// Do not change code below
+		errorPlacement: function (error, element) {
+			error.insertAfter(element.parent());
+		}
+	});
+</script>

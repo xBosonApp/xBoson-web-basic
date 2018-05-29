@@ -1,0 +1,17 @@
+ <link rel="stylesheet" href="lib/js/plugin/datatables/media/css/jquery.dataTables.css" />
+<div id="chart_table_con">
+</div>
+<div id="chart_table_template" style="display:none;">
+  <div class="row" style="padding-right: 15px">
+    <button index="outData" class="btn btn-default btn-xs pull-right">导出数据</button>
+    <button index="closeTable" class="btn btn-default btn-xs pull-right closed">关闭</button>
+  </div>
+  <div class="dataTables_wrapper" >
+    <table id="chart_table" class="table table-bordered table-striped"></table>
+    <table id ="chart_table_ods" class="table table-bordered table-striped"></table>
+  </div>
+  <div id="chart_table_slider_bar"></div>
+</div>
+
+<script src="lib/js/plugin/datatables/media/js/jquery.dataTables.min.js"> </script>
+<script src="bi/js/tableToCsv.js" ></script>

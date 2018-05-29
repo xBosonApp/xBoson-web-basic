@@ -1,0 +1,508 @@
+<style type="text/css">
+#timecx{ display: none;}	
+table{ font-size:12px; font-weight:normal; text-align:left;}
+table thead{background:linear-gradient(to bottom, #f9f9f9 0px, #efefef 100%) repeat-x; border-top:1px solid #dddddd; height:24px; line-height:24px;}
+.z-bg{background:linear-gradient(to bottom, #f9f9f9 0px, #efefef 100%) repeat-x;}
+table td,table th{ border-right:1px dotted #ccc; border-bottom:1px dotted #ccc; padding:0 0 0 5px;height:24px;}
+.tnull input[type="text"]{ width: 100px; padding: 0; border: none;text-align:center;margin-bottom:0; color: #000;}
+.tnull input[disabled]{background:none; border:none;box-shadow:none;cursor:auto;}
+</style>
+ <form id="org_etbjglda" class="form-inline" action="">
+<div id="etbjglda-m"  class="portlet box grey">
+    <div class="portlet-title">
+        <div class="caption" id="yetj-name"><!-- 可以设置图标<i class="icon-globe"></i> -->绩效汇总</div>
+        <!-- 设置关闭和刷新--> 
+        <!-- <div class="tools">
+            <div class="tools-chart">
+            	<a title="柱形图" rel="column"><i class="icon-bar-chart"></i></a> <a title="饼形图" rel="pie"><i class="icon-adjust"></i></a>
+                <span class="reload" title="数据图表"><i class="icon-file-text-alt"></i></span>
+            </div>
+        </div> -->
+        
+    </div>
+    <div class="portlet-body">
+        <div class="lc-inquire">
+           
+                <input type="hidden" id="groupby" value="tablename"/>
+                <input type="hidden" id="pagenum"/>
+                <input type="hidden" id="pagesize"/>
+                <input type="hidden" id="sa"/>
+                <input type="hidden" id="MM"/>
+                <div class="row-fluid">
+                	<div class="span2" style="display:none;"><select id="zhuanqu" class="selectpicker"><option value="1">按机构</option></select></div>
+                    <div class="span1">机构名称</div>
+                    <div class="span2"><select id="dimOrg" class="selectpicker"></select>
+                    <!-- <select id="dimOrg" class="selectpicker">
+                        <option value="424101198">11111111111</option>
+                    </select> -->
+                    </div>
+                    <div class="span1">年度</div>
+                    <div class="span2">
+                    	<div class="year"><input id="year" type="text" class="dateday"></div>
+                    </div>
+                    <div class="span1">季度</div>
+                    <div class="span2">
+                    	<select id="quarter" class="selectpicker">
+                            <option value="1">第一季度</option>
+                            <option value="2">第二季度</option>
+                            <option value="3">第三季度</option>
+                            <option value="4">第四季度</option>
+                        </select>
+                    </div>
+                    <div class="span1"><a id="jgcx1" onclick="setData2EtbjgldaNew('tablename')" class="btn blue">查询</a></div>
+                    <div class="span1" id="jgcxid"></div>
+
+                    <div class="span1"><a id="jgcx2" onclick="setDatacompile()" class="btn blue" style="display:none;">修改</a></div>
+                    <div class="span1"><a id="jgcx3" onclick="setDatarevise()" class="btn blue" style="display:none;">保存</a></div>
+                    <div class="span1"><a id="jgcx4" onclick="setDataaddrevise()" class="btn blue" style="display:none;">添加</a></div>
+                    <div class="span1"><a id="jgcx5" onclick="setDataadd()" class="btn blue" style="display:none;">保存</a></div>
+                    <!--<div class="span1"><a onclick="loading111()" class="btn blue">查询1</a></div>-->
+                </div>
+           
+        </div>
+<!-- 新 开始
+        <div class="row-fluid">
+			<div class="span12">
+                 <table id="logywlltj"></table>
+            </div>
+        </div> -->
+<!-- 新 结束 -->
+
+        <div id="rowtable" class="row-fluid">
+            <div class="span12">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+					<thead>
+					    <tr>
+					        <th>名称</th>
+					        <th>考核标准</th>
+					        <th align="center" width="100">数量</th>
+					        <th>名称</th>
+					        <th>考核标准</th>
+					        <th align="center" width="100">数量</th>
+					    </tr>
+					</thead>
+						<tr>
+						    <td rowspan="2" class="z-bg">健康档案</td>
+						    <td class="z-bg">新建档</td>
+						    <td align="center" class="tnull" valign="middle"><input id="t0101" name="" type="text" value="0" onfocus="this.select()" onmouseover="this.focus()" disabled="disabled"/></td>
+						    <td rowspan="2" class="z-bg">卫生监督、协管</td>
+						    <td class="z-bg">卫生监督协管信息报告</td>
+						    <td align="center" class="tnull "><input id="t1201" name="" type="text" value="0"  disabled="disabled"/></td>
+						  </tr>
+						  <tr>
+						    <td class="z-bg">社区卫生调查、卫生统计、社区诊断</td>
+						    <td align="center" class="tnull "><input id="t0102" name="" type="text" value="0"  disabled="disabled"/></td>
+						    <td class="z-bg">协助开展的饮用水卫生安全、学校卫生、<br />非法行医和非法采供血实地巡查</td>
+						    <td align="center" class="tnull "><input id="t1202" name="" type="text" value="0"  disabled="disabled"/></td>
+						  </tr>
+						  <tr>
+						    <td rowspan="7" class="z-bg">健康教育</td>
+						    <td class="z-bg">健康支持工具</td>
+						    <td align="center" class="tnull "><input id="t0201" name="" type="text" value="0"  disabled="disabled"/></td>
+						    <td rowspan="7" class="z-bg">预防接种</td>
+						    <td class="z-bg">一类疫苗接种</td>
+						    <td align="center" class="tnull "><input id="t0301" name="" type="text" value="0"  disabled="disabled"/></td>
+						  </tr>
+                          <tr>
+						    <td class="z-bg">健康教育宣传品</td>
+						    <td align="center" class="tnull "><input id="t0202" name="" type="text" value="0"  disabled="disabled"/></td>
+						    <td class="z-bg">适龄儿童建档、督促</td>
+						    <td align="center" class="tnull "><input id="t0302" name="" type="text" value="0"  disabled="disabled"/></td>
+						  </tr>
+                          <tr>
+						    <td class="z-bg">健康专栏更新</td>
+						    <td align="center" class="tnull "><input id="t0203" name="" type="text" value="0"  disabled="disabled"/></td>
+						    <td class="z-bg">异常反应监测及处理</td>
+						    <td align="center" class="tnull "><input id="t0303" name="" type="text" value="0"  disabled="disabled"/></td>
+						  </tr>
+                          <tr>
+						    <td class="z-bg">健康知识讲座</td>
+						    <td align="center" class="tnull "><input id="t0204" name="" type="text" value="0"  disabled="disabled"/></td>
+						    <td class="z-bg">免疫效果监测、接种调查评估</td>
+						    <td align="center" class="tnull "><input id="t0304" name="" type="text" value="0"  disabled="disabled"/></td>
+						  </tr>
+                          <tr>
+						    <td class="z-bg">主题日宣传</td>
+						    <td align="center" class="tnull "><input id="t0205" name="" type="text" value="0"  disabled="disabled"/></td>
+						    <td class="z-bg">疫苗储存、使用管理</td>
+						    <td align="center" class="tnull "><input id="t0305" name="" type="text" value="0"  disabled="disabled"/></td>
+						  </tr>
+                          <tr>
+						    <td class="z-bg">健康教育网站</td>
+						    <td align="center" class="tnull "><input id="t0206" name="" type="text" value="0"  disabled="disabled"/></td>
+						    <td rowspan="2" class="z-bg">实施计划免疫网络化管理</td>
+						    <td rowspan="2" align="center" class="tnull "><input id="t0306" name="" type="text" value="0"  disabled="disabled"/></td>
+						  </tr>
+                          <tr>
+						    <td class="z-bg">热线服务电话</td>
+						    <td align="center" class="tnull "><input id="t0207" name="" type="text" value="0"  disabled="disabled"/></td>
+					      </tr>
+						  <tr>
+                            <td rowspan="9" class="z-bg">儿童保健</td>
+                            <td class="z-bg">新生儿访视</td>
+                            <td align="center" class="tnull "><input id="t0401" name="" type="text" value="0"  disabled="disabled"/></td>
+                            <td rowspan="9" class="z-bg">妇女保健</td>
+                            <td rowspan="2" class="z-bg">孕产妇早期建册</td>
+                            <td rowspan="2" align="center" class="tnull "><input id="t0501" name="" type="text" value="0"  disabled="disabled"/></td>
+                        </tr>
+                        <tr>
+                            <td class="z-bg">新生儿满月访视</td>
+                            <td align="center" class="tnull "><input id="t0402" name="" type="text" value="0"  disabled="disabled"/></td>
+                        </tr>
+                        <tr>
+                            <td class="z-bg">1岁以下儿童健康体检</td>
+                            <td align="center" class="tnull "><input id="t0403" name="" type="text" value="0"  disabled="disabled"/></td>
+                            <td rowspan="2" class="z-bg">孕产妇早期健康   状况评估</td>
+                            <td rowspan="2" align="center" class="tnull "><input id="t0502" name="" type="text" value="0"  disabled="disabled"/></td>
+                        </tr>
+                        <tr>
+                            <td class="z-bg">1-3岁儿童健康体检</td>
+                            <td align="center" class="tnull "><input id="t0404" name="" type="text" value="0"  disabled="disabled"/></td>
+                        </tr>
+                        <tr>
+                            <td class="z-bg">血常规检测</td>
+                            <td align="center" class="tnull "><input id="t0405" name="" type="text" value="0"  disabled="disabled"/></td>
+                            <td rowspan="2" class="z-bg">孕期随访</td>
+                            <td rowspan="2" align="center" class="tnull "><input id="t0503" name="" type="text" value="0"  disabled="disabled"/></td>
+                        </tr>
+                        <tr>
+                            <td class="z-bg">4-6岁生长发育评估</td>
+                            <td align="center" class="tnull "><input id="t0406" name="" type="text" value="0"  disabled="disabled"/></td>
+                        </tr>
+                        <tr>
+                            <td class="z-bg">3-6岁儿童口腔保健</td>
+                            <td align="center" class="tnull "><input id="t0407" name="" type="text" value="0"  disabled="disabled"/></td>
+                            <td rowspan="2" class="z-bg">产后入户随访</td>
+                            <td rowspan="2" align="center" class="tnull "><input id="t0504" name="" type="text" value="0"  disabled="disabled"/></td>
+                        </tr>
+                        <tr>
+                            <td class="z-bg">残疾儿童康复救助工程</td>
+                            <td align="center" class="tnull "><input id="t0408" name="" type="text" value="0"  disabled="disabled"/></td>
+                        </tr>
+                        <tr>
+                            <td class="z-bg">妇幼卫生信息统计及监测</td>
+                            <td align="center" class="tnull "><input id="t0409" name="" type="text" value="0"  disabled="disabled"/></td>
+                            <td class="z-bg">产后42天健康检查</td>
+                            <td align="center" class="tnull "><input id="t0505" name="" type="text" value="0"  disabled="disabled"/></td>
+                        </tr>
+                        <tr>
+                            <td class="z-bg">老年人健康管理</td>
+                            <td class="z-bg">60岁以上老年人健康管理（包括老年慢病患者）</td>
+                            <td align="center" class="tnull "><input id="t0701" name="" type="text" value="0"  disabled="disabled"/></td>
+                            <td class="z-bg">计划生育技术服务咨询指导</td>
+                            <td class="z-bg">避孕药具发放管理</td>
+                            <td align="center" class="tnull "><input id="t0601" name="" type="text" value="0"  disabled="disabled"/></td>
+                        </tr>
+                        <tr>
+                            <td rowspan="4" class="z-bg">慢性病患者健康管理</td>
+                            <td class="z-bg">重症患者入户随访</td>
+                            <td align="center" class="tnull "><input id="t0801" name="" type="text" value="0"  disabled="disabled"/></td>
+                            <td rowspan="4" class="z-bg">传染病及突发公共卫生事件管理</td>
+                            <td class="z-bg">传染病疫情监测、疫情调查、漏报调查</td>
+                            <td align="center" class="tnull "><input id="t1101" name="" type="text" value="0"  disabled="disabled"/></td>
+                        </tr>
+                        <tr>
+                            <td class="z-bg">轻症患者入户随访</td>
+                            <td align="center" class="tnull "><input id="t0802" name="" type="text" value="0"  disabled="disabled"/></td>
+                            <td class="z-bg">传染病网络化管理</td>
+                            <td align="center" class="tnull "><input id="t1102" name="" type="text" value="0"  disabled="disabled"/></td>
+                        </tr>
+                        <tr>
+                            <td class="z-bg">门诊、电话随访</td>
+                            <td align="center" class="tnull "><input id="t0803" name="" type="text" value="0"  disabled="disabled"/></td>
+                            <td class="z-bg">艾滋病等重大传染病综合管理</td>
+                            <td align="center" class="tnull "><input id="t1103" name="" type="text" value="0"  disabled="disabled"/></td>
+                        </tr>
+                        <tr>
+                            <td class="z-bg">60岁以下高血压、糖尿病患者年度体检</td>
+                            <td align="center" class="tnull "><input id="t0804" name="" type="text" value="0"  disabled="disabled"/></td>
+                            <td class="z-bg">突发公共卫生事件</td>
+                            <td align="center" class="tnull "><input id="t1104" name="" type="text" value="0"  disabled="disabled"/></td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3" class="z-bg">残疾人管理</td>
+                            <td class="z-bg">入户随访</td>
+                            <td align="center" class="tnull "><input id="t0901" name="" type="text" value="0"  disabled="disabled"/></td>
+                            <td rowspan="3" class="z-bg">重性精神疾病患者健康管理</td>
+                            <td class="z-bg">入户随访</td>
+                            <td align="center" class="tnull "><input id="t1001" name="" type="text" value="0"  disabled="disabled"/></td>
+                        </tr>
+                        <tr>
+                            <td class="z-bg">门诊、电话随访</td>
+                            <td align="center" class="tnull "><input id="t0902" name="" type="text" value="0"  disabled="disabled"/></td>
+                            <td class="z-bg">门诊、电话随访</td>
+                            <td align="center" class="tnull "><input id="t1002" name="" type="text" value="0"  disabled="disabled"/></td>
+                        </tr>
+                        <tr>
+                            <td class="z-bg">健康体检</td>
+                            <td align="center" class="tnull "><input id="t0903" name="" type="text" value="0"  disabled="disabled"/></td>
+                            <td class="z-bg">健康体检</td>
+                            <td align="center" class="tnull "><input id="t1003" name="" type="text" value="0"  disabled="disabled"/></td>
+                        </tr>
+                        <tr>
+                            <td rowspan="4" class="z-bg">结核病防治</td>
+                            <td class="z-bg">结核病人管理</td>
+                            <td align="center" class="tnull "><input id="t1301" name="" type="text" value="0"  disabled="disabled"/></td>
+                            <td class="z-bg">口腔卫生服务</td>
+                            <td class="z-bg">口腔健康档案</td>
+                            <td align="center" class="tnull "><input id="t1401" name="" type="text" value="0"  disabled="disabled"/></td>
+                        </tr>
+                        <tr>
+                            <td class="z-bg">入户随访</td>
+                            <td align="center" class="tnull "><input id="t1302" name="" type="text" value="0"  disabled="disabled"/></td>
+                            <td rowspan="3" class="z-bg">中医药健康管理服务</td>
+                            <td class="z-bg">65岁以上老年人中医药健康管理服务</td>
+                            <td align="center" class="tnull "><input id="t1501" name="" type="text" value="0"  disabled="disabled"/></td>
+                        </tr>
+                        <tr>
+                            <td class="z-bg">门诊随访</td>
+                            <td align="center" class="tnull "><input id="t1303" name="" type="text" value="0"  disabled="disabled"/></td>
+                            <td rowspan="2" class="z-bg">0-36个月龄儿童中医药健康管理服务</td>
+                            <td rowspan="2" align="center" class="tnull "><input id="t1502" name="" type="text" value="0"  disabled="disabled"/></td>
+                        </tr>
+                        <tr>
+                            <td class="z-bg">推荐疑似结核病病人</td>
+                            <td align="center" class="tnull "><input id="t1304" name="" type="text" value="0"  disabled="disabled"/></td>
+                        </tr>
+                        
+					  
+					</table> 
+                 
+            </div>
+        </div>
+    </div>
+</div>
+ </form>
+<script type="text/javascript">
+var dataShow;
+var PageNumber=1;
+var PageSize=10;
+function setDataaddrevise(){
+    $(".tnull input").removeAttr("disabled");
+    $(".tnull input").css({ "border": "1px solid #ccc"});
+    $("#jgcxid").html("");
+    $("#jgcxid").append("<a id='jgcx5' onclick='setDataadd()' class='btn blue'>保存</a>");
+
+}
+function setDatacompile(){
+    $(".tnull input").removeAttr("disabled");
+    $(".tnull input").css({ "border": "1px solid #ccc"});
+    $(".tnull input:first").focus();
+    $(".tnull input").click(function(){
+        $(this).select();
+    });
+
+    $("#jgcxid").html("");
+    $("#jgcxid").append("<a id='jgcx3' onclick='setDatarevise()' class='btn blue'>保存</a>");
+}
+//修改
+function setDatarevise(data){
+    $(".tnull input").attr("disabled","disabled");
+    $(".tnull input").css({ "border": "none"})
+
+    $(".loadshow").show(); 
+    var url ="xg"; 
+    var itemsList;
+    if($("#year").val()!=""){
+        itemsList=["year","quarter","dimOrg","t0101","t0102","t0201","t0202","t0203","t0204","t0205","t0206","t0207","t0301","t0302","t0303","t0304","t0305","t0306","t0401","t0402","t0403","t0404","t0405","t0406","t0407","t0408","t0409","t0501","t0502","t0503","t0504","t0505","t0601","t0701","t0801","t0802","t0803","t0804","t0901","t0902","t0903","t1001","t1002","t1003","t1101","t1102","t1103","t1104","t1201","t1202","t1301","t1302","t1303","t1304","t1401","t1501","t1502"];
+    }else{
+        itemsList=[];
+    }
+    //空数据 会出现 小bug
+    var info= new Map();
+    info.put("sqlid","update");
+    info.put("pagenum",PageNumber);
+    info.put("pagesize",PageSize);
+    info.put("groupby",data);
+    sys_AjaxGet(BIUrl+url,"org_etbjglda","reCallbackhd",info,itemsList);
+}
+function reCallbackhd(data){
+    //alert("------修改成功")
+    setData2Etbjglda();
+}
+//添加
+function setDataadd(data){
+    $(".tnull input").attr("disabled","disabled");
+    $(".tnull input").css({ "border": "none"})
+
+    $(".loadshow").show(); 
+    var url ="tj"; 
+    var itemsList;
+    if($("#year").val()!=""){
+        itemsList=["year","quarter","dimOrg","t0101","t0102","t0201","t0202","t0203","t0204","t0205","t0206","t0207","t0301","t0302","t0303","t0304","t0305","t0306","t0401","t0402","t0403","t0404","t0405","t0406","t0407","t0408","t0409","t0501","t0502","t0503","t0504","t0505","t0601","t0701","t0801","t0802","t0803","t0804","t0901","t0902","t0903","t1001","t1002","t1003","t1101","t1102","t1103","t1104","t1201","t1202","t1301","t1302","t1303","t1304","t1401","t1501","t1502"];
+    }else{
+        itemsList=[];
+    }
+    //空数据 会出现 小bug
+    var info= new Map();
+    info.put("sqlid","insert");
+    info.put("pagenum",PageNumber);
+    info.put("pagesize",PageSize);
+    info.put("groupby",data);
+    sys_AjaxGet(BIUrl+url,"org_etbjglda","reCallbackadd",info,itemsList);
+}
+function reCallbackadd(data){
+    //alert("------修改成功")
+    setData2Etbjglda();
+}
+
+
+
+
+
+function setData2Etbjglda(data){
+    $(".tnull input").attr("disabled","disabled");
+    $(".tnull input").css({ "border": "none"})
+    $("#jgcx3").hide();
+    //$('.tnull').text('0');
+
+	$(".loadshow").show(); 
+	var url ="cx"; 
+	var itemsList;
+	if($("#year").val()!=""){
+		itemsList=["year","quarter","dimOrg"];
+	}else{
+		itemsList=[];
+	}
+	//空数据 会出现 小bug
+	var info= new Map();
+	info.put("sqlid","select");
+	info.put("pagenum",PageNumber);
+	info.put("pagesize",PageSize);
+	if(data==="tablename"){
+	   LXtype="tablename";
+	}else if(data==="createdate"){
+	   LXtype="createdate";
+	}else{
+	   LXtype="hospunitorgcode"
+	}
+	info.put("groupby",data);
+	sys_AjaxGet(BIUrl+url,"org_etbjglda","reCallback101",info,itemsList);
+}
+
+function reCallback101(dataInfo){
+if (!dataInfo.dataMap['t0101']) {
+    $("#jgcxid").html("");
+    $("#jgcxid").append("<a id='jgcx4' onclick='setDataaddrevise()' class='btn blue'>添加</a>");
+    $(".tnull input").val('0');
+}else{
+    $("#jgcxid").html("");
+    $("#jgcxid").append("<a id='jgcx2' onclick='setDatacompile()' class='btn blue'>修改</a>");
+
+//切换图形是grid时候，如果没有对应数据
+$("#t0101").val(dataInfo.dataMap['t0101']);
+$("#t0102").val(dataInfo.dataMap['t0102']);
+$("#t0201").val(dataInfo.dataMap['t0201']);
+$("#t0202").val(dataInfo.dataMap['t0202']);
+$("#t0203").val(dataInfo.dataMap['t0203']);
+$("#t0204").val(dataInfo.dataMap['t0204']);
+$("#t0205").val(dataInfo.dataMap['t0205']);
+$("#t0206").val(dataInfo.dataMap['t0206']);
+$("#t0207").val(dataInfo.dataMap['t0207']);
+$("#t0301").val(dataInfo.dataMap['t0301']);
+$("#t0302").val(dataInfo.dataMap['t0302']);
+$("#t0303").val(dataInfo.dataMap['t0303']);
+$("#t0304").val(dataInfo.dataMap['t0304']);
+$("#t0305").val(dataInfo.dataMap['t0305']);
+$("#t0306").val(dataInfo.dataMap['t0306']);
+$("#t0401").val(dataInfo.dataMap['t0401']);
+$("#t0402").val(dataInfo.dataMap['t0402']);
+$("#t0403").val(dataInfo.dataMap['t0403']);
+$("#t0404").val(dataInfo.dataMap['t0404']);
+$("#t0405").val(dataInfo.dataMap['t0405']);
+$("#t0406").val(dataInfo.dataMap['t0406']);
+$("#t0407").val(dataInfo.dataMap['t0407']);
+$("#t0408").val(dataInfo.dataMap['t0408']);
+$("#t0409").val(dataInfo.dataMap['t0409']);
+$("#t0501").val(dataInfo.dataMap['t0501']);
+$("#t0502").val(dataInfo.dataMap['t0502']);
+$("#t0503").val(dataInfo.dataMap['t0503']);
+$("#t0504").val(dataInfo.dataMap['t0504']);
+$("#t0505").val(dataInfo.dataMap['t0505']);
+$("#t0601").val(dataInfo.dataMap['t0601']);
+$("#t0701").val(dataInfo.dataMap['t0701']);
+$("#t0801").val(dataInfo.dataMap['t0801']);
+$("#t0802").val(dataInfo.dataMap['t0802']);
+$("#t0803").val(dataInfo.dataMap['t0803']);
+$("#t0804").val(dataInfo.dataMap['t0804']);
+$("#t0901").val(dataInfo.dataMap['t0901']);
+$("#t0902").val(dataInfo.dataMap['t0902']);
+$("#t0903").val(dataInfo.dataMap['t0903']);
+$("#t1001").val(dataInfo.dataMap['t1001']);
+$("#t1002").val(dataInfo.dataMap['t1002']);
+$("#t1003").val(dataInfo.dataMap['t1003']);
+$("#t1101").val(dataInfo.dataMap['t1101']);
+$("#t1102").val(dataInfo.dataMap['t1102']);
+$("#t1103").val(dataInfo.dataMap['t1103']);
+$("#t1104").val(dataInfo.dataMap['t1104']);
+$("#t1201").val(dataInfo.dataMap['t1201']);
+$("#t1202").val(dataInfo.dataMap['t1202']);
+$("#t1301").val(dataInfo.dataMap['t1301']);
+$("#t1302").val(dataInfo.dataMap['t1302']);
+$("#t1303").val(dataInfo.dataMap['t1303']);
+$("#t1304").val(dataInfo.dataMap['t1304']);
+$("#t1401").val(dataInfo.dataMap['t1401']);
+$("#t1501").val(dataInfo.dataMap['t1501']);
+$("#t1502").val(dataInfo.dataMap['t1502']);
+}
+//删除新增的dataAll	
+if (zhuanqu=="1") {
+datapush.splice(datapush.length-1);
+}
+}
+</script>
+<script>
+$(function(){
+$(window).resize(function(){
+$('#ttEtbjglda').datagrid('resize');
+});
+});
+</script>
+<script>
+//机构
+$(function () {
+getselectdaoid101();
+});
+function  getselectdaoid101(){
+  sys_BI_getDaoidList("mdmSelectdaoid101");
+}
+function mdmSelectdaoid101(data){
+  var info = new Map();
+  info.put("key",["hospunitorgcode"]);
+  info.put("value",["hospunitorgnm"]);
+  sys_GetSelect("org_etbjglda","dimOrg",info,sys_BI_getCacheDaoidData());
+  $("#dimOrg option:first").remove()
+}
+
+//loadingEtbjglda();
+//setDataCy('tablename');
+
+$(function(){
+$('.dateday').datetimepicker({
+		format: 'yyyy',
+			weekStart: 1,
+	        autoclose: true,
+	        startView: 4,
+	        minView: 4,
+	        forceParse: false,  //必须设置，否则每次解析错，会变成1899年。
+	        language: 'zh-CN'
+	});
+//获取当前年-月-日
+today=new Date();
+var vMon = today.getMonth() + 1;
+var dateendymd=today.getFullYear();
+var ymd=today.getFullYear();
+$("#year").val(dateendymd);
+$("#dateend").val(ymd); 
+
+$("#zymrzy-m .reload").click(function(){
+	$("#zymrzy-m #rowtable").toggleClass("rowtable");
+	$("#zymrzy-m #lc-rowtable").toggleClass("rowtable");
+	})
+
+});
+setData2Etbjglda();
+
+</script>
+
+

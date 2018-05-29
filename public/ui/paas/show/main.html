@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>区域医疗健康信息平台——心医至成</title>
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,maximum-scale=0.5,user-scalable=no" />
+    <meta name="description" content="170" />
+    <meta name="keywords" content="senyint, 心医国际, 心医至成, 区域医疗健康信息平台" />
+    <link rel="stylesheet" href="fonts/font-awesome.min.css" type="text/css" />
+    <link rel="stylesheet" href="fonts/flaticon/flaticon.css" type="text/css" />
+    <link rel="stylesheet" href="css/bootstrap.css" type="text/css" />
+    <link rel="stylesheet" href="css/index.css" type="text/css" />
+    <link rel="stylesheet" href="css/index_extend.css" type="text/css" />
+  </head>
+
+  <body>
+    <section class="mlightbox" id="lockscreen">
+      <div id="lockscreen-content">
+        <img src="img/logo.png" height="109" width="109" id="locklogo" alt="Metromega" />
+        <br/>
+        <br/>
+        <img src="img/preloader.gif" id="lockloader" alt="Loading.." />
+      </div>
+    </section>
+    <img src="img/background2.jpg" class="background" alt="" />
+    <!-- LOGO -->
+    <div class="header">
+      <h1>
+        <a data-scroll="scrollto"  href="#start" ng-controller='controller1'>
+          <img src="img/headerlogo.png" height="40" width="40" class="header-logo" alt=""/>
+          <span style="font-size:28px">区域医疗健康信息平台</span>
+        </a>
+        <a href="#main_modal" class="link" data-toggle="modal" data-src="46312" data-title="医疗健康信息化建设：总体框架 4631-2+">
+          <span style="font-size:22px">【4631-2+】</span>
+        </a>
+      </h1>
+    </div>
+    <!-- /LOGO -->
+    <!-- MAIN -->
+    <section id="content">
+      <!-- SECTION -->
+      <section class="clearfix section" id="start">
+        <!-- SECTION TILES -->
+        <div class="tile green w3 h1 icon-fadeoutscaleup">
+          <a href="#main_modal" class="link" data-toggle="modal" data-src="jkda" data-title="EHR 健康档案调阅">
+            <p class="title" data-scroll="scrollto" data-href="http://123.177.20.243:8080/phhis/EHR/EHRMain?PersonID=84c719d2-872a-43f9-9894-2d37e60e4cd9" style="z-index: 9;">EHR<br/><br/><br/>健康档案调阅</p>
+            <i class="flaticon-2-medicine-kit"></i>
+          </a>
+        </div>
+        <div class="tile yellow w3 h2 icon-fadeoutscaleup">
+          <span class="link" id="Primary_health_care_home">
+            <p class="title">基层医疗卫生<br/><br/><br/>信息系统</p> 
+            <i class="level2_modal"><img src="img/Primary_health_care.png"></i>
+            <!-- MODAL -->
+            <div class="level3_modal" id="Primary_health_care_modal1"> 
+              <a data-scroll="scrollto" href="#public_health"> 公共卫生 </a>
+            </div>
+            <div class="level3_modal" id="Primary_health_care_modal2"> 
+              <a data-scroll="scrollto" href="#basic_medical"> 基本医疗 </a>
+            </div>
+            <!-- MODAL OVER -->
+          </span>
+        </div>
+        <div class="tile purple w2 h1 icon-fadeoutscaleup">
+          <a href="#main_modal" class="link" data-toggle="modal" data-src="sxzz" data-title="双向转诊">
+            <p class="title" data-scroll="scrollto" data-href="ui/trs" style="z-index: 9;">双向转诊</p>
+            <i class="flaticon-right-angle-line-beside-the-heart"></i>
+          </a>
+        </div>
+        <div class="tile blue w2 h1 icon-fadeoutscaleup">
+          <a href="#main_modal" class="link" data-toggle="modal" data-src="jmzsy" data-title="居民主索引（EMPI）">
+            <p class="title" data-scroll="scrollto" data-href="ui/empi/" style="z-index: 9;">eMPI<br/><br/><br/>居民主索引</p>
+            <i class="flaticon-searching-in-archive-folder"></i>
+          </a>
+        </div>
+        <div class="tile turquoise w3 h1 icon-fadeoutscaleup">
+          <a href="#main_modal" class="link" data-toggle="modal" data-src="dzbldy" data-title="EMR 电子病历调阅">
+            <p class="title" data-scroll="scrollto" data-href="ui/view/emr/index.html?typeCode=-1&pid=000319b416934cc1be14d0c5db9651e6" style="z-index: 9;">EMR<br/><br/><br/>电子病历调阅</p>
+            <i class="flaticon-medical-prescription"></i>
+          </a>
+        </div>
+        <div class="tile orange w3 h2 icon-fadeoutscaleup">
+          <a href="#main_modal" class="link" data-toggle="modal" data-src="zhgl" data-title="综合管理">
+            <p class="title" data-scroll="scrollto" data-href="#integrated_management" style="z-index: 9;">综合管理</p>
+            <i class="flaticon-energy-symbol"></i>
+          </a>
+        </div>
+        <div class="tile red w2 h1 icon-fadeoutscaleup">
+          <a href="#main_modal" class="link" data-toggle="modal" data-src="ptjc" data-title="平台基础">
+            <p class="title" data-scroll="scrollto" data-href="http://59.46.190.68:8088/ui/paas/main.html#home.html" style="z-index: 9;">平台基础</p>
+            <i class="flaticon-cell-variant-with-receptors"></i>
+          </a>
+        </div>
+        <div class="tile transparent w3 h1 icon-fadeoutscaleup">
+          <a href="#main_modal" class="link" data-toggle="modal" data-src="ychz" data-title="远程会诊系统">
+            <p class="title" data-scroll="scrollto" data-href="http://59.46.190.68:8088/t/paas/show/demo/cdrzd.html" style="z-index: 9;">远程会诊系统</p>
+            <i class="flaticon-heartbeats-monitoring"></i>
+          </a>
+        </div>
+        <div class="tile transparent w3 h1 icon-fadeoutscaleup">
+          <a href="#main_modal" class="link" data-toggle="modal" data-src="qyyxzx" data-title="区域影像中心">
+            <p class="title" data-scroll="scrollto" data-href="http://59.44.27.126:10017/DicomViewerwaiwang/index.jsp?xeGUID=960B8429A8644137A5BD0B6B8665064E&userid=20160111133840825353&token=98F29CEEFF1D449E9188C2D5BD038839&conferenceID=123" style="z-index: 9;">区域影像中心</p>
+            <i class="flaticon-eye-beside-a-cross"></i>
+          </a>
+        </div>
+        <div class="tile transparent w3 h1 icon-fadeoutscaleup">
+          <a href="#main_modal" class="link" data-toggle="modal" data-src="qyxdzx" data-title="区域心电中心">
+            <p class="title" data-scroll="scrollto" data-href="http://59.46.190.67:8092/WebViewer/ECGViewer/index.do?consultationID=20151117&ecgID=001" style="z-index: 9;">区域心电中心</p>
+            <i class="flaticon-cardiac-graphic"></i>
+          </a>
+        </div>
+        <div class="tile transparent w3 h1 icon-fadeoutscaleup">
+          <a href="#main_modal" class="link" data-toggle="modal" data-src="qyblzx" data-title="区域病理中心">
+            <p class="title" data-scroll="scrollto" data-href="http://59.46.190.67:8092/WebViewer/imageViewer/index.do?consultationID=C74A6297A3900001B8C21010AC301330&sliceID=001" style="z-index: 9;">区域病理中心</p>
+            <i class="flaticon-dna-deoxyribonucleic-acid-chain"></i>
+          </a>
+        </div>
+        <!-- /SECTION TILES -->
+      </section>
+      <section class="clearfix section" id="public_health">
+        <!-- 公共卫生-->
+         <h3 class="block-title">公共卫生</h3>
+        <!-- SECTION -->
+        <section>
+          <!-- SECTION TILES -->
+          <div class="tile brown w2 h1 icon-fadeoutscaleup">
+            <a class="link" href="http://123.177.20.243:8080/phhis/Account/LoginPublc?LoginName=dllgrhjtda&Password=123456" target="_blank">
+              <p class="title">个人和家庭<br/><br/>档案</p> <i class="flaticon-a-heart-beside-the-book"></i>
+            </a>
+          </div>
+          <div class="tile brown w2 h1 icon-fadeoutscaleup">
+            <a class="link" href="http://123.177.20.243:8080/phhis/Account/LoginPublc?LoginName=dlllnrbj&Password=123456" target="_blank">
+              <p class="title">老年人保健</p> <i class="flaticon-a-heart-beside-the-book"></i>
+            </a>
+          </div>
+          <div class="tile brown w2 h1 icon-fadeoutscaleup">
+            <a class="link" href="http://123.177.20.243:8080/phhis/Account/LoginPublc?LoginName=dlletbj&Password=123456" target="_blank">
+              <p class="title">儿童保健</p> <i class="flaticon-a-heart-beside-the-book"></i>
+            </a>
+          </div>
+          <div class="tile brown w2 h1 icon-fadeoutscaleup">
+            <a class="link" href="http://123.177.20.243:8080/phhis/Account/LoginPublc?LoginName=dllfnbj&Password=123456" target="_blank">
+              <p class="title">妇女保健</p> <i class="flaticon-a-heart-beside-the-book"></i>
+            </a>
+          </div>
+          <div class="tile yellow w2 h1 icon-fadeoutscaleup">
+            <a class="link" href="http://123.177.20.243:8080/phhis/Account/LoginPublc?LoginName=dllycfbj&Password=123456" target="_blank">
+              <p class="title">孕产妇保健</p> <i class="flaticon-a-heart-beside-the-book"></i>
+            </a>
+          </div>
+          <div class="tile yellow w2 h1 icon-fadeoutscaleup">
+            <a class="link" href="http://123.177.20.243:8080/phhis/Account/LoginPublc?LoginName=dllcjrkf&Password=123456" target="_blank">
+              <p class="title">残疾人康复</p> <i class="flaticon-wheelchair-symbol"></i>
+            </a>
+          </div>
+          <div class="tile yellow w2 h1 icon-fadeoutscaleup">
+            <a class="link" href="http://123.177.20.243:8080/phhis/Account/LoginPublc?LoginName=dllkqbj&Password=123456" target="_blank">
+              <p class="title">口腔保健</p> <i class="flaticon-tooth-with-a-plus-sign-outlines"></i>
+            </a>
+          </div>
+          <div class="tile yellow w2 h1 icon-fadeoutscaleup">
+            <a class="link" href="http://123.177.20.243:8080/phhis/Account/LoginPublc?LoginName=dlljhsy&Password=123456" target="_blank">
+              <p class="title">计划生育</p> <i class="flaticon-sperms-with-plus-sign"></i>
+            </a>
+          </div>
+          <div class="tile brown w2 h1 icon-fadeoutscaleup">
+            <a class="link" href="http://123.177.20.243:8080/phhis/Account/LoginPublc?LoginName=dlltjgl&Password=123456" target="_blank">
+              <p class="title">体检管理</p> <i class="flaticon-plus-sign-and-human-organs"></i>
+            </a>
+          </div>
+          <div class="tile brown w2 h1 icon-fadeoutscaleup">
+            <a class="link" href="http://123.177.20.243:8080/phhis/Account/LoginPublc?LoginName=dllmbgl&Password=123456" target="_blank">
+              <p class="title">慢病管理</p> <i class="flaticon-medicines-time"></i>
+            </a>
+          </div>
+          <div class="tile brown w2 h1 icon-fadeoutscaleup">
+            <a class="link" href="http://123.177.20.243:8080/phhis/Account/LoginPublc?LoginName=dllcrbgl&Password=123456" target="_blank">
+              <p class="title">传染病管理</p> <i class="flaticon-spheres-connected-by-lines"></i>
+            </a>
+          </div>
+          <div class="tile brown w2 h1 icon-fadeoutscaleup">
+            <a class="link" href="http://123.177.20.243:8080/phhis/Account/LoginPublc?LoginName=dlljhmy&Password=123456" target="_blank">
+              <p class="title">计划免疫</p> <i class="flaticon-24-hours-protection-sign-with-an-umbrella"></i>
+            </a>
+          </div>
+          <div class="tile yellow w2 h1 icon-fadeoutscaleup">
+            <a class="link" href="http://123.177.20.243:8080/phhis/Account/LoginPublc?LoginName=dlljkjy&Password=123456" target="_blank">
+              <p class="title">健康教育</p> <i class="flaticon-smile-emoticon "></i>
+            </a>
+          </div>
+          <div class="tile yellow w2 h1 icon-fadeoutscaleup">
+            <a class="link" href="http://123.177.20.243:8080/phhis/Account/LoginPublc?LoginName=dlltfggwssj&Password=123456" target="_blank">
+              <p class="title">突发公共<br/><br/>卫生事件</p> <i class="flaticon-pharmacy-call-for-drugs-delivery"></i>
+            </a>
+          </div>
+          <div class="tile yellow w2 h1 icon-fadeoutscaleup">
+            <a class="link" href="http://123.177.20.243:8080/phhis/Account/LoginPublc?LoginName=dllwsjdxz&Password=123456" target="_blank">
+              <p class="title">卫生监督<br/><br/>协助</p> <i class="flaticon-plus-sign-on-eye-ball"></i>
+            </a>
+          </div>
+          <div class="tile yellow w2 h1 icon-fadeoutscaleup">
+            <a class="link" href="http://123.177.20.243:8080/phhis/Account/LoginPublc?LoginName=dllazbgl&Password=123456" target="_blank">
+              <p class="title">艾滋病管理</p> <i class="flaticon-disease-symbol"></i>
+            </a>
+          </div>
+          <div class="tile brown w2 h1 icon-fadeoutscaleup">
+            <a class="link" href="http://123.177.20.243:8080/phhis/Account/LoginPublc?LoginName=dlljtqyfu&Password=123456" target="_blank">
+              <p class="title">家庭签约<br/><br/>服务</p> <i class="flaticon-first-aid-kit-outline"></i>
+            </a>
+          </div>
+          <div class="tile brown w2 h3 icon-fadeoutscaleup">
+            <a class="link" href="http://123.177.20.243:8080/phhis/Account/LoginPublc?LoginName=dllbbgl&Password=123456" target="_blank">
+              <p class="title">报表管理</p> <i class="flaticon-catholic-hospital-building"></i>
+            </a>
+          </div>
+          <!-- /SECTION TILES -->
+        </section>
+        <!-- /SECTION -->
+      </section>
+      <section class="clearfix section" id="basic_medical">
+        <!-- 基本诊疗-->
+         <h3 class="block-title">基本诊疗</h3>
+        <!-- SECTION -->
+        <section>
+          <!-- SECTION TILES -->
+          <div class="tile purple w3 h1 icon-fadeoutscaleup">
+            <a class="link" href="http://123.177.20.243:8080/phhis/Account/LoginPublc?LoginName=dllghy&Password=123456" target="_blank">
+              <p class="title">门诊挂号管理</p> <i class="flaticon-first-aid-sign-with-phone"></i>
+            </a>
+          </div>
+          <div class="tile purple w3 h1 icon-fadeoutscaleup">
+            <a class="link" href="http://123.177.20.243:8080/phhis/Account/LoginPublc?LoginName=dllxyys&Password=123456" target="_blank">
+              <p class="title">门诊医生工作站</p> <i class="flaticon-stethoscope-outline-variant"></i>
+            </a>
+          </div>
+          <div class="tile purple w3 h1 icon-fadeoutscaleup">
+            <a class="link" href="http://123.177.20.243:8080/phhis/Account/LoginPublc?LoginName=dllmzhs&Password=123456" target="_blank">
+              <p class="title">门诊护士工作站</p> <i class="flaticon-nurse"></i>
+            </a>
+          </div>
+          <div class="tile purple w3 h1 icon-fadeoutscaleup">
+            <a class="link" href="http://123.177.20.243:8080/phhis/Account/LoginPublc?LoginName=dllsffy&Password=123456" target="_blank">
+              <p class="title">门诊收费结算管理</p> <i class="flaticon-caduceus-variant"></i>
+            </a>
+          </div>
+          <div class="tile yellow w3 h1 icon-fadeoutscaleup">
+            <a class="link" href="http://123.177.20.243:8080/phhis/Account/LoginPublc?LoginName=dllyfgl&Password=123456" target="_blank">
+              <p class="title">门诊药局管理</p> <i class="flaticon-medicine-with-cup"></i>
+            </a>
+          </div>
+          <div class="tile yellow w3 h1 icon-fadeoutscaleup">
+            <a class="link" href="#">
+              <p class="title">住院病人入出院管理</p> <i class="flaticon-human-sleeping-on-bed"></i>
+            </a>
+          </div>
+          <div class="tile yellow w3 h1 icon-fadeoutscaleup">
+            <a class="link" href="#">
+              <p class="title">住院医生工作站</p> <i class="flaticon-stethoscope-outline-variant"></i>
+            </a>
+          </div>
+          <div class="tile yellow w3 h1 icon-fadeoutscaleup">
+            <a class="link" href="#">
+              <p class="title">住院护士工作站</p> <i class="flaticon-nurse"></i>
+            </a>
+          </div>
+          <div class="tile purple w3 h1 icon-fadeoutscaleup">
+            <a class="link" href="#">
+              <p class="title">住院药局管理</p> <i class="flaticon-medicine-with-cup"></i>
+            </a>
+          </div>
+          <div class="tile purple w3 h1 icon-fadeoutscaleup">
+            <a class="link" href="#">
+              <p class="title">住院收费管理</p> <i class="flaticon-caduceus-variant"></i>
+            </a>
+          </div>
+          <div class="tile purple w3 h1 icon-fadeoutscaleup">
+            <a class="link" href="#">
+              <p class="title">辅助检查科室管理</p> <i class="flaticon-hand-with-a-heart"></i>
+            </a>
+          </div>
+          <div class="tile purple w3 h1 icon-fadeoutscaleup">
+            <a class="link" href="#">
+              <p class="title">药库药品管理</p> <i class="flaticon-pharmaceutical-delivery-symbol-with-drugs"></i>
+            </a>
+          </div>
+          <!-- /SECTION TILES -->
+        </section>
+        <!-- /SECTION -->
+      </section>
+      <section class="clearfix section" id="integrated_management">
+        <!-- 综合管理-->
+         <h3 class="block-title">综合管理</h3>
+        <!-- SECTION -->
+        <section>
+          <!-- SECTION TILES -->
+          <div class="tile webdesign imagetile icon-fadein w3 h2">
+            <a href="ui/html5/BI" target="_blank">
+              <i class="flaticon-energy-symbol"></i>
+              <p class="title" data-scroll="scrollto" data-href="ui/html5/BI" style="z-index: 9;">基本医疗保障</p>
+              <img src="img/ylbz01.jpg" alt="" />
+            </a>
+          </div>
+          <div class="tile webdesign imagetile icon-fadein w3 h2">
+            <a href="ui/html5/BI" target="_blank">
+              <i class="flaticon-energy-symbol"></i>
+              <p class="title" data-scroll="scrollto" data-href="ui/html5/BI" style="z-index: 9;">药物管理</p>
+              <img src="img/ywgl04.jpg" alt="" />
+            </a>
+          </div>
+          <div class="tile webdesign imagetile icon-fadein w3 h2">
+            <a href="ui/html5/BI" target="_blank">
+              <i class="flaticon-energy-symbol"></i>
+              <p class="title" data-scroll="scrollto" data-href="ui/html5/BI" style="z-index: 9;">公共卫生</p>
+              <img src="img/ggws02.jpg" alt="" />
+            </a>
+          </div>
+          <div class="tile webdesign imagetile icon-fadein w3 h2">
+            <a href="ui/html5/BI" target="_blank">
+              <i class="flaticon-energy-symbol"></i>
+              <p class="title" data-scroll="scrollto" data-href="ui/html5/BI" style="z-index: 9;">医疗服务</p>
+              <img src="img/ylfw01.jpg" alt="" />
+            </a>
+          </div>
+          <div class="tile webdesign imagetile icon-fadein w3 h2">
+            <a href="ui/html5/BI" target="_blank">
+              <i class="flaticon-energy-symbol"></i>
+              <p class="title" data-scroll="scrollto" data-href="ui/html5/BI" style="z-index: 9;">卫生资源</p>
+              <img src="img/wszy01.jpg" alt="" />
+            </a>
+          </div>
+          <div class="tile webdesign imagetile icon-fadein w3 h2">
+            <a href="ui/html5/BI" target="_blank">
+              <i class="flaticon-energy-symbol"></i>
+              <p class="title" data-scroll="scrollto" data-href="ui/html5/BI" style="z-index: 9;">计划生育</p>
+              <img src="img/jhsy01.jpg" alt="" />
+            </a>
+          </div>
+          <!-- /SECTION TILES -->
+        </section>
+        <!-- /SECTION -->
+      </section>
+      <!-- /SECTION -->
+    </section>
+    <!-- /MAIN -->
+    <!-- BLOG LIGHTBOX -->
+    <section class="mlightbox" id="galleryblog">
+      <section class="mlightbox-content">
+        <div class="fitblog">
+          <iframe width="80%" height="600px" src="#"></iframe>
+        </div>
+      </section>
+    </section>
+
+    <section id="main_modal" class="modal fade" aria-hidden="true">
+      <section class="modal-dialog modal-lgest" style="background:rgba(163,163,163,0.5)">
+        <div class="modal-content" style="width:100%;height:100%;background:rgba(149,208,194,0.9)">
+          <div class="modal-header" style="background:rgba(6,173,165,0.72);font-size:20px;">
+            <button class="close" data-dismiss="modal">&times;</button>
+            <span class="modal-title" id="myModalLabel">&nbsp;</span>
+          </div>
+          <div id="main_modal_lev" class="modal-body" style="overflow:auto;height:90%"></div>
+        </div>
+      </section>
+    </section>
+    <!-- /BLOG LIGHTBOX -->
+
+    <!-- jQuery -->
+    <script src="/ui/paas/lib/js/libs/jquery-1.11.0.min.js"></script>
+    <!--[if !IE]> -->
+    <!--  <script src="/ui/paas/lib/js/libs/jquery-2.0.3.min.js"></script>-->
+    <!-- <![endif]-->
+    <script src="js/jquery-latest.min.js" type="text/javascript"></script>
+    <!-- JQ-->
+    <script src="js/respond.min.js" type="text/javascript"></script>
+    <!-- Responsive Library-->
+    <script src="js/jquery.isotope.js" type="text/javascript"></script>
+    <!-- Isotope -->
+    <script src="js/jquery.mousewheel.js" type="text/javascript"></script>
+    <!-- jQuery Mousewheel -->
+    <script src="js/jquery.mCustomScrollbar.js" type="text/javascript"></script>
+    <!-- Scrollbar -->
+    <script src="js/tileshow.js" type="text/javascript"></script>
+    <script src="js/mlightbox.js" type="text/javascript"></script>
+    <script src="js/jquery.touchSwipe.min.js" type="text/javascript"></script>
+    <!-- TouchSwipe-->
+    <script src="js/jquery.fitVids.js" type="text/javascript"></script>
+    <!-- fitVids -->
+    <script src="js/lockscreen.js" type="text/javascript"></script>
+    <!-- Lockscreen -->
+    <script src="js/bootstrap.js" type="text/javascript"></script>
+    <script src="js/index.js" type="text/javascript"></script>
+    <!-- Bootstrap -->
+    <script src="js/script.js" type="text/javascript"></script>
+
+		<!-- JQUERY COOKIE -->
+		<script src="/ui/paas/lib/js/plugin/jquery-cookie/jquery.cookie.js"></script>
+		<!-- JQUERY Storage API -->
+		<script src="/ui/paas/lib/js/plugin/jquery-storageapi/jquery.storageapi.min.js"></script>
+		<!-- JQUERY FORM -->
+		<script src="/ui/paas/lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+		<!-- JQUERY VALIDATE -->
+		<script src="/ui/paas/lib/js/plugin/jquery-validate/jquery.validate.min.js"></script>
+		<script src="/ui/paas/lib/js/plugin/jquery-validate/messages_zh.js"></script>
+
+		<script src="/ui/paas/lib/js/zy/zy.js"></script>
+		<script src="/ui/paas/lib/js/zy/zy_extend.js"></script>
+		<script src="/ui/paas/lib/js/zy/zy_md5.js"></script>
+
+    <script src="main.js"></script>
+    <script>
+      index();
+      $('a[href="#main_modal"]').click(function(e) {
+        var uri = "show/readme/md.htm?id=" + $(this).data("src");
+        var title = $(this).data('title');
+        $('#myModalLabel').html(title);
+        //zy.debug = true;
+        zy.net.loadHTML(uri, $("#main_modal_lev"));
+      });
+    </script>
+  </body>
+</html>

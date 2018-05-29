@@ -1,0 +1,131 @@
+<!-- Modal -->
+<div class="modal fade" id="mgt_sql_add_updsql" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title">SQL 语句（<span id="mgt_sql_add_updsql_title"></span>）</h4>
+      </div>
+      <div class="modal-body no-padding">
+        <!-- FORM Start -->
+        <form id="mgt_sql_add_updsql_form" method="post" onsubmit="return false;" class="smart-form">
+          <fieldset>
+            <div>
+              <section>
+                <label class="label">SQL ID</label>
+                <label class="input has-warning">
+                  <input type="text" name="sqlid" placeholder="SQL ID">
+                  <b id="mgt_sql_add_updsql_b" class="tooltip tooltip-bottom-right">SQL ID为必填项目</b>
+                </label>
+              </section>
+              <section>
+                <label class="label">SQL 所在组</label>
+                <label class="input">
+                  <input type="text" name="sql_group" placeholder="SQL 所在组">
+                </label>
+              </section>
+              <section>
+                <label class="label">SQL 描述</label>
+                <label class="textarea">
+                  <textarea type="textarea" rows="1" name="sql_desc" placeholder="SQL 描述"></textarea>
+                </label>
+              </section>
+              <section>
+                <label class="label has-warning">SQL 内容</label>
+                <label class="textarea">
+                  <textarea type="textarea" rows="5" name="content" placeholder="SQL 内容"></textarea>
+                </label>
+              </section>
+            </div>
+          </fieldset>
+          <footer>
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary">确定</button>
+          </footer>
+        </form>
+        <!-- FORM End -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+<!-- SCRIPTS ON PAGE EVENT -->
+<script type="text/javascript">
+  // DO NOT REMOVE : GLOBAL FUNCTIONS!
+  pageSetUp();
+  (function () {
+    // 数据字典处理
+    if (mgt_sql._g.param.flg == 'i') {
+      //添加
+      $("#mgt_sql_add_updsql_title").text('添加');
+    } else if (mgt_sql._g.param.flg == 'u') {
+      //修改
+      $('#mgt_sql_add_updsql_form').formDisable(true);
+      var callback = function (msg) {
+        $('#mgt_sql_add_updsql_form').formDisable(false);
+        if (msg) {
+          $('#mgt_sql_add_updsql_form').json2form(msg.result[0]);
+        }
+      };
+      var sqlId = {
+        sqlid: mgt_sql._g.param.sqlid
+      };
+      zy.g.am.app = 'ZYAPP_SYSMGT';
+      zy.g.am.mod = 'sys_sql_mgt';
+      zy.net.get("api/setsqlupt", callback, sqlId);
+      $("#mgt_sql_add_updsql_title").text('修改');
+      $("#mgt_sql_add_updsql_form input[name=sqlid]").attr('readonly', true);
+      $("#mgt_sql_add_updsql_b").remove();
+    }
+  })();
+  $('#mgt_sql_add_updsql').modal('show');
+  // Registration validation script
+  $("#mgt_sql_add_updsql_form").validate({
+    // Rules for form validation
+    rules: {
+      sqlid: {
+        required: true,
+        maxlength: 50
+      },
+      content: {
+        maxlength: 10000
+      },
+      sql_desc: {
+        maxlength: 200
+      },
+      sql_group: {
+        maxlength: 20
+      }
+    },
+    // 验证成功后保存
+    submitHandler: function (form) {
+      var callback = function (msg) {
+        $('#mgt_sql_add_updsql_form').formDisable(false);
+        if (msg) {
+          if (mgt_sql._g.param.flg == 'u') {
+            mgt_sql.SetRow($('#mgt_sql_add_updsql_form').form2json());
+          }
+          $('#mgt_sql_add_updsql').modal('hide');
+          zy.ui.msg("提示信息：", "保存成功！", "s");
+        }
+      };
+      zy.g.am.app = 'ZYAPP_SYSMGT';
+      zy.g.am.mod = 'sys_sql_mgt';
+      if (mgt_sql._g.param.flg == 'i') {
+        zy.net.post("api/addsql", callback, $('#mgt_sql_add_updsql_form').serialize());
+      } else if (mgt_sql._g.param.flg == 'u') {
+        zy.net.post("api/setsql", callback, $('#mgt_sql_add_updsql_form').serialize());
+      }
+      $('#mgt_sql_add_updsql_form').formDisable(true);
+    },
+    // Do not change code below
+    errorPlacement: function (error, element) {
+      error.insertAfter(element.parent());
+    }
+  });
+</script>

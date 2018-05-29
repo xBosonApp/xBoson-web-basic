@@ -1,0 +1,376 @@
+<div class="modal fade" id="zy_chart_selectTable" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog" style="width:90%">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="fa fa-times-circle fa-2" style="color:#E22403"></i>
+        </button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body no-padding">
+        <section id="widget-grid" class="">
+          <!-- row -->
+          <div class="row">
+            <!-- NEW WIDGET START -->
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <!-- Widget ID (each widget will need unique ID)-->
+              <div id="mdm_addr_h7_wid1" class="jarviswidget jarviswidget-color-blueDark" data-widget-editbutton="false" data-widget-deletebutton="false">
+                <header>
+                  <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                  <h2>配置</h2>
+                </header>
+                <!-- widget div-->
+                <div>
+                  <!-- widget edit box -->
+                  <div class="jarviswidget-editbox">
+                    <!-- This area used as dropdown edit box -->
+                  </div>
+                  <!-- end widget edit box -->
+                  <!-- widget content -->
+                  <div class="widget-body no-padding">
+                    <div class="widget-body-toolbar">
+                      <div class="collapse navbar-collapse bg-color-white">
+
+                          <div class="row">
+                            <div class="col-lg-3 col-md-3 col-sm-3">
+                              <div class="input-group">
+                                <span class="input-group-addon"> 模块名称 </span>
+                                <input type="text" class="form-control" index="modTitle">
+                              </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3">
+                              <div class="input-group">
+                                <span class="input-group-addon"> 模块分类 </span>
+                                <input type="text" class="form-control" index="modClass">
+                              </div>
+                            </div>
+                            <div class="col-lg-1 col-md-1 col-sm-1">
+                              <div class="smart-form">
+                                <label class="checkbox">
+                                	<label class="text">分享</label>
+                                  <input type="checkbox" index="share">
+                                  <i></i>
+                                </label>
+                              </div>
+                            </div>
+                            <div class="col-lg-5 col-md-5 col-sm-5">
+                              <div class="btn-group pull-right">
+                                <button index="submit"  class="btn btn-default">
+                                  确定
+                                </button>
+                                <button index="del"  class="btn btn-default">
+                                  删除
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+
+                      </div>
+                    </div>
+
+                    <div id="menuContent" class="menuContent" style="background-color:#FFFFFF; display:none; position: absolute;z-index: 1000;">
+                      <ul id="treeDemo" class="ztree" style="margin-top:0; width:300px;height:300px;overflow: auto;"></ul>
+                    </div>
+
+                    <div class="dataTables_wrapper">
+                      <table id="detail" class="table table-bordered table-striped"></table>
+                    </div>
+                  </div>
+                  <!-- end widget content -->
+                </div>
+                <!-- end widget div -->
+              </div>
+              <!-- end widget -->
+            </article>
+            <!-- WIDGET END -->
+          </div>
+          <!-- end row -->
+        </section>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<script type="text/javascript">
+  $('#zy_chart_selectTable').modal('show');
+  // DO NOT REMOVE : GLOBAL FUNCTIONS!
+  zy_chart.pageSetUp();
+  var clickTarget = null;
+
+  function beforeClick(treeId, treeNode) {
+    var check = (treeNode && !treeNode.isParent);
+    return check;
+  }
+
+  function onClick(e, treeId, treeNode) {
+    var zTree = $.fn.zTree.getZTreeObj("treeDemo"), nodes = zTree.getSelectedNodes(), v = "";
+    if (nodes.length > 0) {
+      var targetInput = clickTarget || null;
+      targetInput.select2('val', nodes[0].modid);
+    }
+  }
+
+  function clearInput(obj) {
+  	$(obj).closest('td').find("[index='nextApi']").select2('val','');
+  }
+
+  function showMenu(obj) {
+    var targetInput = $(obj);
+    var targetInputOffset = $(obj).position();
+    clickTarget = $(obj).closest('td').find("[index='nextApi']");
+    $("#menuContent").css({
+      left : Number(targetInputOffset.left) + 30 + "px",
+      top : Number(targetInputOffset.top) + 80 + "px"
+    }).slideDown("fast");
+
+    $("body").bind("mousedown", onBodyDown);
+  }
+
+  function hideMenu() {
+    $("#menuContent").fadeOut("fast");
+    $("body").unbind("mousedown", onBodyDown);
+  }
+
+  function onBodyDown(event) {
+    if (!(event.target.id == "menuBtn" || event.target.id == "menuContent" || $(event.target).parents("#menuContent").length > 0)) {
+      hideMenu();
+    }
+  }
+
+
+  $(document).ready(function() {
+
+  	shareCheck();
+
+  	function shareCheck(){
+  		if(zy_chart.g.kpiconfig.shareable == '1')
+  			$("[index='share']").prop('checked',true);
+  	  else
+  	    $("[index='share']").prop('checked',false);
+  	}
+
+  	console.log(zy_chart.g.kpiconfig);
+
+    function buildTree(msg) {
+      var setting = {
+        view : {
+          dblClickExpand : false
+        },
+        data : {
+          simpleData : {
+            enable : true
+          }
+        },
+        callback : {
+          beforeClick : beforeClick,
+          onClick : onClick
+        }
+      };
+
+      $.fn.zTree.init($("#treeDemo"), setting, msg);
+    }
+
+    function checkMark() {
+      if (zy_chart.g.mark != 'e') {
+        $('[index="nextApi"]').closest('td').hide();
+        $("thead th").eq($('[index="nextApi"]').closest('td').index()).hide();
+        $(".navbar-form.navbar-left input").attr('readonly', 'readonly');
+      }
+    }
+
+    function _getMsg(obj, func) {
+      var _cb = function(msg) {
+        if (msg) {
+          func(msg);
+        }
+      };
+      zy.g.am.app = obj.app || zy_chart.g.appnm;
+      zy.g.am.mod = obj.mod;
+      if ( typeof (obj.parm) != 'undefined') {
+        zy.net.post("api/" + obj.api, _cb, obj.parm);
+      } else {
+        zy.net.post("api/" + obj.api, _cb);
+      }
+    }
+
+    function _eachTree(json) {
+      if (json != "undefined") {
+        for (var i in json) {
+          if ( typeof (json[i].children) != "undefined") {
+            _eachTree(json[i].children);
+          } else {
+            var obj = {};
+            obj.id = json[i].modid;
+            obj.text = "模块分类: " + json[i].modtype + " 模块名: " + json[i].name;
+            nextApiList.push(obj);
+          }
+        }
+      }
+    }
+
+    function _each(index, obj) {
+      return obj[index].value;
+    }
+
+    var nextApiList = [];
+
+    (function DataTable() {
+      $('[index="modTitle"]').val(zy_chart.g.kpiconfig.modulename);
+      $('[index="modClass"]').val(zy_chart.g.kpiconfig.moduleclass);
+
+      $('.modal-body').find('[index="del"]').btnDisable(true);
+      var columns = [{
+        "data" : "name",
+        "title" : "KPI名"
+      }, {
+        "data" : "unit",
+        "title" : "KPI单位",
+      }, {
+        "title" : "钻取MOD名称",
+        "render" : function(data, type, row, meta) {
+          //        return '<input index="nextApi" style="width:100%;" placeholder="钻取MOD名称" readonly>';
+          return '<input index="nextApi" type="text" readonly value="" style="width:70%;">  <a index="menuBtn" href="#" onclick="showMenu(this); return false;" style="width:30%;">选择</a>  <a index="menuBtn" href="#" onclick="clearInput(this); return false;" style="width:30%;">删除</a>';
+        }
+      }, {
+        "title" : "图形类别",
+        "render" : function(data, type, row, meta) {
+          return '<input index="charttype" style="width:100%;" placeholder="图表类型"/>';
+        }
+      }, {
+        "title" : "显示",
+        "render" : function(data, type, row, meta) {
+          return '<input index="show" style="width:100%;" charttypeplaceholder="显示"/>';
+        }
+      }];
+
+      var options = {
+        "data" : zy_chart.g.kpiconfig.kpis,
+        "columns" : columns,
+        "language" : {
+          "sProcessing" : "处理中...",
+          "sLengthMenu" : "显示 _MENU_ 项结果",
+          "sZeroRecords" : "没有匹配结果",
+          "sInfo" : "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+          "sInfoEmpty" : "显示第 0 至 0 项结果，共 0 项",
+          "sInfoFiltered" : "(由 _MAX_ 项结果过滤)",
+          "sInfoPostFix" : "",
+          "sSearch" : "搜索:",
+          "sUrl" : "",
+          "sEmptyTable" : "表中数据为空",
+          "sLoadingRecords" : "载入中...",
+          "sInfoThousands" : ",",
+          "oPaginate" : {
+            "sFirst" : "首页",
+            "sPrevious" : "上页",
+            "sNext" : "下页",
+            "sLast" : "末页"
+          },
+          "oAria" : {
+            "sSortAscending" : ": 以升序排列此列",
+            "sSortDescending" : ": 以降序排列此列"
+          }
+        },
+        "searching" : false,
+        "autoWidth" : false,
+        "paging" : false,
+        "ordering" : false,
+        "info" : false,
+        "destroy" : true
+      };
+
+      $("#detail").dataTable(options);
+
+      (function() {
+        _getMsg({
+          mod : 'chartbi',
+          api : 'mod_json_sel'
+        }, function(msg) {
+          buildTree(msg.pids);
+          _eachTree(msg.pids);
+          $('[index="nextApi"]').select2({
+            width : '70%',
+            allowClear : true,
+            data : {
+              results : nextApiList
+            }
+          });
+
+          $.each(zy_chart.g.kpiconfig.kpis, function(i, v) {
+            $('[index="nextApi"]').eq(i).select2("val", v.drill_moduleid);
+          });
+
+          $("[index=nextApi]").closest('td').find('.select2-arrow').hide();
+
+        });
+        var cab = function() {
+          $('[index="charttype"]').zySelect('hChart39', false, {
+            width : '100%'
+          });
+          $('[index="show"]').zySelect('hChart40', false, {
+            width : '100%'
+          });
+
+          $.each(zy_chart.g.kpiconfig.kpis, function(i, v) {
+            $('[index="charttype"]').eq(i).select2("val", v.type);
+            $('[index="show"]').eq(i).select2("val", v.visible);
+          });
+
+          checkMark();
+        };
+        zy.cache.initDicts('hChart39,hChart40', cab);
+      })();
+
+    })();
+
+    $('#detail tbody').find('tr').each(function(i) {
+      $(this).data('kpi', zy_chart.g.kpiconfig.kpis[i]);
+    });
+
+    $('#detail tbody').on('click', 'tr', function(e) {
+      if (e.target.nodeName == 'A')
+        return false;
+      $(this).toggleClass('active');
+      if ($('tr.active').length == 0) {
+        $('.modal-body').find('[index="del"]').btnDisable(true);
+      } else {
+        $('.modal-body').find('[index="del"]').btnDisable(false);
+      }
+    });
+
+    $("[index='share']").click(function() {
+    	if($(this).prop("checked"))
+    	  zy_chart.g.kpiconfig.shareable = '1';
+    	else
+    	  zy_chart.g.kpiconfig.shareable = '0';
+    })
+
+    $('.modal-body').find('[index="del"]').click(function() {
+      $('tr.active').hide();
+      $('.modal-body').find('[index="del"]').btnDisable($('tr.active').length == 0);
+    })
+
+    $("[index='submit']").click(function() {
+    	console.log($('.modal').find('tbody tr:hidden').length);
+    	console.log($('.modal').find('tbody tr:visible').length);
+      $.each($('.modal').find('tbody tr:hidden'), function(i, v) {
+        $(this).data('kpi').removed = true;
+      });
+      zy_chart.g.kpiconfig.fileUrl = $('[index="fileUrl"]').val();
+      zy_chart.g.kpiconfig.modulename = $('[index="modTitle"]').val();
+      zy_chart.g.kpiconfig.moduleclass = $('[index="modClass"]').val();
+      $.each(zy_chart.g.kpiconfig.kpis, function(i, v) {
+        v.drill_moduleid = _each(i, $('[index="nextApi"]'));
+        v.visible = _each(i, $('[index="show"]'));
+        v.type = _each(i, $('[index="charttype"]'));
+      });
+      zy_chart.g.kpiconfig.update({
+        act : 'submit',
+        moduleid : zy_chart.g.kpiconfig.moduleid
+      });
+      $('#zy_chart_selectTable').modal('hide');
+    })
+  })
+
+</script>

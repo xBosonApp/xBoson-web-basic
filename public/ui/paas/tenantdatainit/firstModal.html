@@ -1,0 +1,47 @@
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">添加</h4>
+      </div>
+      <div class="modal-body no-padding">
+       <form onsubmit="return false;" class="smart-form">
+          <fieldset>
+            <div class="row">
+            <input type="text" name="presetid" style="display:none;">
+              <section class="col col-6">
+                <label class="label">初始化名称</label>
+                <lable class="input">
+                  <input type="text" name="presetnm" placeholder="初始化名称">
+                  <b class="tooltip tooltip-bottom-right">初始化名称为必填项目</b>
+                </lable>
+              </section>
+
+              <section class="col col-6">
+                <label class="label">状态</label>
+                <label class="input">
+                  <input type="text" name="status" placeholder="状态">
+                </label>
+              </section>
+            </div>
+            <section>
+              <label class="label">说明</label>
+              <label class="textarea">
+                <textarea rows="2" name="mark" id="mark" placeholder="说明"></textarea>
+              </label>
+            </section>
+          </fieldset>
+          <footer>
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary">确定</button>
+          </footer>
+        </form>
+      </div>
+      <!--<div class="modal-footer">-->
+      <!--  <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>-->
+      <!--  <button type="button" class="btn btn-primary">确定</button>-->
+      <!--</div>-->
+    </div>
+  </div>
+</div>

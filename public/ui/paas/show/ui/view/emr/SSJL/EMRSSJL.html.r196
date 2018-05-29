@@ -1,0 +1,310 @@
+
+
+<script type="text/javascript">
+var pageNum=1;
+var pagesize=10;
+var emrssjldata;
+var emrssjl1data;
+$(function () {
+   showDatacssjl();
+   
+});
+function emrssjlcallback(retData){
+    emrssjldata=retData;
+	$('#emrssjljrc').datagrid({
+        nowrap: false,
+        striped: true,
+        collapsible:false,
+		title:'手术记录列表',
+		pagination:true,
+		singleSelect:true,
+		pageNumber:pageNum,
+		pageSize: pagesize,
+		loadMsg:"正在载入...",
+        pageList: [10,20,50,100,200],
+		data:emrssjldata.dataList,
+		columns:[[
+		   		   {field:'dc5001_mzbz',title:'门诊显示',width:64,align:'center'},
+		   {field:'dc5001_kssj',title:'手术日期',width:80,align:'center',			        
+		     	formatter:function(value){
+		            return LC_FormatYMD(value);
+		        }
+		   },
+		   {field:'dc5001_ssmc',title:'手术名称',width:96,align:'center'},
+		   {field:'dc5001_qkyh',title:'切口愈合等级',width:144,align:'center'},
+		   {field:'dc5001_mzfs',title:'麻醉方法',width:80,align:'center'},
+		   {field:'dc5001_jssj_kssj',title:'手术用时',width:80,align:'center'},
+		   {field:'dc5001_ssysxm',title:'主刀医生',width:80,align:'center'},
+		   {field:'dc5001_mzysxm',title:'麻醉医生',width:80,align:'center'},
+		   {field:'dc5001_jgdm',title:'医院',width:96,align:'center'}
+		]],                  
+        onDblClickRow: function (rowIndex) {
+          emrssjlopenRoleDiv(rowIndex);
+        },
+        fitColumns:false,
+	    pagination:true,
+             rownumbers:true
+		}); 
+
+	   var pager = $('#emrssjljrc').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pageNum=pageNumber;
+		           pagesize=pageSize;
+		           showDatacssjl();
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:pagesize,pageNumber:pageNum,total:emrssjldata.count});
+
+		};
+}
+
+	function showDatacssjl(){
+ 
+	   // 数据格式验证通过以后		
+	   // *******************第二步请求数据***********************		
+	
+        	var url ="emrssjl1/"; 	
+        	var itemsList=["dc5001_qkyh","dc5001_mzfs"];	
+			var info= new Map();	
+	        info.put("pageNum",pageNum);
+	        info.put("pageSize",pageSize);
+        	LC_AjaxGet(EMRBaseUrl+url,"formssjl","emrssjlcallback",info,itemsList);
+	    	
+
+	}
+	
+	function emrssjlopenRoleDiv(rowIndex){
+		  var url="emrssjl4/";
+		  var itemsList=[];
+		  var info = new Map();
+		  info.put("zylsh",emrssjldata.dataList[rowIndex].dc5001_ywlsh);
+		  LC_AjaxGet(EMRBaseUrl+url,"formssjl1","emrssjlcallback1",info,itemsList);
+		  LC_SetMapData("formssjl2",emrssjldata.dataList[rowIndex]);
+		  showDatacssjlnr(emrssjldata.dataList[rowIndex].dc5001_jlxh);
+		  LC_FormatTextYMD("formssjl2",["dc5001_kssj","dc5001_jssj"]);
+	}
+	
+	function emrssjlcallback1(retData){
+		  LC_SetMapData("formssjl1",retData.dataList[0]);
+	}
+	function ssjl1callback(retData){
+
+         emrssjl1data=retData;
+         $('#ssjlnr').datagrid({
+            nowrap: false,
+            striped: true,
+            collapsible:false,
+			pagination:true,
+			pageNumber:pageNum,
+			
+			pageSize: pageSize,
+			loadMsg:"正在载入...",
+            pageList: [10,20,50,100,200],
+			data:emrssjl1data.list,
+			columns:[[
+			   {field:'dc5002_sssw',title:'顺序位',width:80,align:'center'},
+			   {field:'dc5002_ssmc',title:'手术名称',width:120,align:'center'},
+			   {field:'dc5002_ssdm',title:'操作编码',width:80,align:'center'},
+			   {field:'dc5002_ssmbbw',title:'目标部位',width:120,align:'center'},
+			   {field:'dc5002_ssczbw',title:'操作部位',width:120,align:'center'},
+			   {field:'dc5002_jrwmc',title:'介入物',width:80,align:'center'},
+			   {field:'dc5002_czcs',title:'操作次数',width:80,align:'center'},
+			   {field:'dc5002_czff',title:'操作方法',width:120,align:'center'}
+			]],                  
+            onDblClickRow: function (rowIndex) {
+              //openRoleDiv(rowIndex);
+            },
+            fitColumns:false,
+		    pagination:true,
+            rownumbers:true
+		}); 
+
+	   var pager = $('#ssjlnr').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pageNum=pageNumber;
+		           pageSize=pageSize;
+		        }
+			});
+			$(pager).pagination({pageSize:pageSize,pageNumber:pageNum,total:emrssjl1data.count});
+		};		  
+	}
+	function showDatacssjlnr(djtxh){
+
+		// 数据格式验证通过以后		
+	    // *******************第二步请求数据***********************		
+		 if(retCheckFlg){	
+			var url ="emrssjl5/"; 	
+			//"dc5001_jgdm","name","sex","dc7002_zrysxm","dc7002_zzysxm","dc7002_zyysxm","dc7002_ryksmc","dc7002_rybqmc","dc7002_brch","dc5001_kssj","dc5001_jssj","dc5001_mzfs","dc5001_mzysxm","dc5001_sqms","dc5001_shms","dc5001_ssysxm","dc5001_ssyzxm","dc5001_ssezxm","dc5001_qkyh"
+			var itemsList=["typeCode1",""];	
+			var info= new Map();	
+			info.put("pageNum",pageNum);
+			info.put("pageSize",pageSize);
+			info.put("djtxh",djtxh);
+			LC_AjaxGet(EMRBaseUrl+url,"formssjl1","ssjl1callback",info,itemsList);	
+		 }		
+	    //********************第三步处理请求后的数据***************
+		
+	}
+
+</script>
+<div class="mainsW-872">
+	<!-- 手术记录列表 开始 -->
+	 <form id="formssjl">
+	<table toolbar="#toolbar"  id="emrssjljrc" style="width:864px;">
+	<div id="toolbar" class="pad-5 clearfix" style="width:864px;">
+	
+		<div class="itemLW-64 padT-4">等级:</div>
+		<div class="itemsW-96">
+			<select class="textLW" name="dept" id="dc5001_qkyh">  
+			    <option value="1">切口等级Ⅰ/愈合类型甲</option>  
+			    <option value="2">切口等级Ⅰ/愈合类型乙</option>
+			    <option value="3">切口等级Ⅰ/愈合类型丙</option>
+			    <option value="4">切口等级Ⅱ/愈合类型甲</option>
+			    <option value="5">切口等级Ⅱ/愈合类型乙</option>
+			    <option value="6">切口等级Ⅱ/愈合类型丙</option>
+			    <option value="7">切口等级Ⅲ/愈合类型乙</option>
+			    <option value="8">切口等级Ⅲ/愈合类型乙</option>
+			    <option value="9">切口等级Ⅲ/愈合类型丙</option>
+			</select>
+		</div>
+		<div class="itemLW-64 padT-4">麻醉:</div>
+		<div class="itemsW-96">
+			<select class="textLW" name="dept" id="dc5001_mzfs">  
+			    <option value="1">全身麻醉</option>  
+			    <option value="11">吸入麻醉</option>
+			    <option value="12">静脉麻醉</option>  
+			    <option value="13">基础麻醉</option>
+			    <option value="2">椎管内麻醉</option>  
+			    <option value="21">蛛网膜下腔阻滞麻醉</option>
+			    <option value="22">硬脊膜外腔阻滞麻醉</option>  
+			    <option value="3">局部麻醉</option>
+			    <option value="31">神经丛阻滞麻醉</option>  
+			    <option value="32">神经节阻滞麻醉</option>
+			    <option value="33">神经阻滞麻醉</option>  
+			    <option value="34">区域阻滞麻醉</option>
+			    <option value="35">局部浸润麻醉</option>  
+			    <option value="36">表面麻醉</option>
+			    <option value="4">针刺麻醉</option>  
+			    <option value="5">复合麻醉</option>
+			    <option value="51">静吸复合全麻</option>  
+			    <option value="52">针药复合麻醉</option>
+			    <option value="53">神经丛与硬膜外阻滞复合麻醉</option>  
+			    <option value="54">全麻复合全身降温</option>
+			    <option value="55">全麻复合控制性降压</option>  
+			    <option value="5X">复合麻醉扩充内容</option>  
+			    <option value="X">麻醉方法扩充内容</option>
+			    <option value="9">其他麻醉方法</option>				    
+			</select>
+		</div>
+		<div class="itemLW-80 padT-4">手术日期</div>
+		<div class="itemsW-112"><input class="Wdate"  onfocus="WdatePicker({dataFmt:'yyyy-MM-dd'})" onClick="WdatePicker()" type="text" style="width:96px;" id="primal_time"/></div>
+		<div class="itemsW-96"><input class="Wdate" onClick="WdatePicker()" type="text" style="width:96px;" id="latest_time"/></div>
+		<div class="itemLW-64"><a href="javascript:;;;" class="easyui-linkbutton" onclick="showDatacssjl()">查询</a></div>
+     
+	</div></table></form>
+	<!-- 手术记录列表 结束 -->
+	 <!--手术记录内容 开始 -->
+	<div class="easyui-panel" title="手术记录内容">
+		<div class="mainsW-864" >
+			 <div class="mainsW-864 padTB-20" >
+			 	<div class="c-18"><lable class="c-18" id="dc5001_jgdm"></lable></div>
+			 	<div class="c-18">手术单</div>
+			 </div>
+			 <form id="formssjl1">
+				<div class="padTB-10 clearfix">
+				 <div class="itemsW-208" >
+				  <div class="itemLW-96 padT-4">姓名：</div>
+				  <div class="itemLW-112"><input class="textLW" type="text" id="name"/></div>
+				 </div>
+				 <div class="itemsW-208">
+				  <div class="itemLW-96 padT-4">性别：</div>
+				  <div class="itemLW-112"><input class="textLW" type="text" id="sex"/></div>
+				 </div>
+				  <div class="itemsW-208" >
+				  <div class="itemLW-96 padT-4">年龄：</div>
+				  <div class="itemLW-112"><input class="textLW" type="text"/></div>
+				 </div>
+				 <div class="itemsW-208" >
+				  <div class="itemLW-96 padT-4">主任医生：</div>
+				  <div class="itemLW-112"><input  class="textLW" type="text" id="dc7002_zrysxm"/></div>
+				 </div>
+				 <div class="itemsW-208" >
+				  <div class="itemLW-96 padT-4">主治医生：</div>
+				  <div class="itemLW-112"><input class="textLW" type="text" id="dc7002_zzysxm"/></div>
+				 </div>
+				 <div class="itemsW-208" >
+				  <div class="itemLW-96 padT-4">住院医生：</div>
+				  <div class="itemLW-112"><input class="textLW" type="text" id="dc7002_zyysxm"/></div>
+				 </div>
+				 <div class="itemsW-208" >
+				  <div class="itemLW-96 padT-4">科室：</div>
+				  <div class="itemLW-112"><input class="textLW" type="text" id="dc7002_ryksmc"/></div>
+				 </div>
+				 <div class="itemsW-208" >
+				  <div class="itemLW-96 padT-4">病区：</div>
+				  <div class="itemLW-112"><input class="textLW" type="text" id="dc7002_rybqmc"/></div>
+				 </div>
+				 <div class="itemsW-208" >
+				  <div class="itemLW-96 padT-4">床号：</div>
+				  <div class="itemLW-112"><input class="textLW" type="text" id="dc7002_brch"/></div>
+				 </div>
+				 
+			</div>
+			</form>
+			<form id="formssjl2">
+		 	<div class="padTB-10 clearfix">
+		 	     <div class="itemsW-416" >
+				  <div class="itemLW-96 padT-4">开始时间：</div>
+				  <div class="itemLW-192"><input class="textLW" type="text" id="dc5001_kssj"/></div>
+				 </div>
+				 <div class="itemsW-416" >
+				  <div class="itemLW-96 padT-4">结束时间：</div>
+				  <div class="itemLW-192"><input class="textLW" type="text" id="dc5001_jssj"/></div>
+				</div>
+				 <div class="itemsW-416" >
+				  <div class="itemLW-96 padT-4">麻醉方法：</div>
+				  <div class="itemLW-320"><input class="textLW" type="text" id="dc5001_mzfs"/></div>
+				 </div>
+				 <div class="itemsW-208">
+				  <div class="itemLW-96 padT-4">麻醉医生：</div>
+				  <div class="itemLW-112"><input class="textLW" type="text" id="dc5001_mzysxm"/></div>
+				 </div>
+				  <div class="itemsW-448" >
+				  <div class="itemLW-96 padT-4">术前诊断：</div>
+				  <div class="itemLW-320"><input class="textLW" type="text" id="dc5001_sqms"/></div>
+				 </div>
+				 <div class="itemsW-448" >
+				  <div class="itemLW-96 padT-4">术后诊断：</div>
+				  <div class="itemLW-320"><input  class="textLW" type="text" id="dc5001_shms"/></div>
+				 </div>
+			</div>
+			<div class="padTB-10 clearfix">
+				 <div class="itemsW-208" >
+				  <div class="itemLW-96 padT-4">手术医生：</div>
+				  <div class="itemLW-112"><input class="textLW" type="text" id="dc5001_ssysxm"/></div>
+				 </div>
+				 <div class="itemsW-208">
+				  <div class="itemLW-96 padT-4">手术一助:</div>
+				  <div class="itemLW-112"><input class="textLW" type="text" id="dc5001_ssyzxm"/></div>
+				 </div>
+				  <div class="itemsW-208" >
+				  <div class="itemLW-96 padT-4">手术二助:</div>
+				  <div class="itemLW-112"><input class="textLW" type="text" id="dc5001_ssezxm"/></div>
+				 </div>
+				 <div class="itemsW-416" >
+				  <div class="itemLW-96 padT-4">切口愈合等级:</div>
+				  <div class="itemLW-320"><input  class="textLW" type="text" id="dc5001_qkyh"/></div>
+				 </div>
+			</div>
+		    </form>
+		 </div>
+		<table toolbar="toolbar1" id="ssjlnr" style=" width:864px;"></table>
+	</div>
+	<!-- 手术记录内容 结束 -->
+</div>
+	

@@ -1,0 +1,18 @@
+<create to='ck' str-s="not"/>
+<set to='ck' attr='str' value="getHeader('cookie')" exp='true'/>
+
+<script runat='server'>
+  var ck = val('ck');
+  var _ck = {};
+  
+  if (ck.str) {
+    ck = ck.str.split(';');
+    ck.forEach(function(item) {
+      var t = item.split('=');
+      _ck[t[0].trim()] = t[1];
+    });
+  }
+  _ck.zyurl = 'http://192.168.7.19/';
+  val('ck', _ck);
+  end();
+</script>

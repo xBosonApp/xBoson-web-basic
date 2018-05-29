@@ -1,0 +1,53 @@
+<div id="EWATERBI_pdmr_prodcplan_log" class="widget-body no-padding" style="margin: -10px -13px 28px -13px;">
+  <div class="widget-body-toolbar">
+    <div class="row">
+      <form id="EWATERBI_pdmr_prodcplan_log_form" method="post" onsubmit="return false;" class="smart-form">
+        <section class="col col-2">
+          <label class="input">
+            <input type="hidden" name="p_change_reason" data-type="select2" placeholder="变更原因"/>
+          </label>
+        </section>
+        <!--<section class="col col-2">-->
+        <!--<label class="input">-->
+        <!--<input type="text" name="p_change_usr" placeholder="更改人" class="form-control">-->
+        <!--</label>-->
+        <!--</section>-->
+
+        <section class="col col-2">
+          <label class="input">
+            <button id="EWATERBI_pdmr_prodcplan_log_search" class="btn btn-info btn-sm" type="submit"><i
+              class="fa fa-search fa-1"></i>&emsp;查 询&emsp;</button>
+          </label>
+        </section>
+      </form>
+    </div>
+  </div>
+  <div class="dataTables_wrapper">
+    <table id="EWATERBI_pdmr_prodcplan_log_dt" class="table table-bordered table-striped">
+      <thead>
+      <tr>
+
+        <!--<th>计划名称</th>-->
+        <th>变更原因</th>
+        <th>更改人</th>
+        <th>修改时间</th>
+        <th>变更记录序号</th>
+      </tr>
+      </thead>
+    </table>
+  </div>
+  <div id="EWATERBI_pdmr_prodcplan_log_pagination"></div>
+</div>
+
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script src="lib/html/zy_modal.js"></script>
+<script src="lib/html/zy_tabs.js"></script>
+<script src="plan/plan_log.js"></script>
+<script type="text/javascript">
+  // DO NOT REMOVE : GLOBAL FUNCTIONS!
+  pageSetUp();
+  var p_log = new P_log();
+  var options = {
+    width: '80%'
+  };
+</script>

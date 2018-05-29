@@ -1,0 +1,176 @@
+
+<script type="text/javascript">
+var pageNum=1;
+var pagesize=10;
+var data1;
+var data2;
+$(function () {
+   showDatacfxx();
+   //showDatacfmx();
+});
+ 	function emrmzjz3callback(retData){
+ 	data1 = retData;
+ 	$('#cfxx').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false, 				
+				title:'处方信息',
+				pagination:true,
+				singleSelect:true,
+				pageNumber:pageNum,
+				pageSize: pagesize,
+				loadMsg:"正在载入...",
+                pageList: [10,20,50,100,200],
+				data:data1.dataList,
+				columns:[[				  
+				   {field:'dc1003_cflb',title:'类型',width:100,align:'center'},
+				   {field:'dc1003_kdysxm',title:'开方医生',width:100,align:'center'},
+				   {field:'dc1003_kdksmc',title:'开方科室',width:100,align:'center'},
+				   {field:'dc1003_cfts',title:'开方帖数',width:100,align:'center'},
+				   {field:'dc1003_zyzf',title:'中药煮煎法',width:100,align:'center'},
+				   {field:'dc1003_kdrq',title:'开方日期',width:100,align:'center',
+				   	   formatter:function(value){
+		                   return LC_FormatYMD(value);
+		               }
+		           },
+				   {field:'dc1003_jgdm',title:'医院',width:160,align:'center'}
+				]],                  
+                onDblClickRow: function (rowIndex) {
+                  openRoleDiv(rowIndex);
+                },
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true
+		}); 
+
+	   var pager = $('#cfxx').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pageNum=pageNumber;
+		           pagesize=pageSize;
+		           showDatacfxx();
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:pagesize,pageNumber:pageNum,total:data1.count});
+
+		};
+ 	
+ 	}
+
+	function showDatacfxx(){
+	
+		// ******************* 请求数据***********************		
+			
+			    //你的服务名
+	        	var url ="emrmzjz3/"; 
+	        	//要提交表单的所有控件id	
+	        	var itemsList=[];	
+			    var info= new Map();
+			    //分页	
+			   
+		        info.put("pageNum",pageNum);
+		        info.put("pageSize",pagesize);
+				info.put("pid",self.parent.pid);
+		if(self.parent.jgdm!=undefined){
+		info.put("jgdm",self.parent.jgdm);
+		info.put("jzlsh",self.parent.jzlsh);
+		}
+				
+	        	LC_AjaxGet(EMRBaseUrl+url,"","emrmzjz3callback",info,itemsList);	
+	        	
+		
+		 //******************** 处理请求后的数据***************	
+	
+	}
+		
+	
+	function openRoleDiv(rowIndex){
+		  var url="emrmzjz4/";
+		  var itemsList=[];
+		  var info = new Map();
+		  info.put("djtxh",data1.dataList[rowIndex].dc1003_jlxh);
+		  info.put("pageNum",pageNum);
+		  info.put("pageSize",pagesize);
+		  LC_AjaxGet(EMRBaseUrl+url,"","emrmzjz4callback",info,itemsList);
+	}
+	
+	function emrmzjz4callback(retData){
+		data2 = retData;
+		$('#cfmx').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+				title:'处方明细',
+				singleSelect:true,
+				pagination:true,
+				pageNumber:pageNum,
+				pageSize: pagesize,
+				loadMsg:"正在载入...",
+                pageList: [10,20,50,100,200],
+				data:data2.dataList,
+				columns:[[
+				  // {field:'tablename',title:'序号',width:60,align:'center'},
+				   {field:'dc1004_zylx',title:'类别',width:100,align:'center'},
+				   {field:'dc1004_ypmc',title:'名称',width:100,align:'center'},
+				   {field:'dc1004_ypjx',title:'剂型',width:100,align:'center'},
+				   {field:'dc1004_ypgg',title:'规格',width:60,align:'center'},
+				   {field:'dc1004_yypc',title:'频次',width:60,align:'center'},
+				   {field:'dc1004_zjl',title:'剂量',width:60,align:'center'},
+				   {field:'dc1004_yyts',title:'天数',width:60,align:'center'},
+				   {field:'dc1004_yytj',title:'途径',width:60,align:'center'},
+				   {field:'dc1004_pspb',title:'皮试',width:60,align:'center'},
+				   {field:'dc1004_yfms',title:'用法描述',width:120,align:'center'}
+				]],                  
+                onDblClickRow: function (rowIndex) {
+                  openRoleDiv(rowIndex);
+                },
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true
+		}); 
+
+	   var pager = $('#cfmx').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pageNum=pageNumber;
+		           pageSize1=pagesize;
+		           showDatacfmx();
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:pagesize,pageNumber:pageNum,total:data2.count});
+
+		};
+	}
+	//function showDatacfmx(){
+			
+		// *******************请求数据***********************		
+		// if(retCheckFlg){		
+				    //你的服务名
+		//        	var url ="emrmzjz4/"; 
+		        	//要提交表单的所有控件id	
+		//        	var itemsList=[];	
+		//		    var info= new Map();
+				    	//分页	
+		//	        info.put("pageNum",pageNum);
+		//	        info.put("pageSize",pageSize);
+		//        	LC_AjaxGet(EMRBaseUrl+url,"","emrmzjz4callback",info,itemsList);	
+		        	
+		// }		
+		 //********************处理请求后的数据***************	
+	//}
+
+</script>
+
+<div class="mainsW-872">
+
+	<!-- 处方信息 开始 -->
+	<table id="cfxx" style="width:872px;"></table>
+	<!-- 处方信息 结束 -->
+	<!-- 处方明细 开始 -->
+	<table id="cfmx"  style="width:872px;"></table>
+	<!-- 处方明细 结束 -->
+</div>

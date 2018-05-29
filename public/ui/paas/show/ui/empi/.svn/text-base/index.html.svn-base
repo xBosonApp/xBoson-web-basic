@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<title>EMPI管理</title>
+<script language="JavaScript" src="/comm.js" type="text/javascript"></script>
+<style type="text/css">
+.active {
+	background-color: #f7941d;
+}
+.active a {
+	background-color: #f7941d;
+}
+</style>
+</head>
+
+<body class="easyui-layout">
+
+<div id="openRoleDiv" autoopen="false" cache="false" closed="false" collapsible="false" minimizable="false" modal="true" resizable="true" stack="true" zindex="9999">
+</div>
+<div border="true" class="cs-north heads" region="north">
+  <div class="cs-north-bg">
+    <div class="cs-north-logo" style="width: 600px;"><img src="/images/lclogo.png" alt="" style="padding:12px 15px 0 2px; float:left;"><span style="font-size:22px; display:block; padding:25px 0 0 0; font-family:微软雅黑,黑体;">区域卫生服务——EMPI</span></div>
+    
+    <div class="cs-north-info">
+        	<div class="cs-north-info-nav">
+            	<img src="../images/grda_03.png"><script language="JavaScript" src="/comm/ui-skin-nav.js" type="text/javascript"></script>
+            	<div class="cs-north-info-nav-c">
+                	<ul>
+                    	<!--<li style=" background:none;"><a href="javascript:void(0)">首页</a></li>
+                        <li><a href="javascript:void(0)">修改密码</a></li>
+                        <li><a href="javascript:void(0)">系统帮助</a></li>-->
+                        <li style=" background:none;"><a href="javascript:void(0)" onclick="tuichu()">安全退出</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="cs-north-info-m"><span style="float:right;"><strong id="nname"></strong>欢迎进入系统！ </span></div>
+        </div>
+  </div>
+</div>
+<div border="true" class="cs-west" region="west" split="true">
+  <div id="index" border="false" class="easyui-accordion" fit="true">
+    <div title="EMPI管理">
+      <ul>
+        <li><a class="cs-navi-tab" href="javascript:void(0);" src="hqtj.html">获取统计</a></li>
+        <li><a class="cs-navi-tab" href="javascript:void(0);" src="grxx.html">获取个人信息</a></li>
+        <li><a class="cs-navi-tab" href="javascript:void(0);" src="ryxx.html">获取相似人信息</a></li>
+        <li><a class="cs-navi-tab" href="javascript:void(0);" src="zxhf.html">注销恢复</a></li>
+        <li><a class="cs-navi-tab" href="javascript:void(0);" src="qz.html">权重比</a></li>
+        <li><a class="cs-navi-tab" href="javascript:void(0);" src="xjjy.html">数据校验</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div id="mainPanle" border="true" border="false" region="center">
+  <div id="tabs" border="false" class="easyui-tabs" fit="true">
+    <div title="获取统计">
+      <iframe frameborder="0" scrolling="yes" src="hqtj.html" style="width: 100%; height: 100%;"></iframe></div>
+  </div>
+</div>
+  <div border="false" class="cs-south" region="south">乐辰科技有限公司</div>
+  <div id="ssa" title=""></div>
+  <div id="mm" class="easyui-menu cs-tab-menu">
+  	<div id="mm-tabupdate">
+  		刷新</div>
+  	<div class="menu-sep">
+  	</div>
+  	<div id="mm-tabclose">
+  		关闭</div>
+  	<div id="mm-tabcloseother">
+  		关闭其他</div>
+  	<div id="mm-tabcloseall">
+  		关闭全部</div>
+  </div>
+<script type="text/javascript">
+$(function(){
+$("#index li").click(function(){
+	$(this).addClass("active");
+	$(this).siblings().removeClass("active")
+	});
+})
+</script>
+</body>
+</html>

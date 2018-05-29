@@ -1,0 +1,164 @@
+
+<script type="text/javascript" language="JavaScript" src="/t/paas/show/ui/comm.js"></script>
+<script src="reporting/highcharts.js"></script>
+<script src="reporting/modules/exporting.js"></script>
+
+<script type="text/javascript">
+
+
+$(function () {
+	alert("id="+UrlParmData.parm("id"));
+    setData(1);
+});
+
+function setData(data){
+	// ******************第一步验证数据格式*********************
+	var checkItemsList = ["test1"];
+    // 重置检查结果
+    retCheckFlg=true;
+    // 调用指定的验证
+	LC_IsCheckLengthMin("form1",checkItemsList,'2');
+	// 定义返回类型
+	var retData;
+	// 数据格式验证通过以后
+	// *******************第二步请求数据***********************
+    // if(retCheckFlg){
+    if(retCheckFlg){
+        var url ="lkjsdflkjl/sdfsadf"; 
+        var itemsList=["start","end","test1"];
+	    var info= new Map();
+	    info.put("name","哈哈");
+	    info.put("sex","哈哈sex");
+        retData = LC_AjaxPost(baseUrl+url,"form1",info,itemsList);
+    }
+    //********************第三步处理请求后的数据***************
+   // if(retData!=undefined){
+   if(true){
+
+        // 更具自己业务情况铺数据
+	    var json;
+	    var jsonData="log/html/data1.json";
+		if(data==1){
+			jsonData="log/html/data1.json";
+		}else if(data==2){
+			jsonData="log/html/data2.json";
+		}else if(data==3){
+			jsonData="log/html/data3.json";
+		};
+		$.getJSON(jsonData,function(data){
+			 json = eval(data);
+			 // alert(json[0].tablename)
+			 //var context=$('#context');
+			 var categ=['产生数据数','成功接收','失败'];
+			 var data=[];
+		
+			 var total=[];
+			 var success=[];
+			 var fail=[];
+			 var categ2=[];
+			 for(i=0;i<json.length;i++)
+			 {
+			    categ2.push(json[i].tablename);
+			    total.push(json[i].total);
+			 }
+			 var subdata1=new Object();
+		     subdata1.name='total';
+		     subdata1.data=total
+			 data.push(subdata1);
+			 var chart=new Highcharts.Chart({
+			     chart: { //定义图开的类型
+			               // type: 'line',//折线
+							//type:'scatter',//点
+							//type:'spline',//曲线
+							//type:'bar',//柱状图
+							//type:'pie',
+							//type:'area',
+							type:'column',
+							//inverted:true,
+							height:300,
+							width:872,
+							renderTo:'context',
+							backgroundColor:'#aaaaaa'
+			     },
+				 title: {//定义标题
+			             text: '日志统计'
+			     },
+				 subtitle: {//副标题
+			             text: '副标题'
+			     },
+				 xAxis: {
+				         title: {
+			                    text: '业务类型'
+			             },
+						 categories:categ2,
+						 type:'category'
+			     },
+			     yAxis: {
+			            title: {
+			                text: '数据量'
+			            },
+			            labels: {
+			                formatter: function() {
+			                   return this.value +'k';
+			                }
+			            }
+			     },
+			     tooltip: {
+			                pointFormat: '{point.y:,.0f}</b><br/>业务类型({series.name})'
+			     },
+			     plotOptions: {
+			        series: {
+			            cursor: 'pointer',
+			            events: {
+			                click: function(event) {
+			                     alert("这是获得的值"+"名称="+event.point.category+"  值="+event.point.y+ "我要跳转页面了");  
+			                     openRoleDiv(1);
+			                }
+			             }
+			          }
+			      },
+				  series:data
+			
+			    }
+			   
+	         );
+		 });
+     } 
+
+ }
+</script>
+
+<style>
+.padding1{padding: 10px 0 0 7px;}
+</style>
+<div class="mainsW-872 padding1">
+	<div class="easyui-panel">
+	<div class="padTB-5 clearfix">
+		<form id="form1">
+			  <div class="itemsW-240" > 
+			  	  <div class="itemLW-80 padT-4">开始时间:</div>
+			  	  <div class="itemRW-144"><input type="text" id="start" class="easyui-datebox" ></div> 
+			  </div>
+			  <div class="itemsW-240">
+			      <div class="itemLW-80 padT-4">结束时间:</div> 
+			      <div class="itemRW-144"><input  type="text" id="end" class="easyui-datebox"></div><input type="text" id="test1" style="display:none;" >
+			  </div>
+			  <div class="itemLW-288">
+			  	  <a href="#" class="easyui-linkbutton">查询</a>
+			  	  <a href="#" class="easyui-linkbutton">查看统计图</a>
+			  </div>
+		</form>
+	</div>	
+	</div>
+
+
+</div>
+<div class="mainsW-872 padTB-10" style="text-align: center;">
+	<a href="#" onclick="setData(1)" class="easyui-linkbutton">按照机构代码查看</a>
+	<a href="#" onclick="setData(2)" class="easyui-linkbutton">按业务查看</a>
+	<a href="#" onclick="setData(3)" class="easyui-linkbutton">按业时间查看</a>
+</div>
+
+<div class="mainsW-872" style="background-color: red;">
+	 <div id="context" style="background-color:blue;height:0px;width:0px;text-align:center;"></div>
+</div>

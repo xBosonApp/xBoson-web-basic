@@ -1,0 +1,223 @@
+ <div class="modal fade" id="ui_release" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title">tree</h4>
+			</div>
+			<div class="modal-body">
+			
+			<div class="row" >
+			<section class="col-sm-6" style="overflow: auto; height:435px;">
+				<ul id="lefttree" class="ztree"></ul>
+				</section>
+				<section class="col-sm-6" style="overflow: auto; height:435px;">
+				<ul id="righttree" class="ztree"></ul>
+				</section>
+				</div>
+				
+			</div>
+			<form method="post" onsubmit="return false;" class="smart-form">
+        <footer>
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <button type="submit" class="btn btn-primary" onclick="ui_release_save()">确定</button>
+        </footer>
+      </form>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	//设置ztree
+	var _tools = {
+	  _api: function (_apinm, _cb, _param, _str) {
+      $.ajax({
+        url: 'http://' + location.host + '/api/' + _apinm,
+        dataType: "jsonp",
+        data: _param || {},
+        type: _str || 'GET',
+        jsonpCallback: 'callback' + zy.tool.random(),
+        success: function (data) {
+          _cb(data);
+        },
+        error: function (xhr, status, error) {
+          console.log('Error: ' + error.message);
+        }
+      });
+    },
+    _post: function (_apinm, _cb, _param) {
+            $.post('http://' + location.host + '/api/' + _apinm, _param, function (data) {
+                _cb && _cb(data);
+            });
+        }
+	  
+	}
+	
+function _tree(){
+	  var setting = {
+		data: {
+			key: {
+				checked: "checked",
+				name: 'name',
+         title: 'path'
+			},
+			simpleData: {
+				enable: true
+				
+			}
+		},
+		check: {
+			enable: true,
+			chkDisabledInherit: true,
+			chkStyle: "checkbox",
+			chkboxType: {
+				"Y": "ps",
+				"N": "ps"
+			}
+		},
+		view: {
+			showTitle: true,
+      selectedMulti: false,
+      showIcon: true,
+      dblClickExpand: false
+		},
+		callback:{
+		  onExpand: _expand
+		}
+	};
+    function _fromServer(_path, _cb,_flag) {
+      if(_flag=='leftex')
+        var _t = {
+          path:_path,
+          branch:'t'
+        };
+        if(_flag=='rightex')
+        var _t={
+          path:_path,
+          branch:'ui'
+        };
+      if(_flag=='left' || _flag=='right')
+        var _t = {
+          path:_path,
+          double:'double'
+        };
+      
+      
+      _tools._api('getfilelist', function (_m) {
+        if (!Boolean(_m.ret)) {
+          if(_flag=='leftex' || _flag=='rightex')
+          var _mm = _m.result;
+          if(_flag=='left')
+          var _mm = _m.t;
+          if(_flag=='right'){
+          var _mm = _m.ui;
+          }
+          
+          
+          if ($.isArray(_mm)) {
+            _mm = _sort(_mm)
+          } else {
+            _mm.children = _sort(_mm.children)
+          }
+
+          _cb && _cb(_mm);
+
+        } else
+          zy.ui.msg('提示', '接口执行失败:' + _m.msg, 'e');
+      }, $.extend(true, _t, zy.g.comm));
+    }
+    function _sort(_arr) {
+            var _fileArray = [], _dirArray = [];
+            $.each(_arr, function (_i, _v) {
+                if (_v.isParent)
+                    _dirArray.push(_v);
+                else
+                    _fileArray.push(_v);
+            });
+
+            return [].concat(_dirArray, _fileArray);
+        }
+    function _expand(_e, _id, _node) {
+          var lefttree = $.fn.zTree.getZTreeObj("lefttree");
+          var righttree = $.fn.zTree.getZTreeObj("righttree");
+          var _flg;
+          var _tid=$(_e.target).attr('id');
+            if(/lefttree/.test(_tid)){
+            _tree=lefttree
+            _flg='leftex';
+            }
+            if(/righttree/.test(_tid)){
+            _tree=righttree
+            _flg='rightex';
+            }
+            if (!_node.children || _node.children.length === 0)
+                _fromServer(_node.path, function (_m) {
+                    var _result = _m;
+                    if(_node.checked)
+                      $.each(_result,function(i,v){
+                        v.checked = true;
+                      });
+                    _node.children = _result;
+                    _tree.refresh();
+                }, _flg);
+        }
+    _fromServer('/', function (_m) {
+        $.fn.zTree.init($("#lefttree"), setting, _m);
+				$('#ui_release').modal('show');
+      },'left');
+      _fromServer('/', function (_m) {
+				$.fn.zTree.init($("#righttree"), setting, _m);
+				$('#ui_release').modal('show');
+      },'right');
+	}
+		
+	//点击保存事件
+	function ui_release_save() {
+		var lefttreeObj = $.fn.zTree.getZTreeObj('lefttree');
+		var leftnodes = lefttreeObj.getCheckedNodes(true);
+		var righttreeObj = $.fn.zTree.getZTreeObj('righttree');
+		var rightnodes = righttreeObj.getCheckedNodes();
+		function _each(_arr){
+		  var _larr=[];
+		  $.each(_arr,function(i,v){
+		    if(v.check_Child_State==-1)
+		      _larr.push(v.path);
+		  })
+		  return _larr;
+		}
+
+		if(rightnodes.length==0 && leftnodes.length==0){
+		  zy.ui.msg("提示信息：", "未选择！", "w");
+		  return;
+		}else{
+		  var right = _each(rightnodes);
+		  var left = _each(leftnodes);
+		}            
+		 var _msg;
+		if(right.length!=0){
+			_msg='点击确定会删除待下线的文件，确定要删除吗？'
+		}else{
+		  _msg='确定要发布选中的文件？？'
+		}
+		
+		zy.ui.mask('请确认',_msg,function(){
+		var param={
+		  up:left,
+		  down:right
+		}
+		
+		console.log(param)
+		_tools._post('publish',function(m){
+		  if(!Boolean(m.ret)){
+		  				zy.ui.msg("提示信息：", "发布成功", "s");
+		  }else{
+		    zy.ui.msg("提示信息：","接口执行失败："+ m.msg, "e");
+		  }
+
+		},$.extend(true, param, zy.g.comm));
+		});
+	}
+	
+	_tree();
+</script>

@@ -1,0 +1,178 @@
+ <div class="modal fade" id="dict_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title"><span id="dict_modal_title"></span></h4>
+			</div>
+			<div class="modal-body no-padding">
+				<!-- FORM Start -->
+				<form id="dict_modal_form" method="post" onsubmit="return false;" class="smart-form">
+					<fieldset>
+						<input type="hidden" name="typecd" />
+						<input type="hidden" name="_version" />
+						<input type="hidden" name="_dictcd" />
+						<div class="row">
+							<section class="col col-6">
+								<label class="label">字典代码</label>
+								<label class="input has-warning">
+									<input type="text" name="dictcd" placeholder="字典代码">
+									<b class="tooltip tooltip-bottom-right">字典代码为必填项目</b>
+								</label>
+							</section>
+							<section class="col col-6">
+								<label class="label has-warning">字典名称</label>
+								<label class="input">
+									<input type="text" name="dictnm" placeholder="字典名称">
+									<b class="tooltip tooltip-bottom-right">字典名称为必填项目</b>
+								</label>
+							</section>
+						</div>
+						<div class="row">
+						  <section class="col col-6">
+								<label class="label">快捷码</label>
+								<label class="input">
+									<input type="text" name="shortkey" placeholder="快捷码">
+								</label>
+							</section>
+							<section class="col col-6">
+								<label class="label">版本</label>
+								<label class="input">
+								  <input type="text" name="version" placeholder="版本">
+									<input type="hidden" name="version" data-type="select2" placeholder="版本">
+									<b class="tooltip tooltip-bottom-right">版本为必填项目</b>
+								</label>
+							</section>
+						</div>
+						<div class="row">
+						  <section class="col col-6">
+								<label class="label">状态</label>
+								<label class="input">
+									<input type="hidden" name="status" data-type="select2" placeholder="状态">
+								</label>
+							</section>
+						</div>
+						<section>
+							<label class="label">说明</label>
+							<label class="textarea">
+								<textarea rows="4" name="mark" placeholder="说明"></textarea>
+							</label>
+						</section>
+					</fieldset>
+					<footer>
+						<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+						<button type="submit" class="btn btn-primary">确定</button>
+					</footer>
+				</form>
+				<!-- FORM End -->
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+<!-- SCRIPTS ON PAGE EVENT -->
+<script type="text/javascript">
+function dict_modal(flag,params){
+  // DO NOT REMOVE : GLOBAL FUNCTIONS!
+	pageSetUp();
+	// 数据字典处理
+	var cb = function () {
+		// 字典数据绑定
+		$("#dict_modal_form input[name=status]").zySelect('ZR.0001', false, {
+			width: '100%', allowClear : false
+		});
+		$("#dict_modal_form input[name=status]").select2("val", '1'); //默认值
+		$("#dict_modal_form input[name=typecd]").val(params.typecd);
+		//初始化版本select2或文本框
+		zy.g.am.app = 'faac7c3dc3844e61a8ca4bd7ab2ff096';
+		zy.g.am.mod = 'dict';
+		zy.net.get("api/versions", function(msg){
+		  if(msg&&msg.versions){
+		    if(msg.versions.length==0){
+		      $("#dict_modal_form input[name=version][type=hidden]").remove();
+		    }else{
+		      $("#dict_modal_form input[name=version][type=text]").remove();
+		      $("#dict_modal_form input[name=version]").zySelectCustomData('',false,{'width':'100%'},msg.versions);
+		    }
+		    if (flag == 'i') {
+    			//添加
+    			$("#dict_modal_title").text('添加');
+    		} else if (flag == 'u') {
+    		  $("#dict_modal_title").text('修改');
+    			$('#dict_modal_form').formDisable(true);
+    			//修改
+    			var callback = function (msg) {
+    				$('#dict_modal_form').formDisable(false);
+    				if (msg) {
+    				  $("#dict_modal_form input[name=_version]").val(msg.result[0].version);
+    				  $("#dict_modal_form input[name=_dictcd]").val(msg.result[0].dictcd);
+    					$('#dict_modal_form').json2form(msg.result[0]);
+    				}
+    			};
+    			zy.g.am.app = 'faac7c3dc3844e61a8ca4bd7ab2ff096';
+    			zy.g.am.mod = 'dict';
+    			zy.net.get("api/getdictupd", callback, params);
+    		}
+		  }
+		}, params);
+	};
+	// 预处理该画面所需的字典类型
+	zy.cache.initDicts('ZR.0001', cb);
+	
+  $('#dict_modal').modal('show');
+	// Registration validation script
+	$("#dict_modal_form").validate({
+		// Rules for form validation
+		rules: {
+			dictcd: {
+				required: true,
+				maxlength: 100
+			},
+			dictnm: {
+				required: true,
+				maxlength: 100
+			},
+			shortkey: {
+				maxlength: 50
+			},
+			version: {
+			  required: true,
+				maxlength: 20
+			},
+			mark: {
+				maxlength: 600
+			}
+		},
+		// 验证成功后保存
+		submitHandler: function (form) {
+			var callback = function (msg) {
+				$('#dict_modal_form').formDisable(false);
+				if (msg) {
+				  // 更新表格数据
+					dict_viewObj.UpdDt();
+					$('#dict_modal').modal('hide');
+					zy.ui.msg("提示信息：", "保存成功！", "s");
+				}
+			};
+			zy.g.am.app = 'faac7c3dc3844e61a8ca4bd7ab2ff096';
+			zy.g.am.mod = 'dict';
+			if (flag == 'i') {
+				zy.net.post("api/adddict", callback, $('#dict_modal_form').serialize());
+			} else if (flag == 'u') {
+				zy.net.post("api/upddict", callback, $('#dict_modal_form').serialize());
+			}
+			$('#dict_modal_form').formDisable(true);
+		},
+		// Do not change code below
+		errorPlacement: function (error, element) {
+			error.insertAfter(element.parent());
+		}
+	});
+}
+	
+</script>

@@ -1,0 +1,370 @@
+﻿<style>
+.row-fluid .displaynone{ display:none;}
+</style>
+<div id="zypz-m"  class="portlet box grey">
+    <div class="portlet-title">
+        <div class="caption" id="yetj-name"><!-- 可以设置图标<i class="icon-globe"></i> -->资源配置</div>
+        <!-- 设置关闭和刷新--> 
+        <div class="tools">
+            <div class="tools-chart">
+            	<a title="柱形图" rel="column"><i class="icon-bar-chart"></i></a> <a title="饼形图" rel="pie"><i class="icon-adjust"></i></a>
+                <span class="reload" title="数据图表"><i class="icon-file-text-alt"></i></span>
+            </div>
+        </div>
+        
+    </div>
+    <div class="portlet-body">
+        <div class="lc-inquire">
+            <form id="org_zypz" class="form-inline" action="">
+                <input type="hidden" id="groupby" value="tablename"/>
+                <input type="hidden" id="pagenum"/>
+                <input type="hidden" id="pagesize"/>
+                <input type="hidden" id="dateType"/>
+                <input type="hidden" id="dimCols"/>
+                <input type="hidden" id="dimRows"/>
+                <input type="hidden" id="dimtype"/>
+				<!--=====20131225 html 日期控件  开始=====-->
+                <div class="row-fluid">
+                    <div class="span1">日期分组</div>
+                    <div class="span2">
+                        <select id="datetime" class="selectpicker">
+                        <option value="3">按季度查询</option>
+                          <option value="1">按日期查询</option>	
+                          <option value="2">按月份查询</option>
+                          
+                          <option value="4">按年查询</option>
+                        </select>
+                    </div>
+                    <div class="span1 displayb">开始时间</div>
+                    <div class="span2 displayb">
+                    	<div class="datebegin"><!--<input id="datebegin" type="text" value="2012-09-09" class="dateday">--></div>
+                    </div>
+                    <div class="span1 displayb">结束时间</div>
+                    <div class="span2 displayb">
+                    	<div class="dateend"><!--<input id="dateend" type="text" value="2012-09-09" class="dateday">--></div>
+                    </div>                    <!-- 不是按照季度默认查询的时候 将quarter的html删掉 -->
+                    <span id="quarter"><input type='hidden' id='datebegin'/><div class='span1 displayn'><input type='text' value='2013' class='date-quarter'></div><div class='span2 displayn'><select id='datequarter' class='selectpicker'><option value='1'>第一季度</option><option value='2'>第二季度</option><option value='3'>第三季度</option><option value='4'>第四季度</option></select></div></span>
+                <!--=====20131225 html 日期控件  结束=====-->
+				
+				
+                    <div class="span1">机构名称</div>
+                    <div class="span2"><select id="dimorg" class="selectpicker" multiple></select></div>
+                    <div class="span1"><a onclick="setData2zypzNew('tablename')" class="btn blue">查询</a></div>
+                </div>
+            </form>
+        </div>
+        <div id="lc-rowtable" class="row-fluid">
+            <div class="span12"><div id="contextzypz"></div></div>
+        </div>
+        <div id="rowtable" class="row-fluid rowtable">
+            <div class="span12">
+                 <table id="ttzypz"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	if($(window).width()>765){
+		$("#contextzypz").height($(window).height()-207);
+	}
+});
+$("#dimCols").val("实际开放总床位,重症医学科实际开放床位,急诊留观实际开放床位,医院医用建筑面积,机构员工人数,机构医师数,机构护理人员数,机构医技人员数");
+function setData2zypz(data){
+	$(".loadshow").show();
+	//选择季度的时候 ----------开始---20131225
+	var datetimeval=$("#datetime").val();
+	if(datetimeval==3){	
+		var datequarterval=$("#datequarter").val();
+		var datequarter=$(".date-quarter").val();
+		$("#datebegin").val(datequarter+datequarterval);
+	}
+	//选择季度的时候 ----------结束---20131225
+	//dimRows=机构&dimCols=实际开放总床位
+	
+		if($("#dimorg").val()!==null){
+		$("#dimtype").val("机构,"+$("#dimorg").val());
+		}else{
+			$("#dimtype").val();
+			}
+	
+	//$("#dimtype").val("机构,"+$("#dimorg").val());  //1
+	$("#dimRows").val("机构");                        //2
+	$("#dateType").val(datetimeval);                  //3
+	
+	
+	var url ="GetAllMembers"; 
+	var itemsList;
+	if($("#datebegin").val()!=""&&$("#dateend").val()!=""){
+		itemsList=["datebegin","dateend","dimtype","dateType","dimRows","dimCols"];
+	}else{
+		itemsList=[];
+	}
+	//空数据 会出现 小bug
+	var info= new Map();
+	info.put("sqlid","select");
+	info.put("pagenum",PageNumber);
+	info.put("pagesize",PageSize);
+	if(data==="tablename"){
+	   LXtype="tablename";
+	}else if(data==="createdate"){
+	   LXtype="createdate";
+	}else{
+	   LXtype="hospunitorgcode"
+	}
+	info.put("groupby",data);
+	sys_AjaxGet(BIASUrl+url,"org_zypz","reCallback602",info,itemsList);
+
+}
+</script>
+<script type="text/javascript">
+var dataShow;
+var PageNumber=1;
+var PageSize=10;
+function loadingzypz(){
+	//选择季度的时候 ----------开始---20131225
+	var datetimeval=$("#datetime").val();
+	if(datetimeval==3){	
+		var datequarterval=$("#datequarter").val();
+		var datequarter=$(".date-quarter").val();
+		$("#datebegin").val(datequarter+datequarterval);
+	}
+	$("#dateType").val(datetimeval);        	
+	//选择季度的时候 ----------结束---20131225
+	$("#dimRows").val("机构"); 
+	$("#pagenum").val(PageNumber);
+  	$("#pagesize").val(PageSize);
+	var mapInfo = new Map();
+	mapInfo.put("sqlid","select");
+	mapInfo.put("pagenum",PageNumber);
+	mapInfo.put("pagesize",PageSize);
+	var itemsList;
+	//itemsList = [];
+	if($("#datebegin").val()==""){
+		itemsList=["groupby"];
+	}else{
+		itemsList=["datebegin","dateend","dimtype","dateType","dimRows","dimCols"];
+	}
+	var url = "GetAllMembers";
+	sys_AjaxGet(BIASUrl+url,"org_zypz","reCallback602",mapInfo,itemsList);
+	
+}
+function reCallback602(dataInfo){
+	//切换图形-----------------------------------20131213---开始
+var chartselect="";
+$("#zypz-m .tools-chart a").click(function(){
+	$("#zypz-m #rowtable").addClass("rowtable");
+	$("#zypz-m #lc-rowtable").removeClass("rowtable");
+		var charttitle=$(this).attr("rel");
+		chartselect=charttitle;
+		reCallback(dataInfo, chartselect, "#contextzypz");
+});		
+if(chartselect===""){
+			reCallback(dataInfo, chartselect, "#contextzypz");
+			$(".loadshow").hide();
+	}
+//切换图形-----------------------------------20131213---结束
+//动态获得grid的数据---------------------------开始
+var xq= [];
+var im=0;
+$.each(dataInfo.dataMap.data[0], function(key, value){
+	//将“机构”的列值转移到第一列
+	if(im==0){
+		xq.push({field:"机构",title:"机构",align:'center',width:200});
+	}
+	im++;	
+	if(key!="机构"){
+	    xq.push({field:key,title:key,align:'center',
+		         formatter:function(value){
+		         	if (value=='') {
+		         		value=0;
+		         	};
+					 return parseData(value);  //数据缺失的时候用到。如：.2323 添加后0.2323  chart_common.js里面已经有定义parseData(data)
+			     }
+			});
+	}
+});
+//动态获得grid的数据---------------------------结束	
+//将dataAll添加到数据里面
+var datapush=dataInfo.dataMap.data;
+dataInfo.dataMap.dataAll[0].机构="合计";
+datapush.push(dataInfo.dataMap.dataAll[0]);	
+
+	$('#ttzypz').datagrid({
+			nowrap: false,
+			striped: true,
+			collapsible:false,
+			//pagination:true,
+			pageNumber:PageNumber,
+			pageSize: PageSize,
+			singleSelect:true, 
+			loadMsg:"正在载入...",
+			pageList: [10,20,50,100,200],
+			data:dataInfo.dataMap.data,
+			columns:[xq],//对应上面的定义grid数据
+			onDblClickRow: function (rowIndex) { //双击
+				// openRoleDiv(rowIndex);
+			},
+		   fitColumns:false,
+		   rownumbers:true
+	}); 
+   var pager = $('#ttzypz').datagrid('getPager');
+	   if(pager){
+		$(pager).pagination({
+			
+			onSelectPage:function(pageNumber,pageSize){
+			   PageNumber=pageNumber;
+			   PageSize=pageSize;
+			   loadingzypz();
+			}
+		});		
+		$(pager).pagination({pageSize:PageSize,pageNumber:PageNumber,total:dataInfo.count});
+	};
+//删除新增的dataAll	
+datapush.splice(datapush.length-1);
+}
+</script>
+<script>
+$(function(){
+$(window).resize(function(){
+$('#ttzypz').datagrid('resize');
+});
+});
+</script>
+<script>
+
+
+
+//日期分组--------------------------------------------------开始---20131225
+$(function(){
+$(".datebegin input").hide();
+$(".dateend input").hide();
+$(".datebegin input.dateday").show();
+$(".dateend input.dateday").show();
+$("#datetime").change(function(){
+	var datetimeval=$("#datetime").val();
+	if(datetimeval==1){
+			$(".displayn").addClass("displaynone");
+			$(".displayb").removeClass("displaynone");
+			$(".datebegin").html("");
+			$(".dateend").html("");
+			$("#quarter").html("");
+			$(".datebegin").append("<input id='datebegin' type='text' value='2012-09-09' class='dateday'>");
+			$(".dateend").append("<input id='dateend' type='text' value='2012-09-09' class='dateday'>");
+			$('.dateday').datetimepicker({
+				format: 'yyyy-mm-dd',
+				autoclose:true,
+				startView:2,
+				minView:2
+			});
+			today=new Date(); 
+			var ymd=sys_FormatYMD(today);
+			var vMon = today.getMonth() + 1;
+var dateendymd=today.getFullYear()-1+"-"+(vMon<10 ? "0" + vMon : vMon)+"-"+today.getDate();
+$("#datebegin").val(dateendymd);
+			$("#zypz-m #dateend").val(ymd); 
+			$("#dateType").val(datetimeval);
+		}else if(datetimeval==2){
+			$(".displayn").addClass("displaynone");
+			$(".displayb").removeClass("displaynone");
+			$(".datebegin").html("");
+			$(".dateend").html("");
+			$("#quarter").html("");
+			$(".datebegin").append("<input id='datebegin' type='text' value='2012-09' class='datemonth'>");
+			$(".dateend").append("<input id='dateend' type='text' value='2012-09' class='datemonth'>");
+			$('.datemonth').datetimepicker({
+				format: 'yyyy-mm',
+				autoclose:true,
+				startView:3,
+				minView:3
+			});
+			var ymd=today.getFullYear()+"-"+(today.getMonth()+1);
+			var vMon = today.getMonth() + 1;
+var dateendymd=today.getFullYear()-1+"-"+(vMon<10 ? "0" + vMon : vMon);
+$("#datebegin").val(dateendymd);
+			$("#zypz-m #dateend").val(ymd); 
+			$("#dateType").val(datetimeval);
+		}else if(datetimeval==3){
+			$(".displayb").addClass("displaynone");
+			$(".displayn").removeClass("displaynone");
+			$(".datebegin").html("");
+			$(".dateend").html("");
+			$("#quarter").append("<input type='hidden' id='datebegin'/><div class='span1 displayn'><input type='text' value='2013' class='date-quarter'></div><div class='span2 displayn'><select id='datequarter' class='selectpicker'><option value='1'>第一季度</option><option value='2'>第二季度</option><option value='3'>第三季度</option><option value='4'>第四季度</option></select></div>")
+			$('.date-quarter').datetimepicker({
+				format: 'yyyy',
+				autoclose:true,
+				startView:4,
+				minView:4
+			});
+			$('.selectpicker').selectpicker({
+				'selectedText': 'cat'
+			});
+			$("#dateType").val(datetimeval);
+		}else if(datetimeval==4){
+			$(".displayn").addClass("displaynone");
+			$(".displayb").removeClass("displaynone");
+			$(".datebegin").html("");
+			$(".dateend").html("");
+			$("#quarter").html("");
+			$(".datebegin").append("<input id='datebegin' type='text' value='2012' class='dateyear'>");
+			$(".dateend").append("<input id='dateend' type='text' value='2012' class='dateyear'>");
+			$('.dateyear').datetimepicker({
+				format: 'yyyy',
+				autoclose:true,
+				startView:4,
+				minView:4
+			});
+			var ymd=today.getFullYear();
+			$("#zypz-m #datebegin").val(ymd);
+			$("#zypz-m #dateend").val(ymd); 
+			$("#dateType").val(datetimeval);
+		}
+	});
+
+$(".displayb").addClass("displaynone");
+$(".displayn").removeClass("displaynone");
+$(".datebegin").html("");
+$(".dateend").html("");
+$('.date-quarter').datetimepicker({
+	format: 'yyyy',
+	autoclose:true,
+	startView:4,
+	minView:4
+});
+//日期分组--------------------------------------------------结束---20131225
+})
+
+
+$(function () {
+
+//today=new Date(); 
+//var ymd=sys_FormatYMD(today);
+//$("#zypz-m #datebegin").val("2013-08-01");
+//$("#zypz-m #dateend").val(ymd); 
+
+
+
+$("#zypz-m .reload").click(function(){
+	$("#zypz-m #rowtable").toggleClass("rowtable");
+	$("#zypz-m #lc-rowtable").toggleClass("rowtable");
+	});
+});
+//机构--------
+$(function () {
+getselectdaoid01();
+});
+function  getselectdaoid01(){
+  sys_BI_getDaoidList("mdmSelectdaoid01");
+}
+function mdmSelectdaoid01(data){
+  var info = new Map();
+  info.put("key",["hospunitorgcode"]);
+  info.put("value",["hospunitorgnm"]);
+  sys_GetSelect("org_zypz","dimorg",info,sys_BI_getCacheDaoidData());
+}
+
+
+loadingzypz();
+
+</script>
+

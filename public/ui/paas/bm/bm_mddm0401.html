@@ -1,0 +1,139 @@
+<form id="bm_mddm0401_form" class="smart-form" method="post" onsubmit="return false;">
+    <header><i class="fa-fw fa fa-pencil-square-o"></i>数据来源选择
+      <a><i id="bm_show_hide" class="fa fa-minus" style="cursor: pointer;"></i></a>
+    </header>
+    <filedset id="bm_mddm04_fieldset">
+      <div class="row">
+        <section class="col col-5">
+          <label>
+            <input type="radio" name="dataway" value="2">视图物理表<span name="tblspan"></span>
+          </label>
+          <label>
+            <input type="radio" name="dataway" value="1">视图SQL
+          </label>
+        </section>
+      </div>
+      <div name="sqlinfo" style="display:none">
+        <section>
+          <label class="label">SQL语句：</label>
+          <div name="sqltext"></div>
+        </section>
+        <section>
+          <label class="label">SQL参数：</label>
+          <div name="sqlparams"></div>
+        </section>
+      </div>
+      <div name="addwhere">
+        <header><i class="fa-fw fa fa-pencil-square-o"></i>追加WHERE条件</header>
+        <div name="addwhere1" class="row">
+          <!--<section class="col col-2">-->
+          <!--  <input type="hidden" name="table-name" data-type="select2" placeholder="表名"/>-->
+          <!--</section>-->
+          <section class="col col-2">
+            <input type="hidden" name="column-name" data-type="select2" placeholder="项目"/>
+          </section>
+          <section class="col col-2">
+            <input type="hidden" name="condition" data-type="select2" placeholder="SQL条件"/>
+          </section>
+          <section class="col col-1">
+            <label class="toggle state-success">
+              <input type="checkbox" name="val-or-para">
+              <i data-swchoff-text="预设" data-swchon-text="参数"></i>
+            </label>
+          </section>
+          <section class="col col-2">
+            <label class="input">
+              <input type="text" name="val"/>
+            </label>
+          </section>
+          <section class="col col-2" style="display:none">
+            <label class="input">
+              <input type="text" name="val2"/>
+            </label>
+          </section>
+          <section class="col col-1">
+            <select name="andor" class="form-control">
+              <option value="AND">AND</option>
+              <option value="OR">OR</option>
+            </select>
+            <!--<input type="hidden" name="andor" data-type="select2" placeholder="ANDOR"/>-->
+          </section>
+        </div>
+        <div name="addwhere2" class="row">
+          <!--<section class="col col-2">-->
+          <!--  <input type="hidden" name="table-name" data-type="select2" placeholder="表名"/>-->
+          <!--</section>-->
+          <section class="col col-2">
+            <input type="hidden" name="column-name" data-type="select2" placeholder="项目"/>
+          </section>
+          <section class="col col-2">
+            <input type="hidden" name="condition" data-type="select2" placeholder="SQL条件"/>
+          </section>
+          <section class="col col-1">
+            <label class="toggle state-success">
+              <input type="checkbox" name="val-or-para">
+              <i data-swchoff-text="预设" data-swchon-text="参数"></i>
+            </label>
+          </section>
+          <section class="col col-2">
+            <label class="input">
+              <input type="text" name="val"/>
+            </label>
+          </section>
+          <section class="col col-2" style="display:none">
+            <label class="input">
+              <input type="text" name="val2"/>
+            </label>
+          </section>
+          <section class="col col-1">
+            <select name="andor" class="form-control">
+              <option value="AND">AND</option>
+              <option value="OR">OR</option>
+            </select>
+            <!--<input type="hidden" name="andor" data-type="select2" placeholder="ANDOR"/>-->
+          </section>
+        </div>
+        <div name="addwhere3" class="row">
+          <!--<section class="col col-2">-->
+          <!--  <input type="hidden" name="table-name" data-type="select2" placeholder="表名"/>-->
+          <!--</section>-->
+          <section class="col col-2">
+            <input type="hidden" name="column-name" data-type="select2" placeholder="项目"/>
+          </section>
+          <section class="col col-2">
+            <input type="hidden" name="condition" data-type="select2" placeholder="SQL条件"/>
+          </section>
+          <section class="col col-1">
+            <label class="toggle state-success">
+              <input type="checkbox" name="val-or-para">
+              <i data-swchoff-text="预设" data-swchon-text="参数"></i>
+            </label>
+          </section>
+          <section class="col col-2">
+            <label class="input">
+              <input type="text" name="val"/>
+            </label>
+          </section>
+          <section class="col col-2" style="display:none">
+            <label class="input">
+              <input type="text" name="val2"/>
+            </label>
+          </section>
+        </div>
+      </div>
+      
+      </filedset>
+    </form>
+<div class="progress progress-micro">
+  <div class="progress-bar progress-bar-primary" role="progressbar" style="width: 100%;"></div>
+</div>
+<div id="bm_mddm04_set_dimension"></div>
+<div class="pull-right">
+  <button class="btn btn-primary" name="bm_mddm04_submitBtn">保存维度定义</button>
+</div>
+<script src="bm/bm_mddm0401.js"></script>
+<script>
+function main(node){
+  var bm_mddm0401Obj = new bm_mddm0401(node);
+}
+</script>

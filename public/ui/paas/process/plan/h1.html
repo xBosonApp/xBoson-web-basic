@@ -1,0 +1,73 @@
+<!-- widget content -->
+<div id="process_plan_index" class="widget-body no-padding" style="margin: -10px -13px 28px -13px;">
+  <div class="widget-body-toolbar">
+    <div class="row">
+      <form id="process_plan_index_form" method="post" onsubmit="return false;" class="smart-form">
+        <section class="col col-2">
+          <label class="input">
+            <input type="text" name="fuzzykey" placeholder="应急预案编码" class="form-control input-sm">
+          </label>
+        </section>
+        <section class="col col-2">
+          <label class="input">
+            <input type="text" name="typenm" placeholder="应急预案名称" class="form-control input-sm">
+          </label>
+        </section>
+        <section class="col col-2">
+          <label class="select">
+            <select name="status" class="form-control input-sm">
+              <option value="" selected="">全部</option>
+              <option value="0">待办</option>
+              <option value="1">接受</option>
+              <option value="2">已办</option>
+              <option value="3">结束</option>
+            </select>
+            <i></i>
+          </label>
+        </section>
+        <section class="col col-2">
+        <button id="process_plan_index_search" class="btn btn-info btn-sm" type="submit"><i class="fa fa-search fa-1"></i>&emsp;查 询&emsp;</button>
+        </section>
+      </form>
+    </div>
+    <div class="btn-group">
+      <button id="process_plan_index_add" class="btn btn-info btn-xs">&emsp;<i class="fa fa-magic"></i>&nbsp;添 加&emsp;
+      </button>
+      <button id="process_plan_index_edit" class="btn btn-info btn-xs">&emsp;<i class="fa fa-edit"></i>&nbsp;修 改&emsp;
+      </button>
+    </div>
+  </div>
+  <div class="dataTables_wrapper">
+    <table id="process_plan_index_dt" class="table table-bordered table-striped">
+      <thead>
+      <tr>
+        <th>应急预案名称</th>
+        <th>事件类别</th>
+        <th>事件内容</th>
+        <!--<th>事件处理办法</th>-->
+        <th>调度负责人</th>
+        <th>事件相关负责人</th>
+        <th>事件相关负责人联系电话</th>
+        <th>状态</th>
+      </tr>
+      </thead>
+    </table>
+  </div>
+  <div id="process_plan_index_pagination"></div>
+</div>
+<!-- end widget content -->
+
+<div id="process_plan_index_iu_form"></div>
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script src="lib/html/zy_modal.js"></script>
+<script src="lib/html/zy_tabs.js"></script>
+<script src="process/plan/h1.js"></script>
+<script type="text/javascript">
+  // DO NOT REMOVE : GLOBAL FUNCTIONS!
+  pageSetUp();
+  //开发临时用：初始化全局API请求参数
+  zy.g.comm.app = 'process';
+  zy.g.comm.mod = 'plan';
+
+  var pp_index = new ProcessPlanIndex();
+</script>

@@ -1,0 +1,86 @@
+<script type="text/javascript" src="/t/paas/show/ui/comm.js"></script>
+<script type="text/javascript">
+$(function () {
+   showData02();
+});
+		function showData02(){
+	   // 第一个 grode(列表)
+		$('#ttwb').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:true,
+				title:'住院就诊记录', 
+				iconCls:'icon-save', 
+				width:900, 
+				height:250, 
+				pagination:true,
+				pageNumber:0,
+				pageSize: 0,
+				loadMsg:"正在载入...",
+                pageList: [10,20,50,100,200],
+				//data:dataInfo.dataList,
+				columns:[[
+				{title:'记录序号',field:'dc7003_jlxh'},
+		        {title:'诊断日期',field:'dc7003_zdrq',			        	
+		            formatter:function(value){
+		                   return LC_FormatYMD(value);
+		            }
+		        },
+		        {title:'门/住诊断',field:'dc7003_mzbz'},
+		        {title:'过敏药物',field:'dc7003_ywmc'},
+		        {title:'诊断医生',field:'dc7003_zdysxm'},
+		        {title:'诊断医院',field:'dc7003_jgdm'},
+		        {title:'既往标示',field:'dc7003_jwbz'}
+				]],                  
+                onDblClickRow: function (rowIndex) {
+                  openRoleDiv(rowIndex);
+                },
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true
+		}); 
+	   var pager = $('#ttwb').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+				/*buttons:[{                           增删改查操作，代码注释，暂时不用
+				   iconCls:'icon-search', 
+				   handler:function(){ 
+				       alert('search'); 
+				   } 
+				},{ 
+				   iconCls:'icon-add', 
+				   handler:function(){ 
+				       alert('add'); 
+				   } 
+				},{ 
+				   iconCls:'icon-edit', 
+				   handler:function(){ 
+				       alert('edit'); 
+				   } 
+				}], */
+			    onSelectPage:function(pageNumber,pageSize){
+		           PageNumber=pageNumber;
+		           PageSize=pageSize;
+		           loading();
+		        }
+		        
+			});	
+	  //$(pager).pagination({pageSize:PageSize,pageNumber:PageNumber,total:dataInfo.datalist.count});
+
+	}
+	
+	}
+ 
+ 
+ 	function openRoleDiv(rowIndex){
+
+
+	}
+</script>
+
+<div class="mainsW-992">
+	<div class="mainW" style="background-color: blue">
+		<table id="ttwb" class="easyui-datagrid" title="住院就诊记录" style="width:700px;height:250px" data-options="rownumbers:true,singleSelect:true,pagination:true"></table>
+	</div>
+	
+</div>

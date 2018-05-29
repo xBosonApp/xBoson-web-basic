@@ -1,0 +1,40 @@
+<!-- rbac_role_mgt06 角色页面Tab -->
+<div style="opacity: 1;" id="rbac_role_mgt06">
+  <div class="row">
+   <!-- <div class="col-sm-6">-->
+  	<!--	<h4 class="page-title txt-color-blueDark">-->
+  	<!--	  <span class="widget-icon"><i class="fa fa-copy"></i></span>-->
+  	<!--			页面权限配置-->
+  	<!--	</h4>-->
+  	<!--</div>-->
+    <div class="col-12">
+      <div class="alert alert-info alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <strong>页面权限配置</strong>&nbsp;确认配置并返回后在角色管理界面保存修改即可生效
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="smart-form" id="rbac_role_mgt06_tab">
+      <div id="rbac_role_mgt06_page_tabs"></div>
+      <footer>
+        <button type="button" id="rbac_role_mgt06_page_cancel" class="btn btn-default">取消</button>
+        <button type="button" id="rbac_role_mgt06_page_confirm" class="btn btn-primary">确认配置并返回</button>
+      </footer>
+    </div>
+  </div>
+  <div id="rbac_role_mgt06_roleid" data-roleid='###query.roleid###'></div>
+  <div id="rbac_role_mgt06_pageid" data-pageid='###query.pageid###'></div>
+  <div id="rbac_role_mgt06_menuid" data-menuid='###query.menuid###'></div>
+</div>
+<script src="lib/html/zy_tabs.js"></script>
+<script src="rbac/role_mgt/rbac_role_mgt06.js"></script>
+<script>
+	// DO NOT REMOVE : GLOBAL FUNCTIONS!
+	pageSetUp();
+// 	(function () {
+	  var rbac_role_mgt06Obj = new rbac_role_mgt06($('#rbac_role_mgt06_roleid').attr('data-roleid'),$('#rbac_role_mgt06_pageid').attr('data-pageid'),$('#rbac_role_mgt06_menuid').attr('data-menuid'));
+// 	})();
+</script>

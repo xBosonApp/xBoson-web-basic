@@ -1,0 +1,83 @@
+<!-- widget grid -->
+<section id="widget-grid" class="">
+  <!-- row -->
+  <div class="row">
+    <!-- NEW WIDGET START -->
+    <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <!-- Widget ID (each widget will need unique ID)-->
+      <div id="dept_view_wid1" class="jarviswidget jarviswidget-color-blueDark" data-widget-fullscreenbutton="false" data-widget-colorbutton="true" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-deletebutton="false">
+        <header>
+          <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+          <h2>部门信息管理</h2>
+        </header>
+        <!-- widget div-->
+        <div>
+          <!-- widget edit box -->
+          <div class="jarviswidget-editbox">
+            <!-- This area used as dropdown edit box -->
+          </div>
+          <!-- end widget edit box -->
+          <!-- widget content -->
+          <div class="widget-body no-padding">
+            <div class="widget-body-toolbar">
+              <form id="dept_view_form" method="post" onsubmit="return false;" class="smart-form">
+                <div class="row">
+                  <section class="col col-3">
+                    <label class="input">
+                      <input type="hidden" name="status" placeholder="状态" data-type="select2">
+                    </label>
+                  </section>
+                  <section class="col col-3">
+                    <label class="input">
+                      <input type="text" name="deptnm" placeholder="部门名称" class="form-control input-sm">
+                    </label>
+                  </section>
+                  <section class="col col-3">
+                    <button id="dept_view_search" class="btn btn-info btn-sm" type="submit"><i class="fa fa-search fa-1"></i>&emsp;查 询&emsp;</button>
+                  </section>
+                </div>
+              </form>
+              <div class="btn-group">
+                <button id="dept_view_add" class="btn btn-info btn-xs">&emsp;<i class="fa fa-magic"></i>&nbsp;添 加&emsp;</button>
+                <button id="dept_view_edit" class="btn btn-info btn-xs">&emsp;<i class="fa fa-edit"></i>&nbsp;修 改&emsp;</button>
+                <button id="dept_member_view" class="btn btn-info btn-xs">&emsp;<i class="fa fa-edit"></i>&nbsp;部门成员&emsp;</button>
+              </div>
+              <div class="pull-right">
+                <b name="total_count"></b>
+              </div>
+            </div>
+            <div class="dataTables_wrapper">
+              <table id="dept_view_dt" class="table table-bordered table-striped ">
+                <thead>
+                  <tr>
+                    <th>部门名称</th>
+                    <th>主管机构</th>
+                    <th>部门负责人</th>
+                    <th>职工总数</th>
+                    <th>部门成立日期</th>
+                    <th>状态</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+          <!-- end widget content -->
+          <div id="dept_view_pagination"></div>
+        </div>
+        <!-- end widget div -->
+      </div>
+      <!-- end widget -->
+    </article>
+    <!-- WIDGET END -->
+  </div>
+  <!-- end row -->
+</section>
+<!-- end widget grid -->
+<div id="dept_view_form2"></div>
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script src="c9e98ea6fc7148d186289e8c33776f8a/dept_manager/dept_view.js"></script>
+<script type="text/javascript">
+// DO NOT REMOVE : GLOBAL FUNCTIONS!
+pageSetUp();
+var dept_view = new DeptView();
+</script>

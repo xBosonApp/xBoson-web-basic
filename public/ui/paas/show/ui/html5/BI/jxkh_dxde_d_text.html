@@ -1,0 +1,1330 @@
+<style type="text/css">
+#timecx{ display: none;}	
+table{ font-size:12px; font-weight:normal; text-align:left;}
+table thead{background:linear-gradient(to bottom, #f9f9f9 0px, #efefef 100%) repeat-x; border-top:1px solid #dddddd; text-align:center;}
+.z-bg{background:linear-gradient(to bottom, #f9f9f9 0px, #efefef 100%) repeat-x;}
+table td,table th{ border-right:1px dotted #ccc; border-bottom:1px dotted #ccc; padding:0 0 0 5px;height:24px;}
+.tnull input[type="text"]{ width: 100px; padding: 0; border: none;text-align:center;margin-bottom:0; color: #000;}
+.tnulladd input[type="text"]{ width:80px; padding: 0; border:1px solid #ccc;text-align:center;margin-bottom:0; color: #000;}
+.tnull input[disabled]{background:none; border:none;box-shadow:none;cursor:auto;}
+.z-info{position:absolute;right:10px; top:3px;}
+#myModalzInfo .close{ display: block;}
+.modal.fade{top:-100%;}
+.portlet-title{position:relative;}
+.z-sg{height:450px;overflow: auto; overflow-x:hidden;}
+#rowtable select{font-size:12px;padding:0; height: 20px; line-height: 20px;}
+
+.cd tr th{width:5%;font-weight:normal; padding:0 5px;}
+table td, table th{padding:0;}
+</style>
+<form id="org_etbjglda" class="form-inline" action="">
+<div id="etbjglda-m"  class="portlet box grey">
+    <div class="portlet-title">
+        <div class="caption" id="yetj-name">公卫经费统计</div>        
+    </div>
+    <div class="portlet-body">
+        <div class="lc-inquire">
+                <input type="hidden" id="IsConfirm"/>
+                <input type="hidden" id="groupby" value="tablename"/>
+                <input type="hidden" id="pagenum"/>
+                <input type="hidden" id="pagesize"/>
+                <input type="hidden" id="sa"/>
+                <input type="hidden" id="MM"/>
+                <div class="row-fluid">
+                	
+                    <div class="span1">年度</div>
+                    <div class="span2">
+                    	<div class="year"><input id="year" type="text" class="dateday"></div>
+                    </div>
+                    <div class="span1">季度</div>
+                    <div class="span2">
+                    	<select id="quarter" class="selectpicker">
+                            <option value="1">第一季度</option>
+                            <option value="2">第二季度</option>
+                            <option value="3">第三季度</option>
+                            <option value="4">第四季度</option>
+                        </select>
+                    </div>
+                    <div class="span1"><a id="jgcx1" onclick="setData2EtbjgldaNew('tablename')" class="btn blue">查询</a></div>
+                    <div class="span1"><a id="Print" onclick="PrintPage()" class="btn blue">打印</a></div>
+                </div>
+           
+        </div>
+  <div id="rowtable" class="row-fluid">
+    <div class="span12">
+          <div id="myPrintArea" style="height:465px;overflow-y:auto;overflow-x:auto;" >
+<!--startprint-->	
+			<div style="height:50px;font-size:16px;line-height:50px;text-align:center;"><strong>单项定额-公共卫生经费统计表</strong>  <span class="z-time1"></span></div>		
+            <table id="testtable" width="100%" border="1" cellspacing="0" cellpadding="0" class="cd" >
+            <thead>
+              <tr>
+                <th class="hide">&nbsp;</th>
+                <th>序号</th>
+                <th>机构名称</th>
+                <th>健康档案</th>
+                <th>健康教育</th>
+                <th>预防接种</th>
+                <th>儿童保健</th>
+                <th>妇女保健</th>
+                <th>计划生育<br />技术服务<br />咨询指导</th>
+                <th>老年人健<br />康管理</th>
+                <th>慢性病患<br />者健康管<br />理</th>
+                <th>残疾人管<br />理</th>
+                <th>重性精神<br />疾病患者<br />健康管理</th>
+                <th>传染病及<br />突发公共<br />卫生事件<br />管理</th>
+                <th>卫生监督<br />协管</th>
+                <th>中医药健<br />康管理服<br />务</th>
+                <th>口腔服务<br />项目</th>
+                <th>妇幼服务<br />项目</th>
+                <th>疾控服务<br />项目</th>
+                <th>结核病服<br />务项目</th>
+                <th>家庭医生<br />签约服务</th>
+                <th>应拨金额</th>
+                <th>奖励比例</th>
+                <th>绩效考核<br />应拨金额</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td align="center" class="hide">565429568</td>
+                <td align="center">1</td>
+                <td align="center">斯大林</td>
+                <td align="center" id="a1">0</td>
+                <td align="center" id="a2">0</td>
+                <td align="center" id="a3">0</td>
+                <td align="center" id="a4">0</td>
+                <td align="center" id="a5">0</td>
+                <td align="center" id="a6">0</td>
+                <td align="center" id="a7">0</td>
+                <td align="center" id="a8">0</td>
+                <td align="center" id="a9">0</td>
+                <td align="center" id="a10">0</td>
+                <td align="center" id="a11">0</td>
+                <td align="center" id="a12">0</td>
+                <td align="center" id="a13">0</td>
+                <td align="center" id="a14">0</td>
+                <td align="center" id="a15">0</td>
+                <td align="center" id="a16">0</td>
+                <td align="center" id="a17">0</td>
+                <td align="center" id="a18">0</td>
+                <td align="center" id="a19">0</td>
+                <td align="center" id="a20"><select name="z" style="width:60px;">
+                    	<option value="1.10">10%</option>
+                        <option value="1.09">9%</option>
+                        <option value="1.08">8%</option>
+                        <option value="1.07">7%</option>
+                        <option value="1.06">6%</option>
+                        <option value="1.05">5%</option>
+                        <option value="1.04">4%</option>
+                        <option value="1.03">3%</option>
+                        <option value="1.02">2%</option>
+                        <option value="1.01">1%</option>
+                        <option value="1.00">无</option>
+                    </select></td>
+                <td align="center" id="a21">0</td>
+              </tr>
+              <tr>
+              <td align="center" class="hide">999120</td>
+                <td align="center">2</td>
+                <td align="center">兆  麟</td>
+                <td align="center" id="b1">0</td>
+                <td align="center" id="b2">0</td>
+                <td align="center" id="b3">0</td>
+                <td align="center" id="b4">0</td>
+                <td align="center" id="b5">0</td>
+                <td align="center" id="b6">0</td>
+                <td align="center" id="b7">0</td>
+                <td align="center" id="b8">0</td>
+                <td align="center" id="b9">0</td>
+                <td align="center" id="b10">0</td>
+                <td align="center" id="b11">0</td>
+                <td align="center" id="b12">0</td>
+                <td align="center" id="b13">0</td>
+                <td align="center" id="b14">0</td>
+                <td align="center" id="b15">0</td>
+                <td align="center" id="b16">0</td>
+                <td align="center" id="b17">0</td>
+                <td align="center" id="b18">0</td>
+                <td align="center" id="b19">0</td>
+                <td align="center" id="b20"><select name="z" style="width:60px;">
+                    	<option value="1.10">10%</option>
+                        <option value="1.09">9%</option>
+                        <option value="1.08">8%</option>
+                        <option value="1.07">7%</option>
+                        <option value="1.06">6%</option>
+                        <option value="1.05">5%</option>
+                        <option value="1.04">4%</option>
+                        <option value="1.03">3%</option>
+                        <option value="1.02">2%</option>
+                        <option value="1.01">1%</option>
+                        <option value="1.00">无</option>
+                    </select></td>
+                <td align="center" id="b21">0</td>
+              </tr>
+              <tr>
+              <td align="center" class="hide">c0514</td>
+                <td align="center">3</td>
+                <td align="center">尚  志</td>
+                <td align="center" id="c1">0</td>
+                <td align="center" id="c2">0</td>
+                <td align="center" id="c3">0</td>
+                <td align="center" id="c4">0</td>
+                <td align="center" id="c5">0</td>
+                <td align="center" id="c6">0</td>
+                <td align="center" id="c7">0</td>
+                <td align="center" id="c8">0</td>
+                <td align="center" id="c9">0</td>
+                <td align="center" id="c10">0</td>
+                <td align="center" id="c11">0</td>
+                <td align="center" id="c12">0</td>
+                <td align="center" id="c13">0</td>
+                <td align="center" id="c14">0</td>
+                <td align="center" id="c15">0</td>
+                <td align="center" id="c16">0</td>
+                <td align="center" id="c17">0</td>
+                <td align="center" id="c18">0</td>
+                <td align="center" id="c19">0</td>
+                <td align="center" id="c20"><select name="z" style="width:60px;">
+                    	<option value="1.10">10%</option>
+                        <option value="1.09">9%</option>
+                        <option value="1.08">8%</option>
+                        <option value="1.07">7%</option>
+                        <option value="1.06">6%</option>
+                        <option value="1.05">5%</option>
+                        <option value="1.04">4%</option>
+                        <option value="1.03">3%</option>
+                        <option value="1.02">2%</option>
+                        <option value="1.01">1%</option>
+                        <option value="1.00">无</option>
+                    </select></td>
+                <td align="center" id="c21">0</td>
+              </tr>
+              <tr>
+              	<td align="center" class="hide">420123548</td>
+                <td align="center">4</td>
+                <td align="center">经  纬</td>
+                <td align="center" id="d1">0</td>
+                <td align="center" id="d2">0</td>
+                <td align="center" id="d3">0</td>
+                <td align="center" id="d4">0</td>
+                <td align="center" id="d5">0</td>
+                <td align="center" id="d6">0</td>
+                <td align="center" id="d7">0</td>
+                <td align="center" id="d8">0</td>
+                <td align="center" id="d9">0</td>
+                <td align="center" id="d10">0</td>
+                <td align="center" id="d11">0</td>
+                <td align="center" id="d12">0</td>
+                <td align="center" id="d13">0</td>
+                <td align="center" id="d14">0</td>
+                <td align="center" id="d15">0</td>
+                <td align="center" id="d16">0</td>
+                <td align="center" id="d17">0</td>
+                <td align="center" id="d18">0</td>
+                <td align="center" id="d19">0</td>
+                <td align="center" id="d20"><select name="z" style="width:60px;">
+                    	<option value="1.10">10%</option>
+                        <option value="1.09">9%</option>
+                        <option value="1.08">8%</option>
+                        <option value="1.07">7%</option>
+                        <option value="1.06">6%</option>
+                        <option value="1.05">5%</option>
+                        <option value="1.04">4%</option>
+                        <option value="1.03">3%</option>
+                        <option value="1.02">2%</option>
+                        <option value="1.01">1%</option>
+                        <option value="1.00">无</option>
+                    </select></td>
+                <td align="center" id="d21">0</td>
+              </tr>
+              <tr>
+              	<td align="center" class="hide">424101120</td>
+                <td align="center">5</td>
+                <td align="center">通  江</td>
+                <td align="center" id="e1">0</td>
+                <td align="center" id="e2">0</td>
+                <td align="center" id="e3">0</td>
+                <td align="center" id="e4">0</td>
+                <td align="center" id="e5">0</td>
+                <td align="center" id="e6">0</td>
+                <td align="center" id="e7">0</td>
+                <td align="center" id="e8">0</td>
+                <td align="center" id="e9">0</td>
+                <td align="center" id="e10">0</td>
+                <td align="center" id="e11">0</td>
+                <td align="center" id="e12">0</td>
+                <td align="center" id="e13">0</td>
+                <td align="center" id="e14">0</td>
+                <td align="center" id="e15">0</td>
+                <td align="center" id="e16">0</td>
+                <td align="center" id="e17">0</td>
+                <td align="center" id="e18">0</td>
+                <td align="center" id="e19">0</td>
+                <td align="center" id="e20"><select name="z" style="width:60px;">
+                    	<option value="1.10">10%</option>
+                        <option value="1.09">9%</option>
+                        <option value="1.08">8%</option>
+                        <option value="1.07">7%</option>
+                        <option value="1.06">6%</option>
+                        <option value="1.05">5%</option>
+                        <option value="1.04">4%</option>
+                        <option value="1.03">3%</option>
+                        <option value="1.02">2%</option>
+                        <option value="1.01">1%</option>
+                        <option value="1.00">无</option>
+                    </select></td>
+                <td align="center" id="e21">0</td>
+              </tr>
+              <tr>
+              	<td align="center" class="hide">2222211111</td>
+                <td align="center">6</td>
+                <td align="center">新  阳</td>
+                <td align="center" id="f1">0</td>
+                <td align="center" id="f2">0</td>
+                <td align="center" id="f3">0</td>
+                <td align="center" id="f4">0</td>
+                <td align="center" id="f5">0</td>
+                <td align="center" id="f6">0</td>
+                <td align="center" id="f7">0</td>
+                <td align="center" id="f8">0</td>
+                <td align="center" id="f9">0</td>
+                <td align="center" id="f10">0</td>
+                <td align="center" id="f11">0</td>
+                <td align="center" id="f12">0</td>
+                <td align="center" id="f13">0</td>
+                <td align="center" id="f14">0</td>
+                <td align="center" id="f15">0</td>
+                <td align="center" id="f16">0</td>
+                <td align="center" id="f17">0</td>
+                <td align="center" id="f18">0</td>
+                <td align="center" id="f19">0</td>
+                <td align="center" id="f20"><select name="z" style="width:60px;">
+                    	<option value="1.10">10%</option>
+                        <option value="1.09">9%</option>
+                        <option value="1.08">8%</option>
+                        <option value="1.07">7%</option>
+                        <option value="1.06">6%</option>
+                        <option value="1.05">5%</option>
+                        <option value="1.04">4%</option>
+                        <option value="1.03">3%</option>
+                        <option value="1.02">2%</option>
+                        <option value="1.01">1%</option>
+                        <option value="1.00">无</option>
+                    </select></td>
+                <td align="center" id="f21">0</td>
+              </tr>
+              <tr>
+              	<td align="center" class="hide">424101171</td>
+                <td align="center">7</td>
+                <td align="center">安  静</td>
+                <td align="center" id="g1">0</td>
+                <td align="center" id="g2">0</td>
+                <td align="center" id="g3">0</td>
+                <td align="center" id="g4">0</td>
+                <td align="center" id="g5">0</td>
+                <td align="center" id="g6">0</td>
+                <td align="center" id="g7">0</td>
+                <td align="center" id="g8">0</td>
+                <td align="center" id="g9">0</td>
+                <td align="center" id="g10">0</td>
+                <td align="center" id="g11">0</td>
+                <td align="center" id="g12">0</td>
+                <td align="center" id="g13">0</td>
+                <td align="center" id="g14">0</td>
+                <td align="center" id="g15">0</td>
+                <td align="center" id="g16">0</td>
+                <td align="center" id="g17">0</td>
+                <td align="center" id="g18">0</td>
+                <td align="center" id="g19">0</td>
+                <td align="center" id="g20"><select name="z" style="width:60px;">
+                    	<option value="1.10">10%</option>
+                        <option value="1.09">9%</option>
+                        <option value="1.08">8%</option>
+                        <option value="1.07">7%</option>
+                        <option value="1.06">6%</option>
+                        <option value="1.05">5%</option>
+                        <option value="1.04">4%</option>
+                        <option value="1.03">3%</option>
+                        <option value="1.02">2%</option>
+                        <option value="1.01">1%</option>
+                        <option value="1.00">无</option>
+                    </select></td>
+                <td align="center" id="g21">0</td>
+              </tr>
+              <tr>
+              	<td align="center" class="hide">424101083</td>
+                <td align="center">8</td>
+                <td align="center">安  和</td>
+                <td align="center" id="h1">0</td>
+                <td align="center" id="h2">0</td>
+                <td align="center" id="h3">0</td>
+                <td align="center" id="h4">0</td>
+                <td align="center" id="h5">0</td>
+                <td align="center" id="h6">0</td>
+                <td align="center" id="h7">0</td>
+                <td align="center" id="h8">0</td>
+                <td align="center" id="h9">0</td>
+                <td align="center" id="h10">0</td>
+                <td align="center" id="h11">0</td>
+                <td align="center" id="h12">0</td>
+                <td align="center" id="h13">0</td>
+                <td align="center" id="h14">0</td>
+                <td align="center" id="h15">0</td>
+                <td align="center" id="h16">0</td>
+                <td align="center" id="h17">0</td>
+                <td align="center" id="h18">0</td>
+                <td align="center" id="h19">0</td>
+                <td align="center" id="h20"><select name="z" style="width:60px;">
+                    	<option value="1.10">10%</option>
+                        <option value="1.09">9%</option>
+                        <option value="1.08">8%</option>
+                        <option value="1.07">7%</option>
+                        <option value="1.06">6%</option>
+                        <option value="1.05">5%</option>
+                        <option value="1.04">4%</option>
+                        <option value="1.03">3%</option>
+                        <option value="1.02">2%</option>
+                        <option value="1.01">1%</option>
+                        <option value="1.00">无</option>
+                    </select></td>
+                <td align="center" id="h21">0</td>
+              </tr>
+              <tr>
+              	<td align="center" class="hide">4241011712</td>
+                <td align="center">9</td>
+                <td align="center">建  国</td>
+                <td align="center" id="i1">0</td>
+                <td align="center" id="i2">0</td>
+                <td align="center" id="i3">0</td>
+                <td align="center" id="i4">0</td>
+                <td align="center" id="i5">0</td>
+                <td align="center" id="i6">0</td>
+                <td align="center" id="i7">0</td>
+                <td align="center" id="i8">0</td>
+                <td align="center" id="i9">0</td>
+                <td align="center" id="i10">0</td>
+                <td align="center" id="i11">0</td>
+                <td align="center" id="i12">0</td>
+                <td align="center" id="i13">0</td>
+                <td align="center" id="i14">0</td>
+                <td align="center" id="i15">0</td>
+                <td align="center" id="i16">0</td>
+                <td align="center" id="i17">0</td>
+                <td align="center" id="i18">0</td>
+                <td align="center" id="i19">0</td>
+                <td align="center" id="i20"><select name="z" style="width:60px;">
+                    	<option value="1.10">10%</option>
+                        <option value="1.09">9%</option>
+                        <option value="1.08">8%</option>
+                        <option value="1.07">7%</option>
+                        <option value="1.06">6%</option>
+                        <option value="1.05">5%</option>
+                        <option value="1.04">4%</option>
+                        <option value="1.03">3%</option>
+                        <option value="1.02">2%</option>
+                        <option value="1.01">1%</option>
+                        <option value="1.00">无</option>
+                    </select></td>
+                <td align="center" id="i21">0</td>
+              </tr>
+              <tr>
+              	<td align="center" class="hide">99990003</td>
+                <td align="center">10</td>
+                <td align="center">抚  顺</td>
+                <td align="center" id="j1">0</td>
+                <td align="center" id="j2">0</td>
+                <td align="center" id="j3">0</td>
+                <td align="center" id="j4">0</td>
+                <td align="center" id="j5">0</td>
+                <td align="center" id="j6">0</td>
+                <td align="center" id="j7">0</td>
+                <td align="center" id="j8">0</td>
+                <td align="center" id="j9">0</td>
+                <td align="center" id="j10">0</td>
+                <td align="center" id="j11">0</td>
+                <td align="center" id="j12">0</td>
+                <td align="center" id="j13">0</td>
+                <td align="center" id="j14">0</td>
+                <td align="center" id="j15">0</td>
+                <td align="center" id="j16">0</td>
+                <td align="center" id="j17">0</td>
+                <td align="center" id="j18">0</td>
+                <td align="center" id="j19">0</td>
+                <td align="center" id="j20"><select name="z" style="width:60px;">
+                    	<option value="1.10">10%</option>
+                        <option value="1.09">9%</option>
+                        <option value="1.08">8%</option>
+                        <option value="1.07">7%</option>
+                        <option value="1.06">6%</option>
+                        <option value="1.05">5%</option>
+                        <option value="1.04">4%</option>
+                        <option value="1.03">3%</option>
+                        <option value="1.02">2%</option>
+                        <option value="1.01">1%</option>
+                        <option value="1.00">无</option>
+                    </select></td>
+                <td align="center" id="j21">0</td>
+              </tr>
+              <tr>
+              	<td align="center" class="hide">42410151823010212</td>
+                <td align="center">11</td>
+                <td align="center">光  华</td>
+                <td align="center" id="k1">0</td>
+                <td align="center" id="k2">0</td>
+                <td align="center" id="k3">0</td>
+                <td align="center" id="k4">0</td>
+                <td align="center" id="k5">0</td>
+                <td align="center" id="k6">0</td>
+                <td align="center" id="k7">0</td>
+                <td align="center" id="k8">0</td>
+                <td align="center" id="k9">0</td>
+                <td align="center" id="k10">0</td>
+                <td align="center" id="k11">0</td>
+                <td align="center" id="k12">0</td>
+                <td align="center" id="k13">0</td>
+                <td align="center" id="k14">0</td>
+                <td align="center" id="k15">0</td>
+                <td align="center" id="k16">0</td>
+                <td align="center" id="k17">0</td>
+                <td align="center" id="k18">0</td>
+                <td align="center" id="k19">0</td>
+                <td align="center" id="k20"><select name="z" style="width:60px;">
+                    	<option value="1.10">10%</option>
+                        <option value="1.09">9%</option>
+                        <option value="1.08">8%</option>
+                        <option value="1.07">7%</option>
+                        <option value="1.06">6%</option>
+                        <option value="1.05">5%</option>
+                        <option value="1.04">4%</option>
+                        <option value="1.03">3%</option>
+                        <option value="1.02">2%</option>
+                        <option value="1.01">1%</option>
+                        <option value="1.00">无</option>
+                    </select></td>
+                <td align="center" id="k21">0</td>
+              </tr>
+              <tr>
+              	<td align="center" class="hide">424101251</td>
+                <td align="center">12</td>
+                <td align="center">共  乐</td>
+                <td align="center" id="l1">0</td>
+                <td align="center" id="l2">0</td>
+                <td align="center" id="l3">0</td>
+                <td align="center" id="l4">0</td>
+                <td align="center" id="l5">0</td>
+                <td align="center" id="l6">0</td>
+                <td align="center" id="l7">0</td>
+                <td align="center" id="l8">0</td>
+                <td align="center" id="l9">0</td>
+                <td align="center" id="l10">0</td>
+                <td align="center" id="l11">0</td>
+                <td align="center" id="l12">0</td>
+                <td align="center" id="l13">0</td>
+                <td align="center" id="l14">0</td>
+                <td align="center" id="l15">0</td>
+                <td align="center" id="l16">0</td>
+                <td align="center" id="l17">0</td>
+                <td align="center" id="l18">0</td>
+                <td align="center" id="l19">0</td>
+                <td align="center" id="l20"><select name="z" style="width:60px;">
+                    	<option value="1.10">10%</option>
+                        <option value="1.09">9%</option>
+                        <option value="1.08">8%</option>
+                        <option value="1.07">7%</option>
+                        <option value="1.06">6%</option>
+                        <option value="1.05">5%</option>
+                        <option value="1.04">4%</option>
+                        <option value="1.03">3%</option>
+                        <option value="1.02">2%</option>
+                        <option value="1.01">1%</option>
+                        <option value="1.00">无</option>
+                    </select></td>
+                <td align="center" id="l21">0</td>
+              </tr>
+              <tr>
+              	<td align="center" class="hide">1111122222</td>
+                <td align="center">13</td>
+                <td align="center">新  华</td>
+                <td align="center" id="m1">0</td>
+                <td align="center" id="m2">0</td>
+                <td align="center" id="m3">0</td>
+                <td align="center" id="m4">0</td>
+                <td align="center" id="m5">0</td>
+                <td align="center" id="m6">0</td>
+                <td align="center" id="m7">0</td>
+                <td align="center" id="m8">0</td>
+                <td align="center" id="m9">0</td>
+                <td align="center" id="m10">0</td>
+                <td align="center" id="m11">0</td>
+                <td align="center" id="m12">0</td>
+                <td align="center" id="m13">0</td>
+                <td align="center" id="m14">0</td>
+                <td align="center" id="m15">0</td>
+                <td align="center" id="m16">0</td>
+                <td align="center" id="m17">0</td>
+                <td align="center" id="m18">0</td>
+                <td align="center" id="m19">0</td>
+                <td align="center" id="m20"><select name="z" style="width:60px;">
+                    	<option value="1.10">10%</option>
+                        <option value="1.09">9%</option>
+                        <option value="1.08">8%</option>
+                        <option value="1.07">7%</option>
+                        <option value="1.06">6%</option>
+                        <option value="1.05">5%</option>
+                        <option value="1.04">4%</option>
+                        <option value="1.03">3%</option>
+                        <option value="1.02">2%</option>
+                        <option value="1.01">1%</option>
+                        <option value="1.00">无</option>
+                    </select></td>
+                <td align="center" id="m21">0</td>
+              </tr>
+              <tr>
+              	<td align="center" class="hide">123000</td>
+                <td align="center">14</td>
+                <td align="center">城  乡</td>
+                <td align="center" id="n1">0</td>
+                <td align="center" id="n2">0</td>
+                <td align="center" id="n3">0</td>
+                <td align="center" id="n4">0</td>
+                <td align="center" id="n5">0</td>
+                <td align="center" id="n6">0</td>
+                <td align="center" id="n7">0</td>
+                <td align="center" id="n8">0</td>
+                <td align="center" id="n9">0</td>
+                <td align="center" id="n10">0</td>
+                <td align="center" id="n11">0</td>
+                <td align="center" id="n12">0</td>
+                <td align="center" id="n13">0</td>
+                <td align="center" id="n14">0</td>
+                <td align="center" id="n15">0</td>
+                <td align="center" id="n16">0</td>
+                <td align="center" id="n17">0</td>
+                <td align="center" id="n18">0</td>
+                <td align="center" id="n19">0</td>
+                <td align="center" id="n20"><select name="z" style="width:60px;">
+                    	<option value="1.10">10%</option>
+                        <option value="1.09">9%</option>
+                        <option value="1.08">8%</option>
+                        <option value="1.07">7%</option>
+                        <option value="1.06">6%</option>
+                        <option value="1.05">5%</option>
+                        <option value="1.04">4%</option>
+                        <option value="1.03">3%</option>
+                        <option value="1.02">2%</option>
+                        <option value="1.01">1%</option>
+                        <option value="1.00">无</option>
+                    </select></td>
+                <td align="center" id="n21">0</td>
+              </tr>
+              <tr>
+              	<td align="center" class="hide">424101198</td>
+                <td align="center">15</td>
+                <td align="center">工  农</td>
+                <td align="center" id="o1">0</td>
+                <td align="center" id="o2">0</td>
+                <td align="center" id="o3">0</td>
+                <td align="center" id="o4">0</td>
+                <td align="center" id="o5">0</td>
+                <td align="center" id="o6">0</td>
+                <td align="center" id="o7">0</td>
+                <td align="center" id="o8">0</td>
+                <td align="center" id="o9">0</td>
+                <td align="center" id="o10">0</td>
+                <td align="center" id="o11">0</td>
+                <td align="center" id="o12">0</td>
+                <td align="center" id="o13">0</td>
+                <td align="center" id="o14">0</td>
+                <td align="center" id="o15">0</td>
+                <td align="center" id="o16">0</td>
+                <td align="center" id="o17">0</td>
+                <td align="center" id="o18">0</td>
+                <td align="center" id="o19">0</td>
+                <td align="center" id="o20"><select name="z" style="width:60px;">
+                    	<option value="1.10">10%</option>
+                        <option value="1.09">9%</option>
+                        <option value="1.08">8%</option>
+                        <option value="1.07">7%</option>
+                        <option value="1.06">6%</option>
+                        <option value="1.05">5%</option>
+                        <option value="1.04">4%</option>
+                        <option value="1.03">3%</option>
+                        <option value="1.02">2%</option>
+                        <option value="1.01">1%</option>
+                        <option value="1.00">无</option>
+                    </select></td>
+                <td align="center" id="o21">0</td>
+              </tr>
+              <tr>
+              	<td align="center" class="hide">99990000</td>
+                <td align="center">16</td>
+                <td align="center">康  安</td>
+                <td align="center" id="p1">0</td>
+                <td align="center" id="p2">0</td>
+                <td align="center" id="p3">0</td>
+                <td align="center" id="p4">0</td>
+                <td align="center" id="p5">0</td>
+                <td align="center" id="p6">0</td>
+                <td align="center" id="p7">0</td>
+                <td align="center" id="p8">0</td>
+                <td align="center" id="p9">0</td>
+                <td align="center" id="p10">0</td>
+                <td align="center" id="p11">0</td>
+                <td align="center" id="p12">0</td>
+                <td align="center" id="p13">0</td>
+                <td align="center" id="p14">0</td>
+                <td align="center" id="p15">0</td>
+                <td align="center" id="p16">0</td>
+                <td align="center" id="p17">0</td>
+                <td align="center" id="p18">0</td>
+                <td align="center" id="p19">0</td>
+                <td align="center" id="p20"><select name="z" style="width:60px;">
+                    	<option value="1.10">10%</option>
+                        <option value="1.09">9%</option>
+                        <option value="1.08">8%</option>
+                        <option value="1.07">7%</option>
+                        <option value="1.06">6%</option>
+                        <option value="1.05">5%</option>
+                        <option value="1.04">4%</option>
+                        <option value="1.03">3%</option>
+                        <option value="1.02">2%</option>
+                        <option value="1.01">1%</option>
+                        <option value="1.00">无</option>
+                    </select></td>
+                <td align="center" id="p21">0</td>
+              </tr>
+              <tr>
+              	<td align="center" class="hide">424101250</td>
+                <td align="center">17</td>
+                <td align="center">工  程</td>
+                <td align="center" id="q1">0</td>
+                <td align="center" id="q2">0</td>
+                <td align="center" id="q3">0</td>
+                <td align="center" id="q4">0</td>
+                <td align="center" id="q5">0</td>
+                <td align="center" id="q6">0</td>
+                <td align="center" id="q7">0</td>
+                <td align="center" id="q8">0</td>
+                <td align="center" id="q9">0</td>
+                <td align="center" id="q10">0</td>
+                <td align="center" id="q11">0</td>
+                <td align="center" id="q12">0</td>
+                <td align="center" id="q13">0</td>
+                <td align="center" id="q14">0</td>
+                <td align="center" id="q15">0</td>
+                <td align="center" id="q16">0</td>
+                <td align="center" id="q17">0</td>
+                <td align="center" id="q18">0</td>
+                <td align="center" id="q19">0</td>
+                <td align="center" id="q20"><select name="z" style="width:60px;">
+                    	<option value="1.10">10%</option>
+                        <option value="1.09">9%</option>
+                        <option value="1.08">8%</option>
+                        <option value="1.07">7%</option>
+                        <option value="1.06">6%</option>
+                        <option value="1.05">5%</option>
+                        <option value="1.04">4%</option>
+                        <option value="1.03">3%</option>
+                        <option value="1.02">2%</option>
+                        <option value="1.01">1%</option>
+                        <option value="1.00">无</option>
+                    </select></td>
+                <td align="center" id="q21">0</td>
+              </tr>
+              <tr>
+              	<td align="center" class="hide">078075854</td>
+                <td align="center">18</td>
+                <td align="center">爱  建</td>
+                <td align="center" id="r1">0</td>
+                <td align="center" id="r2">0</td>
+                <td align="center" id="r3">0</td>
+                <td align="center" id="r4">0</td>
+                <td align="center" id="r5">0</td>
+                <td align="center" id="r6">0</td>
+                <td align="center" id="r7">0</td>
+                <td align="center" id="r8">0</td>
+                <td align="center" id="r9">0</td>
+                <td align="center" id="r10">0</td>
+                <td align="center" id="r11">0</td>
+                <td align="center" id="r12">0</td>
+                <td align="center" id="r13">0</td>
+                <td align="center" id="r14">0</td>
+                <td align="center" id="r15">0</td>
+                <td align="center" id="r16">0</td>
+                <td align="center" id="r17">0</td>
+                <td align="center" id="r18">0</td>
+                <td align="center" id="r19">0</td>
+                <td align="center" id="r20"><select name="z" style="width:60px;">
+                    	<option value="1.10">10%</option>
+                        <option value="1.09">9%</option>
+                        <option value="1.08">8%</option>
+                        <option value="1.07">7%</option>
+                        <option value="1.06">6%</option>
+                        <option value="1.05">5%</option>
+                        <option value="1.04">4%</option>
+                        <option value="1.03">3%</option>
+                        <option value="1.02">2%</option>
+                        <option value="1.01">1%</option>
+                        <option value="1.00">无</option>
+                    </select></td>
+                <td align="center" id="r21">0</td>
+              </tr>
+              <tr>
+              	<td align="center" class="hide">253622</td>
+                <td align="center">19</td>
+                <td align="center">正  阳</td>
+                <td align="center" id="s1">0</td>
+                <td align="center" id="s2">0</td>
+                <td align="center" id="s3">0</td>
+                <td align="center" id="s4">0</td>
+                <td align="center" id="s5">0</td>
+                <td align="center" id="s6">0</td>
+                <td align="center" id="s7">0</td>
+                <td align="center" id="s8">0</td>
+                <td align="center" id="s9">0</td>
+                <td align="center" id="s10">0</td>
+                <td align="center" id="s11">0</td>
+                <td align="center" id="s12">0</td>
+                <td align="center" id="s13">0</td>
+                <td align="center" id="s14">0</td>
+                <td align="center" id="s15">0</td>
+                <td align="center" id="s16">0</td>
+                <td align="center" id="s17">0</td>
+                <td align="center" id="s18">0</td>
+                <td align="center" id="s19">0</td>
+                <td align="center" id="s20"><select name="z" style="width:60px;">
+                    	<option value="1.10">10%</option>
+                        <option value="1.09">9%</option>
+                        <option value="1.08">8%</option>
+                        <option value="1.07">7%</option>
+                        <option value="1.06">6%</option>
+                        <option value="1.05">5%</option>
+                        <option value="1.04">4%</option>
+                        <option value="1.03">3%</option>
+                        <option value="1.02">2%</option>
+                        <option value="1.01">1%</option>
+                        <option value="1.00">无</option>
+                    </select></td>
+                <td align="center" id="s21">0</td>
+              </tr>
+
+
+
+              <tr>
+              	<td align="center" class="hide">xj1</td>
+                <td align="center">&nbsp;</td>
+                <td align="center"><b>小计</b></td>
+                <td align="center" id="main1">0</td>
+                <td align="center" id="main2">0</td>
+                <td align="center" id="main3">0</td>
+                <td align="center" id="main4">0</td>
+                <td align="center" id="main5">0</td>
+                <td align="center" id="main6">0</td>
+                <td align="center" id="main7">0</td>
+                <td align="center" id="main8">0</td>
+                <td align="center" id="main9">0</td>
+                <td align="center" id="main10">0</td>
+                <td align="center" id="main11">0</td>
+                <td align="center" id="main12">0</td>
+                <td align="center" id="main13">0</td>
+                <td align="center" id="main14">0</td>
+                <td align="center" id="main15">0</td>
+                <td align="center" id="main16">0</td>
+                <td align="center" id="main17">0</td>
+                <td align="center" id="main18">0</td>
+                <td align="center" id="main19">0</td>
+                <td align="center" id="main20"></td>
+                <td align="center" id="main21">0</td>
+              </tr>
+              <tr>
+                <td align="center" class="hide">002285303</td>
+                <td align="center">20</td>
+                <td align="center">群  力</td>
+                <td align="center" id="t1">0</td>
+                <td align="center" id="t2">0</td>
+                <td align="center" id="t3">0</td>
+                <td align="center" id="t4">0</td>
+                <td align="center" id="t5">0</td>
+                <td align="center" id="t6">0</td>
+                <td align="center" id="t7">0</td>
+                <td align="center" id="t8">0</td>
+                <td align="center" id="t9">0</td>
+                <td align="center" id="t10">0</td>
+                <td align="center" id="t11">0</td>
+                <td align="center" id="t12">0</td>
+                <td align="center" id="t13">0</td>
+                <td align="center" id="t14">0</td>
+                <td align="center" id="t15">0</td>
+                <td align="center" id="t16">0</td>
+                <td align="center" id="t17">0</td>
+                <td align="center" id="t18">0</td>
+                <td align="center" id="t19">0</td>
+                <td align="center" id="t20"><select name="z" style="width:60px;">
+                    	<option value="1.10">10%</option>
+                        <option value="1.09">9%</option>
+                        <option value="1.08">8%</option>
+                        <option value="1.07">7%</option>
+                        <option value="1.06">6%</option>
+                        <option value="1.05">5%</option>
+                        <option value="1.04">4%</option>
+                        <option value="1.03">3%</option>
+                        <option value="1.02">2%</option>
+                        <option value="1.01">1%</option>
+                        <option value="1.00">无</option>
+                    </select></td>
+                <td align="center" id="t21">0</td>
+              </tr>
+              <tr>
+              	<td align="center" class="hide">21312312</td>
+                <td align="center">21</td>
+                <td align="center">新  发</td>
+                <td align="center" id="u1">0</td>
+                <td align="center" id="u2">0</td>
+                <td align="center" id="u3">0</td>
+                <td align="center" id="u4">0</td>
+                <td align="center" id="u5">0</td>
+                <td align="center" id="u6">0</td>
+                <td align="center" id="u7">0</td>
+                <td align="center" id="u8">0</td>
+                <td align="center" id="u9">0</td>
+                <td align="center" id="u10">0</td>
+                <td align="center" id="u11">0</td>
+                <td align="center" id="u12">0</td>
+                <td align="center" id="u13">0</td>
+                <td align="center" id="u14">0</td>
+                <td align="center" id="u15">0</td>
+                <td align="center" id="u16">0</td>
+                <td align="center" id="u17">0</td>
+                <td align="center" id="u18">0</td>
+                <td align="center" id="u19">0</td>
+                <td align="center" id="u20"><select name="z" style="width:60px;">
+                    	<option value="1.10">10%</option>
+                        <option value="1.09">9%</option>
+                        <option value="1.08">8%</option>
+                        <option value="1.07">7%</option>
+                        <option value="1.06">6%</option>
+                        <option value="1.05">5%</option>
+                        <option value="1.04">4%</option>
+                        <option value="1.03">3%</option>
+                        <option value="1.02">2%</option>
+                        <option value="1.01">1%</option>
+                        <option value="1.00">无</option>
+                    </select></td>
+                <td align="center" id="u21">0</td>
+              </tr>
+              <tr>
+              	<td align="center" class="hide">2322</td>
+                <td align="center">22</td>
+                <td align="center">新  农</td>
+                <td align="center" id="v1">0</td>
+                <td align="center" id="v2">0</td>
+                <td align="center" id="v3">0</td>
+                <td align="center" id="v4">0</td>
+                <td align="center" id="v5">0</td>
+                <td align="center" id="v6">0</td>
+                <td align="center" id="v7">0</td>
+                <td align="center" id="v8">0</td>
+                <td align="center" id="v9">0</td>
+                <td align="center" id="v10">0</td>
+                <td align="center" id="v11">0</td>
+                <td align="center" id="v12">0</td>
+                <td align="center" id="v13">0</td>
+                <td align="center" id="v14">0</td>
+                <td align="center" id="v15">0</td>
+                <td align="center" id="v16">0</td>
+                <td align="center" id="v17">0</td>
+                <td align="center" id="v18">0</td>
+                <td align="center" id="v19">0</td>
+                <td align="center" id="v20"><select name="z" style="width:60px;">
+                    	<option value="1.10">10%</option>
+                        <option value="1.09">9%</option>
+                        <option value="1.08">8%</option>
+                        <option value="1.07">7%</option>
+                        <option value="1.06">6%</option>
+                        <option value="1.05">5%</option>
+                        <option value="1.04">4%</option>
+                        <option value="1.03">3%</option>
+                        <option value="1.02">2%</option>
+                        <option value="1.01">1%</option>
+                        <option value="1.00">无</option>
+                    </select></td>
+                <td align="center" id="v21">0</td>
+              </tr>
+              <tr>
+              	<td align="center" class="hide">PDY1003723010211C2201</td>
+                <td align="center">23</td>
+                <td align="center">榆  树</td>
+                <td align="center" id="w1">0</td>
+                <td align="center" id="w2">0</td>
+                <td align="center" id="w3">0</td>
+                <td align="center" id="w4">0</td>
+                <td align="center" id="w5">0</td>
+                <td align="center" id="w6">0</td>
+                <td align="center" id="w7">0</td>
+                <td align="center" id="w8">0</td>
+                <td align="center" id="w9">0</td>
+                <td align="center" id="w10">0</td>
+                <td align="center" id="w11">0</td>
+                <td align="center" id="w12">0</td>
+                <td align="center" id="w13">0</td>
+                <td align="center" id="w14">0</td>
+                <td align="center" id="w15">0</td>
+                <td align="center" id="w16">0</td>
+                <td align="center" id="w17">0</td>
+                <td align="center" id="w18">0</td>
+                <td align="center" id="w19">0</td>
+                <td align="center" id="w20"><select name="z" style="width:60px;">
+                    	<option value="1.10">10%</option>
+                        <option value="1.09">9%</option>
+                        <option value="1.08">8%</option>
+                        <option value="1.07">7%</option>
+                        <option value="1.06">6%</option>
+                        <option value="1.05">5%</option>
+                        <option value="1.04">4%</option>
+                        <option value="1.03">3%</option>
+                        <option value="1.02">2%</option>
+                        <option value="1.01">1%</option>
+                        <option value="1.00">无</option>
+                    </select></td>
+                <td align="center" id="w21">0</td>
+              </tr>
+              <tr>
+              	<td align="center" class="hide">52134523</td>
+                <td align="center">24</td>
+                <td align="center">太  平</td>
+                <td align="center" id="x1">0</td>
+                <td align="center" id="x2">0</td>
+                <td align="center" id="x3">0</td>
+                <td align="center" id="x4">0</td>
+                <td align="center" id="x5">0</td>
+                <td align="center" id="x6">0</td>
+                <td align="center" id="x7">0</td>
+                <td align="center" id="x8">0</td>
+                <td align="center" id="x9">0</td>
+                <td align="center" id="x10">0</td>
+                <td align="center" id="x11">0</td>
+                <td align="center" id="x12">0</td>
+                <td align="center" id="x13">0</td>
+                <td align="center" id="x14">0</td>
+                <td align="center" id="x15">0</td>
+                <td align="center" id="x16">0</td>
+                <td align="center" id="x17">0</td>
+                <td align="center" id="x18">0</td>
+                <td align="center" id="x19">0</td>
+                <td align="center" id="x20"><select name="z" style="width:60px;">
+                    	<option value="1.10">10%</option>
+                        <option value="1.09">9%</option>
+                        <option value="1.08">8%</option>
+                        <option value="1.07">7%</option>
+                        <option value="1.06">6%</option>
+                        <option value="1.05">5%</option>
+                        <option value="1.04">4%</option>
+                        <option value="1.03">3%</option>
+                        <option value="1.02">2%</option>
+                        <option value="1.01">1%</option>
+                        <option value="1.00">无</option>
+                    </select></td>
+                <td align="center" id="x21">0</td>
+              </tr>
+              <tr>
+                <td align="center" class="hide">xj2</td>
+                <td align="center">&nbsp;</td>
+                <td align="center"><b>小计</b></td>
+                <td align="center" id="y1">0</td>
+                <td align="center" id="y2">0</td>
+                <td align="center" id="y3">0</td>
+                <td align="center" id="y4">0</td>
+                <td align="center" id="y5">0</td>
+                <td align="center" id="y6">0</td>
+                <td align="center" id="y7">0</td>
+                <td align="center" id="y8">0</td>
+                <td align="center" id="y9">0</td>
+                <td align="center" id="y10">0</td>
+                <td align="center" id="y11">0</td>
+                <td align="center" id="y12">0</td>
+                <td align="center" id="y13">0</td>
+                <td align="center" id="y14">0</td>
+                <td align="center" id="y15">0</td>
+                <td align="center" id="y16">0</td>
+                <td align="center" id="y17">0</td>
+                <td align="center" id="y18">0</td>
+                <td align="center" id="y19">0</td>
+                <td align="center" id="y20"></td>
+                <td align="center" id="y21">0</td>
+              </tr>
+              <tr>
+                <td align="center" class="hide">hj</td>
+                <td align="center">&nbsp;</td>
+                <td align="center"><b>合计</b></td>
+                <td align="center" id="z1">0</td>
+                <td align="center" id="z2">0</td>
+                <td align="center" id="z3">0</td>
+                <td align="center" id="z4">0</td>
+                <td align="center" id="z5">0</td>
+                <td align="center" id="z6">0</td>
+                <td align="center" id="z7">0</td>
+                <td align="center" id="z8">0</td>
+                <td align="center" id="z9">0</td>
+                <td align="center" id="z10">0</td>
+                <td align="center" id="z11">0</td>
+                <td align="center" id="z12">0</td>
+                <td align="center" id="z13">0</td>
+                <td align="center" id="z14">0</td>
+                <td align="center" id="z15">0</td>
+                <td align="center" id="z16">0</td>
+                <td align="center" id="z17">0</td>
+                <td align="center" id="z18">0</td>
+                <td align="center" id="z19">0</td>
+                <td align="center" id="z20"></td>
+                <td align="center" id="z21">0</td>
+              </tr>
+              </tbody>
+            </table>
+<!--endprint-->
+           </div>
+	</div>
+ </div>
+ </form>
+<script type="text/javascript">
+
+var dataShow;
+var PageNumber=1;
+var PageSize=10;
+
+
+function setData2EtbjgldaNew(data){
+	var cleantable=document.getElementById("testtable");
+	$("#testtable select").val("1.00");
+	$(".z-time1").text($("#year").val()+"年 第"+$("#quarter").val()+"季度");
+	for(var cleanR=1;cleanR<cleantable.rows.length;cleanR++){
+		for(var cleanC=3;cleanC<cleantable.rows[cleanR].cells.length;cleanC++){
+			if (cleanC!=22) {
+				//alert(cleanR+"----------"+cleanC)
+				cleantable.rows[cleanR].cells[cleanC].innerHTML="0.00";
+			}
+		}
+	}
+    //$(".tnull input").attr("disabled","disabled");
+	var url ="cxpm"; 
+	var itemsList;
+	if($("#year").val()!=""){
+		itemsList=["year","quarter","dimOrg"];
+	}else{
+		itemsList=[];
+	}
+	//空数据 会出现 小bug
+	var info= new Map();
+	info.put("sqlid","select");
+	info.put("pagenum",PageNumber);
+	info.put("pagesize",PageSize);
+	if(data==="tablename"){
+	   LXtype="tablename";
+	}else if(data==="createdate"){
+	   LXtype="createdate";
+	}else{
+	   LXtype="hospunitorgcode"
+	}
+	info.put("groupby",data);
+	sys_AjaxGet(BIUrl+url,"org_etbjglda","reCallback101",info,itemsList);
+}
+function reCallback101(dataInfo){
+	if(dataInfo.ret=="103"){
+        alert("用户登录超时，请重新登陆！");
+        $('#trigger').scojs_modal();
+    }
+    $("select").removeAttr("disabled");
+	var jsonobj=dataInfo;
+	var xj1=0;
+	var xj2=0;
+	var hj=0;
+	var str;
+	var tabledata=document.getElementById("testtable");
+	for(j=1;j<tabledata.rows.length; j++){
+		var id=tabledata.rows[j].cells[0].innerHTML;
+		str=searchValue(jsonobj,id)
+		if(str!=null&&str!=""){
+			tabledata.rows[j].cells[3].innerHTML=parseFloat(str.jkda).toFixed(2);
+			tabledata.rows[j].cells[4].innerHTML=parseFloat(str.jkjy).toFixed(2);
+			tabledata.rows[j].cells[5].innerHTML=parseFloat(str.yfjz).toFixed(2);
+			tabledata.rows[j].cells[6].innerHTML=parseFloat(str.etbj).toFixed(2);
+			tabledata.rows[j].cells[7].innerHTML=parseFloat(str.fnbj).toFixed(2);
+			tabledata.rows[j].cells[8].innerHTML=parseFloat(str.jhsy).toFixed(2);
+			tabledata.rows[j].cells[9].innerHTML=parseFloat(str.lnrjk).toFixed(2);
+			tabledata.rows[j].cells[10].innerHTML=parseFloat(str.mxbhz).toFixed(2);
+			tabledata.rows[j].cells[11].innerHTML=parseFloat(str.cjr).toFixed(2);
+			tabledata.rows[j].cells[12].innerHTML=parseFloat(str.zxjsjb).toFixed(2);
+			tabledata.rows[j].cells[13].innerHTML=parseFloat(str.crb).toFixed(2);
+			tabledata.rows[j].cells[14].innerHTML=parseFloat(str.wsjc).toFixed(2);
+			tabledata.rows[j].cells[15].innerHTML=parseFloat(str.zyy).toFixed(2);
+			tabledata.rows[j].cells[16].innerHTML=parseFloat(str.kqff).toFixed(2);
+			tabledata.rows[j].cells[17].innerHTML=parseFloat(str.fyff).toFixed(2);
+			tabledata.rows[j].cells[18].innerHTML=parseFloat(str.jkff).toFixed(2);
+			tabledata.rows[j].cells[19].innerHTML=parseFloat(str.jhb).toFixed(2);
+			tabledata.rows[j].cells[20].innerHTML=parseFloat(str.jtys).toFixed(2);
+			tabledata.rows[j].cells[21].innerHTML=parseFloat(str.yb).toFixed(2);
+			//tabledata.rows[j].cells[22].innerHTML=str.fullevaluation;
+			tabledata.rows[j].cells[23].innerHTML=parseFloat(str.sj).toFixed(2);
+
+			tabledata.rows[j].cells[22].childNodes[0].id=str.dimorg;
+
+			var tempselect=tabledata.rows[j].cells[22].childNodes[0];
+			for(var ii=0;ii<tempselect.options.length;ii++){
+				if(tempselect.options[ii].value==str.fullevaluation){
+					var newoption=tempselect.options[ii];
+					tempselect.options.remove(ii);
+					tempselect.insertBefore(newoption,tempselect.options[0]);
+					tempselect.options[0].selected=true;
+				}
+			}
+		}
+		else if(tabledata.rows[j].cells[0].innerHTML=="xj1"){
+			xj1=j;
+			var xj1val=0;
+			for (var xj1i=3;xj1i<tabledata.rows[j].cells.length;xj1i++){
+				if(xj1i!=22){
+					for(var xjlvali=1;xjlvali<j;xjlvali++){
+						xj1val=parseFloat(xj1val)+parseFloat(tabledata.rows[xjlvali].cells[xj1i].innerHTML);
+					}
+					//if (xj1i==23) {alert(xj1val);}
+					tabledata.rows[j].cells[xj1i].innerHTML=parseFloat(xj1val).toFixed(2);
+					xj1val=0;
+				}
+			}
+
+		}
+		else if(tabledata.rows[j].cells[0].innerHTML=="xj2"){
+			xj2=j;
+			var xj2val=0;
+			for (var xj2i=3;xj2i<tabledata.rows[j].cells.length;xj2i++){
+				if(xj2i!=22){
+					for(var xj2vali=1+xj1;xj2vali<j;xj2vali++){
+
+						xj2val=parseFloat(xj2val)+parseFloat(tabledata.rows[xj2vali].cells[xj2i].innerHTML);
+					}
+					tabledata.rows[j].cells[xj2i].innerHTML=parseFloat(xj2val).toFixed(2);
+					xj2val=0;
+				}
+			}
+		}
+		else if(tabledata.rows[j].cells[0].innerHTML=="hj"){
+			for(var hj=3;hj<tabledata.rows[j].cells.length;hj++){
+				if (hj!=22) {
+					tabledata.rows[j].cells[hj].innerHTML=parseFloat(parseFloat(tabledata.rows[xj1].cells[hj].innerHTML)+parseFloat(tabledata.rows[xj2].cells[hj].innerHTML)).toFixed(2);
+				}
+			}
+		}	
+		else{
+			if (tabledata.rows[j].cells[22].childNodes.length>0) {
+				tabledata.rows[j].cells[22].childNodes[0].disabled=true;}
+		}
+	}
+
+}
+
+function setData2EtbjgldaNew1(FullEvaluation,dimOrg){
+	var url ="xgFE"; 
+	var itemsList;
+	if($("#year").val()!=""){
+		itemsList=["year","quarter"];
+	}else{
+		itemsList=[];
+	}
+	var info= new Map();
+	info.put("sqlid","update");
+	info.put("pagenum",PageNumber);
+	info.put("pagesize",PageSize);
+	info.put("dimOrg",dimOrg);
+	info.put("FullEvaluation",FullEvaluation);
+	
+	sys_AjaxGet(BIUrl+url,"org_etbjglda","reCallback1011",info,itemsList);
+}
+function reCallback1011(dataInfo){
+	if(dataInfo.ret=="103"){
+        alert("用户登录超时，请重新登陆！");
+        $('#trigger').scojs_modal();
+    }
+	setData2EtbjgldaNew()
+
+}
+
+
+
+function searchValue(jsonobj,searchstr){
+	var str="";
+	for(i=0;i<jsonobj.dataList.length;i++){
+		if(jsonobj.dataList[i].dimorg==searchstr){
+			str=jsonobj.dataList[i];
+			i=jsonobj.dataList.length-1;
+			}
+		}
+	return str;
+}
+
+
+
+
+
+$(function(){
+	$('.dateday').datetimepicker({
+		format: 'yyyy',
+			weekStart: 1,
+			autoclose: true,
+			startView: 4,
+			minView: 4,
+			forceParse: false,  //必须设置，否则每次解析错，会变成1899年。
+			language: 'zh-CN'
+	});
+	//获取当前年-月-日
+	today=new Date();
+	var vMon = today.getMonth() + 1;
+	var dateendymd=today.getFullYear();
+	var ymd=today.getFullYear();
+	$("#year").val(dateendymd);
+	$("#dateend").val(ymd); 
+	
+	$("#zymrzy-m .reload").click(function(){
+		$("#zymrzy-m #rowtable").toggleClass("rowtable");
+		$("#zymrzy-m #lc-rowtable").toggleClass("rowtable");
+		})
+
+	$("#testtable select").change(function(){
+
+		//var newoption=$("option:selected",this);
+		//alert(newoption);
+		//$(this).option.before(newoption);
+		//$(this).prepend(newoption);
+
+		var FullEvaluation=$(this).val();
+		//var dimOrg=$(this).parent("td").siblings(".hide").text();
+		var dimOrg=$(this).attr("id");
+		//alert(FullEvaluation+"------------"+dimOrg);
+		setData2EtbjgldaNew1(FullEvaluation,dimOrg);
+	});
+	$("#testtable tr:odd").css("background","#d8ebfa")
+
+
+});
+
+function PrintPage()
+{  
+	//var bdhtml=window.document.body.innerHTML;
+	//var sprnstr="startprint";
+	//var eprnstr="endprint";
+	//var prnhtml=bdhtml.substring(bdhtml.indexOf(sprnstr)+15);
+	//var prnhtml=prnhtml.substring(0,prnhtml.indexOf(eprnstr)-4);
+	//window.document.body.innerHTML=prnhtml; 
+	//window.print(); 
+	//window.document.body.innerHTML=bdhtml; 
+	$("div#myPrintArea").printArea();
+};
+
+    
+
+
+
+setData2EtbjgldaNew();
+
+</script>
+
+
+</form>

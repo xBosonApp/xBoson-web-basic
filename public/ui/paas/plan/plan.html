@@ -1,0 +1,94 @@
+<div class="row">
+  <div id="EWATERBI_pdmr_prodcplan_wid" class="col-xs-12 col-sm-12 col-md-12 col-lg-12"></div>
+</div>
+<!-- widget content -->
+<div id="EWATERBI_pdmr_prodcplan" class="widget-body no-padding" style="margin: -10px -13px 28px -13px;">
+  <div class="widget-body-toolbar">
+    <div class="row">
+      <form id="EWATERBI_pdmr_prodcplan_form" method="post" onsubmit="return false;" class="smart-form">
+        <section class="col col-2">
+          <label class="input">
+            <input type="hidden" name="status" data-type="select2" placeholder="状态"/>
+          </label>
+        </section>
+        <section class="col col-2">
+          <label class="input">
+            <input type="text" name="p_nm" placeholder="计划名称" class="form-control">
+          </label>
+        </section>
+        <section class="col col-2">
+          <label class="input">
+            <input type="hidden" name="p_typecd" data-type="select2" placeholder="计划分类">
+          </label>
+        </section>
+        <section class="col col-2">
+          <label class="input">
+            <input type="hidden" name="p_dttypecd" data-type="select2" placeholder="计划时间类型">
+          </label>
+        </section>
+        <section class="col col-2">
+          <label class="input">
+            <input type="text" name="p_usr" placeholder="计划人" class="form-control">
+          </label>
+        </section>
+        <section class="col col-2">
+          <label class="input">
+            <button id="EWATERBI_pdmr_prodcplan_search" class="btn btn-info btn-sm" type="submit"><i
+              class="fa fa-search fa-1"></i>&emsp;查 询&emsp;</button>
+          </label>
+        </section>
+      </form>
+    </div>
+    <div class="btn-group">
+      <button id="EWATERBI_pdmr_prodcplan_add" class="btn btn-info btn-xs">&emsp;<i class="fa fa-magic"></i>&nbsp;添 加&emsp;
+      </button>
+      <button id="EWATERBI_pdmr_prodcplan_edit" class="btn btn-info btn-xs">&emsp;<i class="fa fa-edit"></i>&nbsp;修 改&emsp;
+      </button>
+      <button id="EWATERBI_pdmr_prodcplan_tab" class="btn btn-info btn-xs">&emsp;<i class="fa fa-edit"></i>&nbsp;详 细&emsp;
+      </button>
+    </div>
+  </div>
+  <div class="dataTables_wrapper">
+    <table id="EWATERBI_pdmr_prodcplan_dt" class="table table-bordered table-striped">
+      <thead>
+      <tr>
+        <th>计划名称</th>
+        <th>计划分类</th>
+        <th>计划时间类型</th>
+        <th>计划人</th>
+        <th>修改时间</th>
+        <th>状态</th>
+      </tr>
+      </thead>
+    </table>
+  </div>
+  <div id="EWATERBI_pdmr_prodcplan_pagination"></div>
+</div>
+<!-- end widget content -->
+<div id="EWATERBI_pdmr_prodcplan_form1"></div>
+
+
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script src="lib/html/zy_modal.js"></script>
+<script src="lib/html/zy_tabs.js"></script>
+<script src="plan/plan.js"></script>
+<script type="text/javascript">
+  // DO NOT REMOVE : GLOBAL FUNCTIONS!
+  pageSetUp();
+  var md_h1 = new TextH1();
+  var options = {
+    width: '80%'
+  };
+</script>
+<!--<script>var cb = function () {-->
+<!--// 字典数据绑定-->
+<!--$("#EWATERBI_pdmr_prodcplan_form input[name=status]").zySelect('3', true, {-->
+<!--width: '100%'-->
+<!--});-->
+<!--};-->
+<!--// 预处理该画面所需的字典类型，以 , 号分割-->
+<!--zy.cache.initDicts('3', cb);-->
+<!--var tab_h1 = new zyTabs('#EWATERBI_pdmr_prodcplan_wid');-->
+<!--tab_h1.AddTab('h1', '生产计划信息', false, $('#EWATERBI_pdmr_prodcplan'));-->
+<!--tab_h1.AddTab('h2', '变更记录', false, $('#EWATERBI_pdmr_prodcplan_log'));-->
+<!--</script>-->

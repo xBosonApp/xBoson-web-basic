@@ -1,0 +1,43 @@
+﻿<ul class="nav nav-tabs" id="myTabbox" style="margin-bottom:0;margin-top:10px;">
+  <li class="active" rel="ggws_gxydajd.html"><a href="javascript:;;;">高血压人群报表</a></li>
+  <li rel="ggws_gxysf.html"><a href="javascript:;;;">高血压随访报表</a></li>
+  <li rel="ggws_sjysgxyhzgl.html"><a href="javascript:;;;">35岁及以上高血压患者管理报表</a></li>
+</ul>
+<div id="tabbox" style="padding:10px; border:1px solid #ddd; border-top:none;"></div>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#myTabbox li").click(function(){
+		$(this).addClass("active");
+		$(this).siblings().removeClass("active")
+		})
+	$("#myTabbox li").click(function(){
+		$("#tabbox").html("");
+		var ehrrel=$(this).attr("rel");
+		console.log("on click after ehrrel")
+		$("#tabbox").load(ehrrel,function(){
+			 console.log("load ...")
+			setTimeout(function(){
+				   console.log("load in function")
+				 $('.selectpicker').selectpicker({
+					'selectedText': 'cat'
+				});
+				
+			}, 300);
+		});
+	});
+	$("#myTabbox li:first").click();
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,463 @@
+<script type="text/javascript" language="JavaScript" src="/t/paas/show/ui/comm.js"></script>	
+<script type="text/javascript">
+var dataList;
+var aoidMap  = new Map();
+var tsMap = new Map();
+var ysMap = new Map();
+var cosidMap = new Map();
+var pagenum=1;		//小写
+var pagesize=10;   //小写
+var tmpaoid=new Map();
+var tmpgoalhid=new Map();
+
+$(function () {
+getselectdaoid();
+getselectdcosid();
+});
+
+function  getselectdaoid(){
+  var url="mdm/orgs/";
+  var infoa = new Map();
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"formfix2","mdmSelectdaoid",infoa,itemsList);
+}
+
+function mdmSelectdaoid(data){
+  var info = new Map();
+  info.put("key",["orgId"]);
+  info.put("value",["orgNm"]);
+  aoidMap=LC_getDataMap(info,data.dataList);
+}
+
+$(function () {
+	momoDate();
+});
+function momoDate(){
+
+	  $(".Wdate").val(new Date().getFullYear());
+	  $("#month1").val("0"+(new Date().getMonth()+1));
+	  $("#month2").val("0"+(new Date().getMonth()+1));
+	/*  if((new Date().getMonth()+1)<9)
+	  {
+		  $("#month1").val("0"+(new Date().getMonth()+1));
+	  	  $("#month2").val("0"+(new Date().getMonth()+1));
+	  }
+	  else if(9<(new Date().getMonth()+1)<12)
+	  {
+		  $("#month1").val((new Date().getMonth()+1)<10?'09':(new Date().getMonth()+1));
+	  	  $("#month2").val(new Date().getMonth()+1);
+	  }
+	  else
+	  {
+ 			$("#year2").val(new Date().getFullYear()+1);
+		    $("#month1").val(new Date().getMonth()+1);
+            $("#month2").val(new Date().getMonth()+1);
+	  }*/
+
+	  if($("#selectMonth").val()=="1"){
+		  	$("#year1").show();
+		  	$("#year2").show();
+		    $("#month1").show();
+		    $("#month2").show();			
+		    $("#seasonstart").hide();
+		    $("#seasonend").hide();
+	  }else if($("#selectMonth").val()=="2"){
+			if((new Date().getMonth()+1)<4){;$("#seasonstart").val("01");$("#seasonend").val("01");}
+		    else if(4<=(new Date().getMonth()+1)&&(new Date().getMonth()+1)<7){$("#seasonstart").val("04");$("#seasonend").val("04");}
+		    else if(7<=(new Date().getMonth()+1)&&(new Date().getMonth()+1)<10){$("#seasonstart").val("07");$("#seasonend").val("07");}
+		    else{$("#seasonstart").val("10");$("#year2").val(new Date().getFullYear());$("#seasonend").val("10");}		
+			$("#year2").show();
+		  	$("#year1").show();
+			$("#month1").hide();
+		    $("#month2").hide();
+		    $("#seasonstart").show();
+		    $("#seasonend").show();
+	  }else if($("#selectMonth").val()=="3"){
+			$("#yearnumend").show();
+		  	$("#yearnumstart").show();
+			$("#year1").val(new Date().getFullYear());
+			$("#year2").val(new Date().getFullYear());
+		    $("#month1").hide();
+		    $("#month2").hide();
+		    $("#seasonstart").hide();
+		    $("#seasonend").hide();
+	  }
+	}
+
+$(function () {
+  var url="mdm/org/listSta/";
+  var infoa = new Map();
+  infoa.put("stringsplit",self.parent.orgid);
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"formfix2","mdmSelectdys",infoa,itemsList);
+});
+
+function mdmSelectdys(data){
+  var info = new Map();
+  info.put("key",["staffId"]);
+  info.put("value",["name"]);
+  ysMap=LC_getDataMap(info,data.dataList);
+}
+
+
+$(function () {
+	if(self.parent.usertype=="1"){
+		$("#goalhid").attr("disabled",true);
+			 //转出机构
+			getselectaoidout();
+			$("#goalhid").val(self.parent.orgid);
+	}else if(self.parent.usertype=="2"){
+			$("#aoid").attr("disabled",true);
+			//转入机构
+			 getselectaoidin();
+			$("#aoid").val(self.parent.orgid);
+	}
+});
+
+//转出医疗机构
+ function getselectaoidout(){
+
+  var url="mdm/osms004OrgId/";
+  var infoa = new Map();
+  infoa.put("orgid",self.parent.orgid);
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"aoid","mdmSelectoidout",infoa,itemsList);
+}
+
+function mdmSelectoidout(data){
+  var info = new Map();
+  info.put("key",["orgid"]);
+  info.put("value",["orgNm"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("formbrzzxx","aoid",info,data.dataList);
+}
+//转入医疗机构
+ function getselectaoidin(){
+
+  var url="mdm/osms004ChOrgId/";
+  var infoa = new Map();
+  infoa.put("changorgid",self.parent.orgid);
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"goalhid","mdmSelectoidin",infoa,itemsList);
+}
+
+function mdmSelectoidin(data){
+  var info = new Map();
+  info.put("key",["orgid"]);
+  info.put("value",["orgNm"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("formbrzzxx","goalhid",info,data.dataList);
+}
+
+//转换申请状态
+$(function () {
+	getselectdts();
+});
+
+function  getselectdts(){
+	var url="mdm/dict/listget/";
+	var infoa = new Map();
+	infoa.put("stringsplit","VA0004.912");
+	var itemsList= [];
+	LC_AjaxGet(MDMBaseUrl+url,"","mdmSelectdts",infoa,itemsList);
+}
+
+function mdmSelectdts(data){
+	var info = new Map();
+	info.put("key",["typeCode2"]);
+	info.put("value",["typeName"]);
+	tsMap=LC_getDataMap(info,data.dataList["VA0004.912"]);
+	setTimeout(function(){ showDatatzzxx(); }, 800); 
+}
+
+//转换科室
+function  getselectdcosid(){
+  var url="mdm/snamescd";
+  LC_AjaxGet(MDMBaseUrl+url,"","mdmSelectdcosid",new Map(),[]);
+}
+function mdmSelectdcosid(data){ 
+  cosidMap=data;
+}
+
+
+function transgroup(orgid,groupid)
+{
+    var info = new Map();
+    info.put("key",["osms003_scd"]);
+    info.put("value",["osms003_sname"]);
+	var tssmap=new Map();
+	if(cosidMap.dataList!==undefined&&cosidMap.dataList[orgid]!=undefined){
+		tssmap=LC_getDataMap(info,cosidMap.dataList[orgid]);	
+	}
+	return LC_getMapValue(groupid,tssmap);
+}
+
+function showDatatzzxx(){
+	var url="brzzxx/";
+	var info = new Map();	
+	info.put("pagenum",pagenum);      //全小写
+	info.put("pagesize",pagesize);    //全小写
+	var startatime="";
+	var endatime="";
+	if($("#selectMonth").val()=="1"){
+		startatime = $("#year1").val()+"-"+$("#month1").val()+"-01";
+		var endmonth = $("#month2").val();
+		if(parseInt(endmonth)<9)
+	  {
+		 endmonth="0"+(parseInt(endmonth)+1);
+	  }
+	  else
+	  {
+ 			endmonth=parseInt(endmonth)+1;
+	  }
+		endatime = $("#year2").val()+"-"+endmonth+"-01";
+	}
+	else if($("#selectMonth").val()=="2")
+	{
+		startatime = $("#year1").val()+"-"+$("#seasonstart").val()+"-01";
+		endatime = $("#seasonend").val()=="10"?($("#year2").val()*1+1)+"-01-01":$("#year2").val()+"-"+(
+		($("#seasonend").val()*1+3)<10?"0"+($("#seasonend").val()*1+3):($("#seasonend").val()*1+3))+"-01";
+	}
+	else
+	{
+		startatime = $("#year1").val()+"-01-01";
+		var yearend = $("#year2").val();
+		yearend = parseInt(yearend)+1;
+		alert(yearend);
+		endatime = (yearend)+"-01-01";
+	}
+	info.put("startatime",startatime);
+	info.put("endatime",endatime);	
+	
+	var itemsList = ["aoid","goalhid"];	
+
+	LC_AjaxGet(TRSBaseUrl+url,"formbrzzxx","brzzxxCallback",info,itemsList);			
+
+}
+
+function brzzxxCallback(data){
+	    var i=0;
+		$('#div_zzxx').datagrid({
+	            nowrap: false,
+	            striped: true,
+				singleSelect:true,
+	            collapsible:false,
+				pagination:true,
+				pageNumber:pagenum,   //冒号后面 小写
+				pageSize:pagesize,    //冒号后面 小写
+				loadMsg:"正在载入...",
+				//border:false,
+                pageList: [10,20,50,100,200],
+				data:data.dateList,
+				columns:[[
+				   {field:'aoid',title:'转出机构',width:100,align:'center',   				   
+				    formatter:function(value){
+					  tmpaoid.put(i,value);
+					  return LC_getMapValue(value,aoidMap);
+					 }},
+				   {field:'atime',title:'转诊时间',width:100,align:'center',
+				   formatter:function(value){
+					  return LC_SubStr(value,0,10);
+					 }},
+				   {field:'pname',title:'患者姓名',width:80,align:'center'},
+				   {field:'goalhsubid',title:'转诊科室',width:100,align:'center',
+				    formatter:function(value){
+					  //alert(tmpaoid.get(i)); 转出机构ID
+					  //return LC_getMapValue(value,cosidMap);
+					  return transgroup(tmpaoid.get(i),value);
+					 }},
+				   {field:'goalhid',title:'接受机构',width:100,align:'center',				   
+				    formatter:function(value){
+					  tmpgoalhid.put(i,value);
+					  return LC_getMapValue(value,aoidMap);
+					 }},
+				   {field:'atime',title:'接受日期',width:100,align:'center',
+				   formatter:function(value){					  
+					  return LC_SubStr(value,0,10);
+					 }},
+				   {field:'ts',title:'当前状态',width:100,align:'center',
+					 formatter:function(value){
+					  return LC_getMapValue(value,tsMap);
+					 }},
+				   {field:'yytime',title:'预约日期',width:100,align:'center',
+				   formatter:function(value){
+					  return LC_SubStr(value,0,10);
+					 }},
+				   {field:'aosid',title:'预约科室',width:100,align:'center',
+				   formatter:function(value){
+  					  //alert(tmpgoalhid.get(i)); 转入机构ID
+					  return transgroup(tmpgoalhid.get(i),value);
+					  //return LC_getMapValue(value,cosidMap);
+					 }},
+				   {field:'vdid',title:'预约专家姓名',width:80,align:'center',
+				   formatter:function(value){
+					  return LC_getMapValue(value,ysMap);										   
+				    }},
+				   {field:'jztime',title:'患者就诊时间',width:100,align:'center',
+				   formatter:function(value){
+					  i++;
+					  return LC_SubStr(value,0,10);
+					 }}
+				]],                  
+                onDblClickRow: function (rowIndex) {
+                  openRoleDiv(rowIndex);
+                },
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true
+		}); 
+
+	   var pager = $('#div_zzxx').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pagenum=pageNumber; //前面小写
+		           pagesize=pageSize;  //前面小写
+		           showDatatzzxx();
+		        }
+			});		
+			
+			$(pager).pagination({pageSize:pagesize,pageNum:pagenum,total:data.count});  //冒号后面小写
+
+		};
+	
+	}
+//选择日期时候，下面显示时间范围
+/*var bigMonth
+
+$(function(){
+	$("#startSelect").html($("#year1").val()+"-"+$("#month1").val()+"-01");
+	$("#endSelect").html($("#year2").val()+"-"+$("#month2").val()+"-01");
+});*/
+
+
+</script>
+<style>
+body{ font-size:12px;}
+.padding1{padding:10px 0 0 7px;}
+</style>
+<div class="padding1">
+<div class="mainsW-912" style="height:600px;">
+		<form id="formbrzzxx" style="margin:0;">
+    <div class="mainsW-912">
+		<div class="easyui-panel" title="查询信息"  style="height:150px;">
+            <div class="flPadTB-10">
+            	<div class="clearfix">
+                	<div class="mainW-224" >
+                        <div class="itemLW-112 padT-4">检索条件：</div>
+                        <div class="itemRW-112"><select class="textLW" name="dept" id="selectMonth" onchange="momoDate()"><option value="1">月份</option ><option value="2">季度</option ><option value="3">年份</option></select></div>
+                     </div>
+                    <div class="mainW-272" >
+                        <div class="itemLW-112 padT-4">开始时间：</div>
+                        <div class="itemRW-64">	<input class="Wdate"  onClick="WdatePicker({dateFmt:'yyyy'})" type="text" style="width:48px;" id="year1"/></div>		
+                    	<div class="itemRW-64">
+	                    	<select  style="width:64px;" class="month" id="month1" />
+	                    	<option value="01">01月</option>
+	                    	<option value="02">02月</option>
+	                    	<option value="03">03月</option>
+	                    	<option value="04">04月</option>
+	                    	<option value="05">05月</option>
+	                    	<option value="06">06月</option>
+	                    	<option value="07">07月</option>
+	                    	<option value="08">08月</option>
+	                    	<option value="09">09月</option>
+	                    	<option value="10">10月</option>
+	                    	<option value="11">11月</option>
+	                    	<option value="12">12月</option>
+	                    	</select>
+	                    	<select style="width:80px;" class="month" id="seasonstart"/>
+                    		<option value="01">第1季度</option>
+                    		<option value="04">第2季度</option>
+                    		<option value="07">第3季度</option>
+                    		<option value="10">第4季度</option>
+                    		</select>	                    	
+                    	</div>
+						
+                     </div>
+                    <div class="mainW-272" >
+                        <div class="itemLW-112 padT-4">结束时间：</div>
+                        <div class="itemRW-64"><input class="Wdate"  onClick="WdatePicker({dateFmt:'yyyy'})" type="text" style="width:48px;" id="year2"/></div>
+                   		<div class="itemRW-64">
+	                    	<select  style="width:64px;" class="month" id="month2"/>
+		                    	<option value="01">01月</option>
+		                    	<option value="02">02月</option>
+		                    	<option value="03">03月</option>
+		                    	<option value="04">04月</option>
+		                    	<option value="05">05月</option>
+		                    	<option value="06">06月</option>
+		                    	<option value="07">07月</option>
+		                    	<option value="08">08月</option>
+		                    	<option value="09">09月</option>
+		                    	<option value="10">10月</option>
+		                    	<option value="11">11月</option>
+		                    	<option value="12">12月</option>
+	                    	</select>
+	                    	<select style="width:80px;" class="month" id="seasonend"/>
+		                    	<option value="01">第1季度</option>
+		                    	<option value="04">第2季度</option>
+		                    	<option value="07">第3季度</option>
+		                    	<option value="10">第4季度</option>
+	                    	</select>
+						</div>
+                     </div>
+                      <div class="mainW-880">
+                        <div class="mainW-368">
+                            <div class="itemLW-112 padT-4" >转出医疗机构：</div>
+                            <div class="itemRW-240"><select class="textLW" name="dept" id="aoid"></select></div>
+                        </div>
+                        <div class="mainW-368">
+                            <div class="itemLW-112 padT-4">转入医疗机构：</div>
+                            <div class="itemRW-240"><select class="textLW" name="dept" id="goalhid"></select></div>
+                         </div>
+                     </div>
+                 </div>
+                <!--<div class="mainW-880">
+					 <div class="itemLW-112 padT-4" >查询时间范围：</div><span id="startSelect" style="color:green"></span>至<span id="endSelect" style="color:green"></span>
+				 </div>-->
+                 <div class="itemLW-896" style="padding:0 0 5px 0;"><a href="#" class="easyui-linkbutton" id="delaysearch" onclick="showDatatzzxx()">检索</a><!--<span style="margin:0 0 0 10px;"><a href="#" class="easyui-linkbutton">导出EXCEL</a></span>--></div>
+             </div>
+        </div>
+		<table id="div_zzxx"></table>
+        
+        
+        
+        
+    </div>
+</form>
+    
+</div>
+</div>
+<script type="text/javascript">
+//搜索延迟两秒
+var oInput = document.getElementById('delaysearch');
+        oInput.onclick = function(){
+		setTimeout(function(){
+		pagenum=1;
+		pagesize=10;
+ showDatatzzxx();
+}, 300);
+		$("#delaysearch").linkbutton({  
+			disabled:true  
+			}); 
+        setTimeout(function(){
+			$("#delaysearch").linkbutton({  
+			disabled:false  
+			}); 
+		},1000*2);
+}
+
+//添加修改延迟五秒
+var oInput = document.getElementById('delayalter');
+        oInput.onclick = function(){
+		$("#delayalter").linkbutton({  
+			disabled:true  
+			}); 
+        setTimeout(function(){
+			$("#delayalter").linkbutton({  
+			disabled:false  
+			}); 
+		},1000*5);
+}
+</script>

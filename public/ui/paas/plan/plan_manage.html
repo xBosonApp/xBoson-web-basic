@@ -1,0 +1,475 @@
+<div class="modal fade" id="EWATERBI_pdmr_plan_manage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true"
+     data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title"><span id="EWATERBI_pdmr_plan_manage_title"></span></h4>
+      </div>
+      <div class="modal-body no-padding">
+        <!-- FORM Start -->
+        <form id="EWATERBI_pdmr_plan_manage_form" method="post" onsubmit="return false;" class="smart-form"
+              hidden="hidden">
+          <fieldset>
+            <div class="row">
+              <section class="col-12" id="p_sn" style="margin: 0 15px 15px 15px;">
+                <label class="label">计划序列号</label>
+                <label class="input has-warning">
+                  <input type="text" name="p_sn" placeholder="产品序列号自动填充">
+                  <b class="tooltip tooltip-bottom-right">计划序列号自动填充</b> </label>
+              </section>
+            </div>
+            <div class="row">
+
+              <section class="col col-6">
+                <label class="label">计划名称</label>
+                <label class="input has-warning">
+                  <input type="text" name="p_nm" placeholder="计划名称">
+                  <b class="tooltip tooltip-bottom-right">计划名称为必填项目</b> </label>
+              </section>
+              <section class="col col-6">
+                <label class="label">计划分类</label>
+                <label class="input has-warning">
+                  <input type="hidden" name="p_typecd" data-type="select2" placeholder="计划分类">
+                  <b class="tooltip tooltip-bottom-right">计划分类为必填项目</b> </label>
+              </section>
+            </div>
+
+            <div class="row">
+
+              <section class="col col-6">
+                <label class="label">计划时间类型</label>
+                <label class="input has-warning">
+                  <input type="hidden" name="p_dttypecd" data-type="select2" placeholder="计划时间类型">
+                  <b class="tooltip tooltip-bottom-right">计划时间类型为必填项目</b> </label>
+              </section>
+              <section class="col col-6">
+                <label class="label">状态</label>
+                <label class="input">
+                  <input type="hidden" name="status" data-type="select2" placeholder="状态"/>
+                </label>
+              </section>
+            </div>
+            <div class="row">
+              <section class=" col-12 reason" style="margin: 0 15px 15px 15px;">
+                <label class="label">变更原因</label>
+                <label class="input has-warning">
+                  <input type="text" name="p_change_reason" data-type="select2" placeholder="变更原因"/>
+                  <b class="tooltip tooltip-bottom-right">变更原因为必填项目</b> </label>
+              </section>
+            </div>
+            <div>
+              <section>
+                <label class="label">说明</label>
+                <label class="textarea"> <textarea rows="2" name="mark" id="mark" placeholder="说明"></textarea> </label>
+              </section>
+            </div>
+
+          </fieldset>
+          <footer>
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+              取消
+            </button>
+            <button type="submit" class="btn btn-primary">
+              确定
+            </button>
+          </footer>
+        </form>
+        <form id="EWATERBI_pdmr_plan_tab_manage_form" method="post" onsubmit="return false;" class="smart-form"
+              hidden="hidden">
+          <fieldset>
+            <input name="p_finish_usr" style="display: none;">
+
+            <div class="row">
+              <section class="col-12" id="p_sn1" style="margin: 0 15px 15px 15px;">
+                <label class="label">计划序列号</label>
+                <label class="input has-warning">
+                  <input type="text" name="p_sn" placeholder="产品序列号自动填充">
+                  <b class="tooltip tooltip-bottom-right">计划序列号自动填充</b> </label>
+              </section>
+            </div>
+            <div class="row">
+              <section class="col-12" id="p_infosn" style="margin: 0 15px 15px 15px;">
+                <label class="label">计划详细序列号</label>
+                <label class="input has-warning">
+                  <input type="text" name="p_infosn" placeholder="计划详细序列号自动填充">
+                  <b class="tooltip tooltip-bottom-right">计划详细序列号自动生成</b> </label>
+              </section>
+
+            </div>
+
+            <div class="row">
+              <section class="col col-6">
+                <label class="label">计划完成者类型</label>
+                <label class="input has-warning">
+                  <input type="hidden" name="p_finish_usr_typecd" data-type="select2" placeholder="计划完成者类型">
+                  <b class="tooltip tooltip-bottom-right">计划完成者类型为必填项目</b> </label>
+              </section>
+              <section class="col col-6">
+                <label class="label">计划完成者</label>
+                <label class="input has-warning">
+                  <input type="hidden" name="p_finish_usr_show" data-type="select2" placeholder="计划完成者"/>
+                  <b class="tooltip tooltip-bottom-right">计划完成者为必填项目</b> </label>
+              </section>
+            </div>
+            <div class="row">
+              <section class="col col-6">
+                <label class="label">计划完成值</label>
+                <label class="input has-warning">
+                  <input type="text" name="p_val" placeholder="计划完成值">
+                  <b class="tooltip tooltip-bottom-right">计划完成值为必填项目</b> </label>
+              </section>
+              <section class="col col-6">
+                <label class="label">计划完成值单位</label>
+                <label class="input has-warning">
+                  <input type="hidden" name="p_valunit" data-type="select2" placeholder="计划完成值单位">
+                  <b class="tooltip tooltip-bottom-right">计划完成值单位为必填项目</b> </label>
+              </section>
+            </div>
+            <div class="row">
+              <section class="col col-6">
+                <label class="label">计划时间</label>
+                <label class="input">
+                  <input type="text" id="datepicker" name="p_dt" placeholder="计划时间">
+                </label>
+              </section>
+              <section class="col col-6">
+                <label class="label">状态</label>
+                <label class="input">
+                  <input type="hidden" name="status" data-type="select2" placeholder="状态">
+                </label>
+              </section>
+            </div>
+            <div class="row">
+              <section class=" col-12 reason" style="margin: 0 15px 15px 15px;">
+                <label class="label">变更原因</label>
+                <label class="input has-warning">
+                  <input type="hidden" name="p_change_reason" data-type="select2" placeholder="变更原因"/>
+                  <b class="tooltip tooltip-bottom-right">变更原因为必填项目</b> </label>
+              </section>
+            </div>
+            <div>
+              <section>
+                <label class="label">说明</label>
+                <label class="textarea"> <textarea rows="2" name="mark" id="mark" placeholder="说明"></textarea> </label>
+              </section>
+            </div>
+
+          </fieldset>
+          <footer>
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+              取消
+            </button>
+            <button type="submit" class="btn btn-primary">
+              确定
+            </button>
+          </footer>
+        </form>
+        <!-- FORM End -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+<script type="text/javascript">
+pageSetUp();
+
+//设置时间控件
+if (md_h1._g.param.p_dttypecd == '4') {
+  $("#datepicker").datepicker({
+    format: "yyyy-mm-dd",
+    language: "zh-CN",
+    autoclose: true
+  });
+} else if (md_h1._g.param.p_dttypecd == '3') {
+  $("#datepicker").datepicker({
+    format: "yyyy-mm",
+    language: "zh-CN",
+    autoclose: true,
+    minViewMode: 1
+  });
+}
+else if (md_h1._g.param.p_dttypecd == '1') {
+  $("#datepicker").datepicker({
+    format: "yyyy",
+    language: "zh-CN",
+    autoclose: true,
+    minViewMode: 2
+  });
+}
+var cb = function () {
+  // 字典数据绑定
+  $("input[name=status]").zySelect('3', false, {
+    width: '100%'
+  });
+  $("input[name=p_valunit]").zySelect('11', false, {
+    width: '100%'
+  });
+  $("input[name=p_dttypecd]").zySelect('55', false, {
+    width: '100%'
+  });
+  $("input[name=p_finish_usr_typecd]").zySelect('56', false, {
+    width: '100%'
+  });
+
+  var ls = zy.cache.get('_mdm_dict', 'ls');
+  var newData = ls.get('57');
+  newData[0].disabled = true;
+
+  $("#EWATERBI_pdmr_plan_manage_form input[name=p_change_reason]").zySelectCustomData('', false, {
+    width: '100%'
+  }, newData);
+  $("#EWATERBI_pdmr_plan_tab_manage_form input[name=p_change_reason]").zySelectCustomData('', false, {
+    width: '100%'
+  }, newData);
+
+  $("input[name=p_typecd]").zySelect('58', false, {
+    width: '100%'
+  });
+  $("#EWATERBI_pdmr_plan_manage_form input[name=p_sn]").attr('readonly', true);
+  $("input[name=status]").select2("val", '1');
+  //默认值
+  $("#EWATERBI_pdmr_plan_tab_manage_form input[name=p_infosn]").attr('readonly', true);
+  $("#EWATERBI_pdmr_plan_tab_manage_form input[name=p_sn]").attr('readonly', true);
+  //添加计划
+  if (md_h1._g.param.flg == 'i') {
+    $('#EWATERBI_pdmr_plan_manage_form').removeAttr('hidden');
+    $('#EWATERBI_pdmr_plan_tab_manage_form').attr('hidden', 'hidden');
+    $('#p_sn').css('display', 'none');
+    $('#EWATERBI_pdmr_plan_manage_form input[name=p_change_reason]').val('1');
+    $('.reason').css('display', 'none');
+    $("#EWATERBI_pdmr_plan_manage_title").text('添加生产计划信息');
+  }
+  //修改计划信息
+  else if (md_h1._g.param.flg == 'u') {
+    $('#EWATERBI_pdmr_plan_manage_form').removeAttr('hidden');
+    $('#EWATERBI_pdmr_plan_tab_manage_form').attr('hidden', 'hidden');
+    $("#EWATERBI_pdmr_plan_manage_form input[name=p_dttypecd]").select2('readonly', true);
+    $("#EWATERBI_pdmr_plan_manage_title").text('修改生产计划信息');
+    var callback = function (msg) {
+      if (msg) {
+        Console.log("获取字典类型信息数据 = " + JSON.stringify(msg));
+        $('#EWATERBI_pdmr_plan_manage_form').json2form(msg.result[0]);
+        //        console.log(msg.result[0]);
+      }
+    };
+    //设置参数
+    var h2h3 = {
+      p_sn: md_h1._g.param.p_sn
+    };
+    zy.g.am.app = 'EWATERBI';
+    zy.g.am.mod = 'pdmr';
+    zy.net.get("api/plan_view_one", callback, h2h3);
+
+  }
+  //添加详细计划信息
+  else if (info1._g.param.flg == 'i1') {
+    $('#EWATERBI_pdmr_plan_tab_manage_form').removeAttr('hidden');
+    $('#EWATERBI_pdmr_plan_manage_form').attr('hidden', 'hidden');
+    $('.reason').css('display', 'none');
+    $('#p_infosn').css('display', 'none');
+    $('#EWATERBI_pdmr_plan_tab_manage_form input[name=p_sn]').val(md_h1._g.param.p_sn);
+    $('#EWATERBI_pdmr_plan_tab_manage_form input[name=p_change_reason]').val('1');
+    // $('#EWATERBI_pdmr_plan_tab_manage_form input[name=p_infosn]').val(info1._g.param.p_infosn);
+    $("#EWATERBI_pdmr_plan_manage_title").text('添加生产计划详细信息');
+    $("#EWATERBI_pdmr_plan_tab_manage_form input[name=p_sn]").attr('readonly', true);
+
+  }
+  //修改详细计划信息
+  else if (info1._g.param.flg == 'u1') {
+    $('#EWATERBI_pdmr_plan_tab_manage_form').removeAttr('hidden');
+    $('#EWATERBI_pdmr_plan_manage_form').attr('hidden', 'hidden');
+    $("#EWATERBI_pdmr_plan_manage_title").text('修改生产计划详细信息');
+    $('#p_sn1').css('display', 'none');
+    var callback1 = function (msg) {
+      if (msg) {
+        //          Console.log("获取字典类型信息数据 = " + JSON.stringify(msg));
+        $('#EWATERBI_pdmr_plan_tab_manage_form').json2form(msg.result[0]);
+        var cb_usr = function (msg) {
+          if (msg) {
+            $("#EWATERBI_pdmr_plan_tab_manage_form input[name=p_finish_usr_show]").val('');
+            $("#EWATERBI_pdmr_plan_tab_manage_form input[name=p_finish_usr_show]").zySelectCustomData('', false, {
+              width: '100%',
+              multiple: 'multiple'
+            }, msg.result);
+            $("#EWATERBI_pdmr_plan_tab_manage_form input[name=p_finish_usr_show]").select2('val', JSON.parse($("#EWATERBI_pdmr_plan_tab_manage_form input[name=p_finish_usr]").val()));
+          }
+        };
+        var param = {};
+        zy.g.am.app = 'EWATERBI';
+        zy.g.am.mod = 'pdmr';
+        param.p_finish_usr_typecd = $("#EWATERBI_pdmr_plan_tab_manage_form input[name=p_finish_usr_typecd]").val();
+        zy.net.get('api/get_finish_usr_dict', cb_usr, param);
+      }
+    };
+    //设置参数
+    var h1 = {
+      p_infosn: info1._g.param.p_infosn //获取选择行数据，设置参数
+      //p_sn: info1._g.param.p_sn
+    };
+    zy.g.am.app = 'EWATERBI';
+    zy.g.am.mod = 'pdmr';
+    zy.net.get("api/plan_view_info_one", callback1, h1);
+
+  }
+};
+// 预处理该画面所需的字典类型，以 , 号分割
+zy.cache.initDicts('3,11,55,56,57,58', cb);
+$('#EWATERBI_pdmr_plan_manage').modal('show');
+//下拉列表联动
+
+$("#EWATERBI_pdmr_plan_tab_manage_form input[name=p_finish_usr_show]").zySelectCustomData('', false, {
+  width: '100%'
+}, []);
+
+$("#EWATERBI_pdmr_plan_tab_manage_form input[name=p_finish_usr_typecd]").on("change", function (e) {
+  var cb_usr = function (msg) {
+    if (msg) {
+      $("#EWATERBI_pdmr_plan_tab_manage_form input[name=p_finish_usr_show]").val('');
+      $("#EWATERBI_pdmr_plan_tab_manage_form input[name=p_finish_usr_show]").zySelectCustomData(e.val, false, {
+        width: '100%',
+        multiple: 'multiple'
+      }, msg.result);
+    }
+  };
+  var param = {};
+  zy.g.am.app = 'EWATERBI';
+  zy.g.am.mod = 'pdmr';
+  param.p_finish_usr_typecd = $("#EWATERBI_pdmr_plan_tab_manage_form input[name=p_finish_usr_typecd]").val();
+  zy.net.get('api/get_finish_usr_dict', cb_usr, param);
+});
+//添加修改计划信息处理
+$("#EWATERBI_pdmr_plan_manage_form").validate({
+  // Rules for form validation
+  rules: {
+    p_sn: {
+      maxlength: 100
+    },
+    p_nm: {
+      required: true,
+      maxlength: 100
+    },
+    p_typecd: {
+      required: true,
+      maxlength: 100
+    },
+    p_dttypecd: {
+      required: true,
+      maxlength: 100
+    },
+    p_change_reason: {
+      required: true,
+    },
+    mark: {
+      maxlength: 200
+    },
+    status: {
+      maxlength: 100
+    }
+  },
+  // 验证成功后保存
+  submitHandler: function (form) {
+    var callback = function (msg) {
+      $('#EWATERBI_pdmr_plan_manage_form').formDisable(false);
+      if (msg) {
+        Console.log("保存成功 = " + JSON.stringify(msg));
+        if (md_h1._g.param.flg == 'u') {
+          md_h1.SetRow($('#EWATERBI_pdmr_plan_manage_form').form2json());
+        }
+        $('#EWATERBI_pdmr_plan_manage').modal('hide');
+        zy.ui.msg("提示信息：", "保存成功！", "s");
+      }
+    };
+    zy.g.am.app = 'EWATERBI';
+    zy.g.am.mod = 'pdmr';
+    if (md_h1._g.param.flg == 'i') {
+      zy.net.post("api/add_plan", callback, $('#EWATERBI_pdmr_plan_manage_form').serialize());
+      md_h1.UpDt();
+    } else if (md_h1._g.param.flg == 'u') {
+      zy.net.post("api/upd_plan", callback, $('#EWATERBI_pdmr_plan_manage_form').serialize());
+
+    }
+    p_log.Pagination(1);
+
+    $('#EWATERBI_pdmr_plan_manage_form').formDisable(true);
+
+  },
+
+  // Do not change code below
+  errorPlacement: function (error, element) {
+    error.insertAfter(element.parent());
+  }
+});
+//详细验证保存
+$("#EWATERBI_pdmr_plan_tab_manage_form").validate({
+  // Rules for form validation
+  rules: {
+    p_sn: {
+      maxlength: 100
+    },
+    p_dt: {
+      required: true,
+      maxlength: 100
+    },
+    p_finish_usr_typecd: {
+      required: true,
+      maxlength: 100
+    },
+    p_finish_usr_show: {
+      required: true,
+      maxlength: 100
+    },
+    p_val: {
+      required: true,
+      number: true,
+      maxlength: 100
+    },
+    p_valunit: {
+      required: true,
+      maxlength: 100
+    },
+    p_change_reason: {
+      required: true
+    },
+    status: {
+      maxlength: 100
+    }
+  },
+  // 验证成功后保存
+  submitHandler: function (form) {
+    var callback = function (msg) {
+      $('#EWATERBI_pdmr_plan_tab_manage_form').formDisable(false);
+      if (msg) {
+        Console.log("保存成功 = " + JSON.stringify(msg));
+        if (info1._g.param.flg == 'u1') {
+          info1.SetRow($('#EWATERBI_pdmr_plan_tab_manage_form').form2json());
+        }
+        $('#EWATERBI_pdmr_plan_manage').modal('hide');
+        zy.ui.msg("提示信息：", "保存成功！", "s");
+      }
+    };
+    zy.g.am.app = 'EWATERBI';
+    zy.g.am.mod = 'pdmr';
+    $("#EWATERBI_pdmr_plan_tab_manage_form input[name=p_finish_usr]").val(JSON.stringify($("#EWATERBI_pdmr_plan_tab_manage_form input[name=p_finish_usr_show]").select2('val')));
+    if (info1._g.param.flg == 'i1') {
+      zy.net.post("api/add_plan_info", callback, $('#EWATERBI_pdmr_plan_tab_manage_form').serialize());
+      info1.UpDt();
+    } else if (info1._g.param.flg == 'u1') {
+      zy.net.post("api/upd_plan_info", callback, $('#EWATERBI_pdmr_plan_tab_manage_form').serialize());
+    }
+    p_log.Pagination(1);
+    $('#EWATERBI_pdmr_plan_tab_manage_form').formDisable(true);
+  },
+
+  // Do not change code below
+  errorPlacement: function (error, element) {
+    error.insertAfter(element.parent());
+  }
+});
+</script>

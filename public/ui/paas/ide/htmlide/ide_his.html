@@ -1,0 +1,105 @@
+ 					<li id="mod" style="display:none; min-height:60px" >
+						<div class="smart-timeline-icon">
+							<i class="fa fa-pencil"></i>
+						</div>
+						<div class="smart-timeline-time">
+							<small>12 Mar, 2013</small>
+						</div>
+						<div class="smart-timeline-content">
+							<p>
+								<a href="javascript:void(0);"><strong>Nabi Resource Report</strong></a>
+							</p>
+							<p>
+							内容
+							</p>
+							<!--<a href="javascript:void(0);" class="btn btn-xs btn-default">Read more</a>-->
+						</div>
+					</li>
+
+ <div class="modal fade" id="md_mm_h2h3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+        </button>
+        <h4 class="modal-title"><span id="md_mm_h2h3_title">历史记录</span></h4>
+      </div>
+      <div class="modal-body no-padding">
+      <div class="well well-sm" style="max-height:500px;overflow: auto; ">
+			<!-- Timeline Content -->
+			  <div class="smart-timeline">
+  				<ul class="smart-timeline-list" >
+  				</ul>
+			  </div>
+			<!-- END Timeline Content -->
+		  </div>
+		  <div class="row" style="margin-bottom: 10px;margin-top: -10px;">
+		    <div class="text-center">
+  				<a href="javascript:void(0)" id="loadmore" class="btn btn-sm btn-default"><i class="fa fa-arrow-down text-muted"></i> 加载更多</a>
+		    </div>
+		  </div>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<script>
+
+function his(id){
+  
+  var t = id.split('--');
+  var api = t[0];
+  var mod = t[1];
+  var app = t[2];
+
+  var loadMore = $('#loadmore');
+  
+  function newTime(o){
+    var target = $('#mod');
+    var newT = target.clone().show();
+    o.updatedt = $.format.date(o.updatedt, 'yyyy-MM-dd HH:mm:ss');
+    newT.children(':eq(1)').find('small').html(o.updatedt);
+    newT.children(':last').children(':first').find('strong').html(o.name);
+    o.updatecmt = o.updatecmt.replace(/\\r\\n/g,"<br>");
+    newT.children(':last').children(':eq(1)').html(o.updatecmt);
+    $('.smart-timeline-list').append(newT);
+  }
+  
+  loadMore.click(function(e){
+    $('.smart-timeline-list').empty();
+    fromServer();
+  })
+  
+  var count = 0;
+  
+  var oldcount = 0;
+  
+  function fromServer(){
+    count+=5;
+    zy.extend.get({
+      app:'ZYAPP_IDE',
+      mod:'ZYMODULE_IDE',
+      apinm:'apilog'
+    },function(msg){
+      
+      if(oldcount && oldcount == msg.result.length){
+        zy.extend.msg('历史记录已全部显示!','i');
+      }
+      
+      oldcount = msg.result.length;
+      $.each(msg.result,function(i,v){
+        newTime(v);
+      })
+    },{appid:app,moduleid:mod,apiid:api,pagecnt:count})
+  }
+  
+  fromServer();
+  
+
+  $('#md_mm_h2h3').modal('show');
+  
+  
+}
+</script>

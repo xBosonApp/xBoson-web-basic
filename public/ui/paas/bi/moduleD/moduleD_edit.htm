@@ -1,0 +1,159 @@
+<!-- Widget ID (each widget will need unique ID)-->
+<div class="jarviswidget" id="moduleD_edit" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+	<header>
+		<h2>图表管理</h2>
+	</header>
+	<div>
+		<div class="jarviswidget-editbox">
+			<!-- This area used as dropdown edit box -->
+
+		</div>
+		<div class="widget-body">
+		  <div id="nouislider" class="noUiSlider"></div>
+		  <div class="row">
+        <section id="moduleD_edit_tree" class="col col-xs-12 col-sm-3">
+          <div id="moduleD_edit_tabs">
+    				<ul>
+    					<li>
+    						<a href="#moduleD_edit_tabs-a">图表列表</a>
+    					</li>
+    					<li>
+    						<a href="#moduleD_edit_tabs-b">模型列表</a>
+    					</li>
+    				</ul>
+    				<div id="moduleD_edit_tabs-a">
+              <div class="row">
+                <ul class="ztree" id="moduleD_edit_module_tree"></ul>
+              </div>
+    				</div>
+    				<div id="moduleD_edit_tabs-b">
+    				  <div class="row">
+    				    <ul class="ztree" id="moduleD_edit_model_tree"></ul>
+    				  </div>
+    				</div>
+    			</div>
+        </section>
+        <section id="moduleD_edit_chart" class="col col-xs-12 col-sm-9">
+          <filedset id="moduleD_edit_module_info">
+            <legend>
+              <i class="fa fa-lightbulb-o">&nbsp;图表管理&nbsp;</i>
+            </legend>
+            <div class="row">
+              <form class="smart-form">
+                <div class="col col-6 input-group">
+                  <span class="input-group-addon"> 图表分类 </span>
+                  <input type="text" index="modClass" data-type="select2" class="form-control">
+                </div>
+                <div class="col col-6 input-group">
+                  <span class="input-group-addon"> 图表名称 </span>
+                  <input type="text" index="modTitle" class="form-control">
+                </div>
+                <!--<div class="col col-3 input-group">-->
+                <!--  <label class="checkbox">-->
+                <!--  	<label class="text">分享</label>-->
+                <!--    <input type="checkbox" index="share">-->
+                <!--    <i></i>-->
+                <!--  </label>-->
+                <!--</div>-->
+              </form>
+             </div>
+            <hr> 
+            <div class="row">
+              <div class="col col-xs-12 col-sm-6">
+                <form enctype="multipart/form-data" onsubmit="return false;" method="post" class="smart-form">
+                  <label class="input input-file" for="file">
+              			<div class="button">
+              				<input type="file" onchange="this.parentNode.nextElementSibling.value = this.value" name="file">选择新模板
+              			</div>
+              			<input type="text" readonly="" index="fileName">
+              		</label>
+                </form>
+              </div>
+              <div class="ben-group col-md-4 col-sm-5 ">
+                <button index="upfile" class="btn btn-default btn-sm">
+                     上传模板
+                </button>
+                <button index="savechart" class="btn btn-success btn-sm">
+                     保存图表
+                </button>
+              </div>
+            </div>
+          </filedset>
+          
+          <filedset>
+            <legend>
+              <i class="fa fa-lightbulb-o">&nbsp;图表预览&nbsp;</i>
+            </legend>
+            <div id="moduleD_edit_module_con">
+              
+            </div>
+          </filedset>
+          
+          <filedset>
+            <legend>
+              <i class="fa fa-lightbulb-o">&nbsp;查询预览&nbsp;</i>
+            </legend>
+            <div class="row chart_form_editor">
+              <div style="min-height: 400px" role='content'>
+                <div class='form_preview'></div>
+                <div style='color:#999;'>可用参数 (点击插入):</div>
+                <div class='form_param'></div>
+                  <hr style='clear: both'/>
+                <div class="btn-group">
+                  <button class="must_preview btn btn-default btn-sm">预览</button>
+                  <button class="use_template btn btn-default btn-sm">自动写代码</button>
+                  <!--<button class="show_help btn btn-default btn-sm">帮助</button>-->
+                </div>
+                <pre id='form_html_code'></pre>
+              </div>
+            </div>
+          </filedset>
+        </section>
+      </div>
+		</div>
+	</div>
+</div>
+
+<div id="moduleD_edit_mode"></div>
+
+<div class='hide chart-form-script-template'>
+  $(function() {
+    var jroot = $('.chart-search-form');
+    zy.log('chart form success', jroot);
+  });
+</div>
+
+
+<script id="width-3-template" type="text/x-handlebars-template"></script>
+
+<script id="template-button-default" type="text/x-handlebars-template">
+  <button class="{{class}}">{{title}}</button>
+</script>
+
+<script id="template-button-list" type="text/x-handlebars-template">
+  <div class="btn-group">
+    <button class="{{class}}">
+      {{title}}
+    </button>
+    <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle" aria-expanded="false">
+      <span class="caret"></span>
+    </button>
+    {{#button-list list}}{{tilte}}{{/list}}
+  </div>
+</script>
+
+<script id="template-edittable-row" type="text/x-handlebars-template">
+  {{#list people}}{{firstName}} {{lastName}}{{/list}}
+</script>
+
+<script src="bi/echarts.js"></script>
+<script src="lib/js/plugin/noUiSlider/jquery.nouislider.min.js"></script>
+<script src="bi/js/tableToCsv.js"></script>
+<script src="bi/moduleD/moduleD.js"></script>
+<script src="bi/moduleD/moduleD_edit.js"></script>
+
+<script>
+  pageSetUp();
+  var _moduleD_edit = new moduleD_edit();
+</script>
+

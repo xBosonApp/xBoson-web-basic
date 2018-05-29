@@ -1,0 +1,113 @@
+<div class="modal fade" id="orgrole_manage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">
+					通用角色机构授权
+				</h4>
+			</div>
+			<div class="modal-body no-padding">
+				<!-- FORM Start -->
+				<form id="orgrole_manage_form" method="post" onsubmit="return false;" class="smart-form">
+					<fieldset>
+						<div class="row">
+							<section class="col col-12">
+								<label class="label" name="org_nm">机构名称：</label>
+							</section>
+						</div>
+						<div class="row" id="orgrole_manage_comm">
+							<section class="col col-12">
+								<label class="label">平台通用角色：</label>
+								<div name="result"></div>
+							</section>
+						</div>
+					</fieldset>
+					<footer>
+						<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+						<button type="submit" class="btn btn-primary">保存</button>
+					</footer>
+				</form>
+				<!-- FORM End -->
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+<!-- SCRIPTS ON PAGE EVENT -->
+<script type="text/javascript">
+// DO NOT REMOVE : GLOBAL FUNCTIONS!
+pageSetUp();
+
+/**显示角色checkbox
+ **/
+$("#orgrole_manage_form label[name=org_nm]").append(" <b>" + orgrole_view._g.param.org_nm + "</b>");
+Console.log('机构ID = ' + orgrole_view._g.param.org_id);
+	//用户角色列表回调函数
+	var cb = function (msg) {
+		if (msg) {
+			if (msg.result) {
+				//增加checked属性
+				for (var i in msg.result) {
+					if (msg.result[i].checked == 'true') {
+						var checkbox = "&nbsp;&nbsp;&nbsp;<input type='checkbox' name='roleid' value='" + msg.result[i].roleid + "' checked='true'";
+						checkbox = checkbox + " />&nbsp;" + msg.result[i].rolenm + "<br/>";
+						$("#orgrole_manage_form div[name=result]").append(checkbox);
+					} else {
+						var checkbox = "&nbsp;&nbsp;&nbsp;<input type='checkbox' name='roleid' value='" + msg.result[i].roleid + "' />&nbsp;" + msg.result[i].rolenm + "<br/>";
+						$("#orgrole_manage_form div[name=result]").append(checkbox);
+					}
+				}
+			} else {
+				$("#orgrole_manage_comm").remove();
+			}
+		}
+	};
+	zy.g.am.app = "auth";
+	zy.g.am.mod = "jgsqtyjs";
+	//测试参数
+	//zy.g.comm.org='zr';
+	zy.net.get("api/comm_role_view", cb, {
+		"org_id": orgrole_view._g.param.org_id
+	});
+$('#orgrole_manage').modal('show');
+
+/*表单操作 保存按钮
+ */
+$("#orgrole_manage_form").validate({
+	//保存按钮操作
+	submitHandler: function(form) {
+		//callback回调
+		var callback = function(msg) {
+			if (msg) {
+				$('#orgrole_manage').modal('hide');
+				zy.ui.msg("提示信息：", "保存成功！", "s");
+			}
+		};
+		//参数设置
+		var roleid = "";
+		var chekd = $("#orgrole_manage_form input[name=roleid]:checked");
+		//遍历选中的checkbox
+		chekd.each(function() {
+			roleid = roleid + $(this).val() + ",";
+		});
+		//去除最后一个逗号
+		roleid = roleid.trimCom();
+		//合并参数
+		var param = {
+			'roleid': roleid,
+			'org_id': orgrole_view._g.param.org_id
+		};
+		zy.g.am.app = "auth";
+		zy.g.am.mod = "jgsqtyjs";
+		zy.net.post("api/orgrole_manage", callback, param);
+	},
+	// Do not change code below
+	errorPlacement: function(error, element) {
+		error.insertAfter(element.parent());
+	}
+});
+</script>

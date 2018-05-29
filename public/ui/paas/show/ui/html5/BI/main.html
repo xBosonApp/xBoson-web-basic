@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>哈尔滨市道里区卫生综合管理</title>
+<script type="text/javascript" src="../comm.js"></script>
+<script type="text/javascript" src="../comm/commonJs/LC_bi.js"></script>
+<script type="text/javascript" src="../comm/commonJs/bootstrap/gray.js"></script>
+<!--=====年月日插件=====-->
+<link href="../comm/commonCss/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+<script type="text/javascript" src="../comm/commonJs/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<style>
+.lc-inquire{ display:none;}
+/* .reload{ display:none;} */
+#lc-rowtable{ overflow:hidden;}
+.row-fluid .span1{ margin: 0; text-align: right; line-height: 30px;}
+.row-fluid .span2{ margin: 0 0 0 10px;}
+.submenu{height:350px;overflow: auto; overflow-x:hidden;}
+.container-fluid{padding: 0 20px 8px 20px;}
+ul.page-sidebar-menu > li.open > ul.sub-menu{ display: block;}
+.close{ display: none;}
+#main{ position: relative;}
+.loadshow{position: absolute; top: 0; background:rgba(0,0,0,0.5) url(../comm/commonImg/fancybox_loading.gif) center center no-repeat;}
+</style>
+<script>
+
+//登陆
+$(function () {
+   showDatalogin();
+});
+function showDatalogin(){
+    var url ="dimUser";
+    var itemsList = [];
+    var info = new Map();
+    info.put("sqlid","loginCheck");
+    sys_AjaxGet(BIUrl+url,"","logincallbacka",info,itemsList);
+    }
+function logincallbacka(reData){
+    if(reData.ret!=="105"){
+       $('#trigger').scojs_modal();
+    }else{
+       $("#main").load('mz_mrmzl.html');
+    }
+}
+function mainload(){
+    $("#main").load('mz_mrmzl.html');
+}
+</script>
+
+</head>
+
+<body>
+
+<div class="page-container row-fluid">
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <a id="firstshow" onclick="mainload()"></a>
+            <a id="trigger" data-trigger="modal" href="login.html" data-title="登陆" class="btn" style="display:none;" ></a>
+            <div id="main"></div>
+        </div>
+    </div>
+</div>
+<button id="btn-modal" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" style="display:none;"></button>
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body"><p>没有相应数据！</p></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

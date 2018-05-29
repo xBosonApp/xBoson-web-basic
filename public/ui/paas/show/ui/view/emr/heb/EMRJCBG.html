@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script type="text/javascript" language="JavaScript" src="/t/paas/show/ui/comm.js"></script>
+<script type="text/javascript">
+	var pageNum=1;
+	var pageSize=10;
+	var emrjcbgdata;
+
+$(function () {
+   showDatajcbg();
+});
+
+function emrjcbgcallback(retData){
+
+		emrjcbgdata = retData;
+        $('#jcbg').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+				title:'检查报告列表',
+				pagination:true,
+				pageNumber:pageNum,
+				pageSize:pageSize,
+				loadMsg:"正在载入...",
+                pageList: [10,20,50,100,200],
+                singleSelect:true,
+				data:emrjcbgdata.dataList,
+				columns:[[
+				   {field:'dc3001_jlxh',title:'序号',width:60,align:'center'},
+				   {field:'dc3001_yybz',title:'阴阳性',width:100,align:'center'},
+				   {field:'dc3001_kdsj',title:'开单日期',width:100,align:'center',
+				   	   formatter:function(value){
+		                   return LC_FormatYMD(value);
+		               }
+		           },
+				   {field:'dc3001_jcmc',title:'检查项目',width:100,align:'center'},
+				   {field:'dc3001_jcbw',title:'检查部位',width:100,align:'center'},
+				   {field:'dc3001_sqghxm',title:'开单医生',width:100,align:'center'},
+				   {field:'dc3001_jcysxm',title:'检查医生',width:100,align:'center'},
+				   {field:'dc3001_jcsj',title:'检查日期',width:100,align:'center',
+				   	   formatter:function(value){
+		                   return LC_FormatYMD(value);
+		               }
+		           },
+				   {field:'dc3001_jgdm',title:'医院',width:100,align:'center'}
+				]],                  
+                onDblClickRow: function (rowIndex) {
+                  openRoleDiv(rowIndex);
+                },
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true
+		}); 
+
+	   var pager = $('#jcbg').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			       onSelectPage:function(pageNumber,pageSize){
+		           pageNum=pageNumber;
+		           pageSize=pageSize;
+		           showDatajcbg();
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:pageSize,pageNumber:pageNum,total:emrjcbgdata.count});
+
+		};
+	
+}
+	function showDatajcbg(){
+
+ 		if(retCheckFlg){
+        	var url ="emrjcbg1/"; 
+			var loadpid=LoadUrlParm.parm("pid");
+			var typeCode=LoadUrlParm.parm("typeCode");
+			//alert("----**"+EMRBaseUrl+url+"?callback=emrjcbgcallback&pageNum=1&pageSize=5&pid="+loadpid+"&typeCode="+typeCode);
+			$.ajax({
+			   type: "get",
+		       //contentType : 'application/json;charset=utf-8',
+			   url : EMRBaseUrl+url+"?callback=emrjcbgcallback&pageNum=1&pageSize=5&pid="+loadpid+"&typeCode="+typeCode,
+			   dataType:"jsonp",
+			   //jsonp: "jsoncallback",   
+			   async: false, 
+			   jsonpCallback: "emrjcbgcallback",
+			   success : function(data) {
+		
+			   },   
+			   error : function() {   
+				   self.parent.$.messager.alert('系统错误提示',"操作数据失败",'error'); 
+				   retData= undefined;
+			   }   
+			});
+        	
+    }		
+}
+</script>
+</head>
+<body>
+  <table id="jcbg" ></table>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<section id="widget-grid" class="">
+<div id="bm_bms_index" class="jarviswidget jarviswidget-color-blue" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+  <header name="bm_bms_menu_header">
+    <h2></h2>
+    <div name="bm_bms_menu_tree" class="widget-toolbar" role="menu" title="树形列表"><i class="glyphicon glyphicon-folder-open"></i></div>
+    <div name="bm_bms_menu_help" class="widget-toolbar" role="menu" title="帮助"><i class="glyphicon glyphicon-book"></i></div>
+    <div name="bm_bms_menu_config" class="widget-toolbar" role="menu" title="配置数据"><i class="glyphicon glyphicon-cog"></i></div>
+    <div name="bm_bms_menu_run" class="widget-toolbar" role="menu" title="测试"><i class="glyphicon glyphicon-play"></i></div>
+  </header>
+  <!-- widget div-->
+  <div>
+    <!-- widget content -->
+    <div class="widget-body">
+      <div class="row">
+        <div id="nouislider" class="noUiSlider"></div>
+      </div>
+      <div class="row">
+        <div id="_ztree" class="col-xs-3"><ul class="ztree"></ul></div>
+        <div id="innercontent" class="col-xs-9"></div>
+      </div>
+    </div>
+  <!-- end widget content -->
+  </div>
+  <!-- end widget div -->
+</div>
+</section>
+<div id="bm_bms_modal"></div>
+<div id="bm_modal"></div>
+<script src="lib/js/plugin/noUiSlider/jquery.nouislider.min.js"></script>
+<script src="bm/bms/bms_index.js"></script>
+<script>
+  // 页面初始化设置
+  pageSetUp();
+  zy.debug = false;
+  // var cbFun = 'function(msg){if(msg.result[0].parentcd == "BM"){_tree.addNodes(node,msg.result[1]);}else{_tree.addNodes(node,msg.result);}}';
+  $("[name=bm_bms_menu_header]").find("h2").html("");
+  var bm_bms_IndexObj = new bm_bms_Index(1);
+</script>

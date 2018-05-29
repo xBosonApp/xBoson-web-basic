@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>乐辰科技</title>
+<script type="text/javascript" language="JavaScript" src="/t/paas/show/ui/comm.js"></script>
+
+<style type="text/css">
+body {
+	font: 12px/20px "微软雅黑", "宋体", Arial, sans-serif, Verdana, Tahoma;
+	padding: 0;
+	margin: 0;
+}
+a:link {
+ text-decoration: none;
+}
+a:visited {
+ text-decoration: none;
+}
+a:hover {
+ text-decoration: underline;
+}
+a:active {
+ text-decoration: none;
+}
+.cs-north {
+	height:60px;
+}
+.cs-north-bg {
+	width: 100%;
+	height: 100%;
+	background: url('/t/paas/show/ui/comm/easyui/themes/gray/images/header_bg.png') repeat-x;
+}
+.cs-north-logo {
+	height: 40px;
+	margin: 15px 0px 0px 5px;
+	display: inline-block;
+	color:#000000;font-size:22px;font-weight:bold;text-decoration:none
+}
+.cs-west {
+	width:260px;padding:0px;
+}
+.cs-south {
+	height:25px;background:url('/t/paas/show/ui/comm/easyui/themes/pepper-grinder/images/ui-bg_fine-grain_15_ffffff_60x60.png') repeat-x;padding:0px;text-align:center;
+}
+.cs-navi-tab {
+	padding: 5px;
+}
+.cs-tab-menu {
+	width:120px;
+}
+.cs-home-remark {
+	padding: 10px;
+}
+.wrapper {
+    float: right;
+    height: 30px;
+    margin-left: 10px;
+}
+.ui-skin-nav {
+    float: right;
+	padding: 0;
+	margin-right: 10px;
+	list-style: none outside none;
+	height: 30px;
+}
+
+.ui-skin-nav .li-skinitem {
+    float: left;
+    font-size: 12px;
+    line-height: 30px;
+	margin-left: 10px;
+    text-align: center;
+}
+.ui-skin-nav .li-skinitem span {
+	cursor: pointer;
+	width:10px;
+	height:10px;
+	display:inline-block;
+}
+.ui-skin-nav .li-skinitem span.cs-skin-on{
+	border: 1px solid #FFFFFF;
+}
+
+.ui-skin-nav .li-skinitem span.gray{background-color:gray;}
+.ui-skin-nav .li-skinitem span.default{background-color:blue;}
+.ui-skin-nav .li-skinitem span.bootstrap{background-color:#D7EBF9;}
+.ui-skin-nav .li-skinitem span.black{background-color:black;}
+.ui-skin-nav .li-skinitem span.metro{background-color:#FFE57E;}
+</style>
+
+<script type="text/javascript">
+
+
+var jzjlData;
+$(function () {
+debugger;
+    var url = "emrjzjl1/"; 	
+    var url1 = "emrjybg1/"; 
+    var url2 = "emrjcbg1/"; 
+    var url3 = "emrmzjz3/"; 
+    var url4 = "emrjzjl2/"; 
+    var url5 = "emrjzjl1/"; 	
+    var itemsList=[];	
+    var info= new Map();	
+    info.put("pageNum",1);
+    info.put("pageSize",2);
+    
+    var jzjlinfo= new Map();	
+    jzjlinfo.put("pageNum",1);
+    jzjlinfo.put("pageSize",5);
+    LC_AjaxGet(EMRBaseUrl+url5,"","emrjzjlIndexcallback",jzjlinfo,itemsList);
+        	
+	var url6 ="emrzdjl1/"; 	
+	LC_AjaxGet(EMRBaseUrl+url6,"","zdjlIndexcallback",jzjlinfo,itemsList);	
+    
+    LC_AjaxGet(EMRBaseUrl+url,"","showDatacssjl",info,itemsList);	
+    LC_AjaxGet(EMRBaseUrl+url1,"","showDatajybg",info,itemsList);	
+    LC_AjaxGet(EMRBaseUrl+url2,"","showDatajcbg",info,itemsList);
+    LC_AjaxGet(EMRBaseUrl+url3,"","showDatayys",info,itemsList);
+    LC_AjaxGet(EMRBaseUrl+url4,"","showDatazjjz",info,itemsList);
+   
+
+});
+function zdjlIndexcallback(retData){
+     var strHtml="";
+     for(var i=0;i<retData.dataList.length;i++){
+     	strHtml=strHtml+'<div class="itemLW-80">'+ retData.dataList[i].dc7001_zdrq+'</div>'
+     }
+	 $("#div_zdjl").html(strHtml);
+}
+function emrjzjlIndexcallback(retData){
+	var strHtml="";
+	for(var i=0;i<retData.dataList.length;i++){
+ 
+	   strHtml=strHtml+'<div class="mainsW-704">'+
+					'<div class="itemLW-80">年内门诊：</div>'+
+					'<div class="itemsW-48">'+retData.dataList[i].dc1002_ghksmc+'</div>'+
+					'<div class="itemLW-96">最近门诊日期：</div>'+
+					'<div class="itemsW-112">'+retData.dataList[i].dc1002_ghksmc+'</div>'+
+					'<div class="itemLW-64">主要诊断：</div>'+
+					'<div class="itemsW-80">'+retData.dataList[i].dc1002_ghksmc+'</div>'+
+					'<div class="itemLW-64">过敏药物：</div>'+
+					'<div class="itemsW-112">'+retData.dataList[i].dc1002_ghksmc+'</div>'+
+				'</div>';
+	}
+	$("#div_jzzy").html(strHtml);
+}
+
+function showDatazjjz(retData){
+	$('#zjjz').datagrid({
+		title:'最近就诊',
+		pageNumber:1,
+		pageSize: 2,
+		data:retData.dataList,
+		singleSelect:true,
+		columns:[[
+		    {title:'序号',field:'dc1001_jlxh'},
+	        {title:'就诊日期',field:'dc1002_ghsj' ,width:150,
+	        	formatter:function(value){
+		            return LC_FormatYMD(value);
+		        }
+		    },
+	        {title:'就诊科室',field:'dc1001_jzksmc' ,width:100},
+	        {title:'主要诊断',field:'dc1001_zyzd' },
+	        {title:'就诊医生',field:'dc1001_jzysxm' },
+	        {title:'就诊医院',field:'dc1001_jgdm' ,width:150}
+		]]	
+	});
+}
+	function showDatayys(data1){
+		$('#yys').datagrid({
+			title:'用药史',
+			data:data1.dataList,
+			pageNumber:1,
+			pageSize: 2,
+			singleSelect:true,
+		    columns:[[
+			   {field:'tablename',title:'序号',width:60,align:'center'},
+			   {field:'dc1003_cflb',title:'类型',width:100,align:'center'},
+			   {field:'dc1003_kdysxm',title:'开方医生',width:100,align:'center'},
+			   {field:'dc1003_kdksmc',title:'开方科室',width:100,align:'center'},
+			   {field:'dc1003_cfts',title:'开方帖数',width:100,align:'center'},
+			   {field:'dc1003_zyzf',title:'中药煮煎法',width:100,align:'center'},
+			   {field:'dc1003_kdrq',title:'开方日期',width:100,align:'center',
+			   	formatter:function(value){
+		            return LC_FormatYMD(value);
+		        }},
+			   {field:'dc1003_jgdm',title:'医院',width:160,align:'center'}
+		    ]]
+		});
+	}
+	function showDatacssjl(retData){
+		$('#ssjl').datagrid({
+			title:'手术史',
+			data:retData.dataList,
+			pageNumber:1,
+			pageSize: 2,
+			singleSelect:true,
+			columns:[[
+			   {field:'tablename',title:'序号',width:60,align:'center'},
+			   {field:'dc5001_mzbz',title:'门诊显示',width:80,align:'center'},
+			   {field:'dc5001_kssj',title:'手术日期',width:80,align:'center',
+			   	formatter:function(value){
+		            return LC_FormatYMD(value);
+		        }},
+			   {field:'dc5001_ssmc',title:'手术名称',width:100,align:'center'},
+			   {field:'dc5001_qkyh',title:'切口愈合等级',width:80,align:'center'},
+			   {field:'dc5001_mzfs',title:'麻醉方法',width:80,align:'center'},
+			   {field:'dc5001_jssj_kssj',title:'手术用时',width:80,align:'center'},
+			   {field:'dc5001_ssysxm',title:'主刀医生',width:80,align:'center'},
+			   {field:'dc5001_mzysxm',title:'麻醉医生',width:80,align:'center'},
+			   {field:'dc5001_jgdm',title:'医院',width:100,align:'center'}
+			]]
+		});
+	}
+
+	function showDatajybg(data1){
+		$('#jybg').datagrid({
+			title:'检验史',
+		    data:data1.dataList,
+		   	pageNumber:1,
+			pageSize: 2,
+			singleSelect:true,
+			columns:[[
+			   {field:'tablename',title:'序号',width:60,align:'center'},
+			   {field:'dc4001_sqrq',title:'开单日期',width:100,align:'center',
+			   	formatter:function(value){
+		            return LC_FormatYMD(value);
+		        }},
+			   {field:'dc4001_bgdmc',title:'检验名称',width:100,align:'center'},
+			   {field:'dc4001_shghxm',title:'开单医生',width:100,align:'center'},
+			   {field:'dc4001_jcghxm',title:'检验医生',width:100,align:'center'},
+			   {field:'dc4001_jyrq',title:'检验日期',width:100,align:'center'},
+			   {field:'dc4001_jgdm',title:'医院',width:100,align:'center'}
+		   ]]
+		});
+	}
+	
+	function showDatajcbg(emrjcbgdata){
+	    $('#jcbg').datagrid({
+			title:'检查史',
+			data:emrjcbgdata.dataList,
+			pageNumber:1,
+			pageSize: 2,
+			columns:[[
+			   {field:'dc3001_jlxh',title:'序号',width:60,align:'center'},
+			   {field:'dc3001_yybz',title:'阴阳性',width:100,align:'center'},
+			   {field:'dc3001_kdsj',title:'开单日期',width:100,align:'center',
+			   	formatter:function(value){
+		            return LC_FormatYMD(value);
+		        }},
+			   {field:'dc3001_jcmc',title:'检查项目',width:100,align:'center'},
+			   {field:'dc3001_jcbw',title:'检查部位',width:100,align:'center'},
+			   {field:'dc3001_sqghxm',title:'开单医生',width:100,align:'center'},
+			   {field:'dc3001_jcysxm',title:'检查医生',width:100,align:'center'},
+			   {field:'dc3001_jcsj',title:'检查日期',width:100,align:'center',
+			   	formatter:function(value){
+		            return LC_FormatYMD(value);
+		        }},
+			   {field:'dc3001_jgdm',title:'医院',width:100,align:'center'}
+		   ]]
+	   });
+	}
+
+
+
+$(function () {
+
+	var urlindex="patientinfo/";
+	var info=new Map();
+	info.put("typeCode","-1");
+	var itemsList=[];
+	//pid="01c21ee2a26c439ba60e9aa8a7086b5f";
+	
+	
+	var urlindex1 ="emrjzjl1/"; 		
+	var infojzjl= new Map();	
+	infojzjl.put("pageNum","1");
+	infojzjl.put("pageSize","5");
+
+    LC_AjaxGet(EMRBaseUrl+urlindex1,"","emrjzjlIndexcallback11",infojzjl,itemsList);	
+
+    LC_AjaxGet(EMRBaseUrl+urlindex,"","zdjlIndexDemocallback",info,itemsList);
+})
+function emrjzjlIndexcallback11(retData){
+	var strHtml="<ul class='easyui-tree'> <li><span>测试1</span><ul>";				            
+	for(var i=0;i<retData.dataList.length;i++){
+	  strHtml=strHtml+"<li><a href='javascript:void(0);'  class='cs-navi-tab'>"+LC_FormatYMD(retData.dataList[i].dc1002_ghsj)+"</a></li>";
+	}
+	strHtml=strHtml+"<li><a href='javascript:void(0);' src='EMRView/JZJL/JZJL.html' class='cs-navi-tab'>更多...</a></li></ul></li></ul>";
+
+//	$("#jzjlul").html(strHtml);
+}
+
+function zdjlIndexDemocallback(retData){
+	 $("#empiName").text(retData.datalist[0].name);
+	 $("#empiSex").text(retData.datalist[0].sex);
+	 $("#empiAge").text(LC_FormatYMD(retData.datalist[0].birthday));
+	 $("#empiTel").text(retData.cardList[0].number);
+	 $("#empiHF").text(retData.extendedInfo[0].marriage);
+	 $("#empiMZ").text(retData.extendedInfo[0].ethnic);
+	 $("#empiZY").text(retData.extendedInfo[0].jobTitle);
+	 $("#empiXX").text(retData.extendedInfo[0].rhBlood);
+	 $("#empiSex").text(retData.datalist[0].sex);
+	 $("#empiAdd").text(retData.addressList[0].address);
+	 $("#empiCode").text(retData.addressList[0].addrCityCode);
+	 $("#empiMTel").text(retData.cardList[1].number);
+}
+</script>
+
+</head>
+<body class="easyui-layout">
+	<div id="openRoleDiv" modal="true" resizable="true" zIndex="9999" minimizable="false" collapsible="false" cache="false" closed="false" stack="true" autoOpen="false"> 
+	</div> 
+	<div region="north" border="true" class="cs-north">
+		<div class="cs-north-bg">
+		<div class="cs-north-logo" style="width: 500px; height: 30px;"> 医疗平台系统 v1.0 Beta</div>
+		<ul class="ui-skin-nav">				
+			<li class="li-skinitem" title="gray"><span class="gray" rel="gray"></span></li>
+			<li class="li-skinitem" title="default"><span class="default" rel="default"></span></li>
+			<li class="li-skinitem" title="bootstrap"><span class="bootstrap" rel="bootstrap"></span></li>
+			<li class="li-skinitem" title="black"><span class="black" rel="black"></span></li>
+			<li class="li-skinitem" title="metro"><span class="metro" rel="metro"></span></li>
+		</ul>	
+		</div>
+	</div>
+	<div region="west" border="true" split="true" title="菜单" class="cs-west">
+		<div class="easyui-accordion" fit="true" border="false">
+				<div title="个人信息">
+				
+					<div class="fPanel">
+			            <div class="fPanel-box clearfix">
+							<img src="" width="80" height="100" style="float:left;margin:10px 0 0 10px; background:#000;">
+							<div class="mainW-144 list-ul padTB-5">
+								<ul class="itemLW-48 text-ul">
+							    	<li>姓名：</li>
+							        <li>性别：</li>
+							        <li>出生：</li>
+							        <li>婚姻：</li>
+							        <li>民族：</li>
+							        <li>职业：</li>
+							        <li>血型：</li>
+							    </ul>
+							    <ul class="itemRW-80">
+							    	<li><span id="empiName"></span></li>
+							    	<li><span id="empiSex"></span></li>
+							    	<li><span id="empiAge"></span></li>
+							    	<li><span id="empiHF"></span></li>
+							    	<li><span id="empiMZ"></span></li>
+							    	<li><span id="empiZY"></span></li>
+							    	<li><span id="empiXX"></span></li>
+							    </ul>
+							</div>
+			            </div>
+			        </div>
+			    	<div class="fPanel">
+			        	<div class="fPanel-header">
+			                <div class="fPanel-title">本人联系方式</div>
+			            </div>
+			            <div class="fPanel-box list-ul clearfix">
+							<ul class="itemLW-48 text-ul">
+						    	<li>手机：</li>
+						        <li>电话：</li>
+						        <li>地址：</li>
+						        <li>邮编：</li>
+						    </ul>
+						    <ul class="itemRW-128">
+						    	<li><span id="empiMTel"></span></li>
+						    	<li><span id="empiTel"></span></li>
+						    	<li><span id="empiAdd"></span></li>
+						    	<li><span id="empiCode"></span></li>
+						    </ul>
+			            </div>
+			        </div>
+						<div class="easyui-tabs">
+<!--							<div title="就诊">-->
+<!--								<ul class="easyui-tree">-->
+<!--							        <li>-->
+<!--							            <span>测试1</span>-->
+<!--							            <ul>-->
+<!--							                <li><a href="javascript:void(0);" src="EMRView/MZJZ/EMRMZJZ.html" class="cs-navi-tab">门诊就诊</a></li>-->
+<!--							                <li><a href="javascript:void(0);" src="EMRView/ZYJZ/EMRZYJZ.html" class="cs-navi-tab">住院记录</a></li>-->
+<!--							                <li><a href="javascript:void(0);" src="EMRView/GMYW/GMYW.html" class="cs-navi-tab">过敏药物</a></li>-->
+<!--											<li><a href="javascript:void(0);" src="EMRView/CFYZ/CFYZ.html" class="cs-navi-tab">处方医嘱</a></li>-->
+<!--											<li><a href="javascript:void(0);" src="EMRView/ZDJL/ZDJL.html" class="cs-navi-tab">诊断记录</a></li>-->
+<!--											<li><a href="javascript:void(0);" src="EMRView/JZJL/JZJL.html" class="cs-navi-tab">就诊记录</a></li>-->
+<!--											<li><a href="javascript:void(0);" src="EMRView/ZYJZ/EMRBASY1.html" class="cs-navi-tab">病案首页</a></li>-->
+<!--											<li><a href="javascript:void(0);" src="EMRView/ZYJZ/EMRBASY2.html" class="cs-navi-tab">病例2</a></li>-->
+<!--							            </ul>-->
+<!--							        </li>-->
+<!--							    </ul>-->
+<!--							</div>-->
+							
+<!--							<div title="就诊1" id="jzjlul">-->
+<!--				-->
+<!--							</div>-->
+<!--							-->
+<!--							<div title="诊断">11111</div>-->
+							<div title="服务">
+								<ul>
+					                <li><a href="javascript:void(0);" src="EMRView/MZJZ/EMRMZJZ.html" class="cs-navi-tab">处方</a></li>
+					                <li><a href="javascript:void(0);" src="EMRView/ZYJZ/EMRZYJZ.html" class="cs-navi-tab">医嘱</a></li>
+					                <li><a href="javascript:void(0);" src="EMRView/GMYW/GMYW.html" class="cs-navi-tab">检查</a></li>
+									<li><a href="javascript:void(0);" src="EMRView/CFYZ/CFYZ.html" class="cs-navi-tab">检验</a></li>
+									<li><a href="javascript:void(0);" src="EMRView/GMYW/GMYW.html" class="cs-navi-tab">手术</a></li>
+									<li><a href="javascript:void(0);" src="EMRView/CFYZ/CFYZ.html" class="cs-navi-tab">诊断</a></li>
+								</ul>
+                            </div>
+						</div>
+					</div>
+<!--				<div title="Base">-->
+<!--			       <ul class="easyui-tree">-->
+<!--				        <li>-->
+<!--				            <span>测试1</span>-->
+<!--				            <ul>-->
+<!--				                  <li><a href="javascript:void(0);" src="log/html/1.html" class="cs-navi-tab">第一个页面</a></li>-->
+<!--				                  <li><a href="javascript:void(0);" src="log/html/2.html" class="cs-navi-tab">第二个页面</a></li>-->
+<!--				                  <li><a href="javascript:void(0);" src="log/html/exceptionSelect.html" class="cs-navi-tab">刘建1</a></li>-->
+<!--				                  <li><a href="javascript:void(0);" src="log/html/businessTotal.html" class="cs-navi-tab">刘建2</a></li>-->
+<!--				                  <li><a href="javascript:void(0);" src="log/html/TrafficTotal.html" class="cs-navi-tab">刘建3</a></li>-->
+<!--				                  <li><a href="javascript:void(0);" src="EMRView/MZJZ/EMRMZJZ.html" class="cs-navi-tab">门诊就诊</a></li>-->
+<!---->
+<!--									<li><a href="javascript:void(0);" src="EMRView/GMYW/GMYW.html" class="cs-navi-tab">过敏药物</a></p></li>-->
+<!--									<li><a href="javascript:void(0);" src="EMRView/CFYZ/CFYZ.html" class="cs-navi-tab">处方医嘱</a></p></li>-->
+<!--									<li><a href="javascript:void(0);" src="EMRView/ZDJL/ZDJL.html" class="cs-navi-tab">诊断记录</a></p></li>-->
+<!--									<li><a href="javascript:void(0);" src="EMRView/ZYJZ/EMRZYJL2.html" class="cs-navi-tab">病例2</a></p></li>-->
+<!--									-->
+<!--				                  <li><a href="javascript:void(0);" src="EMRView/ZYJZ/ruyuanInfo.html" class="cs-navi-tab">住院记录</a></p></li>-->
+<!--				                  <li><a href="javascript:void(0);" src="EMRView/ZYJZ/yzxx.html" class="cs-navi-tab">医嘱信息</a></p></li>-->
+<!--				               		<li><a href="javascript:void(0);" src="EMRView/ZYJZ/chuyuanxiaojie.html" class="cs-navi-tab">出院小结</a></p></li>-->
+<!--				               		<li><a href="javascript:void(0);" src="EMRView/ZYJZ/binganshouye.html" class="cs-navi-tab">病案首页</a></p></li>-->
+<!--				                  -->
+<!--				                  <li><a href="javascript:void(0);" src="EMRView/MZJZ/index.html" class="cs-navi-tab">index</a></p></li>-->
+<!--				                 <li>-->
+<!--						            <span>测试2</span>-->
+<!--						            <ul>-->
+<!--						                  <li><a href="javascript:void(0);" src="#" class="cs-navi-tab">自定义分页练习1</a></p></li>-->
+<!--									      -->
+<!--						            </ul>-->
+<!--							     </li>-->
+<!--				            </ul>-->
+<!--				        </li>-->
+<!--				       -->
+<!--				        <li>-->
+<!--				            <span>测试1哈哈</span>-->
+<!--				            <ul>-->
+<!--				                  <li><a href="javascript:void(0);" src="log/html/MyHtml.html" class="cs-navi-tab">第一个页面</a></p></li>-->
+<!---->
+<!--				                 <li>-->
+<!--						            <span>测试2</span>-->
+<!--						            <ul>-->
+<!--						                  <li><a href="javascript:void(0);" src="#" class="cs-navi-tab">自定义分页练习1</a></p></li>-->
+<!--									      -->
+<!--						            </ul>-->
+<!--							     </li>-->
+<!--				            </ul>-->
+<!--				        </li>-->
+<!--				    </ul>-->
+<!--                </div>-->
+				
+					 
+				
+		</div>
+	</div>
+	<div id="mainPanle" region="center" border="true" border="false">
+		 <div id="tabs" class="easyui-tabs"  fit="true" border="false" >
+                <div title="Home">
+					
+<script type="text/javascript">
+
+
+	
+</script>
+<div class="mainsW-912">
+	<div class="mainsW-912">
+	<div class="mainsW-720">
+		<div class="easyui-panel" title="就诊摘要">
+			<div class="padTB-5 clearfix" id="div_jzzy">
+
+			</div>
+		</div>
+	</div>
+	<div class="mainsW-192">
+
+		<div class="easyui-panel" title="历史诊断">
+			<div class="padTB-5 clearfix" >
+				<div class="mainsW-176" style="height:88px;" id="div_zdjl">
+					
+					
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	<div class="mainsW-912">
+	<!-- 最近就诊 开始 -->
+	<table id="zjjz" tools="#zjjz-more"></table>
+	<div id="zjjz-more" >
+		<a class="layout-button-right cs-navi-tab" href="javascript:void(0)" src="EMRView/CFYZ/CFYZ.html"   style="padding: 0;"><span style="display:none">就诊记录</span></a>
+	</div>
+	<!-- 最近就诊 结束 -->
+	<!-- 用药史 开始 -->
+	<table id="yys" tools="#yys-more"></table>
+	<div id="yys-more" >
+		<a class="layout-button-right cs-navi-tab" href="javascript:void(0)" src="EMRView/MZJZ/EMRMZJZ_YYQK.html" style="padding: 0;"><span style="display:none">用药情况</span></a>
+	</div>
+	<!-- 用药史 结束 -->
+	<!-- 检查史 开始 -->
+	<table id="jcbg" tools="#jcbg-more"></table>
+	<div id="jcbg-more" >
+		<a class="layout-button-right cs-navi-tab" href="javascript:void(0)"  src="EMRView/GMYW/GMYW.html" style="padding: 0;"><span style="display:none">检查记录</span></a>
+	</div>
+	<!-- 检查史 结束 -->
+	<!-- 检验史 开始 -->
+	<table id="jybg" tools="#jybg-more"></table>
+	<div id="jybg-more" >
+		<a class="layout-button-right cs-navi-tab" href="javascript:void(0)"  src="EMRView/CFYZ/CFYZ.html" style="padding: 0;"><span style="display:none">检验历史</span></a>
+	</div>
+	<!-- 检验史 结束 -->
+	<!-- 手术史 开始 -->
+	<table id="ssjl" tools="#ssjl-more"></table>
+	<div id="ssjl-more" >
+		<a class="layout-button-right cs-navi-tab" href="javascript:void(0)" src="EMRView/GMYW/GMYW.html" style="padding: 0;"><span style="display:none">手术记录</span></a>
+	</div>
+	<!-- 手术史 结束 -->
+	</div>
+	
+	
+</div>
+
+
+				</div>
+        </div>
+	</div>
+
+	<div id="ssa" title=""></div>
+	<div id="mm" class="easyui-menu cs-tab-menu">
+		<div id="mm-tabupdate">刷新</div>
+		<div class="menu-sep"></div>
+		<div id="mm-tabclose">关闭</div>
+		<div id="mm-tabcloseother">关闭其他</div>
+		<div id="mm-tabcloseall">关闭全部</div>
+	</div>
+</body>
+</html>

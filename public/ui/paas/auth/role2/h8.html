@@ -1,0 +1,116 @@
+ <style type="text/css">
+	/*.ztree * {*/
+	/*	font-family: Consolas, Microsoft YaHei, SimHei, STHeiti, SimSun, STSong, sans-serif;*/
+	/*	font-size: 14px;*/
+	/*	font-weight: 100;*/
+	/*}*/
+</style>
+<!-- widget grid -->
+<section id="widget-grid" class="">
+	<!-- row -->
+	<div class="row">
+		<!-- NEW WIDGET START -->
+		<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div id="mdm_datadict_h1_wid1" class="jarviswidget jarviswidget-color-blueDark" data-widget-fullscreenbutton="false" data-widget-colorbutton="true" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-deletebutton="false">
+				<header>
+					<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+					<h2>角色管理</h2>
+				</header>
+				<!-- widget div-->
+				<div>
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+					</div>
+					<!-- end widget edit box -->
+					<!-- widget content -->
+					<div class="widget-body no-padding">
+						<div class="widget-body-toolbar">
+							<div class="row">
+								<form id="auth_role_h8_search_form" method="post" onsubmit="return false;" class="smart-form">
+									<input type="hidden" name="orgid" />
+									<section class="col col-2">
+										<label class="input">
+											<input type="hidden" name="status" data-type="select2" placeholder="状态" />
+										</label>
+									</section>
+									<section class="col col-2">
+										<label class="input">
+											<input type="hidden" name="role_type" data-type="select2" placeholder="角色类型">
+										</label>
+									</section>
+									<section class="col col-2">
+										<label class="input">
+											<input type="text" name="rolenm" placeholder="角色名称" class="form-control input-sm">
+										</label>
+									</section>
+									<section class="col col-3">
+									<button id="auth_role_h8_search" class="btn btn-info btn-sm" type="submit"><i class="fa fa-search fa-1"></i>&emsp;查 询&emsp;</button>
+									</section>
+								</form>
+							</div>
+							<div class="btn-group">
+								<button id="auth_role_h8_add" class="btn btn-info btn-xs">&emsp;<i class="fa fa-magic"></i>&nbsp;添 加&emsp;</button>
+								<button id="auth_role_h8_edit" class="btn btn-info btn-xs">&emsp;<i class="fa fa-edit"></i>&nbsp;修 改&emsp;</button>
+								<button id="auth_role_h8_set" class="btn btn-info btn-xs">&emsp;<i class="fa fa-edit"></i>&nbsp;设定权限&emsp;</button>
+								<button id="auth_role_h8_preview" class="btn btn-info btn-xs">&emsp;<i class="fa fa-edit"></i>&nbsp;角色菜单&emsp;</button>
+								<button id="auth_role_h8_page_auth" class="btn btn-info btn-xs">&emsp;<i class="fa fa-edit"></i>&nbsp;角色页面权限&emsp;</button>
+								<button id="auth_role_h8_page_view" class="btn btn-info btn-xs">&emsp;<i class="fa fa-edit"></i>&nbsp;页面一览&emsp;</button>
+								<button id="auth_role_h8_del" class="btn btn-info btn-xs">&emsp;<i class="fa fa-trash-o"></i>&nbsp;删 除&emsp;</button>
+							</div>
+							<div class="pull-right">
+                <b name="total_count"></b>
+              </div>
+						</div>
+						 <!--class="dataTables_wrapper"-->
+						<div class="table-responsive">
+							<table id="auth_role_h8_dt" class="table table-bordered table-striped">
+								<thead>
+									<tr>
+										<th>角色名称</th>
+										<th>角色描述</th>
+										<th>操作类型</th>
+										<th>角色类型</th>
+										<!--<th id="auth_role_h8_comm_flag">是否通用角色</th>-->
+										<th>修改时间</th>
+										<th>状态</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+					</div>
+					<!-- end widget content -->
+					<div id="auth_role_h8_pagination"></div>
+				</div>
+				<!-- end widget div -->
+			</div>
+			<!-- end widget -->
+		</article>
+		<!-- WIDGET END -->
+	</div>
+	<!-- end row -->
+</section>
+<!-- end widget grid -->
+<div id="auth_role_dialog_div">
+	<div class="ui-dialog-content">
+		<table  style="width:100%;">
+			<tr>
+				<td id="auth_role_cont_user" width="25%"></td>
+				<td id="auth_role_cont_dept" width="25%"></td>
+				<td id="auth_role_cont_sys" width="25%" ></td>
+				<td id="auth_role_cont_menu" width="25%"></td>
+			</tr>
+		</table>
+	</div>
+</div>
+<div id="auth_role_h8_form"></div>
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<!-- BOOTSTRAP UI + Slider -->
+<!-- <script src="lib/js/plugin/bootstrap-editable/js/bootstrap-editable.min.js"></script> -->
+<script src="auth/role2/h8.js"></script>
+<script type="text/javascript">
+	// DO NOT REMOVE : GLOBAL FUNCTIONS!
+	pageSetUp();
+	var auth_h8 = new AuthRoleH8();
+</script>

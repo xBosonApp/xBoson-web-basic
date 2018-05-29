@@ -1,0 +1,25 @@
+
+
+<form onsubmit="return false;" class="smart-form" style="display:none;">
+	<fieldset>
+	  <div id="search"></div>
+	  <section class="col col-2 pull-right">
+	    <button id="search_btn" class="btn btn-primary btn-sm pull-right">查询</button>
+	  </section>
+	</fieldset>
+</form>
+<div id="echart" style="height:300px" class="row"></div>
+<div id="chart_table_con">
+</div>
+<div id="chart_table_template" style="display:none;">
+  <div class="row" style="padding-right: 15px">
+    <button index="outData" class="btn btn-default btn-xs pull-right">导出数据</button>
+    <button index="closeTable" class="btn btn-default btn-xs pull-right">关闭</button>
+  </div>
+  <div class="dataTables_wrapper" >
+    <table id="chart_table" class="table table-bordered table-striped"></table>
+    <table id ="chart_table_ods" class="table table-bordered table-striped"></table>
+  </div>
+  <div id="chart_table_slider_bar"></div>
+</div>
+

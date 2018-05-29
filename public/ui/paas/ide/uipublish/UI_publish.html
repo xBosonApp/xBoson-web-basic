@@ -1,0 +1,297 @@
+<div id="UI_publish" class="jarviswidget jarviswidget-color-blue" 
+    sytle='margin:0 !important;'
+    data-widget-deletebutton="false" data-widget-togglebutton="false" 
+    data-widget-editbutton="false" data-widget-colorbutton="false" role="widget">
+  <header role="heading">
+    <div id="ui_publish"  role="menu" class="widget-toolbar" title="发布">
+    
+    <i class="glyphicon glyphicon-new-window"></i></div>
+    
+    <div id="ui_publish2" api='publish2' role="menu" 
+         class="widget-toolbar" title="New发布">
+    <i class="glyphicon glyphicon-export"></i></div>
+  </header>
+  
+  <div class="widget-body">
+  <div class="row" >
+    <section class="col-sm-5 fix_size" style="overflow: auto; height:455px;">
+      <h4 class="modal-title">待上线</h4>
+      <ul id="lefttree" class="ztree"></ul>
+    </section>
+    <section class="col-sm-1"></section>
+    <section class="col-sm-5 fix_size" style="overflow: auto;height:455px; padding:0">
+      <h4 class="modal-title">待下线</h4>
+      <ul id="righttree" class="ztree"></ul>
+    </section>
+  </div>
+  </div>
+</div>
+<script type="text/javascript">
+(function() {
+
+  var win = $(window).resize(fixsize);
+  fixsize();
+  function fixsize() {
+    var _height = win.height();
+    $('.fix_size').css('height', _height - 190);
+  }
+
+  function get_api_url(_apinm) {
+    if (! zy.isXBosonSystem) {
+      return 'http://' + location.host + '/api/' + _apinm;
+    }
+    var __url = zy.g.host.api + 
+        'app/'+ zy.g.comm.org +'/ZYAPP_IDE/ZYMODULE_UI_IDE/'+ _apinm;
+    return __url;
+  }
+	
+	var _tools = {
+	  _api: function (_apinm, _cb, _param, _str) {
+      var __url = get_api_url(_apinm);
+      var jsonp_name = 'callback' + zy.tool.random();
+      _param = zy.fix_jsonp_parm(_param || {});
+      _param.cb = jsonp_name;
+
+      $.ajax({
+        url: __url,
+        dataType: "jsonp",
+        data: _param,
+        type: _str || 'GET',
+        jsonpCallback: jsonp_name,
+        success: function (data) {
+          zy.fix_xboson_data(data);
+          data.ret = data.code;
+          _cb(data);
+        },
+        error: function (xhr, status, error) {
+          console.log('Error: ' + error.stack);
+        }
+      });
+    },
+
+    _post: function (_apinm, _cb, _param) {
+        // 拦截对 publish2 的调用, 修正其中的参数
+        if (_apinm == 'publish2') {
+          if (zy.isXBosonSystem) {
+            return _in_post();
+          }
+          var getp = $.extend(true, {}, zy.g.comm, {
+            app: 'ZYAPP_LOGIN', mod: 'ZYMODULE_LOGIN'
+          });
+          $.get('/ds/api/getuserorgtype', getp, function(__ret) {
+            _param.orgpath = ('p' == __ret.result[0].org_type)
+                           ? 'paas' : 'saas';
+            _in_post();
+          }, 'json');
+        } else {
+          _in_post();
+        }
+        
+        function _in_post() {
+          var host = location.host;
+          console.log('!', _apinm, _param);
+          //host = '192.168.7.144'
+          var __url = get_api_url(_apinm);
+          $.post(__url, _param, function (data) {
+            zy.fix_xboson_data(data);
+            data.ret = data.code;
+            _cb && _cb(data);
+          });
+        }
+    },
+    _label: function (_str) {
+        var _q = '<' + _str + '></' + _str + '>';
+        return $(_q);
+    }
+	}
+	//设置ztree
+	var setting = {
+		data: {
+			key: {
+				checked: "checked",
+				name: 'name',
+         title: 'path'
+			},
+			simpleData: {
+				enable: true
+				
+			}
+		},
+		check: {
+			enable: true,
+			chkDisabledInherit: true,
+			chkStyle: "checkbox",
+			chkboxType: {
+				"Y": "ps",
+				"N": "ps"
+			}
+		},
+		view: {
+			showTitle: true,
+      selectedMulti: false,
+      showIcon: true,
+      dblClickExpand: false
+		},
+		callback:{
+		  onExpand: _expand
+		}
+	};
+	  function _fromServer(_path, _cb,_flag) {
+      if(_flag=='leftex')
+        var _t = {
+          path:_path,
+          branch:'t'
+        };
+      if(_flag=='rightex')
+        var _t={
+          path:_path,
+          branch:'ui'
+        };
+      if(_flag=='left' || _flag=='right')
+        var _t = {
+          path:_path,
+          double:'double'
+        };
+      
+      _tools._api('getfilelist', function (_m) {
+        if (!Boolean(_m.ret)) {
+          if(_flag=='leftex' || _flag=='rightex')
+            var _mm = _m.result;
+          if(_flag=='left')
+            var _mm = _m.t;
+          if(_flag=='right') {
+            var _mm = _m.ui;
+          }
+          
+          if ($.isArray(_mm)) {
+            _mm = _sort(_mm)
+          } else {
+            _mm.children = _sort(_mm.children)
+          }
+          _cb && _cb(_mm);
+        } else {
+          zy.ui.msg('提示', '接口执行失败:' + _m.msg, 'e');
+        }
+      }, $.extend(true, _t, zy.g.comm));
+    }
+    function _sort(_arr) {
+            var _fileArray = [], _dirArray = [];
+            $.each(_arr, function (_i, _v) {
+                if (_v.isParent)
+                    _dirArray.push(_v);
+                else
+                    _fileArray.push(_v);
+            });
+
+            return [].concat(_dirArray, _fileArray);
+        }
+    function _expand(_e, _id, _node) {
+          var lefttree = $.fn.zTree.getZTreeObj("lefttree");
+          var righttree = $.fn.zTree.getZTreeObj("righttree");
+          var _flg;
+          var _tid=$(_e.target).attr('id');
+            if(/lefttree/.test(_tid)){
+            _tree=lefttree
+            _flg='leftex';
+            }
+            if(/righttree/.test(_tid)){
+            _tree=righttree
+            _flg='rightex';
+            }
+            if (!_node.children || _node.children.length === 0)
+                _fromServer(_node.path, function (_m) {
+                    var _result = _m;
+                    if(_node.checked)
+                      $.each(_result,function(i,v){
+                        v.checked = true;
+                      });
+                    _node.children = _result;
+                    _tree.refresh();
+                }, _flg);
+        }
+    _fromServer('/', function (_m) {
+        $.fn.zTree.init($("#lefttree"), setting, _m);
+      },'left');
+    _fromServer('/', function (_m) {
+				$.fn.zTree.init($("#righttree"), setting, _m);
+      },'right');
+	
+	
+
+    $('#ui_publish,#ui_publish2').click(function(){
+      
+    var publish_api_name = $(this).attr('api') || 'publish';
+    zy.ui.msg("提示信息：", "发布中...", "s");
+    
+      //获取改变check状态的节点
+		var lefttreeObj = $.fn.zTree.getZTreeObj('lefttree');
+		var leftnodes = lefttreeObj.getCheckedNodes(true);
+		var righttreeObj = $.fn.zTree.getZTreeObj('righttree');
+		var rightnodes = righttreeObj.getCheckedNodes();
+		function _each(_arr){
+		  var _larr=[];
+		  $.each(_arr,function(i,v){
+		    if(v.check_Child_State==-1)
+		      _larr.push(v.path);
+		  })
+		  return _larr;
+		}
+    
+    
+        
+		if(rightnodes.length==0 && leftnodes.length==0){
+		  zy.ui.msg("提示信息：", "未选择！", "w");
+		  return;
+		}else{
+		  var right = _each(rightnodes);
+		  var left = _each(leftnodes);
+		}            
+		 
+		if(right.length!=0){
+		  zy.ui.mask('请确认','点击确定会删除待下线的文件，确定要删除吗？',function(){
+		var param={
+		  up:left,
+		  down:right
+		}
+		
+		console.log(param)
+		_tools._post(publish_api_name,function(m){
+		  console.log('pub', m);
+		  if(!Boolean(m.ret)) {
+        _fromServer('/', function (_m) {
+  				$.fn.zTree.init($("#righttree"), setting, _m);
+          zy.ui.msg("提示信息：", "发布成功", "s");
+        },'right');
+		  }else{
+		    zy.ui.msg("提示信息：","接口执行失败："+ m.msg, "e");
+		  }
+		  
+		},$.extend(true, param, zy.g.comm));
+	   // pageSetUp();
+				});
+		}else{
+		  var param={
+		  up:left,
+		  down:right
+		}
+		
+		console.log(param)
+		_tools._post(publish_api_name,function(m){
+		  if(!Boolean(m.ret)){
+	
+      _fromServer('/', function (_m) {
+				$.fn.zTree.init($("#righttree"), setting, _m);
+            zy.ui.msg("提示信息：", "发布成功", "s");
+        },'right');
+		  }else{
+		    zy.ui.msg("提示信息：","接口执行失败："+ m.msg, "e");
+		  }
+
+		},$.extend(true, param, zy.g.comm));
+		}
+		
+    });
+
+// 	_tree();
+})();
+</script>

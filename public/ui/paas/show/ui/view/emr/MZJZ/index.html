@@ -1,0 +1,213 @@
+<script type="text/javascript" language="JavaScript" src="/t/paas/show/ui/comm.js"></script>
+		
+<script type="text/javascript">
+
+var jzjlData;
+$(function () {
+    var url = "emrjzjl1/"; 	
+    var url1 = "emrjybg1/"; 
+    var url2 = "emrjcbg1/"; 
+    var url3 = "emrmzjz3/"; 
+    var url4 = "emrjzjl2/"; 
+    var url5 = "emrjzjl1/"; 	
+    var itemsList=[];	
+    var info= new Map();	
+    info.put("pageNum",1);
+    info.put("pageSize",2);
+    info.put("pid",self.parent.pid);
+    var jzjlinfo= new Map();	
+    jzjlinfo.put("pageNum",1);
+    jzjlinfo.put("pageSize",5);
+	jzjlinfo.put("pid",self.parent.pid);
+    LC_AjaxGet(EMRBaseUrl+url5,"","emrjzjlIndexcallback",jzjlinfo,itemsList);
+        	
+	var url6 ="emrzdjl1/"; 	
+	LC_AjaxGet(EMRBaseUrl+url6,"","zdjlIndexcallback",jzjlinfo,itemsList);	
+    
+    LC_AjaxGet(EMRBaseUrl+url,"","showDatacssjl",info,itemsList);	
+    LC_AjaxGet(EMRBaseUrl+url1,"","showDatajybg",info,itemsList);	
+    LC_AjaxGet(EMRBaseUrl+url2,"","showDatajcbg",info,itemsList);
+    LC_AjaxGet(EMRBaseUrl+url3,"","showDatayys",info,itemsList);
+    LC_AjaxGet(EMRBaseUrl+url4,"","showDatazjjz",info,itemsList);
+   
+
+});
+function zdjlIndexcallback(retData){
+     var strHtml="";
+     for(var i=0;i<retData.dataList.length;i++){
+     	strHtml=strHtml+'<div class="itemLW-80">'+ retData.dataList[i].dc7001_zdrq+'</div>'
+     }
+	 $("#div_zdjl").html(strHtml);
+}
+function emrjzjlIndexcallback(retData){
+	var strHtml="";
+	for(var i=0;i<retData.dataList.length;i++){
+ 
+	   strHtml=strHtml+'<div class="mainsW-704">'+
+					'<div class="itemLW-80">年内门诊：</div>'+
+					'<div class="itemsW-48">'+retData.dataList[i].dc1002_ghksmc+'</div>'+
+					'<div class="itemLW-96">最近门诊日期：</div>'+
+					'<div class="itemsW-112">'+retData.dataList[i].dc1002_ghksmc+'</div>'+
+					'<div class="itemLW-64">主要诊断：</div>'+
+					'<div class="itemsW-80">'+retData.dataList[i].dc1002_ghksmc+'</div>'+
+					'<div class="itemLW-64">过敏药物：</div>'+
+					'<div class="itemsW-112">'+retData.dataList[i].dc1002_ghksmc+'</div>'+
+				'</div>';
+	}
+	$("#div_jzzy").html(strHtml);
+}
+
+function showDatazjjz(retData){
+	$('#zjjz').datagrid({
+		title:'最近就诊',
+		pageNumber:1,
+		pageSize: 2,
+		data:retData.dataList,
+		singleSelect:true,
+		columns:[[
+		    {title:'序号',field:'dc1001_jlxh'},
+	        {title:'就诊日期',field:'dc1002_ghsj' ,width:150},
+	        {title:'就诊科室',field:'dc1001_jzksmc' ,width:100},
+	        {title:'主要诊断',field:'dc1001_zyzd' },
+	        {title:'就诊医生',field:'dc1001_jzysxm' },
+	        {title:'就诊医院',field:'dc1001_jgdm' ,width:150}
+		]]	
+	});
+}
+	function showDatayys(data1){
+		$('#yys').datagrid({
+			title:'用药史',
+			data:data1.dataList,
+			pageNumber:1,
+			pageSize: 2,
+			singleSelect:true,
+		    columns:[[
+			   {field:'tablename',title:'序号',width:60,align:'center'},
+			   {field:'dc1003_cflb',title:'类型',width:100,align:'center'},
+			   {field:'dc1003_kdysxm',title:'开方医生',width:100,align:'center'},
+			   {field:'dc1003_kdksmc',title:'开方科室',width:100,align:'center'},
+			   {field:'dc1003_cfts',title:'开方帖数',width:100,align:'center'},
+			   {field:'dc1003_zyzf',title:'中药煮煎法',width:100,align:'center'},
+			   {field:'dc1003_kdrq',title:'开方日期',width:100,align:'center'},
+			   {field:'dc1003_jgdm',title:'医院',width:160,align:'center'}
+		    ]]
+		});
+	}
+	function showDatacssjl(retData){
+		$('#ssjl').datagrid({
+			title:'手术史',
+			data:retData.dataList,
+			pageNumber:1,
+			pageSize: 2,
+			singleSelect:true,
+			columns:[[
+			   {field:'tablename',title:'序号',width:60,align:'center'},
+			   {field:'dc5001_mzbz',title:'门诊显示',width:80,align:'center'},
+			   {field:'dc5001_kssj',title:'手术日期',width:80,align:'center'},
+			   {field:'dc5001_ssmc',title:'手术名称',width:100,align:'center'},
+			   {field:'dc5001_qkyh',title:'切口愈合等级',width:80,align:'center'},
+			   {field:'dc5001_mzfs',title:'麻醉方法',width:80,align:'center'},
+			   {field:'dc5001_jssj_kssj',title:'手术用时',width:80,align:'center'},
+			   {field:'dc5001_ssysxm',title:'主刀医生',width:80,align:'center'},
+			   {field:'dc5001_mzysxm',title:'麻醉医生',width:80,align:'center'},
+			   {field:'dc5001_jgdm',title:'医院',width:100,align:'center'}
+			]]
+		});
+	}
+
+	function showDatajybg(data1){
+		$('#jybg').datagrid({
+			title:'检验史',
+		    data:data1.dataList,
+		   	pageNumber:1,
+			pageSize: 2,
+			singleSelect:true,
+			columns:[[
+			   {field:'tablename',title:'序号',width:60,align:'center'},
+			   {field:'dc4001_sqrq',title:'开单日期',width:100,align:'center'},
+			   {field:'dc4001_bgdmc',title:'检验名称',width:100,align:'center'},
+			   {field:'dc4001_shghxm',title:'开单医生',width:100,align:'center'},
+			   {field:'dc4001_jcghxm',title:'检验医生',width:100,align:'center'},
+			   {field:'dc4001_jyrq',title:'检验日期',width:100,align:'center'},
+			   {field:'dc4001_jgdm',title:'医院',width:100,align:'center'}
+		   ]]
+		});
+	}
+	
+	function showDatajcbg(emrjcbgdata){
+	    $('#jcbg').datagrid({
+			title:'检查史',
+			data:emrjcbgdata.dataList,
+			pageNumber:1,
+			pageSize: 2,
+			columns:[[
+			   {field:'dc3001_jlxh',title:'序号',width:60,align:'center'},
+			   {field:'dc3001_yybz',title:'阴阳性',width:100,align:'center'},
+			   {field:'dc3001_kdsj',title:'开单日期',width:100,align:'center'},
+			   {field:'dc3001_jcmc',title:'检查项目',width:100,align:'center'},
+			   {field:'dc3001_jcbw',title:'检查部位',width:100,align:'center'},
+			   {field:'dc3001_sqghxm',title:'开单医生',width:100,align:'center'},
+			   {field:'dc3001_jcysxm',title:'检查医生',width:100,align:'center'},
+			   {field:'dc3001_jcsj',title:'检查日期',width:100,align:'center'},
+			   {field:'dc3001_jgdm',title:'医院',width:100,align:'center'}
+		   ]]
+	   });
+	}
+	
+</script>
+<div class="mainsW-912">
+	<div class="mainsW-912">
+	<div class="mainsW-720">
+		<div class="easyui-panel" title="就诊摘要">
+			<div class="padTB-5 clearfix" id="div_jzzy">
+
+			</div>
+		</div>
+	</div>
+	<div class="mainsW-192">
+		<div class="easyui-panel" title="历史诊断">
+			<div class="padTB-5 clearfix" >
+				<div class="mainsW-176" style="height:64px;" id="div_zdjl">
+					
+					
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	<div class="mainsW-912">
+	<!-- 最近就诊 开始 -->
+	<table id="zjjz" tools="#zjjz-more"></table>
+	<div id="zjjz-more" >
+		<a class="layout-button-right" href="javascript:void(0)"></a>
+	</div>
+	<!-- 最近就诊 结束 -->
+	<!-- 用药史 开始 -->
+	<table id="yys" tools="#yys-more"></table>
+	<div id="yys-more" >
+		<a class="layout-button-right" href="javascript:void(0)"></a>
+	</div>
+	<!-- 用药史 结束 -->
+	<!-- 检查史 开始 -->
+	<table id="jcbg" tools="#jcbg-more"></table>
+	<div id="jcbg-more" >
+		<a class="layout-button-right" href="javascript:void(0)"></a>
+	</div>
+	<!-- 检查史 结束 -->
+	<!-- 检验史 开始 -->
+	<table id="jybg" tools="#jybg-more"></table>
+	<div id="jybg-more" >
+		<a class="layout-button-right" href="javascript:void(0)"></a>
+	</div>
+	<!-- 检验史 结束 -->
+	<!-- 手术史 开始 -->
+	<table id="ssjl" tools="#ssjl-more"></table>
+	<div id="ssjl-more" >
+		<a class="layout-button-right" href="javascript:void(0)"></a>
+	</div>
+	<!-- 手术史 结束 -->
+	</div>
+	
+	
+</div>
+	

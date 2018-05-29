@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Custom DataGrid Pager - jQuery EasyUI Demo</title>
+<script type="text/javascript" src="/t/paas/show/ui/comm.js"></script>	
+<script type="text/javascript">
+
+$(function () {
+   dataxjjy();	
+});
+
+function xgbtton() {  
+var url="validateconfigchange/";
+   var itemsList=["pname_name","pname_comment","pname_regx_regx","nickname_name","nickname_comment","nickname_regx_regx","gender_name","gender_comment","gender_regx_regx","age_name","age_comment","age_regx_regx","birthday_name","birthday_comment","birthday_regx_regx","nation_name","nation_comment","nation_regx_regx","addrprovince_name","addrprovince_comment","addrprovince_regx_regx","addrcity_name","addrcity_comment","addrcity_regx_regx","addrcounty_name","addrcounty_comment","addrcounty_regx_regx","addrtown_name","addrtown_comment","addrtown_regx_regx","addrvillage_name","addrvillage_comment","addrvillage_regx_regx","addrhouseid_name","addrhouseid_comment","addrhouseid_regx_regx","registeretype_name","registeretype_comment","registeretype_regx_regx","nationality_name","nationality_comment","nationality_regx_regx","marriedstatus_name","marriedstatus_comment","marriedstatus_regx_regx","booldtype_name","booldtype_comment","booldtype_regx_regx","rh_name","rh_comment","rh_regx_regx","workdate_name","workdate_comment","workdate_regx_regx","jobtypecode_name","jobtypecode_comment","jobtypecode_regx_regx","educationcode_name","educationcode_comment","educationcode_regx_regx","degreecode_name","degreecode_comment","degreecode_regx_regx","orgcodes_name","orgcodes_comment","orgcodes_regx_regx","email_name","email_comment","email_regx_regx","credentials_name","credentials_comment","credentials_regx_01","credentials_regx_02","credentials_regx_03","credentials_regx_04","credentials_regx_05","credentials_regx_06","credentials_regx_07","credentials_regx_08","credentials_regx_09","credentials_regx_10","credentials_regx_11","credentials_regx_12","credentials_regx_13","credentials_regx_14","credentials_regx_15","credentials_regx_16","credentials_regx_70","credentials_regx_71","credentials_regx_72","credentials_regx_73","credentials_regx_80","credentials_regx_81","credentials_regx_90","credentials_regx_91","credentials_regx_92","credentials_regx_99","phones_comment","phones_name","phones_regx_01","phones_regx_02","phones_regx_03","phones_regx_04","phones_regx_05","phones_regx_06","phones_regx_07","phones_regx_08","phones_regx_09","phones_regx_10","phones_regx_99"];
+ // var itemsList=[];
+ var info= new Map();	
+   LC_AjaxGet(EMPIUrl+url,"xjjyform","callbacksave",info,itemsList);
+  
+	 	 
+}  
+   
+// 保存回调函数
+ function callbacksave(reData){
+ alert(123);
+  if (reData.ret=="0") {
+    self.parent.$.messager.alert('提示',reData.msg,'info');
+    $("#openRoleDiv").window("close");
+
+    } else {
+    self.parent.$.messager.alert('错误提示',reData.msg,'error');
+  }
+ // dataxjjy();
+ }
+
+
+
+function dataxjjy(){
+
+	    	var url="getvalidateconfig/";
+         var itemsList=[];
+			var info= new Map();	
+	 	 
+	 	 LC_AjaxGet(EMPIUrl+url,"xjjyform","xjjycallback",info,itemsList);
+}
+
+
+//uniques
+function transuniques(uniques)
+{
+  var resuniques='';
+  for(var key in uniques)
+  {
+  //resuniques+=uniques[key]+';';
+  resuniques+=key+';';
+  }
+  return resuniques;
+}
+
+//regx
+function transregx(regx,id)
+{
+//  var resregx='';
+  for(var key in regx)
+  {
+  //<a href='#' class='paneltjbut' onclick='btnDel('" + id + "_regx_" + key + "')'>删除</a>
+    $('#'+ id).append("<div>正则" + key + ":<input type='text' id='" + id + "_regx_" + key + "' style='margin:3px 0 3px 32px;width:210px;' value='" + regx[key] + "' /><br /></div>");
+  }
+}
+//动态修改ID属性值,id为旧ID
+function toClone(id,newId){
+    var clone = $('#'+ id).cloneNode(true);
+    clone.id = newId;
+    return clone;
+}
+
+//weight
+function transweight(weight)
+{
+
+  if(weight.weight!=undefined)
+  {
+    return weight.weight;
+  }
+    else{
+      var resweight='';
+      for(var key in weight)
+      {
+      //resuniques+=uniques[key]+';';
+      resweight+=key+';';
+      }
+      return resweight;
+      
+      
+  }
+}
+
+
+
+function xjjycallback(data){
+var validation=data.validation;
+
+/* if(data.unique===null){
+		   data.unique=null;
+				}
+				else{
+		 data.unique=true;
+			}
+*/LC_SetData("xjjydiv",validation.max,"max");
+LC_SetData("xjjydiv",validation.min,"min");
+
+//姓名
+LC_SetData("xjjydiv",validation.pname.name,"pname_name");
+LC_SetData("xjjydiv",validation.pname.comment,"pname_comment");
+//LC_SetData("xjjydiv",transweight(validation.pname.types),"pname_types_weight");
+//LC_SetData("xjjydiv",transuniques(validation.pname.uniques),"pname_uniques");
+LC_SetData("xjjydiv",validation.pname.types,"pname_types");
+LC_SetData("xjjydiv",validation.pname.regx.regx,"pname_regx_regx");
+LC_SetData("xjjydiv",validation.pname.uniques,"pname_uniques");
+LC_SetData("xjjydiv",validation.pname.unique,"pname_unique");
+
+//昵称
+LC_SetData("xjjydiv",validation.nickname.name,"nickname_name");
+LC_SetData("xjjydiv",validation.nickname.comment,"nickname_comment");
+//LC_SetData("xjjydiv",transweight(validation.nickname.types),"nickname_types_weight");
+//LC_SetData("xjjydiv",transuniques(validation.nickname.uniques),"nickname_uniques");
+LC_SetData("xjjydiv",validation.nickname.types,"nickname_types");
+LC_SetData("xjjydiv",validation.nickname.regx.regx,"nickname_regx_regx");
+LC_SetData("xjjydiv",validation.nickname.uniques,"nickname_uniques");
+LC_SetData("xjjydiv",validation.nickname.unique,"nickname_unique");
+
+
+//性别
+LC_SetData("xjjydiv",validation.gender.name,"gender_name");
+LC_SetData("xjjydiv",validation.gender.comment,"gender_comment");
+//LC_SetData("xjjydiv",transweight(validation.pname.types),"pname_types_weight");
+//LC_SetData("xjjydiv",transuniques(validation.pname.uniques),"pname_uniques");
+LC_SetData("xjjydiv",validation.gender.types,"gender_types");
+LC_SetData("xjjydiv",validation.gender.regx.regx,"gender_regx_regx");
+LC_SetData("xjjydiv",validation.gender.uniques,"gender_uniques");
+LC_SetData("xjjydiv",validation.gender.unique,"gender_unique");
+
+//年龄
+LC_SetData("xjjydiv",validation.age.name,"age_name");
+LC_SetData("xjjydiv",validation.age.comment,"age_comment");
+//LC_SetData("xjjydiv",transweight(validation.age.types),"age_types_weight");
+//LC_SetData("xjjydiv",transuniques(validation.age.uniques),"age_uniques");
+LC_SetData("xjjydiv",validation.age.types,"age_types");
+LC_SetData("xjjydiv",validation.age.regx.regx,"age_regx_regx");
+LC_SetData("xjjydiv",validation.age.uniques,"age_uniques");
+LC_SetData("xjjydiv",validation.age.unique,"age_unique");
+
+//出生日期
+LC_SetData("xjjydiv",validation.birthday.name,"birthday_name");
+LC_SetData("xjjydiv",validation.birthday.comment,"birthday_comment");
+//LC_SetData("xjjydiv",transweight(validation.birthday.types),"birthday_types_weight");
+//LC_SetData("xjjydiv",transuniques(validation.birthday.uniques),"birthday_uniques");
+LC_SetData("xjjydiv",validation.birthday.types,"birthday_types");
+LC_SetData("xjjydiv",validation.birthday.regx.regx,"birthday_regx_regx");
+LC_SetData("xjjydiv",validation.birthday.uniques,"birthday_uniques");
+LC_SetData("xjjydiv",validation.birthday.unique,"birthday_unique");
+
+
+//民族
+LC_SetData("xjjydiv",validation.nation.name,"nation_name");
+LC_SetData("xjjydiv",validation.nation.comment,"nation_comment");
+//LC_SetData("xjjydiv",transweight(validation.nation.types),"nation_types_weight");
+//LC_SetData("xjjydiv",transuniques(validation.nation.uniques),"nation_uniques");
+LC_SetData("xjjydiv",validation.nation.types,"nation_types");
+LC_SetData("xjjydiv",validation.nation.regx.regx,"nation_regx_regx");
+LC_SetData("xjjydiv",validation.nation.uniques,"nation_uniques");
+LC_SetData("xjjydiv",validation.nation.unique,"nation_unique");
+
+//地址-省
+LC_SetData("xjjydiv",validation.addrprovince.name,"addrprovince_name");
+LC_SetData("xjjydiv",validation.addrprovince.comment,"addrprovince_comment");
+//LC_SetData("xjjydiv",transweight(validation.addrprovince.types),"addrprovince_types_weight");
+//LC_SetData("xjjydiv",transuniques(validation.addrprovince.uniques),"addrprovince_uniques");
+LC_SetData("xjjydiv",validation.addrprovince.types,"addrprovince_types");
+LC_SetData("xjjydiv",validation.addrprovince.regx.regx,"addrprovince_regx_regx");
+LC_SetData("xjjydiv",validation.addrprovince.uniques,"addrprovince_uniques");
+LC_SetData("xjjydiv",validation.addrprovince.unique,"addrprovince_unique");
+
+//地址-市
+LC_SetData("xjjydiv",validation.addrcity.name,"addrcity_name");
+LC_SetData("xjjydiv",validation.addrcity.comment,"addrcity_comment");
+//LC_SetData("xjjydiv",transweight(validation.addrcity.types),"addrcity_types_weight");
+//LC_SetData("xjjydiv",transuniques(validation.addrcity.uniques),"addrcity_uniques");
+LC_SetData("xjjydiv",validation.addrcity.types,"addrcity_types");
+LC_SetData("xjjydiv",validation.addrcity.regx.regx,"addrcity_regx_regx");
+LC_SetData("xjjydiv",validation.addrcity.uniques,"addrcity_uniques");
+LC_SetData("xjjydiv",validation.addrcity.unique,"addrcity_unique");
+
+//地址-县
+LC_SetData("xjjydiv",validation.addrcounty.name,"addrcounty_name");
+LC_SetData("xjjydiv",validation.addrcounty.comment,"addrcounty_comment");
+//LC_SetData("xjjydiv",transweight(validation.addrcounty.types),"addrcounty_types_weight");
+//LC_SetData("xjjydiv",transuniques(validation.addrcounty.uniques),"addrcounty_uniques");
+LC_SetData("xjjydiv",validation.addrcounty.types,"addrcounty_types");
+LC_SetData("xjjydiv",validation.addrcounty.regx.regx,"addrcounty_regx_regx");
+LC_SetData("xjjydiv",validation.addrcounty.uniques,"addrcounty_uniques");
+LC_SetData("xjjydiv",validation.addrcounty.unique,"addrcounty_unique");
+
+//地址-乡
+LC_SetData("xjjydiv",validation.addrtown.name,"addrtown_name");
+LC_SetData("xjjydiv",validation.addrtown.comment,"addrtown_comment");
+//LC_SetData("xjjydiv",transweight(validation.addrtown.types),"addrtown_types_weight");
+//LC_SetData("xjjydiv",transuniques(validation.addrtown.uniques),"addrtown_uniques");
+LC_SetData("xjjydiv",validation.addrtown.types,"addrtown_types");
+LC_SetData("xjjydiv",validation.addrtown.regx.regx,"addrtown_regx_regx");
+LC_SetData("xjjydiv",validation.addrtown.uniques,"addrtown_uniques");
+LC_SetData("xjjydiv",validation.addrtown.unique,"addrtown_unique");
+
+//地址-村
+LC_SetData("xjjydiv",validation.addrvillage.name,"addrvillage_name");
+LC_SetData("xjjydiv",validation.addrvillage.comment,"addrvillage_comment");
+//LC_SetData("xjjydiv",transweight(validation.addrvillage.types),"addrvillage_types_weight");
+//LC_SetData("xjjydiv",transuniques(validation.addrvillage.uniques),"addrvillage_uniques");
+LC_SetData("xjjydiv",validation.addrvillage.types,"addrvillage_types");
+LC_SetData("xjjydiv",validation.addrvillage.regx.regx,"addrvillage_regx_regx");
+LC_SetData("xjjydiv",validation.addrvillage.uniques,"addrvillage_uniques");
+LC_SetData("xjjydiv",validation.addrvillage.unique,"addrvillage_unique");
+
+//地址-门牌号码
+LC_SetData("xjjydiv",validation.addrhouseid.name,"addrhouseid_name");
+LC_SetData("xjjydiv",validation.addrhouseid.comment,"addrhouseid_comment");
+//LC_SetData("xjjydiv",transweight(validation.addrhouseid.types),"addrhouseid_types_weight");
+//LC_SetData("xjjydiv",transuniques(validation.addrhouseid.uniques),"addrhouseid_uniques");
+LC_SetData("xjjydiv",validation.addrhouseid.types,"addrhouseid_types");
+LC_SetData("xjjydiv",validation.addrhouseid.regx.regx,"addrhouseid_regx_regx");
+LC_SetData("xjjydiv",validation.addrhouseid.uniques,"addrhouseid_uniques");
+LC_SetData("xjjydiv",validation.addrhouseid.unique,"addrhouseid_unique");
+
+
+//户籍类型代码
+LC_SetData("xjjydiv",validation.registeretype.name,"registeretype_name");
+LC_SetData("xjjydiv",validation.registeretype.comment,"registeretype_comment");
+//LC_SetData("xjjydiv",transweight(validation.registeretype.types),"registeretype_types_weight");
+//LC_SetData("xjjydiv",transuniques(validation.registeretype.uniques),"registeretype_uniques");
+LC_SetData("xjjydiv",validation.registeretype.types,"registeretype_types");
+LC_SetData("xjjydiv",validation.registeretype.regx.regx,"registeretype_regx_regx");
+LC_SetData("xjjydiv",validation.registeretype.uniques,"registeretype_uniques");
+LC_SetData("xjjydiv",validation.registeretype.unique,"registeretype_unique");
+
+//国籍
+LC_SetData("xjjydiv",validation.nationality.name,"nationality_name");
+LC_SetData("xjjydiv",validation.nationality.comment,"nationality_comment");
+//LC_SetData("xjjydiv",transweight(validation.nationality.types),"nationality_types_weight");
+//LC_SetData("xjjydiv",transuniques(validation.nationality.uniques),"nationality_uniques");
+LC_SetData("xjjydiv",validation.nationality.types,"nationality_types");
+LC_SetData("xjjydiv",validation.nationality.regx.regx,"nationality_regx_regx");
+LC_SetData("xjjydiv",validation.nationality.uniques,"nationality_uniques");
+LC_SetData("xjjydiv",validation.nationality.unique,"nationality_unique");
+
+//婚姻状况代码
+LC_SetData("xjjydiv",validation.marriedstatus.name,"marriedstatus_name");
+LC_SetData("xjjydiv",validation.marriedstatus.comment,"marriedstatus_comment");
+//LC_SetData("xjjydiv",transweight(validation.marriedstatus.types),"marriedstatus_types_weight");
+//LC_SetData("xjjydiv",transuniques(validation.marriedstatus.uniques),"marriedstatus_uniques");
+LC_SetData("xjjydiv",validation.marriedstatus.types,"marriedstatus_types");
+LC_SetData("xjjydiv",validation.marriedstatus.regx.regx,"marriedstatus_regx_regx");
+LC_SetData("xjjydiv",validation.marriedstatus.uniques,"marriedstatus_uniques");
+LC_SetData("xjjydiv",validation.marriedstatus.unique,"marriedstatus_unique");
+
+//ABO血型
+LC_SetData("xjjydiv",validation.booldtype.name,"booldtype_name");
+LC_SetData("xjjydiv",validation.booldtype.comment,"booldtype_comment");
+//LC_SetData("xjjydiv",transweight(validation.booldtype.types),"booldtype_types_weight");
+//LC_SetData("xjjydiv",transuniques(validation.booldtype.uniques),"booldtype_uniques");
+LC_SetData("xjjydiv",validation.booldtype.types,"booldtype_types");
+LC_SetData("xjjydiv",validation.booldtype.regx.regx,"booldtype_regx_regx");
+LC_SetData("xjjydiv",validation.booldtype.uniques,"booldtype_uniques");
+LC_SetData("xjjydiv",validation.booldtype.unique,"booldtype_unique");
+
+//RH血型
+LC_SetData("xjjydiv",validation.rh.name,"rh_name");
+LC_SetData("xjjydiv",validation.rh.comment,"rh_comment");
+//LC_SetData("xjjydiv",transweight(validation.rh.types),"rh_types_weight");
+//LC_SetData("xjjydiv",transuniques(validation.rh.uniques),"rh_uniques");
+LC_SetData("xjjydiv",validation.rh.types,"rh_types");
+LC_SetData("xjjydiv",validation.rh.regx.regx,"rh_regx_regx");
+LC_SetData("xjjydiv",validation.rh.uniques,"rh_uniques");
+LC_SetData("xjjydiv",validation.rh.unique,"rh_unique");
+
+//参加工作日期
+LC_SetData("xjjydiv",validation.workdate.name,"workdate_name");
+LC_SetData("xjjydiv",validation.workdate.comment,"workdate_comment");
+//LC_SetData("xjjydiv",transweight(validation.workdate.types),"workdate_types_weight");
+//LC_SetData("xjjydiv",transuniques(validation.workdate.uniques),"workdate_uniques");
+LC_SetData("xjjydiv",validation.workdate.types,"workdate_types");
+LC_SetData("xjjydiv",validation.workdate.regx.regx,"workdate_regx_regx");
+LC_SetData("xjjydiv",validation.workdate.uniques,"workdate_uniques");
+LC_SetData("xjjydiv",validation.workdate.unique,"workdate_unique");
+
+//职业类别代码
+LC_SetData("xjjydiv",validation.jobtypecode.name,"jobtypecode_name");
+LC_SetData("xjjydiv",validation.jobtypecode.comment,"jobtypecode_comment");
+//LC_SetData("xjjydiv",transweight(validation.jobtypecode.types),"jobtypecode_types_weight");
+//LC_SetData("xjjydiv",transuniques(validation.jobtypecode.uniques),"jobtypecode_uniques");
+LC_SetData("xjjydiv",validation.jobtypecode.types,"jobtypecode_types");
+LC_SetData("xjjydiv",validation.jobtypecode.regx.regx,"jobtypecode_regx_regx");
+LC_SetData("xjjydiv",validation.jobtypecode.uniques,"jobtypecode_uniques");
+LC_SetData("xjjydiv",validation.jobtypecode.unique,"jobtypecode_unique");
+
+//学历代码
+LC_SetData("xjjydiv",validation.educationcode.name,"educationcode_name");
+LC_SetData("xjjydiv",validation.educationcode.comment,"educationcode_comment");
+//LC_SetData("xjjydiv",transweight(validation.educationcode.types),"educationcode_types_weight");
+//LC_SetData("xjjydiv",transuniques(validation.educationcode.uniques),"educationcode_uniques");
+LC_SetData("xjjydiv",validation.educationcode.types,"educationcode_types");
+LC_SetData("xjjydiv",validation.educationcode.regx.regx,"educationcode_regx_regx");
+LC_SetData("xjjydiv",validation.educationcode.uniques,"educationcode_uniques");
+LC_SetData("xjjydiv",validation.educationcode.unique,"educationcode_unique");
+
+//学位代码
+LC_SetData("xjjydiv",validation.degreecode.name,"degreecode_name");
+LC_SetData("xjjydiv",validation.degreecode.comment,"degreecode_comment");
+//LC_SetData("xjjydiv",transweight(validation.degreecode.types),"degreecode_types_weight");
+//LC_SetData("xjjydiv",transuniques(validation.degreecode.uniques),"degreecode_uniques");
+LC_SetData("xjjydiv",validation.degreecode.types,"degreecode_types");
+LC_SetData("xjjydiv",validation.degreecode.regx.regx,"degreecode_regx_regx");
+LC_SetData("xjjydiv",validation.degreecode.uniques,"degreecode_uniques");
+LC_SetData("xjjydiv",validation.degreecode.unique,"degreecode_unique");
+
+//机构代码
+LC_SetData("xjjydiv",validation.orgcodes.name,"orgcodes_name");
+LC_SetData("xjjydiv",validation.orgcodes.comment,"orgcodes_comment");
+//LC_SetData("xjjydiv",transweight(validation.orgcodes.types),"orgcodes_types_weight");
+//LC_SetData("xjjydiv",transuniques(validation.orgcodes.uniques),"orgcodes_uniques");
+LC_SetData("xjjydiv",validation.orgcodes.types,"orgcodes_types");
+LC_SetData("xjjydiv",validation.orgcodes.regx.regx,"orgcodes_regx_regx");
+LC_SetData("xjjydiv",validation.orgcodes.uniques,"orgcodes_uniques");
+LC_SetData("xjjydiv",validation.orgcodes.unique,"orgcodes_unique");
+
+
+//证件
+LC_SetData("xjjydiv",validation.credentials.name,"credentials_name");
+LC_SetData("xjjydiv",validation.credentials.comment,"credentials_comment");
+//LC_SetData("xjjydiv",transweight(validation.pname.types),"pname_types_weight");
+//LC_SetData("xjjydiv",transuniques(validation.pname.uniques),"pname_uniques");
+LC_SetData("xjjydiv",validation.credentials.types,"credentials_types");
+//LC_SetData("xjjydiv",transregx(validation.credentials.regx),"credentials_regx");
+transregx(validation.credentials.regx,"credentials");
+LC_SetData("xjjydiv",validation.credentials.uniques,"credentials_uniques");
+LC_SetData("xjjydiv",validation.credentials.unique,"credentials_unique");
+
+//电话
+LC_SetData("xjjydiv",validation.phones.name,"phones_name");
+LC_SetData("xjjydiv",validation.phones.comment,"phones_comment");
+//LC_SetData("xjjydiv",transweight(validation.phones.types),"phones_types_weight");
+//LC_SetData("xjjydiv",transuniques(validation.phones.uniques),"phones_uniques");
+LC_SetData("xjjydiv",validation.phones.types,"phones_types");
+//LC_SetData("xjjydiv",transregx(validation.phones.regx),"phones_regx");
+transregx(validation.phones.regx,"phones");
+LC_SetData("xjjydiv",validation.phones.uniques,"phones_uniques");
+LC_SetData("xjjydiv",validation.phones.unique,"phones_unique");
+
+
+//电子邮箱
+LC_SetData("xjjydiv",validation.email.name,"email_name");
+LC_SetData("xjjydiv",validation.email.comment,"email_comment");
+//LC_SetData("xjjydiv",transweight(validation.pname.types),"pname_types_weight");
+//LC_SetData("xjjydiv",transuniques(validation.pname.uniques),"pname_uniques");
+LC_SetData("xjjydiv",validation.email.types,"email_types");
+LC_SetData("xjjydiv",validation.email.regx.regx,"email_regx_regx");
+LC_SetData("xjjydiv",validation.email.uniques,"email_uniques");
+LC_SetData("xjjydiv",validation.email.unique,"email_unique");
+
+}
+
+	
+//function btnAdddh(id){
+//  /*$('#'+ id).append("正则:<input type='text' id='" + id + "_regx_' style='margin:3px 0 3px 32px;width:210px;' value='' /><a href='#' class='paneltjbut' onclick='btnDel()'>删除</a><br />");*/
+//self.parent.dataMap="";
+//		var openRoleDiv = self.parent.$("#openRoleDiv");
+//		openRoleDiv.window({
+//				  href:"tj_xjjy.html",
+//	              title: '添加信息',
+//	              width: 350,
+//	              height: 250,
+//	              onBeforeClose:function(){
+//	              xjjycallback();
+//　　                }
+//	          });
+//
+//}
+//function btnAddzj(id){
+//self.parent.dataMap="";
+//		var openRoleDiv = self.parent.$("#openRoleDiv");
+//		openRoleDiv.window({
+//				  href:"tj_xjjyzj.html",
+//	              title: '添加信息',
+//	              width: 350,
+//	              height: 250,
+//	              onBeforeClose:function(){
+//	              xjjycallback();
+//　　                }
+//	          });
+//
+//}
+//
+//function btnDel(id){
+//  
+//}
+function btnAddph(){
+	
+	$('#div-ph-open').dialog('open');
+	
+
+}
+
+function btnAddzj(){
+	
+	$('#div-zj-open').dialog('open');
+	
+
+}
+
+
+</script>
+<style type="text/css">
+.paenlall{float:left;width:336px;padding:5px;}
+.paenltop{background: linear-gradient(to bottom, #EFF5FF 0px, #E0ECFF 100%) repeat-x scroll 0 0 transparent;border:1px solid  #95B8E7;width: 334px;position: relative;text-align: left;float:left;height:26px;}
+.peanltitle{color: #0E2D5F;font-size: 12px;font-weight: bold;height: 16px;line-height: 16px;float:left;padding:5px 0 0 5px;}
+.paenlbot{float:left;width:324px;padding:5px;height: auto;border:1px solid #95B8E7;border-top-width:0;}
+.paneltjbut{display: inline-block;font-size: 12px;height: 16px;line-height: 16px;margin: 0;vertical-align: baseline;width: auto;color: #444444;padding: 5px 6px 5px 5px;border:1px solid #fff;}
+.paneltjbut:hover{border-radius: 5px 5px 5px 5px;border:1px solid #b7d2ff;background: none repeat scroll 0 0 #eaf2ff;text-decoration:none;}
+.margina{margin-left:3px;}
+.tjbut{float:right;margin:1px 3px 0 0;}
+</style>
+<form id="xjjyform">
+
+<input type="hidden" id="max"/>
+<input type="hidden" id="min"/>
+      <div style="width:720px; float:left;padding-left:10px;" id="xjjydiv">
+      		<div class="flPadTB-10 mainsW-528">
+                <a href="#" class="easyui-linkbutton" onclick="xgbtton()">提交</a>
+            </div>
+            
+            
+            <div class="paenlall">
+    			      <div class="paenltop">
+    			          <div class="peanltitle" id="pname_comment">姓名</div>
+    			          <input type="hidden" id="pname_name" />
+    			      </div>
+    			      <div class="paenlbot">
+    			       正则:<input type="text" id="pname_regx_regx" style="margin-left:32px;width:210px;"/>
+    			      </div>    
+			   </div>
+			
+			<div class="paenlall">
+    			      <div class="paenltop">
+    			          <div class="peanltitle" id="nickname_comment">昵称</div>
+    			          <input type="hidden" id="nickname_name" />
+    			      </div>
+    			      <div class="paenlbot">
+    			       正则:<input type="text" id="nickname_regx_regx" style="margin-left:32px;width:210px;"/>
+    			      </div>    
+			   </div>
+
+			
+			<div class="paenlall">
+    			      <div class="paenltop">
+    			          <div class="peanltitle" id="gender_comment">性别</div>
+    			          <input type="hidden" id="gender_name" />
+    			      </div>    				    
+    			      <div class="paenlbot">
+    			       正则:<input type="text" id="gender_regx_regx" style="margin-left:32px;width:210px;"/>
+    			       </div>
+			</div>
+			
+			<div class="paenlall">
+    			      <div class="paenltop">
+    			          <div class="peanltitle" id="age_comment">年龄</div>
+    			          <input type="hidden" id="age_name" />
+    			      </div>    				    
+    			      <div class="paenlbot">
+    			       正则:<input type="text" id="" style="margin-left:32px;width:210px;"/>
+    			       </div>
+			</div>
+
+        <div class="paenlall">
+    			      <div class="paenltop">
+    			          <div class="peanltitle" id="birthday_comment">出生日期</div>
+    			          <input type="hidden" id="birthday_name" />
+    			      </div>    				    
+    			      <div class="paenlbot">
+    			       正则:<input type="text" id="" style="margin-left:32px;width:210px;"/>
+    			       </div>
+			</div>
+
+        <div class="paenlall">
+    			      <div class="paenltop">
+    			          <div class="peanltitle" id="nation_comment">民族</div>
+    			          <input type="hidden" id="nation_name" />
+    			      </div>    				    
+    			      <div class="paenlbot">
+    			       正则:<input type="text" id="" style="margin-left:32px;width:210px;"/>
+    			       </div>
+			</div>
+
+        <div class="paenlall">
+    			      <div class="paenltop">
+    			          <div class="peanltitle" id="email_comment">电子邮件</div>
+    			          <input type="hidden" id="email_name" />
+    			      </div>    				    
+    			      <div class="paenlbot">
+    			             正则:<input type="text" id="email_regx_regx" style="margin-left:32px;width:210px;"/>
+    			      </div>
+			</div>
+        
+        <div class="paenlall">
+    			      <div class="paenltop">
+    			          <div class="peanltitle" id="addrprovince_comment">地址-省</div>
+    			          <input type="hidden" id="addrprovince_name" />
+    			      </div>    				    
+    			      <div class="paenlbot">
+    			       正则:<input type="text" id="" style="margin-left:32px;width:210px;"/>
+    			       </div>
+			</div>
+			
+			<div class="paenlall">
+    			      <div class="paenltop">
+    			          <div class="peanltitle" id="addrcity_comment">地址-市</div>
+    			          <input type="hidden" id="addrcity_name" />
+    			      </div>    				    
+    			      <div class="paenlbot">
+    			       正则:<input type="text" id="" style="margin-left:32px;width:210px;"/>
+    			       </div>
+			</div>
+          
+         <div class="paenlall">
+    			      <div class="paenltop">
+    			          <div class="peanltitle" id="addrcounty_name">地址-县</div>
+    			          <input type="hidden" id="addrcounty_name" />
+    			      </div>    				    
+    			      <div class="paenlbot">
+    			       正则:<input type="text" id="" style="margin-left:32px;width:210px;"/>
+    			       </div>
+			</div>
+
+        <div class="paenlall">
+    			      <div class="paenltop">
+    			          <div class="peanltitle" id="addrtown_name">地址-乡</div>
+    			          <input type="hidden" id="addrtown_name" />
+    			      </div>    				    
+    			      <div class="paenlbot">
+    			       正则:<input type="text" id="" style="margin-left:32px;width:210px;"/>
+    			       </div>
+			</div>
+
+        <div class="paenlall">
+    			      <div class="paenltop">
+    			          <div class="peanltitle" id="addrvillage_name">地址-村</div>
+    			          <input type="hidden" id="addrvillage_name" />
+    			      </div>    				    
+    			      <div class="paenlbot">
+    			       正则:<input type="text" id="" style="margin-left:32px;width:210px;"/>
+    			       </div>
+			</div>
+
+        <div class="paenlall">
+    			      <div class="paenltop">
+    			          <div class="peanltitle" id="addrhouseid_name">地址-门牌号码</div>
+    			          <input type="hidden" id="addrhouseid_name" />
+    			      </div>    				    
+    			      <div class="paenlbot">
+    			       正则:<input type="text" id="" style="margin-left:32px;width:210px;"/>
+    			       </div>
+			</div>
+
+        <div class="paenlall">
+    			      <div class="paenltop">
+    			          <div class="peanltitle" id="registeretype_name">户籍类型代码</div>
+    			          <input type="hidden" id="registeretype_name" />
+    			      </div>    				    
+    			      <div class="paenlbot">
+    			       正则:<input type="text" id="" style="margin-left:32px;width:210px;"/>
+    			       </div>
+			</div>
+
+        <div class="paenlall">
+    			      <div class="paenltop">
+    			          <div class="peanltitle" id="nationality_name">国籍</div>
+    			          <input type="hidden" id="nationality_name" />
+    			      </div>    				    
+    			      <div class="paenlbot">
+    			       正则:<input type="text" id="" style="margin-left:32px;width:210px;"/>
+    			       </div>
+			</div>
+
+        <div class="paenlall">
+    			      <div class="paenltop">
+    			          <div class="peanltitle" id="marriedstatus_name">婚姻状况代码</div>
+    			          <input type="hidden" id="marriedstatus_name" />
+    			      </div>    				    
+    			      <div class="paenlbot">
+    			       正则:<input type="text" id="" style="margin-left:32px;width:210px;"/>
+    			       </div>
+			</div>
+
+        <div class="paenlall">
+    			      <div class="paenltop">
+    			          <div class="peanltitle" id="booldtype_name">ABO血型</div>
+    			          <input type="hidden" id="booldtype_name" />
+    			      </div>    				    
+    			      <div class="paenlbot">
+    			       正则:<input type="text" id="" style="margin-left:32px;width:210px;"/>
+    			       </div>
+			</div>
+
+        <div class="paenlall">
+    			      <div class="paenltop">
+    			          <div class="peanltitle" id="rh_name">RH血型</div>
+    			          <input type="hidden" id="rh_name" />
+    			      </div>    				    
+    			      <div class="paenlbot">
+    			       正则:<input type="text" id="" style="margin-left:32px;width:210px;"/>
+    			       </div>
+			</div>
+
+        <div class="paenlall">
+    			      <div class="paenltop">
+    			          <div class="peanltitle" id="workdate_name">参加工作日期</div>
+    			          <input type="hidden" id="workdate_name" />
+    			      </div>    				    
+    			      <div class="paenlbot">
+    			       正则:<input type="text" id="" style="margin-left:32px;width:210px;"/>
+    			       </div>
+			</div>
+
+        <div class="paenlall">
+    			      <div class="paenltop">
+    			          <div class="peanltitle" id="jobtypecode_name">职业类别代码</div>
+    			          <input type="hidden" id="jobtypecode_name" />
+    			      </div>    				    
+    			      <div class="paenlbot">
+    			       正则:<input type="text" id="" style="margin-left:32px;width:210px;"/>
+    			       </div>
+			</div>
+
+        <div class="paenlall">
+    			      <div class="paenltop">
+    			          <div class="peanltitle" id="educationcode_name">学历代码</div>
+    			          <input type="hidden" id="educationcode_name" />
+    			      </div>    				    
+    			      <div class="paenlbot">
+    			       正则:<input type="text" id="" style="margin-left:32px;width:210px;"/>
+    			       </div>
+			</div>
+
+        <div class="paenlall">
+    			      <div class="paenltop">
+    			          <div class="peanltitle" id="degreecode_name">学位代码</div>
+    			          <input type="hidden" id="degreecode_name" />
+    			      </div>    				    
+    			      <div class="paenlbot">
+    			       正则:<input type="text" id="" style="margin-left:32px;width:210px;"/>
+    			       </div>
+			</div>
+
+        <div class="paenlall">
+    			      <div class="paenltop">
+    			          <div class="peanltitle" id="orgcodes_name">机构代码</div>
+    			          <input type="hidden" id="orgcodes_name" />
+    			      </div>    				    
+    			      <div class="paenlbot">
+    			       正则:<input type="text" id="" style="margin-left:32px;width:210px;"/>
+    			       </div>
+			</div>
+
+        
+		   <div class="paenlall">
+    			      <div class="paenltop">
+    			          <div class="peanltitle" id="credentials_name">证件</div>
+    			          <input type="hidden" id="credentials_name" />
+    			          <a href="#" class="easyui-linkbutton tjbut" onclick="btnAddzj()">添加</a>
+    			          <input type="hidden" id="credentials_name"/>
+    			          <input type="hidden" id="credentials_comment"/>
+    			      </div>      				    
+    			      <div class="paenlbot" id="tjwbk1">
+    			          <div id="credentials"></div>
+    			      </div> 
+			 </div>
+			 
+			 
+			<div class="paenlall">
+		      <div class="paenltop">
+		          <div class="peanltitle" id="phones_name">电话</div>
+		          <input type="hidden" id="phones_name" />
+		          <a href="#" class="easyui-linkbutton tjbut" onclick="btnAddph()">添加</a>
+		          <input type="hidden" id="phones_name"/>
+		          <input type="hidden" id="phones_comment"/>
+               <div class="paenlbot" id="tjwbk">
+                    <div id="phones"></div>     
+                    
+		         </div>      				    
+			      </div> 
+         </div>
+      </div>
+</form>
+
+
+<!-- 弹出添加电话 -->
+<div id="div-ph-open" title="添加电话"  class="easyui-dialog textLW"  data-options="modal:true,closed:true" style="width:350px;height:200px;padding:10px 0 0 0;">
+    <form id="fmph">
+   <!--  <input type="hidden" id="orgId"> -->
+    <div class="mainW-288" >
+        <div class="itemLW-80 padT-4">类型：</div>
+        <div class="itemRW-208">
+          <select id="selectph" class="textLW" >
+            <option value=""></option>
+            <option value="01">本人电话</option>
+            <option value="02">配偶电话</option>
+            <option value="03">监护人电话</option>
+            <option value="04">家庭电话</option>
+            <option value="05">本人工作单位电话</option>
+            <option value="06">居委会电话</option>
+            <option value="07">传真</option>
+            <option value="08">QQ</option>
+            <option value="09">MSN</option>
+            <option value="10">电子邮件</option>
+            <option value="99">其他</option>
+          </select>        
+        </div>
+    </div>
+    <div class="mainW-288" >
+        <div class="itemLW-80 padT-4">正则：</div>
+        <div class="itemRW-208"><input id="zztextph"  required="true" class="textLW" type="text" /></div>
+    </div>
+        
+    <div class="itemLW-288 padTB-10"><a href="#" class="easyui-linkbutton" onclick="phadd()">添加</a></div>
+
+    </form>
+</div>
+
+<!-- 弹出添加证件 -->
+<div id="div-zj-open" title="添加证件"  class="easyui-dialog textLW"  data-options="modal:true,closed:true" style="width:350px;height:200px;padding:10px 0 0 0;">
+    <form id="fmzj">
+   <!--  <input type="hidden" id="orgId"> -->
+    <div class="mainW-288" >
+        <div class="itemLW-80 padT-4">类型：</div>
+        <div class="itemRW-208">
+          <select id="selectzj" class="textLW" >
+            <option value=""></option>
+            <option value="01">居民身份证</option>
+            <option value="02">港澳居民身份证</option>
+            <option value="03">居民户口簿</option>
+            <option value="04">护照</option>
+            <option value="05">军官证</option>
+            <option value="06">文职干部证</option>
+            <option value="07">士兵证</option>
+            <option value="08">驾驶执照</option>
+            <option value="09">残疾证</option>
+            <option value="10">医疗保险证</option>
+            <option value="11">出生证明</option>
+            <option value="12">家庭标识</option>
+            <option value="13">住院病案</option>
+            <option value="14">住院床位</option>
+            <option value="15">门诊病历</option>
+            <option value="16">死亡证明</option>
+            <option value="70">社保卡</option>
+            <option value="71">一卡通</option>
+            <option value="72">健康卡</option>
+            <option value="73">学生证</option>
+            <option value="80">母亲身份证</option>
+            <option value="81">父亲身份证</option>
+            <option value="90">本地唯一标识</option>
+            <option value="91">合作医疗卡</option>
+            <option value="92">自费卡</option>
+            <option value="99">其他标识</option>
+          </select>        
+        </div>
+    </div>
+    <div class="mainW-288" >
+        <div class="itemLW-80 padT-4">正则：</div>
+        <div class="itemRW-208"><input id="zztextzj"  required="true" class="textLW tjxjjyid" type="text" /></div>
+    </div>
+        
+    <div class="itemLW-288 padTB-10"><a href="#" class="easyui-linkbutton" onclick="zjadd()">添加</a></div>
+
+    </form>
+</div>
+
+
+
+<script type="text/jscript">
+ function phadd(){
+	 var selectphval=$("#selectph").val()
+	 var zztextph=$("#zztextph").val();
+	 if(zztextph!==""){ 
+	 $('#tjwbk').append("<div><div style='height:20px;margin-top:3px;'><select style='float:left; width:129px;' id='typeCodedh_" + selectphval + "' class='textLW' ><option value=''></option><option value='01'>本人电话</option><option value='02'>配偶电话</option><option value='03'>监护人电话</option><option value='04'>家庭电话</option><option value='05'>本人工作单位电话</option><option value='06'>居委会电话</option><option value='07'>传真</option><option value='08'>QQ</option><option value='09'>MSN</option><option value='10'>电子邮件</option><option value='99'>其他</option></select><input id='phones_regx_" + selectphval + "' style='float:left;margin-left:5px;' /></div></div>")	
+	 $("#typeCodedh_" + selectphval + "").val(selectphval);
+	 $("#phones_regx_" + selectphval + "").val(zztextph);	 
+	 $('#div-ph-open').dialog('close');
+	}
+	 }
+	
+function zjadd(){
+	 var selectzjval=$("#selectzj").val()
+	 var zztextzj=$("#zztextzj").val();
+	 if(zztextzj!==""){ 
+	 $('#tjwbk1').append("<div><div style='height:20px;margin-top:3px;'><select style='float:left; width:129px;' id='typeCodezj_" + selectzjval + "' class='textLW' ><option value=''></option><option value='01'>居民身份证</option><option value='02'>港澳居民身份证</option><option value='03'>居民户口簿</option><option value='04'>护照</option><option value='05'>军官证</option><option value='06'>文职干部证</option><option value='07'>士兵证</option><option value='08'>驾驶执照</option><option value='09'>残疾证</option><option value='10'>医疗保险证</option><option value='11'>出生证明</option><option value='12'>家庭标识</option><option value='13'>住院病案</option><option value='14'>住院床位</option><option value='15'>门诊病历</option><option value='16'>死亡证明</option><option value='70'>社保卡</option><option value='71'>一卡通</option><option value='72'>健康卡</option><option value='73'>学生证</option><option value='80'>母亲身份证</option><option value='81'>父亲身份证</option><option value='90'>本地唯一标识</option><option value='91'>合作医疗卡</option><option value='92'>自费卡</option><option value='99'>其他标识</option><input id='credentials_regx_" + selectzjval + "' style='float:left;margin-left:5px;' /></div></div>")	
+	 $("#typeCodezj_" + selectzjval + "").val(selectzjval);
+	 $("#credentials_regx_" + selectzjval + "").val(zztextzj);	 
+	 $('#div-zj-open').dialog('close');
+	}
+	 }
+
+
+
+
+ // function tjxjjy1(){
+  //{$('#xjjydiv').append('<div class="paenlall"><div class="paenltop"><div class="peanltitle" id="email_name"></div></div><div class="paenlbot">正则:<input type="text" id="email_regx_regx" style="margin-left:32px;width:210px;"/><a href="#" class="paneltjbut margina" plain="true" onclick="tjxjjy()">添加</a></div></div>');}
+ // }
+</script>

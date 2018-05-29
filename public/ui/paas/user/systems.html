@@ -1,0 +1,63 @@
+<!-- widget grid -->
+<section id="widget-grid" class="">
+  <!-- row -->
+  <div class="row">
+    <!-- NEW WIDGET START -->
+    <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <!-- Widget ID (each widget will need unique ID)-->
+      <div id="mgt_sys_system_getsystemlist_wid1" class="jarviswidget jarviswidget-color-blueDark" data-widget-fullscreenbutton="false" data-widget-colorbutton="true" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-deletebutton="false">
+        <header>
+          <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+          <h2>服务一览</h2>
+        </header>
+        <!-- widget div-->
+        <div>
+          <!-- widget edit box -->
+          <div class="jarviswidget-editbox">
+            <!-- This area used as dropdown edit box -->
+          </div>
+          <!-- end widget edit box -->
+          <!-- widget content -->
+          <div class="widget-body no-padding">
+            <!--<div class="widget-body-toolbar">-->
+                <form id="mgt_sys_system_getsystemlist_form" method="post" onsubmit="return false;" class="smart-form">
+                  <!--<div class="row">-->
+                   <!--<section class="col col-2"><button id="mgt_sys_system_getsystemlist_search" class="btn btn-info btn-sm" type="submit"><i class="fa fa-search fa-1"></i>&emsp;查 询&emsp;</button>-->
+                     
+                  <!-- </section>-->
+                  <!--</div>-->
+                </form>
+            <!--</div>-->
+            <div class="dataTables_wrapper">
+              <table id="mgt_sys_system_getsystemlist_dt" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>查看API列表</th>
+                    <th>系统ID</th>
+                    <th>系统名称</th>
+                    <th>状态</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+            <div id="mgt_sys_system_getsystemlist_pagination"></div>
+          </div>
+          <!-- end widget content -->
+        </div>
+        <!-- end widget div -->
+      </div>
+      <!-- end widget -->
+    </article>
+    <!-- WIDGET END -->
+  </div>
+  <!-- end row -->
+</section>
+<!-- end widget grid -->
+<div id="mgt_sys_system_getsystemlist_form2"></div>
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script src="user/systems.js"></script>
+<script type="text/javascript">
+  // DO NOT REMOVE : GLOBAL FUNCTIONS!
+  pageSetUp();
+  var mgt_system = new MgtSystemList();
+</script>

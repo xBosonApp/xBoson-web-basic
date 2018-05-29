@@ -1,0 +1,208 @@
+<script src="/t/paas/show/ui/comm.js" type="text/javascript"></script>
+<script type="text/javascript">
+var pageNum=1;
+var pagesize=10;
+var orgdata;
+
+//定义字典map
+var orgClassMap=new Map();
+var statusMap=new Map();
+var orgTypeMap=new Map();
+var regionMap=new Map();
+
+//main
+$(function(){
+	showDataorg();
+})
+// 获取数据字典
+function getselect(){
+  var url="mdm/dict/listget/";
+  var infoa = new Map();
+  infoa.put("stringsplit","VA0004.430,VA0004.62,VA0004.906,VA0004.03");
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"org","mdmSelect",infoa,itemsList);
+}
+// 回调函数
+function mdmSelect(data){
+  var info = new Map();
+  info.put("key",["typeCode2"]);
+  info.put("value",["typeName"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("org","orgClass",info,data.dataList["VA0004.430"]);//医院等级
+  LC_GetSelect("org","status",info,data.dataList["VA0004.62"]);//有效标记
+  // map获取
+  orgClassMap=LC_getDataMap(info,data.dataList["VA0004.430"]);
+  statusMap=LC_getDataMap(info,data.dataList["VA0004.62"]);
+  orgTypeMap=LC_getDataMap(info,data.dataList["VA0004.906"]);//卫生机构(组织)类别
+  regionMap=LC_getDataMap(info,data.dataList["VA0004.03"]);//行政区划代码
+}
+
+function firload(){
+pageNum=1;
+showDataorg();
+}
+function showDataorg(){
+// 数据格式验证通过以后
+// *******************请求数据**********************
+  var url ="mdm/orgs";
+  var itemsList=["orgCd","orgNm","orgClass","status"];
+	var info= new Map();
+  info.put("pageNum",pageNum);
+  info.put("pageSize",pagesize);
+  LC_AjaxGet(MDMBaseUrl+url,"org","orgcallback",info,itemsList);
+}
+
+// 回调函数
+function orgcallback(retData){
+	orgdata=retData;
+	$('#div-org').datagrid({
+	      nowrap: false,
+	      striped: true,
+	      collapsible:false,
+				pagination:true,
+				border:false,
+				title:'机构列表',
+				pageNumber:pageNum,
+				pageSize: pagesize,
+				loadMsg:"正在载入...",
+        pageList: [10,20,50,100,200],
+        singleSelect:true,        
+				data:orgdata.dataList,
+				fitColumns:true,
+				columns:[[
+				   {field:'orgCd',title:'组织机构代码',width:90},
+				   {field:'orgNm',title:'机构名称',width:220},
+				   {field:'orgClass',title:'机构等级',width:120,formatter:function(value){return LC_getMapValue(value,orgClassMap);}},
+				   {field:'region',title:'行政区划代码',width:180,formatter:function(value){return LC_getMapValue(value,regionMap);}},
+				   {field:'orgType',title:'卫生机构(组织)类别',width:140,formatter:function(value){return LC_getMapValue(value,orgTypeMap);}},
+				   {field:'status',title:'有效标记',width:180,formatter:function(value){return LC_getMapValue(value,statusMap);}}
+				]],
+                onDblClickRow: function (rowIndex) {
+                  openRoleDiv(rowIndex);
+                },
+                onClickRow: function (rowIndex) {
+		          rowno=rowIndex;
+		        },
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true,
+			   height:380,
+			   width:870
+		}); 
+
+	   var pager = $('#div-org').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pageNum=pageNumber;
+		           pagesize=pageSize;
+		           showDataorg();
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:pagesize,pageNumber:pageNum,total:orgdata.count});
+
+		};
+}
+
+function openRoleDiv(rowIndex){
+	self.parent.orgId=orgdata.dataList[rowIndex].orgId;
+		var openRoleDiv = self.parent.$("#openRoleDiv");
+		openRoleDiv.window({
+				  href:"organ/orgupdateinsert.html",
+	              title: '修改机构信息',
+	              width: 750,
+	              height: 460
+	          });
+}
+
+// 编辑
+function edit(){
+		self.parent.orgId=orgdata.dataList[rowno].orgId;
+		var openRoleDiv = self.parent.$("#openRoleDiv");
+		openRoleDiv.window({
+				 href:"organ/orgupdateinsert.html",
+	              title: '编辑机构信息',
+	              width: 750,
+	              height: 460,
+	              onBeforeClose:function(){
+	              showDataorg();
+　　                }
+	          });
+}
+
+// 添加
+function add(){
+		self.parent.orgId="";	
+		var openRoleDiv = self.parent.$("#openRoleDiv");
+		openRoleDiv.window({
+				 href:"organ/orgupdateinsert.html",
+	              title: '添加机构',
+	              width: 750,
+	              height: 460,
+	              onBeforeClose:function(){
+	              showDataorg();
+　　                }
+	          });
+}
+	
+</script>
+<style type="text/css">
+.padding1 {
+  padding: 10px 0 0 7px;
+}
+</style>
+<div class="padding1">
+  <div class="mainW-872">
+    <div class="easyui-panel" title="机构查询">
+      <div class="clearfix">
+        <div class="flPadTB-10">
+          <form id="org" style="margin: 0;">
+            <div class="mainW-816">
+              <div class="itemsW-304">
+                <div class="itemLW-112">组织机构代码：</div>
+                <div class="itemRW-160"><input id="orgCd" class="textLW" type="text"></div>
+              </div>
+              <div class="itemsW-304">
+                <div class="itemLW-112">机构名称：</div>
+                <div class="itemLW-160"><input id="orgNm" class="textLW" type="text"></div>
+              </div>
+              <div class="itemsW-304">
+                <div class="itemLW-112">机构等级：</div>
+                <div class="itemLW-160">
+                  <select id="orgClass" class="textLW"></select>
+                </div>
+              </div>
+              <div class="itemsW-304">
+                <div class="itemLW-112">有效标记：</div>
+                <div class="itemRW-160">
+                  <select id="status" class="textLW"></select>
+                </div>
+              </div>
+              <div class="itemW-16"><a class="easyui-linkbutton" href="#" onclick="firload()">查询</a></div>
+            </div>
+          </form>
+        </div>
+        <div class="mainW" style="border-top: 1px solid #95B8E7;">
+          <table id="div-org" toolbar="#toolbar">
+          </table>
+          <div id="toolbar">
+            <a class="easyui-linkbutton" href="javascript:void(0)" iconcls="icon-add" onclick="add()" plain="true">添加</a> <a class="easyui-linkbutton" href="javascript:void(0)" iconcls="icon-edit" onclick="edit()" plain="true">编辑</a> </div>
+          <div id="ceshiid" style="display: none;">
+            <script src="datagrid/ceshi.js" type="text/javascript"></script>
+            <input onclick="ceshi()" type="button" value="测试"><br></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+// 画面初始化处理
+$(function () {
+  $("#orgCd").focus();
+  orgcallback("");  // 空表格加载
+  getselect();  // 获取下拉选项数据
+
+});
+</script>

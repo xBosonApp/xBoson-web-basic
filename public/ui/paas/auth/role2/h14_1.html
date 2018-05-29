@@ -1,0 +1,150 @@
+<!--页面添加修改-->
+<div class="modal fade" id="role2_h14_1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" name="role2_h14_1_cancel" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title"><span name="role2_h14_1_span"></span></h4>
+			</div>
+			<div class="modal-body">
+			  <form id="role2_h14_1_form" onsubmit="return false;">
+  			  <div class="row">
+  			    <div class="col col-md-6">
+    			    <section>
+    			      <label>页面ID</label>
+  			        <input class="form-control" type="text" name="pageid" placeholder="页面ID"/>
+    			    </section>
+  			    </div>
+  			    <div class="col col-md-6">
+    			    <section>
+    			      <label>页面名称</label>
+  			        <input class="form-control" type="text" name="pagenm" placeholder="页面名称"/>
+    			    </section>
+  			    </div>
+  			  </div>
+  			  <div class="row">
+  			    <div class="col col-md-10">
+    			    <section>
+    			      <label>页面路径</label>
+  			        <input class="form-control" type="text" name="page_path" placeholder="页面路径"/>
+    			    </section>
+            </div>
+  			    <section class="col col-md-2">
+  			      <label>&emsp;</label>
+  			      <button type="button" name="selectURI" class="btn btn-default btn-sm">选择URI</button>
+  			    </section>
+  			  </div>
+			  </form>
+			</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" name="role2_h14_1_save">保存</button>
+        <button type="button" class="btn btn-default" name="role2_h14_1_cancel">关闭</button>
+      </div>
+		</div>
+	</div>
+</div>
+<div id="role2_h14_1_selecturi"></div>
+<script>
+  function role2_h14_1(flag,rowdata,savecb,cancelcb){
+    var modal = $('#role2_h14_1');
+    var formDiv = $('#role2_h14_1_form');
+    var title_span = modal.find('[name=role2_h14_1_span]');
+    
+    var selecturiDiv = $('#role2_h14_1_selecturi');
+    
+    function Init(){
+      InitData();
+      Event();
+      modal.modal('show');
+    }
+    
+    //修改时铺数据
+    function InitData(){
+      if(flag=='i'){
+        title_span.text('添加');
+      }
+      if(flag=='u'){
+        title_span.text('修改');
+        zy.g.am.app='auth';
+			  zy.g.am.mod='role_page';
+			  zy.net.post('api/getpage_upd',function(msg){
+			    if(msg){
+			      formDiv.json2form(msg.result[0]);
+			      formDiv.find('[name=pageid]').attr('readonly','readonly');
+			    }
+			  },{'pageid':rowdata.pageid});
+      }
+    }
+    
+    function Event(){
+      //保存按钮
+      modal.find('[name=role2_h14_1_save]').click(function(){
+        formDiv.submit();
+      });
+      //取消按钮
+      modal.find('[name=role2_h14_1_cancel]').click(function(){
+        modal.modal('hide');
+        cancelcb&&cancelcb();
+      });
+      
+      //表单form
+      formDiv.validate({
+        // Rules for form validation
+    		rules: {
+    			pageid: {
+    				required: true,
+    				maxlength: 12
+    			},
+    			pagenm: {
+    				required: true
+    			},
+    			page_path: {
+    				required: true
+    			}
+    		},
+    		// 验证成功后保存
+    		submitHandler: function (form) {
+    			if(flag=='i'){
+    			  zy.g.am.app='auth';
+			      zy.g.am.mod='role_page';
+    			  zy.net.post('api/addpage',function(msg){
+    			    if(msg){
+    			      zy.ui.msg('提示信息：','保存成功','s');
+    			      modal.modal('hide');
+    			      savecb&&savecb();
+    			    }
+    			  },formDiv.serialize());
+    			}else if(flag=='u'){
+    			  zy.g.am.app='auth';
+			      zy.g.am.mod='role_page';
+    			  zy.net.post('api/updpage',function(msg){
+    			    zy.ui.msg('提示信息：','保存成功','s');
+    			    modal.modal('hide');
+    			    savecb&&savecb();
+    			  },formDiv.serialize());
+    			}
+    		},
+    		// Do not change code below
+    		errorPlacement: function (error, element) {
+    			error.insertAfter(element.parent());
+    		}
+      });
+      //选择URI
+      formDiv.find('[name=selectURI]').click(function(){
+        modal.modal('hide');
+        zy.net.loadHTML('auth/role2/h14_2.html',selecturiDiv,function(){
+          uilisttree(function(_uri){
+            formDiv.find('[name=page_path]').val(_uri);
+            modal.modal('show');
+          },function(){
+            modal.modal('show');
+          });
+        });
+      });
+    }
+    
+    Init();
+  }
+</script>

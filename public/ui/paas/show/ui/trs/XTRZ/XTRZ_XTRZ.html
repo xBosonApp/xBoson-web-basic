@@ -1,0 +1,233 @@
+<script type="text/javascript" language="JavaScript" src="/t/paas/show/ui/comm.js"></script>		
+<script type="text/javascript">
+
+var pagenum=1;
+var pagesize=10;
+var xtrzdata;
+var tsMap=new Map();
+var aoidMap=new Map();
+var ysMap=new Map();
+$(function () {
+    var tommorrow=new Date();
+    $("#startatime").val(LC_FormatYMD(tommorrow.setDate(tommorrow.getDate())));
+	$("#endatime").val(LC_FormatYMD(tommorrow.setDate(tommorrow.getDate())));
+   getselectdys();
+   getselectdts();
+   getselectdz();
+   getselectdaoid();
+
+ 
+	
+});
+$(function () {
+setTimeout(function(){
+	 showDataxtrz()
+	}, 600); 
+});
+function xtrzcallback(retData){
+
+	xtrzdata=retData;
+		$('#div_xtrz').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+				pagination:true,
+				pageNumber:pagenum,
+				pageSize: pagesize,
+				loadMsg:"正在载入...",
+				singleSelect:true,
+				//border:false,
+                pageList: [10,20,50,100,200],
+				data:xtrzdata.dataList,
+				columns:[[
+				   {field:'ts',title:'事件类型',width:100,align:'center',
+					 formatter:function(value){
+					  return LC_getMapValue(value,tsMap);
+					 }},
+				   {field:'utime',title:'操作时间',width:150,align:'center',
+				   formatter:function(value){
+					  return LC_SubStr(value,0,10);
+					 }},
+				   {field:'uuid',title:'操作工号',width:150,align:'center'},
+				   {field:'pname',title:'人员名称',width:100,align:'center'},
+				   {field:'goalhid',title:'附属医疗机构',width:200,align:'center',
+					 formatter:function(value){
+					  return LC_getMapValue(value,aoidMap);
+					 }},
+				   {field:'cid',title:'用户角色',width:100,align:'center',
+					 formatter:function(value){
+					  return LC_getMapValue(value,ysMap);
+					 }}
+				]],                  
+                onDblClickRow: function (rowIndex) {
+                  openRoleDiv(rowIndex);
+                },
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true
+		}); 
+
+	   var pager = $('#div_xtrz').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pagenum=pageNumber;
+		           pagesize=pageSize;
+		          showDataxtrz();
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:pagesize,pageNumber:pagenum,total:xtrzdata.count});
+
+		};
+}
+function showDataxtrz(){
+	//LC_Resetting("xtrzjs");
+	//var checkpcthrItems=["startatime","endatime"];
+	//LC_IsCheckNotNull("xtrzjs",checkpcthrItems);
+	//if(retCheckFlg){
+	var url ="xtrzcx/"; 	
+	var itemsList=["startatime","endatime","ts"];	
+	var info= new Map();	
+	info.put("pagenum",pagenum);
+	info.put("pagesize",pagesize);
+	LC_AjaxGet(TRSBaseUrl+url,"xtrzjs","xtrzcallback",info,itemsList);
+	//}
+	}
+//数据字典提取下拉框
+function  getselectdz(){
+  var url="mdm/dict/listget/";
+  var infoa = new Map();
+  infoa.put("stringsplit","VA0004.912");
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"xtrzjs","mdmSelectdz",infoa,itemsList);
+}
+function mdmSelectdz(data){
+  var info = new Map();
+  info.put("key",["typeCode2"]);
+  info.put("value",["typeName"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("xtrzjs","ts",info,data.dataList["VA0004.912"]);
+}
+//转换事件类型
+function  getselectdts(){
+  var url="mdm/dict/listget/";
+  var infoa = new Map();
+  infoa.put("stringsplit","VA0004.912");
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"","mdmSelectdts",infoa,itemsList);
+}
+function mdmSelectdts(data){
+  var info = new Map();
+  info.put("key",["typeCode2"]);
+  info.put("value",["typeName"]);
+  tsMap=LC_getDataMap(info,data.dataList["VA0004.912"]);
+}
+//转换机构
+function  getselectdaoid(){
+  var url="mdm/orgs/";
+  var infoa = new Map();
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"","mdmSelectdaoid",infoa,itemsList);
+}
+function mdmSelectdaoid(data){
+  var info = new Map();
+  info.put("key",["orgId"]);
+  info.put("value",["orgNm"]);
+  aoidMap=LC_getDataMap(info,data.dataList);
+}
+//转换用户角色
+function  getselectdys(){
+  var url="mdm/org/listSta/";
+  var infoa = new Map();
+  infoa.put("stringsplit",self.parent.orgid);
+  var itemsList= [];
+  LC_AjaxGet(MDMBaseUrl+url,"xtrzjs","mdmSelectdys",infoa,itemsList);
+}
+function mdmSelectdys(data){
+  var info = new Map();
+  info.put("key",["staffId"]);
+  info.put("value",["name"]);
+  ysMap=LC_getDataMap(info,data.dataList);
+}
+</script>
+<style>
+body{ font-size:12px;}
+.padding1{padding:10px 0 0 7px;}
+</style>
+<div class="padding1">
+<div class="mainsW-912" style="height:600px;">
+    <div class="mainsW-912">
+		<div class="easyui-panel" title="检索信息" style="height:110px;">
+            <div class="flPadTB-10">
+            <form id="xtrzjs" style=" margin:0;">
+            	<div class="clearfix">
+                    <div class="mainW-224" >
+                        <div class="itemLW-112 padT-4">开始时间：</div>
+                        <div class="itemRW-112"><input id="startatime"  class="Wdate" onClick="WdatePicker()" type="text" style="width:112px;" /></div>
+                     </div>
+                     <div class="mainW-224" >
+                        <div class="itemLW-112 padT-4">结束时间：</div>
+                        <div class="itemRW-112"><input id="endatime"  class="Wdate" onClick="WdatePicker()" type="text" style="width:112px;" /></div>
+                     </div>
+                     <div class="mainW-224" >
+                        <div class="itemLW-112 padT-4">事件类型：</div>
+                        <div class="itemRW-112"><select id="ts"  class="textLW" name="dept"></select></div>
+                     </div>
+                 </div>
+                 </form>
+                 <div class="itemLW-896" style="padding:0 0 5px 0;"><span><a href="#" id="delaysearch" class="easyui-linkbutton" onclick=" showDataxtrz()">检索</a></span><!--<span class="padLR-10"><a href="#" class="easyui-linkbutton">打印</a></span><span class="padLR-10"><a href="#" class="easyui-linkbutton">导出EXCEL</a></span>--></div>
+             </div>
+             
+        </div>
+		<table id="div_xtrz"></table>    
+    </div>
+</div>
+</div>
+
+
+
+<script type="text/javascript">
+//搜索延迟两秒
+var oInput = document.getElementById('delaysearch');
+        oInput.onclick = function(){
+	setTimeout(function(){
+		pagenum=1;
+			pagesize=10;
+ showDataxtrz();
+}, 300);
+		$("#delaysearch").linkbutton({  
+			disabled:true  
+			}); 
+        setTimeout(function(){
+			$("#delaysearch").linkbutton({  
+			disabled:false  
+			}); 
+		},1000*2);
+}
+
+//添加修改延迟五秒
+var oInput = document.getElementById('delayalter');
+        oInput.onclick = function(){
+		$("#delayalter").linkbutton({  
+			disabled:true  
+			}); 
+        setTimeout(function(){
+			$("#delayalter").linkbutton({  
+			disabled:false  
+			}); 
+		},1000*5);
+}
+</script>
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,171 @@
+<!-- NEW WIDGET START -->
+<link rel="stylesheet" href="lib/js/plugin/bootstrap-datepicker/datepicker3.css" type="text/css" />
+<style type="text/css">
+	/*.ztree * {*/
+	/*	font-family: Consolas, Microsoft YaHei, SimHei, STHeiti, SimSun, STSong, sans-serif;*/
+	/*	font-size: 16px;*/
+	/*	font-weight: 400;*/
+	/*}*/
+	.ztree li {
+		padding: 7px;
+	}
+	.selectnode {
+		color : #3276B1;
+	}
+</style>
+<article class="col-xs-12 col-sm-12 col-md-12 col-lg-5 chart-template">
+	<!-- Widget ID (each widget will need unique ID)-->
+
+	<div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0">
+		<header>
+			<h2 class='chart-title'></h2>
+					<div class="widget-toolbar">
+
+						<div class="btn-group">
+								<button class="btn btn-xs btn-warning" style="display: none;" index="savePlate">
+									保存
+								</button>
+								<button class="btn btn-xs btn-warning dropdown-toggle" data-toggle="dropdown" style="display: none;">
+									保存 <i class="fa fa-caret-down"></i>
+								</button>
+								<ul class="dropdown-menu">
+									<li>
+										<a href="javascript:void(0);" index="save">
+											保存模块
+										</a>
+									</li>
+									<li>
+										<a href="javascript:void(0);" index="saveAs">
+											另存模块
+										</a>
+									</li>
+									</li>
+									<li class="divider"></li>
+									<li>
+										<a href="javascript:void(0);">
+											取消
+										</a>
+									</li>
+								</ul>
+						</div>
+					</div>
+
+		</header>
+		<!-- widget div-->
+		<div>
+			<!-- widget edit box -->
+			<div class="jarviswidget-editbox">
+				<div class="navbar-collapse bg-color-white">
+					<div class="navbar-form navbar-left">
+						<button index="select" class="btn btn-primary" style="margin: 5px;">
+							显示KPI列表
+						</button>
+						<button class="btn btn-primary" name="oldmod" style="margin: 5px;">
+							显示模块列表
+						</button>
+						<button class="btn btn-primary" index="SearchDiv" style="margin: 5px;display: none;">
+							显示查询条件
+						</button>
+						<button index="config" class="btn btn-primary" style="margin: 5px;">
+							配置图表
+						</button>
+
+						<div class="form-group">
+							<button index="table"  class="btn btn-primary" style="margin: 5px;">
+								显示表格
+							</button>
+							<button class="btn btn-danger" type="button" index="clear" style="margin: 5px;">
+								重置
+							</button>
+							<div class="btn-group dropdown">
+
+							</div>
+
+							<!--<div class="btn-group dropdown">
+								<button class="btn btn-primary" type="button" index="save">
+									保存模块
+								</button>
+								<button class="btn btn-primary" type="button" index="saveAs">
+									保存模块
+								</button>
+							</div>-->
+
+							<!--<button class="btn btn-sm btn-success" type="button" index="savePlate">
+							保存画面
+							</button>-->
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+			<!-- end widget edit box -->
+			<!-- widget content -->
+			<div class="widget-body">
+				<div class="row">
+					<div id="searchDiv" class="navbar-form navbar-left" style="background-color:#ffffff;width:55%;z-index: 1000;position: absolute;">
+						<div class="class="form-group"">
+							<header role="heading" class="alert alert-info" style="width: 100%;margin: 5px;">
+								查询条件
+								<button index="closeSearchDiv"  class="btn btn-xs btn-default pull-right">
+									<i class="fa fa-times"></i>
+								</button>
+								<button index="minSearchDiv"  class="btn btn-xs btn-default pull-right">
+									<i class="fa fa-minus"></i>
+								</button>
+							</header>
+							<span class='date_widget' style="margin: 5px;"></span>
+							<button index="search" class="btn btn-sm btn-default" style="margin: 5px;">
+								查询
+							</button>
+						</div>
+					</div>
+					<div id="KpiTree" style="background-color:#ffffff;height: 350px;width:25%;z-index: 1000;position: absolute;border:1px solid;">
+						<header role="heading" class="alert alert-info">
+							KPI列表
+							<input style="width: 60%;" index = "searchTree">
+							<button index="closeKpi"  class="btn btn-xs btn-default pull-right">
+								<i class="fa fa-times"></i>
+							</button>
+						</header>
+						<div style="height: 80%;width:100%;overflow:auto;">
+							<ul class="ztree"></ul>
+						</div>
+					</div>
+					<div id="ModTree" style="background-color:#ffffff;height: 350px;width:25%;position: absolute;z-index: 1000;border:1px solid">
+						<header role="heading" class="alert alert-info">
+							模块列表
+							<button index="closeMod"  class="btn btn-xs btn-default pull-right">
+								<i class="fa fa-times"></i>
+							</button>
+						</header>
+						<div style="height: 80%;width:100%;overflow:auto;">
+							<ul class="ztree"></ul>
+						</div>
+					</div>
+					<div id="container1" class="has-legend dropable chart-containner"
+					index="chart-containner" style="position: relative;"></div>
+
+					<!--<div style="position: relative;opacity: 1;border: 1px solid #F00;background: #FFF;z-index: 1000;">
+					<div>
+					<button class="btn-warning">浮动测试</button>
+					</div>
+					</div>-->
+				</div>
+				<div class="widget-footer">
+
+				</div>
+			</div>
+		</div>
+		<!-- end widget div -->
+
+	</div>
+	<!-- end widget -->
+</article>
+<div class="modelform"></div>
+
+<script type="text/javascript">
+
+$('.chart-template').hide();
+
+</script>

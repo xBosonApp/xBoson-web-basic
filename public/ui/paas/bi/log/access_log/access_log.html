@@ -1,0 +1,113 @@
+ <!-- widget grid -->
+<section id="widget-grid" class="">
+	<!-- row -->
+	<div class="row">
+		<!-- NEW WIDGET START -->
+		<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div id="log_access_log_wid" class="jarviswidget jarviswidget-color-blueDark" data-widget-fullscreenbutton="false" data-widget-colorbutton="true" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-deletebutton="false">
+				<header>
+					<!--<span class="widget-icon"> <i class="fa fa-table"></i> </span>-->
+					<h2>API请求日志-基础分析</h2>
+				</header>
+				<!-- widget div-->
+				<div>
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+					</div>
+					<!-- end widget edit box -->
+					<!-- widget content -->
+					<div class="widget-body no-padding">
+						<div class="widget-body-toolbar">
+								<form id="log_access_log_search_form" method="post" onsubmit="return false;" class="smart-form">
+								  <div class="row">
+								    <section class="col col-2">
+  										<div class="input-group">
+  										  <span class="input-group-addon">开始日期</span>
+  											<input class="form-control" type="text" name="dt_from" placeholder="开始日期">
+  										</div>
+  									</section>
+  									<section class="col col-1">
+  									  <div class="input-group">
+											  <input class="form-control" type="text" name="time_from" placeholder="开始时间"/>
+											</div>
+  									</section>
+  									<section class="col col-2">
+  										<div class="input-group">
+  										  <span class="input-group-addon">结束日期</span>
+  											<input class="form-control" type="text" name="dt_to" placeholder="结束日期">
+  										</div>
+  									</section>
+  									<section class="col col-1">
+  									  <div class="input-group">
+											  <input class="form-control" type="text" name="time_to" placeholder="结束时间"/>
+											</div>
+  									</section>
+  									<section class="col col-2">
+  										<label class="input">
+  											<input type="hidden" name="userid" data-type="select2" placeholder="用户ID">
+  										</label>
+  									</section>
+  									<section class="col col-2">
+  										<label class="input">
+  											<input type="hidden" name="access_cd" data-type="select2" placeholder="登录状态">
+  										</label>
+  									</section>
+  									<section class="col col-2">
+  									<button id="log_access_log_search" class="btn btn-info btn-sm" type="submit"><i class="fa fa-search fa-1"></i>&emsp;查 询&emsp;</button>
+  									</section>
+								  </div>
+								  
+								</form>
+							<div class="row">
+							  <div class="col-md-12">
+    							<div class="pull-right">
+                    <b name="total_count"></b>
+                  </div>
+                </div>
+							</div>
+						</div>
+						 <!--class="dataTables_wrapper"-->
+						<div class="table-responsive">
+							<table id="log_access_log_dt" class="table table-bordered table-striped">
+								<thead>
+									<tr>
+									<th>用户ID</th>
+										<th>日志产生时间</th>
+										<th>日志级别</th>
+										<th>日志异常类型</th>
+										<th>日志内容</th>
+										<th>请求ID</th>
+										<th>会话标识符</th>
+										<th>登录状态代码</th>
+										<th>应用ID</th>
+										<th>创建时间</th>
+										
+									</tr>
+								</thead>
+							</table>
+						</div>
+					</div>
+					<!-- end widget content -->
+					<div id="log_access_log_pagination"></div>
+				</div>
+				<!-- end widget div -->
+			</div>
+			<!-- end widget -->
+		</article>
+		<!-- WIDGET END -->
+	</div>
+	<!-- end row -->
+</section>
+<!-- end widget grid -->
+<script src="lib/js/plugin/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<!-- BOOTSTRAP UI + Slider -->
+<!-- <script src="lib/js/plugin/bootstrap-editable/js/bootstrap-editable.min.js"></script> -->
+<script src="bi/log/access_log/access_log.js"></script>
+<script type="text/javascript">
+	// DO NOT REMOVE : GLOBAL FUNCTIONS!
+	pageSetUp();
+	var Access_logObj = new Access_log();
+</script>

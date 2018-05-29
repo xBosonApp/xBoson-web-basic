@@ -1,0 +1,166 @@
+﻿<script type="text/javascript" language="JavaScript" src="/t/paas/show/ui/comm.js"></script>	
+<script type="text/javascript">
+$(function () {
+   showDataxxbj();
+});
+function showDataxxbj(){
+		$('#div_xxbj').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+				pagination:true,
+				pageNumber:0,
+				pageSize: 0,
+				loadMsg:"正在载入...",
+				//border:false,
+                pageList: [10,20,50,100,200],
+				//data:dataInfo.dataList,
+				columns:[[
+				   {field:'test',title:'员工工号',width:150,align:'center'},
+				   {field:'test',title:'员工姓名',width:100,align:'center'},
+				   {field:'test',title:'联系电话',width:100,align:'center'},
+				   {field:'test',title:'附属医疗机构',width:200,align:'center'},
+				   {field:'test',title:'用户角色',width:100,align:'center'}
+				]],                  
+                onDblClickRow: function (rowIndex) {
+                  openRoleDiv(rowIndex);
+                },
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true
+		}); 
+
+	   var pager = $('#div_xxbj').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           PageNumber=pageNumber;
+		           PageSize=pageSize;
+		           loading();
+		        }
+			});		
+		 
+			//$(pager).pagination({pageSize:PageSize,pageNumber:PageNumber,total:dataInfo.datalist.count});
+
+		};
+	
+	}
+	function addinfo(){
+		$('#div-addinfo').dialog('open');
+	}
+	function alterinfo(){
+		$('#div-alterinfo').dialog('open');
+	}
+	function confirm1(){
+		$.messager.confirm('提示信息', '确认要删除该机构信息?', function(r){
+			if (r){
+				alert('confirmed: '+r);
+			}
+		});
+	}
+	
+</script>
+<style>
+body{ font-size:12px;}
+.padding1 {padding: 10px 0 0 7px;}
+</style>
+<div class="mainsW-912 padding1" style="height:600px;">
+    <div class="mainsW-912">
+		<div class="easyui-panel" title="查询信息">
+            <div class="flPadTB-10">
+            	<div class="clearfix">
+                    <div class="mainW-224" >
+                        <div class="itemLW-112 padT-4">用户工号：</div>
+                        <div class="itemRW-112"><input  class="textLW" type="text" /></div>
+                     </div>
+                     <div class="mainW-224" >
+                        <div class="itemLW-112 padT-4">用户名称：</div>
+                        <div class="itemRW-112"><input  class="textLW" type="text" /></div>
+                     </div>
+                     <div class="mainW-224" >
+                        <div class="itemLW-112 padT-4">联系电话：</div>
+                        <div class="itemRW-112"><input  class="textLW" type="text" /></div>
+                     </div>
+                     <div class="itemLW-224" >
+                        <a href="#" class="easyui-linkbutton">检索</a>
+                     </div>
+                 </div>
+                 
+             </div>
+        </div>
+        <table id="div_xxbj"></table>
+        
+        <div class="butCenter flPadTB-10">
+        	<a href="javascript:void(0)" class="easyui-linkbutton" onClick="addinfo();">新增用户信息</a>
+        	<a href="javascript:void(0)" class="easyui-linkbutton" onClick="alterinfo();">修改用户信息</a>
+        	<a href="javascript:void(0)" class="easyui-linkbutton" onClick="confirm1();">删除</a>
+        </div>
+        <!-- 新增用户信息 -->
+        <div id="div-addinfo" class="easyui-dialog" title="新增用户信息" data-options="width:385,modal:true,closed:true">
+            <div class="mainW-368 flPadTB-10" >
+                <div class="itemLW-112 padT-4">员工工号：</div>
+                <div class="itemRW-208"><input class="textLW" type="text" input/></div>
+                <div class="itemLW-112 padT-4">登陆密码：</div>
+                <div class="itemRW-208"><input class="textLW" type="text" input/></div>
+                <div class="itemLW-112 padT-4">确认密码：</div>
+                <div class="itemRW-208"><input class="textLW" type="text" input/></div>
+                <div class="itemLW-112 padT-4">用户姓名：</div>
+                <div class="itemRW-208"><input class="textLW" type="text" input/></div>
+                <div class="itemLW-112 padT-4">联系电话：</div>
+                <div class="itemRW-208"><input class="textLW" type="text" input/></div>
+                <div class="itemLW-112 padT-4">所属机构：</div>
+                <div class="itemRW-208"><select class="textLW" name="dept"><option>aitem1</option></select></div>
+                <div class="itemLW-112 padT-4">&nbsp;</div>
+                <div class="itemRW-208"><input name="" type="checkbox" value="" />管理员</div>
+            </div>
+            <div class="butCenter flPadTB-10">
+                <span class="padLR-10"><a href="javascript:void(0)" class="easyui-linkbutton" onClick="revocationDialog()">确定</a></span>
+                <span class="padLR-10"><a href="javascript:void(0)" class="easyui-linkbutton" onclick="javascript:$('#div-addinfo').dialog('close')">取消</a></span>
+            </div>
+        </div>
+        <!-- 修改用户信息 -->
+        <div id="div-alterinfo" class="easyui-dialog" title="修改用户信息" data-options="width:385,modal:true,closed:true">
+            <div class="mainW-368 flPadTB-10" >
+                <div class="itemLW-112 padT-4">员工工号：</div>
+                <div class="itemRW-208 padT-4"><span id="">123456</span></div>
+                <div class="itemLW-112 padT-4">登陆密码：</div>
+                <div class="itemRW-208"><input class="textLW" type="text" input/></div>
+                <div class="itemLW-112 padT-4">确认密码：</div>
+                <div class="itemRW-208"><input class="textLW" type="text" input/></div>
+                <div class="itemLW-112 padT-4">用户姓名：</div>
+                <div class="itemRW-208"><input class="textLW" type="text" input/></div>
+                <div class="itemLW-112 padT-4">联系电话：</div>
+                <div class="itemRW-208"><input class="textLW" type="text" input/></div>
+                <div class="itemLW-112 padT-4">所属机构：</div>
+                <div class="itemRW-208"><select class="textLW" name="dept"><option>aitem1</option></select></div>
+                <div class="itemLW-112 padT-4">&nbsp;</div>
+                <div class="itemRW-208"><input name="" type="checkbox" value="" />管理员</div>
+            </div>
+            <div class="butCenter flPadTB-10">
+                <span class="padLR-10"><a href="javascript:void(0)" class="easyui-linkbutton" onClick="revocationDialog()">确定</a></span>
+                <span class="padLR-10"><a href="javascript:void(0)" class="easyui-linkbutton" onclick="javascript:$('#div-alterinfo').dialog('close')">取消</a></span>
+            </div>
+        </div>
+        
+        
+        
+        
+    </div>
+    
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

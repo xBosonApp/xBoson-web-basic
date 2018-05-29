@@ -1,0 +1,38 @@
+<!-- rbac_prj_mgt10 服务选择页面 -->
+<div class="modal fade" id="rbac_prj_mgt10_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title">选择服务</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <section class="col-sm-6">
+            <p>&nbsp;API&nbsp;服务</p>
+            <ul id="tree_api" class="ztree"></ul>
+          </section>
+          <section class="col-sm-6">
+            <p>&nbsp;模型服务</p>
+            <ul id="tree_model" class="ztree"></ul>
+          </section>
+        </div>
+      </div>
+      <form method="post" onsubmit="return false;" class="smart-form">
+        <footer>
+          <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">取消</button>
+          <button type="submit" class="btn btn-primary btn-xs" name="rbac_prj_mgt10_submit">确定</button>
+        </footer>
+      </form>
+    </div>
+  </div>
+</div>
+<!--<div id="rbac_prj_mgt10_prjid" data-prjid='###query.prjid###'></div>-->
+<!--<div id="rbac_prj_mgt10_pageid" data-pageid='###query.pageid###'></div>-->
+<!--<div id="rbac_prj_mgt10_elementid" data-elementid='###query.elementid###'></div>-->
+<!--<div id="rbac_prj_mgt10_api" data-api='###query.api###'></div>-->
+<!--<div id="rbac_prj_mgt10_model" data-model='###query.model###'></div>-->
+<!--<div id="rbac_prj_mgt10_mgt09_selfid" data-mgt09_selfid='###query.mgt09_selfid###'></div>-->
+<script src="rbac/prj_mgt/rbac_prj_mgt10.js"></script>

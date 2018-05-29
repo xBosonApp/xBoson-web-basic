@@ -1,0 +1,359 @@
+﻿<style type="text/css">
+#timecx{ display: none;}	
+</style>
+<div id="etbjglda-m"  class="portlet box grey">
+    <div class="portlet-title">
+        <div class="caption" id="yetj-name"><!-- 可以设置图标<i class="icon-globe"></i> -->社区健康档案中性别比例情况</div>
+        <!-- 设置关闭和刷新--> 
+        <div class="tools">
+            <div class="tools-chart">
+            	<span class="qht"><i class="icon-bar-chart"></i></span>
+            	<a class="t-ch-h" title="column"><i class="icon-bar-chart"></i></a>
+            	<a class="t-ch-h" title="pic"><i class="icon-adjust"></i></a>
+            	<span class="reload"><i class="icon-file-text-alt"></i></span>
+            </div>
+        </div>
+        
+    </div>
+    <div class="portlet-body">
+        <div class="lc-inquire">
+            <form id="org_etbjglda" class="form-inline" action="">
+                <input type="hidden" id="groupby" value="tablename"/>
+                <input type="hidden" id="pagenum"/>
+                <input type="hidden" id="pagesize"/>
+                <input type="hidden" id="sa"/>
+                <input type="hidden" id="MM"/>
+                <div class="row-fluid">
+                	<div class="span2"><select id="zhuanqu" class="selectpicker"><option value="2">按时间</option><option value="1">按社区</option></select></div>
+                    <div class="span1">社区名称</div>
+                    <div class="span2"><select id="dimOrgan" class="selectpicker"></select></div>
+                    <div class="span1 displayb">开始时间</div>
+                    <div class="span2 displayb">
+                    	<div class="datebegin"></div>
+                    </div>
+                    <div class="span1 displayb">结束时间</div>
+                    <div class="span2 displayb">
+                    	<div class="dateend"></div>
+                    </div>
+                    <div class="span1"><a id="jgcx" onclick="setData2Etbjglda('tablename')" class="btn blue">查询</a></div>
+                    <div class="span1"><a id="timecx" onclick="Etbjgltime('tablename')" class="btn blue">查询</a></div>
+                </div>
+            </form>
+        </div>
+        <div id="lc-rowtable" class="row-fluid">
+            <div class="span12">
+                <div id="contextEtbjglda"></div>
+            </div>
+        </div>
+        <div id="rowtable" class="row-fluid rowtable">
+            <div class="span12">
+                 <table id="ttEtbjglda"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+$(document).ready(function(){
+	if($(window).width()>765){
+		$("#contextEtbjglda").height($(window).height()-207);
+	}
+});
+
+var dataShow;
+var PageNumber=1;
+var PageSize=10;
+function setData2Etbjglda(data){
+	$(".loadshow").show(); 
+	var url ="NNBL"; 
+	var itemsList;
+	if($("#datebegin").val()!=""&&$("#dateend").val()!=""){
+		itemsList=["datebegin","dateend","dimOrgan"];
+	}else{
+		itemsList=[];
+	}
+	//空数据 会出现 小bug
+	var info= new Map();
+	info.put("sqlid","select");
+	info.put("pagenum",PageNumber);
+	info.put("pagesize",PageSize);
+	if(data==="tablename"){
+	   LXtype="tablename";
+	}else if(data==="createdate"){
+	   LXtype="createdate";
+	}else{
+	   LXtype="hospunitorgcode"
+	}
+	info.put("groupby",data);
+	sys_AjaxGet(BIASUrl+url,"org_etbjglda","reCallback101",info,itemsList);
+}
+function Etbjgltime(){
+	$(".loadshow").show(); 
+	$("#sa").val("1");
+	$("#pagenum").val(PageNumber);
+  	$("#pagesize").val(PageSize);
+	var mapInfo = new Map();
+	mapInfo.put("sqlid","select");
+	mapInfo.put("pagenum",PageNumber);
+	mapInfo.put("pagesize",PageSize);
+	var itemsList;
+	itemsList = ["datebegin","dateend","dimOrgan"];
+	var url = "SQNNZX";
+	sys_AjaxGet(BIASUrl+url,"org_etbjglda","reCallback101",mapInfo,itemsList);
+}
+function reCallback101(dataInfo){
+	//切换图形-----------------------------------20131213---开始
+var chartselect="";
+$("#etbjglda-m .tools-chart a").click(function(){
+	$("#etbjglda-m #rowtable").addClass("rowtable");
+	$("#etbjglda-m #lc-rowtable").removeClass("rowtable");
+		var charttitle=$(this).attr("title");
+		chartselect=charttitle;
+		if (chartselect=="pic") {
+			reCallbackPic(dataInfo, chartselect, "#contextEtbjglda");
+		}else{
+			reCallbackColumn(dataInfo, chartselect, "#contextEtbjglda");
+		}
+});	
+//切换图形-----------------------------------20131213---结束	
+//切换图形是grid时候，如果没有对应数据
+if(dataInfo.dataMap.data.length==0){
+		$('.reload').unbind("click");
+		$("#rowtable").addClass("rowtable");
+		$("#lc-rowtable").removeClass("rowtable");
+	}else{
+		$(".reload").click(function(){
+			$("#rowtable").removeClass("rowtable");
+			$("#lc-rowtable").addClass("rowtable");
+		});
+	}
+$(".qht").click(function(){
+	$("#rowtable").addClass("rowtable");
+	$("#lc-rowtable").removeClass("rowtable");
+});
+//动态获得grid的数据---------------------------开始
+var xq= [];
+var im=0;
+var zhuanqu=$("#zhuanqu").val();
+if(zhuanqu=="1"){
+	var chartselect="column";
+	reCallbackColumn(dataInfo, chartselect, "#contextEtbjglda");
+	$.each(dataInfo.dataMap.data[0], function(key, value){
+		if(im==0){
+			xq.push({field:"社区",title:"社区",align:'center',width:200});
+		}
+		im++;	
+		if(key!="社区"){
+		    xq.push({field:key,title:key,align:'center',
+			         formatter:function(value){
+		         	if (value=='') {
+		         		value=0;
+		         	};
+						 return parseData(value);  //数据缺失的时候用到。如：.2323 添加后0.2323  chart_common.js里面已经有定义parseData(data)
+				     }
+				});
+		}
+	});
+}else{
+	var chartselect="spline";
+	reCallbackSpline(dataInfo, chartselect, "#contextEtbjglda");
+	$.each(dataInfo.dataMap.data[0], function(key, value){
+		if(im==0){
+			xq.push({field:"年",title:"年",align:'center',width:200});
+		}
+		im++;	
+		if(key!="年"){
+		    xq.push({field:key,title:key,align:'center',
+			         formatter:function(value){
+		         	if (value=='') {
+		         		value=0;
+		         	};
+						 return parseData(value);  //数据缺失的时候用到。如：.2323 添加后0.2323  chart_common.js里面已经有定义parseData(data)
+				     }
+				});
+		}
+	});
+}
+//动态获得grid的数据---------------------------结束	
+//将dataAll添加到数据里面
+var zhuanqu=$("#zhuanqu").val();
+if (zhuanqu=="1") {
+var datapush=dataInfo.dataMap.data;
+dataInfo.dataMap.dataAll[0].社区="合计";
+datapush.push(dataInfo.dataMap.dataAll[0]);	
+}
+	$('#ttEtbjglda').datagrid({
+			nowrap: false,
+			striped: true,
+			collapsible:false,
+			//pagination:true,
+			pageNumber:PageNumber,
+			pageSize: PageSize,
+			singleSelect:true, 
+			loadMsg:"正在载入...",
+			pageList: [10,20,50,100,200],
+			data:dataInfo.dataMap.data,
+			columns:[xq],//对应上面的定义grid数据
+			onDblClickRow: function (rowIndex) { //双击
+				// openRoleDiv(rowIndex);
+			},
+		   fitColumns:false,
+		   rownumbers:true
+	}); 
+   var pager = $('#ttEtbjglda').datagrid('getPager');
+	   if(pager){
+		$(pager).pagination({
+			
+			onSelectPage:function(pageNumber,pageSize){
+			   PageNumber=pageNumber;
+			   PageSize=pageSize;
+			   }
+		});		
+		$(pager).pagination({pageSize:PageSize,pageNumber:PageNumber,total:dataInfo.count});
+	};
+//删除新增的dataAll	
+if (zhuanqu=="1") {
+datapush.splice(datapush.length-1);
+}
+
+}
+</script>
+<script>
+$(function(){
+$(window).resize(function(){
+$('#ttEtbjglda').datagrid('resize');
+});
+});
+</script>
+<script>
+
+$(function () {
+getselectdaoid()
+});
+//活动类型--------------------------------------------------老的下拉写法------------------------
+function  getselectdaoid(){
+  var url="dimOrgan";
+  var infoa = new Map();
+  var itemsList= [];
+  sys_AjaxGet(BIUrl+url,"dimOrgan","mdmSelectdaoid",infoa,itemsList);
+}
+function mdmSelectdaoid(data){
+  var info = new Map();
+  info.put("key",["organizationcode"]);
+  info.put("value",["organizationname"]);
+  //aoidMap=sys_getDataMap(info,data.dataList);
+  sys_GetSelect("org_etbjglda","dimOrgan",info,data.dataList);
+  //console.log(data.dataList);
+}
+
+//loadingEtbjglda();
+//setDataCy('tablename');
+
+var zhuanqu=$("#zhuanqu").val();
+if (zhuanqu=="1") {
+	$(".displayb").hide();
+	$(".t-ch-h").show();
+	$(".qht").hide();
+	$(".datebegin").html("");
+	$(".dateend").html("");
+	$(".datebegin").append("<input id='datebegin' type='text' value='2012-09-09' class='dateday'>");
+	$(".dateend").append("<input id='dateend' type='text' value='2012-09-09' class='dateday'>");
+	$('.dateday').datetimepicker({
+		format: 'yyyy-mm-dd',
+		autoclose:true,
+		startView:2,
+		minView:2
+	});
+	today=new Date(); 
+	var ymd=sys_FormatYMD(today);
+	var vMon = today.getMonth() + 1;
+var dateendymd=today.getFullYear()-1+"-"+(vMon<10 ? "0" + vMon : vMon)+"-"+today.getDate();
+$("#datebegin").val(dateendymd);
+	$("#dateend").val(ymd);
+    setData2Etbjglda();
+    $("#jgcx").show();
+    $("#timecx").hide();
+}else{
+	$(".displayb").show();
+	$(".t-ch-h").hide();
+	$(".qht").show();
+	$(".datebegin").html("");
+	$(".dateend").html("");
+	$(".datebegin").append("<input id='datebegin' type='text' value='2012' class='dateyear'>");
+	$(".dateend").append("<input id='dateend' type='text' value='2012' class='dateyear'>");
+	$('.dateyear').datetimepicker({
+		format: 'yyyy',
+		weekStart: 1,
+        autoclose: true,
+        startView: 4,
+        minView: 4,
+        forceParse: false,  //必须设置，否则每次解析错，会变成1899年。
+        language: 'zh-CN'
+	});
+	today=new Date();
+	var vMon = today.getMonth() + 1;
+	var dateendymd=today.getFullYear()-1;
+	var ymd=today.getFullYear();
+	$("#datebegin").val(dateendymd);
+	$("#dateend").val(ymd); 
+    setTimeout('Etbjgltime()',100);
+    $("#jgcx").hide();
+    $("#timecx").show();
+};
+$("#zhuanqu").change(function(){
+    var zhuanqu=$("#zhuanqu").val();
+    if (zhuanqu=="1") {
+    	$(".displayb").hide();
+    	$(".t-ch-h").show();
+		$(".qht").hide();
+    	$(".datebegin").html("");
+    	$(".dateend").html("");
+    	$(".datebegin").append("<input id='datebegin' type='text' value='2012-09-09' class='dateday'>");
+		$(".dateend").append("<input id='dateend' type='text' value='2012-09-09' class='dateday'>");
+		$('.dateday').datetimepicker({
+			format: 'yyyy-mm-dd',
+			autoclose:true,
+			startView:2,
+			minView:2
+		});
+		today=new Date(); 
+		var ymd=sys_FormatYMD(today);
+		var vMon = today.getMonth() + 1;
+		var dateendymd=today.getFullYear()-1+"-"+(vMon<10 ? "0" + vMon : vMon)+"-"+today.getDate();
+		$("#datebegin").val(dateendymd);
+		$("#dateend").val(ymd);
+	    setData2Etbjglda();
+	    $("#jgcx").show();
+    	$("#timecx").hide();
+    }else{
+    	$(".displayb").show();
+    	$(".t-ch-h").hide();
+		$(".qht").show();
+    	$(".datebegin").html("");
+    	$(".dateend").html("");
+    	$(".datebegin").append("<input id='datebegin' type='text' value='2012' class='dateyear'>");
+		$(".dateend").append("<input id='dateend' type='text' value='2012' class='dateyear'>");
+		$('.dateyear').datetimepicker({
+			format: 'yyyy',
+			weekStart: 1,
+            autoclose: true,
+            startView: 4,
+            minView: 4,
+            forceParse: false,  //必须设置，否则每次解析错，会变成1899年。
+            language: 'zh-CN'
+		});
+		today=new Date();
+		var vMon = today.getMonth() + 1;
+		var dateendymd=today.getFullYear()-1;
+		var ymd=today.getFullYear();
+		$("#datebegin").val(dateendymd);
+		$("#dateend").val(ymd);
+        setTimeout('Etbjgltime()',100);
+        $("#jgcx").hide();
+    	$("#timecx").show();
+    };
+
+});
+</script>
+
+
+

@@ -1,0 +1,277 @@
+<script language="JavaScript" src="/t/paas/show/ui/comm.js" type="text/javascript"></script>
+<script type="text/javascript">
+var pageNum=1;
+var pagesize=10;
+var pagesizes=10;
+var emrcfyzdata;
+var emrcfyzdata2;
+
+function emrcfyzcallback(retData){
+	emrcfyzdata = retData;
+	$('#mzcf').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+				title:'门诊处方记录',
+				pagination:true,
+				pageNumber:pageNum,
+				pageSize: pagesize,
+				loadMsg:"正在载入...",
+                pageList: [10,20,50,100,200],
+                singleSelect:true, 
+				data:emrcfyzdata.dataList,
+				columns:[[
+				    //{title:'序号',field:'dc1003_jlxh'},
+			        {title:'开嘱日期',field:'dc1003_kdrq' ,width:112,
+			        	formatter:function(value){
+		                   return LC_FormatYMD(value);
+		               }
+		            },
+			        {title:'药品名称',field:'dc1004_ypmc' ,width:176},
+			        {title:'频次',field:'dc1004_yypc',width:80},
+			        {title:'途径',field:'dc1004_yytj',width: 128},
+			        {title:'每次用量',field:'dc1004_ycjl',width:64 },
+			        {title:'总量',field:'dc1004_zjl',width:64 },			        
+			        {title:'开嘱医生',field:'dc1003_kdysxm',width: 80},			        
+			        {title:'医院',field:'dc1003_jgdm' ,width:144}
+				]],                  
+                onDblClickRow: function (rowIndex) {
+                  openRoleDiv(rowIndex);
+                },
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true
+		}); 
+
+	   var pager = $('#mzcf').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pageNum=pageNumber;
+		           pagesize=pageSize;
+		           showDatamzcf();
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:pagesize,pageNumber:pageNum,total:emrcfyzdata.count});
+
+		};
+}
+	function showDatamzcf(){
+	
+		//var checkItemsList = ["primal_time","latest_time","dc1003_cflb"];		
+		// 重置检查结果		
+		//LC_Resetting("form1")		
+		// 调用指定的验证	
+		//LC_IsCheckLengthMin("form1",checkItemsList,'2');		
+		// 定义返回类型		
+				
+		// 数据格式验证通过以后		
+		// *******************第二步请求数据***********************		
+		 if(retCheckFlg){		
+			
+        	var url ="emrcfyz1/"; 
+        	var itemsList=["primal_time","latest_time","cflb"];
+			var info= new Map();	
+	        info.put("pageNum",pageNum);
+	        info.put("pageSize",pagesize);
+			info.put("pid",self.parent.pid);
+        	LC_AjaxGet(EMRBaseUrl+url,"form1","emrcfyzcallback",info,itemsList);	
+        	 
+		 }		
+		//********************第三步处理请求后的数据***************				
+	}
+	
+	function openRoleDiv(rowIndex){
+        LC_SetMapData("form1",emrcfyzdata.dataList[rowIndex]);
+	}
+
+//****************************************以下第二部分***************************-->
+
+	function emrcfyzcallback2(retData){
+	    emrcfyzdata2 = retData;
+	    
+	    $('#zyyz').datagrid({
+	            nowrap: false,
+	            striped: true,
+	            collapsible:false,
+				title:'住院医嘱',
+				pagination:true,
+				singleSelect:true, 
+				pageNumber:pageNum,
+				pageSize: pagesizes,
+				loadMsg:"正在载入...",
+                pageList: [10,20,50,100,200],
+                singleSelect:true,
+				data:emrcfyzdata2.dataList,
+				columns:[[
+				    //{title:'序号',field:'dc2002_jlxh'},
+			        {title:'开嘱日期',field:'dc2002_kzsj' ,width:96,
+			           formatter:function(value){
+		                   return LC_FormatYMD(value);
+		               }
+		            },
+			        {title:'药品名称',field:'dc2002_yzmc' ,width:176},
+			        {title:'频次',field:'dc2002_yypc' ,width:80},
+			        {title:'途径',field:'dc2002_yytj' ,width:128},
+			        {title:'每次用量',field:'dc2002_ycjl',width:64 },
+			        {title:'开嘱医生',field:'dc2002_kzysxm',width:80 },			        
+			        {title:'停嘱时间',field:'dc2002_tzsj',width:96,	
+			        formatter:function(value){
+		                   return LC_FormatYMD(value);
+		               }
+              },			        
+			        {title:'医院',field:'dc2002_jgdm' ,width:144}
+				]],                  
+                onDblClickRow: function (rowIndex) {
+                  openRoleDiv2(rowIndex);
+                },
+               fitColumns:false,
+			   pagination:true,
+               rownumbers:true
+		}); 
+
+	   var pager = $('#zyyz').datagrid('getPager');
+           if(pager){
+			$(pager).pagination({
+			    onSelectPage:function(pageNumber,pageSize){
+		           pageNum=pageNumber;
+		           pagesizes=pageSize;
+		           showDataczyyz();
+		        }
+			});		
+		 
+			$(pager).pagination({pageSize:pagesizes,pageNumber:pageNum,total:emrcfyzdata2.count});
+
+		};
+	
+	}
+
+	function showDataczyyz(){
+	
+		//var checkItemsList = ["primal_time","latest_time","dc2002_yzlb"];	
+				
+		// 重置检查结果		
+		//LC_Resetting("form2")		
+		// 调用指定的验证	
+		//LC_IsDateCheck(formid,itemsList)	
+		// 定义返回类型		
+				
+		// 数据格式验证通过以后		
+		// *******************第二步请求数据***********************		
+		 if(retCheckFlg){		
+			
+        	var url ="emrcfyz2/"; 	
+        	var itemsList=["primal_time","latest_time","yzlb"];	
+			var info= new Map();	
+	        info.put("pageNum",pageNum);
+	        info.put("pageSize",pagesizes);
+			info.put("pid",self.parent.pid);
+			self.parent.pid
+            LC_AjaxGet(EMRBaseUrl+url,"form2","emrcfyzcallback2",info,itemsList);	
+        	 
+		 }		
+		 }
+//********************第三步处理请求后的数据***************
+	
+		
+		
+	
+	function openRoleDiv2(rowIndex){
+        LC_SetMapData("form2",emrcfyzdata2.dataList[rowIndex]);
+	}
+
+</script>
+<div class="mainsW-912">
+   <!-- onload="loading()" -->
+   <div id="cf">
+    <form id="form1"> 
+   <table id="mzcf" toolbar="#toolbar">
+   
+   <div id="toolbar" class="pad-5 clearfix">
+        <div class="itemLW-32 padT-4">
+		<input id="cflb" checked="" name="jybg" type="radio" value="" /></div>
+
+        <div class="itemsW-32 padT-4">
+           全部</div>
+        <div class="itemLW-32 padT-4">
+           <input id="cflb" name="jybg" type="radio" value="1" /></div>
+        <div class="itemsW-32 padT-4">
+           西药</div>
+        <div class="itemLW-32 padT-4">
+           <input id="cflb" name="jybg" type="radio" value="2" /></div>
+        <div class="itemsW-32 padT-4">
+           成药</div>
+        <div class="itemLW-32 padT-4">
+           <input id="cflb" name="jybg" type="radio" value="3" /></div>
+        <div class="itemsW-64 padT-4">
+           草药</div>
+        <div class="itemLW-64 padT-4">
+           日期：</div>
+        <div class="itemsW-96">
+           <input id="primal_time" class="Wdate" onclick="WdatePicker()" style="width: 96px;" type="text" value="" /></div>
+        <div class="itemCW-16 padT-4">
+           至</div>
+        <div class="itemsW-96">
+           <input id="latest_time" class="Wdate" onclick="WdatePicker()" style="width: 96px;" type="text" value="" /></div>
+        <div class="itemLW-64">
+           <a class="easyui-linkbutton" href="javascript:;;;" onclick="showDatamzcf()">查询</a></div>
+     
+   </div>
+   </table>   
+    </form>
+   </div>
+   <!-- 检查报告列表 结束 -->
+   <!-- 检查报告内容 开始 -->
+   <div id="yz">
+    <form id="form2">
+   <table id="zyyz" toolbar="#toolbar-zyyz">
+   <div id="toolbar-zyyz" class="pad-5 clearfix">
+     
+        <div class="itemLW-32 padT-4">
+           <input id="yzlb" checked="" name="jybg" type="radio" value="" /></div>
+        <div class="itemsW-32 padT-4">
+           全部</div>
+        <div class="itemLW-32 padT-4">
+           <input id="yzlb" name="jybg" type="radio" value="1" /></div>
+        <div class="itemsW-32 padT-4">
+           出院</div>
+        <div class="itemLW-32 padT-4">
+           <input id="yzlb" name="jybg" type="radio" value="2" /></div>
+        <div class="itemsW-32 padT-4">
+           长期</div>
+        <div class="itemLW-32 padT-4">
+           <input id="yzlb" name="jybg" type="radio" value="3" /></div>
+        <div class="itemsW-64 padT-4">
+           临时</div>
+        <div class="itemLW-64 padT-4">
+           日期：</div>
+        <div class="itemsW-96">
+           <input id="primal_time" class="Wdate" onclick="WdatePicker()" style="width: 96px;" type="text" value="" /></div>
+        <div class="itemCW-16 padT-4">
+           至</div>
+        <div class="itemsW-96">
+           <input id="latest_time" class="Wdate" onclick="WdatePicker()" style="width: 96px;" type="text" value="" /></div>
+        <div class="itemLW-64">
+           <a class="easyui-linkbutton" href="javascript:;;;" onclick="showDataczyyz()">查询</a></div>
+     
+   </div>
+   </table>
+     </form>
+   <!-- 检查报告内容 结束 -->
+   </div>
+</div>
+<script type="text/javascript">
+$(function () {
+   showDatamzcf();
+   showDataczyyz();
+
+var a =LoadUrlParm.parm("flg");
+  if (a==="cf") {
+        $('#yz').hide();
+  } else if (a==="yz") {
+    
+    $('#cf').hide();
+  }
+});
+</script>

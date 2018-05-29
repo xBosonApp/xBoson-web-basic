@@ -1,0 +1,50 @@
+<!-- Create By xBoson System -->
+
+<div id="managed_token" class="widget-body no-padding" style="margin: -10px -13px 38px -13px;">
+  <div class="widget-body-toolbar">
+    <div class="row">
+      <form id="managed_token_form" method="post" onsubmit="return false;" class="smart-form">
+        <input type="hidden" name="tp_appid"/>
+        <input type="hidden" name="orgid"/>
+        <section class="col col-2">
+          <label class="input">
+            <button id="managed_token_search" class="btn btn-info btn-sm" type="submit"><i class="fa fa-search fa-1"></i>&emsp;更 新&emsp;</button>
+          </label>
+        </section>
+      </form>
+    </div>
+    <div class="btn-group">
+      <button id="managed_token_v" class="btn btn-info btn-xs">&emsp;<i class="fa fa-trash-o"></i>&nbsp;启 用&emsp;
+      </button>
+      <button id="managed_token_x" class="btn btn-info btn-xs">&emsp;<i class="fa fa-trash-o"></i>&nbsp;禁 用&emsp;
+      </button>
+      <button id="managed_token_delete" class="btn btn-info btn-xs">&emsp;<i class="fa fa-trash-o"></i>&nbsp;删 除&emsp;
+      </button>
+    </div>
+  </div>
+  <div class="dataTables_wrapper">
+    <table id="managed_token_dt" class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <!--<th>应用ID</th>-->
+          <th>用户ID</th>
+          <th>令牌</th>
+          <th>状态</th>
+          <th>开始时间</th>
+          <th>结束时间</th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+  <div id="managed_token_pagination"></div>
+</div>
+<div id="managed_token_form2"></div>
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script src="lib/html/zy_modal.js"></script>
+<script src="lib/html/zy_tabs.js"></script>
+<script src="mgt/third_app/tokens.js"></script>
+<script type="text/javascript">
+// DO NOT REMOVE : GLOBAL FUNCTIONS!
+pageSetUp();
+var token_managed = new ManagedToken();
+</script>

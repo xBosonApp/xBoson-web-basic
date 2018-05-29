@@ -1,0 +1,137 @@
+<!-- rbac_auth_mgt01 用户授权 -->
+<div style="opacity: 1;" id="rbac_auth_mgt01">
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="well well-sm well-light padding-10">
+        <div class="row">
+          <div class="col-sm-12">
+            <section>
+              <div>
+                <label><h6 class="margin-top-0"><strong>&nbsp;人员</strong></h6></label>
+                <ul id="rbac_auth_mgt01_staff" class="ztree"></ul>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-8">
+      <div class="row well well-sm well-light padding-10">
+        <div class="row">
+					<div class="col-sm-12">
+							<label><h6 class="margin-top-0"><strong>已分配的角色</strong></h6></label>
+							<input name="assigned_roles" id="assigned_roles" />
+					</div>
+				</div>
+				<div class="row">
+          <hr>
+          <div class="col-lg-12 pull-right">
+            <button id="rbac_auth_mgt01_save" class="btn btn-primary">
+              &emsp;<i class="fa fa-save"></i>&nbsp;确定&emsp;
+            </button>
+            <button id="rbac_auth_mgt01_refresh" class="btn btn-success">
+              &emsp;<i class="fa fa-refresh"></i>&nbsp;重置&emsp;
+            </button>
+          </div>
+        </div>
+      </div>
+      <label id="rbac_auth_mgt01_role_title"><h6 class="margin-top-0"><strong>&nbsp;本机构角色列表</strong></h6></label>
+      <div class="row">
+        <script id="rbac_auth_mgt01_tmpl" type="text/x-jsrender">
+          <div class="well well-sm padding-10">
+            <h7 class="margin-top-0"><strong>{{: rg_nm}}</strong></h7>
+            <div class="row">
+            {{if children && children.length}}
+              <div class="list-group padding-10">
+              {{for children}}
+                <a data-roleid="{{: roleid}}" data-rolenm="{{: rolenm}}" class="list-group-item" title="{{: role_desc}}" href="javascript:void(0);">
+                  {{: rolenm}}
+                </a>
+              {{/for}}
+              </div>
+            {{/if}}
+            </div>
+          </div>
+        </script>
+        <div class="col-sm-6" id="rbac_auth_mgt01_role_l_container"></div>
+        <div class="col-sm-6" id="rbac_auth_mgt01_role_r_container"></div>
+      </div>
+      <!--<div class="row" id="rbac_auth_mgt01_role_container">-->
+      <!--  <script id="rbac_auth_mgt01_tmpl" type="text/x-jsrender">-->
+      <!--    <div class="col-sm-6">-->
+      <!--      <div class="well well-sm padding-10">-->
+      <!--        <h7 class="margin-top-0"><strong>{{: rg_nm}}</strong></h7>-->
+      <!--        <div class="row">-->
+      <!--        {{if children && children.length}}-->
+      <!--          <div class="list-group padding-10">-->
+      <!--          {{for children}}-->
+      <!--            <a data-roleid="{{: roleid}}" data-rolenm="{{: rolenm}}" class="list-group-item" title="{{: role_desc}}" href="javascript:void(0);">-->
+      <!--              {{: rolenm}}-->
+      <!--            </a>-->
+      <!--          {{/for}}-->
+      <!--          </div>-->
+      <!--        {{/if}}-->
+      <!--        </div>-->
+      <!--      </div>-->
+      <!--    </div>-->
+      <!--  </script>-->
+      <!--</div>-->
+      <label id="rbac_auth_mgt01_rls_role_title"><h6 class="margin-top-0"><strong>&nbsp;应用角色列表</strong></h6></label>
+      <div class="row">
+        <script id="rbac_auth_mgt01_rls_tmpl" type="text/x-jsrender">
+          <div class="well well-sm padding-10">
+            <h7 class="margin-top-0"><strong>{{: applicationnm}}</strong></h7>
+            <div class="row">
+            {{if children && children.length}}
+              <div class="list-group padding-10">
+              {{for children}}
+                <a data-roleid="{{: roleid}}" data-rolenm="{{: rolenm}}" class="list-group-item" title="{{: role_desc}}" href="javascript:void(0);">
+                  {{: rolenm}}
+                </a>
+              {{/for}}
+              </div>
+            {{/if}}
+            </div>
+          </div>
+        </script>
+        <div class="col-sm-6" id="rbac_auth_mgt01_rls_role_l_container"></div>
+        <div class="col-sm-6" id="rbac_auth_mgt01_rls_role_r_container"></div>
+      </div>
+      
+      <!--<div class="row" id="rbac_auth_mgt01_rls_role_container">-->
+      <!--  <script id="rbac_auth_mgt01_rls_tmpl" type="text/x-jsrender">-->
+      <!--    <div class="col-sm-6">-->
+      <!--      <div class="well well-sm padding-10">-->
+      <!--        <h7 class="margin-top-0"><strong>{{: applicationnm}}</strong></h7>-->
+      <!--        <div class="row">-->
+      <!--        {{if children && children.length}}-->
+      <!--          <div class="list-group padding-10">-->
+      <!--          {{for children}}-->
+      <!--            <a data-roleid="{{: roleid}}" data-rolenm="{{: rolenm}}" class="list-group-item" title="{{: role_desc}}" href="javascript:void(0);">-->
+      <!--              {{: rolenm}}-->
+      <!--            </a>-->
+      <!--          {{/for}}-->
+      <!--          </div>-->
+      <!--        {{/if}}-->
+      <!--        </div>-->
+      <!--      </div>-->
+      <!--    </div>-->
+      <!--  </script>-->
+      <!--</div>-->
+    </div>
+  </div>
+  <div id="rbac_auth_mgt01_dialog"></div>
+  <auth page="rbac_auth_mgt01" />
+  <div id="rbac_auth_mgt01_auth" data-auth='###auth###'></div>
+</div>
+<script src="lib/js/plugin/jquery-tagsinput/jquery.tagsinput.min.js"></script>
+<link rel="stylesheet" type="text/css" href="lib/js/plugin/jquery-tagsinput/jquery.tagsinput.min.css" />
+<script src="lib/js/plugin/jquery-jsrender/jsrender.min.js"></script>
+<script src="rbac/auth_mgt/rbac_auth_mgt01.js"></script>
+<script>
+	// DO NOT REMOVE : GLOBAL FUNCTIONS!
+	pageSetUp();
+	(function(){
+	  var rbac_auth_mgt01Obj = new rbac_auth_mgt01();
+	})();
+</script>

@@ -1,0 +1,70 @@
+<style>
+  .modal section  {
+    margin-bottom : 0px;
+  }
+</style>
+<div class="modal fade" id="get_system_model" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title">模型列表</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-xs-6">
+            <ul id="modeltree" class="ztree"></ul>
+          </div>
+          
+        </div>
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+<script type="text/javascript">
+  var modal=$('#get_system_model');
+  modal.modal('show');
+  var setting = {
+                    data: {
+                    key: {
+                      checked: 'checked',
+                      name: 'typenm',
+                      title: 'typecd'
+                    },
+                    simpleData: {
+                      enable: true,
+                      idKey: "typecd",
+                      pIdKey: "parentcd"
+        
+                    }
+                  },
+                  
+                  view: {
+                    showTitle: true,
+                    selectedMulti: false,
+                    showIcon: true,
+                    dblClickExpand: false
+                  }
+                };
+  function init(){
+    var getresult=function(msg){
+      if(msg.ret=='0'){
+        $.fn.zTree.init(modal.find('#modeltree'), setting, msg.result);
+      }
+    }
+    var param = {
+      'sysid': mgt_system._g.param.sysid
+    };
+    zy.g.am.app = 'ZYAPP_SYSMGT';
+    zy.g.am.mod = 'system_mgt';
+    zy.net.get("api/selectmodel", getresult,param);
+  }
+  init()
+</script>

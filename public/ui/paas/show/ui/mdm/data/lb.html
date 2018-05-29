@@ -1,0 +1,120 @@
+﻿
+		<script type="text/javascript">
+		var dataMap;
+		$(function () {
+      $("#typeCode").focus();
+          //$("#typeCode").val(self.parent.typeCode);
+        //  if(self.parent.typeCode!=""){
+              
+        //  }
+       //   alert($("#typeCode").val())
+   		// var url="mdm/dict/details/";
+		//  var itemsList=["typeCode"];
+		//  var info = new Map();
+        //  LC_AjaxPost(MDMBaseUrl+url,"fm","callbackabc",info,itemsList);
+        
+        if(localStorage.getItem("dataMap")===""){
+           
+        $("#update").hide();
+        }else{
+         dataMap=JSON.parse(localStorage.getItem("dataMap"));
+        $("#add").hide();
+        $("#typeCode").attr('disabled','disabled');
+          LC_SetMapData("fm",dataMap);
+        }
+        
+        
+       
+
+});
+	//	function callbackabc(retData){
+	 //     LC_SetMapData("fm",retData.dataList[0]);
+	//	}
+
+
+function update(){
+	LC_Resetting("fm");
+	var checkNameItems=["typeName"];
+	var checkExpItems=["explicate"];
+	LC_IsCheckLength("fm",checkNameItems,1,100);
+	LC_IsCheckLengthMax("fm",checkExpItems,500);
+	if(retCheckFlg){
+		var url="mdm/dict/type/stat/";
+		var itemsList = ["typeCode", "typeName","explicate", "status"];
+		var info = new Map();
+		LC_AjaxGet(MDMBaseUrl+url,"fm","callback",info,itemsList);
+	}
+	
+
+}		
+function callback(reData){
+  if (reData.ret=="0") {
+    self.parent.$.messager.alert('提示',reData.msg,'info');
+    $("#openRoleDiv").window("close");
+  } else {
+    self.parent.$.messager.alert('错误提示',reData.msg,'error');
+  }
+  
+ }
+
+
+function add(){
+	
+	LC_Resetting("fm");
+	var checkNameItems=["typeName"];
+	var checkCoidItems=["typeCode"];
+	var checkExpItems=["explicate"];
+	LC_IsCheckLength("fm",checkCoidItems,1,10);
+	LC_IsCheckLength("fm",checkNameItems,1,100);
+	LC_IsCheckLengthMax("fm",checkExpItems,500);
+	if(retCheckFlg){
+	var url="mdm/dict/type/add/";
+	var itemsList = ["typeCode", "typeName","explicate", "status"];
+	var info = new Map();
+	LC_AjaxGet(MDMBaseUrl+url,"fm","callback1",info,itemsList);
+	}
+}
+
+function callback1(reData){
+  if (reData.ret=="0") {
+    self.parent.$.messager.alert('提示',reData.msg,'info');
+    $("#openRoleDiv").window("close");
+  } else {
+    self.parent.$.messager.alert('错误提示',reData.msg,'error');
+  }
+ }
+
+
+</script>
+
+<div class="padTB-5">
+    <form id="fm">
+   <!--  <input type="hidden" id="orgId"> -->
+    <div class="mainW-288" >
+        <div class="itemLW-80 padT-4">类别代码：</div>
+        <div class="itemRW-208"><input id="typeCode" class="textLW" type="text" ></div>
+    </div>
+    <div class="mainW-288" >
+        <div class="itemLW-80 padT-4">类别名称：</div>
+        <div class="itemRW-208"><input id="typeName"  class="textLW" type="text" ></div>
+    </div>
+    <div class="mainW-288" >
+        <div class="itemLW-80 padT-4">说明：</div>
+        <div class="itemRW-208"><textarea id="explicate" class="textLW" name="" cols="" rows=""></textarea></div>
+    </div>
+    <div class="mainW-288" >
+        <div class="itemLW-80 padT-4">状态：</div>
+        <div class="itemRW-208">
+   
+      <select id="status"  class="textLW" name="dept" >  
+                <option value="1">正常</option>
+                <option value="2">注销</option>
+                <option value="3">迁出</option>
+            </select>
+            
+        </div>
+    </div>
+    <div class="itemLW-288 padTB-10"><a id="update" href="#" class="easyui-linkbutton" onclick="update()">修改</a><a id="add" href="#" class="easyui-linkbutton" onclick="add()">添加</a></div>
+
+    </form>
+</div>

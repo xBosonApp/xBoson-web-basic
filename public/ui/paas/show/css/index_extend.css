@@ -1,0 +1,66 @@
+.level2_modal{
+    cursor: pointer;
+}
+.level2_modal img{
+    width: 80px;
+    height: 80px;
+    margin-left: 1vw;
+}
+.level3_modal{
+    width: 98%;
+    height: 48%;
+    position:absolute;
+    left:1%;
+    z-index: 10;
+    background: rgba(0,0,0,0.4);
+    display: none;
+}
+.level3_modal a{
+    font-size: 40px;
+    position: absolute;
+    text-shadow: 0px 0px 5px #000;    
+}
+#Primary_health_care_modal1:hover,#Primary_health_care_modal2:hover{
+    background: rgba(218,98,12,0.8);  
+}
+#Primary_health_care_modal1{
+    top:1%;
+}
+#Primary_health_care_modal1 a{
+    right:1vw;
+    top:1vh;
+}
+#Primary_health_care_modal2{
+    bottom:1%;
+}
+#Primary_health_care_modal2 a{
+    left:1vw;
+    bottom:1vh;
+}
+#Primary_health_care_modal2 a:focus,#Primary_health_care_modal1 a:focus{
+    outline:none;
+    border:none;
+}
+.tile1{
+    width:100%;
+    height:25%;
+    line-height:100%;
+    text-align:center;
+}
+#level_modal_gxd{
+    width:50vw;
+    height:90vh;
+    background:#fff;
+    position:absolute;
+    right:5vw;
+    top:5vh;
+}
+.modal-lgest{
+    width:80%;
+    height:80%;
+    margin:10vh auto;
+}
+#main_modal_lev_1{
+    width:100%;
+    height:93%;
+}

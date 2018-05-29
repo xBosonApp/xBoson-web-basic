@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<script>
+	  document.write("<link href='http://" + location.host + "/t/paas/show/css/modal.css' />");
+    document.write("<script src='http://" + location.host + "/ui/paas/lib/js/libs/jquery-1.11.0.min.js'><" + "/" + "script>"); 
+    document.write("<script src='http://" + location.host + "/ui/paas/lib/js/libs/showdown.min.js'><" + "/" + "script>"); 
+  </script>
+	<script>
+    $(function(){
+      // showdown.setOption('noHeaderId', true);
+      // showdown.setOption('strikethrough', true);
+      // showdown.setOption('tables', true);
+      // showdown.setOption('tasklists', true);
+      // showdown.setFlavor('vanilla');
+      showdown.setFlavor('github');
+      var converter = new showdown.Converter();
+      var  te = $(".SR").html();
+      var  ht = converter.makeHtml(te);
+      $(".SC").empty();
+      $(".SC").html(ht);
+      $(".modal_img").css({
+        width:"94%",
+        height:"80%",
+        position: "fixed",
+        top:"15%",
+        left:"3%",
+      })
+    })
+  </script>
+  <style>
+    .SC{
+      width:100%;
+      height:100%;
+      font-size:24px;
+      color: #fff;
+      text-align: center;
+      position: absolute;
+      right:0;
+      top:0;
+    }
+  </style> 
+</head>
+<body>
+<p class="SR" style="display:none">
+#电子病历调阅
+</p>
+<script> 
+  document.write("<img src='http://" + location.host + "/t/paas/show/img/dzbldy.png' class='modal_img'/>"); 
+</script>
+<div class="SC">
+    
+</div>
+</body>
+
+</html>

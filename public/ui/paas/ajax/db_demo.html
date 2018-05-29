@@ -1,0 +1,239 @@
+<!--<link rel="stylesheet" href="lib/js/plugin/datatables/media/css/jquery.dataTables.css" />-->
+<!--<section id="widget-grid" class="">-->
+<!--  <div class="row">-->
+<!--  	<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">-->
+<!--  		<div class="jarviswidget"  data-widget-editbutton="false"  data-widget-colorbutton="false" data-widget-deletebutton="false">-->
+<!--  		    <header role="heading">-->
+<!--  		    	<span class="widget-icon"><i class="icon-calendar"></i></span>-->
+<!--  		        <h2>数据库</h2>     -->
+<!--      					<ul class="nav pull-right nav-pills navchange">-->
+<!--      						<li class="active">-->
+<!--      							<a data-toggle="tab" href="#home">查询预览</a>-->
+<!--      						</li>-->
+<!--      						<li>-->
+<!--      							<a data-toggle="tab" href="#profile">数据库表信息</a>-->
+<!--      						</li>-->
+<!--      						<li>-->
+<!--      							<a data-toggle="tab" href="#info">执行历史</a>-->
+<!--      						</li>-->
+<!--      					</ul>-->
+<!--  		    </header>-->
+<!--  		    <div>-->
+<!--  		        <div class="jarviswidget-editbox">-->
+<!--  		            <div>-->
+<!--  		                <label>Styles:</label>-->
+<!--  		                <span data-widget-setstyle="purple" class="purple-btn"></span>-->
+<!--  		                <span data-widget-setstyle="navyblue" class="navyblue-btn"></span>-->
+<!--  		                <span data-widget-setstyle="green" class="green-btn"></span>-->
+<!--  		                <span data-widget-setstyle="yellow" class="yellow-btn"></span>-->
+<!--  		                <span data-widget-setstyle="orange" class="orange-btn"></span>-->
+<!--  		                <span data-widget-setstyle="pink" class="pink-btn"></span>-->
+<!--  		                <span data-widget-setstyle="red" class="red-btn"></span>-->
+<!--  		                <span data-widget-setstyle="darkgrey" class="darkgrey-btn"></span>-->
+<!--  		                <span data-widget-setstyle="black" class="black-btn"></span>-->
+<!--  		            </div>-->
+<!--  		        </div>-->
+<!--  		        <div class="widget-body"> -->
+<!--  		          <div class="widget-body no-padding">-->
+
+<!--						 widget body text-->
+						
+<!--						<div class="tab-content padding-10">-->
+<!--							<div class="tab-pane fade in active" id="home">-->
+<!--							<form action="" class="smart-form" id="db_form">-->
+<!--                <fieldset>-->
+<!--  								<section class="col col-xs-12 col-sm-12 col-md-12 col-lg-12">-->
+<!--  									<label class="label">SQL:</label>-->
+<!--  									<label class="textarea"> 										-->
+<!--  										<textarea rows="5" class="custom-scroll" name="sqls"></textarea> -->
+<!--  									</label>-->
+<!--  									<div class="note">-->
+<!--  										<strong>注:</strong>sql文-->
+<!--  									</div>-->
+<!--  								</section>-->
+<!--  								<section class="col col-3">-->
+<!--  								  <a class="btn btn-info btn-sm _clear"  href="javascript:void(0);">-->
+<!--                    <i class="fa fa-rotate-right"></i>&emsp;清空&emsp;</a>-->
+<!--                    <a class="btn btn-info btn-sm _search"  href="javascript:void(0);">-->
+<!--                    <i class="fa fa-play"></i>&emsp;执行&emsp;</a>-->
+<!--  								</section>-->
+<!--  								<section class="col col-2">-->
+<!--  								  <div class="hidden-mobile">-->
+<!--          						<span class="onoffswitch-title"><i class="fa fa-bug"></i>显示异常</span>-->
+<!--          						<span class="onoffswitch">-->
+<!--          							<input type="checkbox" name="showerr" class="onoffswitch-checkbox" id="showerr">-->
+<!--          							<label class="onoffswitch-label" for="showerr"> -->
+<!--            							<span class="onoffswitch-inner" data-swchon-text="YES" data-swchoff-text="NO"></span>                         <span class="onoffswitch-switch"></span> -->
+<!--          							</label> </span>-->
+<!--          					</div>-->
+<!--  								</section>-->
+<!--								</fieldset>-->
+<!--								<div class="col col-xs-12 col-sm-12 col-md-12 col-lg-12 table-bordered  hidden" id="sqlerr">-->
+<!--								</div>-->
+<!--								<section>-->
+<!--								  <div id="db_result_table" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">-->
+<!--                    <div id="chart_table_con">-->
+<!--                    </div>-->
+<!--                    <div id="chart_table_template" style="display:none;">-->
+<!--                      <div class="row" style="padding-right: 15px">-->
+<!--                      </div>-->
+<!--                      <div class="dataTables_wrapper" >-->
+<!--                        <table id="chart_table" class="table table-bordered table-striped"></table>-->
+<!--                        <table id ="chart_table_ods" class="table table-bordered table-striped"></table>-->
+<!--                      </div>-->
+<!--                      <div id="chart_table_slider_bar"></div>-->
+<!--                    </div>  -->
+<!--									</div>-->
+<!--								</section>-->
+<!--							</form>	-->
+<!--							</div>-->
+<!--							<div class="tab-pane fade" id="profile">-->
+<!--                <section>-->
+<!--								  <div id="db_tables_table" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">-->
+<!--                    <div id="chart_table_con">-->
+<!--                    </div>-->
+<!--                    <div id="chart_table_template" style="display:none;">-->
+<!--                      <div class="row" style="padding-right: 15px">-->
+<!--                      </div>-->
+<!--                      <div class="dataTables_wrapper" >-->
+<!--                        <table id="chart_table" class="table table-bordered table-striped"></table>-->
+<!--                        <table id ="chart_table_ods" class="table table-bordered table-striped"></table>-->
+<!--                      </div>-->
+<!--                      <div id="chart_table_slider_bar"></div>-->
+<!--                    </div>  -->
+<!--									</div>-->
+<!--								</section>-->
+<!--							</div>-->
+<!--							<div class="tab-pane fade" id="info">-->
+<!--  							<div class="row">-->
+<!--                  	<div class="col-sm-12">-->
+<!--                  		<div class="well">-->
+<!--                  			<table class="table table-striped table-forum">-->
+<!--                  				<thead>-->
+<!--                  					<tr>-->
+<!--                  						<th colspan="2"></th>-->
+<!--                  						<th class="text-center hidden-xs hidden-sm" style="width: 100px;"></th>-->
+<!--                  						<th class="text-center hidden-xs hidden-sm" style="width: 100px;"></th>-->
+<!--                  						<th class="hidden-xs hidden-sm" style="width: 200px;"></th>-->
+<!--                  					</tr>-->
+<!--                  				</thead>-->
+<!--                  				<tbody id="hissql_tablebody"></tbody>-->
+<!--                  			</table>-->
+<!--                  		</div>-->
+<!--                  	</div>-->
+<!--                  </div>-->
+<!--							</div>-->
+<!--						</div>-->
+<!--					</div>-->
+<!--  		        </div>-->
+<!--  		    </div>-->
+<!--  		</div>-->
+<!--  	</article>-->
+<!--  </div>-->
+<!--</section>-->
+<!--<script src="lib/js/plugin/datatables/media/js/jquery.dataTables.min.js"> </script>-->
+<!--<script src="bi/html/table_custom.js"></script>-->
+<!--<script>-->
+<!--  pageSetUp();-->
+<!--  init();-->
+<!--  var sqls = "";-->
+<!--  var colms = [];-->
+<!--  var datas = [];-->
+<!--  var hisSql= [];-->
+<!--  function init(){-->
+<!--    var _sqls = $('#db_form').find('[name=sqls]');-->
+    //查询按钮点击事件
+<!--    $('#db_form').find('._search').on('click',function(){-->
+<!--      sqls = $('#db_form').find('[name=sqls]').val();-->
+<!--      if(sqls==''){zy.ui.msg("提示：","请正确输入SQL文！","i");return false;}-->
+<!--      var cb = function(msg){-->
+<!--        hisSql.push({sqls:sqls,dt:zy.tool.Date.getDatetimes(),msg:msg});-->
+<!--        if(msg && msg.ret=="0"){-->
+<!--          $('#sqlerr').html("正常！");-->
+<!--          colms=[];-->
+<!--          datas = msg.result;-->
+<!--          $.each(datas,function(i,v){-->
+<!--            if(i==0){-->
+<!--               $.each(v,function(k,r){-->
+<!--                 colms.push({title:k,data:k}); -->
+<!--               });-->
+<!--            }-->
+<!--          });-->
+<!--          showTable();-->
+<!--        }-->
+<!--      };-->
+<!--      var err = function(msg){-->
+<!--        hisSql.push({sqls:sqls,dt:zy.tool.Date.getDatetimes(),msg:msg});-->
+<!--        zy.ui.msg("异常：","sql执行异常！","e");-->
+<!--        $('#sqlerr').html('<strong>注:</strong>'+msg.errs);-->
+<!--        showErr();-->
+<!--      }-->
+<!--      zy.g.am.app = 'cfb82858dc0a4598834d356c661a678f';-->
+<!--      zy.g.am.mod = 'log_analy';-->
+<!--      zy.g.am.sqls = sqls;-->
+<!--      zy.net.get("api/dbtool",cb,{},null,err);-->
+<!--    });-->
+    
+<!--    $('#db_form').find('._clear').on('click',function(){-->
+<!--      $('#db_form').find('[name=sqls]').val("");-->
+<!--    });-->
+      
+<!--    $('.navchange').find('[href=#info]').on('click',function(){-->
+<!--      var str ="";-->
+<!--      for(var i in hisSql){-->
+<!--        var h = hisSql[i];-->
+<!--        var ret = h.msg.ret=='0'?'成功':'失败';-->
+<!--        str = str +'<tr><td class="text-center" style="width: 40px;"><i class="fa fa-copy fa-2x text-muted _copy"></i></td><td><h4><a href="javascript:void(0);">'+h.dt+'</a><small>'+h.sqls+'</small></h4></td><td class="text-center hidden-xs hidden-sm"><a href="javascript:void(0);"></a></td><td class="text-center hidden-xs hidden-sm"><a href="javascript:void(0);"></a></td><td class="hidden-xs hidden-sm">结果：<a href="javascript:void(0);"></a><small>'+ret+'</small></td></tr>';-->
+<!--      }-->
+<!--      $('#hissql_tablebody').html(str);-->
+<!--    });-->
+    
+<!--    $('.navchange').find('[href=#profile]').on('click',function(){-->
+<!--      var cb = function(msg){-->
+<!--        if(msg&&msg.result){-->
+<!--          colms=[-->
+<!--            {data:"typecd",title:"类型"},-->
+<!--            {data:"cn",title:"中文"},-->
+<!--            {data:"en",title:"English"},-->
+<!--            {title:"状态","render":function(data, type, row, meta) {-->
+<!--              if (row.status === '1') { -->
+<!--                return "有效";-->
+<!--              }-->
+<!--              else{return "无效";}-->
+<!--            }},-->
+<!--            {data:"updatedt",title:"更新时间"},-->
+<!--            {data:"createdt",title:"创建时间"},-->
+<!--            {data:"mark",title:"备注"}];-->
+<!--          datas = msg.result;-->
+<!--          var o = {};-->
+<!--          o.columns = colms;-->
+<!--          o.data = datas;-->
+<!--          BuildGrid($('#db_tables_table'),o);-->
+<!--        }-->
+<!--      };-->
+<!--      zy.g.am.app = 'cfb82858dc0a4598834d356c661a678f';-->
+<!--      zy.g.am.mod = 'log_analy';-->
+<!--      zy.g.am.sqls = 'select * from sys_md_mm003';-->
+<!--      zy.net.get("api/dbtool",cb,{},null);-->
+<!--    });-->
+    
+<!--    $('#showerr').click(function(){-->
+<!--        showErr();-->
+<!--    });-->
+<!--  }-->
+  
+<!--  function showTable () {-->
+<!--    var o = {};-->
+<!--    o.columns = colms;-->
+<!--    o.data = datas;-->
+<!--    BuildGrid($('#db_result_table'),o);-->
+<!--  }-->
+  
+<!--  function showErr(){-->
+<!--    if($('#showerr').prop('checked')){-->
+<!--      $('#sqlerr').removeClass("hidden");-->
+<!--    } else {-->
+<!--      $('#sqlerr').addClass("hidden");-->
+<!--    }-->
+<!--  }-->
+<!--</script>-->

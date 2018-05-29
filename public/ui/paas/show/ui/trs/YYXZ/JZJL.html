@@ -1,0 +1,112 @@
+<script type="text/javascript">
+
+//转诊状态下拉
+$(function () {
+	getselectdform1();
+	});
+
+	function  getselectdform1(){
+		var url="mdm/dict/listget/";
+		var infoa = new Map();
+		infoa.put("stringsplit","VA0004.912");
+		var itemsList= [];
+		LC_AjaxGet(MDMBaseUrl+url,"jzjl","mdmSelectdf",infoa,itemsList);
+}
+	function mdmSelectdf(data){
+		var info = new Map();
+		info.put("key",["typeCode2"]);
+		info.put("value",["typeName"]);
+		info.put("keySplit",",");
+		info.put("valueSplit","|");
+		LC_GetSelect("jzjl","ts",info,data.dataList["VA0004.912"]);
+}
+// 画面初始化处理
+ $(function () {
+alert(self.parent.dataMap);
+  // 取得画面URI参数
+LC_SetMapData("jzjl",self.parent.dataMap);
+   
+  });
+$(function () {
+getselect();
+});
+
+ function  getselect(){
+
+  var url="mdm/dict/listget/";
+  var infoa = new Map();
+  infoa.put("stringsplit","VA0004.912,CV5101.62");
+  var itemsList= [];
+
+  LC_AjaxGet(MDMBaseUrl+url,"jzjl","mdmSelect",infoa,itemsList);
+
+}
+
+function mdmSelect(data){
+
+  var info = new Map();
+  info.put("key",["typeCode2"]);
+  info.put("value",["typeName"]);
+  info.put("keySplit",",");
+  info.put("valueSplit","|");
+  LC_GetSelect("jzjl","ts",info,data.dataList["VA0004.912"]);
+  LC_GetSelect("jzjl","VHT",info,data.dataList["CV5101.62"]);
+
+}
+</script>
+
+<div class="flPadTB-10">
+ <form id="jzjl">
+    <div class="mainW-448">
+        <div class="itemLW-112 padT-4">转诊状态：</div>
+        <div class="itemRW-336"><select  id="ts" class="textLW" name="dept"></select></div>
+    </div>
+<div class="mainW-224" >
+    <div class="itemLW-112 padT-4">就诊时间：</div>
+    <div class="itemRW-112 padT-4"><span id="vtime"></span></div>
+</div>
+<div class="mainW-224" >
+    <div class="itemLW-112 padT-4">就诊类别：</div>
+    <div class="itemRW-112"><select class="textLW" name="dept" id="vht"></select></div>
+</div>
+<div class="mainW-224" >
+    <div class="itemLW-112 padT-4">就诊记录号：</div>
+    <div class="itemRW-112"><input class="textLW" type="text" id="vhrno"/></div>
+</div>
+<div class="mainW-224" >
+    <div class="itemLW-112 padT-4">经诊医生：</div>
+    <div class="itemRW-112" id="vdid"><select class="textLW" name="dept"></select></div>
+</div>
+<div class="mainW-448">
+    <div class="mainW-224" >
+        <div class="itemLW-112 padT-4">诊断码：</div>
+        <div class="itemRW-112"><input class="textLW" type="text" id="dr"/></div>
+    </div>
+    <div class="mainW-224" >
+        <div class="itemLW-112 padT-4">诊断名：</div>
+        <div class="itemRW-112"><select class="textLW" name="dept" id=""></select></div>
+    </div>
+</div>
+<div class="mainW-448">
+    <div class="itemLW-112 padT-4">诊断描述：</div>
+    <div class="itemRW-336"><textarea class="textLW" name="" cols="" rows="" id="dsymptom"></textarea></div>
+</div>
+<div class="mainW-448">
+    <div class="itemLW-112 padT-4">病史摘要：</div>
+    <div class="itemRW-336"><textarea class="textLW" name="" cols="" rows="" id="hsummary"></textarea></div>
+</div>
+<div class="mainW-448">
+    <div class="itemLW-112 padT-4">过敏史：</div>
+    <div class="itemRW-336"><textarea class="textLW" name="" cols="" rows="" id="irribefore"></textarea></div>
+</div>
+<div class="mainW-448">
+    <div class="itemLW-112 padT-4">用药记录：</div>
+    <div class="itemRW-336"><textarea class="textLW" name="" cols="" rows="" id="drugcount"></textarea></div>
+</div>
+<div class="mainW-448">
+    <div class="itemLW-112 padT-4">治疗建议：</div>
+    <div class="itemRW-336"><textarea class="textLW" name="" cols="" rows="" id="aca"></textarea></div>
+</div> 
+</form>
+</div>
+

@@ -1,0 +1,106 @@
+<!--<div class="jarviswidget jarviswidget jarviswidget-color-blueDark" id="wid-id-13" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false">-->
+  <!-- widget options:
+  usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+  data-widget-colorbutton="false"
+  data-widget-editbutton="false"
+  data-widget-togglebutton="false"
+  data-widget-deletebutton="false"
+  data-widget-fullscreenbutton="false"
+  data-widget-custombutton="false"
+  data-widget-collapsed="true"
+  data-widget-sortable="false"
+
+  -->
+<!--  <header>-->
+<!--    <h2><strong>重要数据</strong><i></i></h2>-->
+
+<!--  </header>-->
+
+  <!-- widget div-->
+<!--  <div>-->
+
+    <!-- widget edit box -->
+<!--    <div class="jarviswidget-editbox">-->
+      <!-- This area used as dropdown edit box -->
+
+<!--    </div>-->
+    <!-- end widget edit box -->
+
+    <!-- widget content -->
+<!--    <div>-->
+<!--      <div class="row" style="margin: 0 0 20px 0;">-->
+<!--        <div class="smart-form">-->
+<!--          <div class="col col-4">-->
+<!--            <div class="input-group">-->
+<!--              <span class="input-group-addon"> 模版列表 </span>-->
+<!--              <input type="text" style="width: 100%;" name="sel">-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="col col-1">-->
+<!--              <button name="search" type="button" class="form-control btn btn-default">-->
+<!--              	查询-->
+<!--              </button>-->
+<!--          </div>-->
+<!--          <div name="colCon" style="display: none;" class="col col-3 pull-right">-->
+<!--            <div class="col col-8">-->
+<!--              <div class="input-group">-->
+<!--                <span class="input-group-addon"> 滚动幅度 </span>-->
+<!--                <input type="text" style="width: 100%;" class="form-control" name="step">-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="col col-4">-->
+<!--                <button type="button" class="form-control btn btn-default" name="dySco">-->
+<!--                  开始-->
+<!--                </button>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+      <!-- widget body text-->
+
+<!--      <div id="test"></div>-->
+
+      <!-- end widget body text-->
+
+<!--    </div>-->
+    <!-- end widget content -->
+
+<!--  </div>-->
+  <!-- end widget div -->
+
+<!--</div>-->
+<!--<script type="text/javascript" src="bi/js/zy_chart_wbsTable.js"></script>-->
+<!--<script type="text/javascript">-->
+<!--  zy.g.am.app = 'ewaterbi';-->
+<!--  zy.g.am.mod = 'impdata';-->
+<!--  zy.net.get('api/getimpdatanmdict',function(msg){-->
+<!--      $('[name=sel]').select2({-->
+<!--        data : msg.result-->
+<!--      });-->
+  },{sitetype:'2'}); //泵站
+
+<!--  $('[name=search]').click(function() {-->
+<!--  	var _modsn = $('[name=sel]').val();-->
+<!--  	if(_modsn != '')-->
+<!--  	  init($('[name=sel]').val());-->
+<!--  	else-->
+<!--  	  zy.ui.msg('提示','请选择模版','i');-->
+<!--  });-->
+
+<!--  function init(modsn) {-->
+<!--    $.fn.factData.buildHander(function(hander) {-->
+<!--      var apiInfo = {-->
+<!--        api : 'getsiteimpdatamodrelateinfo',-->
+<!--        app : 'ewaterbi',-->
+<!--        mod : 'impdata',-->
+<!--        r_parm : {-->
+<!--          modsn : modsn,-->
+<!--          sitetype : '2'-->
+<!--        }-->
+<!--      };-->
+<!--      hander.init('test', apiInfo, function(b) {-->
+<!--      });-->
+<!--    });-->
+<!--  }-->
+<!--</script>-->

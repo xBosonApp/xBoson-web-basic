@@ -1,0 +1,39 @@
+<ui:gotop/>
+
+<ui:jarviswidget id='doc_index' title='开发手册'>
+<ui:row>
+
+<ul style='margin: 50px; font-size: 20px;'>
+  <li><a href='api-doc/javascript.html' 
+    target='doc_view'>JavaScript 开发规范</a></li>
+  <li><a href='api-doc/instruction.html' 
+    target='doc_view'>平台服务说明文档</a></li>
+  <li><a href='api-doc/masquerade.md'
+    target='doc_view'>模板开发手册</a></li>
+  <li><a href='api-doc/brewery.md'
+    target='doc_view'>UI 版本管理接口开发手册</a></li>
+  <li><a href='api-doc/paas-qa.md'
+    target='doc_view'>平台部署 Q/A</a></li>
+</ul>
+
+</ui:row>
+</ui:jarviswidget>
+
+
+<include src='./md.htm'/>
+
+<script>
+$(function() {
+  $('a[target]').click(function() {
+    var thiz = $(this);
+    set_markdown_file(null, null, thiz.attr('href'));
+    pageSetUp();
+    return false;
+  });
+  
+  // $('#gotop').click(function() {
+  //   $("#page_top").focus();
+  //   return false;
+  // });
+});
+</script>

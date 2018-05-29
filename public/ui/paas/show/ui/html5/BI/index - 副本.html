@@ -1,0 +1,663 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>哈尔滨市道里区卫生综合管理</title>
+<script type="text/javascript" src="../comm.js"></script>
+<script type="text/javascript" src="../comm/commonJs/LC_bi.js"></script>
+<script type="text/javascript" src="../comm/commonJs/bootstrap/gray.js"></script>
+<!--=====年月日插件=====-->
+<link href="../comm/commonCss/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+<script type="text/javascript" src="../comm/commonJs/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<style>
+#lc-rowtable{ overflow:hidden;}
+.row-fluid{ position:relative;}
+.row-fluid .span1{ margin: 0; text-align: right; line-height: 30px;}
+.row-fluid .span2{ margin: 0 0 0 10px;}
+.submenu{height:300px;overflow: auto; overflow-x:hidden;}
+.submenu2{height:200px;overflow: auto; overflow-x:hidden;}
+ul.page-sidebar-menu > li > ul.sub-menu li > ul.sub-menu.submenu3 > li > a{padding-left:60px;}
+ul.page-sidebar-menu > li > ul.sub-menu li > ul.sub-menu.submenu4 > li > a{padding-left:60px;}
+ul.page-sidebar-menu > li > ul.sub-menu li > ul.sub-menu > li > a.ccc{color:#808080;}
+.container-fluid{padding: 0 20px 8px 20px;}
+ul.page-sidebar-menu > li.open > ul.sub-menu{ display: block;}
+.close{ display: none;}
+#main{ position: relative;}
+.loadshow{position: absolute; top: 0; background:rgba(0,0,0,0.5) url(../comm/commonImg/fancybox_loading.gif) center center no-repeat;}
+ul.page-sidebar-menu > li > ul.sub-menu li > ul.sub-menu > li > a.z-active{background:#9dd5fb;color:#555;}
+.page-sidebar-menu{min-height: 573px;}
+#maindiv > div{ float: left;}
+ul.page-sidebar-menu > li > ul.sub-menu li > ul.sub-menu > li > a.ccc:hover{
+    background: none !important;
+    color: #808080 !important;
+}
+</style>
+<script>
+$(function(){
+//分割线---------------------没有二级的单页--------------------------------------------------
+$(".bi_show").click(function(){
+	$("#main").html("");
+	var ehrrel=$(this).attr("rel");
+	$("#main").load(ehrrel,function(){
+		setTimeout(function(){
+			 $('.selectpicker').selectpicker({
+				'selectedText': 'cat'
+			});
+            
+		}, 300);
+		$(".toolsmore").hide();
+        $(".lc-inquire").show();
+        $(".reload").show(); 
+	});
+
+});
+});
+//登录
+$(function () {
+   showDatalogin();
+});
+function showDatalogin(){
+    var url ="dimUser";
+    var itemsList = [];
+    var info = new Map();
+    info.put("sqlid","loginCheck");
+    sys_AjaxGet(BIUrl+url,"","logincallbacka",info,itemsList);
+    }
+function logincallbacka(reData){
+    if(reData.ret!=="105"){
+        $('#trigger').scojs_modal();
+    }else{
+        $("#ylfwjc").click();
+    	$("#mz").click();
+    	$("#firstshow").click();
+    }
+}
+//---------------------------------------下拉菜单-----
+//重点疾病
+function  getselectdimcv01(param){
+   sys_BI_getDimcvList("mdmSelectdimcvzyzdjb","dimCVPriDis");
+}
+function mdmSelectdimcvzyzdjb(data){
+	//alert("------------111");
+  var info = new Map();
+  info.put("key",["typecode"]);
+  info.put("value",["typename"]);
+  sys_GetSelect("org_zyzdjb","zyzdjb",info,sys_BI_getDimcvListData("dimCVPriDis"));
+  
+}
+//重点手术
+function  getselectdimcv02(){
+   sys_BI_getDimcvList("mdmSelectdimcvzyzdss","dimCVOper");
+}
+function mdmSelectdimcvzyzdss(data){
+	//alert("------------222");
+  var info = new Map();
+  info.put("key",["typecode"]);
+  info.put("value",["typename"]);
+  sys_GetSelect("org_zyzdss","zyzdss",info,sys_BI_getDimcvListData("dimCVOper"));
+}
+
+//右侧的高度随着浏览器高度变化而变化
+//window.onload=function (){ 
+//function auto_height() 
+//{
+//document.getElementById("page-content").style.height=document.documentElement.clientHeight-42+"px"; 
+//} 
+//auto_height(); 
+//onresize=auto_height; 
+//} 
+
+//获得当前时间,刻度为一千分一秒
+var initializationTime=(new Date()).getTime();
+function showLeftTime()
+{
+var now=new Date();
+var year=now.getFullYear();
+var month=now.getMonth()+1;
+var day=now.getDate();
+var hours=now.getHours();
+var minutes=now.getMinutes();
+var seconds=now.getSeconds();
+document.all.show.innerHTML=""+year+"年"+month+"月"+day+"日 "+hours+":"+minutes+":"+seconds+"";
+//一秒刷新一次显示时间
+var timeID=setTimeout(showLeftTime,1000);
+}
+//-->
+
+
+
+</script>
+</head>
+
+<body class="page-header-fixed" onload="showLeftTime()">
+<!-- =====header===== -->
+<div class="header navbar navbar-inverse navbar-fixed-top">
+	<div class="navbar-inner">
+    	<div class="container-fluid">
+            <a href="index.html" class="brand" style="color:#fff; font-family:微软雅黑; font-size:16px; margin:0;">哈尔滨市道里区卫生综合管理</a>
+            <a href="javascript:;" class="btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
+                <img src="../comm/commonImg/menu-toggler.png">
+            </a>
+        </div>
+    </div>
+    <div class="header-time">
+        <div class="header-time-main" id="show"></div>
+        <a href="http://222.171.79.100:8080/" target="_blank" style="float:right; color:#fff; margin:5px 10px 0 0;">道里区区域管理平台</a>
+    </div>
+</div>
+<div class="page-container row-fluid">
+	<div class="page-sidebar nav-collapse collapse">
+    	<ul class="page-sidebar-menu">
+            <li>
+                <div id="lchide" class="sidebar-toggler hidden-phone"></div>
+            </li>
+            <li class="open">
+                <a href="javascript:;"><i class="icon-home" style="color:#ffffff;"></i><span class="title">公共卫生</span></a>
+            	<ul class="sub-menu ">
+                    <li class="open">
+                        <a id="ylfwjc" href="javascript:;"><i class="icon-th"></i> 健康档案管理<span class="arrow"></span></a>
+                        <ul class="sub-menu">
+                        	<li>
+                                <a id="firstshow" class="bi_show" href="" rel="公共卫生数据查询.html"><i class="icon-user"></i><span class="title"> 健康档案综合查询</span></a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a href="javascript:;"><i class="icon-user"></i> 健康档案报表<span class="arrow"></span></a>
+                                <ul class="sub-menu">
+                                    <li><a class="bi_show" href="javascript:;" rel="tab01.html">健康档案报表</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="ggws_jkjy.html">健康教育报表</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="jxkh_jhsyjsfwzxzd.html">计划生育服务咨询报表</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="jxkh_kqwsfugl.html">口腔卫生服务管理报表</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="jxkh_syjc.html">健康档案死亡人数报表</a></li>
+                                </ul>
+                            </li>
+                            
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:;"><i class="icon-th"></i> 特殊人群管理<span class="arrow"></span></a>
+                        <ul class="sub-menu ">
+                            <li>
+                                <a href="javascript:;"><i class="icon-user"></i> 高血压人群管理<span class="arrow"></span></a>
+                                <ul class="sub-menu">
+                                    <li><a class="bi_show" href="javascript:;" rel="公共卫生数据查询_gxy.html">高血压人群综合查询</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="tab02.html">高血压人群报表</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="javascript:;"><i class="icon-user"></i> 糖尿病人群管理<span class="arrow"></span></a>
+                                <ul class="sub-menu">
+                                    <li><a class="bi_show" href="javascript:;" rel="公共卫生数据查询_tjb.html">糖尿病人群综合查询</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="tab03.html">糖尿病人群综合查询报表</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="javascript:;"><i class="icon-user"></i> 孕产妇人群管理<span class="arrow"></span></a>
+                                <ul class="sub-menu">
+                                    <li><a class="bi_show" href="javascript:;" rel="公共卫生数据查询_ycf.html">孕产妇人群综合查询</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="ggws_ycfjkgl.html">孕产妇报表</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="javascript:;"><i class="icon-user"></i> 0-6岁儿童管理<span class="arrow"></span></a>
+                                <ul class="sub-menu">
+                                    <li><a class="bi_show" href="javascript:;" rel="公共卫生数据查询_et.html">0-6岁儿童综合查询</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="ggws_setjkgl.html">0-6岁儿童报表</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="javascript:;"><i class="icon-user"></i> 老年人管理<span class="arrow"></span></a>
+                                <ul class="sub-menu">
+                                    <li><a class="bi_show" href="javascript:;" rel="公共卫生数据查询_lnr.html">老年人群综合查询</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="ggws_sjslnrjkgl.html">老年人群报表</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="javascript:;"><i class="icon-user"></i> 残疾人群管理<span class="arrow"></span></a>
+                                <ul class="sub-menu">
+                                    <li><a class="bi_show" href="javascript:;" rel="公共卫生数据查询_cjr.html">残疾人群综合查询</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="jxkh_cjrgl.html">残疾人群报表</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="javascript:;"><i class="icon-user"></i> 精神病人群管理<span class="arrow"></span></a>
+                                <ul class="sub-menu">
+                                    <li><a class="bi_show" href="javascript:;" rel="公共卫生数据查询_jsb.html">精神病人群综合查询</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="ggws_zxjsbglrs.html">精神病人群报表</a></li>
+                                </ul>
+                            </li>
+                            
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:;"><i class="icon-th"></i> 数据应用分析<span class="arrow"></span></a>
+                        <ul class="sub-menu submenu">
+                            <li>
+                                <a href="javascript:;"><i class="icon-user"></i> 人口档案情况分析<span class="arrow"></span></a>
+                                <ul class="sub-menu">
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_003005007.html">人口档案比例</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_004006.html">人口档案各年度增长量</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_008社区中男女比例情况.html">人口档案性别比例</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_004007.html">人口档案各年度男女增长量</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_004008.html">人口档案各年度各年龄段增长量</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="javascript:;"><i class="icon-user"></i> 出生和死亡情况分析<span class="arrow"></span></a>
+                                <ul class="sub-menu">
+                                    <li>
+                                        <a href="javascript:;"><i class="icon-bookmark"></i> 出生情况分析<span class="arrow"></span></a>
+                                        <ul class="sub-menu submenu3">
+                                            <li><a href="javascript:;" class="ccc">出生缺陷率</a></li>
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_道理区低出生体重发生率.html">低出生体重发生率</a></li>
+                                            <li><a href="javascript:;" class="ccc">遗传代谢性疾病筛查率</a></li>
+                                            <li><a href="javascript:;" class="ccc">新生儿听力筛查率</a></li>
+                                            <li><a href="javascript:;" class="ccc">婴儿死亡率及5岁以下儿童死亡率</a></li>
+                                            <li><a href="javascript:;" class="ccc">新生儿破伤风发病率</a></li>
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_道理区新生儿数量.html">各年度出生人数</a></li>
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_道理区新生儿性别比例.html">新生儿性别比例</a></li>
+                                            <!-- <li><a class="bi_show" href="javascript:;" rel="yetj_道理区1岁以下儿童数量.html">1岁以下儿童数量</a></li> -->
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;"><i class="icon-bookmark"></i> 死亡档案分析<span class="arrow"></span></a>
+                                        <ul class="sub-menu submenu4">
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_死亡人口(男女占比).html">死亡档案性别比例</a></li>
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_004009.html">死亡档案各年度增长量</a></li>
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_004010.html">死亡档案各年龄增长量</a></li>
+                                            <li><a href="javascript:;" class="ccc">死亡档案死因分析</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="javascript:;"><i class="icon-user"></i> 慢病档案分析<span class="arrow"></span></a>
+                                <ul class="sub-menu">
+                                    <li>
+                                        <a href="javascript:;"><i class="icon-bookmark"></i> 高血压档案分析<span class="arrow"></span></a>
+                                        <ul class="sub-menu submenu3">
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_高血压(人群比率).html">高血压患病比例</a></li>
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_高血压(患者性别分析).html">高血压患病性别比例</a></li>
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_高血压(年龄比率).html">高血压档案各年龄比例</a></li>
+                                            <li><a href="javascript:;" class="ccc">高血压发现患病率与理论患病率比较</a></li>
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_gxy02.html">高血压档案各年度增长量</a></li>
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_高血压控制率.html">高血压控制率</a></li>
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_高血压控制率男女比例.html">高血压控制率性别比例</a></li>
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_高血压控制率年龄比例.html">高血压控制率年龄比例</a></li>
+                                            <li><a href="javascript:;" class="ccc">高血压治疗率</a></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;"><i class="icon-bookmark"></i> 糖尿病档案分析<span class="arrow"></span></a>
+                                        <ul class="sub-menu submenu3">
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_糖尿病(人群比率).html">糖尿病患病比例</a></li>
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_糖尿病(患者性别分析).html">糖尿病患病性别比例</a></li>
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_糖尿病(年龄比率).html">糖尿病档案各年龄比例</a></li>
+                                            <li><a href="javascript:;" class="ccc">糖尿病发现患病率与理论患病率比较</a></li>
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_tnb41.html">糖尿病档案各年度增长量</a></li>
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_糖尿病控制率.html">糖尿病控制率</a></li>
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_糖尿病控制率男女比例.html">糖尿病控制率性别比例</a></li>
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_糖尿病控制率年龄比例.html">糖尿病控制率年龄比例</a></li>
+                                            <li><a href="javascript:;" class="ccc">糖尿病治疗率</a></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;"><i class="icon-bookmark"></i> 精神病档案分析<span class="arrow"></span></a>
+                                        <ul class="sub-menu submenu3">
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_精神病(人群比率).html">精神病患病比例</a></li>
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_精神病(患者性别分析).html">精神病患病性别比例</a></li>
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_精神病(年龄比率).html">精神病各年龄比例</a></li>
+                                            <li><a href="javascript:;" class="ccc">精神病发现患病率与理论患病率比较</a></li>
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_jsb48.html">精神病各年度增长量</a></li>
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_精神病控制率.html">精神病控制率</a></li>
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_精神病控制率男女比例.html">精神病控制率性别比例</a></li>
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_精神病控制率年龄比例.html">精神病控制率年龄比例</a></li>
+                                            <li><a href="javascript:;" class="ccc">精神病治疗率</a></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;"><i class="icon-bookmark"></i> 慢性病数据分析评测<span class="arrow"></span></a>
+                                        <ul class="sub-menu submenu4">
+                                            <li><a href="javascript:;" class="ccc">慢性病数据分析评测表</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="javascript:;"><i class="icon-user"></i> 危险因素与遗传病史<span class="arrow"></span></a>
+                                <ul class="sub-menu">
+                                    <li>
+                                        <a href="javascript:;"><i class="icon-bookmark"></i> 主要危险因素分析<span class="arrow"></span></a>
+                                        <ul class="sub-menu submenu4">
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_004011.html">人口危险因素年度变化趋势</a></li>
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_吸烟饮酒健康情况.html">健康档案人口危险因素分析</a></li>
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_高血压患病因素分析.html">高血压危险因素分析</a></li>
+                                            <li><a href="javascript:;" class="ccc">糖尿病危险因素分析</a></li>
+                                            
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;"><i class="icon-bookmark"></i> 其它因素分析<span class="arrow"></span></a>
+                                        <ul class="sub-menu submenu4">
+                                            <li>
+                                                <a href="javascript:;"><i class="icon-bookmark"></i> 血压分析<span class="arrow"></span></a>
+                                                <ul class="sub-menu submenu4">
+                                                    <li><a href="javascript:;" class="ccc">人口收缩压舒张压平均值</a></li>
+                                                    <li><a href="javascript:;" class="ccc">人口收缩压舒张压平均值性别比例</a></li>
+                                                    <li><a href="javascript:;" class="ccc">人口收缩压舒张压平均值年龄比例</a></li>
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:;"><i class="icon-bookmark"></i> 血脂分析<span class="arrow"></span></a>
+                                                <ul class="sub-menu submenu4">
+                                                    <li><a href="javascript:;" class="ccc">胆固醇甘油三脂等平均值</a></li>
+                                                    <li><a href="javascript:;" class="ccc">胆固醇甘油三脂等平均值性别比例</a></li>
+                                                    <li><a href="javascript:;" class="ccc">胆固醇甘油三脂等平均值年龄比例</a></li>
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:;"><i class="icon-bookmark"></i> 腰围分析<span class="arrow"></span></a>
+                                                <ul class="sub-menu submenu4">
+                                                    <li><a href="javascript:;" class="ccc">腰围平均均值</a></li>
+                                                    <li><a href="javascript:;" class="ccc">腰围平均均值性别比例</a></li>
+                                                    <li><a href="javascript:;" class="ccc">腰围平均均值年龄比例</a></li>
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:;"><i class="icon-bookmark"></i> 体质指数分析<span class="arrow"></span></a>
+                                                <ul class="sub-menu submenu4">
+                                                    <li><a href="javascript:;" class="ccc">人口体质指数平均值</a></li>
+                                                    <li><a href="javascript:;" class="ccc">人口体质指数平均值性别比例</a></li>
+                                                    <li><a href="javascript:;" class="ccc">人口体质指数平均值年龄比例</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;"><i class="icon-bookmark"></i> 遗传病史分析<span class="arrow"></span></a>
+                                        <ul class="sub-menu submenu4">
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_遗传病史数据分析.html">遗传与无遗传疾病比例</a></li>
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_家族疾病史性别情况分析.html">遗传疾病性别比例</a></li>
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_004012.html">遗传疾病年度变化趋势</a></li>
+                                            <li><a class="bi_show" href="javascript:;" rel="yetj_遗传疾病年龄比例.html">遗传疾病年龄比例</a></li>
+                                        </ul>
+                                    </li>
+                                    
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="javascript:;"><i class="icon-user"></i> 残疾人档案分析<span class="arrow"></span></a>
+                                <ul class="sub-menu">
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_残疾人(人群比率).html">残疾人档案比例</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_残疾人(患者性别分析).html">残疾人档案性别比例</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_残疾人(年龄比率).html">残疾人档案各年龄比例</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_cjr64.html">残疾人档案年度增长量</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="javascript:;"><i class="icon-user"></i> 孕产妇档案分析<span class="arrow"></span></a>
+                                <ul class="sub-menu">
+                                    <li><a class="ccc" href="javascript:;">孕产妇档案管理率</a></li>
+                                    <li><a class="ccc" href="javascript:;">孕产妇重度贫血患病率</a></li>
+                                    <li><a class="ccc" href="javascript:;">>孕产妇住院分娩率</a></li>
+                                    <li><a class="ccc" href="javascript:;">孕产妇死亡率</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_孕产妇自然分娩率.html">孕产妇自然分娩率</a></li>
+                                    <li><a class="ccc" href="javascript:;">孕产妇艾滋病梅毒检测率</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="javascript:;"><i class="icon-user"></i> 儿童档案分析<span class="arrow"></span></a>
+                                <ul class="sub-menu">
+                                    <li><a class="ccc" href="javascript:;">0-6岁儿童管理率</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_婴儿纯母乳喂养率.html">婴儿纯母乳喂养率</a></li>
+                                    <li><a class="ccc" href="javascript:;">5岁及以下儿童贫血低体重率</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="javascript:;"><i class="icon-user"></i> 口腔疾病分析<span class="arrow"></span></a>
+                                <ul class="sub-menu">
+                                    <!-- <li><a class="bi_show" href="javascript:;" rel="yetj_牙齿龌龊.html">郛牙龌龊</a></li> -->
+                                    <li><a href="javascript:;" class="ccc">郛牙龌龊</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="javascript:;"><i class="icon-user"></i> 健康素养<span class="arrow"></span></a>
+                                <ul class="sub-menu">
+                                    <li><a href="javascript:;" class="ccc">健康素养</a></li>
+                                    <li><a href="javascript:;" class="ccc">三方面素养比例</a></li>
+                                    <li><a href="javascript:;" class="ccc">七类健康问题素养比例</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;"><i class="icon-home" style="color:#ffffff;"></i><span class="title">绩效考核</span></a>
+            	<ul class="sub-menu ">
+                    <li>
+                        <a href="javascript:;"><i class="icon-th"></i> 公共卫生经费核算<span class="arrow"></span></a>
+                        <ul class="sub-menu">
+                        	<li>
+                                <a  class="bi_show" href="javascript:;" rel="jxkh_jxhz_d_text.html"><i class="icon-user"></i><span class="title"> 补助标准</span></a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a  class="bi_show" href="javascript:;" rel="jxkh_dxde_d_text.html"><i class="icon-user"></i><span class="title"> 公共卫生经费统计</span></a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:;"><i class="icon-th"></i> 绩效考核数据统计<span class="arrow"></span></a>
+                        <ul class="sub-menu submenu">
+                        	<li>
+                                <a class="bi_show" href="javascript:;" rel="jxkh_jkda.html"><i class="icon-user"></i><span class="title"> 健康档案</span></a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="javascript:;" rel="jxkh_jkjy.html"><i class="icon-user"></i><span class="title"> 健康教育</span></a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="javascript:;" rel="jxkh_etbj.html"><i class="icon-user"></i><span class="title"> 儿童保健</span></a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="javascript:;" rel="jxkh_fnbj.html"><i class="icon-user"></i><span class="title"> 妇女保健</span></a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="javascript:;" rel="jxkh_jhsyjsfwzxzd.html"><i class="icon-user"></i><span class="title"> 计划生育服务咨询指导</span></a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="javascript:;" rel="jxkh_jktj.html"><i class="icon-user"></i><span class="title"> 健康体检</span></a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="javascript:;" rel="jxkh_mxbhzjkgl.html"><i class="icon-user"></i><span class="title"> 慢性病患者健康管理</span></a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="javascript:;" rel="jxkh_cjrgl.html"><i class="icon-user"></i><span class="title"> 残疾人管理</span></a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="javascript:;" rel="jxkh_zxjsbhzjkgl.html"><i class="icon-user"></i><span class="title"> 重性精神病患者健康管理</span></a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="javascript:;" rel="jxkh_kqwsfugl.html"><i class="icon-user"></i><span class="title"> 口腔卫生综合服务管理</span></a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <!--<li>
+                        <a href="javascript:;"><i class="icon-th"></i><span class="title"> 数据应用分析</span></a>
+                        <ul class="sub-menu" style="height:0px;"></ul>
+                    </li>-->
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;"><i class="icon-home" style="color:#ffffff;"></i><span class="title">医疗服务</span></a>
+            	<ul class="sub-menu ">
+                    <li>
+                        <a href="javascript:;"><i class="icon-th"></i> 基层社区<span class="arrow"></span></a>
+                        <ul class="sub-menu submenu">
+                            <li>
+                                <a href="javascript:;"><i class="icon-user"></i> 门诊业务管理<span class="arrow"></span></a>
+                                <ul class="sub-menu">
+                                    <li><a class="bi_show" href="javascript:;" rel="mz_mzgh.html">挂号统计</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="mz_mrmzl.html">就诊人数统计</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="zd_zd.html">诊断量统计</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="mz_cf.html">处方量统计</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="mzjc_yp.html">药品情况统计</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="mzjc_jc.html">检查量统计</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="mzjc_jy.html">检验量统计</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="mz_mzylfy.html">门诊医疗费用统计</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="javascript:;"><i class="icon-user"></i> 住院业务管理<span class="arrow"></span></a>
+                                <ul class="sub-menu">
+                                    <li><a class="bi_show" href="javascript:;" rel="zy_mrzy.html">住院量统计</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="zyjc_yp.html">药品情况统计</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="zyjc_jc.html">住院检查量统计</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="zyjc_jy.html">住院检验量统计</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="zyjc_zyylfy.html">住院费用统计</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                 <a class="bi_show" href="javascript:;" rel="ylfw_mzhzykfylsrje.html"><i class="icon-user"></i> 门诊、住院收入费用统计</a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a href="javascript:;"><i class="icon-user"></i> 医疗卫生数据分析<span class="arrow"></span></a>
+                                <ul class="sub-menu">
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_sjfx68.html">诊疗数据</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_sjfx69.html">历年诊疗人群对比</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_sjfx71.html">门诊人均医疗花费社区机构历年人均诊疗费用对比</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_sjfx72.html">住院人均医疗花费社区机构历年人均诊疗费用对比</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_sjfx75.html">数据监管</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="yetj_sjfx77.html">检验检查</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:;"><i class="icon-th"></i> 医院<span class="arrow"></span></a>
+                        <ul class="sub-menu submenu">
+                            <li>
+                                <a href="javascript:;"><i class="icon-user"></i> 门诊业务管理<span class="arrow"></span></a>
+                                <ul class="sub-menu sublia">
+                                    <li><a class="bi_show" href="javascript:;" rel="zj001.html">挂号统计</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="zj002.html">就诊人数统计</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="zj003.html">诊断量统计</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="zj004.html">处方量统计</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="zj005.html">药品情况统计</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="zj006.html">检查量统计</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="zj007.html">检验量统计</a></li>
+                                    <li><a class="bi_show" href="javascript:;" rel="zj008.html">门诊医疗费用统计</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="javascript:;;;" rel="zj009.html">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">住院人次统计</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="javascript:;;;" rel="zj0010.html">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">门诊和住院康复医疗收入金额（元）</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            
+                            <li>
+                                <a class="bi_show" href="javascript:;;;" rel="zj0011.html">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">手术次数统计</span>
+                                </a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;"><i class="icon-home" style="color:#ffffff;"></i><span class="title">行政管理</span></a>
+            	<ul class="sub-menu">
+                    <li>
+                        <a href="javascript:;"><i class="icon-th"></i> 人事管理<span class="arrow"></span></a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a class="bi_show" href="javascript:;" rel="yzgl_zb.html"><i class="icon-user"></i><span class="title"> 在编</span></a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                            <li>
+                                <a class="bi_show" href="javascript:;" rel="yzgl_wp.html"><i class="icon-user"></i><span class="title"> 外聘</span></a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:;"><i class="icon-th"></i> 机构管理<span class="arrow"></span></a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a class="bi_show" href="javascript:;" rel="yzgl_jgglxx.html"><i class="icon-user"></i><span class="title"> 机构基础信息</span></a>
+                                <ul class="sub-menu" style="height:0px;"></ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <!--<li>
+                        <a id="ylsjyyfx" href="javascript:;"><i class="icon-th"></i> 数据应用分析<span class="arrow"></span></a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a class="bgc" href="javascript:;;;">
+                                    <i class="icon-user"></i> 
+                                    <span class="title">数据分析应用模块</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>-->
+                </ul>
+            </li>
+            
+            
+            
+            
+            
+            
+            
+    </div>
+</div>    
+<div id="page-content" class="page-content">
+	<div class="container-fluid">
+		<a id="trigger" data-trigger="modal" href="login.html" data-title="登录" class="btn" style="display:none;" ></a>
+		<div id="main"></div>
+	</div>
+</div>
+<button id="btn-modal" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal" style="display:none;"></button>
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body"><p>没有相应数据！</p></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+    jQuery(document).ready(function() {       
+       App.init();
+    });
+</script>
+<script type="text/javascript" language="JavaScript"  src="../../commjs/time.js"></script>
+</body>
+</html>

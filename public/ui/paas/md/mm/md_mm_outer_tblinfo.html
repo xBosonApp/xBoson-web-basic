@@ -1,0 +1,505 @@
+<!--外部数据表信息-->
+<div class="row">
+  <div id="outer_tblinfo_tab_container" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <ul>
+      <li class="active"><a href="#tab_first"  ><span>列信息</span></a></li>
+      <li ><a href="#tab_second" ><span>数 据</span></a></li>
+    </ul>
+    <!-- widget content -->
+    <div class="tab-content">
+      <div id="tab_first">
+        <div class="btn-group">
+          <button class="btn btn-info btn-xs" title="创建数据集数据元模型" name="createobj" disabled="disabled"><i class="fa fa-magic"></i> 创建模型</button>
+          <button class="btn btn-info btn-xs" name="selectall"><i class="fa fa-list"></i> 选择行</button>
+          <button class="btn btn-info btn-xs" name="ddl"><i class="fa fa-legal"></i> 查看表定义语句</button>
+        </div>
+        <div class="pull-right">
+          <b name="column_total_count"></b>
+        </div>
+        <div id="outer_tblinfo_column_table_div" class="table-responsive">
+          <table id="outer_tblinfo_column_table" class="table table-bordered table-striped"></table>
+        </div>
+        <!--<div id="outer_tblinfo_column_pagi"></div>-->
+      </div>
+      <div id="tab_second">
+        <form name="where_form" method="post" onsubmit="return false;">
+          <div class="row">
+            <div class="col col-md-6">
+              <textarea name="wherearea" class="form-control" rows="3" placeholder="请输入WHERE条件(a='1' order by b)"></textarea>
+            </div>
+            <div class="col col-md-6">
+              <button type="submit" class="btn btn-primary">查询</button>
+            </div>
+          </div>
+        </form>
+        <div class="pull-right">
+          <b name="column_total_count"></b>
+        </div>
+        <div name="tbldiv" class="table-responsive">
+          <table name="tbl" class="table table-bordered table-striped"></table>
+        </div>
+        <div name="tbl_pagi"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  $('#outer_tblinfo_tab_container').tabs();
+  var outer_tblinfo = (function(){
+    var pt = outer_tblinfo.prototype;
+    var thiz;
+    
+    var tab_container=$('#outer_tblinfo_tab_container');
+    
+    var param;
+    
+    var tab_first=$('#tab_first');
+    var tab_second=$('#tab_second');
+    
+    var tools = {
+      api: function(param, cb) {
+        var _cb = function(msg) {
+          cb && cb(msg);
+        };
+        zy.g.am.app = param.app;
+        zy.g.am.mod = param.mod;
+        zy.net.get("api/" + param.api, _cb, param.r_param, param.page);
+      }
+    };
+    
+    function outer_tblinfo(nodeJSON){
+      param = nodeJSON;
+      Init();
+    }
+    
+    function Init(){
+      tab_container.tabs({
+        active: 0,
+        activate: function (event, ui) {
+          var newIndex = ui.newTab.parent().children().index(ui.newTab);
+          if (newIndex === 0) {
+          }
+          else if(newIndex === 1){
+            Init_tab_second();
+          }
+        }
+      });
+      Init_tab_first();
+    }
+    
+    function Init_tab_first(){
+      var dt = $('#outer_tblinfo_column_table');
+      var pagenation = $('#outer_tblinfo_column_pagi');
+      
+      function DataTable(data) {
+        var columns = [
+          {
+            "data": "table_name",
+            "title":'表名'
+          },
+          {
+            "data": "column_name",
+            "title":'列名'
+          },
+          {
+            "data": "is_nullable",
+            "title":'是否为NULL'
+          },
+          {
+            "title":'默认值',
+            "data":'column_default'
+          },
+          {
+            "title":'列类型',
+            "data":'column_type'
+          },
+          {
+            "title":'是否主键',
+            "data":'column_key'
+          },
+          {
+            "title":'列注释',
+            "data":'column_comment',
+            "defaultContent": ''
+          }
+        ];
+        var options = {
+          "data": data,
+          "columns": columns
+        };
+        $.extend(options, zy.ui.dataTable);
+        dt.dataTable(options);
+      };
+  
+      function _async(num){
+        var padding = (function(num){
+          return function(callback){
+            var i = 0;
+            var result = {};
+            return function(key,value){
+              result[key] = value;
+              i++;
+              if(i == num)
+                callback&&callback(result);
+            }
+          }
+        })(num);
+        return padding;
+      }
+  
+      function Toolbar() {
+  
+        function Modal(data,is_all_columns){
+  
+          var target = $('#md_mm_createobj');
+  
+          var async = _async(2);
+          var done = async(function(result){
+            var left = result.left;
+            var right = result.right;
+  
+            target.find('footer').find('.btn-primary').unbind()
+              .click(function(e){
+                var selectLeft = left.getSelectedNodes();
+                var selectRight = right.getSelectedNodes();
+                var decd0 = target.find('[name=decd0]').val();
+                var decd1 = target.find('[name=decd1]').val();
+                //是否同时创建数据集
+                var is_cre_ds = target.find('input:checked[name=is_cre_ds]').length==1?1:0;
+                zy.log('is_cre_ds=',is_cre_ds);
+                //是否同时创建物理表映射
+                var is_cre_tbl_link = target.find('input:checked[name=is_cre_tbl_link]').length==1?1:0;
+                
+                if(selectLeft.length == 0)
+                  return zy.ui.msg('提示','请选择数据元','i');
+                if(is_cre_ds==1){
+                  if(selectRight.length == 0)
+                    return zy.ui.msg('提示','请选择数据集','i');
+                }else{
+                  selectRight = [{typecd:''}];
+                }
+                if(decd0 == '')
+                  return zy.ui.msg('提示','请选择或输入业务大类','i');
+                if(decd1 == '')
+                  return zy.ui.msg('提示','请输入业务小类','i');
+                if(isNaN(decd1) || decd1.length != 2)
+                  return zy.ui.msg('提示','业务小类为两位数字','i');
+  
+                var _t = {
+                  dedir : selectLeft[0].typecd,
+                  dsdir : selectRight[0].typecd,
+                  column : data,
+                  did : param.did,
+                  table_schema: param.table_schema,
+                  table_name:param.table_name,
+                  decd0 : decd0,
+                  decd1 : decd1,
+                  is_cre_ds : is_cre_ds,
+                  is_cre_tbl_link : is_cre_tbl_link
+                };
+  
+                tools.api({
+                  app:'c879dcc94d204d96a98a34e0b7d75676',
+                  mod:'outdatasource',
+                  api:'creatededs',
+                  r_param : _t
+                },function(msg){
+                  if(msg && msg.ret == '0'){
+                    zy.ui.msg('提示','创建成功','s');
+                    target.modal('hide');
+                  }
+                });
+                
+              })
+          });
+  
+          function tree(container,data,cb){
+            var tree = null;
+  
+            function opt() {
+  
+              function beforeClick(treeId, treeNode, clickFlag){
+                if(treeNode.isParent)
+                  return false;
+                return true;
+              }
+  
+              function Expand(event, treeId, treeNode){
+                _Expand && _Expand(treeNode,tree)
+              }
+  
+              function Click(event, treeId, treeNode) {
+                if(!treeNode)
+                  return;
+                if(treeId != 'left')
+                  return;
+                target.find('[name=decd0]').val(treeNode.typecd);
+              }
+  
+              function _addHoverDom(_id, _node) {
+                var sObj = $("#" + _node.tId + "_span");
+                if (_node.editNameFlag || $("#addBtn_" + _node.tId).length > 0 || $("#editBtn_" + _node.tId).length > 0)
+                  return;
+                var addStr = "<span class='button add' id='addBtn_" + _node.tId + "' title='添加' onfocus='this.blur();'></span>";
+                var editStr = "<span class='button edit' id='editBtn_" + _node.tId + "' title='修改' onfocus='this.blur();'></span>";
+                if (_node.level == 0) {
+                  sObj.after(addStr);
+                } else {
+                  sObj.after(addStr);
+                  sObj.after(editStr);
+                }
+                $('#addBtn_' + _node.tId).bind("click", function() {
+                  tree.selectNode(_node);
+                  target.modal('hide');
+                  mm_h1._addModal(_node,function(node){
+                    var n = node;
+                    // n.shownm = n.typenm;
+                    console.log(tree,_node,n);
+                    tree.addNodes(_node, n);
+                    tree.cancelSelectedNode(_node);
+                    target.modal('show');
+                  },function(){
+                    tree.cancelSelectedNode(_node);
+                    target.modal('show');
+                  });
+                  return false;
+                })
+                $('#editBtn_' + _node.tId).bind('click', function() {
+                  target.modal('hide');
+                  tree.selectNode(_node);
+                  mm_h1._editModal(_node,function(node){
+                    var n = node;
+                    _node.typenm = n.typenm;
+                    _node.shownm = n.shownm;
+                    _node.datatable = n.datatable;
+                    tree.updateNode(_node);
+                    tree.cancelSelectedNode(_node);
+                    target.modal('show');
+                  },function(){
+                    tree.cancelSelectedNode(_node);
+                    target.modal('show');
+                  });
+                  return false;
+                })
+              }
+  
+              function _removeHoverDom(_id, _node) {
+                $("#addBtn_" + _node.tId).unbind().remove();
+                $("#editBtn_" + _node.tId).unbind().remove();
+              }
+  
+              return {
+                view: {
+                  dblClickExpand: false,
+                  addHoverDom: _addHoverDom,
+                  removeHoverDom: _removeHoverDom,
+                  nameIsHTML: true
+                },
+                data: {
+                  key: {
+                    name: "typenm",
+                    title: "shownm"
+                  },
+                  simpleData: {
+                    enable: true,
+                    idKey: "typecd",
+                    pIdKey: "parentcd"
+                  }
+                },
+                callback: {
+                  beforeClick:beforeClick,
+                  onClick: Click
+                  // onExpand : Expand
+                }
+              }
+            }
+  
+            var option = opt()
+            tree = $.fn.zTree.init(container, option, data);
+  
+            cb&&cb(tree);
+          }
+  
+          tools.api({
+            app:'c879dcc94d204d96a98a34e0b7d75676',
+            mod:'outdatasource',
+            api:'getdedstree'
+          },function(msg){
+            var left = target.find('#left');
+            var right = target.find('#right');
+            tree(left,msg['result0'],function(tree){
+              done('left',tree);
+            })
+            tree(right,msg['result1'],function(tree){
+              done('right',tree);
+            })
+            target.modal('show');
+          });
+          
+          //同时创建数据集 复选框事件
+          target.find('input[name=is_cre_ds]').change(function(){
+            if(!$(this).is(':checked')){
+              //同时创建物理表映射 取消勾选
+              target.find('input[name=is_cre_tbl_link]').attr('checked',false);
+            }
+          });
+          //非选中全部列时，同时创建物理表映射，复选框取消勾选
+          if(!is_all_columns){
+            target.find('input[name=is_cre_tbl_link]').attr('checked',false);
+          }
+        }
+        
+        //创建模型
+        tab_first.find('[name=createobj]').click(function(e){
+          zy.net.loadHTML('md/mm/md_mm_outer_sourse.html',$('#md_mm_h1_modal1'),function(){
+            window.ee = dt;
+            var _temp = dt.find('tr.active');
+            var is_all_columns = (dt.find('tbody').find('tr:not(.active)').length==0)?1:0;
+            zy.log('is_all_columns = ',is_all_columns);
+            var data = '';
+            $.each(_temp,function(i,v){
+              var index = $(v).index();
+              data += dt.DataTable().row(index).data()['column_name'] + ',';
+            });
+            data = data.trimCom();
+            Modal(data,is_all_columns);
+          })
+        });
+        //选择行
+        tab_first.find('[name=selectall]').click(function(e){
+          //找出移除和添加class的元素
+          var re = dt.find('tbody').find('tr.active');
+          var ad = dt.find('tbody').find('tr').not('.active');
+          //移除和添加class
+          re.removeClass('active');
+          ad.addClass('active');
+          if(ad.length>0){
+            tab_first.find('[name=createobj]').btnDisable(false);
+          }else{
+            tab_first.find('[name=createobj]').btnDisable(true);
+          }
+        });
+        //DDL
+        tab_first.find('[name=ddl]').click(function(){
+          zy.net.loadHTML('md/mm/tab2_ddl_modal.html',$('#md_mm_h1_modal1'),function(){
+            ddl_modal(param);
+          });
+        });
+        
+        tab_first.find('[name=createobj]').btnDisable(true);
+  
+        dt.on('click', 'tr', function (e) {
+          if ($(this).find('th').is('th') || $(this).find('td').hasClass('dataTables_empty'))
+            return false;
+          if (!$(this).find('div').hasClass('popover') && $(this).hasClass('active')) {
+            $(this).removeClass('active');
+            if(dt.find('tr.active').length == 0)
+              tab_first.find('[name=createobj]').btnDisable(true);
+          } else {
+            $(this).addClass('active');
+            tab_first.find('[name=createobj]').btnDisable(false);
+          }
+        });
+      };
+  
+      // function Pagination(page) {
+      //   $.jqPaginator(pagenation, {
+      //     totalCounts: 1,
+      //     pageSize: zy.g.page.pagesize,
+      //     currentPage: page,
+      //     onPageChange: function (num) {
+      //       SetDt(num);
+      //     }
+      //   });
+      // };
+  
+      function SetDt() {
+        var cb = function (msg) {
+          if (msg) {
+            DataTable(msg.result);
+            tab_first.find('[name=column_total_count]').html('总数：'+msg.result.length);
+          }
+        };
+        zy.g.am.app = 'c879dcc94d204d96a98a34e0b7d75676';
+        zy.g.am.mod = 'outdatasource';
+        zy.net.get("api/getouttablecolumns", cb, {
+          did: param.did,
+          table_schema : param["table_schema"],
+          table_name :param["table_name"]
+        });
+      };
+  
+      SetDt();
+      Toolbar();
+    }
+    
+    function Init_tab_second(){
+      var dtdiv = tab_second.find('[name=tbldiv]');
+      var dt = tab_second.find('[name=tbl]');
+      var pagenation = tab_second.find('[name=tbl_pagi]');
+      var where_form = tab_second.find('[name=where_form]');
+      
+      Toolbar();
+      Pagination(1);
+      
+      function DataTable(type,data) {
+        var columns = [];
+        $.each(type,function(i,v){
+          columns.push({'title':v.cn,'data':v.en});
+        });
+        var options = {
+          "data": data,
+          "columns": columns
+        };
+        $.extend(options, zy.ui.dataTable);
+        dt.dataTable(options);
+      };
+      
+      function Pagination(page) {
+        $.jqPaginator(pagenation, {
+          totalCounts: 1,
+          pageSize: zy.g.page.pagesize,
+          currentPage: page,
+          onPageChange: function (num) {
+            SetDt(num);
+          }
+        });
+      };
+  
+      function SetDt(page) {
+        var cb = function (msg) {
+          if (msg) {
+            DataTable(msg.type,msg.data);
+            tab_second.find('[name=column_total_count]').html('总数：'+msg.count);
+            pagenation.jqPaginator('option', {
+              totalCounts: msg.count,
+              pageSize: zy.g.page.pagesize,
+              currentPage: page
+            });
+            where_form.find('[type=submit]').button('reset');
+          }
+        };
+        zy.g.am.app = 'c879dcc94d204d96a98a34e0b7d75676';
+        zy.g.am.mod = 'outdatasource';
+        zy.net.get("api/gettabledata", cb, {
+          did: param.did,
+          table_name :param["table_name"],
+          wherearea: where_form.find('[name=wherearea]').val()
+        }, page, function(msg){
+          where_form.find('[type=submit]').button('reset');
+          zy.ui.msg('提示信息：',msg.msg,'i');
+        });
+      };
+      
+      function Toolbar(){
+        where_form.find('[type=submit]').click(function(){
+          $(this).button('loading');
+          Pagination(1);
+        });
+      }
+      
+    }
+    
+    return outer_tblinfo;
+  })();
+</script>

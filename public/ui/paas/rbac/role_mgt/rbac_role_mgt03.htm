@@ -1,0 +1,34 @@
+<!-- rbac_role_mgt03 授权情况页面 -->
+<div class="modal fade" id="rbac_role_mgt03" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+          class="sr-only">Close</span></button>
+        <h4 class="modal-title">授权情况</h4>
+      </div>
+      <div class="modal-body no-padding">
+        <div id="rbac_role_mgt03_modal_body" class="padding-10"></div>
+        <div class="smart-form">
+          <footer>
+            <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">取消</button>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="rbac_role_mgt03_roleid" data-roleid='###query.roleid###'></div>
+<script>
+  (function(){
+    var rbac_role_mgt03_modal = $('#rbac_role_mgt03');
+    var container = rbac_role_mgt03_modal.find('#rbac_role_mgt03_modal_body');
+    container.attr('href', 'rbac/role_mgt/rbac_role_mgt02.htm?roleid='+$('#rbac_role_mgt03_roleid').attr('data-roleid'));
+    container.load(container.attr('href'));
+    // 隐藏时将自身删除
+    rbac_role_mgt03_modal.on('hidden.bs.modal', function () {
+      rbac_role_mgt03_modal.remove();
+    });
+    rbac_role_mgt03_modal.modal('show');
+  })();
+</script>

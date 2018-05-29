@@ -1,0 +1,40 @@
+  <div class="modal fade" id="sel_table_data" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+        </button>
+        <h4 class="modal-title"><span id="md_mm_h4_title">获取指定参数</span></h4>
+      </div>
+      <div class="modal-body no-padding">
+      <div id="table"></div>
+        <!-- FORM Start -->
+      </div>
+      <div class="modal-footer">
+          <button id="btn_ok" type="submit" class="btn btn-primary" style="float:right;">确定</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script type="text/javascript" src="lib/html/zy_dytable.js"></script>
+<!--<script src="md/mm/h4.js"></script>-->
+<script>
+  $('#sel_table_data').modal('show');
+  var _datatable = new dyTable({
+    app:'c879dcc94d204d96a98a34e0b7d75676',
+    mod:'tableandindex',
+    api:'gettabledata'
+  });
+  _datatable.init($("#table"), {typecd:"test211",did:"00000000000000000000000000000000",en:"test1"});
+  //   var _datatable=new dyTable({
+  //   app: 'c879dcc94d204d96a98a34e0b7d75676',
+  //   api: 'getdatatable',
+  //   mod: 'mm'
+  // });
+  // _datatable.init($("#table"),{typecd:"test11"});
+</script>

@@ -1,0 +1,92 @@
+<!-- rbac_auth_mgt02 客户端权限设定 -->
+<div style="opacity: 1;" id="rbac_auth_mgt02">
+  <div id="rbac_auth_mgt02_client_jumbotron" class="jumbotron" style="display:none;">
+    <h1>没有发现任何可用的客户端</h1>
+    <p>关于本页的详细情况请咨询您的系统管理员。</p>
+  </div>
+  <div id="rbac_auth_mgt02_main" class="row" style="display:none;">
+    <div class="col-sm-4">
+      <div class="well well-sm well-light padding-10">
+        <h5 class="margin-top-0"><strong>客户端列表</strong></h5>
+        <div class="row">
+          <div class="list-group padding-10" id="rbac_auth_mgt02_client_container">
+            <script id="rbac_auth_mgt02_tmpl" type="text/x-jsrender">
+              <a data-client_id="{{: client_id}}" class="list-group-item" title="{{: mark}}" href="javascript:void(0);">
+                {{: client_name}}
+              </a>
+            </script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-8">
+      <div id="rbac_auth_mgt02_scope_jumbotron" class="jumbotron">
+        <h3>请从左侧选择一个客户端</h3>
+      </div>
+      <div id="rbac_auth_mgt02_scope_container" class="well well-sm well-light padding-10" style="display:none;">
+        <hr>
+        <div class="row" id="rbac_auth_mgt02_scope_new_container">
+          <div class="col-sm-12">
+            <button id="rbac_auth_mgt02_scope_new" class="btn btn-primary">
+              &emsp;<i class="fa fa-magic"></i>&nbsp;添加&nbsp;Scope&emsp;
+            </button>
+          </div>
+        </div>
+        <div id="rbac_auth_mgt02_scope_edit_container" class="row" style="display:none;">
+          <div class="col-sm-12">
+            <div class="row">
+              <form id="rbac_auth_mgt02_scope_edit_form" method="post" onsubmit="return false;" class="smart-form">
+                <input type="hidden" name="client_id" />
+                <input type="hidden" name="op_type" />
+                <input type="hidden" name="oldroleid" />
+                <section class="col col-3">
+                	<label class="input">
+                		<input type="text" name="scope" placeholder="Scope" class="form-control input-sm">
+                	</label>
+                </section>
+                <section class="col col-3">
+                	<label class="input">
+                		<input type="text" name="scopenm" placeholder="Scope 名称" class="form-control input-sm">
+                	</label>
+                </section>
+                <section class="col col-3">
+                	<label class="input">
+                		<input type="hidden" name="roleid" data-type="select2" placeholder="角色" />
+                	</label>
+                </section>
+                <section class="col col-3">
+                  <button id="rbac_auth_mgt02_scope_save" class="btn btn-primary btn-sm" type="submit"><i class="fa fa-save"></i>&emsp;保存&emsp;</button>
+                </section>
+              </form>
+            </div>
+          </div>
+        </div>
+        <hr>
+				<div class="table-responsive" id="rbac_auth_mgt02_scope_dt_container">
+					<table id="rbac_auth_mgt02_scope_dt" class="table table-bordered table-striped" style="width:100%">
+						<thead>
+							<tr>
+								<th>Scope</th>
+								<th>Scope&nbsp;名称</th>
+								<th>角色</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+      </div>
+    </div>
+  </div>
+  <div id="rbac_auth_mgt02_dialog"></div>
+  <!--<auth page="rbac_auth_mgt02" />-->
+  <!--<div id="rbac_auth_mgt02_auth" data-auth='###auth###'></div>-->
+</div>
+<script src="lib/js/plugin/jquery-jsrender/jsrender.min.js"></script>
+<script src="rbac/auth_mgt/rbac_auth_mgt02.js"></script>
+<script>
+	// DO NOT REMOVE : GLOBAL FUNCTIONS!
+	pageSetUp();
+	(function(){
+	  var rbac_auth_mgt02Obj = new rbac_auth_mgt02();
+	})();
+</script>
