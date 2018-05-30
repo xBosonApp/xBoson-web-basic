@@ -1,4 +1,4 @@
-function NewIDE(roleid){
+function NewIDE(roleid) {
 
   var _domLabel = {
     app : {
@@ -284,7 +284,31 @@ function NewIDE(roleid){
       }
       return _t;
     }
+  };
+  
+  
+  //JYM: 字典缓存
+  var __cache = {};
+  function getDict(dictid, cb) {
+    var ret = __cache[dictid];
+    if (ret) return cb(ret);
+    
+    _tools._api({
+      apitype : 'api/',
+      apiid : 'getdict',
+      appid : 'ZYAPP_LOGIN',
+      modid : 'ZYMODULE_LOGIN',
+      r_param : {
+        typecd : dictid,
+        // ADD: Jym. ZR.0031 一定在平台机构上
+        orgid  : 'a297dfacd7a84eab9656675f61750078',
+      }
+    }, function(msg) {
+      __cache[dictid] = msg;
+      cb(msg);
+    });
   }
+  
 
   function _onLeave(_flg) {
     if (_flg) {
@@ -493,22 +517,31 @@ function NewIDE(roleid){
         _div.append(_tools._label('div').addClass('btn-group'));
         var _btn = _tools._label('i').addClass('glyphicon glyphicon-cloud-upload dropdown-toggle').attr('data-toggle', 'dropdown');
         var _ul = _tools._label('ul').addClass('dropdown-menu pull-right');
+        
+        // JYM: 修正读取两次字典
+        var _loading_dict;
         _div.unbind('show');
         _div.bind('show', function(e, _stability) {
-          _tools._api({
-            apitype : 'api/',
-            apiid : 'getdict',
-            appid : 'ZYAPP_LOGIN',
-            modid : 'ZYMODULE_LOGIN',
-            r_param : {
-              typecd : 'ZR.0031'
+          if (_loading_dict) return;
+          _loading_dict = true;
+          
+          getDict('ZR.0031', function(msg) {
+            try {
+              var _apistatusbtn = $('#widget-grid')
+                  .find('header .glyphicon-cloud-upload')
+                  .closest('.widget-toolbar');
+                  
+              if (_onlineCheck(_apistatusbtn.find('ul'), _stability)) {
+                _eachResult(msg.result[0]['ZR.0031'], _apistatusbtn.find('ul'), _stability);
+              }
+              
+              _apistatusbtn.show();
+            } catch(e) {
+              console.error("ide/htmlide/ide.js", e);
+            } finally {
+              _loading_dict = false;
             }
-          }, function(msg) {
-            var _apistatusbtn = $('#widget-grid').find('header .glyphicon-cloud-upload').closest('.widget-toolbar');
-            if (_onlineCheck(_apistatusbtn.find('ul'), _stability))
-              _eachResult(msg.result[0]['ZR.0031'], _apistatusbtn.find('ul'), _stability);
-            _apistatusbtn.show();
-          })
+          });
         })
         return _div.children().append(_btn).append(_ul).parent();
       }
@@ -1355,19 +1388,26 @@ function NewIDE(roleid){
         _code({
           contentid : _node.contentid
         }, function(_m) {
-          var _id=_node.apiid + '--' +_node.moduleid + '--'+_node.appid;
-          var _pre = _tab.add(_node.apiid, _node.contentid, _m.stability,_id);
-          _pre.inputc.val(_m.updatecmt);
-          _pre.pre.attr('help_info',_m['help_info']);
-          _initIde(function() {
-            _apistatusbtn.trigger('show', [_m.stability]);
-            editor.initSize();
-            editor.set(_m.content, false);
-            _savebtn.show();
-            _hisbtn.show();
-            _runbtn.parent().show();
-            _runbtn.trigger('_init',[_node,_m['help_info']]);
-          }, _pre.pre);
+          try {
+            var _id=_node.apiid + '--' +_node.moduleid + '--'+_node.appid;
+            var _pre = _tab.add(_node.apiid, _node.contentid, _m.stability, _id);
+            _pre.inputc.val(_m.updatecmt);
+            _pre.pre.attr('help_info',_m['help_info']);
+            
+            _initIde(function() {
+              _apistatusbtn.trigger('show', [_m.stability]);
+              editor.initSize();
+              editor.set(_m.content, false);
+              _savebtn.show();
+              _hisbtn.show();
+              _runbtn.parent().show();
+              _runbtn.trigger('_init',[_node,_m['help_info']]);
+            }, _pre.pre);
+          } catch(e) {
+            console.log("ide/htmlide/ide.js", e);
+            zy.ui.msg('IDE 打开错误', 'ID 使用了中文可能出错, 检查 app/module/api 的 id 是否正确.', 'e');
+            throw e;
+          }
         });
     }
 

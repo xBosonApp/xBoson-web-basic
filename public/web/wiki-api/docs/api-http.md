@@ -81,12 +81,12 @@ var headerValue = headers["Content-Type"];
 
 ```javascript
 var ret = http.platformGet(
-    {app:"appid123",mod:"moduleid123",api:"apiname123"}, 
+    {app:"appid123",mod:"moduleid123",api:"apiname123"},
     {paramKey: 123});
 // HTTP 响应状态码
-var statusCode = ret["code"];  
-// 被调用的 API 返回的数据，JSON 结构									
-var retData = ret["data"];     
+var statusCode = ret["code"];
+// 被调用的 API 返回的数据，JSON 结构	
+var retData = ret["data"];
 // 被调用的 API 返回的 "ret" 的值
 var retCd = retData["ret"];
 // 被调用的 API 返回的 Cookie JSON Map 对象
@@ -139,4 +139,3 @@ var cookie = ret["cookie"];
 ## http.asyncPlatformGet(..), http.asyncPlatformPost(..)
 
 未实现, 2.0 平台内部调用 api 不需要实现.
-
