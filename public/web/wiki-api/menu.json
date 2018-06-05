@@ -35,6 +35,8 @@
     { "name": "pm", "file": "docs/api-pm.md" },
     { "name": "cluster", "file": "docs/api-cluster.md" },
     { "name": "fabric", "file": "docs/api-fabric.md" },
-    { "name": "image", "file": "docs/api-image.md" }
+    { "name": "image", "file": "docs/api-image.md" },
+    { "name": "stream-util", "file": "docs/api-streamutil.md" },
+    { "name": "xml", "file": "docs/api-xml.md" }
   ]}
 ]

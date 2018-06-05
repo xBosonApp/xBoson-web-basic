@@ -42,6 +42,7 @@ function load_menu() {
     } else {
       m.css('margin-top', 20);
     }
+    m.attr("file", data.file);
     m.html(data.name);
 
     if (data.file) {
@@ -113,6 +114,20 @@ function open_doc(data) {
       }
     });
     setPage(data.file);
+    
+    //
+    // 如果连接在菜单中能找到, 则内页跳转到指定页面, 支持 md 格式.
+    // 路径必须是 'docs/' 开头.
+    //
+    var href = content.find('a');
+    href.click(function() {
+      var a = $(this);
+      var find = $("[file='"+ a.attr('href') +"']");
+      if (find.length > 0) {
+        find.trigger('click');
+        return false;
+      }
+    });
     
     hljs.initHighlighting.called = null;
     hljs.initHighlighting();
