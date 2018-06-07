@@ -38,6 +38,6 @@
     { "name": "image", "file": "docs/api-image.md" },
     { "name": "stream-util", "file": "docs/api-streamutil.md" },
     { "name": "xml", "file": "docs/api-xml.md" },
-    { "name": "Web-service", "file": "docs/api-ws.md" }
+    { "name": "WebService", "file": "docs/api-ws.md" }
   ]}
 ]

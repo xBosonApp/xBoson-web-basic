@@ -35,7 +35,7 @@ console.log(x);
 var xmlbuild = require("xml");
 ```
 
-## xmlbuild.build(JsOutputStream: out [, bool: pretty])
+## XmlRoot xmlbuild.build(JsOutputStream: out [, bool: pretty])
 
 创建一个 xml 构造器对象, 返回 XmlRoot 的实例; 默认不会格式化输出.
 
@@ -45,7 +45,7 @@ var xmlbuild = require("xml");
 * pretty 格式化输出, 默认 false.
 
 
-## xmlbuild.parse(JsInputStream: input)
+## TagStruct xmlbuild.parse(JsInputStream: input)
 
 解析输入流中的字符串, 返回解析后的 xml 结构对象 TagStruct.
 
@@ -86,6 +86,16 @@ var xmlbuild = require("xml");
 ```
 
 
+## void stringify(TagStruct: ts, JsOutputStream: out)
+
+把 xml 结构数据以 xml 字符串输出到 out 流中.
+
+
+## String stringify(TagStruct: ts)
+
+将 xml 结构数据转换为 xml 字符串并返回.
+
+
 # class XmlRoot
 
 根对象, 用于创建 xml 标签, 本身并不输出 xml 内容.
@@ -100,7 +110,7 @@ var xmlbuild = require("xml");
 结束所有 xml 输出, 并清空缓冲区, 之后对该对象的调用都会抛出异常.
 
 
-## tag(string: name)
+## XmlTagWriter tag(string: name)
 
 创建并返回 XmlTagWriter 类的实例.
 
@@ -126,7 +136,7 @@ xml 字符串输出类.
 将 txt 原样输出到标签体中, 不做转换.
 
 
-## tag(string: name)
+## XmlTagWriter tag(string: name)
 
 创建子标签并返回 XmlTagWriter 类的实例.
 

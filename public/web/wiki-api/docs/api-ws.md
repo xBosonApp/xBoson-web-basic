@@ -17,7 +17,7 @@ var ws = require("ws");
 保存服务调用信息到 webservice 数据源中.
 
 
-## ws.connection(String: soapKey)
+## WSConnection ws.connection(String: soapKey)
 
 从 webservice 数据源打开 soapKey 指定的服务配置, 并返回 WSConnection 对象.
 
@@ -34,7 +34,7 @@ var ws = require("ws");
 
 # class WSConnection
 
-用于调用远程服务
+用于调用远程服务.
 
 
 ## setVersion(int: version)
@@ -43,27 +43,29 @@ var ws = require("ws");
 该方法必须在 connect() 连接前调用, 否则抛出异常.
 
 
-## connect()
+## JsOutputStream connect()
 
 打开到远程的连接, 此时 xml 消息尚未发送.
 返回 [JsOutputStream](docs/api-streamutil.md) 对象.
 
 
-## buildFunctionCall()
+## XmlTagWriter buildFunctionCall()
 
 开始构建 xml 请求, 并返回 [XmlTagWriter](docs/api-xml.md).
 用户需要使用返回的 xml 标签构建器构建请求参数, 
 或使用 connect 方法返回的输出流构建非 xml 请求参数.
+在 connect() 之后调用, 否则抛出异常.
 
 
-## openInput()
+## JsInputStream openInput()
 
 打开输入流用于读取服务接口的应答数据.
 该方法一旦调用将关闭输出流, 应该在请求数据构建完成后调用.
 返回 [JsInputStream](docs/api-streamutil.md) 对象.
-
+必须在调用 connect/buildFunctionCall 之后调用否则抛出异常.
 
 ## end()
 
 openInput() 方法中会自动调用 end(); 该方法一般不需要调用.
 将请求 xml 闭合, 同时清空输出流的缓冲区.
+必须在调用 connect/buildFunctionCall 之后调用否则抛出异常.
