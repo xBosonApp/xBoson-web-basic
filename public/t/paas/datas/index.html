@@ -1,0 +1,70 @@
+<section id="widget-grid" class="">
+<div id="bm_index" class="jarviswidget jarviswidget-color-blue" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+  <header name="bm_menu_header">
+    <h2>Web服务列表</h2>
+    <div name="datas_help" class="widget-toolbar" role="menu" title="帮助"><i class="glyphicon glyphicon-book"></i></div>
+  </header>
+  <!-- widget div-->
+  <div>
+    <!-- widget content -->
+    <div class="widget-body">
+      <hr class="simple">
+      <div class="row">
+        <form class="smart-form" onsubmit="return false;" method="post" id='sys_datas_index_search'>
+          <section class="col col-2">
+            <label class="label">状态</label>
+            <label class="input">
+              <input type="hidden" name="status" data-type="select2" placeholder="状态" />
+            </label>
+          </section>
+          <section class="col col-2">
+            <label class="input">
+              <input type="text" name="wsname" placeholder="服务名称">
+            </label>
+          </section>
+          <section class="col col-2">
+            <label class="input">
+              <input type="text" name="mname" placeholder="模块名">
+            </label>
+          </section>
+          <section class="col col-2">
+            <label class="input">
+              <input type="text" name="fname" placeholder="函数名">
+            </label>
+          </section>
+          <section class="col col-2">
+            <button class="btn btn-default btn-sm btn-info btn-primary" name="search">&emsp;查 询&emsp;<i
+              class="fa fa-search fa-1"></i></button>
+          </section>
+        </form>
+      </div>
+      <div class="btn-group" id="sys_md_mm002_edit">
+        <button type="submit" class="btn btn-info btn-xs" name="add">&emsp;<i class="fa fa-magic fa-1"></i>&emsp;添 加&emsp;</button>
+        <button type="submit" class="btn btn-info btn-xs" name="edit">&emsp;<i class="fa fa-edit fa-1"></i>&emsp;修 改&emsp;</button>
+        <button type="submit" class="btn btn-info btn-xs" name="test">&emsp;<i class="fa fa-play"></i>&emsp;测试&emsp;</button>
+        <button type="submit" class="btn btn-info btn-xs" name="del" style="display: block;">&emsp;<i class="fa fa-trash-o "></i>&emsp;删 除&emsp;</button>
+      </div>
+      <hr class="simple">
+      <div class="row">
+       <div style="margin-left: 12px;margin-right: 12px;">
+          <div class="table-responsive dataTables_wrapper" style="overflow:scroll;">
+            <table class="table table-bordered table-hover table-striped dataTable" id="sys_md_mm002_table">
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  <!-- end widget content -->
+  </div>
+  <!-- end widget div -->
+</div>
+</section>
+<div id="bm_modal"></div>
+<div id="bm_modal_modal"></div>
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script src="datas/index.js"></script>
+<script>
+  // 页面初始化设置
+  pageSetUp();
+  var datas_index = new datas_index();
+</script>

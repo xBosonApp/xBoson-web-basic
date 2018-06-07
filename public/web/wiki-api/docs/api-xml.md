@@ -45,6 +45,47 @@ var xmlbuild = require("xml");
 * pretty 格式化输出, 默认 false.
 
 
+## xmlbuild.parse(JsInputStream: input)
+
+解析输入流中的字符串, 返回解析后的 xml 结构对象 TagStruct.
+
+参数:
+
+* input 输入流 [JsInputStream](docs/api-streamutil.md) 
+
+
+```js
+// 返回结构例子
+[
+  {
+    "name": "getCountryCityByIpResult",
+    "qName": "getCountryCityByIpResult",
+    "text": "",
+    "uri": "http://WebXml.com.cn/"
+    "attributes": {},
+    "childrenNode": [
+      {
+        "attributes": {},
+        "childrenNode": [],
+        "name": "string",
+        "qName": "string",
+        "text": "182.201.178.62",
+        "uri": "http://WebXml.com.cn/"
+      },
+      {
+        "attributes": {},
+        "childrenNode": [],
+        "name": "string",
+        "qName": "string",
+        "text": "辽宁电信",
+        "uri": "http://WebXml.com.cn/"
+      }
+    ],
+  }
+],
+```
+
+
 # class XmlRoot
 
 根对象, 用于创建 xml 标签, 本身并不输出 xml 内容.
@@ -61,12 +102,12 @@ var xmlbuild = require("xml");
 
 ## tag(string: name)
 
-创建并返回 XmlTag 类的实例.
+创建并返回 XmlTagWriter 类的实例.
 
 
-# class XmlTag
+# class XmlTagWriter
 
-xml 标签类.
+xml 字符串输出类.
 
 
 ## attr(string: name, object: value)
@@ -87,9 +128,49 @@ xml 标签类.
 
 ## tag(string: name)
 
-创建子标签并返回 XmlTag 类的实例.
+创建子标签并返回 XmlTagWriter 类的实例.
 
 
 ## end()
 
 关闭标签; 通常不需要显式调用, 当新的标签被创建, 前一个标签会自动关闭.
+
+
+# class TagStruct
+
+xml 结构类, 表示解析后的 xml 对象.
+
+
+## String: name
+
+标签名称, 不含有名字空间前缀
+
+
+## String: qName
+
+带有名字空间前缀的标签名称
+
+
+## String: uri
+
+如果在名字空间中, 该属性为名字空间 URI, 否则为空.
+
+
+## String: text
+
+标签体中的纯文本
+
+
+## TagStruct: parent
+
+指向父节点
+
+
+## Array<TagStruct>: childrenNode
+
+指向子节点
+
+
+## Map<String, String>: attributes
+
+属性表
