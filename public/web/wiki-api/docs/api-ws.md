@@ -12,14 +12,10 @@ var ws = require("ws");
 ```
 
 
-## ws.save(Object: serviceSetting)
+## WSConnection ws.connection(String: settingKey)
 
-保存服务调用信息到 webservice 数据源中.
-
-
-## WSConnection ws.connection(String: soapKey)
-
-从 webservice 数据源打开 soapKey 指定的服务配置, 并返回 WSConnection 对象.
+从 webservice 数据源打开 settingKey 指定的服务配置, 并返回 WSConnection 对象.
+如果配置不存在抛出异常.
 
 
 ## ws.wsdl(String: url)

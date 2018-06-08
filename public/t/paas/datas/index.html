@@ -1,66 +1,96 @@
+<!-- widget grid -->
 <section id="widget-grid" class="">
-<div id="bm_index" class="jarviswidget jarviswidget-color-blue" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-custombutton="false" data-widget-sortable="false">
-  <header name="bm_menu_header">
-    <h2>Web服务列表</h2>
-    <div name="datas_help" class="widget-toolbar" role="menu" title="帮助"><i class="glyphicon glyphicon-book"></i></div>
-  </header>
-  <!-- widget div-->
-  <div>
-    <!-- widget content -->
-    <div class="widget-body">
-      <hr class="simple">
-      <div class="row">
-        <form class="smart-form" onsubmit="return false;" method="post" id='sys_datas_index_search'>
-          <section class="col col-2">
-            <label class="label">状态</label>
-            <label class="input">
-              <input type="hidden" name="status" data-type="select2" placeholder="状态" />
-            </label>
-          </section>
-          <section class="col col-2">
-            <label class="input">
-              <input type="text" name="wsname" placeholder="服务名称">
-            </label>
-          </section>
-          <section class="col col-2">
-            <label class="input">
-              <input type="text" name="mname" placeholder="模块名">
-            </label>
-          </section>
-          <section class="col col-2">
-            <label class="input">
-              <input type="text" name="fname" placeholder="函数名">
-            </label>
-          </section>
-          <section class="col col-2">
-            <button class="btn btn-default btn-sm btn-info btn-primary" name="search">&emsp;查 询&emsp;<i
-              class="fa fa-search fa-1"></i></button>
-          </section>
-        </form>
-      </div>
-      <div class="btn-group" id="sys_md_mm002_edit">
-        <button type="submit" class="btn btn-info btn-xs" name="add">&emsp;<i class="fa fa-magic fa-1"></i>&emsp;添 加&emsp;</button>
-        <button type="submit" class="btn btn-info btn-xs" name="edit">&emsp;<i class="fa fa-edit fa-1"></i>&emsp;修 改&emsp;</button>
-        <button type="submit" class="btn btn-info btn-xs" name="test">&emsp;<i class="fa fa-play"></i>&emsp;测试&emsp;</button>
-        <button type="submit" class="btn btn-info btn-xs" name="del" style="display: block;">&emsp;<i class="fa fa-trash-o "></i>&emsp;删 除&emsp;</button>
-      </div>
-      <hr class="simple">
-      <div class="row">
-       <div style="margin-left: 12px;margin-right: 12px;">
-          <div class="table-responsive dataTables_wrapper" style="overflow:scroll;">
-            <table class="table table-bordered table-hover table-striped dataTable" id="sys_md_mm002_table">
-            </table>
+  <!-- row -->
+  <div class="row">
+    <!-- NEW WIDGET START -->
+    <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <!-- Widget ID (each widget will need unique ID)-->
+      <div id="sys_datas_index" class="jarviswidget jarviswidget-color-blueDark" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-deletebutton="false">
+        <header>
+          <span class="widget-icon"> <i class="fa fa-table"></i>
+          </span>
+          <h2>Web服务列表</h2>
+          <div name="datas_help" class="widget-toolbar" role="menu" title="帮助"><i class="glyphicon glyphicon-book"></i></div>
+        </header>
+        <!-- widget div-->
+        <div>
+          <!-- widget edit box -->
+          <div class="jarviswidget-editbox">
+            <!-- This area used as dropdown edit box -->
           </div>
+          <!-- end widget edit box -->
+          <!-- widget content -->
+          <div class="widget-body no-padding">
+            <div class="widget-body-toolbar">
+              <form id="sys_datas_index_search" method="post" onsubmit="return false;" class="smart-form">
+                <div class="row">
+                  <section class="col col-2">
+                    <label class="input">
+                      <input type="hidden" name="status" data-type="select2" placeholder="状态" />
+                    </label>
+                  </section>
+                  <section class="col col-2">
+                    <label class="input">
+                      <input type="text" name="wsname" placeholder="服务名称">
+                    </label>
+                  </section>
+                  <section class="col col-2">
+                    <label class="input">
+                      <input type="text" name="ws_mod_name" placeholder="模块名">
+                    </label>
+                  </section>
+                  <section class="col col-2">
+                    <label class="input">
+                      <input type="text" name="ws_func_name" placeholder="函数名">
+                    </label>
+                  </section>
+                  <section class="col col-2">
+                    <button class="btn btn-default btn-sm btn-info btn-primary" name="search">&emsp;查 询&emsp;<i
+                      class="fa fa-search fa-1"></i></button>
+                  </section>
+                </div>
+                <div class="btn-group">
+                  <button class="btn btn-info btn-xs" name="add">&emsp;<i class="fa fa-magic fa-1"></i>&emsp;添 加&emsp;</button>
+                  <button class="btn btn-info btn-xs" name="edit">&emsp;<i class="fa fa-edit fa-1"></i>&emsp;修 改&emsp;</button>
+                  <button class="btn btn-info btn-xs" name="del">&emsp;<i class="fa fa-trash-o "></i>&emsp;删 除&emsp;</button>
+                  <button class="btn btn-info btn-xs" name="test">&emsp;<i class="fa fa-play"></i>&emsp;测试&emsp;</button>
+                </div>
+                <div class="pull-right">
+                  <b id="sys_datas_index_total_count"></b>
+                </div>
+              </form>
+            </div>
+            <div class="dataTables_wrapper">
+              <table id="sys_datas_index_table" class="table table-bordered table-striped ">
+                <thead>
+                  <tr>
+                    <th>服务ID</th>
+                    <th>服务名称</th>
+                    <th>服务说明</th>
+                    <th>WSDL URI</th>
+                    <th>模块名</th>
+                    <th>函数名</th>
+                    <th>状态</th>
+                    <th>创建时间</th>
+                    <th>更新时间</th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+          <!-- end widget content -->
+          <div id="sys_datas_index_pagination"></div>
         </div>
+        <!-- end widget div -->
       </div>
-    </div>
-  <!-- end widget content -->
+      <!-- end widget -->
+    </article>
+    <!-- WIDGET END -->
   </div>
-  <!-- end widget div -->
-</div>
+  <!-- end row -->
 </section>
-<div id="bm_modal"></div>
-<div id="bm_modal_modal"></div>
+<!-- end widget grid -->
+<div id="sys_datas_index_modal"></div>
 <script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
 <script src="datas/index.js"></script>
 <script>

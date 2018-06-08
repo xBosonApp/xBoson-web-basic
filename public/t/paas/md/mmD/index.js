@@ -907,18 +907,19 @@ md_mmD_index = (function(zy, $) {
         if(nodeClick.datatable == "sys_mdm003"){
           zy.g.am.app = 'c879dcc94d204d96a98a34e0b7d75676';
           zy.g.am.mod = 'mm';
-          zy.net.get('api/elemusedinfo', function(msg){
+          zy.net.get('api/getdataupt', function(msg){
             var sure = function() {
               zy.net.loadHTML("md/mm/sys_mdm003.html", index_mod,function(){
                 mm_sys_mdm003('u',nodeClick.typecd,_data.decd,updateGrid);
               });
             }
-            if(msg.ret==0&&msg.log!=""){
-                zy.ui.mask('修改确认', '是否确认修改此条数据:'+msg.log,sure);
-            }
-            else if(msg.ret==0&&msg.log==""){
-              sure();
-            } else{
+            if (msg.ret == 0) {
+              if (msg.log) {
+                zy.ui.mask('修改确认', '是否确认修改此条数据:'+ msg.log, sure);
+              } else {
+                sure();
+              }
+            } else {
               return false;
             }
           },{
