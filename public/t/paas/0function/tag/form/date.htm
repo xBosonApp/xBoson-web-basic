@@ -1,0 +1,29 @@
+<never>
+  参数:
+    class, id, value: 默认值
+    name : 表单名称
+    label: 显示名称
+</never>
+<section class="col col-3">
+  <label class="input">
+    <input class="form-control ###class### auto_tag_form_date_ctrl" value='###value###'
+        id='###id###' type="text" name="###name###" placeholder="###label###">
+  </label>
+</section>
+<del to='label'/><del to='value'/>
+    
+<once id='auto_tag_form_date_ctrl.js'>
+  <script src="lib/js/plugin/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
+  <script>
+    jQuery('.auto_tag_form_date_ctrl').each(function() {
+      var thiz = $(this);
+      thiz.datepicker({
+        language : 'zh-CN',
+        format   : 'yyyy-mm-dd'
+      });
+      if (!thiz.prop('value')) {
+        thiz.datepicker('setDate', Date());
+      }
+    });
+  </script>
+</once>

@@ -78,6 +78,11 @@ var stream = require('streamutil');
 将输入流解析为字符串, 一行一行的读取.
 
 
+## JsOutputStream openXMLOutputStream(JsOutputStream out)
+
+将输出流包装为 xml 文本内容输出流, 输出的字符先被 xml 字符转移后输出到 out.
+
+
 # class JsOutputStream
 
 所有的输出流父类

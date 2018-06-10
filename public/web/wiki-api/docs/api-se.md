@@ -187,6 +187,11 @@ content_id 有效并发出通知返回 true.
 当 html 模板标签库被修改后, 调用该方法使模板引擎重新加载标签库.
 
 
+## se.sendUIFileReload(string: pagePath)
+
+当 html 文件修改后, 调用该方法使模板引擎重新加载指定的文件.
+
+
 ## se.reloadUserRole(string[]:ids)
 
 [未实现] 更新已登录用户的角色.

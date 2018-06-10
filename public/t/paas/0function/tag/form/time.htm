@@ -1,0 +1,28 @@
+<never>
+  参数:
+    name : 表单名称
+    class, id, label: 显示名称
+    value: 默认值
+</never>
+<section class="col col-3">
+  <label class="input">
+    <input class="form-control ###class### auto_tag_form_time_ctrl" value='###value###'
+        id='###id###' type="text" name="###name###" placeholder="###label###">
+  </label>
+</section>
+<del to='label'/><del to='value'/>
+    
+<once id='auto_tag_form_time_ctrl.js'>
+  <script>
+    jQuery('.auto_tag_form_time_ctrl').each(function() {
+      var thiz = $(this);
+      thiz.timepicker({
+        'showMeridian' : false,
+        'showSeconds'  : true,
+        'defaultTime'  : thiz.prop('value') || new Date(),
+        'minuteStep'   : 5,
+        'secondStep'   : 5
+      });
+    });
+  </script>
+</once>

@@ -1,0 +1,25 @@
+<never>
+  从 api 接口返回的数据生成下拉选项
+  参数:
+    api, mod, app : api ID, 模块 ID, 应用 ID
+    id, class : 通用属性
+    label : 显示名称
+</never>
+
+<section class="col col-3">
+	<label class="input">
+		<input id="###id###" class="###class### auto_tag_form_select2" name="###name###" 
+		  type="hidden" data-type="select2" placeholder="###label###"
+		  data-api='###api###' data-app='###app###' data-mod='###mod###'>
+	</label>
+</section>
+<del to='label'/>
+
+<once id='tag_form_select2_api_script.js'>
+  <js:xboson />
+  <script>
+    jQuery('.auto_tag_form_select2').each(function() {
+      xb.select2fromApi($(this));
+    });
+  </script>
+</once>

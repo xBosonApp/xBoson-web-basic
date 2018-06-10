@@ -1,0 +1,45 @@
+<never>
+  参数:
+    id, class, title
+</never>
+
+<!-- widget grid -->
+<section id="section_###id###" class="widget-grid ###class###">
+  <!-- row -->
+  <div class="row">
+    <!-- NEW WIDGET START -->
+    <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <!-- Widget ID (each widget will need unique ID)-->
+      <div id="###id###" class="jarviswidget jarviswidget-color-blueDark" data-widget-fullscreenbutton="false" data-widget-colorbutton="true" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-deletebutton="false">
+        <header>
+          <span class="widget-icon"> <i class="fa fa-table"></i>
+          </span>
+          <h2>###title###</h2>
+        </header>
+        <!-- widget div-->
+        <div>
+          <!-- widget edit box -->
+          <div class="jarviswidget-editbox">
+            <!-- This area used as dropdown edit box -->
+          </div>
+          <!-- end widget edit box -->
+          <!-- widget content -->
+          <div class="widget-body no-padding">
+            <pit/>
+          </div>
+          <!-- end widget content -->
+          <div id="user_view_pagination"></div>
+        </div>
+        <!-- end widget div -->
+      </div>
+      <!-- end widget -->
+    </article>
+    <!-- WIDGET END -->
+  </div>
+  <!-- end row -->
+</section>
+<!--<div id="user_view_dialog_div"></div>-->
+<!-- end widget grid -->
+<script type="text/javascript">
+pageSetUp();
+</script>

@@ -1,0 +1,39 @@
+<never>
+  从 api 接口返回的数据生成表格, 并关联查询表单, 自动分页.
+  字段映射用 <table:mapper/> 标签实现.
+  参数:
+    api, mod, app : api ID, 模块 ID, 应用 ID
+    form  : form 表单的选择器, 作为表格的查询条件 (!注意: 选择器是 jquery 格式的).
+    id    : 表格 id.
+    class : 表格的 class.
+    dataName : 在 ajax 返回结果集中的数据属性名称, 默认 'result' 或 'data'.
+</never>
+
+<div class="dataTables_wrapper">
+  <div class="row">
+    <div class="col-md-12">
+  		<div class="pull-right">
+        <b class="total_count_num"></b>
+      </div>
+    </div>
+  </div>
+  <table id="###id###" class="###class### table table-bordered table-striped auto_tag_table_api"
+          data-api='###api###' data-app='###app###' data-mod='###mod###' 
+          data-form='###form###' data-dataName='###dataName###'>
+    <thead>
+      <tr>
+        <pit/>
+      </tr>
+    </thead>
+  </table>
+  <div class="auto_tag_table_api_pagination"></div>
+</div>
+<once id='table_api_script.js'>
+  <script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+  <js:xboson />
+  <script>
+    jQuery('.auto_tag_table_api').each(function() {
+      xb.createDataTable($(this));
+    });
+  </script>
+</once>

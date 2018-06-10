@@ -5,6 +5,7 @@
 
 ### 6 月
 
+* 10. 更新 stream-util, xml, se 模块.
 * 7. 增加 ws 模块, 更新 xml 模块.
 * 5. 更新 sys, 增加 stream-util, xml 模块.
 

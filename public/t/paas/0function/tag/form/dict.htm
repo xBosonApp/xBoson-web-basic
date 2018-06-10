@@ -1,0 +1,42 @@
+<never>
+  生成下拉列表, 列表选项来自字典
+  参数:
+    typecd : 字典主键
+    val    : 默认值
+    label  : 显示名称
+    name   : 表单参数名称
+    id, class
+</never>
+<section class="col col-sm-3">
+  <label class="input">
+    <input type="hidden" id='###id###' name="###name###" data-type="select2" 
+           placeholder="###label###" class='auto_tag_form_dict ###class###'
+           data-typecd='###typecd###' value='###val###'/>
+  </label>
+</section>
+<del to='label'/>
+
+<once id='tag_form_dict.js'>
+  <js:xboson />
+  <script>
+    jQuery(".auto_tag_form_dict").each(function() {
+      var thiz = $(this);
+      var typecd = thiz.data('typecd');
+      var val = thiz.prop('value');
+      var nameCache = {};
+      
+      if (! thiz.attr('placeholder')) {
+        xb.getDictNameByTypecd(typecd, function(name) {
+          thiz.attr('placeholder', name);
+        });
+      }
+      
+      zy.cache.initDicts(typecd, function() {
+        thiz.zySelect(typecd, true, {
+          width: '100%'
+        });
+        thiz.select2('val', val);
+      });
+    });
+  </script>
+</once>
