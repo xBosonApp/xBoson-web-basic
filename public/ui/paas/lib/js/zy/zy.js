@@ -1132,7 +1132,15 @@ zy.net = {
         }, 300);
       },
       error: function (xhr, ajaxOptions, thrownError) {
-        container.html('<h4 style="margin-top:10px; display:block; text-align:left"><i class="fa fa-warning txt-color-orangeDark"></i> Error 404! 找不到网页。<br>' + url + '</h4>');
+        var buf = ['<h4 style="margin-top:10px; display:block; text-align:left">',
+            '<i class="fa fa-warning txt-color-orangeDark"></i>',
+            '出错了: <b style="font-size: 50px">', xhr.status, '</b>', 
+            '<span style="">',  (thrownError && thrownError.message) || '', '</span>',
+            '<span style="float: right">', url, '</span></h4>',
+            '<hr style="border-color: #6b2121"/>',
+            xhr.responseText || '',
+          ];
+        container.html(buf.join(''));
       }
     });
   },

@@ -1,0 +1,25 @@
+<ui:grid id='idid' class='name' title='Webservice 服务列表'>
+  <ui:form id='listform'>
+      <form:text name='wsname' label='服务名称' tooltip='模糊查询'/>
+      <form:text name='wsnote' label='服务说明' tooltip='模糊查询'/>
+      <form:text name='ws_uri' label='URI 地址' tooltip='模糊查询' width='6'/>
+      <form:br/>
+      <form:text name='ws_mod_name' label='模块名称' tooltip='模糊查询'/>
+      <form:text name='ws_func_name' label='函数名称' tooltip='模糊查询'/>
+      <form:group>
+        <form:submit label='查询'/>
+        <form:reset/>
+      </form:group>
+  </ui:form>
+  
+  <table:api app='a1e22425b8574d67bf4f200b4ccde506' mod='webservice' 
+      api='list' form='#listform'>
+    <table:mapper label='名称' key='wsname'/>
+    <table:mapper label='说明' key='wsnote'/>
+    <table:mapper label='URI' key='ws_uri'/>
+    <table:mapper label='模块' key='ws_mod_name'/>
+    <table:mapper label='函数' key='ws_func_name'/>
+    <table:mapper label='状态' key='status'><table:render_status/></table:mapper>
+    <table:mapper label='更新日期' key='updatedt'/>
+  </table:api>
+</ui:grid>

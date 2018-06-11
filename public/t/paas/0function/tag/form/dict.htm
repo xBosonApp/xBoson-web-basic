@@ -1,20 +1,18 @@
 <never>
   生成下拉列表, 列表选项来自字典
   参数:
-    typecd : 字典主键
-    val    : 默认值
-    label  : 显示名称
-    name   : 表单参数名称
-    id, class
+    [必填] typecd: 字典主键, label: 显示名称, name: 表单参数名称
+    [可选] val: 默认值, id, class,  width: 宽度
 </never>
-<section class="col col-sm-3">
+<js:default name='width' dval='3'/>
+<section class="col col-sm-###width###">
+  <label class="label">###label###</label>
   <label class="input">
     <input type="hidden" id='###id###' name="###name###" data-type="select2" 
            placeholder="###label###" class='auto_tag_form_dict ###class###'
            data-typecd='###typecd###' value='###val###'/>
   </label>
 </section>
-<del to='label'/>
 
 <once id='tag_form_dict.js'>
   <js:xboson />
@@ -28,6 +26,7 @@
       if (! thiz.attr('placeholder')) {
         xb.getDictNameByTypecd(typecd, function(name) {
           thiz.attr('placeholder', name);
+          thiz.parent().parent().find(".label").text(name);
         });
       }
       

@@ -1,0 +1,33 @@
+<never>
+  对全局变量进行操作, 参数:
+  [必选] name: 全局变量名, to: 全局变量值设置到局部变量中, from: 局部变量设置到全局变量,
+          clear: 清除全局变量, set: 直接设置一个值
+</never>
+<script runat='server'>
+  var global = val('global');
+  var name   = val('name');
+  var to     = val('to');
+  var from   = val('from');
+  var clear  = val('clear');
+  var sett   = val('set');
+
+  if (!name) {
+    throw new Error("[js:global] name 参数不能为空");
+  }
+  
+  if (sett) {
+    global[name] = sett;
+  }
+  else if (to) {
+    val(to, global[name]);
+  }
+  else if (from) {
+    global[name] = val(from);
+  }
+  else if (clear) {
+    delete global[name];
+  }
+  else {
+    throw new Error("[js:global] 没有操作参数: to/from/clear/set");
+  }
+</script>

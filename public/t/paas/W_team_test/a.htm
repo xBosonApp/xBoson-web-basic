@@ -1,4 +1,4 @@
-<div>a.htm</div>
+<div>测试 a.htm</div>
 <include src='./b.htm'/>
 <div>query.a = ###query.a###</div>
 <li>baseurl: ###baseurl###</li>
@@ -7,34 +7,30 @@
 
 <ui:grid id='idid' class='name' title='测试'>
   <ui:form id='testform'>
-    <form:row>
-      <form:text name='name' label='名称'/>
+      <form:text name='name' label='名称' icon='lock' tooltip='平台类型'/>
       <form:dict typecd='ZR.0034' name='org_type' />
       <form:submit label='查询'/>
-    </form:row>
   </ui:form>
   
   <table:api app='0418a865dac144cfa77a1e4573e3f549' mod='tenant_manager' 
       api='tenantinfo' form='#testform'>
     <table:mapper label='租户' key='de0810013j'/>
-    <table:mapper label='管理员 ID' key='userid'/>
+    <table:mapper label='管理员 ID' key='userid'/> 
     <table:mapper label='机构 ID' key='orgid'/>
   </table:api>
   
   <hr/>
   
   <ui:form id='testform2'>
-    <form:row>
       <form:date name='dt_from' label='开始日期'/>
       <form:time name='time_from' label='开始时间' value='00:00:00'/>
       <form:api_select2 name='appid' label='APP-ID' app='cfb82858dc0a4598834d356c661a678f' 
           mod='log_request' api='app_select'/>
-    </form:row>
-    <form:row>
+      <form:br/>
       <form:date name='dt_to' label='结束日期'/>
       <form:time name='time_to' label='结束时间' value='23:59:59'/>
+      <form:text name='t1' label='不应该有值'/>
       <form:submit label='查询'/>
-    </form:row>
   </ui:form>
   
   <table:api app='cfb82858dc0a4598834d356c661a678f' mod='log_request' 
@@ -43,5 +39,6 @@
     <table:mapper label='日志级别' key='log_level'/>
     <table:mapper label='请求ID' key='requestid'/>
     <table:mapper label='访问者' key='userid'/>
+    <table:mapper label='路径' key='log'/>
   </table:api>
 </ui:grid>

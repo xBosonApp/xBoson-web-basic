@@ -1,0 +1,18 @@
+<never>
+  设置变量默认值, 参数:
+  [必选] name: 变量名, dval: 默认值
+</never>
+<script runat='server'>
+  var parent_context = val('parent_context');
+  var name = val('name');
+  var cval = val(name);
+  var dval = val('dval');
+  
+  if (!name) throw new Error("[js:default] 必须有 'name' 参数");
+  if (!dval) throw new Error("[js:default] 必须有 'dval' 参数");
+  if (!parent_context) throw Error("js:default 没有找到父级上下文");
+  
+  if (!cval) {
+    parent_context[name] = dval;
+  }
+</script>

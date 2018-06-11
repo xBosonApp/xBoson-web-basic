@@ -1,16 +1,17 @@
 <never>
   参数:
-    class, id, value: 默认值
-    name : 表单名称
-    label: 显示名称
+    [必填] label: 显示名称, name : 表单名称
+    [可选] class, id, value: 默认值, width: 宽度
 </never>
-<section class="col col-3">
+<js:default name='width' dval='3'/>
+<section class="col col-###wdith###">
+  <label class="label">###label###</label>
   <label class="input">
+    <i class="icon-append fa fa-calendar"></i>
     <input class="form-control ###class### auto_tag_form_date_ctrl" value='###value###'
         id='###id###' type="text" name="###name###" placeholder="###label###">
   </label>
 </section>
-<del to='label'/><del to='value'/>
     
 <once id='auto_tag_form_date_ctrl.js'>
   <script src="lib/js/plugin/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>

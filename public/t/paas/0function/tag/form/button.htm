@@ -1,12 +1,9 @@
 <!-- Create By xBoson System -->
 <never>
-  属性:
-    id, class
-    title  -- 按钮显示名称
-    faname -- 按钮图标 fa 名称
-    
+  参数:
+    [必填] label: 按钮显示名称,
+    [可选] id, class,  icon: 按钮图标 fa 名称, 
   推荐放在 <div class="btn-group">...</div> 中
 </never>
-
-<button id="###id###" class="btn btn-info btn-xs ###class###">&emsp;<i class="fa fa-###faname###"></i>&nbsp;###title###&emsp;</button>
-<del to='label'/>
+<button id="###id###" class="btn btn-info btn-xs ###class###">&emsp;<i class="fa fa-###icon###">
+    </i>&nbsp;###label###&emsp;</button>
