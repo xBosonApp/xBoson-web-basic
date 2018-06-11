@@ -1,0 +1,22 @@
+<never>
+  打开模态窗口
+  参数:
+    [必须] url: 加载到模态的页面路径
+</never>
+<b class='auto_tag_moda_open' url='###url###' style='display: none'></b>
+<once id="auto_tag_moda_open.js">
+  <js:xboson/>
+  <script>
+    jQuery('.auto_tag_moda_open').each(function() {
+      var thiz  = $(this);
+      var url   = thiz.attr('url');
+      var who   = thiz.parent();
+      var frame = $("<div class='moda_frame'/>").appendTo(document.body);
+      
+      who.click(function() {
+        thiz.show();
+        zy.net.loadHTML(url, frame);
+      });
+    });
+  </script>
+</once>

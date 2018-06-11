@@ -1,19 +1,9 @@
 <never>
   参数:
     [必填] label: 显示名称, 
-    [可选] class, id, width: 宽度, name : 表单名称
+    [可选] class, id, name : 表单名称
 </never>
-<if var='global.innnergroup' not='true'>
-  <js:default name='width' dval='3'/>
-  <section class="col col-###width###">
-  <label class="label">&emsp;</label>
-  <label class="input">
-</if>
-    <js:default name='icon' dval='eraser'/>
-    <js:default name='label' dval='重置'/>
-    <button id="###id###" class="btn btn-info btn-sm ###class###" type="reset" name='###name###'>
-        <i class="fa fa-###icon###"></i>&emsp;###label###&emsp;</button>
-<if var='global.innnergroup' not='true'>
-  </label>
-  </section>
-</if>
+<js:default name='icon' dval='eraser'/>
+<js:default name='label' dval='重置'/>
+<button id="###id###" class="btn btn-info btn-sm ###class###" type="reset" name='###name###'>
+    <i class="fa fa-###icon###"></i>&emsp;###label###&emsp;<pit/></button>

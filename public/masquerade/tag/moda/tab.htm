@@ -1,0 +1,35 @@
+<never>
+  Tab 内容页, 与 moda:tabpanel 联合使用.
+  参数:
+    [必须] title
+    [可选] id, class
+</never>
+<js:default name='id' rand='true'/>
+<div id="tab_###id###" class='auto_tag_moda_tab_page'>
+  <div>
+    <pit/>
+  </div>
+  <li class='tab_title'>
+    <a href="#tab_###id###">###title###</a>
+  </li>
+</div>
+<once id='auto_tag_moda_tab_page.js'>
+<script>
+  $('.auto_tag_moda_tab_page').each(function() {
+    var thiz  = $(this);
+    var nav   = thiz.parent().find('.tab_menu');
+    var title = thiz.find('.tab_title');
+    
+    title.appendTo(nav);
+    if (title.length) {
+      setTimeout(function() {
+        thiz.parent().tabs();
+      }, 10);
+    }
+  });
+</script>
+</once>
+<script>
+// DO NOT REMOVE : GLOBAL FUNCTIONS!
+pageSetUp();
+</script>

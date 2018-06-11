@@ -1,0 +1,14 @@
+<never>
+  将该组件置于被控组件内部, 控制该组件的可用性, 一般用于表单元素.
+  参数:
+    recvid: 被指定发出控制的组件 id.
+</never>
+<b style='display:none' class='auto_tag_mp_usability' recvid='###recvid###'></b>
+<once id='auto_tag_mp_usability.js'>
+  <js:xboson/>
+  <script>
+    jQuery('.auto_tag_mp_usability').each(function() {
+      xb.usebilityControl(this);
+    });
+  </script>
+</once>

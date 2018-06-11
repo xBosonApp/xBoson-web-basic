@@ -1,0 +1,47 @@
+<never>
+  模态对话框框架.
+  参数:
+    [可选] id, class
+    [必填] title
+</never>
+<!-- Modal -->
+<js:default name='id' rand='true'/>
+<div class="modal fade ###class### auto_tag_moda_frame" id="moda_frame_###id###" tabindex="-1" role="dialog" 
+     aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          &times;
+        </button>
+        <h4 class="modal-title">###title###</h4>
+      </div>
+      <div class="modal-body">
+        <!-- FORM Start -->
+        <pit/>
+        <!-- FORM End -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<once id='jquery.form.min.js'>
+  <script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+</once>
+<code style='display:none' class='auto_tag_moda_frame_code'>
+  jQuery(function($) {
+    var id = '#moda_frame_###id###';
+    var fr = $(id).modal('show');
+    console.log("show moda", id, fr);
+  })
+</code>
+<!-- SCRIPTS ON PAGE EVENT -->
+<script type="text/javascript">
+  // DO NOT REMOVE : GLOBAL FUNCTIONS!
+  pageSetUp();
+  $('.auto_tag_moda_frame_code').each(function() {
+    eval($(this).text())
+  }).remove();
+</script>

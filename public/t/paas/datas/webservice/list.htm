@@ -1,19 +1,34 @@
 <ui:grid id='idid' class='name' title='Webservice 服务列表'>
   <ui:form id='listform'>
-      <form:text name='wsname' label='服务名称' tooltip='模糊查询'/>
-      <form:text name='wsnote' label='服务说明' tooltip='模糊查询'/>
-      <form:text name='ws_uri' label='URI 地址' tooltip='模糊查询' width='6'/>
-      <form:br/>
-      <form:text name='ws_mod_name' label='模块名称' tooltip='模糊查询'/>
-      <form:text name='ws_func_name' label='函数名称' tooltip='模糊查询'/>
+    <form:text name='wsname' label='服务名称' tooltip='模糊查询'/>
+    <form:text name='wsnote' label='服务说明' tooltip='模糊查询'/>
+    <form:text name='ws_uri' label='URI 地址' tooltip='模糊查询' width='6'/>
+    <form:br/>
+    <form:text name='ws_mod_name' label='模块名称' tooltip='模糊查询'/>
+    <form:text name='ws_func_name' label='函数名称' tooltip='模糊查询'/>
+    
+    <form:btn_toolbar>
       <form:group>
         <form:submit label='查询'/>
         <form:reset/>
       </form:group>
+      <form:group>
+        <form:button label='添加' icon='magic'>
+          <moda:open url='datas/webservice/add.htm'/>
+        </form:button>
+        <form:button label='修改' icon='edit'>
+          <mp:usability recvid='datatable0'/>
+        </form:button>
+        <form:button label='测试' icon='play'/>
+        <form:button label='删除' icon='trash-o'>
+          <mp:usability recvid='datatable0'/>
+        </form:button>
+      </form:group>
+    </form:btn_toolbar>
   </ui:form>
   
   <table:api app='a1e22425b8574d67bf4f200b4ccde506' mod='webservice' 
-      api='list' form='#listform'>
+      api='list' form='#listform' id='datatable0'>
     <table:mapper label='名称' key='wsname'/>
     <table:mapper label='说明' key='wsnote'/>
     <table:mapper label='URI' key='ws_uri'/>

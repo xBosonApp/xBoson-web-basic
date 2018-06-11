@@ -9,7 +9,14 @@
   <ui:form id='testform'>
       <form:text name='name' label='名称' icon='lock' tooltip='平台类型'/>
       <form:dict typecd='ZR.0034' name='org_type' />
-      <form:submit label='查询'/>
+      <form:btn_toolbar>
+        <form:group>
+          <form:submit label='查询'/>
+          <form:button label='打开Tab页面模态' icon='magic'>
+            <moda:open url='W_team_test/modatab.htm'/>
+          </form:button>
+        </form:group>
+      </form:btn_toolbar>
   </ui:form>
   
   <table:api app='0418a865dac144cfa77a1e4573e3f549' mod='tenant_manager' 
@@ -30,7 +37,11 @@
       <form:date name='dt_to' label='结束日期'/>
       <form:time name='time_to' label='结束时间' value='23:59:59'/>
       <form:text name='t1' label='不应该有值'/>
-      <form:submit label='查询'/>
+      <form:btn_toolbar>
+        <form:group>
+          <form:submit label='查询'/>
+        </form:group>
+      </form:btn_toolbar>
   </ui:form>
   
   <table:api app='cfb82858dc0a4598834d356c661a678f' mod='log_request' 
