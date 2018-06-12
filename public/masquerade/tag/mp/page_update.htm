@@ -1,0 +1,27 @@
+<never>
+  通常放在表单控件中作为子标签, 当控件被触发, 则发出 PAGE_UPDATE 消息.
+  一些控件依赖这个消息工作, 当发现控件在页面修改后不在工作, 可能需要触发这个消息.
+  !!! 未完成 !!!
+</never>
+<b style='display: none' class='auto_tag_mp_page_update'></b>
+<once id='auto_tag_mp_page_update.js'>
+  <js:xboson/>
+  <script>
+    $('.auto_tag_mp_page_update').each(function() {
+      var thiz = $(this);
+      var who = thiz.parents(":input").first();
+      var pte = thiz.parents("[data-event-type]").first();
+      
+      if (pte.length) {
+        var id = pte.attr('id');
+        xb.regListener(pte.data('event-type'), id, function() {
+          xb.sendEvent(xb.events.PAGE_UPDATED, null, who);
+        });
+      } else {
+        who.click(function() {
+          xb.sendEvent(xb.events.PAGE_UPDATED, null, who);
+        });
+      }
+    });
+  </script>
+</once>

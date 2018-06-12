@@ -4,13 +4,13 @@
     [必须] title
     [可选] id, class
 </never>
-<js:default name='id' rand='true'/>
-<div id="tab_###id###" class='auto_tag_moda_tab_page'>
+<js:default name='id' rand='true' prefix='tab_page'/>
+<div id="_###id###" class='auto_tag_moda_tab_page ###class### ###id###'>
   <div>
     <pit/>
   </div>
   <li class='tab_title'>
-    <a href="#tab_###id###">###title###</a>
+    <a href="#_###id###" class='###id###'>###title###</a>
   </li>
 </div>
 <once id='auto_tag_moda_tab_page.js'>
@@ -29,7 +29,3 @@
   });
 </script>
 </once>
-<script>
-// DO NOT REMOVE : GLOBAL FUNCTIONS!
-pageSetUp();
-</script>

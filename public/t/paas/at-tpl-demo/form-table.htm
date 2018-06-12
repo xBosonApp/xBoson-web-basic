@@ -1,0 +1,21 @@
+<ui:grid id='idid' class='name' title='测试'>
+  <ui:form id='testform'>
+      <form:text name='name' label='名称' icon='lock' tooltip='平台类型'/>
+      <form:dict typecd='ZR.0034' name='org_type' />
+      <form:btn_toolbar>
+        <form:group>
+          <form:submit label='查询'/>
+          <form:button label='打开Tab页面模态' icon='magic'>
+            <moda:open url='at-tpl-demo/moda-tabs.htm'/>
+          </form:button>
+        </form:group>
+      </form:btn_toolbar>
+  </ui:form>
+  
+  <table:api app='0418a865dac144cfa77a1e4573e3f549' mod='tenant_manager' 
+      api='tenantinfo' form='#testform'>
+    <table:mapper label='租户' key='de0810013j'/>
+    <table:mapper label='管理员 ID' key='userid'/> 
+    <table:mapper label='机构 ID' key='orgid'/>
+  </table:api>
+</ui:grid>

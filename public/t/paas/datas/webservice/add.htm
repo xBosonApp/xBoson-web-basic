@@ -1,16 +1,89 @@
 <!-- Create By xBoson System -->
 <moda:frame title='创建/发现 Webservice 接口'>
-  <ui:form id='listform'>
-    <fieldset>
-      <form:text name='wsname' label='服务名称' tooltip='模糊查询' width='6'/>
-      <form:text name='wsnote' label='服务说明' tooltip='模糊查询' width='6'/>
-      <form:text name='ws_uri' label='URI 地址' tooltip='模糊查询' width='6'/>
-      <form:text name='ws_mod_name' label='模块名称' tooltip='模糊查询' width='6'/>
-      <form:text name='ws_func_name' label='函数名称' tooltip='模糊查询' width='6'/>
-    </fieldset>
-    <footer>
-      <moda:cancel/>
-      <moda:ok/>
-    </footer>
-  </ui:form>
+  <moda:tabpanel>
+    <moda:tab title='创建接口' id='tab_create'>
+      <ui:form id='create' class='update_form'>
+        <fieldset>
+          <form:text name='wsname' label='名称' tooltip='最少1字符' width='6'>
+            <vali:string min='1'/>
+          </form:text>
+          <form:text name='wsnote' label='说明' tooltip='可以空' width='6'/>
+          <form:text name='ws_uri' label='URI 地址' tooltip='最少1字符' width='6'>
+            <vali:url min='1'/>
+          </form:text>
+          <form:text name='ws_mod_name' label='模块名称' tooltip='最少1字符' width='6'>
+            <vali:string min='1'/>
+          </form:text>
+          <form:text name='ws_func_name' label='函数名称' tooltip='最少1字符' width='6'>
+            <vali:string min='1'/>
+          </form:text>
+          <input type='hidden' name='ws_config_json'/>
+        </fieldset>
+        
+        <footer>
+          <moda:cancel/>
+          <moda:ok>
+            <form:post app='a1e22425b8574d67bf4f200b4ccde506' mod='webservice' api='create'/>
+          </moda:ok>
+        </footer>
+      </ui:form>
+    </moda:tab>
+    
+    <moda:tab title='Webservice 发现'>
+      <ui:form id='wsdl'>
+        <fieldset>
+          <form:text name='url' label='wsdl 地址' width='9'
+              tooltip='有效的 wsdl 地址, 以 http:// 开始' />
+              
+          <form:checkbox id='hidenonsoap' label='显示非 SOAP 接口' width='3'
+              toggle_display='.wsdl_function:not(.soap)' />
+              
+          <form:textarea name='xml' label='wsdl 文档 (优先解析, 为空时解析 URL)' 
+              tooltip='XML 格式' width='9'/>
+          
+          <form:btn_toolbar>
+            <form:button label='解析 Wsdl' width>
+              <form:post app='a1e22425b8574d67bf4f200b4ccde506' mod='webservice' api='parsewsdl'>
+                <mp:handle src='/datas/webservice/wsdl.js'>
+                </mp:handle>
+                <mp:page_update/>
+              </form:post>
+            </form:button>
+          </form:btn_toolbar>
+          
+        </fieldset>
+      </ui:form>
+        
+      <ui:form id='wsdl2'>
+        <fieldset class='wsdl_define hide'>
+          <form:title>WSDL 定义</form:title>
+          <form:select name='ns' label='名字空间' width='5'/>
+          <form:select name='types' label='数据类型' width='5'/>
+          <form:textarea name='doc' label='说明' width='10'/>
+        </fieldset>
+        
+        <div class='function_define hide'>
+        </div>
+        
+        <div class='function_define_tpl hide'>
+          <fieldset>
+            <form:title><b class='fname'></b> <small>方法定义</small></form:title>
+            <form:text name='mod' label='所在模块' width='5'/>
+            <form:text name='ctype' label='调用方法' width='5'/>
+            <form:text name='curl' label='调用地址' width='10'/>
+            <form:text name='input' label='入参' width='5'/>
+            <form:text name='output' label='出参' width='5'/>
+            <form:textarea name='doc' label='说明' width='9'/>
+            <form:btn_toolbar>
+                <form:button label='应用' name='apply' icon='cog' class='hide'/>
+            </form:btn_toolbar>
+          </fieldset>
+        </div>
+        
+        <footer>
+          <moda:cancel/>
+        </footer>
+      </ui:form>
+    </moda:tab>
+  </moda:tabpanel>
 </moda:frame>

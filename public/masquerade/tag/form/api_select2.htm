@@ -2,16 +2,15 @@
   从 api 接口返回的数据生成下拉选项
   参数:
     api, mod, app : api ID, 模块 ID, 应用 ID
-    id, class : 通用属性
-    label : 显示名称
+    id, class : 通用属性, label : 显示名称, width: 宽度
 </never>
-
-<section class="col col-3">
+<js:default name='width' dval='3'/>
+<section class="col col-###width###">
   <label class="label">###label###</label>
 	<label class="input">
 		<input id="###id###" class="###class### auto_tag_form_select2" name="###name###" 
 		  type="hidden" data-type="select2" placeholder="###label###"
-		  data-api='###api###' data-app='###app###' data-mod='###mod###'>
+		  data-api='###api###' data-app='###app###' data-mod='###mod###'><pit/></input>
 	</label>
 </section>
 

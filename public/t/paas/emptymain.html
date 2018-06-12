@@ -175,13 +175,13 @@
 
   <!-- inline scripts related to this page -->
   <script type="text/javascript">
-  (function(){
+  jQuery(function($){
     if(window.opener) {
-      $.extend(true,zy.g,window.opener.zy.g);
+      $.extend(true, zy.g, window.opener.zy.g);
       zy.g.comm.s = 'd';
     }
     
-    $.extend(true,zy.g,parent.zy.g);
+    $.extend(true, zy.g, parent.zy.g);
     zy.check_xboson_system();
     var url = zy.fix_preview_url(location.hash);
 
@@ -192,9 +192,11 @@
         var content = $(this).height();
         var iframe = parent.$('iframe').height();
         parent.$('iframe').height(content);
-      })
+      });
+      zy.debug = true;
+      zy.g.comm.s = 'd';
     });
-  })();
+  });
   </script>
 </body>
 </html>

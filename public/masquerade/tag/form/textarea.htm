@@ -1,16 +1,19 @@
 <never>
   参数:
     [必须] name: 表单名称, label: 显示名称,
-    [可选] id, class, icon: 图标名, 不需要 fa 前缀, tooltip: 弹出提示, value: 默认值, width: 宽度
+    [可选] id, class, icon: 图标名, 不需要 fa 前缀, tooltip: 弹出提示, value: 默认值, 
+           width: 宽度, rows: 行高,
 </never>
 <js:default name='width' dval='3'/>
+<js:default name='rows' dval='3'/>
 <section class="col col-###width###">
   <label class="label">###label###</label>
-  <label class="input">
+  <label class="textarea">
     <js:default name='icon' dval='pencil-square-o'/>
     <i class="icon-append fa fa-###icon###"></i>
-    <input type="text" id='###id###' name="###name###" placeholder="###label###" 
-           class="form-control input-sm ###class###" value='###value###'><pit/></input>
+    <textarea type="text" id='###id###' name="###name###" placeholder="###label###" rows='###rows###'
+           class="form-control ###class###">###value###</textarea>
     <if var='tooltip'><b class="tooltip tooltip-top-right">###tooltip###</b></if>
+    <pit/>
   </label>
 </section>

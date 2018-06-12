@@ -1,0 +1,33 @@
+<never>
+  用 get 方法请求 api, 作为按钮子节点; 返回数据除了弹出提示, 并将数据发送到消息总线.
+  参数:
+    [必须] api, app, mod, 
+    [可选] id: 消息id
+</never>
+<js:default name='id' rand='true' prefix='get_result_'/>
+<b style='display:none' class='auto_tag_form_get' id='###id###'
+    data-api='###api###' data-app='###app###' data-mod='###mod###'
+    data-event-type='FORM_API_RESULT'><pit/></b>
+    
+<once id='auto_tag_form_get.js'>
+<js:xboson/>
+<script>
+  $('.auto_tag_form_get').each(function() {
+    var data   = $(this);
+    var button = data.parent();
+    var form   = data.parents('form').first();
+    var id     = data.attr('id');
+    
+    button.click(function() {
+      if (! form.valid()) 
+        return;
+        
+      button.prop('disabled', true);
+      xb.sendDataRequest(data, form, null, function(ret) {
+        xb.sendApiResultEvent(ret, id);
+        button.prop('disabled', false);
+      });
+    });
+  });
+</script>
+</once>

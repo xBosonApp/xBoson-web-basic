@@ -1,6 +1,7 @@
 <never>
   设置变量默认值, 参数:
-  [必选] name: 变量名, dval: 默认值, rand: 生成不重复的id值给 name, 可以没有 dval
+  [必选] name: 变量名, dval: 默认值, 
+  [可选] rand: 随机生成不重复的id值给 name 变量, prefix: 随机生成变量时使用前缀, 
 </never>
 <script runat='server'>
   var parent_context = val('parent_context');
@@ -8,18 +9,20 @@
   var cval = val(name);
   var dval = val('dval');
   var rand = val('rand');
+  var pf   = val('prefix') || '';
   
   if (!name) throw new Error("[js:default] 必须有 'name' 参数");
   if (!dval) {
     if (!rand) {
       throw new Error("[js:default] 必须有 'dval' 或 'rand' 参数");
     }
-  }
-  if (!parent_context) throw Error("js:default 没有找到父级上下文");
+  } 
   
+  if (!parent_context) throw Error("js:default 没有找到父级上下文");
+
   if (!cval) {
     if (rand) {
-      dval = val('nextId')();
+      dval = pf + val('nextId')();
     }
     parent_context[name] = dval;
   }
