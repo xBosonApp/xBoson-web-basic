@@ -5,18 +5,18 @@
     [可选] id: 消息id
 </never>
 <js:default name='id' rand='true' prefix='get_result_'/>
-<b style='display:none' class='auto_tag_form_get' id='###id###'
+<b style='display:none' class='auto_tag_form_get' data-id='###id###'
     data-api='###api###' data-app='###app###' data-mod='###mod###'
     data-event-type='FORM_API_RESULT'><pit/></b>
     
 <once id='auto_tag_form_get.js'>
 <js:xboson/>
 <script>
-  $('.auto_tag_form_get').each(function() {
+  xb.auto_filter('.auto_tag_form_get').each(function() {
     var data   = $(this);
     var button = data.parent();
     var form   = data.parents('form').first();
-    var id     = data.attr('id');
+    var id     = data.data('id');
     
     button.click(function() {
       if (! form.valid()) 

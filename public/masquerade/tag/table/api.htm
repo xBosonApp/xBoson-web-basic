@@ -16,6 +16,7 @@
       </div>
     </div>
   </div>
+  <style> td { word-break: break-all; min-width: 80px; } </style>
   <table id="###id###" class="###class### table table-bordered table-striped auto_tag_table_api"
           data-api='###api###' data-app='###app###' data-mod='###mod###' 
           data-form='###form###' data-dataName='###dataName###'>
@@ -31,7 +32,7 @@
   <script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
   <js:xboson />
   <script>
-    jQuery('.auto_tag_table_api').each(function() {
+    xb.auto_filter('.auto_tag_table_api').each(function() {
       xb.createDataTable($(this));
     });
   </script>

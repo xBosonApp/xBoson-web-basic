@@ -8,7 +8,7 @@
 <once id='auto_tag_vali_url.js'>
   <js:xboson/>
   <script>
-    $('.auto_tag_vali_url').each(function() {
+    xb.auto_filter('.auto_tag_vali_url').each(function() {
       var thiz = $(this);
       var struct = xb.valiStruct(thiz, 'vali:url');
       struct.setting.rules[struct.unit.attr('name')] = { url: true };

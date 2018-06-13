@@ -1,6 +1,6 @@
 <never>
   通用事件处理器, 必须放在发出消息的节点中作为子节点, 处理父节点发来的消息, 
-  父节点必须有属性: `data-event-type`, 自定义脚本从 4 个地方来:
+  父节点必须有属性: `data-event-type`, `id`; 自定义脚本从 4 个地方来:
     1. 用 handle 的 src 属性从 url 加载一个脚本.
     2. 用 script 子标签的 src 属性加载一个脚本.
     3. 从 script 子标签中获取代码 (不推荐).
@@ -12,40 +12,28 @@
     id     : 消息 id
     handle : 标签本身的 jquery 对象
     
-  参数: 
+  参数:
     [可选] src: 加载脚本的 url
 </never>
 <code style='display: none' class='auto_tag_mp_handle' src='###src###'><pit/></code>
-<once id='auto_tag_mp_handle'>
+<once id='auto_tag_mp_handle.js'>
 <js:xboson/>
 <script>
-  $('.auto_tag_mp_handle').each(function() {
+  xb.auto_filter('.auto_tag_mp_handle').each(function() {
     var thiz = $(this);
     var sc   = thiz.find('script');
-    var pte  = thiz.parents("[data-event-type]").first();
-    var type = pte.data('event-type');
-    var pid  = pte.attr("id");
-    if (!type) {
-      zy.ui.msg("错误 &lt;mp:handle>", "父标签中没有找到发送消息节点", 'e');
-      return;
-    }
+    var setting = xb.getEventSettingFromParent(thiz);
+    if (!setting) return;
     
     if (thiz.attr("src")) {
-      var src = thiz.attr('src');
-      xb.getText(src, function(err, code) {
-        if (err) return zy.ui.msg("错误 &lt;mp:handle>", err.stack, 'e');
-        setHandleWithCode(code);
-      });
+      setHandleWithCode(null, thiz.attr('src'));
       return;
     }
     
     if (sc.length) {
       var src = sc.attr('src');
       if (src) {
-        xb.getText(src, function(err, code) {
-          if (err) return zy.ui.msg("错误 &lt;mp:handle>", err.stack, 'e');
-          setHandleWithCode(code);
-        });
+        setHandleWithCode(null, src);
       } else {
         setHandleWithCode(sc.html());
       }
@@ -53,9 +41,19 @@
       setHandleWithCode(thiz.html());
     }
     
-    function setHandleWithCode(code) {
-      xb.regListenerWithCode(code, type, pid, thiz);
+    function setHandleWithCode(code, url) {
+      if (url) {
+        xb.getText(url, function(err, code) {
+          if (err) return zy.ui.msg("&lt;mp:handle> 读取脚本错误", url +"<br/>"+ err.stack, 'e');
+          if (!code) {
+            return zy.ui.msg("&lt;mp:handle> 从 url 读取脚本错误", url, 'e');
+          }
+          setHandleWithCode(code);
+        });
+      } else {
+        xb.regListenerWithCode(code, setting.type, setting.id, thiz);
+      }
     }
-  }).remove();
+  });
 </script>
 </once>

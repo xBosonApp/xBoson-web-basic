@@ -8,7 +8,7 @@
 <once id='auto_tag_vali_email.js'>
   <js:xboson/>
   <script>
-    $('.auto_tag_vali_email').each(function() {
+    xb.auto_filter('.auto_tag_vali_email').each(function() {
       var thiz = $(this);
       var struct = xb.valiStruct(thiz, 'vali:email');
       struct.setting.rules[struct.unit.attr('name')] = { email: true };

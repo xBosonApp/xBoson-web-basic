@@ -1,0 +1,110 @@
+<never>
+  选择一个字典
+</never>
+<js:default name='width' dval='3'/>
+<js:default name='id' rand='true' prefix='select_dict_'/>
+<section class="col col-###width###">
+  <label class="label">###label###</label>
+	<label class="input">
+		<input id="###id###" class="###class### auto_tag_form_select_dict" 
+		       name="###name###" type='hidden' style='margin-top: 20px;'><pit/>
+		</input>
+		<input class='auto_tag_form_select_dict_disp' 
+		       placeholder="###label###" readonly style='cursor: pointer'/>
+	</label>
+</section>
+
+<once id='auto_tag_form_select_dict.js'>
+  <js:xboson/>
+  
+  <div class="modal fade" id="auto_tag_select_dict_modal" data-id='###id###' tabindex="2" 
+      role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h4 class="modal-title" id="myModalLabel">字典选择</h4>
+              </div>
+              <div class="modal-body">Loading ...</div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                  <button type="button" class="ok btn btn-primary btn-sm">&emsp;&emsp;应用&emsp;&emsp;</button>
+              </div>
+          </div><!-- /.modal-content -->
+      </div><!-- /.modal -->
+  </div>
+  
+  <script>
+    xb.auto_filter('.auto_tag_form_select_dict').each(function() {
+      var select = $(this);
+      var disp = select.parent().find(".auto_tag_form_select_dict_disp");
+      var url = zy.g.host.api + 'app/'+ zy.g.comm.org
+              + '/d2c8511b47714faba5c71506a5029d94/datadict/gettree';
+              
+      var selectDialog = $("#auto_tag_select_dict_modal").first();
+      selectDialog.appendTo(document.body);
+      
+      var ok = selectDialog.find(".ok");
+      var treediv = $("<div class='ztree'>");
+      var setting = {
+        async: {
+          url        : url,
+          enable     : true,
+          dataFilter : dataFilter,
+          autoParam  : [ 'typecd' ],
+          otherParam : ['openid', zy.g.comm.openid],
+        },
+        callback: {
+          onMouseDown : onMouseDown,
+        },
+      };
+      
+      var current_select;
+      zTreeObj = $.fn.zTree.init(treediv, setting);
+      var body = selectDialog.find(".modal-body");
+      body.html('').append(treediv);
+      
+      // selectDialog.on('hidden.bs.modal', function() {
+      //   selectDialog.removeData('bs.modal');
+      //   selectDialog.html('');
+      //   zTreeObj.destroy();
+      // });
+      
+      if (select.val()) {
+        xb.getDictNameByTypecd(select.val(), function(name) {
+          disp.val(name);
+        });
+      }
+      
+      disp.click(function() {
+        selectDialog.modal('show');
+      });
+      
+      ok.click(function() {
+        if (current_select) {
+          select.val(current_select.typecd);
+          disp.val(current_select.typenm);
+        }
+        selectDialog.modal('hide');
+      });
+      
+      var okx = -1;
+      function onMouseDown(event, treeId, treeNode) {
+        if (okx < 0) {
+          okx = body.offset().left + body.width() - 100;
+          ok.css("position", 'absolute');
+        }
+        ok.offset({ left: okx, top: event.pageY-15 });
+        current_select = treeNode;
+      }
+      
+      
+      function dataFilter(treeid, parentNode, rdata) {
+        rdata.result.forEach(function(row) {
+          row.name = row.typenm +' ['+ row.typecd +' v'+ row.version +']';
+        });
+        return rdata.result;
+      }
+    });
+  </script>
+</once>

@@ -1,0 +1,36 @@
+<!-- Create By xBoson System -->
+<moda:frame title='创建交换标准'>
+    <ui:form id='create' class='update_form'>
+      <fieldset>
+        <form:text name='standardname' label='交换标准编码名称' tooltip='最少1字符' width='6'>
+          <vali:string min='1' max='45'/>
+        </form:text>
+        <form:text name='setcodenode' label='数据集编码名称' tooltip='最少1字符' width='6'>
+          <vali:string min='1' max='45'/>
+        </form:text>
+        <form:text name='standardcode' label='交换标准编码' tooltip='最少1字符' width='6'>
+          <vali:string min='1' max='45'/>
+        </form:text>
+        <form:text name='setcode' label='数据集编码' tooltip='最少1字符' width='6'>
+          <vali:string min='1' max='45'/>
+        </form:text>
+        <form:text name='table_name' label='物理表名称' tooltip='可以空' width='6'>
+          <vali:string min='0' max='45'/>
+        </form:text>
+        <form:select_dict name='typecd' label='字段配置字典' width='6'>
+          <vali:string min='1' max='100'/>
+        </form:select_dict>
+      </fieldset>
+      
+      <footer>
+        <moda:cancel/>
+        <moda:ok>
+          <form:post app='9da3e4550d1f42d3979ae30931d498c9' mod='nsdata' api='cri_create'>
+            <mp:close when='this.code == 0'>
+              <mp:send type='TABLE_UPDATE_REQ' id='datatable0'/>
+            </mp:close>
+          </form:post>
+        </moda:ok>
+      </footer>
+    </ui:form>
+</moda:frame>

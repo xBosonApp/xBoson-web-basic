@@ -1,0 +1,27 @@
+<never>
+  接收来自父容器的消息(消息定义在父容器), 
+  参数:
+    [可选] when: js 表达式, 用于处理消息数据, this 是消息数据根节点, 数据结构与消息有关.
+</never>
+<js:default name='id' rand='true' prefix='close_'/>
+<b style='display:none' class='auto_tag_mp_close' data-when='###when###' 
+    data-event-type='CLOSE' data-id='###id###'><pit/></b>
+<once id='auto_tag_mp_close.js'>
+  <js:xboson/>
+  <script>
+    xb.auto_filter('.auto_tag_mp_close').each(function() {
+      var jdata = $(this);
+      var es    = xb.getEventSettingFromParent(jdata);
+      var id    = jdata.data('id');
+      
+      xb.regListener(es, function(event_data) {
+        xb.eval_short(jdata, 'when', event_data, function(err, eret, isnull) {
+          if ((!isnull) && (!eret)) return;
+          xb.findEventDealFromParentAndSend(jdata, xb.events.CLOSE);
+          // 为了子节点能正确接受到消息
+          xb.emit(xb.events.CLOSE, id, jdata);
+        });
+      });
+    });
+  </script>
+</once>

@@ -1,8 +1,9 @@
 <!-- Create By xBoson System -->
-<moda:frame title='创建/发现 Webservice 接口'>
+<moda:frame title='修改 Webservice 接口'>
   <moda:tabpanel>
-    <moda:tab title='创建接口' id='tab_create'>
+    <moda:tab title='修改接口' id='tab_create'>
       <ui:form id='create' class='update_form'>
+        <mp:loaddata id='datatable0'/>
         <fieldset>
           <form:text name='wsname' label='名称' tooltip='最少1字符' width='6'>
             <vali:string min='1' max='45'/>
@@ -21,13 +22,14 @@
             <vali:string min='0' max='500'/>
           </form:textarea>
           <input type='hidden' name='ws_config_json'/>
+          <input type='hidden' name='wsid'/>
         </fieldset>
         
         <footer>
           <moda:cancel/>
           <moda:ok>
-            <form:post app='a1e22425b8574d67bf4f200b4ccde506' mod='webservice' api='create'>
-              <mp:close when='this.code == 0'>
+            <form:post app='a1e22425b8574d67bf4f200b4ccde506' mod='webservice' api='modify'>
+              <mp:close when='console.log(this), this.code == 0'>
                 <mp:send type='TABLE_UPDATE_REQ' id='datatable0'/>
               </mp:close>
             </form:post>

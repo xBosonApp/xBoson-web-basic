@@ -1,0 +1,36 @@
+<never>
+  在按钮(等组件)和 handle 组件之间做桥接, 组件的 dom click 事件转换为总线 CLICK 消息.
+  可以放在超链接, 表单(按钮), 或直接接受父组件的消息.
+  如果配置 recvtype / recvid, 则接受消息并将消息结果保存在临时变量, 作为 click 事件的消息数据.
+  参数: 
+    [可选] recvtype: 消息类型. recvid: 消息 id.
+</never>
+<js:default name='id' rand='true' prefix='onclick_'/>
+<b class='auto_tag_mp_onclick' id='###id###' data-event-type='CLICK'
+    data-recvtype='###recvtype###', data-recvid='###recvid###'><pit/></b>
+<once id='auto_tag_mp_onclick.js'>
+  <js:xboson/>
+  <script>
+    xb.auto_filter('.auto_tag_mp_onclick').each(function() {
+      var jdata = $(this);
+      var id    = jdata.attr("id");
+      var ctrl  = jdata.parents(":input,a").first();
+      var rvtp  = jdata.data('recvtype');
+      var rvid  = jdata.data('recvid');
+      var savedata;
+      
+      if (!ctrl.length) 
+        ctrl.add(jdata.parent());
+        
+      if (rvtp && rvid) {
+        xb.on(rvtp, rvid, function(d) {
+          savedata = d;
+        });
+      }
+      
+      ctrl.click(function() {
+        xb.emit(xb.events.CLICK, id, savedata);
+      });
+    });
+  </script>
+</once>

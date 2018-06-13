@@ -27,24 +27,29 @@
   <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
-<once id='jquery.form.min.js'>
+<once id='auto_tag_moda_frame.js'>
   <script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>
-</once>
-<code style='display:none' class='auto_tag_moda_frame_code'>
-  (function() {
-    return '#moda_frame_###id###';
-  })
-</code>
-<!-- SCRIPTS ON PAGE EVENT -->
-<script type="text/javascript">
-  // DO NOT REMOVE : GLOBAL FUNCTIONS!
-  pageSetUp();
-  $('.auto_tag_moda_frame_code').each(function() {
-    var code   = $(this);
-    var id     = eval(code.text())();
-    var frame  = $(id).modal('show');
+  <js:xboson/>
+  <script>
+  xb.auto_filter('.auto_tag_moda_frame').each(function() {
+    var frame  = $(this).modal('show');
+    var id     = frame.attr("id");
     var dialog = frame.find('.modal-dialog');
     
     dialog.width(xb.autoWidth(frame));
-  }).remove(); // 防止多个 frame 加载到同一个页面出错.
+    xb.dealEventToDom(frame, xb.events.CLOSE, close);
+
+    frame.on('hidden.bs.modal', function() {
+      frame.removeData('bs.modal');
+      frame.html('');
+    });
+    
+    function close() {
+      frame.modal('hide');
+    }
+  });
+  </script>
+</once>
+<script type="text/javascript">
+  pageSetUp();
 </script>

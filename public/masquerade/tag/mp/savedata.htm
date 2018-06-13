@@ -1,0 +1,24 @@
+<never>
+  接受指定的事件, 并将事件发送的数据保存到数据池, 稍后可以从池中取出, 可放在任意位置.
+  参数:
+    [必须] type: 事件类型. id: 事件id / 数据 id.
+</never>
+<b style='disply:none' class='auto_tag_mp_savedata' data-type='###type###' data-id='###id###'></b>
+
+<once id='auto_tag_mp_savedata.js'>
+  <js:xboson/>
+  <script>
+    xb.auto_filter('.auto_tag_mp_savedata').each(function() {
+      var jdata = $(this);
+      var id    = jdata.data('id');
+      var type  = jdata.data('type');
+      
+      if (!id) return zy.ui.msg("&lt;mp:savedata>", "id 参数无效", 'w');
+      if (!type) return zy.ui.msg("&lt;mp:savedata>", "type 参数无效", 'w');
+      
+      xb.on(type, id, function(d) {
+        xb.save_data(id, d);
+      });
+    });
+  </script>
+</once>

@@ -1,0 +1,27 @@
+<never>
+  立即从数据池中取出数据, 推入父级控件, 支持: form; 通常用于主页面向对话框传参.
+  参数:
+    [必须] id: 事件id / 数据 id.
+</never>
+<b style='disply:none' class='auto_tag_mp_loaddata' data-id='###id###'></b>
+<once id='auto_tag_mp_loaddata.js'>
+  <js:xboson/>
+  <script>
+    xb.auto_filter('.auto_tag_mp_loaddata').each(function() {
+      var jdata  = $(this);
+      var id     = jdata.data('id');
+      var target = jdata.parents("form").first();
+      var data   = xb.load_data(id);
+      
+      if (!id) return zy.ui.message("&lt;mp:loaddata>", "id 属性无效", 'w');
+      if (!target.length) return zy.ui.message("&lt;mp:loaddata>", "找不到可以推入数据的父级控件", 'w');
+      if (!data) return zy.ui.message("&lt;mp:loaddata>", "数据池没有数据可以读取:"+ id, 'w');
+      
+      switch (target.prop('tagName')) {
+        case 'FORM':
+          xb.dataToForm(data, target);
+          break;
+      }
+    });
+  </script>
+</once>

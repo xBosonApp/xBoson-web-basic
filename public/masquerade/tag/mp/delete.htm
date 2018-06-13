@@ -1,0 +1,19 @@
+<never>
+  将该组件置于按钮组件内部, 当按钮按下, 执行删除操作. 删除成功后发出 DELETE 事件.
+  参数:
+    [必须] primary: 指出数据集主键, 也使用该名称作为上传参数. dataid: 数据在数据池中的 id.
+           app, mod, api: 指定 api 接口参数.
+</never>
+<b style='display:none' class='auto_tag_mp_delete' data-event-type='DELETE' 
+    data-primary='###primary###' data-id='###dataid###'
+    data-app='###app###' data-mod='###mod###' data-api='###api###'><pit/></b>
+<once id='auto_tag_mp_delete.js'>
+  <js:xboson/>
+  <script>
+    xb.auto_filter('.auto_tag_mp_delete').each(function() {
+      xb.deleteControl($(this), function(err, id, data) {
+        xb.sendEvent('DELETE', id, data); 
+      });
+    });
+  </script>
+</once>

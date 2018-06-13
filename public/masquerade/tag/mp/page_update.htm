@@ -7,13 +7,13 @@
 <once id='auto_tag_mp_page_update.js'>
   <js:xboson/>
   <script>
-    $('.auto_tag_mp_page_update').each(function() {
+    xb.auto_filter('.auto_tag_mp_page_update').each(function() {
       var thiz = $(this);
       var who = thiz.parents(":input").first();
       var pte = thiz.parents("[data-event-type]").first();
       
       if (pte.length) {
-        var id = pte.attr('id');
+        var id = pte.attr('id') || pte.data('id');
         xb.regListener(pte.data('event-type'), id, function() {
           xb.sendEvent(xb.events.PAGE_UPDATED, null, who);
         });
