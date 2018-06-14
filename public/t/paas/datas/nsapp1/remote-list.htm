@@ -1,0 +1,51 @@
+<ui:grid id='idid' class='list' title='远程配置列表'>
+  <ui:form id='listform'>
+    <form:text name='rname' label='配置名' tooltip='模糊查询' width='4'/>
+    <form:text name='username' label='用户名' tooltip='模糊查询' width='4'/>
+    <form:text name='license' label='证书' tooltip='模糊查询' width='4'/>
+    <form:select name='status' label='状态' width='4'>
+      <option value='1'>启用</option>
+      <option value='0'>禁用</option>
+    </form:select>
+    
+    <form:btn_toolbar>
+      <form:group>
+        <form:submit label='查询'/>
+        <form:reset/>
+      </form:group>
+      <form:group>
+        <form:button label='添加' icon='magic'>
+          <moda:open url='datas/nsapp1/remote-add.htm'/>
+        </form:button>
+        <form:button label='修改' icon='edit'>
+          <mp:usability recvid='datatable0'/>
+          <moda:open url='datas/nsapp1/remote-edit.htm'/>
+        </form:button>
+        <form:button label='删除' icon='trash-o'>
+          <mp:usability recvid='datatable0'/>
+          <mp:delete app='9da3e4550d1f42d3979ae30931d498c9' primary='rtid'
+              mod='nsdata' api='remote_rm' dataid='datatable0'>
+            <mp:send type='TABLE_UPDATE_REQ' id='datatable0'/>
+          </mp:delete>
+        </form:button>
+      </form:group>
+    </form:btn_toolbar>
+  </ui:form>
+  
+  <mp:savedata type='SELECT_TABLE_ROW' id='datatable0'/>
+  
+  <table:api app='9da3e4550d1f42d3979ae30931d498c9' mod='nsdata' api='remote_list' 
+      form='#listform' id='datatable0'>
+    <table:mapper label='配置名称' key='rname'/>
+    <table:mapper label='用户名' key='username'/>
+    <!--<table:mapper label='密码' key='userpwd'/>-->
+    <!--<table:mapper label='证书' key='license'/>-->
+    <table:mapper label='安全配置类型' key='authoritytype'>
+      <table:render_dict typecd='NS-APP-01-AUTHORITYTYPE'/>
+    </table:mapper>
+    
+    <table:mapper label='状态' key='status'><table:render_status/></table:mapper>
+    <table:mapper label='更新时间' key='updatedt'/>
+    <table:mapper label='创建时间' key='createdt'/>
+  </table:api>
+</ui:grid>

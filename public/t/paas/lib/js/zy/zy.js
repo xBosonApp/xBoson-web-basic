@@ -204,13 +204,14 @@ zy.fix_preview_url = function(url) {
 (function() {
   //
   // 刷新后还原 debug 模式
+  // jym: NONONONONONONONONONONO
   //
-  $(window).on("unload", function() {
-    sessionStorage['zy.debug'] = zy.debug ? '1' : null;
-  });
-  setTimeout(function() {
-    zy.debug =  sessionStorage['zy.debug'] == '1'
-  }, 1);
+  // $(window).on("unload", function() {
+  //   sessionStorage['zy.debug'] = zy.debug ? '1' : null;
+  // });
+  // setTimeout(function() {
+  //   zy.debug =  sessionStorage['zy.debug'] == '1'
+  // }, 1);
 })();
 
 /** =====================共通方法 */
@@ -2919,6 +2920,7 @@ zy.ui.dataTable = {
   "scrollX": true,
   "initComplete": dataTableXScrollFix
 };
+
 //
 // by JYM. 当水平滚动过长, 显示左右移动把手
 //
@@ -2931,12 +2933,16 @@ function dataTableXScrollFix(settings, json) {
     return;
   if (thiz.height() < window.innerHeight)
     return;
+  if (thiz.data("destroy_table_x_scroll_fix")) {
+    thiz.data("destroy_table_x_scroll_fix")();
+  }
+  thiz.data('destroy_table_x_scroll_fix', destroy);
   
   var x1=0, x2=0, y=-1000;
   var moveScrollStep = 100;
   var opacityOnTable = '0.3';
-  var left  = $("<div class='fa fa-chevron-left'></div>");
-  var right = $("<div class='fa fa-chevron-right'></div>");
+  var left  = $("<div class='fa fa-chevron-left data_table_x_scroll_fix'></div>");
+  var right = $("<div class='fa fa-chevron-right data_table_x_scroll_fix'></div>");
   var style = { "position": "absolute",
     "background-color": "#ccc", 'border-radius': '5px',
     "padding": "50px 5px", 'opacity': opacityOnTable, 'cursor': 'pointer',
@@ -2960,18 +2966,7 @@ function dataTableXScrollFix(settings, json) {
   });
   
   var inButton = false;
-  thiz.mouseenter(function() {
-    inButton = true;
-    left.show();
-    right.show();
-  }).mouseleave(function() {
-    inButton = false;
-    setTimeout(function() {
-      if (inButton) return;
-      left.hide();
-      right.hide();
-    }, 100);
-  });
+  thiz.mouseenter(_show).mouseleave(_hide);
   
   left.click(function() {
     scrollBody.animate({scrollLeft: 
@@ -2984,6 +2979,21 @@ function dataTableXScrollFix(settings, json) {
   }).mouseenter(getFocus).mouseleave(lostFocus);
   
   $(window).resize(onresize);
+  
+  function _show() {
+    inButton = true;
+    left.show();
+    right.show();
+  }
+  
+  function _hide() {
+    inButton = false;
+    setTimeout(function() {
+      if (inButton) return;
+      left.hide();
+      right.hide();
+    }, 100);
+  }
   
   function onresize() {
     var pos = scrollDiv.offset();
@@ -3001,6 +3011,13 @@ function dataTableXScrollFix(settings, json) {
   function lostFocus() {
     inButton = false;
     $(this).animate({ 'opacity': opacityOnTable, 'border-width': 0 });
+  }
+  
+  function destroy() {
+    $(window).off('resize', onresize);
+    thiz.off('mouseenter', _show).off('mouseleave',_hide);
+    left.remove();
+    right.remove();
   }
 }
 /** =====================Select2 */

@@ -65,6 +65,7 @@
   
   function setSelect(selecter, data) {
     var sub = currentJdom.find(selecter);
+    sub.html('');
     for (var n in data) {
       sub.append("<option>"+ n +'['+ data[n] + "]</option>");
     }

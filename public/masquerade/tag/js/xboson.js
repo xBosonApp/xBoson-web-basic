@@ -54,6 +54,7 @@ var xb = window.xb = {
   save_data           : save_data,
   load_data           : load_data,
   dataToForm          : dataToForm,
+  warn                : warn,
   
   // 事件处理框架
   getEventSettingFromParent      : getEventSettingFromParent,
@@ -175,7 +176,7 @@ function sendApiResultEvent(ret, id, _cb) {
       }
     }
   } catch(err) {
-    zy.ui.msg("异常", err.message, 'e');
+    xb.warn("异常", err.message, 'e');
     console.error(err);
     _cb && _cb(err);
   }
@@ -191,9 +192,9 @@ function getEventSettingFromParent(jdata) {
   var evet_id   = pt_event.attr("id") || pt_event.data('id');
   var NAME      = 'getEventSettingFromParent';
   
-  if (!pt_event.length) return zy.ui.msg(NAME, '找不到含有 data-event-type 的父组件', 'w'); 
-  if (!evet_type) return zy.ui.msg(NAME, 'event-type 定义无效', 'w');
-  if (!evet_id) return zy.ui.msg(NAME, 'id 定义无效', 'w');
+  if (!pt_event.length) return xb.warn(NAME, '找不到含有 data-event-type 的父组件', 'w'); 
+  if (!evet_type) return xb.warn(NAME, 'event-type 定义无效', 'w');
+  if (!evet_id) return xb.warn(NAME, 'id 定义无效', 'w');
   return {
     type  : evet_type,
     id    : evet_id,
@@ -223,11 +224,30 @@ function findEventDealFromParentAndSend(jdata, dealEvent) {
     if (id) {
       xb.sendEvent(dealEvent, id, jdata);  
     } else {
-      zy.ui.msg("deal-event", "组件 "+ jtag.selector +" 没有 id 属性", 'w');
+      xb.warn("[deal-event]", "组件 "+ jtag.selector +" 没有 id 属性", 'w');
     }
     return jtag;
   }
-  zy.ui.msg("deal-event", "没有找到能处理 "+ dealEvent + " 事件的父组件", 'w');
+  xb.warn("[deal-event]", "没有找到能处理 "+ dealEvent + " 事件的父组件", 'w');
+}
+
+
+function warn(title, msg, _err) {
+  var type;
+  if (!_err) {
+    type = 'w';
+  } else if (typeof _err == 'string') {
+    type = _err;
+  } else {
+    type = 'e';
+  }
+  
+  var stack = (_err && _err.stack) || new Error('xboson.js::warn()').stack;
+  console.warn(title, msg, stack);
+  if (zy.debug) {
+    msg = msg +"<pre>"+ stack + "</pre>";
+  }
+  zy.ui.msg(title, msg, type);
 }
 
 
@@ -243,7 +263,7 @@ function eval_short(jdata, _name, context, _cb) {
       var fn = eval('(function() { return '+ when +'})');
       _cb(null, fn.apply(context));
     } catch(e) { 
-      zy.ui.msg("eval_short 表达式错误", e.stack, 'e');
+      xb.warn("eval_short 表达式错误", e.stack, 'e');
       console.error("Code:", when, "Context:", context, e);
       _cb(e);
     }
@@ -298,17 +318,16 @@ function createDataTable(table) {
   
   var options = $.extend({}, zy.ui.dataTable, {
     "data"      : [],
-    "columns"   : getColumnMapper(mapper),
   });
+  setTimeout(init, 230);
   
-  regListener(events.TABLE_UPDATE_REQ, id, request);
-  selectedTable(table, onselect);
-  form.submit(request);
   
-  setupPagination(pagination, pageset, function() {
-    request();
-  });
-  
+  function init() {
+    regListener(events.TABLE_UPDATE_REQ, id, request);
+    selectedTable(table, onselect);
+    form.submit(request);
+    setupPagination(pagination, pageset, request);
+  }
   
   function request() {
     sendDataRequest(table, form, pageset, reciveData);
@@ -320,16 +339,23 @@ function createDataTable(table) {
       pageset.totalCounts = ret[table.data('dataName')+'_count'] || ret.count || ret.result_count || 0;
       pageset.update();
       total_count_num.text("总数："+ pageset.totalCounts);
+      
       // 如果没有生成配置, 则使用表格数据生成动态表格
       if (!options.columns) {
-        options.columns = getColumns(rows);
-        generateHead();
+        if (mapper.length > 0) {
+          options.columns = getColumnFromMapper(mapper);
+        } else {
+          options.columns = getColumnsFromData(rows);
+          generateHead();
+        }
       }
+      
       options.data = rows || [];
       
       if (table.fnClearTable) {
         table.fnClearTable();
         delete options.aaData;
+        // delete options.initComplete;
       }
       table.dataTable(options);
       onselect(null);
@@ -340,7 +366,7 @@ function createDataTable(table) {
     if (id) sendEvent(events.SELECT_TABLE_ROW, id, data);
   }
   
-  function getColumns(rows) {
+  function getColumnsFromData(rows) {
     var names = [];
     if (rows && rows[0]) {
       var r = rows[0];
@@ -353,18 +379,27 @@ function createDataTable(table) {
     return names;
   }
   
-  function getColumnMapper(mapper) {
-    if (mapper.length < 1) return;
+  function getColumnFromMapper(mapper) {
     var names = [];
     
     mapper.each(function() {
-      var thiz = $(this);
-      var func = thiz.find('.render_function');
       var render_func;
+      var thiz = $(this);
       
-      if (func.length) {
-        render_func = eval('('+ func.text() +')');  
+      var config = thiz.find('.render_function');
+      var delayid = config.data('delay-function');
+      if (delayid) {
+        render_func = function(data, type, row, meta) {
+          var fn = config.data(delayid);
+          return fn ? fn(data, type, row, meta) : data;
+        };
       } 
+      else {
+        var code = config.text();
+        if (code) {
+          render_func = eval('('+ code +')');  
+        }
+      }
       
       names.push({
         'render' : render_func,
@@ -375,10 +410,15 @@ function createDataTable(table) {
   }
   
   function generateHead() {
-    var head = table.find('thead');
-    options.columns.forEach(function(hset) {
-      $('th').text(hset.data).appendTo(head);
-    });
+    var headdrawd = false;
+    options.headerCallback = function(thead, data, start, end, display) {
+      if (headdrawd) return;
+      headdrawd = true;
+      options.columns.forEach(function(hset, i) {
+        $('<th>').text(hset.data).appendTo(thead);
+        console.log(hset.data)
+      });
+    };
   }
   
   function defaultPageset() {
@@ -464,9 +504,9 @@ function deleteControl(jdata, deletedcb) {
   var curr_data = {};
   var button    = jdata.parent();
   
-  if (!dataid) return zy.ui.msg("&lt;mp:delete>", "dataid 参数无效", 'w');
-  if (!pri) return zy.ui.msg("&lt;mp:delete>", "primary 参数无效", 'w');
-  if (!button.length) return zy.ui.msg("&lt;mp:delete>", "父级标签没有按钮", 'w');
+  if (!dataid) return xb.warn("&lt;mp:delete>", "dataid 参数无效", 'w');
+  if (!pri) return xb.warn("&lt;mp:delete>", "primary 参数无效", 'w');
+  if (!button.length) return xb.warn("&lt;mp:delete>", "父级标签没有按钮", 'w');
   
   button.click(function() {
     zy.ui.mask("删除数据", "数据将被删除! 请确认, 如果误操作请 '取消'.", function() {
@@ -547,18 +587,18 @@ function getText(url, callback) {
 //
 function regListenerWithCode(code, type, pid, handle) {
   if (!code) {
-    return zy.ui.msg("regListenerWithCode", "代码无效<br/>", 'e');
+    return xb.warn("regListenerWithCode", "代码无效<br/>", 'e');
   }
   var fn = eval('('+ code + ')');
   if (typeof fn != 'function') {
-    return zy.ui.msg("regListenerWithCode", "标签体中必须定义一个函数<br/>"+code, 'e');
+    return xb.warn("regListenerWithCode", "标签体中必须定义一个函数<br/>"+code, 'e');
   }
   
   xb.regListener(type, pid, function(data) {
     try {
       fn(data, type, pid, handle);
     } catch(e) {
-      zy.ui.msg("regListenerWithCode 处理器异常", e.stack, 'e');
+      xb.warn("regListenerWithCode 处理器异常", e.stack, 'e');
       throw e;
     }
   });
@@ -611,10 +651,10 @@ function valiStrMinMax(struct) {
   var min  = struct.jdata.attr('min');
   
   if (isNaN(min) || min < 0) {
-    zy.ui.msg(tagname +" 标签异常", 'min 值无效', 'w');
+    xb.warn(tagname +" 标签异常", 'min 值无效', 'w');
   }
   if (max && max < min) {
-    zy.ui.msg(tagname +" 标签异常", 'max 值无效', 'w');
+    xb.warn(tagname +" 标签异常", 'max 值无效', 'w');
   }
   
   var rules = struct.setting.rules;
@@ -651,10 +691,10 @@ function valiStruct(jdata, tagname) {
     unit = unit.find(":input");
   }
   if (unit.length < 1) {
-    return zy.ui.msg(tagname +" 标签异常", '没有找到父级表单元件', 'e');
+    return xb.warn(tagname +" 标签异常", '没有找到父级表单元件', 'e');
   }
   if (form.length < 1) {
-    return zy.ui.msg(tagname +" 标签异常", '没有找到表单', 'e');
+    return xb.warn(tagname +" 标签异常", '没有找到表单', 'e');
   }
   
   var setting = form.data("vali:data");

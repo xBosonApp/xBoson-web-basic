@@ -1,0 +1,31 @@
+<never> 
+  字典翻转, (这是表格数据渲染器的另一种用法) 参数:
+    [必须] typecd
+</never>
+<js:default name='id' rand='true' prefix='table_render_dict_'/>
+<code class='tag_auto_table_render_dict render_function' data-delay-function='###id###'
+    style='display: none' data-typecd='###typecd###'>
+</code>
+<once id='tag_auto_table_render_dict.js'>
+  <script>
+    xb.auto_filter('.tag_auto_table_render_dict').each(function() {
+      var jdata   = $(this);
+      var typecd  = jdata.data('typecd');
+      var delayid = jdata.data('delay-function');
+      
+      var map = {};
+      
+      zy.cache.initDicts(typecd, function() {
+        var dict = zy.cache.getDict(typecd);
+        
+        for (var i=dict.length-1; i>=0; --i) {
+          map[dict[i].id] = dict[i];
+        }
+      });
+    
+      jdata.data(delayid, function(data, type, row, meta) {
+        return map[data].text;
+      });
+    });
+  </script>
+</once>

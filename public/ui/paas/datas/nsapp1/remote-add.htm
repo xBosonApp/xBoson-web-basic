@@ -1,0 +1,32 @@
+<!-- Create By xBoson System -->
+<moda:frame title='创建远程配置'>
+    <ui:form id='create' class='update_form'>
+      <fieldset>
+        <form:text name='rname' label='配置名称' tooltip='' width='10'>
+          <vali:string min='1' max='45'/>
+        </form:text>
+        <form:text name='username' label='用户名' tooltip='如果不需要请填 0' width='10'>
+          <vali:string min='1' max='50'/>
+        </form:text>
+        <form:password name='userpwd' label='密码' tooltip='如果不需要请填 0' width='10'>
+          <vali:string min='0' max='50'/>
+        </form:password>
+        <form:dict name='authoritytype' typecd='NS-APP-01-AUTHORITYTYPE' width='10' val='0'>
+        </form:dict>
+        <form:textarea name='license' label='授权码/证书' tooltip='如果不需要请填 0' width='10' rows='13'>
+          <vali:string min='0' max='1500'/>
+        </form:textarea>
+      </fieldset>
+      
+      <footer>
+        <moda:cancel/>
+        <moda:ok>
+          <form:post app='9da3e4550d1f42d3979ae30931d498c9' mod='nsdata' api='remote_create'>
+            <mp:close when='this.code == 0'>
+              <mp:send type='TABLE_UPDATE_REQ' id='datatable0'/>
+            </mp:close>
+          </form:post>
+        </moda:ok>
+      </footer>
+    </ui:form>
+</moda:frame>

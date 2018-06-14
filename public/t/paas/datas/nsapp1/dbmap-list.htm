@@ -1,0 +1,58 @@
+<ui:grid id='idid' class='list' title='交换接口配置管理'>
+  <ui:form id='listform'>
+    <form:text name='map_name' label='名称' tooltip='模糊查询' width='3'/>
+    <form:text name='cri_name' label='标准名称' tooltip='模糊查询' width='3'/>
+    <form:text name='rname' label='配置名称' tooltip='模糊查询' width='3'/>
+    <form:text name='wsname' label='Webservice名称' tooltip='模糊查询' width='3'/>
+    <form:text name='sourceorgan' label='消费方机构编码' tooltip='模糊查询' width='3'/>
+    <form:text name='sourcedomain' label='消费方接入系统编码' tooltip='模糊查询' width='3'/>
+    <form:text name='targetorgan' label='提供方机构编码' tooltip='模糊查询' width='3'/>
+    <form:text name='targetdomain' label='提供方接入系统编码' tooltip='模糊查询' width='3'/>
+    
+    <form:select name='status' label='状态'>
+      <option value='1'>启用</option>
+      <option value='0'>禁用</option>
+    </form:select>
+    
+    <form:btn_toolbar>
+      <form:group>
+        <form:submit label='查询'/>
+        <form:reset/>
+      </form:group>
+      <form:group>
+        <form:button label='添加' icon='magic'>
+          <moda:open url='datas/nsapp1/cri-add.htm'/>
+        </form:button>
+        <form:button label='修改' icon='edit'>
+          <mp:usability recvid='datatable0'/>
+          <moda:open url='datas/nsapp1/cri-edit.htm'/>
+        </form:button>
+        <form:button label='删除' icon='trash-o'>
+          <mp:usability recvid='datatable0'/>
+          <mp:delete app='9da3e4550d1f42d3979ae30931d498c9' primary='mapid'
+              mod='nsdata' api='mapper_rm' dataid='datatable0'>
+            <mp:send type='TABLE_UPDATE_REQ' id='datatable0'/>
+          </mp:delete>
+        </form:button>
+      </form:group>
+    </form:btn_toolbar>
+  </ui:form>
+  
+  <mp:savedata type='SELECT_TABLE_ROW' id='datatable0'/>
+  
+  <table:api app='9da3e4550d1f42d3979ae30931d498c9' mod='nsdata' 
+      api='mapper_list' form='#listform' id='datatable0'>
+    <table:mapper label='名称' key='map_name'/>
+    <table:mapper label='交换标准' key='cri_name'/>
+    <table:mapper label='权限配置' key='rname'/>
+    <table:mapper label='WebService接口' key='wsname'/>
+    <table:mapper label='消费方机构编码' key='sourceorgan'/>
+    <table:mapper label='消费方接入系统编码' key='sourcedomain'/>
+    <table:mapper label='提供方机构编码' key='targetorgan'/>
+    <table:mapper label='提供方接入系统编码' key='targetdomain'/>
+    
+    <table:mapper label='状态' key='status'><table:render_status/></table:mapper>
+    <table:mapper label='更新时间' key='updatedt'/>
+    <table:mapper label='创建时间' key='createdt'/> 
+  </table:api>
+</ui:grid>
