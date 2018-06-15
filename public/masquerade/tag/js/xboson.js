@@ -55,6 +55,9 @@ var xb = window.xb = {
   load_data           : load_data,
   dataToForm          : dataToForm,
   warn                : warn,
+  safeHtml            : safeHtml,
+  openDialog          : openDialog,
+  apiURL              : apiURL,
   
   // 事件处理框架
   getEventSettingFromParent      : getEventSettingFromParent,
@@ -245,7 +248,8 @@ function warn(title, msg, _err) {
   var stack = (_err && _err.stack) || new Error('xboson.js::warn()').stack;
   console.warn(title, msg, stack);
   if (zy.debug) {
-    msg = msg +"<pre>"+ stack + "</pre>";
+    msg = [msg, "<pre style='color: #fff; background: rgba(255, 255, 255, 0);", 
+          "border:0;'>", stack, "</pre>"].join('');
   }
   zy.ui.msg(title, msg, type);
 }
@@ -316,7 +320,7 @@ function createDataTable(table) {
   var pagination      = table.parent().find('.auto_tag_table_api_pagination');
   var total_count_num = table.parent().find('.total_count_num');
   
-  var options = $.extend({}, zy.ui.dataTable, {
+  var options = $.extend(null, {}, zy.ui.dataTable, {
     "data"      : [],
   });
   setTimeout(init, 230);
@@ -433,16 +437,82 @@ function createDataTable(table) {
 
 
 //
-// 从 api 返回的数据组装为 selet2
+// 返回 api 调用完整地址
+// 如果有 jobj 则后面的参数被忽略
+//
+function apiURL(jobj, _app, _mod, _api) {
+  if (jobj) {
+    _app = jobj.data('app');
+    _mod = jobj.data('mod');
+    _api = jobj.data('api');
+  }
+  var url = [ zy.g.host.api,'app/', zy.g.comm.org, '/', _app, '/', _mod, '/', _api ];
+  return url.join('');
+}
+
+
+//
+// 从 api 返回的数据组装为 selet2, 支持标准分页参数.
+// select doc: /xboson/face/t/paas/lib/js/plugin/select2/Select2-3.4.8.html
 //
 function select2fromApi(jobj) {
-  zy.g.am.app = jobj.data('app');
-  zy.g.am.mod = jobj.data('mod');
-  zy.net.get('api/'+ jobj.data('api'),function(msg){
-    if(msg){
-      jobj.zySelectCustomData('', false, { width:'100%' }, msg.result);  
-    }
+  var url           = xb.apiURL(jobj);
+  var id_field      = jobj.data('id_field')   || 'id';
+  var text_field    = jobj.data('text_field') || 'text';
+  var result_field  = jobj.data('result_field');
+  var pagesize      = parseInt(zy.g.page.pagesize) || 10;
+  var count;
+  
+  jobj.select2({
+    placeholder : "查找...", //默认显示的文本
+    allowClear  : true, //选择后出现清除按钮图标
+    width       : '100%',
+    ajax: {
+      url     : url,
+      data    : getQuery,
+      results : filterResult,
+    },
   });
+  return jobj;
+  
+  
+  function filterResult(data, page, context) {
+    var arr = data[result_field] || data.data || data.result;
+    var ret = [];
+    count   = data.count;
+    
+    for (var i=arr.length-1; i>=0; --i) {
+      var id = arr[i][id_field];
+      var tx = arr[i][text_field];
+      
+      if (id && tx) {
+        ret.push({ id:id, text:tx }) ;
+      } else {
+        xb.warn("中断 select2fromApi", '设置的字段没有有效数据<br/>'+ url 
+            +'<br/>id_field:'+ id_field +"<br/>text_field:"+ text_field);
+        break;
+      }
+    }
+    
+    return {
+      more    : page * pagesize < count,
+      results : ret,
+    };
+  }
+  
+  
+  function getQuery(term, page, context) {
+    var query = {
+      pagenum  : page || 1,
+      pagesize : pagesize,
+      count    : count,
+    };
+    //
+    // 用文本域做搜索条件
+    //
+    query[text_field] = term;
+    return query;
+  }
 }
 
 
@@ -549,7 +619,7 @@ function autoWidth(frame) {
 
 
 //
-// 获取文本.
+// HTTP GET 获取文本.
 // url -- 以 '/' 开始则从 paas 下获取文件, 否则在 saas 中获取文件
 // callback -- Function(err, text);
 //
@@ -749,6 +819,43 @@ function dataToForm(row, jform) {
     jform.find("[name='"+ name +"']").val(row[name]);
     //console.log(name, row[name], jform.find("[name='"+ name +"']"))
   }
+}
+
+
+//
+// 删除不安全的 html 元素
+//
+function safeHtml(h) {
+  var jh;
+  if (typeof h == 'string') {
+    jh = $('<div>').append(h);
+  } else {
+    jh = h;
+  }
+  jh.find('script, style, link').remove();
+  return jh;
+}
+
+
+//
+// 将 frame 设置为模态对话框并显示, 当对话框关闭时销毁对话框和内部数据.
+// 适合显示比较短, 而且不需要用户交互的内容.
+//
+function openDialog(frame, _onclose) {
+  frame.dialog({
+    width : '70%',
+    height: '500',
+    modal : 'true',
+    hide  : 'slide',
+    show  : 'slide',
+    close : function() {
+      frame.dialog('destroy');
+      frame.hide();
+      _onclose && _onclose();
+    }
+  });
+  frame.dialog('open');
+  return frame;
 }
 
 

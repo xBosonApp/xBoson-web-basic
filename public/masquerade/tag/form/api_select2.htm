@@ -1,15 +1,20 @@
 <never>
   从 api 接口返回的数据生成下拉选项
   参数:
-    api, mod, app : api ID, 模块 ID, 应用 ID
-    id, class : 通用属性, label : 显示名称, width: 宽度
+    [必须] api, mod, app : api ID, 模块 ID, 应用 ID. 
+           id_field     : 从数据集中获取(表单)值的字段, 默认 'id'. 
+           text_field   : 从数据集中获取文本的字段, 默认 'text'.
+           result_field : 从数据集中获取数组的字段, 默认 'data/result'.
+    [可选] id, class : 通用属性, label : 显示名称, width: 宽度
 </never>
 <js:default name='width' dval='3'/>
 <section class="col col-###width###">
   <label class="label">###label###</label>
-	<label class="input">
+	<label class="select">
 		<input id="###id###" class="###class### auto_tag_form_select2" name="###name###" 
-		  type="hidden" data-type="select2" placeholder="###label###"
+		  type="hidden" data-type="select2" placeholder="###label###" 
+		  data-id_field='###id_field###' data-text_field='###text_field###' 
+		  data-result_field='###result_field###'
 		  data-api='###api###' data-app='###app###' data-mod='###mod###'><pit/></input>
 	</label>
 </section>

@@ -1,0 +1,91 @@
+<!-- Create By xBoson System -->
+<script src='datas/lib/dom.jsPlumb-1.7.4-min.js'></script>
+<script src='datas/lib/fields-mapping.js'></script>
+<moda:frame title='创建交换接口配置'>
+    <ui:form id='create' class='update_form'>
+      <fieldset>
+        <form:text name='map_name' label='名称' tooltip='' width='6'>
+          <vali:string min='1' max='45'/>
+        </form:text>
+        <form:api_select2 name='criid' label='交换标准' tooltip='' width='6'
+            app='9da3e4550d1f42d3979ae30931d498c9' mod='nsdata' api='cri_list'
+            text_field='standardname' id_field='criid'>
+          <vali:string min='1' max='32'/>
+        </form:api_select2>
+        
+        <form:api_select2 name='rtid' label='远程配置' tooltip='' width='6'
+            app='9da3e4550d1f42d3979ae30931d498c9' mod='nsdata' api='remote_list'
+            text_field='rname' id_field='rtid'>
+          <vali:string min='1' max='32'/>
+        </form:api_select2>
+        <form:api_select2 name='wsid' label='WebService' tooltip='' width='6'
+            app='a1e22425b8574d67bf4f200b4ccde506' mod='webservice' api='list'
+            text_field='wsname' id_field='wsid'>
+          <vali:string min='1' max='32'/>
+        </form:api_select2>
+        
+        <form:text name='route' label='服务路由信息' tooltip='可空' width='6'>
+          <vali:string min='0' max='50'/>
+        </form:text>
+        <form:text name='process' label='服务流程编排' tooltip='可空' width='6'>
+          <vali:string min='0' max='50'/>
+        </form:text>
+        
+        <form:dict name='sourceorgan' label='消费方机构编码' tooltip='' width='6'
+            typecd='NS-APP-01-ORGAN' >
+          <vali:string min='1' max='50'/>
+        </form:dict>
+        <form:dict name='sourcedomain' label='消费方接入系统编码' tooltip='' width='6'
+            typecd='NS-APP-01-DOMAIN' >
+          <vali:string min='1' max='50'/>
+        </form:dict>
+        
+        <form:dict name='targetorgan' label='提供方机构编码' tooltip='可空' width='6'
+            typecd='NS-APP-01-ORGAN' >
+          <vali:string min='0' max='50'/>
+        </form:dict>
+        <form:dict name='targetdomain' label='提供方接入系统编码' tooltip='' width='6'
+            typecd='NS-APP-01-DOMAIN' >
+          <vali:string min='1' max='50'/>
+        </form:dict>
+        
+        <form:api_select2 name='source_did' label='SQL 数据源' tooltip='' width='6'
+            app='ZYAPP_SYSMGT' mod='datasource' api='getdatasourcelist'
+            text_field='cn' id_field='did'>
+          <vali:string min='1' max='32'/>
+        </form:api_select2>
+        <form:dict name='servicecode' label='服务注册中心唯一服务编码' typecd='NS-APP-01-SERVICECODE' 
+            tooltip='' width='6'>
+          <vali:string min='1' max='50'/>
+        </form:dict>
+        
+        <form:textarea name='sql_str' label='提取数据的 SQL 文' tooltip='数据来源' 
+              width='10' rows='6' value='Select 1'>
+          <vali:string min='1' max='5000'/>
+        </form:textarea>
+        <form:btn_toolbar width='2'>
+          <form:button label='提取字段'>
+            <mp:onclick recvtype='SELECT_TABLE_ROW' recvid='datatable0'>
+              <mp:handle src='/datas/nsapp1/sqlbind.js'/>
+            </mp:onclick>
+          </form:button>
+        </form:btn_toolbar>
+        <form:textarea name='map_json' label='字段配置映射' tooltip='隐藏域' 
+              width='10' rows='6' value='{}'>
+          <vali:string min='1' max='5000'/>
+        </form:textarea>
+        
+      </fieldset>
+      
+      <footer>
+        <moda:cancel/>
+        <moda:ok>
+          <form:post app='9da3e4550d1f42d3979ae30931d498c9' mod='nsdata' api='mapper_create'>
+            <mp:close when='this.code == 0'>
+              <mp:send type='TABLE_UPDATE_REQ' id='datatable0'/>
+            </mp:close>
+          </form:post>
+        </moda:ok>
+      </footer>
+    </ui:form>
+</moda:frame>

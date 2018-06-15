@@ -1142,6 +1142,7 @@ zy.net = {
             xhr.responseText || '',
           ];
         container.html(buf.join(''));
+        callback && callback(xhr, ajaxOptions, thrownError)
       }
     });
   },

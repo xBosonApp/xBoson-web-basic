@@ -1,0 +1,335 @@
+<!-- Create By xBoson System -->
+<js:xboson/>
+<ui:grid id='dict_tool' class='list' title='交换标准编码表映射 导入工具 (NS-APP-01-SC-MAPPING)'>
+    
+  <ui:form id='step1' class='update_form'>
+    <fieldset>
+      <form:title>STEP 1, 从文档中复制表格内容</form:title>
+      
+      <form:textarea id='txt' label="" tooltip='直接从 word 文档中复制整个表格, 复制后为多行文本(没有格式)'
+          width='10' rows='15'></form:textarea>
+      <form:br/>
+      <form:text id='line' label='每 n 行为一个数据单位' tooltip='表格中的列数' width='3'>
+      </form:text>
+      <form:select label='是否有表头' id='hashead'>
+        <option value='1'>有</option>
+        <option value='0'>无</option>
+      </form:select>
+      <form:btn_toolbar width='3'>
+        <form:button id='parse_txt' label='解析' icon='arrow-down'></form:button>
+        <form:button id='demo' label='例子' icon='code'></form:button>
+      </form:btn_toolbar>
+    </fieldset>
+  </ui:form>
+  
+  <ui:form id='step2' class='update_form hide'>
+    <fieldset>
+      <form:title>STEP 2, 检查格式配置字段映射</form:title>
+      <form:br/>
+      <layout:table/>
+      
+      <div id='column_mapper'>
+        <form:select name='dictcd' label='编码列'></form:select>
+        <form:select name='dictnm' label='名称列'></form:select>
+        <form:select name='mark' label='说明列(多个说明列将被合并到一起)'></form:select>
+      </div>
+      <form:btn_toolbar width='3'>
+        <form:button id='parse_mapper' label='确定' icon='arrow-down'></form:button>
+        <form:button id='add_note' label='+说明列' icon='copy'></form:button>
+        <form:button id='min_note' label='-说明列' icon='eraser'></form:button>
+      </form:btn_toolbar>
+    </fieldset>
+  </ui:form>
+  
+  <ui:form id='step3' class='update_form hide'>
+    <fieldset>
+      <form:title>STEP 3, 数据写入值域代码</form:title>
+      <form:br/>
+      <form:select_dict name='typecd' label='类别编码' tooltip='选择一个字典以写入' width='3'>
+        <vali:string min='1' max='45'/>
+      </form:select_dict>
+      <form:text name='version' label='版本' tooltip='' width='3' value='1.0'>
+        <vali:string min='1' max='45'/>
+      </form:text>
+      <form:btn_toolbar width='3'>
+        <form:button id='push_data' label='上传' icon='play'></form:button>
+        <form:button id='clear_log' label='清空日志' icon='eraser'></form:button>
+        <form:button id='reset_all' label='清空全部' icon='eraser'></form:button>
+      </form:btn_toolbar>
+    </fieldset>
+    
+    <fieldset>
+      <layout:panel>
+          <layout:progress id='total_progress'/>
+          <div>状态: <b id='ps_msg'></b></div>
+          <div>总数据: <b id='ps_total'></b></div>
+          <div>成功: <b id='ps_success'></b></div>
+          <div>失败: <b id='ps_fail'></b></div>
+          <div id='ps_log'></div>
+          <style>
+            #ps_log dl { border-bottom: 1px dashed #eee; }
+            #ps_log { color: #aaa; margin-top: 15px; max-height: 500px; overflow-y: scroll; }
+          </style>
+      </layout:panel>
+    </fieldset>
+  </ui:form>
+</ui:grid>
+
+<script>
+  jQuery(function($) {
+    var root          = $("#dict_tool");
+    var ps_msg        = $("#ps_msg");
+    var ps_total      = $("#ps_total");
+    var ps_success    = $("#ps_success");
+    var ps_fail       = $("#ps_fail");
+    var ps_log        = $("#ps_log");
+    var column_mapper = $("#column_mapper");
+    var progress      = $('#total_progress');
+    var note          = column_mapper.find('[name=mark]').parents("section").first();
+    var push_url      = xb.apiURL(null, 'd2c8511b47714faba5c71506a5029d94', 'datadict', 'adddata');
+    var config;
+    var tableObj;
+      
+      
+    $('#demo').click(function() {
+      $('#txt').val($("#data_demo_text").text());
+      $('#line').val(5);
+      $("#parse_txt").trigger('click');
+    });
+    
+    
+    $('#add_note').click(function() {
+       column_mapper.append(note.clone());
+    });
+    
+    
+    $('#clear_log').click(function() {
+      ps_msg.html('');
+      ps_log.html('');
+      ps_success.html('');
+      ps_fail.html('');
+      ps_total.html('');
+      progress.css('width', '0');
+    });
+    
+    
+    $('#min_note').click(function() {
+      var mark = column_mapper.find('[name=mark]');
+      if (mark.length > 1) {
+        mark.last().parents("section").first().remove();
+      } else {
+        zy.ui.msg('警告', '至少保留一个说明列', 'w');
+      }
+    });
+    
+    
+    $('#parse_mapper').click(function() {
+      $("#step3").removeClass('hide');
+    });
+    
+    
+    $('#reset_all').click(function() {
+      $('#clear_log').trigger('click');
+      $("#step2").addClass('hide');
+      $("#step3").addClass('hide');
+      $('#txt').val('');
+      $('#line').val('');
+      root.find('[name=typecd]').val('');
+      column_mapper.find('[name=mark]').each(function(i) {
+        if (i) $(this).parents("section").first().remove();
+      });
+      clearMapper();
+    });
+    
+    
+    $("#push_data").click(function() {
+      var allinput = $("#dict_tool").find(':input');
+      var xmark   = [];
+      var xdictcd = column_mapper.find('[name=dictcd]').val();
+      var xdictnm = column_mapper.find('[name=dictnm]').val();
+      var typecd  = root.find('[name=typecd]').val();
+      var version = root.find("[name=version]").val();
+      var i       = -1;
+      var all     = config.data;
+      var success = 0;
+      var fail    = 0;
+      var total   = config.data.length;
+      var query   = {
+            typecd  : typecd,
+            dictcd  : null,
+            dictnm  : null,
+            mark    : null,
+            status  : 1,
+            version : version,
+            openid  : zy.g.comm.openid,
+          };
+          
+      if (!typecd) return zy.ui.msg("缺少参数", '选择一个类别编码', 'w');
+      column_mapper.find('[name=mark]').val(function(i, v) { return xmark.push(v), v; });
+      
+      ps_msg.html("初始化...");
+      progress.css('width', '0');
+      ps_total.html(total);
+      allinput.prop('disabled', true);
+      nextrow();
+      
+      
+      function nextrow() {
+        if (++i < all.length) {
+          var crow = all[i];
+          query.dictcd = crow[xdictcd];
+          query.dictnm = crow[xdictnm];
+          query.mark   = getMark(crow);
+          ps_msg.html("正在处理: " + query.dictnm + ", "+ query.dictcd);
+          
+          push_dict(query, function(err) {
+            if (err) {
+              log(err, query);
+            }
+            update(err);
+            nextrow();
+          });
+        } else {
+          ps_msg.html("全部完成");
+          allinput.prop('disabled', false);
+          zy.ui.msg("完成", '数据上传完成', 'i');
+        }
+      }
+      
+      function getMark(crow) {
+        var ret = [];
+        for (var i=0; i < xmark.length; ++i) {
+          ret.push(crow[ xmark[i] ]);
+        }
+        return ret.join("; ");
+      }
+      
+      function update(err) {
+        if (err) {
+          ps_fail.html(++fail);  
+        } else {
+          ps_success.html(++success);
+        }
+        progress.css('width', parseInt((success+fail)/total*100) + '%');
+      }
+    });
+    
+    
+    function log(err, msg) {
+      ps_log.append(['<dl class="dl-horizontal"><dt>', 
+        err ? '失败' : '完成', 
+        "&emsp;[", new Date().toLocaleTimeString(), ']</dt><dd>', 
+        (err.msg || err.message || err), '&emsp;', 
+        JSON.stringify(msg), '</dd></dt>'].join(''));
+    }
+    
+    
+    function push_dict(query, cb) {
+      $.ajax(push_url, {
+        data: query,
+        success: function(data, textStatus, jqXHR) {
+          if (data.code) {
+            cb(data.msg);
+          } else {
+            cb(null, data);
+          }
+        },
+        error: function(data, textStatus, jqXHR) {
+          cb(textStatus || jqXHR);
+        },
+      });
+    }
+    
+    
+    $('#parse_txt').click(function() {
+      var txt = $('#txt').val();
+      if (!txt) return xb.warn("错误", "填写文本内容");
+      
+      config = { data: [], columns:[] };
+      $.extend(null, config, zy.ui.dataTable);
+      
+      parseModeMLine(txt, config);
+      
+      if (tableObj) tableObj.destroy();
+      var table = $('#step2').removeClass('hide').find("table");
+      tableObj = table.DataTable(config);
+    });
+  
+    
+    function addMapper(k, v) {
+      var opt = $("<option>").val(k).text(v);
+      column_mapper.find("select").append(opt.clone());
+    }
+    
+    
+    function clearMapper() {
+      column_mapper.find("select").html('');
+    }
+    
+    
+    //
+    // 解析单行文本
+    //
+    function parseModeMLine(txt, config) {
+      var line = parseInt($('#line').val());
+      var hashead = parseInt($('#hashead').val());
+      
+      if (!line) return xb.warn("错误", '表格中的列数 无效');
+      
+      var p = 0;
+      var all = txt.split('\n');
+      
+      clearMapper();
+      if (hashead) {
+        for (; p<line; ++p) {
+          config.columns.push({ title: all[p] });
+          addMapper(p, all[p]);
+        }
+      } else {
+        for (var i=0; i<line; ++i) {
+          var t = '第 '+i+' 列';
+          config.columns.push({ title: t });
+          addMapper(p, t);
+        }
+      }
+      
+      var currline;
+      for (;;) {
+        currline = [];
+        for (var i=0; i<line; ++i) {
+          currline.push(all[p]);
+          if (++p >= all.length) return;
+        }
+        config.data.push(currline);
+      }
+    }
+  });
+</script>
+
+<pre class='hide' id='data_demo_text'>
+表头1
+表头2
+表头3
+表头A
+表头B
+行1列1
+行1列2
+行1列3
+行1列A
+行1列B
+行2列1
+行2列2
+行2列3
+行2列A
+行2列B
+行3列1
+行3列2
+行3列3
+行3列A
+行3列B
+行A列1
+行A列2
+行A列3
+行A列A
+行A列B
+</pre>

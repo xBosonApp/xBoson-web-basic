@@ -13,9 +13,9 @@
       var target = jdata.parents("form").first();
       var data   = xb.load_data(id);
       
-      if (!id) return zy.ui.message("&lt;mp:loaddata>", "id 属性无效", 'w');
-      if (!target.length) return zy.ui.message("&lt;mp:loaddata>", "找不到可以推入数据的父级控件", 'w');
-      if (!data) return zy.ui.message("&lt;mp:loaddata>", "数据池没有数据可以读取:"+ id, 'w');
+      if (!id) return xb.warn("&lt;mp:loaddata>", "id 属性无效", 'w');
+      if (!target.length) return xb.warn("&lt;mp:loaddata>", "找不到可以推入数据的父级控件", 'w');
+      if (!data) return xb.warn("&lt;mp:loaddata>", "数据池没有数据可以读取:"+ id, 'w');
       
       switch (target.prop('tagName')) {
         case 'FORM':

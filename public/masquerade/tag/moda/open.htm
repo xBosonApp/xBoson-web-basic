@@ -1,5 +1,5 @@
 <never>
-  打开模态窗口
+  打开模态窗口; 要求父组件是按钮, 可接受鼠标 click 事件.
   参数:
     [必须] url: 加载到模态的页面路径
 </never>
@@ -11,12 +11,24 @@
       var thiz  = $(this);
       var url   = thiz.attr('url');
       var who   = thiz.parent();
-      var frame = $("<div class='moda_frame'/>").appendTo(document.body);
+      var frame = $("<div class='moda_frame'/>");
       
-      who.click(function() {
+      who.click(do_open);
+        
+      function do_open() {
+        frame.appendTo(document.body);
         thiz.show();
-        zy.net.loadHTML(url, frame);
-      });
+        
+        zy.net.loadHTML(url, frame, function(data, errMsg, thrownError) {
+          if (errMsg || thrownError) {
+            xb.safeHtml(frame);
+            xb.openDialog(frame, function() {
+              frame.html('').remove();
+              thiz.hide();
+            });
+          }
+        });
+      }
     });
   </script>
 </once>
