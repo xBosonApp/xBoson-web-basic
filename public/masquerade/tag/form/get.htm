@@ -2,7 +2,7 @@
   用 get 方法请求 api, 作为按钮子节点; 返回数据除了弹出提示, 并将数据发送到消息总线.
   参数:
     [必须] api, app, mod, 
-    [可选] id: 消息id
+    [可选] id: 消息id, formid: 从指定的表单接收参数.
 </never>
 <js:default name='id' rand='true' prefix='get_result_'/>
 <b style='display:none' class='auto_tag_form_get' data-id='###id###'
@@ -15,7 +15,8 @@
   xb.auto_filter('.auto_tag_form_get').each(function() {
     var data   = $(this);
     var button = data.parent();
-    var form   = data.parents('form').first();
+    var formid = data.data('formid');
+    var form   = formid ? $('#'+formid) : data.parents('form').first();
     var id     = data.data('id');
     
     button.click(function() {

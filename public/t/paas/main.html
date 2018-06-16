@@ -195,10 +195,15 @@
       <!-- end fullscreen button -->
       
       <div id="setup_debug" class="btn-header transparent pull-right">
-        <span>
-          <a href="javascript:void(0);" style="opacity: 0.3;"
+        <span class="btn-group" role="group">
+          <a href="javascript:void(0);" style="opacity: 0.3;" class="btn btn-default"
              onclick="zy.setup_debug(); $(this).hide();" title="开启调试模式">
             <i class="fa fa-bug"></i>
+          </a>
+          <a href="javascript:void(0);" style="opacity: 0.3;" class="btn btn-default"
+             onclick="zy.cache.get('_mdm_dict', 'ls').removeAll(); 
+             zy.ui.msg('缓存已更新');" title="更新本地字典(值域代码)缓存">
+            <i class="fa fa-refresh"></i>
           </a>
         </span>
       </div>

@@ -2,21 +2,29 @@
   一个单选框, 当使用 toggle_display 时, 页面变化后新加入的标签不在控制范围,
   此时需要发送一个 PAGE_UPDATE 全局消息.
   参数:
-    [必须] label: 显示名称,
+    [必须] label: 显示名称, title: 另一个显示名称
     [可选] id, class, width: 宽度, name: 表单名称, 
            toggle_display: 该选择器指向被控制的组件, 被选中时该组件显示, 否则隐藏,
            reverse: 选中时隐藏, 否则显示,
 </never>
 <js:default name='width' dval='3'/>
 <section class="col col-###width###">
-  <label class="label">&nbsp;</label>
+  <label class="label">###title###&nbsp;</label>
   <label class=''>
-    <input type="checkbox" class='###class### auto_tag_form_checkbox' 
-        reverse='###reverse###' toggle_display='###toggle_display###' 
-        name='###name###' id='###id###' ><pit/></input>&emsp;###label###
+    <div class="input-group">
+      <span class="input-group-addon">
+        <input type="checkbox" class='###class### auto_tag_form_checkbox' 
+            reverse='###reverse###' toggle_display='###toggle_display###' 
+            name='###name###' id='###id###' ><pit/></input>&emsp;
+      </span>
+      <label type="text" class="form-control">###label###</label>
+    </div>
   </label>
 </section>
 <once id='auto_tag_form_checkbox.js'>
+  <style>
+    .input-group label { padding-top: 6px; padding-left: 10px; height: 24px; width: auto; }
+  </style>
   <js:xboson/>
   <script>
     xb.auto_filter('.auto_tag_form_checkbox').each(function() {

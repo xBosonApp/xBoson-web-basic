@@ -1,4 +1,5 @@
 <ui:grid id='idid' class='list' title='交换接口配置管理'>
+  <script src='datas/nsapp1/dbmap-bind.js'></script>
   <ui:form id='listform'>
     <form:text name='map_name' label='名称' tooltip='模糊查询' width='3'/>
     <form:text name='cri_name' label='标准名称' tooltip='模糊查询' width='3'/>
@@ -23,10 +24,23 @@
         <form:button label='添加' icon='magic'>
           <moda:open url='datas/nsapp1/dbmap-add.htm'/>
         </form:button>
+        
         <form:button label='修改' icon='edit'>
           <mp:usability recvid='datatable0'/>
           <moda:open url='datas/nsapp1/dbmap-edit.htm'/>
         </form:button>
+        
+        <form:button label='运行' icon='play'>
+          <mp:usability recvid='datatable0'/>
+          <mp:onclick recvtype='SELECT_TABLE_ROW' recvid='datatable0'>
+            <mp:handle>
+              (function(data, type, id, handle) {
+                dbmap.play(data);
+              })
+            </mp:handle>
+          </mp:onclick>
+        </form:button>
+        
         <form:button label='删除' icon='trash-o'>
           <mp:usability recvid='datatable0'/>
           <mp:delete app='9da3e4550d1f42d3979ae30931d498c9' primary='mapid'

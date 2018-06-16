@@ -23,7 +23,16 @@ var events = {
   CLOSE            : 'CLOSE',
   // 组件被用户按下
   CLICK            : 'CLICK',
+  // 页面销毁时被调用
+  PAGE_DESTROY     : 'PAGE_DESTROY',
 };
+
+//
+// 不区分消息 id 的消息.
+//
+var global_events = new Set([
+  events.PAGE_DESTROY, events.PAGE_UPDATED,
+]);
 
 
 var xb = window.xb = {
@@ -58,12 +67,20 @@ var xb = window.xb = {
   safeHtml            : safeHtml,
   openDialog          : openDialog,
   apiURL              : apiURL,
+  refreshAllDict      : refreshAllDict,
+  getTableConfig      : getTableConfig,
+  configDictDialog    : configDictDialog,
   
   // 事件处理框架
   getEventSettingFromParent      : getEventSettingFromParent,
   dealEventToDom                 : dealEventToDom,
   findEventDealFromParentAndSend : findEventDealFromParentAndSend,
 };
+
+
+jQuery.fn.extend({
+  smartval : jqSmartValue,  
+});
 
 
 //
@@ -103,7 +120,7 @@ function regListener(type, id, callback) {
 // 内部函数, 构造消息总线
 //
 function getEvent(type, id) {
-  if (type == events.PAGE_UPDATED) id = 'GLOBAL';
+  if (global_events.has(type)) id = '*';
   if (!type) throw new Error("xboson.js:getEvent type is null");
   if (!id  ) throw new Error("xboson.js:getEvent id is null");
   var n = type +":"+ id;
@@ -461,6 +478,7 @@ function select2fromApi(jobj) {
   var text_field    = jobj.data('text_field') || 'text';
   var result_field  = jobj.data('result_field');
   var pagesize      = parseInt(zy.g.page.pagesize) || 10;
+  var val           = jobj.val();
   var count;
   
   jobj.select2({
@@ -472,8 +490,26 @@ function select2fromApi(jobj) {
       data    : getQuery,
       results : filterResult,
     },
+    initSelection: initSelection,
   });
   return jobj;
+  
+  
+  function initSelection(element, callback) {
+    if (!val) return;
+    var q = {};
+    q[id_field] = jobj.val();
+    
+    $.get(url, q, function(r) {
+      var arr = r && (r[result_field] || r.data || r.result);
+      if (arr && arr[0]) {
+        callback({
+          id   : arr[0][id_field],
+          text : arr[0][text_field],
+        });
+      }
+    });
+  }
   
   
   function filterResult(data, page, context) {
@@ -856,6 +892,177 @@ function openDialog(frame, _onclose) {
   });
   frame.dialog('open');
   return frame;
+}
+
+
+function refreshAllDict() {
+  try {
+    if (zy) {
+      zy.cache.get('_mdm_dict', 'ls').removeAll();
+    }
+  } catch(e) {
+    console.error("refreshAllDict", e);
+  }
+}
+
+
+//
+// $.fn.dataTable 的默认配置
+// dataTable() 返回 jquery 对象自身, DataTable() 返回 TableApi 对象.
+//
+function getTableConfig() {
+  var config = { data: [], columns:[], language: {} };
+  $.extend(true, config.language, zy.ui.dataTable.language);
+  return config;
+}
+
+
+//
+// config.displayInput 用于显示字典字面值的 input 元素
+// config.dialog 对话框框架根元素
+// config.realInput 实际存储值的表单元素
+// config.destroy 出参: 返回后绑定销毁的方法
+// config.show 出参: 返回后绑定显示的方法
+//
+function configDictDialog(config) {
+  var select  = config.realInput;
+  var disp    = config.displayInput;
+  var dialog  = config.dialog; 
+  var ok      = dialog.find(".ok");
+  var body    = dialog.find(".modal-body");
+  var url     = xb.apiURL(null, 'd2c8511b47714faba5c71506a5029d94', 'datadict', 'gettree');
+  var treediv = $("<div class='ztree'>");
+  var current_select;
+  var okx = -1;
+  var zTreeObj = dialog.data('zTreeObj');
+  
+  var setting = {
+    async: {
+      url        : url,
+      enable     : true,
+      dataFilter : dataFilter,
+      autoParam  : [ 'typecd' ],
+      otherParam : [ 'openid', zy.g.comm.openid ],
+    },
+    callback: {
+      onMouseDown : onMouseDown,
+    },
+    view: { nameIsHTML: true },
+  };
+  
+  if (! ok.length) {
+    ok = $('<button type="button" class="ok btn btn-primary btn-sm">应用</button>');
+    ok.prependTo(dialog.find('.modal-footer'));
+  }
+  
+  config.destroy = destroy;
+  config.show = show;
+  disp.click(show).css('cursor', 'pointer');
+  
+  
+  if (select.val()) {
+    xb.getDictNameByTypecd(select.val(), function(name) {
+      disp.val(name);
+    });
+  }
+  
+  
+  ok.click(function() {
+    if (current_select) {
+      select.val(current_select.typecd);
+      disp.val(current_select.typenm);
+      select.trigger('change');
+    }
+    dialog.modal('hide');
+    resetOk();
+  });
+  
+  
+  function resetOk() {
+    ok.css("position", 'static');
+    okx = -1;
+  }
+  
+  
+  function show() {
+    if (!zTreeObj) {
+      dialog.data("is_setting_to_dict", true);
+      dialog.appendTo(document.body);
+      dialog.find('.modal-dialog').css('width', '600px');
+      dialog.on('hidden.bs.modal', resetOk);
+      body.empty().append(treediv);
+      zTreeObj = $.fn.zTree.init(treediv, setting);
+      dialog.data('zTreeObj', zTreeObj);
+      xb.on('PAGE_DESTROY', null, destroy);
+    }
+    dialog.modal('show');
+  }
+  
+  
+  function destroy() {
+    if (zTreeObj) {
+      dialog.removeData('bs.modal');
+      dialog.empty();
+      dialog.remove();
+      zTreeObj.destroy();
+      zTreeObj = null;
+    }
+  }
+  
+  
+  function onMouseDown(event, treeId, treeNode) {
+    if (okx < 0) {
+      okx = body.offset().left + body.width() - 100;
+      ok.css("position", 'absolute');
+    }
+    ok.offset({ left: okx, top: event.pageY-15 });
+    current_select = treeNode;
+  }
+  
+  
+  function dataFilter(treeid, parentNode, rdata) {
+    rdata.result.forEach(function(row) {
+      // BUG: 接口不应该返回这个数据
+      // if (row.typecd == 'ROOT') return;
+      row.name = row.typenm +' <span class="note">'+ row.typecd +' v'+ row.version +'</span>'
+    });
+    return rdata.result;
+  }
+}
+
+
+//
+// val() 的替代品, 通常返回 val() 的值, 除非:
+// 1. 当 checkbox 被选中返回 val() 否则返回 null.
+//
+function jqSmartValue() {
+  var dom = this[0];
+  var v = null;
+  if (dom) {
+    switch (dom.tagName) {
+      default:
+        v = this.val();
+        break;
+        
+      case 'INPUT': {
+        if (this.prop('disabled'))
+          return v;
+          
+        switch(dom.type) {
+          case 'checkbox':
+          case 'radio':
+            v = this.prop('checked') && this.val();
+            break;
+            
+          default:
+            v = this.val();
+            break;
+        }
+      }
+      break;
+    }
+  }
+  return v;
 }
 
 

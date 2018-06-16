@@ -15,7 +15,7 @@
         <option value='1'>有</option>
         <option value='0'>无</option>
       </form:select>
-      <form:btn_toolbar width='3'>
+      <form:btn_toolbar width='6'>
         <form:button id='parse_txt' label='解析' icon='arrow-down'></form:button>
         <form:button id='demo' label='例子' icon='code'></form:button>
       </form:btn_toolbar>
@@ -51,7 +51,7 @@
       <form:text name='version' label='版本' tooltip='' width='3' value='1.0'>
         <vali:string min='1' max='45'/>
       </form:text>
-      <form:btn_toolbar width='3'>
+      <form:btn_toolbar width='6'>
         <form:button id='push_data' label='上传' icon='play'></form:button>
         <form:button id='clear_log' label='清空日志' icon='eraser'></form:button>
         <form:button id='reset_all' label='清空全部' icon='eraser'></form:button>
@@ -87,6 +87,7 @@
     var progress      = $('#total_progress');
     var note          = column_mapper.find('[name=mark]').parents("section").first();
     var push_url      = xb.apiURL(null, 'd2c8511b47714faba5c71506a5029d94', 'datadict', 'adddata');
+    var merge_note    = ' / ';
     var config;
     var tableObj;
       
@@ -201,7 +202,7 @@
         for (var i=0; i < xmark.length; ++i) {
           ret.push(crow[ xmark[i] ]);
         }
-        return ret.join("; ");
+        return ret.join(merge_note);
       }
       
       function update(err) {
@@ -245,9 +246,7 @@
       var txt = $('#txt').val();
       if (!txt) return xb.warn("错误", "填写文本内容");
       
-      config = { data: [], columns:[] };
-      $.extend(null, config, zy.ui.dataTable);
-      
+      config = xb.getTableConfig();
       parseModeMLine(txt, config);
       
       if (tableObj) tableObj.destroy();

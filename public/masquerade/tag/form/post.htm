@@ -2,12 +2,12 @@
   用 post 方法请求 api, 作为按钮子节点; 返回数据除了弹出提示, 并将数据发送到消息总线.
   参数:
     [必须] api, app, mod, 
-    [可选] id: 消息id
+    [可选] id: 消息id, formid: 从指定的表单接收参数.
 </never>
 <js:default name='id' rand='true' prefix='post_result_'/>
 <b style='display:none' class='auto_tag_form_post' data-id='###id###'
     data-api='###api###' data-app='###app###' data-mod='###mod###'
-    data-event-type='FORM_API_RESULT'><pit/></b>
+    data-event-type='FORM_API_RESULT' data-formid='###formid###'><pit/></b>
     
 <once id='auto_tag_form_post.js'>
 <js:xboson/>
@@ -15,7 +15,8 @@
   xb.auto_filter('.auto_tag_form_post').each(function() {
     var data   = $(this);
     var button = data.parent();
-    var form   = data.parents('form').first();
+    var formid = data.data('formid');
+    var form   = formid ? $('#'+formid) : data.parents('form').first();
     var id     = data.data('id');
     
     button.click(function() {

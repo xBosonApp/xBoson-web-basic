@@ -3,7 +3,8 @@
   参数:
     [必须] id: 事件id / 数据 id.
 </never>
-<b style='disply:none' class='auto_tag_mp_loaddata' data-id='###id###'></b>
+<b style='disply:none' class='auto_tag_mp_loaddata' data-id='###id###'
+    data-event-type='LOAD_OVER'><pit/></b>
 <once id='auto_tag_mp_loaddata.js'>
   <js:xboson/>
   <script>
@@ -22,6 +23,8 @@
           xb.dataToForm(data, target);
           break;
       }
+      
+      xb.emit('LOAD_OVER', id, jdata);
     });
   </script>
 </once>

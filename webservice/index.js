@@ -1,7 +1,7 @@
 var http = require('http');
 
 
-function outputxml() {
+function outputxml(msg) {
 return`<?xml version="1.0" encoding="UTF-8" ?>
 <XnS0:Envelope xmlns:XnS0="http://www.w3.org/2003/05/soap-envelope">
 <XnS0:Body>
@@ -30,7 +30,7 @@ return`<?xml version="1.0" encoding="UTF-8" ?>
       <datacompress>0</datacompress>
       <returnmessage>
         <retcode>1</retcode>
-        <rettext>结果描述`+ Math.random() +`</rettext>
+        <rettext>结果: `+ msg +`</rettext>
       </returnmessage>
       <businessdata/>
       <returnset>
@@ -46,14 +46,18 @@ return`<?xml version="1.0" encoding="UTF-8" ?>
 }
 
 const srv = http.createServer((req, res) => {
+  var len = 0;
+  
   req.on('data', function(d) {
-    console.log(d.toString('utf8'));
+    s = d.toString('utf8');
+    len += s.length;
   });
 
   req.on('end', function() {
     res.writeHead(200, { 'Content-Type': 'text/xml' });
-    res.end(outputxml());
-    console.log("\n");
+    var msg = "请求长度:"+len+"字符";
+    res.end(outputxml(msg));
+    console.log(msg);
   });
 });
 

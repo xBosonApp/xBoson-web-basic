@@ -1,0 +1,131 @@
+<!-- Create By xBoson System -->
+<!--<script src='datas/lib/dom.jsPlumb-1.7.4-min.js'></script>-->
+<!--<script src='datas/lib/fields-mapping.js'></script>-->
+<script src='datas/nsapp1/dbmap-bind.js'></script>
+<style>
+  .odd { background-color: #f1f0f0; }
+</style>
+
+<moda:frame title='创建交换接口配置' class='dbmap_edit_root'>
+  <ui:form id='edit' class='update_form'>
+    <mp:loaddata id='datatable0'>
+      <mp:handle>
+        function(data, type, id, handle) { 
+          dbmap.jsonBuildForm(handle.parents("form").first()); 
+        }
+      </mp:handle>
+    </mp:loaddata>
+    <input type='hidden' name='mapid'/>
+     
+    <fieldset>
+      <form:text name='map_name' label='名称' tooltip='' width='6'>
+        <vali:string min='1' max='45'/>
+      </form:text>
+      <form:api_select2 name='criid' label='交换标准' tooltip='' width='6'
+          app='9da3e4550d1f42d3979ae30931d498c9' mod='nsdata' api='cri_list'
+          text_field='standardname' id_field='criid'>
+        <vali:string min='1' max='32'/>
+      </form:api_select2>
+      
+      <form:api_select2 name='rtid' label='远程配置' tooltip='' width='6'
+          app='9da3e4550d1f42d3979ae30931d498c9' mod='nsdata' api='remote_list'
+          text_field='rname' id_field='rtid'>
+        <vali:string min='1' max='32'/>
+      </form:api_select2>
+      <form:api_select2 name='wsid' label='WebService' tooltip='' width='6'
+          app='a1e22425b8574d67bf4f200b4ccde506' mod='webservice' api='list'
+          text_field='wsname' id_field='wsid'>
+        <vali:string min='1' max='32'/>
+      </form:api_select2>
+      
+      <form:text name='route' label='服务路由信息' tooltip='可空' width='6'>
+        <vali:string min='0' max='50'/>
+      </form:text>
+      <form:text name='process' label='服务流程编排' tooltip='可空' width='6'>
+        <vali:string min='0' max='50'/>
+      </form:text>
+      
+      <form:dict name='sourceorgan' label='消费方机构编码' tooltip='' width='6'
+          typecd='NS-APP-01-ORGAN' >
+        <vali:string min='1' max='50'/>
+      </form:dict>
+      <form:dict name='sourcedomain' label='消费方接入系统编码' tooltip='' width='6'
+          typecd='NS-APP-01-DOMAIN' >
+        <vali:string min='1' max='50'/>
+      </form:dict>
+      
+      <form:dict name='targetorgan' label='提供方机构编码' tooltip='可空' width='6'
+          typecd='NS-APP-01-ORGAN' >
+        <vali:string min='0' max='50'/>
+      </form:dict>
+      <form:dict name='targetdomain' label='提供方接入系统编码' tooltip='' width='6'
+          typecd='NS-APP-01-DOMAIN' >
+        <vali:string min='1' max='50'/>
+      </form:dict>
+      
+      <form:api_select2 name='source_did' label='SQL 数据源' tooltip='' width='6'
+          app='ZYAPP_SYSMGT' mod='datasource' api='getdatasourcelist'
+          text_field='cn' id_field='did'>
+        <vali:string min='1' max='32'/>
+      </form:api_select2>
+      <form:dict name='servicecode' label='服务注册中心唯一服务编码' typecd='NS-APP-01-SERVICECODE' 
+          tooltip='' width='6'>
+        <vali:string min='1' max='50'/>
+      </form:dict>
+      
+      <form:textarea name='sql_str' label='提取数据的 SQL 文' tooltip='数据来源'width='10' rows='6'>
+        <vali:string min='1' max='5000'/>
+      </form:textarea>
+      <form:btn_toolbar width='2'>
+        <form:button label='提取字段' icon='spinner'>
+          <mp:onclick recvtype='SELECT_TABLE_ROW' recvid='datatable0'>
+            <mp:handle>
+              (function(data, type, id, handle) {
+                dbmap.parseSql(handle);
+              })
+            </mp:handle>
+          </mp:onclick>
+        </form:button>
+      </form:btn_toolbar>
+      
+      <div class='hide'>
+        <form:textarea name='map_json' label='字段配置映射' tooltip='隐藏域' width='10' rows='6'/>
+      </div>
+    </fieldset>
+  </ui:form>
+  
+  <ui:form id='mapper' class='update_form'>
+    <form:title>字段映射配置</form:title>
+    
+    <fieldset class='mapper_template'>
+      <div class='configrow'>
+        <form:text name='target' label='标准' tooltip='可空' width='2'/>
+        <layout:label label='说明' width='3' icon='file-text-o' class='notetext'/>
+        <form:select label='对应 SQL 字段' width='2' name='dbfield'/>
+        <form:checkbox label='启用' title='应用值域映射' name='usedict' width='1'/>
+        
+        <layout:frsection label='值域映射' class='input' width='2'>
+          <input type='hidden' name='typecd'/>
+          <input type='text' name='typenm' readonly tooltip='值域映射开启后有效'/>
+        </layout:frsection>
+        <form:text name='default' label='值域映射无效时的默认值' width='2' tooltip='值域映射开启后有效'/>
+        <form:br/>
+      </div>
+    </fieldset>
+  </ui:form>
+    
+  <ui:form id='commit' class='update_form'>
+    <footer>
+      <moda:cancel/>
+      <moda:ok>
+        <form:post app='9da3e4550d1f42d3979ae30931d498c9' mod='nsdata' api='mapper_modify' formid='edit'>
+          <mp:close when='this.code == 0'>
+            <mp:send type='TABLE_UPDATE_REQ' id='datatable0'/>
+          </mp:close>
+        </form:post>
+      </moda:ok>
+    </footer>
+  </ui:form>
+  
+  <chip:dialog class='dbmap_dict_dialog' title='字典选择'/>
+</moda:frame>
