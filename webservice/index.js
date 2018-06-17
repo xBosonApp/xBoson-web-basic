@@ -51,6 +51,7 @@ const srv = http.createServer((req, res) => {
   req.on('data', function(d) {
     s = d.toString('utf8');
     len += s.length;
+    console.log(s);
   });
 
   req.on('end', function() {

@@ -4,7 +4,7 @@
     [可选] class, id, value: 默认值, width: 宽度
 </never>
 <js:default name='width' dval='3'/>
-<section class="col col-###wdith###">
+<section class="col col-###width###">
   <label class="label">###label###</label>
   <label class="input">
     <i class="icon-append fa fa-calendar"></i>
@@ -14,6 +14,7 @@
 </section>
     
 <once id='auto_tag_form_date_ctrl.js'>
+  <js:xboson/>
   <script src="lib/js/plugin/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
   <script>
     xb.auto_filter('.auto_tag_form_date_ctrl').each(function() {

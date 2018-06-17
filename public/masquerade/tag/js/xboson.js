@@ -70,6 +70,7 @@ var xb = window.xb = {
   refreshAllDict      : refreshAllDict,
   getTableConfig      : getTableConfig,
   configDictDialog    : configDictDialog,
+  stringifyUsedTime   : stringifyUsedTime,
   
   // 事件处理框架
   getEventSettingFromParent      : getEventSettingFromParent,
@@ -1063,6 +1064,29 @@ function jqSmartValue() {
     }
   }
   return v;
+}
+
+
+function stringifyUsedTime(i) {
+  var ms = parseInt(i);
+  if (!ms) return i;
+  var unit;
+  if (ms < 1000) {
+    unit = '毫秒';
+  } else if (ms < 60*1000) {
+    ms /= 1000;
+    unit = '秒';
+  } else if (ms < 60*60*1000) {
+    ms /= 60*1000;
+    unit = '分种';
+  } else if (ms < 24*60*60*1000) {
+    ms /= 60*60*1000;
+    unit = '小时';
+  } else {
+    ms /= 24*60*60*1000;
+    unit = '天';
+  }
+  return [ms.toFixed(1), "<span class='note'>", unit, "</span>"].join('&emsp;');
 }
 
 

@@ -143,17 +143,42 @@ function setupDict(real, diaplay) {
 function play(data) {
   var url = xb.apiURL(null, '9da3e4550d1f42d3979ae30931d498c9', 'nsdata', 'exchange');
   var query = { 's': zy.debug ? 'd': null, 'mapid': data.mapid };
-  zy.ui.msg("提示", "请求已经发送", 'i');
+  var beginat = Date.now();
   
-  $.ajax(url, {
+  var d = $("<div title='调用 SOAP 接口'></div>");
+  d.append('<div>ID:'+ data.mapid +"</div>");
+  d.append('<div class="wait">请求已经发送, 请耐心等待...<b class="usetime"></b></div>');
+  
+  var tid = setInterval(function() {
+    d.find(".usetime").html(xb.stringifyUsedTime(Date.now()-beginat));
+  }, 1000);
+  
+  var ajaxobj = $.ajax(url, {
     data: query,
+    timeout: 0,
     success: function(ret) {
-      zy.ui.msg("完成", "接口返回码:"+ ret.code +"<br/>返回消息:"+ ret.msg, 'i');
+      msg = ["完成<br/>", "接口返回码:"+ ret.code +"<br/>返回消息:<hr/><pre>", ret.msg, '</pre>'];
+      over(msg);
     },
     error: function(ret, msg, err) {
-      zy.ui.msg("警告", msg||err + "<br/>若长时间未返回, 请到进程管理中确认.", 'w');
+      msg = ["错误<br/>", msg||err];
+      over(msg);
     },
   });
+  
+  xb.openDialog(d, function() {
+    if (ajaxobj.readyState < 4) {
+      ajaxobj.abort();
+      zy.ui.msg("中断", "请求已经中断, 但任务未停止, 请到进程管理中确认.", 'i');
+    }
+    over();
+  });
+  
+  function over(msg) {
+    clearInterval(tid);
+    msg && d.append(msg.join(''));
+    d.find('.wait').hide();
+  }
 }
 
 

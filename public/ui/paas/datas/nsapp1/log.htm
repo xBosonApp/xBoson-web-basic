@@ -1,0 +1,34 @@
+<ui:grid id='idid' class='list' title='远程配置列表'>
+  <ui:form id='listform'>
+    <form:text name='totalcnt' label='数据量' tooltip='返回大于该数量的日志' width='4'/>
+    <form:text name='reqmsg' label='返回消息' tooltip='模糊查询' width='4'/>
+    <form:text name='map_name' label='映射名称' tooltip='模糊查询' width='4'/>
+    <form:text name='sql_str' label='SQL文' tooltip='模糊查询' width='4'/>
+    <form:text name='standardname' label='标准名称' tooltip='模糊查询' width='4'/>
+    <form:text name='daqtaskid' label='采集任务的标识号' tooltip='接口标准' width='4'/>
+    <form:date name='begindate' label='开始日期' width='4' value=''/>
+    <form:date name='enddate' label='结束日期' width='4' value=''/>
+    
+    <form:btn_toolbar>
+      <form:group>
+        <form:submit label='查询'/>
+        <form:reset/>
+      </form:group>
+    </form:btn_toolbar>
+  </ui:form>
+  
+  <mp:savedata type='SELECT_TABLE_ROW' id='datatable0'/>
+  
+  <table:api app='9da3e4550d1f42d3979ae30931d498c9' mod='nsdata' api='log1' 
+      form='#listform' id='datatable0'>
+    <table:mapper label='日志时间' key='createdt'/>
+    <table:mapper label='数据量' key='totalcnt'/>
+    <table:mapper label='返回消息' key='reqmsg'/>
+    <table:mapper label='消耗时间' key='use_time'>
+      <table:render_ms/>
+    </table:mapper>
+    <table:mapper label='映射名称' key='map_name'/>
+    <table:mapper label='标准名称' key='standardname'/>
+    <table:mapper label='SQL文' key='sql_str'/>
+  </table:api>
+</ui:grid>

@@ -6,11 +6,11 @@
   .odd { background-color: #f1f0f0; }
 </style>
 
-<moda:frame title='创建交换接口配置' class='dbmap_edit_root'>
+<moda:frame title='修改交换接口配置' class='dbmap_edit_root'>
   <ui:form id='edit' class='update_form'>
     <mp:loaddata id='datatable0'>
       <mp:handle>
-        function(data, type, id, handle) { 
+        function(data, type, id, handle) {
           dbmap.jsonBuildForm(handle.parents("form").first()); 
         }
       </mp:handle>
@@ -81,7 +81,7 @@
           <mp:onclick recvtype='SELECT_TABLE_ROW' recvid='datatable0'>
             <mp:handle>
               (function(data, type, id, handle) {
-                dbmap.parseSql(handle);
+                dbmap.parseSql(handle.parents("form").first());
               })
             </mp:handle>
           </mp:onclick>
