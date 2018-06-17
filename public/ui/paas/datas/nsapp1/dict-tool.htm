@@ -6,7 +6,7 @@
     <fieldset>
       <form:title>STEP 1, 从文档中复制表格内容</form:title>
       
-      <form:textarea id='txt' label="" tooltip='直接从 word 文档中复制整个表格, 复制后为多行文本(没有格式)'
+      <form:textarea id='txt' label="" tooltip='直接从 word 文档中复制整个表格, 复制后为多行文本(没有格式), 如果有多列 先用 "转单列" 将多列转为单列多行.'
           width='10' rows='15'></form:textarea>
       <form:br/>
       <form:text id='line' label='每 n 行为一个数据单位' tooltip='表格中的列数' width='3'>
@@ -17,6 +17,7 @@
       </form:select>
       <form:btn_toolbar width='6'>
         <form:button id='parse_txt' label='解析' icon='arrow-down'></form:button>
+        <form:button id='column_to_line' label='转单列' icon='magic'></form:button>
         <form:button id='demo' label='例子' icon='code'></form:button>
       </form:btn_toolbar>
     </fieldset>
@@ -85,6 +86,7 @@
     var ps_log        = $("#ps_log");
     var column_mapper = $("#column_mapper");
     var progress      = $('#total_progress');
+    var table         = $('#step2').find("table");
     var note          = column_mapper.find('[name=mark]').parents("section").first();
     var push_url      = xb.apiURL(null, 'd2c8511b47714faba5c71506a5029d94', 'datadict', 'adddata');
     var merge_note    = ' / ';
@@ -140,6 +142,20 @@
         if (i) $(this).parents("section").first().remove();
       });
       clearMapper();
+    });
+    
+    $('#column_to_line').click(function() {
+      var sp  = '\t';
+      var txt = $('#txt').val();
+      
+      try {
+        // 效率不高, 凑合用
+        var tmp = txt.split('\n')[0].split(sp);
+        $('#line').val(tmp.length);
+      } catch(e) { console.error(e) }
+      
+      txt = txt.split(sp).join('\n');
+      $('#txt').val(txt);
     });
     
     
@@ -247,10 +263,12 @@
       if (!txt) return xb.warn("错误", "填写文本内容");
       
       config = xb.getTableConfig();
-      parseModeMLine(txt, config);
+      if (!parseModeMLine(txt, config)) {
+        return;
+      }
       
       if (tableObj) tableObj.destroy();
-      var table = $('#step2').removeClass('hide').find("table");
+      $('#step2').removeClass('hide');
       tableObj = table.DataTable(config);
     });
   
@@ -297,10 +315,12 @@
         currline = [];
         for (var i=0; i<line; ++i) {
           currline.push(all[p]);
-          if (++p >= all.length) return;
+          if (++p >= all.length) 
+            return true;
         }
         config.data.push(currline);
       }
+      return true;
     }
   });
 </script>

@@ -290,6 +290,7 @@ function warn(title, msg, _err) {
           "border:0;'>", stack, "</pre>"].join('');
   }
   zy.ui.msg(title, msg, type);
+  return false;
 }
 
 

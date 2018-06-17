@@ -1,14 +1,14 @@
 <never>
   参数:
     [必填] label: 显示名称, name : 表单名称
-    [可选] class, id, value: 默认值, width: 宽度
+    [可选] class, id, value: 默认值, width: 宽度, offset: 整数天的偏移值(有默认值无效)
 </never>
 <js:default name='width' dval='3'/>
 <section class="col col-###width###">
   <label class="label">###label###</label>
   <label class="input">
     <i class="icon-append fa fa-calendar"></i>
-    <input class="form-control ###class### auto_tag_form_date_ctrl" value='###value###'
+    <input class="form-control ###class### auto_tag_form_date_ctrl" value='###value###' data-offset='###offset###'
         id='###id###' type="text" name="###name###" placeholder="###label###"><pit/></input>
   </label>
 </section>
@@ -19,12 +19,19 @@
   <script>
     xb.auto_filter('.auto_tag_form_date_ctrl').each(function() {
       var thiz = $(this);
+      var offset = parseInt(thiz.data('offset'));
+      
       thiz.datepicker({
         language : 'zh-CN',
         format   : 'yyyy-mm-dd'
       });
+      
       if (!thiz.prop('value')) {
-        thiz.datepicker('setDate', Date());
+        var now = Date.now();
+        if (offset) {
+          now += (offset * 24*60*60*1000);
+        }
+        thiz.datepicker('setDate', new Date(now));
       }
     });
   </script>
