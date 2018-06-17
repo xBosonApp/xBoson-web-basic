@@ -3,6 +3,7 @@
   参数:
     [必须] type: 发出的事件类型, id: 发出的事件 id.
 </never>
+<js:default name='id' rand='true' predix='mp_send_'/>
 <b style='display:none' class='auto_tag_mp_send' data-type='###type###' data-id='###id###'></b>
 <once id='auto_tag_mp_send.js'>
   <js:xboson/>
@@ -13,7 +14,7 @@
       var id      = jdata.data('id');
       var setting = xb.getEventSettingFromParent(jdata);
       
-      console.debug("Deal Send Event:", setting);
+      //console.debug("Deal Send Event:", setting);
       xb.on(setting.type, setting.id, function(data) {
         xb.emit(type, id, data);
       });

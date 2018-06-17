@@ -1226,6 +1226,7 @@ function checkURL() {
   var url = location.hash.replace(/^#/,'');
   zy.log('checkURL.url= '+url);
 
+  window.xb && xb.pageDestroy(url);
   container = $('#content');
   // Do this if url exists (for page refresh, etc...)
   if (url) {
@@ -1262,7 +1263,6 @@ function checkURL() {
         url = url.substring(1);
       }
       loadURL(url + location.search, container, path);
-
       // loadURL(url + location.search, container,$('nav a[href="' + url + '"]').attr('path'));
     }
   } else {

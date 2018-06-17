@@ -2,11 +2,7 @@
   <ui:form id='listform'>
     <form:text name='rname' label='配置名' tooltip='模糊查询' width='4'/>
     <form:text name='username' label='用户名' tooltip='模糊查询' width='4'/>
-    <form:text name='license' label='证书' tooltip='模糊查询' width='4'/>
-    <form:select name='status' label='状态' width='4'>
-      <option value='1'>启用</option>
-      <option value='0'>禁用</option>
-    </form:select>
+    <form:status/>
     
     <form:btn_toolbar>
       <form:group>

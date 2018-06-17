@@ -157,8 +157,9 @@ function play(data) {
     data: query,
     timeout: 0,
     success: function(ret) {
-      msg = ["完成<br/>", "接口返回码:"+ ret.code +"<br/>返回消息:<hr/><pre>", ret.msg, '</pre>'];
+      msg = ["完成<br/>", "接口返回码:"+ ret.code +"<br/>返回消息:<hr/><pre class='htmlcode'></pre>"];
       over(msg);
+      d.find('.htmlcode').text(ret.msg);
     },
     error: function(ret, msg, err) {
       msg = ["错误<br/>", msg||err];

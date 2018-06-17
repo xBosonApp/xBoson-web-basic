@@ -3,7 +3,13 @@
   <moda:tabpanel>
     <moda:tab title='修改接口' id='tab_create'>
       <ui:form id='create' class='update_form'>
-        <mp:loaddata id='datatable0'/>
+        <mp:loaddata id='datatable0'>
+          <mp:handle>
+            (function(data, a, b, handle) {
+              handle.parents('.modal-body').find('[name=url]').val(data.ws_uri+'?wsdl');
+            })
+          </mp:handle>
+        </mp:loaddata>
         <fieldset>
           <form:text name='wsname' label='名称' tooltip='最少1字符' width='6'>
             <vali:string min='1' max='45'/>

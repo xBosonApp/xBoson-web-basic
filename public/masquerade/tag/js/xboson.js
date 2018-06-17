@@ -71,6 +71,7 @@ var xb = window.xb = {
   getTableConfig      : getTableConfig,
   configDictDialog    : configDictDialog,
   stringifyUsedTime   : stringifyUsedTime,
+  pageDestroy         : pageDestroy,
   
   // 事件处理框架
   getEventSettingFromParent      : getEventSettingFromParent,
@@ -82,6 +83,9 @@ var xb = window.xb = {
 jQuery.fn.extend({
   smartval : jqSmartValue,  
 });
+
+// 当页面销毁时清空消息总线
+xb.on(events.PAGE_DESTROY, null, onPageDestroy);
 
 
 //
@@ -130,6 +134,18 @@ function getEvent(type, id) {
     v = ebus[n] = $.Callbacks();
   }
   return v;
+}
+
+
+function onPageDestroy(newPage) {
+  ebus = {};
+  dataPool = {};
+  xb.on(events.PAGE_DESTROY, null, onPageDestroy);
+}
+
+
+function pageDestroy(d) {
+  xb.emit(events.PAGE_DESTROY, null, d);
 }
 
 
@@ -211,7 +227,8 @@ function getEventSettingFromParent(jdata) {
   var pt_event  = jdata.parents("[data-event-type]").first();
   var evet_type = pt_event.data('event-type');
   var evet_id   = pt_event.attr("id") || pt_event.data('id');
-  var NAME      = 'getEventSettingFromParent';
+  var id        = jdata.data('id');
+  var NAME      = 'getEventSettingFromParent::'+id;
   
   if (!pt_event.length) return xb.warn(NAME, '找不到含有 data-event-type 的父组件', 'w'); 
   if (!evet_type) return xb.warn(NAME, 'event-type 定义无效', 'w');
@@ -228,6 +245,7 @@ function getEventSettingFromParent(jdata) {
 // 在 jdom 上绑定事件监听器 (允许子节点发现该容器的监听器)
 //
 function dealEventToDom(jdom, eventType, eventFn) {
+  throw new Error("dealEventToDom() 废弃");
   var id = jdom.attr("id") || jdom.data("id");
   jdom.addClass('deal-event-'+ eventType);
   xb.regListener(eventType, id, eventFn);
@@ -239,6 +257,7 @@ function dealEventToDom(jdom, eventType, eventFn) {
 // 用于发现代码中定义的事件, 与 getEventSettingFromParent 区别.
 //
 function findEventDealFromParentAndSend(jdata, dealEvent) {
+  throw new Error("findEventDealFromParentAndSend() 废弃");
   var jtag = jdata.parents('.deal-event-'+ dealEvent).first();  
   if (jtag.length) {
     var id = jtag.attr('id') || jdom.data("id");
@@ -249,7 +268,8 @@ function findEventDealFromParentAndSend(jdata, dealEvent) {
     }
     return jtag;
   }
-  xb.warn("[deal-event]", "没有找到能处理 "+ dealEvent + " 事件的父组件", 'w');
+  xb.warn("[deal-event]", "没有找到能处理 "+ dealEvent 
+    +"(From:"+ jdata.data('id')||jdata.attr('id') +") 事件的父组件", 'w');
 }
 
 
@@ -334,6 +354,7 @@ function createDataTable(table) {
   var form    = $(table.data('form'));
   var pageset = defaultPageset();
   var mapper  = table.find('.table_mapper');
+  var tableObj;
   
   var pagination      = table.parent().find('.auto_tag_table_api_pagination');
   var total_count_num = table.parent().find('.total_count_num');
@@ -374,12 +395,11 @@ function createDataTable(table) {
       
       options.data = rows || [];
       
-      if (table.fnClearTable) {
-        table.fnClearTable();
+      if (tableObj) {
+        tableObj.destroy();
         delete options.aaData;
-        // delete options.initComplete;
       }
-      table.dataTable(options);
+      tableObj = table.DataTable(options);
       onselect(null);
     }
   }
@@ -880,13 +900,15 @@ function safeHtml(h) {
 //
 function openDialog(frame, _onclose) {
   frame.dialog({
-    width : '70%',
-    height: '500',
-    modal : 'true',
-    hide  : 'slide',
-    show  : 'slide',
-    close : function() {
+    width    : '70%',
+    height   : '500',
+    modal    : 'true',
+    hide     : 'slide',
+    show     : 'slide',
+    appendTo : '#content',
+    close    : function() {
       frame.dialog('destroy');
+      frame.remove();
       frame.hide();
       _onclose && _onclose();
     }
