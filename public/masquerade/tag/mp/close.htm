@@ -1,5 +1,5 @@
 <never>
-  接收来自父容器的消息(消息定义在父容器), 并转发送 close 事件一直到根节点.
+  接收来自父容器的消息(消息定义在父容器), 并转发送 close 事件一直到上层根节点和子节点.
   参数:
     [必须] id: 向目标对象发送关闭事件
     [可选] when: js 表达式, 用于处理消息数据, this 是消息数据根节点, 数据结构与消息有关.
@@ -11,10 +11,11 @@
   <js:xboson/>
   <script>
     xb.auto_filter('.auto_tag_mp_close').each(function() {
-      var jdata = $(this);
-      var es    = xb.getEventSettingFromParent(jdata);
-      var id    = jdata.data('id');
+      var jdata   = $(this);
+      var es      = xb.getEventSettingFromParent(jdata);
+      var id      = jdata.data('id');
       var sending = false;
+      var CLOSE   = xb.events.CLOSE;
       
       if (!id) return xb.warn("mp:close 标签", "没有 id 参数");
       
@@ -25,20 +26,12 @@
         xb.eval_short(jdata, 'when', event_data, function(err, eret, isnull) {
           if ((!isnull) && (!eret)) return;
           
-          // 向所有层级父节点发布消息.
-          jdata.parents("[data-event-type]").each(function() {
-            var target = $(this);
-            var etype  = target.data('event-type');
-            var eid    = target.attr("id") || target.data('id');
-            xb.emit(etype, eid, event_data);
-          });
+          // 向所有层级父节点发布 CLOSE 消息.
+          xb.sendToEachParents(jdata, CLOSE, event_data);
           // 为了子节点能正确接受到消息
           xb.emit(xb.events.CLOSE, id, event_data);
-          
           // 修正可能的自调用
-          setTimeout(function() {
-            sending = false;
-          }, 100);
+          setTimeout(function() { sending = false; }, 100);
         });
       });
     });

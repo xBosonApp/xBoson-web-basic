@@ -7,7 +7,7 @@
 <!-- Modal -->
 <js:default name='id' rand='true' prefix='frame_'/>
 <div class="modal fade ###class### auto_tag_moda_frame" id="moda_###id###" tabindex="-1" role="dialog" 
-     aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-event-type='CLOSE'>
+     aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-event-type='CLOSED'>
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -51,7 +51,7 @@
       frame.removeData('bs.modal');
       frame.empty();
       frame.remove();
-      xb.emit('CLOSE', id, frame);
+      xb.emit('CLOSED', id, frame);
     }
   });
   </script>

@@ -21,6 +21,8 @@ var events = {
   PAGE_UPDATED     : 'PAGE_UPDATED',
   // 关闭组件的请求
   CLOSE            : 'CLOSE',
+  // 组件已经关闭发出这个消息
+  CLOSED           : 'CLOSED',
   // 组件被用户按下
   CLICK            : 'CLICK',
   // 页面销毁时被调用
@@ -72,6 +74,7 @@ var xb = window.xb = {
   configDictDialog    : configDictDialog,
   stringifyUsedTime   : stringifyUsedTime,
   pageDestroy         : pageDestroy,
+  sendToEachParents   : sendToEachParents,
   
   // 事件处理框架
   getEventSettingFromParent      : getEventSettingFromParent,
@@ -134,6 +137,21 @@ function getEvent(type, id) {
     v = ebus[n] = $.Callbacks();
   }
   return v;
+}
+
+
+//
+// 遍历所有父级组件, 只要组件有 id 属性, 就向组件发布 type 消息, id 就是 组件 id.
+// 比如 close 事件需要向父组件散发, 使用该方法.
+//
+function sendToEachParents(jdata, type, data) {
+  jdata.parents().each(function() {
+    var target = $(this);
+    var eid    = target.attr("id") || target.data('id');
+    if (eid) {
+      xb.emit(type, eid, data);
+    }
+  });
 }
 
 
