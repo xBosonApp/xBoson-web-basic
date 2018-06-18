@@ -18,17 +18,10 @@ const srv = http.createServer((req, res) => {
   soapPaser(root, body, responseWrite);
   bodyParser(body, businessdata);
   
-  req.on('data', function(d) {
-    var s = d.toString('utf8');
-    if (len < maxwritebody) {
-      responseWrite.write(s.substr(0, maxwritebody));
-    }
-    console.log(s);
-    root.write(s);
-    len += s.length;
-  });
+  req.on('data', _write);
 
-  req.on('end', function() {
+  req.on('end', function(d) {
+    if (d) _write(d);
     res.writeHead(200, { 'Content-Type': 'text/xml' });
     var msg = "\n\n<note>请求长度:"+len+"字符</note>";
   
@@ -46,6 +39,16 @@ const srv = http.createServer((req, res) => {
     body.close();
     businessdata.end();
   });
+
+  function _write(d) {
+    var s = d.toString('utf8');
+    if (len < maxwritebody) {
+      responseWrite.write(s.substr(0, maxwritebody));
+    }
+    console.log(s);
+    root.write(s);
+    len += s.length;
+  } 
 });
 
 srv.listen(18889);
@@ -184,6 +187,9 @@ function bodyParser(body, businessdata) {
           break;
         }
         var sub = txt.substr(i, 80);
+        //
+        // 不完整的写入 gzip 数据会让他抛出数据结尾异常.
+        //
         businessdata.write(sub);
         ziptxt.push(sub);
       }

@@ -108,6 +108,12 @@ var stream = require('streamutil');
 向输出流写二进制数据, 从缓冲区的 begin 偏移开始到 len 个字节.
 
 
+## finish()
+
+有一些流不希望关闭底层流, 但是又需要完成最后的输出 (比如 gzip 要写出尾数据), 
+则会实现该方法, 通常该方法什么都不做.
+
+
 # class JsInputStream
 
 所有输入流的父类
