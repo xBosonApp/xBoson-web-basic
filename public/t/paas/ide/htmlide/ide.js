@@ -365,6 +365,7 @@ function NewIDE(roleid) {
           // $('#zy_tabs').children('div:visible').find('pre').attr("style","position: absolute;width: 500px;height: 400px;");
           var _contendid = $('#zy_tabs').children('div:visible').find('div').attr('id');
           var _editor = ace.edit(_id);
+          zy.setEditorExOptions(_editor);
           $('#left-panel nav').bind('click', function() {
             _editor.destroy();
             _editor.container.remove();
@@ -1083,6 +1084,7 @@ function NewIDE(roleid) {
     editor.setTheme("ace/theme/ambiance");
     editor.getSession().setMode("ace/mode/sjs");
     editor.$blockScrolling = Infinity;
+    zy.setEditorExOptions(editor, 'api');
     // editor.setOptions({
     //   enableBasicAutocompletion: true,
     //   enableSnippets: true,
@@ -1521,6 +1523,7 @@ function NewIDE(roleid) {
           editor.setOption('wrap',120);
           editor.setOption('tabSize',2);
           _ide(_pre);
+          zy.setEditorExOptions(editor);
         }
 
         var s = $($('.col-xs-12.col-sm-3')[0]).children(':last').attr('style');
@@ -1538,6 +1541,7 @@ function NewIDE(roleid) {
           editor.setOption('wrap',120);
           editor.setOption('tabSize',2);
           _ide(_pre);
+          zy.setEditorExOptions(editor);
         }
 
         var s = $($('.col-xs-12.col-sm-3')[0]).children(':last').attr('style');

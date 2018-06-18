@@ -98,6 +98,17 @@ var zy = {
 //
 zy.isXBosonSystem = null;
 
+// 编辑器扩展功能
+zy.setEditorExOptions = function(editor) {
+  zy.net.loadScript.call(this,"lib/js/ace/1.2.9/ext-language_tools.js", function () {
+    editor.setOptions({
+      enableBasicAutocompletion: false,
+      enableSnippets: true,
+      enableLiveAutocompletion: true,
+    });
+  });
+}
+
 // 路径中有 '/xboson/' 认为是新版系统
 zy.check_xboson_system = function() {
   if (location.pathname.indexOf('/xboson/') >= 0) {

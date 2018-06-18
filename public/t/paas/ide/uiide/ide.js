@@ -24,6 +24,7 @@
             }
         ]
     };
+    
 
     //
     // ADD by J.ym 17.12.16
@@ -38,6 +39,10 @@
         get_api_url = function(_api_name) {
             return  'http://' + location.host + '/api/' + _apinm;
         };
+    }
+    
+    function setEditorOptions(editor) {
+      zy.setEditorExOptions(editor);
     }
 
     //
@@ -505,6 +510,7 @@
                     var _id = $('#zy_tabs').children('div:visible').find('pre').attr('id');
                     var _path = $('#zy_tabs').children('div:visible').find('div').attr('name');
                     var _editor = ace.edit(_id);
+                    setEditorOptions(_editor);
                     $('#left-panel nav').bind('click', function() {
                       _editor.destroy();
                       _editor.container.remove();
@@ -1263,6 +1269,7 @@
             editor.getSession().setMode("ace/mode/" + _filetype);
         }
         editor.$blockScrolling = Infinity;
+        setEditorOptions(editor);
         // editor.setOptions({
         //     enableBasicAutocompletion: true,
         //     enableSnippets: true,
@@ -1901,6 +1908,7 @@
                     });
                     editor.setOption('wrap',120);
                     editor.setOption('tabSize',2);
+                    setEditorOptions(editor);
                     _ide(_pre,filetype);
                     }
                 }
@@ -1939,6 +1947,7 @@
                         });
                         editor.setOption('wrap',120);
                         editor.setOption('tabSize',2);
+                        setEditorOptions(editor);
                         _ide(_pre,filetype);
                       }
                     }
