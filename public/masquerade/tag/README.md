@@ -39,7 +39,9 @@
 * uiauth.htm
 * webinfo.htm
 
-### web 目录下全部
+### web 目录
+
+* 全部 !
 
 ### ui 目录
 

@@ -192,6 +192,11 @@ content_id 有效并发出通知返回 true.
 当 html 文件修改后, 调用该方法使模板引擎重新加载指定的文件.
 
 
+## se.sendAppReleased()
+
+重新读取已经发布的应用程序列表; 否则发布应用只更新数据库不更新平台内核.
+
+
 ## se.reloadUserRole(string[]:ids)
 
 [未实现] 更新已登录用户的角色.
