@@ -45,7 +45,7 @@ const srv = http.createServer((req, res) => {
     if (len < maxwritebody) {
       responseWrite.write(s.substr(0, maxwritebody));
     }
-    console.log(s);
+    console.log("Read", d.length, "bytes...");
     root.write(s);
     len += s.length;
   } 
