@@ -7,18 +7,6 @@
 
 # API
 
-## se.encodePlatformPassword(string:uid, string:date, string:password)
-
-* uid: 用户名字符串
-* date: 最后修改时间字符串, 用于加密密码的盐
-* password: 密码明文
-* 返回加密后的密码字符串
-
-```javascrip
-var ps = se.encodePlatformPassword("jym", "2017-01-11 10:47:00", "ps012345");
-```
-
-
 ## se.setCache(string:region, string:key, object:val, int:exp)
 
 * region: 缓存分组名称
@@ -146,21 +134,6 @@ var all_key = se.cacheKeys("regionName", "*");
 # 扩展 API 
 
 这些方法仅在 2.0 平台中可用.
-
-## se.decodeApiScript(string:code)
-
-* code: 加密脚本字符串
-* 返回 string
-
-返回解密后的脚本, 去掉了前后 "<%..%>" 符号.
-
-
-## se.encodeApiScript(string:code)
-
-* code: 脚本源代码
-* 返回 string
-
-将 "<%..%>" 重新加上, 返回加密后的脚本.
 
 
 ## se.sendApiChange(string:content_id)

@@ -3,6 +3,7 @@ var sax = require("sax");
 var Base64 = require('base64-stream');
 var zlib = require('zlib');
 var EventEmitter = require('events');
+var PORT = 18800;
 
 
 const srv = http.createServer((req, res) => {
@@ -51,8 +52,8 @@ const srv = http.createServer((req, res) => {
   } 
 });
 
-srv.listen(18889);
-console.log("Http server ON", 18889);
+srv.listen(PORT);
+console.log("Http server ON", PORT);
 
 process.on('uncaughtException', (err) => {
   console.error(err.stack);
