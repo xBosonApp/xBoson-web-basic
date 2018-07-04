@@ -140,11 +140,12 @@ body 长度为 0 会返回 null, 出现错误会抛出异常.
 
 ```javascript
 var list1 = {1,2,3};
-sys.addRetData(list1, "list1");
+sys.addRetData(list1, "key:list1");
 //
-// 这样写同样有效, 相当于调用 sys.addRetData(list1, "list1");
+// 这样写同样有效, 相当于调用 sys.addRetData(list1, "list1"), 
+// 注意如果两个参数都是字符串, 则第一个参数是 value, 第二个参数是 key
 //
-sys.addRetData("list1", list1);
+sys.addRetData("key:list1", list1);
 ```
 
 
@@ -164,30 +165,42 @@ sys.setRetData(0, "OK", "list1");
 ```
 
 
-## sys.getUserPID([string...:userId])
+## sys.getUserPID([{string}Or{StringArray}: userId])
 
-获取用户的PID, userID 是用户名, pid 是用户对应的唯一 UUID;  
-无参调用数返回当前用户 pid; 一个参数调用返回指定用户 pid;   
-多个参数调用返回 map, 键是 userID, 值是对应的 pid;
+获取用户的PID, userId 是用户名, pid 是用户对应的唯一 UUID;  
+无参调用返回当前用户 pid; 一个字符串参数调用返回指定用户 pid;   
+一个字符串数组调用返回 map, 使用 userId 索引这个 map, 返回 userId 对应的 pid.
 
 参数:
 
-* userId: 动态参数, 或数组, 该参数决定返回数据类型.
+* 无参调用
+* userId:  字符串, 或数组, 该参数决定返回数据类型.
 
 ```javascript
 var currentPId = sys.getUserPID();
-var pids = sys.getUserPID(["userid1", "userid2", "userid3"]);
-var pid1 = pids["userid1"];
+var pid        = sys.getUserPID('userid');
+var pidMap     = sys.getUserPID(["userid1", "userid2", "userid3"]);
+var pid1       = pidMap["userid1"];
 ```
 
 
-## sys.getUserIdByPID([string...:userPID])
+## sys.getUserIdByPID([{string}Or{StringArray}: userPID])
 
-通过用户的 PID 获取用户的 id; 返回 map, key 是 pid, value 是 id.
+通过用户的 PID 获取用户的 userId, userId 是用户名, pid 是用户对应的唯一 UUID;  
+无参调用返回当前用户的 userId; 一个字符串参数调用返回指定用户 userId;
+一个字符串数组调用返回 map, 使用 userPID 索引这个 map, 返回 userPID 对应的 userId.
 
 参数:
 
-* userPID: 用户 PID 的数组.
+* 无参调用
+* userPID: 用户 PID 的数组, 或是一个用户的 pid 字符串.
+
+```javascript
+var currentUserID = sys.getUserIdByPID();
+var userid        = sys.getUserIdByPID('pid');
+var useridMap     = sys.getUserIdByPID(["pid1", "pid2", "pid3"]);
+var userid1       = useridMap["pid1"];
+```
 
 
 ## sys.getUserAdminFlag([string:userId, string:orgId])
@@ -197,8 +210,8 @@ var pid1 = pids["userid1"];
 
 参数:
 
-* userId: 若省略该参数, 则返回当前用户的标记, 否则返回指定用户的标记
-* orgId: 若省略该参数, 则返回当前所在机构的标记.
+* userId: 若省略该参数, 则返回当前用户的标记, 否则返回指定用户的标记.
+* orgId: 用户所在的机构.
 
 
 
