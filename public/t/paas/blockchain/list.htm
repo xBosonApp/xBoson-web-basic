@@ -1,0 +1,42 @@
+<ui:grid id='idid' class='list' title='区块链列表'>
+  <ui:form id='listform'>
+    <form:text name='name' label='区块链名称' tooltip='模糊查询'/>
+    <form:text name='chain_id' label='区块链 ID'/>
+    <form:status/>
+    
+    <form:btn_toolbar>
+      <form:group>
+        <form:submit label='查询'/>
+        <form:reset/>
+      </form:group>
+      <form:group>
+        <form:button label='添加' icon='magic'>
+          <moda:open url='blockchain/add.htm'/>
+        </form:button>
+        <form:button label='密钥' icon='edit'>
+          <mp:usability recvid='datatable0'/>
+          <moda:open url='blockchain/details.htm'/>
+        </form:button>
+        <form:button label='图形' icon='edit'>
+          <mp:usability recvid='datatable0'/>
+          <moda:open url='blockchain/graph.htm'/>
+        </form:button>
+      </form:group>
+    </form:btn_toolbar>
+  </ui:form>
+  
+  <mp:savedata type='SELECT_TABLE_ROW' id='datatable0'/>
+  
+  <table:api app='81092b8cd82041a2b81296409eba92da' mod='basic' 
+      api='list' form='#listform' id='datatable0'>
+    <table:mapper label='名称' key='name'/>
+    <table:mapper label='创建人' key='create_userid'/>
+    <table:mapper label='链 ID' key='chain_id'/>
+    <table:mapper label='物理文件' key='physical_chain'/>
+    <table:mapper label='根私钥离线时间' key='offline_gpk'/>
+    
+    <table:mapper label='状态' key='status'><table:render_status/></table:mapper>
+    <table:mapper label='更新时间' key='updatedt'/>
+    <table:mapper label='创建时间' key='createdt'/>
+  </table:api>
+</ui:grid>

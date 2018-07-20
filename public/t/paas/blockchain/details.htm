@@ -1,0 +1,61 @@
+<!-- Create By xBoson System -->
+<moda:frame title='区块链详情'>
+    <ui:form id='details' class='update_form'>
+      <mp:loaddata id='datatable0'/>
+      <input type='hidden' name='chain_id'/>
+      
+      <fieldset>
+        <form:text name='name' label='区块链名称' tooltip='' width='6'>
+          <vali:string min='1' max='45'/>
+        </form:text>
+        <form:text name='chain_id' label='区块链ID' tooltip='' width='6'>
+          <vali:string min='1' max='50'/>
+        </form:text>
+      </fieldset>
+      
+      <fieldset>
+        <table:api app='81092b8cd82041a2b81296409eba92da' mod='basic' 
+                   api='keys' form='#details' id='datatable_keys'>
+          <table:mapper label='功能' key='type_name'/>
+          <table:mapper label='公钥' key='publickey'/>
+          <table:mapper label='私钥' key='privatekey'/>
+        </table:api>
+        
+        <section>
+          <br/>
+          创世区块私钥离线后可以防止区块链数据被重建, 离线后请将密钥保存在安全的地方.
+        </section>
+      </fieldset>
+      
+      <footer>
+        <moda:cancel/>
+        
+        <moda:button text='创世区块私钥离线' id='offline_gpk_button'>
+          <form:post app='81092b8cd82041a2b81296409eba92da' mod='basic' api='offline_gpk'>
+            <mp:close when='this.code == 0'>
+              <mp:send type='TABLE_UPDATE_REQ' id='datatable0'/>
+            </mp:close>
+          </form:post>
+        </moda:button>
+        
+        <a href='#' class="btn btn-info btn-sm"
+           download='privatekey.txt' target='_blank' id='download_privatekey'>下载创世区块私钥</a>
+        <script>
+          xb.on('TABLE_DATA_READY', 'datatable_keys', function(data) {
+            var a = $('#download_privatekey');
+            a.prop("download", $('#details input[name=name]').val() +"_privatekey.txt");
+            
+            var privatekey = data.result[0].privatekey;
+            if (privatekey) {
+              var blob = new Blob([privatekey], { type: 'application/octet-stream' });
+              a.attr("href", URL.createObjectURL(blob));
+            } else {
+              a.hide();
+              $('#offline_gpk_button').hide();
+            }
+          });
+        </script>
+        
+      </footer>
+    </ui:form>
+</moda:frame>

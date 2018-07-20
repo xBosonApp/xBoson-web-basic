@@ -15,6 +15,8 @@ var events = {
   SELECT_TABLE_ROW : 'SELECT_TABLE_ROW',
   // 请求表格重新从数据源获取内容并更新画面.
   TABLE_UPDATE_REQ : 'TABLE_UPDATE_REQ',
+  // 表格数据已经构建完成.
+  TABLE_DATA_READY : 'TABLE_DATA_READY',
   // 当 api 接口返回后的事件, 参数是接口的返回数据集.
   FORM_API_RESULT  : 'FORM_API_RESULT',
   // 画面重新绘制后发出这个时间, 不需要事件 id
@@ -420,6 +422,7 @@ function createDataTable(table) {
       }
       tableObj = table.DataTable(options);
       onselect(null);
+      sendEvent(events.TABLE_DATA_READY, id, ret);
     }
   }
   
