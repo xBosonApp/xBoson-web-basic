@@ -1,0 +1,17 @@
+<never>
+  作为要验证表单的子标签, 在 form 递交前验证有效性.
+  参数:
+    [必须]: min: 最小长度, max: 最大长度
+</never>
+
+<b style='display: none' class='auto_tag_vali_number' min='###min###' max='###max###'></b>
+<once id='auto_tag_vali_number.js'>
+  <js:xboson/>
+  <script>
+    xb.auto_filter('.auto_tag_vali_number').each(function() {
+      var thiz = $(this);
+      var struct = xb.valiStruct(thiz, 'vali:number');
+      xb.valiNumberMinMax(struct);
+    });
+  </script>
+</once>

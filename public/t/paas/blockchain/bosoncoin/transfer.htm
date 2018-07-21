@@ -1,0 +1,23 @@
+<!-- Create By xBoson System -->
+<moda:frame title='转账'>
+    <ui:form id='transfer_form' class='update_form'>
+      <fieldset>
+        <form:text name='userid' label='接收方用户名' tooltip='最少1字符' width='6'>
+          <vali:string min='1' max='45'/>
+        </form:text>
+        <form:text name='coin' label='转账数量' tooltip='最少1字符' width='6'>
+          <vali:number min='0' max='MAX_VALUE'/>
+        </form:text>
+      </fieldset>
+      
+      <footer>
+        <moda:cancel/>
+        <moda:ok>
+          <form:post app='81092b8cd82041a2b81296409eba92da' mod='bosoncoin' api='transfer'>
+            <mp:close when='this.code == 0'>
+            </mp:close>
+          </form:post>
+        </moda:ok>
+      </footer>
+    </ui:form>
+</moda:frame>

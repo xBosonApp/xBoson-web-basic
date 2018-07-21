@@ -59,6 +59,7 @@ var xb = window.xb = {
   postDataUseApi      : postDataUseApi,
   sendApiResultEvent  : sendApiResultEvent,
   valiStrMinMax       : valiStrMinMax,
+  valiNumberMinMax    : valiNumberMinMax,
   valiStruct          : valiStruct,
   vali_bind           : vali_bind,
   deleteControl       : deleteControl,
@@ -814,6 +815,32 @@ function valiStrMinMax(struct) {
     required  : min > 0,
     minlength : parseInt(min),
     maxlength : parseInt(max) || Number.MAX_VALUE,
+  });
+  vali_bind(struct);
+}
+
+
+function valiNumberMinMax(struct) {
+  var fieldname = struct.unit.attr('name');
+  var tagname = struct.tagname;
+  var max  = struct.jdata.attr('max');
+  var min  = struct.jdata.attr('min');
+  
+  if (isNaN(min) || min < 0) {
+    xb.warn(tagname +" 标签异常", 'min 值无效', 'w');
+  }
+  if (max && max < min) {
+    xb.warn(tagname +" 标签异常", 'max 值无效', 'w');
+  }
+  
+  var rules = struct.setting.rules;
+  //
+  // 必须写成合并式的语法.
+  //
+  rules[fieldname] = $.extend(true, rules[fieldname], {
+    required  : min > 0,
+    min : parseInt(min),
+    max : parseInt(max) || Number.MAX_VALUE,
   });
   vali_bind(struct);
 }

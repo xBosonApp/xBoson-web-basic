@@ -1,0 +1,21 @@
+<!-- Create By xBoson System -->
+<moda:frame title='创建区块链'>
+    <ui:form id='create' class='update_form'>
+      <fieldset>
+        <form:text name='name' label='区块链名称' tooltip='最少1字符' width='10'>
+          <vali:string min='1' max='45'/>
+        </form:text>
+      </fieldset>
+      
+      <footer>
+        <moda:cancel/>
+        <moda:ok>
+          <form:post app='81092b8cd82041a2b81296409eba92da' mod='basic' api='createch'>
+            <mp:close when='this.code == 0'>
+              <mp:send type='TABLE_UPDATE_REQ' id='datatable0'/>
+            </mp:close>
+          </form:post>
+        </moda:ok>
+      </footer>
+    </ui:form>
+</moda:frame>

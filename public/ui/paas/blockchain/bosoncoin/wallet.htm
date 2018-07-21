@@ -1,0 +1,51 @@
+<!-- Create By xBoson System -->
+<js:xboson/>
+<ui:grid id='idid' class='list' title='钱包'>
+  <style>
+    #hash {
+      border: 0; position: absolute; height: 80%; width: 50%; 
+      right:10px; letter-spacing: 8px; word-break: break-all; 
+      white-space: pre-wrap!important; background-color: inherit;
+    }
+    #log {
+      min-height: 100px; word-break: break-all;
+      max-height: 300px; overflow: auto;
+    }
+  </style>
+  
+  <pre id='hash'></pre>
+  <h1 style='font-size: 50px'>波子币: <b id='coin'>0</b></h1>
+  <hr style='margin-bottom: 20px'/>
+  
+  <h1 style='margin-top: 100px'>用户: <b id='userid'></b></h1>
+  <h1>总价: <b id='total'></b></h1>
+  
+  <ui:form>
+    <form:btn_toolbar>
+      <form:group>
+        <form:button label='挖矿' icon='play' id='mining'>
+        </form:button>
+        <form:button label='停止挖矿' icon='pause' id='stop_mining'>
+        </form:button>
+        <form:button label='刷新' icon='spinner' id='update'>
+        </form:button>
+        <form:button label='转账' icon='retweet'>
+          <moda:open url='blockchain/bosoncoin/transfer.htm'/>
+        </form:button>
+      </form:group>
+    </form:btn_toolbar>
+    
+    <form:select id='diff' label='挖矿难度' width='2'>
+      <option value='1'>简单, 少量奖励</option>
+      <option value='2'>略难, 一些奖励</option>
+      <option value='3'>最难, 很多奖励</option>
+    </form:select>
+  </ui:form>
+  
+  <div id='log'></div>
+</ui:grid>
+
+<!-- https://www.npmjs.com/package/js-sha256 -->
+<script src="blockchain/bosoncoin/sha256.js"></script>
+<script src="blockchain/bosoncoin/decimal.js"></script>
+<script src="blockchain/bosoncoin/wallet.js"></script>
