@@ -78,6 +78,8 @@ var xb = window.xb = {
   stringifyUsedTime   : stringifyUsedTime,
   pageDestroy         : pageDestroy,
   sendToEachParents   : sendToEachParents,
+  createLogger        : createLogger,
+  api                 : callapi,
   
   // 事件处理框架
   getEventSettingFromParent      : getEventSettingFromParent,
@@ -1158,6 +1160,97 @@ function stringifyUsedTime(i) {
     unit = '天';
   }
   return [ms.toFixed(1), "<span class='note'>", unit, "</span>"].join('&emsp;');
+}
+
+
+//
+// 在 jdom 对象上创建日志
+//
+function createLogger(jdom, _max_line) {
+  var maxline  = _max_line || 100;
+  var keepline = parseInt(maxline/2);
+  var count    = 0;
+  var ret = {
+    log     : log,
+    info    : info,
+    success : success,
+    error   : error,
+    err     : error,
+    fail    : error,
+    warn    : warn,
+    warning : warn,
+    debug   : debug,
+    apiret  : apiret,
+    api     : apiret,
+  };
+  return ret;
+  
+  function log() {
+    _log(arguments).addClass("text-primary");
+  }
+  
+  function error() {
+    _log(arguments).addClass("text-danger");
+  }
+  
+  function success() {
+    _log(arguments).addClass("text-success");
+  }
+  
+  function warn() {
+    _log(arguments).addClass("text-warning");
+  }
+  
+  function debug() {
+    _log(arguments).addClass("text-muted");
+  }
+  
+  function info() {
+    _log(arguments).addClass("text-info");
+  }
+  
+  function apiret(ret) {
+    var func = ret.code ? success : error;
+    arguments[0] = ret.msg;
+    func.apply(null, arguments);
+  }
+  
+  function _log(args) {
+    var buf = ['['+new Date().toLocaleTimeString()+']'];
+    for (var i=0; i<args.length; ++i) {
+      buf.push(args[i]);
+    }
+    var line = $("<div class='item'>").html(buf.join(' '));
+    jdom.prepend(line);
+    
+    if (++count > maxline) {
+      count = removeExcessLine();
+    }
+    return line;
+  }
+  
+  function removeExcessLine() {
+    var items = jdom.find(".item");
+    for (var i=items.length-1; i>keepline; --i) {
+      items.eq(i).remove();
+    }
+    return items.size();
+  }
+}
+
+
+//
+// 调用平台接口
+//
+function callapi(app, mod, api, parm, cb) {
+  zy.g.am.app = app;
+  zy.g.am.mod = mod;
+  var api = 'api/'+ api;
+  if (cb == null && typeof parm == 'function') {
+    cb = parm;
+    parm = {};
+  }
+  zy.net.get(api, cb, parm, null, cb);
 }
 
 

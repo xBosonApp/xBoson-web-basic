@@ -1,0 +1,294 @@
+<!-- Create By xBoson System -->
+<moda:frame title='区块链状态' width='90%'>
+  <ui:form id='graph_form' class='update_form'>
+    <mp:loaddata id='datatable0'/>
+    <input type='hidden' name='chain_id'/>
+    
+    <fieldset>
+      <form:text name='name' label='区块链名称' tooltip='' width='3'>
+      </form:text>
+      <form:text name='chain_id' label='区块链ID' tooltip='' width='3'>
+      </form:text>
+      <form:text id='blockchainsize' label='区块链长度' tooltip='' width='3'>
+      </form:text>
+      <form:text id='worldState' label='世界状态' tooltip='' width='3'>
+      </form:text>
+    </fieldset>
+    
+    <fieldset id='graph'>
+      <h3 id='subtitle'></h3>
+      <table>
+        <tr>
+          <td id='genesis'></td><td colspan="2" id='data_block'></td>
+        </tr>
+        <tr>
+          <td></td> <td id='signer'></td> <td id='chaincode'></td>
+        </tr>
+      </table>
+    </fieldset>
+    <footer><moda:cancel/></footer>
+  </ui:form>
+  
+<style>
+  .block {
+    display: inline-block; width: 190px; margin: 20px;
+    padding: 10px 20px; border: 2px solid #999;
+  }
+  .block pre {
+    position: absolute; z-index: 3000;
+  }
+  #signer .block {
+    display: block; color: #fff; background-color: #CCCC99;
+  }
+  #chaincode .block {
+    color: #fff; background-color: #CC9999;
+    margin-top: 50px;
+  }
+  #data_block .block {
+    color: #fff; background-color: #666666;
+  }
+  #genesis .block {
+    padding: 50px 20px;
+  }
+  .labelstyle {
+    border: 1px solid #bbb; padding: 4px;
+    color: #ccc; border-radius: 6px;
+  }
+  #chaincode {
+    text-align: right;
+  }
+</style>
+    
+<script src='blockchain/jsplumb-2.7.9.js'></script>
+<script>
+jsPlumb.bind("ready", function() {
+  var SHOW_BLOCK_COUNT = 10;
+  var graph = $('#graph');
+  var chain_id = $('#graph_form').find('input[name=chain_id]').val();
+  var genesis;
+  var draw_connect = $.Callbacks();
+  var chaincodeMap = {};
+  var blockName = ['', '创', '块', '密', '码', '消'];
+  
+  var pl = jsPlumb.getInstance({      
+     Endpoint           : ["Dot", {radius:2}],
+     HoverPaintStyle    : { strokeStyle: "#1e8151", lineWidth: 3 },
+     DragOptions        : { zIndex:2000 },
+     Container          : graph,
+     ConnectionOverlays : [
+         [ "Arrow", { location: 1, id: "arrow", length:10, foldback:0.8, width: 10} ],
+         [ "Label", { label: "", id: "label", cssClass: "labelstyle" }]
+     ],
+  });
+
+  $('#subtitle').html("最近"+ SHOW_BLOCK_COUNT +"个区块浏览, 关联链码和密钥");
+  build();
+  setTimeout(repaint_connect, 500);
+  $(window).resize(repaint_connect);
+  
+  
+  function build() {
+    build_signer(function() {
+      build_genesis(function() {
+        build_data_block(function() {
+          build_all_connect();
+        });
+      });
+    });
+  }
+  
+  
+  function setChainAttribute(ret) {
+    $('#blockchainsize').val(ret.size);
+    $('#worldState').val(ret.worldState);
+  }
+  
+  
+  function repaint_connect() {
+    pl.repaintEverything();
+  }
+  
+  
+  function build_all_connect() {
+    draw_connect.fire('make');
+  }
+  
+  
+  function getblock(key, cb) {
+    if (!key) throw new Error("key is null");
+    var parm = {chain_id: chain_id, key: key};
+    xb.api('81092b8cd82041a2b81296409eba92da', 'basic', 'getblock', parm, cb);
+  }
+  
+  
+  function build_data_block(cb) {
+    var parm = {chain_id:chain_id};
+    var count = SHOW_BLOCK_COUNT;
+    var nextKey = null;
+    
+    xb.api('81092b8cd82041a2b81296409eba92da', 'basic', 'lastblockkey', parm, function(last) {
+      _create_block(last.block);
+    });
+    
+    function _next() {
+      if (--count > 0 && nextKey != genesis.key) {
+        getblock(nextKey, function(ret) {
+          _create_block(ret.block);
+        });
+      } else {
+        if (nextKey != genesis.key) {
+          var id = blockid(nextKey);
+          create_block('data_block', "忽略更多的数据块", ". . .").attr("id", id);
+          connect(id, blockid(genesis), ["Left", "Right"], '链', 1);
+        }
+        cb && cb();
+      }
+    }
+    
+    function _create_block(_block) {
+      var id = blockid(_block);
+      create_block('data_block', _block, blockName[_block.type] +' '+ _block.key).attr("id", id);
+      nextKey = _block.previousKey;
+      connect(signerid(_block), id, ['Right', 'BottomLeft'], '签名', 300);
+      connect(id, blockid(nextKey), ['Left', 'Right'], '链', 1);
+      build_chaincode(_block, _next);
+    }
+  }
+  
+  
+  function build_signer(cb) {
+    xb.api('81092b8cd82041a2b81296409eba92da', 'basic', 'keys', {chain_id:chain_id}, function(ret) {
+      ret.result.forEach(function(s) {
+        create_block('signer', s, s.type_name).attr("id", signerid(s));
+      });
+      cb && cb();
+    });
+  }
+  
+  
+  function build_genesis(cb) {
+    xb.api('81092b8cd82041a2b81296409eba92da', 'basic', 'getgenesis', {chain_id:chain_id}, function(ret) {
+      var id = blockid(ret.block);
+      create_block('genesis', ret.block, "创世区块<br/>"+ ret.block.key).attr("id", id);
+      genesis = ret.block;
+      connect(signerid(ret.block), id, ['Left', 'Right'], '签名');
+      cb && cb();
+      setChainAttribute(ret);
+    });
+  }
+  
+  
+  function build_chaincode(ref, cb) {
+    var key = ref.chaincodeKey;
+    if (!key) return (cb && cb()); // 链码本身没有 chaincodeKey
+    var cc = chaincodeMap[key];
+    
+    if (!cc) {
+      getblock(key, function(ret) {
+        cc = chaincodeMap[key] = ret.block;
+        var id = chaincodeid(cc);
+        var name = '链码<br/>'+ cc.apiPath +"<br/>["+ cc.create +"]";
+        create_block('chaincode', cc, name).attr("id", id);
+        connect(signerid(cc), id, ['Right', 'BottomLeft'], '签名');
+        _create_conn(id);
+      });
+    } else {
+      _create_conn(chaincodeid(cc));
+    }
+    
+    function _create_conn(id) {
+      connect(blockid(ref), id, ['BottomRight', 'TopRight'], '链码', 50);
+      cb && cb();
+    }
+  }
+  
+  
+  function create_block(toID, data, name) {
+    var b = $("<div class='block'></div>");
+    b.html(name || data);
+    var info = $("<pre>");
+    info.text(JSON.stringify(data, 0, 2)).appendTo(b);
+    info.hide();
+    
+    b.mouseover(function() {
+      info.show();
+    });
+    
+    b.mouseout(function() {
+      info.hide();
+    });
+    
+    switch (toID) {
+      case 'data_block': 
+        $('#'+ toID).prepend(b);
+        break;
+        
+      default:
+        $('#'+ toID).append(b);
+        break;
+    }
+    return b;
+  }
+  
+  
+  function signerid(x) {
+    return 'signer_'+ x.type;
+  }
+  
+  
+  function blockid(b) {
+    return 'block_'+ (b.key || b);
+  }
+  
+  
+  function chaincodeid(b) {
+    return 'chaincode_'+ (b.chaincodeKey || b.key);
+  }
+  
+  
+  function connect(a, b, anchors, text, curviness) {
+    var conn;
+    draw_connect.add(function() {
+      try {
+        var stroke;
+        var strokeWidth = 1;
+        var connector = [ "Bezier", { curviness: curviness || 100, cssClass: 'linebezier' }];
+        
+        switch (text) {
+          case '链码':
+            stroke = '#666666'; break;
+          case '签名':
+            stroke = '#CCCC99'; break;
+          case '链':
+            //connector = [ 'Flowchart', { midpoint: 1, cornerRadius: 5, stub: 3 }];
+            strokeWidth = 2;
+            stroke = '#aa5555'; break;
+          default:
+            stroke = '#333'; break;
+        }
+        
+        var setting = {
+          source        : a, 
+          target        : b,
+          anchor        : anchors || [ "Perimeter", { shape:"Square", anchorCount:150 }],
+          endpointStyle : { fill: "#999" },
+          detachable    : false,
+          connector     : connector,
+          paintStyle    : { stroke: stroke, strokeWidth: strokeWidth },
+        };
+        conn = pl.connect(setting);
+        text && conn.getOverlay("label").setLabel(text);
+        
+        // $("#"+a).click(function() {
+        //   var thiz = $(this).css('position', 'absolute');
+        //   pl.draggable(thiz);
+        //   thiz.off('click')
+        // });
+      } catch(e) {
+        zy.ui.msg("错误", e.message || e, 'e');
+      }
+    });
+  }
+});
+</script>
+</moda:frame>

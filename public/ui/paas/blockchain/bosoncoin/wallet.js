@@ -6,6 +6,7 @@ jQuery(function($) {
   var difficult = 1;
   var lastkey;
   var key_uptime = 5e3;
+  var log = xb.createLogger($('#log'));
   
   $('#update').click(updateInfo).click(total);
   $('#mining').click(mining);
@@ -23,19 +24,12 @@ jQuery(function($) {
   
   function change_diff() {
     difficult = parseInt( $("#diff").val() ) || 1;
-    log("更改难度为", difficult);
+    log.debug("更改难度为", difficult);
   }
   
   
   function get(app, mod, api, parm, cb) {
-    zy.g.am.app = app;
-    zy.g.am.mod = mod;
-    var api = 'api/'+ api;
-    if (cb == null && typeof parm == 'function') {
-      cb = parm;
-      parm = {};
-    }
-    zy.net.get(api, cb, parm, null, cb);
+    xb.api(app, mod, api, parm, cb);
   }
   
   function updateInfo() {
@@ -63,27 +57,11 @@ jQuery(function($) {
       if (lastkey != key) {
         lastkey = key;
         getblock(key, function(b) {
-          log("新的区块已经加入", key, 'hash:', b.hash, 'sign:', b.sign, 'previousKey:', b.previousKey);
+          log.info("新的区块已经加入", key, 'hash:', b.hash, 'sign:', b.sign, 'previousKey:', b.previousKey);
         });
       }
       if (typeof cb == 'function') cb();
     });
-  }
-  
-  function log() {
-    var buf = ['['+new Date().toLocaleTimeString()+']'];
-    for (var i=0; i<arguments.length; ++i) {
-      buf.push(arguments[i]);
-    }
-    var line = $("<div class='item'>").html(buf.join(' '));
-    var log = $('#log').prepend(line);
-    
-    var items = log.find(".item");
-    if (items.length > 100) {
-      for (var i=items.length-1; i>50; --i) {
-        items.eq(i).remove();
-      }
-    }
   }
   
   function mining() {
@@ -139,7 +117,7 @@ jQuery(function($) {
       var parm = {rand: rand, difficult: difficult};
       
       get('81092b8cd82041a2b81296409eba92da', 'bosoncoin', 'mining', parm, function(ret) {
-        log(ret.msg, '挖了', cc, '次,', '用了', use, ', 平均', speed, '次/秒');
+        log.api(ret, '挖了', cc, '次,', '用了', use, ', 平均', speed, '次/秒');
         updateInfo();
         total();
         update_key(start_compute_hash);
