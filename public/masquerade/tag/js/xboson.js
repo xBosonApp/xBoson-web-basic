@@ -80,6 +80,7 @@ var xb = window.xb = {
   sendToEachParents   : sendToEachParents,
   createLogger        : createLogger,
   api                 : callapi,
+  waitDisplay         : waitDisplay,
   
   // 事件处理框架
   getEventSettingFromParent      : getEventSettingFromParent,
@@ -1251,6 +1252,21 @@ function callapi(app, mod, api, parm, cb) {
     parm = {};
   }
   zy.net.get(api, cb, parm, null, cb);
+}
+
+
+//
+// 等待隐藏的 jdom 元素显示出来, jdom 在显示时宽度必须大于 0,
+// 15秒超时, cb 被调用.
+//
+function waitDisplay(jdom, cb) {
+  var endtime = Date.now() + 15e3;
+  var tid = setInterval(function() {
+    if (jdom.width() > 0 || Date.now() > endtime) {
+      cb();
+      clearInterval(tid);
+    }
+  }, 10);
 }
 
 
