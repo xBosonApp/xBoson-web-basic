@@ -7,7 +7,8 @@
     { "name": "脚本兼容", "file": "docs/compatible.md"},
     { "name": "JavaScript 参考", "file": "docs/javascript-doc.htm"},
     { "name": "模块", "file": "docs/api.md" },
-    { "name": "OAuth 2.0 登录", "file": "docs/oauth2.md" }
+    { "name": "OAuth 2.0 登录", "file": "docs/oauth2.md" },
+    { "name": "区块链见证者接入", "file": "docs/witness.md" }
   ]},
 
   { "name": "全局模块", "file": "docs/api.md", "sub": [

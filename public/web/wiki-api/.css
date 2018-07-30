@@ -82,6 +82,7 @@ pre {
 
 .hljs {
   background-color: #563010 !important;
+  word-break: break-all;
 }
 
 code {

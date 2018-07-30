@@ -5,6 +5,7 @@
 
 ### 7 月
 
+* 30. 增加 witness 文档.
 * 21. 增加 digest, chain 模块.
 * 4. 更新 sys 模块.
 
