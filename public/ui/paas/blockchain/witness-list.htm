@@ -1,0 +1,37 @@
+<!-- Create By xBoson System -->
+<ui:grid id='idid' class='list' title='见证者列表'>
+  <ui:form id='listform'>
+    <form:text name='name' label='见证者名称' tooltip='模糊查询'/>
+    <form:text name='wnid' label='见证者 ID'/>
+    <form:text name='host' label='主机'/>
+    <form:text name='publickey' label='公钥' tooltip='模糊查询'/>
+    
+    <form:btn_toolbar>
+      <form:group>
+        <form:submit label='查询'/>
+        <form:reset/>
+      </form:group>
+      <form:group>
+        <form:button label='设定名字' icon='magic'>
+          <moda:open url='blockchain/witness-name.htm'/>
+          <mp:usability recvid='datatable0'/>
+        </form:button>
+      </form:group>
+    </form:btn_toolbar>
+  </ui:form>
+  
+  <mp:savedata type='SELECT_TABLE_ROW' id='datatable0'/>
+  
+  <table:api app='81092b8cd82041a2b81296409eba92da' mod='witness' 
+      api='list' form='#listform' id='datatable0'>
+    <table:mapper label='见证者 ID' key='wnid'/>
+    <table:mapper label='名称' key='name'/>
+    <table:mapper label='主机地址' key='host'/>
+    <table:mapper label='端口' key='port'/>
+    <table:mapper label='公钥' key='publickey'/>
+    <table:mapper label='公钥算法' key='algorithm'/>
+    
+    <table:mapper label='更新时间' key='updatedt'/>
+    <table:mapper label='创建时间' key='createdt'/>
+  </table:api>
+</ui:grid>

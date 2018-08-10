@@ -28,7 +28,7 @@ http://localhost:80/xboson/witness/register?algorithm=SHA256withECDSA&publickey=
 参数说明:
 
 * `algorithm` 密钥对生成算法, 必须是 `SHA256withECDSA`
-* `publickey` 公钥, `base64` 编码格式字符串.
+* `publickey` 公钥, `ASN.1` `base64` 编码格式字符串.
 * `host` 字符串, 见证者主机网络地址, 平台必须能通过主机+端口访问到该节点.
 * `port` 数字, 见证者主机网络端口.
 * `urlperfix` 字符串, 见证者 http 服务接口前缀, 当平台调用约定的接口时将该前缀连接在 url 的前面, 除此之外平台不会自动添加多余的符号.
@@ -37,17 +37,17 @@ http://localhost:80/xboson/witness/register?algorithm=SHA256withECDSA&publickey=
 
 ```json
 {
-  "ret" : 0,
-  "msg" : "ok",
-  "id"  : "ewonvw3829nvcz"
+  "code" : 0,
+  "msg"  : "ok",
+  "id"   : "ewonvw3829nvcz"
 }
 ```
 
 返回说明:
 
-* `ret` [返回码说明](docs/codes.md), 成功返回 0.
-* `msg` 返回消息字符串.
-* `id`  成功时返回见证者节点唯一识别 id, 见证者节点有必要保存于本地.
+* `code` [返回码说明](docs/codes.md), 成功返回 0.
+* `msg`  返回消息字符串.
+* `id`   成功时返回见证者节点唯一识别 id, 见证者节点有必要保存于本地.
 
 
 ## `/xboson/witness/change`
@@ -69,15 +69,15 @@ http://localhost:80/xboson/witness/change?id=ewonvw3829nvcz&host=192.168.0.1&por
 
 ```json
 {
-  "ret" : 0,
-  "msg" : "ok",
+  "code" : 0,
+  "msg"  : "ok",
 }
 ```
 
 返回说明:
 
-* `ret` [返回码说明](docs/codes.md), 成功返回 0.
-* `msg` 返回消息字符串.
+* `code` [返回码说明](docs/codes.md), 成功返回 0.
+* `msg`  返回消息字符串.
 
 
 
@@ -89,12 +89,34 @@ http://localhost:80/xboson/witness/change?id=ewonvw3829nvcz&host=192.168.0.1&por
 
 ## sign
 
-使用私钥签名一个数据块; 接口通过 POST 接收数据, 二进制原始待签名数据存于 HTTP BODY 中, Http Header 定义:
+使用私钥签名一个数据块; 接口通过 POST 接收数据, 二进制原始待签名数据存于 HTTP BODY 中;  
+http 参数 key 指明当前块的主键, 因为块尚未上链, 仅作为存档;
+Http Header 定义:
 
 ```txt
 Content-Type: application/octet-stream
 Content-Transfer-Encoding: binary
 ```
 
-接口将数据签名后将签名后的二进制数据用 Response Body 返回, http 返回码为 200;  
+接口签名数据, 签名后的二进制数据格式为 `ASN.1` 用 Response Body 返回, http 返回码为 200;  
 若要返回错误消息, 则返回码 500, Response Body 中存储错误消息字符串.
+
+
+## deliver
+
+通知见证者数据块已经上链, 见证者可以选择忽略该接口的实现, 参数通过 http 传递:
+
+```url
+http://192.168.0.1:7000/ws/deliver?key=...&success=bool
+```
+
+参数说明:
+
+* `key` 数据块的 key, 见证者可以通过平台接口拉取区块的完整数据
+* `success` 区块是否成功上链, 成功为 `1` 失败为 `0`
+
+返回说明:
+
+1. 如果接口返回 http 代码 200, 并不需要返回更多数据, 平台会按约定继续调用 deliver 接口.
+2. 如果接口返回 http 代码 404, 表示见证者不关心块是否递交, 平台后续不再调用 deliver 接口, 除非见证者再次通过 change 注册自己.
+3. 如果接口返回其他的 http 代码, 则认为接口执行失败, 最多会用同样的参数重试 3次, 如果失败则不再调用 deliver 接口.
