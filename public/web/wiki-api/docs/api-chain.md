@@ -9,7 +9,7 @@ var bc = require('chain');
 
 # 方法
 
-## bc.create(string: chainName, string: channelName)
+## bc.create(string: chainName, string: channelName, string: consensusExp)
 
 创建一个链
 
