@@ -1,0 +1,73 @@
+<!-- Create By xBoson System -->
+<moda:frame title='链表' width='80%'>
+  <ui:form id='block_list' class='update_form'>
+    <mp:loaddata id='datatable0'/>
+    <input type='hidden' name='chain_id'/>
+    
+    <fieldset>
+      <form:text name='begin_key' label='起始区块' tooltip='' width='6'>
+      </form:text>
+      <form:btn_toolbar>
+        <form:group>
+          <form:submit label='查询'/>
+          <form:reset/>
+        </form:group>
+      </form:btn_toolbar>
+    </fieldset>
+    
+    <mp:savedata type='TABLE_DATA_READY' id='datatable1'/>
+    
+    <fieldset>
+      <table:api app='81092b8cd82041a2b81296409eba92da' mod='basic' 
+          api='blocklist' form='#block_list' id='datatable1' hidepage='1'>
+        <table:mapper label='键' key='key'/>
+        <table:mapper label='校验' key='hash'/>
+        <table:mapper label='用户' key='userid'/>
+        <table:mapper label='块类型' key='type'>
+          <table:render>
+          function(data, type, row, meta) {
+            return {1:"创世块", 2:'数据块', 3:'加密数据块', 4:'链码块', 5:'消息块'}[data];
+          }
+          </table:render>
+        </table:mapper>
+        <table:mapper label='数据' key='data'/>
+        <table:mapper label='签名' key='sign'>
+          <table:render>
+          function(data, type, row, meta) {
+            return JSON.stringify(data, null, 2);
+          }
+          </table:render>
+        </table:mapper>
+        <table:mapper label='前块' key='previousKey'/>
+        <table:mapper label='创建时间' key='create'/>
+      </table:api>
+    </fieldset>
+    
+    <footer>
+      <moda:cancel/>
+      <moda:button text='下一页' id='n_page'>
+      </moda:button>
+      <moda:button text='首页' id='f_page'>
+      </moda:button>
+      
+      <script>
+        jQuery(function($) {
+          var next = $("#n_page");
+          var first = $("#f_page");
+          var begin_key = $("[name=begin_key]");
+          $('#block_list')
+          
+          next.click(function() {
+            var arr = xb.load_data('datatable1').data;
+            var key = arr[arr.length-1].key
+            begin_key.val(key);
+          });
+          
+          first.click(function() {
+            begin_key.val("");
+          });
+        });
+      </script>
+    </footer>
+  </ui:form>
+</moda:frame>

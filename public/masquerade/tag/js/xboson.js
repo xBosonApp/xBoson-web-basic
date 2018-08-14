@@ -394,7 +394,13 @@ function createDataTable(table) {
     regListener(events.TABLE_UPDATE_REQ, id, request);
     selectedTable(table, onselect);
     form.submit(request);
-    setupPagination(pagination, pageset, request);
+    
+    if (table.data('hidepage')) {
+      pagination.hide();
+      request();
+    } else {
+      setupPagination(pagination, pageset, request);
+    }
   }
   
   function request() {

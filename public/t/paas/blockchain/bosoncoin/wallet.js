@@ -57,7 +57,7 @@ jQuery(function($) {
       if (lastkey != key) {
         lastkey = key;
         getblock(key, function(b) {
-          log.info("新的区块已经加入", key, 'hash:', b.hash, 'sign:', b.sign, 'previousKey:', b.previousKey);
+          log.info("新的区块已经加入", key, 'hash:', b.hash, 'previousKey:', b.previousKey);
         });
       }
       if (typeof cb == 'function') cb();
@@ -75,36 +75,37 @@ jQuery(function($) {
       clearInterval(mining_tid);
       
       mining_tid = setInterval(function() {
-        var hash = sha256.update(lastkey);
-        var rand = rand_string(500);
-        hash.update(rand);
-        var ret = hash.array();
-        
-        ++count;
-        var speed = parseInt(count/(Date.now()-beginTime)*1000);
-        hashdiv.text(rand
-          +'\n\nCount: '+ count
-          +'  \nSpeed: '+ speed +' count/second'
-          +'  \nKey  : '+ lastkey
-          +"\n\nHash : "+ hex_string(ret));
-        
-        switch (difficult) {
-          case 1:
-            if (ret[0] == 0) 
-              do_mining(rand, speed);
-            break;
-            
-          case 2:
-            if (ret[0] == 0 && ret[1] == 0) 
-              do_mining(rand, speed);
-            break;
-            
-          case 3:
-            if (ret[0] == 0 && ret[1] == 0 && ret[2] == 0) 
-              do_mining(rand, speed);
-            break;
-        }
-        
+        // for (var i=0; i<10; ++i) { // 使用循环可以显著提升速度
+          var hash = sha256.update(lastkey);
+          var rand = rand_string(500);
+          hash.update(rand);
+          var ret = hash.array();
+          
+          ++count;
+          var speed = parseInt(count/(Date.now()-beginTime)*1000);
+          hashdiv.text(rand
+            +'\n\nCount: '+ count
+            +'  \nSpeed: '+ speed +' count/second'
+            +'  \nKey  : '+ lastkey
+            +"\n\nHash : "+ hex_string(ret));
+          
+          switch (difficult) {
+            case 1:
+              if (ret[0] == 0) 
+                do_mining(rand, speed);
+              break;
+              
+            case 2:
+              if (ret[0] == 0 && ret[1] == 0) 
+                do_mining(rand, speed);
+              break;
+              
+            case 3:
+              if (ret[0] == 0 && ret[1] == 0 && ret[2] == 0) 
+                do_mining(rand, speed);
+              break;
+          }
+        // }
       }, 0);
     }
     

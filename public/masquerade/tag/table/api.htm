@@ -6,6 +6,7 @@
            form: form 表单的选择器, 作为表格的查询条件 (!注意: 选择器是 jquery 格式的).
     [可选] id: 表格 id, class : 表格的 class,
            dataName: 在 ajax 返回结果集中的数据属性名称, 默认 'result' 或 'data'.
+           hidepage: 为 1 时将不显示分页组件
 </never>
 
 <div class="dataTables_wrapper">
@@ -19,7 +20,7 @@
   <style> td { word-break: break-all; min-width: 80px; } </style>
   <table id="###id###" class="###class### table table-bordered table-striped auto_tag_table_api"
           data-api='###api###' data-app='###app###' data-mod='###mod###' 
-          data-form='###form###' data-dataName='###dataName###'>
+          data-form='###form###' data-dataName='###dataName###' data-hidepage='###hidepage###'>
     <thead>
       <tr>
         <pit/>

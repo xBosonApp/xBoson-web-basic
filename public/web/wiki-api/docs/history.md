@@ -5,6 +5,7 @@
 
 ### 8 月
 
+* 14. 更新 witness 文档.
 * 13. 修改 api-chain 文档.
 * 4. 修改 witness 文档.
 
