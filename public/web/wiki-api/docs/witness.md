@@ -102,18 +102,46 @@ Content-Transfer-Encoding: binary
 若要返回错误消息, 则返回码 500, Response Body 中存储错误消息字符串.
 
 
-## deliver [未实现]
+## deliver
 
-通知见证者数据块已经上链, 见证者可以选择忽略该接口的实现, 参数通过 http 传递:
+通知见证者数据块已经上链, 见证者可以选择忽略该接口的实现, 参数通过 http POST Body 传递:
 
 ```url
-http://192.168.0.1:7000/ws/deliver?key=...&success=bool
+http://192.168.0.1:7000/ws/deliver
 ```
 
-参数说明:
+Http BODY 中是 utf8 编码的 json 字符串
 
-* `key` 数据块的 key, 见证者可以通过平台接口拉取区块的完整数据
-* `success` 区块是否成功上链, 成功为 `1` 失败为 `0`
+```json
+{
+  "key": "W_jzm1djT9GNlszb8j2OqA",
+  "hash": "K6BA7JdzqNTf7DO3kLXZSU4Tb6mttJgZcecSonOlfnc",
+  "previousHash": "4L4JERbplZM2vJzrjRCxDI19kgiDiHwjTE15Z2nDqQo",
+  "previousKey": "U-bO3WAfQb61tG9CYn2qtw",
+  "create": 1534325080934,
+  "data": "cGc9bv3ca7jcI4xAyYytI3-aqhM",
+  "userid": "1f33f752805443e59bfe5f8f77481443",
+  "chaincodeKey": "bhh3Af9CQt6rkCLGnBi0uw",
+  "type": 2,
+  "sign": {
+    "2": "MEUCIQCUag5UQqtsV8VijTK0NkIxMDAZA0PsemwfMmTnUmUSugIgE7OYDZC4JaW-WQw8mpT4AUyfDxCAk2qBg7--ClNFoZs",
+    "edcede767f9f4004942e9e861ae7da13": "MEQCIDxlqqwpYPXgdVZjmHq3q-5GvdwFX0XNjyv1vbx3m2z5AiBMQZtUhndd_2MiYfYalYZzLysIBJW6-Pivm26QKXUYyw"
+  }
+}
+```
+
+字段说明:
+
+* `key` base64 编码的数据块的 key.
+* `hash` base64 编码的数据块 hash, 该 hash 由各个字段通过 `SHA-256` 生成. 
+* `previousHash` base64 编码的前导块 hash
+* `previousKey` base64 编码的前导块 key
+* `create` 区块生成时间的长整型毫秒值
+* `data` base64 编码的块数据
+* `userid` 生成该块的用户 uid
+* `chaincodeKey` base64 编码, 指向生成该块的链码块的 key
+* `type` 块类型
+* `sign` 签名字段, 属性的名称是见证者 id, 值是对数据块的签名, 签名不包括 `hash` 字段.
 
 返回说明:
 
