@@ -2,6 +2,9 @@
 <moda:frame title='流程图预览' width='70%'>
   <ui:form id='view_flow_diagram' class='update_form'>
     <fieldset>
+      <form:text id='url' label='访问 URL' tooltip='在浏览器中打开或嵌入 iframe' width='10'></form:text>
+      <form:text id='mas' label='模板代码' tooltip='嵌入到 htm 模板代码中' width='10'></form:text>
+        
       <iframe/>
       <script>
       (function($) {
@@ -14,6 +17,9 @@
           xb.iframeMax(frame);
           frame.attr("src", url + id);
         });
+        
+        root.find('#url').val(window.location.origin + url + id);
+        root.find('#mas').val(["<", 'chip:flow_diagram fileid="', id, '"/>'].join(''));
       })(jQuery);
       </script>
     </fieldset>

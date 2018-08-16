@@ -1121,7 +1121,424 @@ color: #5F5F5F;
 .smart-style-3 .bigBox span, .smart-style-3 .SmallBox span {
 	letter-spacing:0px;
 }
+/********************************************************************* STYLE 6 *************************************************************/
+.smart-style-6 a {
+    transition: color 0.5s linear 0s,background-color 0.5s linear 0s !important;
+}
+
+.smart-style-6 body.container {
+    border-left: 5px solid rgba(34, 38, 46, 0.4);
+    border-right: 5px solid rgba(34, 38, 46, 0.4);
+}
+
+.smart-style-6 #header {
+    background-image:none;
+    background-color:#167c80;
+}
+
+.smart-style-6 #project-context > :first-child {
+    color: #fff;
+  /*  text-shadow: 0 0 5px #555358;*/
+ font-size: 20px;
+}
+
+.smart-style-6 #ribbon {
+    background: #fff;
+}
 
 
-/********************************************************************* Skin-4 *************************************************************/
+.smart-style-6 #ribbon .breadcrumb > .active, .smart-style-6 #ribbon .breadcrumb li:last-child {
+color: #167c80;
+}
+
+.smart-style-6 #ribbon .breadcrumb a, .smart-style-6 #ribbon .breadcrumb {
+color: #747474 !important;
+}
+
+.smart-style-6 .breadcrumb>li+li:before {
+    color: #646464;
+}
+
+.smart-style-6 #project-selector {
+    color: #B9B9B9;
+}
+
+.smart-style-6 .open > .dropdown-menu, .smart-style-6 .dropdown-menu {
+    padding:4px;
+}
+.smart-style-6 .dropdown-menu>li>a, .smart-style-6 .dropdown-menu > li > a {
+    border-radius:4px;
+    margin:3px 0;
+}
+
+
+.smart-style-6 .btn.btn-ribbon {
+background-color: #167c80;
+background-image: -moz-linear-gradient(top, #6F7D94, #697486);
+background-image: -webkit-gradient(linear, 0 0, 0 500%, from(#6F7D94), to(#697486));
+background-image: -webkit-linear-gradient(top, #6F7D94, #697486);
+background-image: -o-linear-gradient(top, #6F7D94, #697486);
+background-image: linear-gradient(to bottom, #6F7D94, #697486);
+}
+
+.smart-style-6 #logo-group span#activity {
+background: #0d0f52;
+border: 5px solid #0d0f52;
+color:#fff;
+cursor: pointer;
+}.smart-style-6 .btn-header > :first-child > a {
+background: #096a6e;
+border: 5px solid #096a6e;
+color:#fff !important;
+cursor: pointer !important; 
+}.smart-style-6 .btn-header > :first-child > a:hover {
+    opacity:.9;
+}
+
+.smart-style-6 #cancel-search-js {
+    background: #fb3c4a;
+    line-height:29px !important;
+}
+
+.smart-style-6 .MsgTitle .txt-color-orangeDark {
+    color:#fb3c4a !important;
+}
+
+@media (max-width: 979px) and (min-width: 768px) {
+    .smart-style-6  #hide-menu i {
+        color: #fff !important;
+    }
+}
+
+@media only screen and (max-width: 679px) and (min-width: 0px) {
+    .smart-style-6 #hide-menu i {
+        color: #fff !important;
+    }
+}
+
+@media only screen and (max-width: 479px) and (min-width: 320px) {
+    .smart-style-6 #sparks {
+        background: #fff;
+    }
+
+    .smart-style-6 #cancel-search-js, .smart-style-6 .search-mobile .header-search > button {
+        border-radius:3px;
+    }
+}   
+
+
+.smart-style-6 .minifyme {
+    background: #096a6e;
+} .smart-style-6 .minifyme:hover {
+    background: #167c80;
+    color: #E5E8F3
+}
+
+.smart-style-6 #show-shortcut:hover > i {
+    color:#fff;
+}
+
+.smart-style-6 aside, 
+.smart-style-6 .superbox-show,
+.smart-style-6 .inbox-footer  {
+background: #167c80;
+padding-left: -10px;
+}
+.smart-style-6 .superbox-list.active:before {
+    color: #5b5e24;
+}
+
+
+
+.smart-style-6 #logo-group {
+background:#167c80 !important;
+}
+
+.smart-style-6 .login-info span, .smart-style-6 .login-info {
+    border-bottom:none;
+}
+
+.smart-style-6 nav ul b .fa-expand-o:before {
+    content: "\f504";
+}
+
+.smart-style-6 nav ul b .fa-collapse-o:before {
+    content: "\f507";
+}
+
+.smart-style-6 .header-search > input[type="text"] {
+    border-color:#FFF !important;
+    border-radius:2px;
+}
+
+.smart-style-6 nav ul ul li > a {
+    text-shadow: 0 5px 5px #000;
+    font-size: 12px;
+    padding-left: 20px;
+    color:#fff;
+    display: block;
+    font-weight: 300;
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+}
+.smart-style-6 nav ul ul ul li a {
+    padding: 8px 57px 8px 54px !important;
+}
+.smart-style-6 nav ul ul ul ul li a {
+    padding-left: 72px !important;
+}
+.smart-style-6 nav ul ul ul ul ul li a {
+    padding-left: 90px !important;
+}
+.smart-style-6 nav ul ul ul ul ul ul li a {
+    padding-left: 508px !important;
+}
+
+.smart-style-6 nav > ul > li > ul::before, .smart-style-6 nav > ul ul li::before {
+    border:none !important;
+}
+
+.smart-style-6 nav > ul > li > a > i {
+    font-size: 30px;
+    vertical-align: 0px;
+}
+
+.smart-style-6 nav > ul > li >a b {
+    right: 57px;
+    top: 52px;
+}
+
+.smart-style-6 nav > ul > li > a > i:after {
+    border:5px solid #fff; /* here */
+}
+
+.smart-style-6 nav ul ul {
+    background: #096a6e;
+}
+
+.smart-style-6 nav ul ul li > a:hover {
+    background: #167c80!important;
+}
+
+
+.smart-style-6 nav ul li a, 
+.smart-style-6 .login-info strong, 
+.smart-style-6 .login-info a {
+    color: #dfdfdf;
+}
+.smart-style-6 nav ul li a:active {
+    background:none;
+}.smart-style-6 nav ul li a:hover {
+    color:#fff;
+}
+
+.smart-style-6 .header-dropdown-list a.dropdown-toggle {
+    color:#FFF;
+    text-decoration:none;
+}
+
+.smart-style-6 nav ul li a {
+    padding: 10px 10px 10px 11px;
+
+}
+
+.smart-style-6 .login-info {
+    height:auto;
+}
+.smart-style-6 .login-info > span{
+    padding: 5px 50px;
+}
+
+.smart-style-6 .login-info img {
+    width: 35px;
+    border-radius:50%;
+}
+
+.smart-style-6 .login-info a {
+    margin-top:2px;
+    margin-left: -3px;
+}
+.smart-style-6 .login-info a span {
+    max-width: 536px;
+}
+
+.smart-style-6 .login-info a:hover {
+    color:#fff;
+}
+
+.smart-style-6 #logo-group > span .badge {
+    background: #0aa699;
+}
+
+.smart-style-6 #activity.active .badge {
+    background: #0aa699 !important;
+}
+
+.smart-style-6 .ajax-dropdown {
+    background: #E2E8F5;
+}
+
+.smart-style-6 .ajax-notifications {
+    background:#fff;
+}
+
+/* no nav animation */
+    .smart-style-6  nav > ul > li > a:hover i {
+        -webkit-animation-name: none;
+        -moz-animation-name: none;
+        -o-animation-name: none;
+        animation-name: none;
+    }
+
+
+/*
+ * COLORS
+ */
+
+.smart-style-6 img.online {
+    border-left-color: #167c80 !important; 
+}
+
+.smart-style-6 .onoffswitch-inner:before {
+      background-color: #36AECC !important;
+    }
+
+    .smart-style-6 .bg-color-red {
+      background-color: #fb3c4a !important;
+    }
+    
+    
+    
+.smart-style-6 .pagination>.active>a, 
+.smart-style-6 .pagination>.active>span, 
+.smart-style-6 .pagination>.active>a:hover, 
+.smart-style-6 .pagination>.active>span:hover, 
+.smart-style-6 .pagination>.active>a:focus, 
+.smart-style-6 .pagination>.active>span:focus {
+    background-color: #36AECC;
+    border-color: #36AECC;
+}   
+
+
+/*
+ * MINIFIED
+ */
+
+.smart-style-6.minified .login-info a {
+    margin-top:6px;
+}
+
+.smart-style-6.minified nav ul li a {
+    padding: 10px 10px 10px 11px;
+}
+
+.smart-style-6.minified nav > ul > li > a > i {
+    font-size: 24px;
+}
+
+.smart-style-6.minified nav > ul > li {
+border-bottom: 5px solid #1a696c;
+border-top: 5px solid #1b9ca1;
+}
+
+.smart-style-6.minified nav > ul > li > ul {
+    background:#096a6e;
+}
+.smart-style-6.minified nav > ul > li > ul > li {
+    background:#096a6e;
+}
+
+.smart-style-6.minified .login-info img {
+    width: 30px !important;
+}
+.smart-style-6.minified .login-info span {
+    padding: 0px 5px !important;
+}
+
+.smart-style-6.minified nav ul ul li > a:hover {
+    background: #167c80 !important;
+}
+
+.smart-style-6.minified nav ul > li > ul > li > ul {
+    background:#085e62;
+}
+
+.smart-style-6.minified nav > ul > li > ul > li > ul > li {
+    background:#085e62;
+}
+
+.smart-style-6.minified nav ul ul li > a {
+    padding-left: 10px;
+    padding-right: 53px !important;
+}
+.smart-style-6.minified nav ul ul ul li a {
+    padding-left: 33px !important;
+    padding-right: 53px !important;
+}
+.smart-style-6.minified nav ul ul ul ul li a {
+    padding-left: 43px !important;
+    padding-right: 53px !important;
+}
+.smart-style-6.minified nav ul ul ul ul ul li a {
+    padding-left: 53px !important;
+    padding-right: 53px !important;
+}
+.smart-style-6.minified nav ul ul ul ul ul ul li a {
+    padding-left: 63px !important;
+    padding-right: 53px !important;
+}
+
+
+/*
+ * widget colors
+ */
+
+.smart-style-6 .jarviswidget-color-darken > header  {
+    background: #5B5E24 !important;
+    border-color: #5B5E24 !important;
+}
+
+.smart-style-6 .jarviswidget-color-blueDark > header  {
+    background: #353D4B !important;
+    border-color: #353D4B !important;
+}
+
+.smart-style-6 .jarviswidget-color-blue > header {
+    background: #167c80;
+    border-color: #096a6e !important;
+}
+
+.smart-style-6 .jarviswidget-color-purple > header {
+    background: #736086;
+}
+
+.smart-style-6 .jarviswidget-color-red > header {
+    background: #C02635;
+    border-color: #8F2529 !important;
+}
+
+.smart-style-6  .jarviswidget .bg-color-red {
+    background: #C02635 !important;
+}
+
+.smart-style-6 .jarviswidget-color-greenLight > header, .smart-style-6 .jarviswidget .bg-color-greenLight {
+    border-color: #96B447 !important;
+    background: #96B447 !important;
+}
+
+.smart-style-6 .jarviswidget-color-yellow > header, .smart-style-6 .jarviswidget .bg-color-yellow {
+    border-color: #DBB727 !important;
+    background: #FDD05C !important;
+    color: #25245F;
+}
+
+.smart-style-6 .jarviswidget-color-pink > header, .smart-style-6 .jarviswidget .bg-color-pink {
+    background: #DB8EBB !important;
+}
+
+
+
+
+
+
 
