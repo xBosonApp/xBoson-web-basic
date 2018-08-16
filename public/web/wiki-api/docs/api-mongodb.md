@@ -222,6 +222,17 @@ phone.getIndexes().forEach(function(index) {
 var findx = coll.find({ _id : 'jym-PC-1514958286201' });
 ```
 
+## Collection.find(object: query, object: projection)
+
+条件查询文件, 返回数组, projection 指定返回的文档字段, _id 字段总是返回.
+
+```javascript
+//
+// 查询文档, 返回的字段包括: {_id, item, qty}
+//
+var findx = coll.find( { qty: { $gt: 25 } }, { item: 1, qty: 1 } );
+```
+
 ## Collection.drop()
 
 删除当前文档集合.

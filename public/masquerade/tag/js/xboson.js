@@ -5,6 +5,7 @@ if (window.xb) return;
 var nameCache = {};
 var ebus = {};
 var dataPool = {};
+var zy = getZY();
 
 //
 // 消息类型
@@ -81,6 +82,7 @@ var xb = window.xb = {
   createLogger        : createLogger,
   api                 : callapi,
   waitDisplay         : waitDisplay,
+  iframeMax           : iframeMax,
   
   // 事件处理框架
   getEventSettingFromParent      : getEventSettingFromParent,
@@ -1273,6 +1275,38 @@ function waitDisplay(jdom, cb) {
       clearInterval(tid);
     }
   }, 10);
+}
+
+
+function getZY() {
+  var z = window.zy;
+  if (!z) {
+    z = {
+      log : console.log,
+    };
+  }
+  return z;
+}
+
+
+//
+// 当 iframe 内容改变时, iframe 本身的尺寸也跟随改变.
+//
+function iframeMax(jiframe) {
+  var jdom = $(jiframe);
+  var iwin = jdom[0].contentWindow;
+  jdom.css({ border: 0, width: '100%', margin: 0, padding: 0 });
+  
+  jdom.load(fix);
+  jdom.resize(fix);
+  
+  xb.on('PAGE_DESTROY', null, function() {
+    jdom.off();
+  });
+  
+  function fix() {
+    jdom.height(iwin.document.body.scrollHeight);
+  }
 }
 
 

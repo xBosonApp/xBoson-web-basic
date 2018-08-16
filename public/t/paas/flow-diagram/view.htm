@@ -1,0 +1,25 @@
+<!-- Create By xBoson System -->
+<moda:frame title='流程图预览' width='70%'>
+  <ui:form id='view_flow_diagram' class='update_form'>
+    <fieldset>
+      <iframe/>
+      <script>
+      (function($) {
+        var url = '/xboson/face/masquerade/tag/chip/flow_diagram.htm?fileid=';
+        var root = $('#view_flow_diagram');
+        var id = xb.load_data('datatable0')._id;
+        var frame = root.find("iframe");
+        
+        xb.waitDisplay(root, function() {
+          xb.iframeMax(frame);
+          frame.attr("src", url + id);
+        });
+      })(jQuery);
+      </script>
+    </fieldset>
+  
+    <footer>
+      <moda:cancel/>
+    </footer>
+  </ui:form>
+</moda:frame>

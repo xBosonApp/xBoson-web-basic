@@ -1,0 +1,90 @@
+<never>
+  //
+  //TODO: 预览不完整!!!!!!!!!!
+  //
+  在当前位置绘制流程图, 该页面可以直接请求, 参数通过 url 传入, 参数:
+    [必须] fileid - 文件 id (完整文件名)
+</never>
+<js:default name='id' rand='true' prefix='flow_diagram_'/>
+<div id="###id###" class='tag_auto_chip_flow_diagram' data-fileid='###fileid###' 
+     data-qfileid='###query.fileid###'></div>
+
+<once id='tag_auto_chip_flow_diagram.js'>
+  <b data-contextpath='###config.contextPath###' id='contextpath'></b>
+  <js:jquery/>
+  <js:xboson/>
+  
+  <style>
+    .tag_auto_chip_flow_diagram {
+      background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAgTSAwIDIwIEwgNDAgMjAgTSAyMCAwIEwgMjAgNDAgTSAwIDMwIEwgNDAgMzAgTSAzMCAwIEwgMzAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2UwZTBlMCIgb3BhY2l0eT0iMC4yIiBzdHJva2Utd2lkdGg9IjEiLz48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZTBlMGUwIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=");
+      background-position: -1px -1px;
+      background-color: #FFF; padding: 30px;
+    }
+  </style>
+	
+  <script type="text/javascript">
+    var urlParams = (function(url) {
+			var result = new Object();
+			var idx = url.lastIndexOf('?');
+			if (idx > 0) {
+				var params = url.substring(idx + 1).split('&');
+				for (var i = 0; i < params.length; i++) {
+					idx = params[i].indexOf('=');
+					
+					if (idx > 0) {
+						result[params[i].substring(0, idx)] = params[i].substring(idx + 1);
+					}
+				}
+			}
+			return result;
+		})(window.location.href);
+		
+		var contextPath = $('#contextpath').data('contextpath');
+		var mxLoadResources = true;
+		var mxBasePath = contextPath +'/face/web/mxgraph';
+		
+		var RESOURCES_PATH = mxBasePath +'/grapheditor';
+		var STENCIL_PATH = RESOURCES_PATH +'/stencils';
+		var RESOURCE_BASE = RESOURCES_PATH +'/resources';
+		// var IMAGE_PATH = RESOURCES_PATH +'/images';
+		var IMAGE_PATH = 'images';
+		var STYLE_PATH = RESOURCES_PATH +'/styles';
+		var CSS_PATH = STYLE_PATH;
+  </script>
+  
+  <script type="text/javascript" src="###config.contextPath###/face/web/mxgraph/grapheditor/sanitizer/sanitizer.min.js"></script>
+  <script type="text/javascript" src="###config.contextPath###/face/web/mxgraph/mxClient.min.js"></script>
+  <script type="text/javascript" src="###config.contextPath###/face/web/mxgraph/grapheditor/js/Graph.js"></script>
+  <script type="text/javascript" src="###config.contextPath###/face/web/mxgraph/grapheditor/js/Shapes.js"></script>
+  
+  <script type="text/javascript">
+    xb.auto_filter('.tag_auto_chip_flow_diagram').each(function() {
+      var thiz = $(this);
+      var fileid = thiz.data('fileid') || thiz.data('qfileid');
+      
+      if (!fileid) {
+        thiz.text("fileid 参数无效");
+        return;
+      }
+      
+    	var graph = new Graph(this);
+    	graph.resizeContainer = true;
+    	graph.setEnabled(false);
+    	
+    	var url = contextPath + '/app/a297dfacd7a84eab9656675f61750078/a510370fd076433dbe8eb33a885f0199/basic/load';
+     	$.get(url, { id: fileid }, function(ret) {
+     	  if (ret.code == 0) {
+     	    show(ret.data);
+     	  } else {
+     	    thiz.text(ret.msg);
+     	  }
+     	});
+    
+    	function show(data) {
+    		var xmlDoc = mxUtils.parseXml(data);
+    		var codec = new mxCodec(xmlDoc);
+    		codec.decode(xmlDoc.documentElement, graph.getModel());
+    	};
+    });
+  </script>
+</once>

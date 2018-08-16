@@ -1,0 +1,27 @@
+<never> 
+  枚举渲染器, 将数据反转为值, 参数:
+    [必须] map - 枚举 json 字符串
+</never>
+<js:default name='id' rand='true' prefix='table_render_enum_'/>
+<code class='tag_auto_table_render_enum render_function' data-delay-function='###id###'
+    style='display: none' data-map='###map###'>
+</code>
+<once id='tag_auto_table_render_enum.js'>
+  <script>
+    xb.auto_filter('.tag_auto_table_render_enum').each(function() {
+      var jdata   = $(this);
+      var map     = jdata.data('map');
+      var delayid = jdata.data('delay-function');
+      var none    = '[无枚举值]';
+      try {
+        // 使用 eval 允许不严格的 json 字符串.
+        map = eval('('+ map +')');
+      } catch(e) {
+        none = '[JSON format error `'+ map +'`:'+ e.message +']';
+      }
+      jdata.data(delayid, function(data, type, row, meta) {
+        return map[data] || none;
+      });
+    });
+  </script>
+</once>

@@ -1,0 +1,55 @@
+<!-- Create By xBoson System -->
+<ui:grid id='idid' class='list' title='流程图文件列表'>
+  <ui:form id='listform'>
+    <form:text name='filename' label='文件名'/>
+    
+    <form:btn_toolbar>
+      <form:group>
+        <form:submit label='查询'/>
+        <form:reset/>
+      </form:group>
+      <form:group>
+        <form:button label='添加' icon='magic'>
+          <moda:open url='flow-diagram/create.htm'/>
+        </form:button>
+        <form:button label='编辑' icon='edit'>
+          <mp:usability recvid='datatable0'/>
+          <moda:open url='flow-diagram/edit.htm'/>
+        </form:button>
+        <form:button label='图形编辑器' icon='object-ungroup' id='open_graphe_editor'>
+          <mp:usability recvid='datatable0'/>
+        </form:button>
+        <form:button label='预览' icon='play'>
+          <mp:usability recvid='datatable0'/>
+          <moda:open url='flow-diagram/view.htm'/>
+        </form:button>
+        <form:button label='删除' icon='remove'>
+          <mp:usability recvid='datatable0'/>
+          <mp:delete app='a510370fd076433dbe8eb33a885f0199' primary='_id'
+              mod='basic' api='delete' dataid='datatable0'>
+            <mp:send type='TABLE_UPDATE_REQ' id='datatable0'/>
+          </mp:delete>
+        </form:button>
+      </form:group>
+    </form:btn_toolbar>
+  </ui:form>
+  
+  <mp:savedata type='SELECT_TABLE_ROW' id='datatable0'/>
+  <script>
+    jQuery('#open_graphe_editor').click(function() {
+      var id = xb.load_data('datatable0')._id;
+      window.open(zy.g.host.ui +'/web/mxgraph/grapheditor/index.html?id='+ id);
+    });
+  </script>
+  
+  <table:api app='a510370fd076433dbe8eb33a885f0199' mod='basic' 
+      api='list' form='#listform' id='datatable0'>
+    <table:mapper label='文件名' key='_id'/>
+    <table:mapper label='说明' key='desc'/>
+    <table:mapper label='权限' key='access'>
+      <table:render_enum map='{ 1: "公共", 0: "私有" }'/>
+    </table:mapper>
+    <table:mapper label='更新时间' key='updateTime'><table:render_time/></table:mapper>
+    <table:mapper label='创建时间' key='createTime'><table:render_time/></table:mapper>
+  </table:api>
+</ui:grid>

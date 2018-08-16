@@ -1,0 +1,28 @@
+<!-- Create By xBoson System -->
+<moda:frame title='修改文件'>
+    <ui:form id='create' class='update_form'>
+      <mp:loaddata id='datatable0'/>
+      
+      <fieldset>
+        <form:text name='_id' label='文件名' tooltip='不可改' width='10'>
+          <form:readonly/>
+        </form:text>
+        <form:select name='ispublic' label='访问权限' width='10'>
+          <option value='0'>私有</option>
+          <option value='1'>公共</option>
+        </form:select>
+        <form:textarea name='desc' label='说明' width='10' rows='10'></form:textarea>
+      </fieldset>
+      
+      <footer>
+        <moda:cancel/>
+        <moda:ok>
+          <form:post app='a510370fd076433dbe8eb33a885f0199' mod='basic' api='update'>
+            <mp:close when='this.code == 0'>
+              <mp:send type='TABLE_UPDATE_REQ' id='datatable0'/>
+            </mp:close>
+          </form:post>
+        </moda:ok>
+      </footer>
+    </ui:form>
+</moda:frame>

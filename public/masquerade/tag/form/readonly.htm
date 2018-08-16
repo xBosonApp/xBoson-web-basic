@@ -1,0 +1,13 @@
+<never>置于 input 内部, 使表单只读, 无参数</never>
+<b style='display: none' class='auto_tag_form_readonly'/>
+<once id='auto_tag_form_readonly.js'>
+  <js:xboson/>
+  <script>
+    xb.auto_filter('.auto_tag_form_readonly').each(function() {
+      var f = $(this).parent();
+      window.x = f;
+      if (f.is('label,.class')) f = f.find(":input");
+      f.attr('readonly', true);
+    });
+  </script>
+</once>
