@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Grapheditor</title>
+    <title>流程图编辑器</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" type="text/css" href="styles/grapheditor.css">
@@ -43,7 +43,7 @@
 	<script type="text/javascript" src="deflate/base64.js"></script>
 	<script type="text/javascript" src="jscolor/jscolor.js"></script>
 	<script type="text/javascript" src="sanitizer/sanitizer.min.js"></script>
-	<script type="text/javascript" src="../../../src/js/mxClient.js"></script>
+	<script type="text/javascript" src="../mxClient.min.js"></script>
 	<script type="text/javascript" src="js/EditorUi.js"></script>
 	<script type="text/javascript" src="js/Editor.js"></script>
 	<script type="text/javascript" src="js/Sidebar.js"></script>
@@ -66,12 +66,22 @@
 			{
 				editorUiInit.apply(this, arguments);
 				this.actions.get('export').setEnabled(false);
+				this.editor.setFilename(urlParams.id);
+				this.updateDocumentTitle();
 
 				// Updates action states which require a backend
 				if (!Editor.useLocalStorage)
 				{
 					mxUtils.post(OPEN_URL, '', mxUtils.bind(this, function(req)
 					{
+					  var xmlString = JSON.parse(req.request.response).data;
+					  var doc = mxUtils.parseXml(xmlString);
+  					this.editor.setGraphXml(doc.documentElement);
+  					this.editor.setModified(false);
+  					this.editor.undoManager.clear();
+						this.editor.setFilename(urlParams.id);
+						this.updateDocumentTitle();
+					  
 						var enabled = req.getStatus() != 404;
 						this.actions.get('open').setEnabled(enabled || Graph.fileSupport);
 						this.actions.get('import').setEnabled(enabled || Graph.fileSupport);

@@ -7,8 +7,8 @@ window.MAX_AREA = window.MAX_AREA || 15000 * 15000;
 
 // URLs for save and export
 window.EXPORT_URL = window.EXPORT_URL || '/export';
-window.SAVE_URL = window.SAVE_URL || '/save';
-window.OPEN_URL = window.OPEN_URL || '/open';
+window.SAVE_URL = window.SAVE_URL || '/xboson/app/a297dfacd7a84eab9656675f61750078/a510370fd076433dbe8eb33a885f0199/basic/save?id='+ urlParams.id;
+window.OPEN_URL = window.OPEN_URL || '/xboson/app/a297dfacd7a84eab9656675f61750078/a510370fd076433dbe8eb33a885f0199/basic/load?id='+ urlParams.id;
 window.RESOURCES_PATH = window.RESOURCES_PATH || 'resources';
 window.RESOURCE_BASE = window.RESOURCE_BASE || window.RESOURCES_PATH + '/grapheditor';
 window.STENCIL_PATH = window.STENCIL_PATH || 'stencils';
@@ -24,6 +24,6 @@ window.OPEN_FORM = window.OPEN_FORM || 'open.html';
 // files (the special bundle and the default bundle) is disabled to
 // save a GET request. This requires that all resources be present in
 // each properties file since only one file is loaded.
-window.mxBasePath = window.mxBasePath || '../../../src';
-window.mxLanguage = window.mxLanguage || urlParams['lang'];
-window.mxLanguages = window.mxLanguages || ['de'];
+window.mxBasePath = window.mxBasePath || '../../../web/mxgraph';
+window.mxLanguage = window.mxLanguage || urlParams['lang'] || 'zh-CN';
+window.mxLanguages = window.mxLanguages || ['zh-CN', 'de'];

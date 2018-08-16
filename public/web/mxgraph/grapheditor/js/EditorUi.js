@@ -3507,13 +3507,24 @@ EditorUi.prototype.save = function(name)
 			{
 				if (xml.length < MAX_REQUEST_SIZE)
 				{
-					new mxXmlRequest(SAVE_URL, 'filename=' + encodeURIComponent(name) +
-						'&xml=' + encodeURIComponent(xml)).simulate(document, '_blank');
+					var req = new mxXmlRequest(SAVE_URL, 'filename=' + encodeURIComponent(name) +
+						'&xml=' + encodeURIComponent(xml));
+					//
+					// req.simulate(document, '_blank');
+					// 此处已经修改
+					//
+					req.send(function(x) {
+					  if (x.request.status != 200) {
+					    return mxUtils.popup(x.request.statusText, true);
+					  }
+					  var ret = JSON.parse(x.request.response);
+					  mxUtils.popup(ret.msg, true);
+					});
 				}
 				else
 				{
 					mxUtils.alert(mxResources.get('drawingTooLarge'));
-					mxUtils.popup(xml);
+					mxUtils.popup(xml, true);
 					
 					return;
 				}
