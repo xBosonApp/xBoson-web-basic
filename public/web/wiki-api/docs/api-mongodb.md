@@ -26,6 +26,8 @@ var mongodb = require('mongodb');
 var client = mongodb.connect('mongodb://username:password@localhost:27017,localhost:27018/?replicaSet=foo');
 // 单机无密码
 var client = mongodb.connect("mongodb://localhost");
+// 连接到平台默认配置的 mongodb
+var client = mongodb.connect();
 ```
 
 
