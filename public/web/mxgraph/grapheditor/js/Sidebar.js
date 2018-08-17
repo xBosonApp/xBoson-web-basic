@@ -10,6 +10,7 @@ function Sidebar(editorUi, container)
 	this.container = container;
 	this.palettes = new Object();
 	this.taglist = new Object();
+	this.scripts = {};
 	this.showTooltips = true;
 	this.graph = editorUi.createTemporaryGraph(this.editorUi.editor.graph.getStylesheet());
 	this.graph.cellRenderer.antiAlias = false;
@@ -86,6 +87,7 @@ Sidebar.prototype.init = function()
 	var dir = STENCIL_PATH;
 	
 	this.addSearchPalette(true);
+// 	this.addPaletteSelectorPanel();
 	this.addGeneralPalette(true);
 	this.addMiscPalette(false);
 	this.addAdvancedPalette(false);
@@ -104,6 +106,26 @@ Sidebar.prototype.init = function()
 		 'Worker1', 'Soldier1', 'Doctor1', 'Tech1', 'Security1', 'Telesales1'], null,
 		 {'Wireless_Router_N': 'wireless router switch wap wifi access point wlan',
 		  'Router_Icon': 'router switch'});
+		  
+	// 扩展模板库
+// 	this.addStencilPalette('android', 'Android', dir + '/android/android.xml',
+// 		';whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2');
+// 	this.loadScript('/android/mxAndroid.js');
+		
+// 	this.addStencilPalette('bootstrap', 'Bootstrap', dir + '/bootstrap/bootstrap.xml',
+// 		';whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2');	
+// 	this.loadScript('/bootstrap/mxBootstrap.js');
+	
+// 	this.loadScript('/mxER.js');
+};
+
+
+Sidebar.prototype.loadScript = function(filename) {
+  if (this.scripts[filename]) return;
+  var sc = document.createElement("script");
+  sc.src = STENCIL_PATH + filename;
+  document.body.appendChild(sc);
+  this.scripts[filename] = true;
 };
 
 /**
@@ -590,6 +612,7 @@ Sidebar.prototype.cloneCell = function(cell, value)
 	
 	return clone;
 };
+
 
 /**
  * Adds shape search UI.
