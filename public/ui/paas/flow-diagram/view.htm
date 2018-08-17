@@ -12,9 +12,9 @@
         var root = $('#view_flow_diagram');
         var id = xb.load_data('datatable0')._id;
         var frame = root.find("iframe");
+        xb.iframeMax(frame);
         
-        xb.waitDisplay(root, function() {
-          xb.iframeMax(frame);
+        xb.waitDisplay(frame, function() {
           frame.attr("src", url + id);
         });
         

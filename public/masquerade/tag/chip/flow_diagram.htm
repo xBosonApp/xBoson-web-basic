@@ -1,7 +1,5 @@
+<!DOCTYPE html>
 <never>
-  //
-  //TODO: 预览不完整!!!!!!!!!!
-  //
   在当前位置绘制流程图, 该页面可以直接请求, 参数通过 url 传入, 参数:
     [必须] fileid - 文件 id (完整文件名)
 </never>
@@ -20,6 +18,7 @@
       background-position: -1px -1px;
       background-color: #FFF; padding: 30px;
     }
+    body { margin: 0; }
   </style>
 	
   <script type="text/javascript">
@@ -43,13 +42,14 @@
 		var mxLoadResources = true;
 		var mxBasePath = contextPath +'/face/web/mxgraph';
 		
-		var RESOURCES_PATH = mxBasePath +'/grapheditor';
-		var STENCIL_PATH = RESOURCES_PATH +'/stencils';
-		var RESOURCE_BASE = RESOURCES_PATH +'/resources';
-		// var IMAGE_PATH = RESOURCES_PATH +'/images';
-		var IMAGE_PATH = 'images';
-		var STYLE_PATH = RESOURCES_PATH +'/styles';
+		var RESOURCES_PATH = mxBasePath +'/resources';
+		var RESOURCE_BASE =  mxBasePath +'/grapheditor'
+		var STENCIL_PATH = RESOURCE_BASE +'/stencils';
+		var IMAGE_PATH = RESOURCE_BASE +'/images';
+		var STYLE_PATH = RESOURCE_BASE +'/styles';
 		var CSS_PATH = STYLE_PATH;
+		
+		// mxConstants.STYLE_FILLCOLOR]="#C3D9FF";a[mxConstants.STYLE_STROKECOLOR]="#6482B9"
   </script>
   
   <script type="text/javascript" src="###config.contextPath###/face/web/mxgraph/grapheditor/sanitizer/sanitizer.min.js"></script>
@@ -68,8 +68,16 @@
       }
       
     	var graph = new Graph(this);
-    	graph.resizeContainer = true;
+    	graph.resizeContainer = false;
     	graph.setEnabled(false);
+    	//
+    	// 修正预览与设计样式的不一致
+    	//
+    	var vertexStyle = graph.stylesheet.styles.defaultVertex;
+    	vertexStyle.fillColor = '#FFFFFF';
+    	vertexStyle.strokeColor = '#000000';
+    	vertexStyle.align = 'left';
+    // 	console.log(graph.style, '1111111111111111')
     	
     	var url = contextPath + '/app/a297dfacd7a84eab9656675f61750078/a510370fd076433dbe8eb33a885f0199/basic/load';
      	$.get(url, { id: fileid }, function(ret) {
@@ -81,9 +89,12 @@
      	});
     
     	function show(data) {
+    	  graph.getModel().beginUpdate();
     		var xmlDoc = mxUtils.parseXml(data);
     		var codec = new mxCodec(xmlDoc);
     		codec.decode(xmlDoc.documentElement, graph.getModel());
+    		graph.getModel().endUpdate();
+    		graph.sizeDidChange();
     	};
     });
   </script>

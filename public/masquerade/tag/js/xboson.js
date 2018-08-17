@@ -1270,11 +1270,11 @@ function callapi(app, mod, api, parm, cb) {
 function waitDisplay(jdom, cb) {
   var endtime = Date.now() + 15e3;
   var tid = setInterval(function() {
-    if (jdom.width() > 0 || Date.now() > endtime) {
+    if ((jdom.height() > 0 && jdom.width() > 0) || Date.now() > endtime) {
       cb();
       clearInterval(tid);
     }
-  }, 10);
+  }, 30);
 }
 
 
@@ -1297,7 +1297,7 @@ function iframeMax(jiframe) {
   var iwin = jdom[0].contentWindow;
   jdom.css({ border: 0, width: '100%', margin: 0, padding: 0 });
   
-  jdom.load(fix);
+  jdom.on('load', fix);
   jdom.resize(fix);
   
   xb.on('PAGE_DESTROY', null, function() {
@@ -1305,6 +1305,7 @@ function iframeMax(jiframe) {
   });
   
   function fix() {
+    console.debug("fix iframe size");
     jdom.height(iwin.document.body.scrollHeight);
   }
 }

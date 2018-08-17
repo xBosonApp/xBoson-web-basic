@@ -41,6 +41,7 @@
     { "name": "xml", "file": "docs/api-xml.md" },
     { "name": "WebService", "file": "docs/api-ws.md" },
     { "name": "Digest", "file": "docs/api-digest.md" },
-    { "name": "Blockchain", "file": "docs/api-chain.md" }
+    { "name": "Blockchain", "file": "docs/api-chain.md" },
+    { "name": "Crypto", "file": "docs/api-crypto.md" }
   ]}
 ]
