@@ -1305,8 +1305,11 @@ function iframeMax(jiframe) {
   });
   
   function fix() {
-    console.debug("fix iframe size");
-    jdom.height(iwin.document.body.scrollHeight);
+    // 一些组件在 resize 之后更改画面高度, 加入延迟可以修正这个问题.
+    setTimeout(function() {
+      console.debug("fix iframe size");
+      jdom.height(iwin.document.body.scrollHeight);
+    }, 10);
   }
 }
 

@@ -1,4 +1,8 @@
 /* Create By xBoson System */
+(function() {
+//
+// 该配置引导加载图形库
+//
 var SHAPES_PATH = mxBasePath + '/grapheditor/shapes';
 /**
  * Specifies special libraries that are loaded via dynamic JS. Add cases
@@ -50,3 +54,4 @@ mxStencilRegistry.libraries['pid2inst'] = [SHAPES_PATH + '/pid2/mxPidInstruments
 mxStencilRegistry.libraries['pid2misc'] = [SHAPES_PATH + '/pid2/mxPidMisc.js', STENCIL_PATH + '/pid/misc.xml'];
 mxStencilRegistry.libraries['pid2valves'] = [SHAPES_PATH + '/pid2/mxPidValves.js'];
 mxStencilRegistry.libraries['pidFlowSensors'] = [STENCIL_PATH + '/pid/flow_sensors.xml'];
+})();

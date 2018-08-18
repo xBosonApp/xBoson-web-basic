@@ -1063,3 +1063,4 @@ archimate=ArchiMate 2.1
 webicons=网络图标
 sysml=系统建模语言
 aws3=AWS 3D
+selectgraphlibs=打开组件库...

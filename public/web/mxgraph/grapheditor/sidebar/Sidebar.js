@@ -1278,7 +1278,7 @@
     //
   	var input = document.createElement('input');
   	input.setAttribute('type', 'button');
-  	input.value = "更多图形...";
+  	input.value = mxResources.get('selectgraphlibs');
   	input.style.fontSize = '12px';
   	input.style.overflow = 'hidden';
   	input.style.boxSizing = 'border-box';
@@ -1346,7 +1346,7 @@
   	  var close = document.createElement('a');
   	  close.style = 'font-weight: bold; padding: 5px 60px; display: block';
   	  close.href = '#';
-  	  close.innerHTML = "确定";
+  	  close.innerHTML = mxResources.get('ok');
   	  left.appendChild(close);
   	  
   	  mxEvent.addListener(dialog, 'close', _close);

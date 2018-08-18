@@ -42,19 +42,6 @@ sha256.update(randstr);
 var hash = sha256.digest().bin();
 ```
 
-## Bytes digest.toBytes(String str, String coding)
-
-将字符串按照编码转换为字节缓冲区, coding 的编码格式可以为:
-
-* `hex` 16进制字符串.
-* `base58` base58 格式.
-* `base64` 普通 base64 格式 .
-* `base64url` base64url 格式 without padding.
- 
-```javascript
-var bytesObj = digest.toBytes("00010203", 'hex');
-```
-
 
 # Class Hash
 
@@ -75,28 +62,3 @@ var bytesObj = digest.toBytes("00010203", 'hex');
 ## Bytes digest()
 
 返回摘要的字节数组
-
-
-# Class Bytes
-
-存储字节数组, 在必要时转换为 string, 方便进行 json 的转换.
-
-## String toString()
-
-转换为字符串, 使用 base64url without padding 编码.
-
-## String toHex()
-
-返回数组的 16 进制表示的字符串.
-
-## Array bin()
-
-返回原始数组.
-
-## String toJavaString()
-
-将字节数组按照 UTF-8 作为底层数据编码为字符串.
-
-## Bytes concat(Bytes other)
-
-将自身与另一个缓存连接, 返回包含两个缓冲区数据的缓冲区.

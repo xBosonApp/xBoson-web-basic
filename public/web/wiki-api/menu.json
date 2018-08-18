@@ -27,6 +27,7 @@
     { "name": "assert", "file": "docs/api-assert.md" },
     { "name": "uuid", "file": "docs/api-uuid.md" },
     { "name": "Buffer", "file": "docs/api-buffer.md" },
+    { "name": "Bytes", "file": "docs/api-bytes.md" },
     { "name": "path", "file": "docs/api-path.md" },
     { "name": "url", "file": "docs/api-url.md" },
     { "name": "mongodb", "file": "docs/api-mongodb.md" },

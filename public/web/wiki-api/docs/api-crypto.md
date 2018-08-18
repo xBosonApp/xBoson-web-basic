@@ -54,7 +54,7 @@ var result = hash.digest();
 
 # Class CipherJs
 
-加密/解密对象, [Bytes 类说明](docs/api-digest.md)
+加密/解密对象, [Bytes 类说明](docs/api-bytes.md)
 
 ## Bytes update(String)
 

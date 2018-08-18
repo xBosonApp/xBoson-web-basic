@@ -38,24 +38,25 @@
 			return result;
 		})(window.location.href);
 		
-		var contextPath = $('#contextpath').data('contextpath');
+		var contextPath     = $('#contextpath').data('contextpath');
 		var mxLoadResources = true;
-		var mxBasePath = contextPath +'/face/web/mxgraph';
+		var mxBasePath      = contextPath +'/face/web/mxgraph';
 		
-		var RESOURCES_PATH = mxBasePath +'/resources';
-		var RESOURCE_BASE =  mxBasePath +'/grapheditor'
-		var STENCIL_PATH = RESOURCE_BASE +'/stencils';
-		var IMAGE_PATH = RESOURCE_BASE +'/images';
-		var STYLE_PATH = RESOURCE_BASE +'/styles';
-		var CSS_PATH = STYLE_PATH;
-		
-		// mxConstants.STYLE_FILLCOLOR]="#C3D9FF";a[mxConstants.STYLE_STROKECOLOR]="#6482B9"
+		var RESOURCES_PATH  = mxBasePath +'/resources';
+		var RESOURCE_BASE   = mxBasePath +'/grapheditor'
+		var STENCIL_PATH    = RESOURCE_BASE +'/stencils';
+		var IMAGE_PATH      = RESOURCE_BASE +'/images';
+		var STYLE_PATH      = RESOURCE_BASE +'/styles';
+		var CSS_PATH        = STYLE_PATH;
+		// var GRAPH_IMAGE_PATH = STENCIL_PATH+ '/clipart';
   </script>
   
   <script type="text/javascript" src="###config.contextPath###/face/web/mxgraph/grapheditor/sanitizer/sanitizer.min.js"></script>
   <script type="text/javascript" src="###config.contextPath###/face/web/mxgraph/mxClient.min.js"></script>
   <script type="text/javascript" src="###config.contextPath###/face/web/mxgraph/grapheditor/js/Graph.js"></script>
   <script type="text/javascript" src="###config.contextPath###/face/web/mxgraph/grapheditor/js/Shapes.js"></script>
+  <script type="text/javascript" src="###config.contextPath###/face/web/mxgraph/grapheditor/js/Extends.js"></script>
+  <script type="text/javascript" src="###config.contextPath###/face/web/mxgraph/grapheditor/js/StyleSheet.js"></script>
   
   <script type="text/javascript">
     xb.auto_filter('.tag_auto_chip_flow_diagram').each(function() {
@@ -70,14 +71,8 @@
     	var graph = new Graph(this);
     	graph.resizeContainer = false;
     	graph.setEnabled(false);
-    	//
-    	// 修正预览与设计样式的不一致
-    	//
-    	var vertexStyle = graph.stylesheet.styles.defaultVertex;
-    	vertexStyle.fillColor = '#FFFFFF';
-    	vertexStyle.strokeColor = '#000000';
-    	vertexStyle.align = 'left';
-    // 	console.log(graph.style, '1111111111111111')
+    	setuptGraphStyle(graph);
+    	
     	
     	var url = contextPath + '/app/a297dfacd7a84eab9656675f61750078/a510370fd076433dbe8eb33a885f0199/basic/load';
      	$.get(url, { id: fileid }, function(ret) {
@@ -95,6 +90,13 @@
     		codec.decode(xmlDoc.documentElement, graph.getModel());
     		graph.getModel().endUpdate();
     		graph.sizeDidChange();
+    		//
+    		// 修正图片路径错误, 或者有更好的方法 ?
+    		//
+    		thiz.find('image').each(function() {
+    		  var url = this.href.baseVal;
+    		  this.href.baseVal = url.replace('masquerade/tag/chip', 'web/mxgraph/grapheditor');
+    		});
     	};
     });
   </script>

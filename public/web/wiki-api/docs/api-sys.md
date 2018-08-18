@@ -567,11 +567,6 @@ sys.format("hello {0}", ['xBoson'])
 返回加密后的密码, password 已经 md5 处理.
 
 
-## Bytes sys.joinBytes(Bytes[])
-
-将缓冲区数组组合为单个缓冲区, [Bytes 类说明](docs/api-digest.md).
-
-
 ## sys.charAt(...), sys.indexOf(...), sys.size(...), sys.startWith(..), sys.endWith(...), sys.length(..), sys.subStringTo(..), sys.subString(..), sys.split(..), sys.contain(..), sys.toUpperCase(..), sys.toLowerCase(..), sys.replace(..), sys.trim(..), sys.trunc(..), sys.httpGet(..)
 
 这些方法不要再调用, 使用 js 原生方法替代.

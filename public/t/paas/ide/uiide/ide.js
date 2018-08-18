@@ -3,7 +3,7 @@
     // 如果历史记录功能不正确, 则修改这个配置
     var splitBasePath = 'web4node'
     var basePathOnServer = '$';
-    var enableFileType = { '':1, 'html':1, 'htm':1 };
+    var enableFileType = { '':1, 'html':1, 'htm':1, 'md':1 };
     
     
     var _domLabel = {
@@ -1357,23 +1357,23 @@
         function _paramObject(_form) {
             var _o = {};
             _form.find('input').each(function (_i, _v) {
-                var _type = $('input[name=type]:checked').closest('div').hasClass('has-warning') ? true : false;
+                //var _type = $('input[name=type]:checked').closest('div').hasClass('has-warning') ? true : false;
 
                 var _lname = $('input[name=type]:checked').val()
                 if (_lname === '文件夹') {
                     if (!$(_v).attr('role'))
                         _o[$(_v).attr('name')] = $(_v).val();
                     if ($(_v).attr('name') === 'type')
-                        _o['type'] = _type;
+                        _o['type'] = false;
                 } else {
                     var _filename = [$(_v).val(), _lname].join('.')
                     if (!$(_v).attr('role'))
                         _o[$(_v).attr('name')] = $(_v).val(); //_filename;
                     if ($(_v).attr('name') === 'type')
-                        _o['type'] = _type;
+                        _o['type'] = true;
 
                 }
-            })
+            });
             return _o;
         }
 
@@ -1409,9 +1409,8 @@
 
             var _btn = _jq.find('[name=ide_submit]');
             _btn.unbind();
+            
             _btn.click(function () {
-
-
                 var _tname = $('.modal-body').find('[type=input]').val();
                 var _lname = $('input[name=type]:checked').val();
                 var _filename;
@@ -1589,7 +1588,7 @@
                     filenm: _node.name //_tname
                 }
                 var _head = $('.modal-title');
-                _head.html('修改');
+                _head.html('修改文件名');
                 var _jq = $('.modal-body');
                 _jq.empty();
                 _mod._form($('.modal-body'), _domLabel.edit, _object);
@@ -1603,7 +1602,7 @@
         function _addModal(_node) {
             zy.net.loadHTML.call(this, "ide/uiide/ide_edit.html", _mod, function () {
                 var _head = $('.modal-title');
-                _head.html('新增');
+                _head.html('创建新文件');
                 $('.modal').modal('show');
                 _initEvent(_mod.find('form'), _node, false);
             });

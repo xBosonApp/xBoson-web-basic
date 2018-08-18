@@ -11,35 +11,38 @@
         <form onsubmit="return false;" class="smart-form">
           <fieldset>
             <div class="row">
-              <section class="col col-6">
-                <label class="label">名称</label>
+              <section class="col col-10">
+                <label class="label">文件名</label>
                 <label class="input">
                   <input  type="input" name="filenm" placeholder="名称"><b class="tooltip tooltip-bottom-right">名称为必填项</b>
-               </label>
-               <label class="label" style='padding-top:10px'>添加其他类型文件请使用上传功能</label>
+                </label>
+                <label class="label" style='padding-top:10px'>添加其他类型文件请使用上传功能</label>
               </section>
-              <section class="col col-6">
-          <div class="col col-6">
-            <label class="label">文件夹</label>
-            <label class="input ">
-              <div class="inline-group">
-                <label class="radio">文件夹<input type="radio" checked="checked" name="type" value="文件夹"><i></i></label>
-              </div>
-            </label>
+            </div>
+            <div class="row">
+              <section class="col col-10">
+                <div class="col col-6">
+                  <label class="label">文件夹</label>
+                  <label class="input ">
+                    <div class="inline-group">
+                      <label class="radio">文件夹<input type="radio" checked="checked" name="type" value="文件夹"><i></i></label>
+                    </div>
+                  </label>
+                </div>
+                <div class="col col-6 ">
+                  <label class="label has-warning">文件</label>
+                  <label class="input ">
+                    <div class="inline-group has-warning file-type-list">
+                      <div style='display:flow-root'><label class="radio">JavaScript 脚本<input type="radio" checked="checked" name="type" value="js"><i></i></label></div>
+                      <div style='display:flow-root'><label class="radio">css 样式表<input type="radio" checked="checked"  name="type" value="css"><i></i></label></div>
+                      <div style='display:flow-root'><label class="radio">Markdown 文档<input type="radio" checked="checked"  name="type" value="md"><i></i></label></div>
+                      <div style='display:flow-root'><label class="radio">HTML 页面<input type="radio" checked="checked"  name="type" value="html"><i></i></label></div>
+                      <div style='display:flow-root'><label class="radio">HTML 模板<input type="radio" checked="checked"  name="type" value="htm"><i></i></label></div>
+                    </div>
+                  </label>
+                </div>
+              </section>
           </div>
-          <div class="col col-6 ">
-            <label class="label has-warning">文件</label>
-            <label class="input ">
-              <div class="inline-group has-warning">
-            <label class="radio">js<input type="radio" checked="checked" name="type" value="js"><i></i></label>
-            <label class="radio">htm<input type="radio" checked="checked"  name="type" value="htm"><i></i></label>
-            <label class="radio">html<input type="radio" checked="checked"  name="type" value="html"><i></i></label>
-            <label class="radio">css<input type="radio" checked="checked"  name="type" value="css"><i></i></label>
-              </div>
-            </label>
-          </div>
-        </section>
-        </div>
         </fieldset>
           <footer><button class="btn btn-default" data-dismiss="modal">取消</button><button class="btn btn-primary" name="ide_submit">确定</button></footer>
         </form>

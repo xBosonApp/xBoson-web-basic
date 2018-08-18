@@ -39,7 +39,7 @@ var bc = require('chain');
 # class Chain
 
 对链进行操作.
-[Bytes 类说明](docs/api-digest.md)
+[Bytes 类说明](docs/api-bytes.md)
 
 ## Bytes genesisKey()
 

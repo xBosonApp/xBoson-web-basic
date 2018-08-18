@@ -5,6 +5,7 @@
 
 ### 8 月
 
+* 18. 更新 sys, digest, chain 文档, 增加 api-bytes 文档.
 * 17. 更新 sys, mongodb, digest 文档, 增加 api-crypto 文档.
 * 16. 更新 mongodb 文档.
 * 14. 更新 witness 文档.
