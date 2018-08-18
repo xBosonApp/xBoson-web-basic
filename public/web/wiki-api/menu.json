@@ -44,5 +44,20 @@
     { "name": "Digest", "file": "docs/api-digest.md" },
     { "name": "Blockchain", "file": "docs/api-chain.md" },
     { "name": "Crypto", "file": "docs/api-crypto.md" }
+  ]},
+  
+  { "name": "前端模板", "basepath":"ui-docs", "file": "basic.md", "sub": [
+    { "name": "chip", "file": "chip.md" },
+    { "name": "form", "file": "form.md" },
+    { "name": "js", "file": "js.md" },
+    { "name": "layout", "file": "layout.md" },
+    { "name": "moda", "file": "moda.md" },
+    { "name": "mp", "file": "mp.md" },
+    { "name": "table", "file": "table.md" },
+    { "name": "ui", "file": "ui.md" },
+    { "name": "vali", "file": "vali.md" },
+    { "name": "web", "file": "web.md" },
+    { "name": "常用模板", "file": "usetempate.md" },
+    { "name": "高级开发指南", "file": "adv.md" }
   ]}
 ]

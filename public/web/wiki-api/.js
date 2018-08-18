@@ -32,10 +32,15 @@ function load_menu() {
   $.get('menu.json', function(menu_data) {
     console.log('load', menu_data)
     menu.html("");
-    menu_data.forEach(function(d) { build_menu(d, null, 0) });
+    menu_data.forEach(function(d) { build_menu(d, null, 0, d.basepath) });
   });
 
-  function build_menu(data, parent, level) {
+  function build_menu(data, parent, level, basepath) {
+      console.log(data.file, basepath, '-------------')
+    if (basepath && data.file) {
+      data.file = basepath +'/'+ data.file;
+    }
+    
     var m = $("<a class='menu_item'>");
     if (level) {
       m.css('padding-left', level * 20);
@@ -61,7 +66,7 @@ function load_menu() {
 
     if (data.sub && data.sub.length > 0) {
       data.sub.forEach(function(d) {
-        build_menu(d, m, level+1);
+        build_menu(d, m, level+1, basepath);
       });
     }
 
