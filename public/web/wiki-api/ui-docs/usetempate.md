@@ -47,7 +47,7 @@
 ```html
 <moda:frame title='修改[TITLE]]'>
     <ui:form id='create' class='update_form'>
-      <!-- 读取表格 datatable0 当前行的数据, 需要与 mp:loaddata 配合 -->
+      <!-- 读取表格 datatable0 当前行的数据并绑定到 form 上, 需要与 mp:loaddata 配合 -->
       <mp:loaddata id='datatable0'/>
       <!-- 属性字段 -->
       <fieldset>
@@ -117,6 +117,12 @@
   </ui:form>
   <!-- 当表格行被鼠标选中, 保存当前选中行的数据 -->
   <mp:savedata type='SELECT_TABLE_ROW' id='datatable0'/>
+  <script>
+    jQuery(function($) {
+      // 该方法可以读取由 mp:savedata 保存的数据, 注意 id 要一致.
+      var data = xb.load_data('datatable0');
+    });
+  </script>
   <!-- 修改 app/mod/api 为对应查询表格数据的接口 -->
   <table:api app='9da3e4550d1f42d3979ae30931d498c9' mod='nsdata' 
       api='cri_list' form='#listform' id='datatable0'>
