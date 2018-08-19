@@ -6,12 +6,16 @@
       
       <fieldset>
         <form:text name='name' label='区块链名称' tooltip='' width='6'>
-          <vali:string min='1' max='45'/>
+          <form:readonly/>
         </form:text>
         <form:text name='chain_id' label='区块链ID' tooltip='' width='6'>
-          <vali:string min='1' max='50'/>
+          <form:readonly/>
+        </form:text>
+        <form:text name='rolenm' label='授权角色' tooltip='' width='6'>
+          <form:readonly/>
         </form:text>
         <form:textarea name='consensus' label='共识表达式' width='10' rows='10'>
+          <form:readonly/>
         </form:textarea>
       </fieldset>
       

@@ -1,0 +1,14 @@
+<a class='tag_auto_chip_wiki ###class###' href='#' id='###id###' target="_blank"
+   data-contextpath='###config.contextPath###' data-file='###file###'><pit/></a>
+<once id='tag_auto_chip_wiki.js'>
+  <js:xboson/>
+  <script>
+    xb.auto_filter('.tag_auto_chip_wiki').each(function() {
+      var a = $(this);
+      var file = a.data('file');
+      var href = a.data('contextpath') + '/face/web/wiki-api/index.html';
+      sessionStorage.wikiPage = file;
+      a.attr('href', href);
+    });
+  </script>
+</once>

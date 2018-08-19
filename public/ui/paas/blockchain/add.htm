@@ -5,10 +5,16 @@
         <form:text name='name' label='区块链名称' tooltip='最少1字符' width='10'>
           <vali:string min='1' max='45'/>
         </form:text>
-        <form:text name='roleid' label='授权角色' tooltip='留空则任何人都可打开' width='10'>
+        <form:api_select2 name='roleid' label='授权角色' tooltip='留空则任何人都可打开' width='10'
+            app='auth' mod='role' api='roles'
+            text_field='rolenm' id_field='roleid'>
           <vali:string min='0' max='45'/>
-        </form:text>
-        <form:textarea name='consensus' label='共识表达式' width='10' rows='10'></form:textarea>
+        </form:api_select2>
+        <form:textarea name='consensus' label='共识表达式' tooltip='表达式参考 Wiki 文档' width='10' rows='10'>
+          <div style='text-align: right'>
+            <chip:wiki file='docs/witness.md'>如何写共识表达式 ?</chip:wiki>
+          </div>
+        </form:textarea>
       </fieldset>
       
       <footer>

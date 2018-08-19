@@ -17,4 +17,24 @@
 ```
 
 
+## `<chip:wiki>`
+
+生成打开 wiki 文档的链接按钮, 标签体是显示的文字
+
+必填参数:
+
+* file : wiki 文件路径以 `/WEB/wiki-api/` 为根路径开始.
+
+可选参数:
+
+* id
+* class
+
+```html
+<chip:wiki file='docs/witness.md'>共识表达式</chip:wiki>
+```
+
+
 ## `<chip:dialog>`
+
+无

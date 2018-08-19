@@ -36,7 +36,7 @@ function load_menu() {
   });
 
   function build_menu(data, parent, level, basepath) {
-      console.log(data.file, basepath, '-------------')
+    // console.log(data.file, basepath, '-------------')
     if (basepath && data.file) {
       data.file = basepath +'/'+ data.file;
     }
