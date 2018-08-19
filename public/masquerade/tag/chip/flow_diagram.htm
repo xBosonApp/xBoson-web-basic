@@ -73,8 +73,8 @@
     	graph.setEnabled(false);
     	setuptGraphStyle(graph);
     	
+    	var url = contextPath +'/openapp/a297dfacd7a84eab9656675f61750078/a510370fd076433dbe8eb33a885f0199/basic/load';
     	
-    	var url = contextPath + '/app/a297dfacd7a84eab9656675f61750078/a510370fd076433dbe8eb33a885f0199/basic/load';
      	$.get(url, { id: fileid }, function(ret) {
      	  if (ret.code == 0) {
      	    show(ret.data);
