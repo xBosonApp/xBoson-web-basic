@@ -1,4 +1,4 @@
-# js 组件
+# 脚本组件
 
 这些组件没有显示, 提供一些常用的 js 功能.
 
@@ -51,8 +51,50 @@
 
 ## `<js:jquery>`
 
-在页面上加载 jquery 脚本, 版本为: jquery-2.0.3.min
+在页面上加载 jquery 脚本, 版本为: jquery-2.0.3.min.  
+[中文参考](http://hemin.cn/jq/), [官方文档](https://api.jquery.com/)
 
 ```html
 <js:jquery/>
+```
+
+
+## `<js:canvg>`
+
+加载脚本, 用于将 svg 文本渲染到 canvas 上, [参考](https://github.com/canvg/canvg).
+
+```html
+<js:canvg/>
+```
+
+
+## `<js:html2canvas>`
+
+加载脚本, 用于将页面渲染到 canvas 上, [参考](https://github.com/niklasvh/html2canvas)
+
+```html
+<js:html2canvas/>
+<js:canvg/>
+<script>
+// 设定渲染目标
+var render_target = document.body;
+var options = {
+  useCORS: false,
+  allowTaint: true,
+  ignoreClear: true, 
+  ignoreDimensions: true,
+  ignoreMouse: true,
+};
+// 将页面和页面中的 svg 都渲染到 canvas 上, (可能会有错误)
+html2canvas(render_target, options).then(function(canvas) {
+  $(render_target).find("svg").each(function() {
+    canvg(canvas, this.outerHTML, options);
+  });
+  // 下载
+  var a = document.createElement('a');
+  a.href = canvas.toDataURL('image/png');
+  a.download = id.replace('/', '-') + '.png';
+  a.click();
+});
+</script>
 ```

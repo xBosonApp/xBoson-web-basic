@@ -6,13 +6,39 @@
       <form:text id='mas' label='模板代码' tooltip='嵌入到 htm 模板代码中' width='10'></form:text>
         
       <iframe/>
+      <js:canvg/> 
+      <js:html2canvas/>
       <script>
       (function($) {
         var url = '/xboson/face/masquerade/tag/chip/flow_diagram.htm?fileid=';
         var root = $('#view_flow_diagram');
         var id = xb.load_data('datatable0')._id;
         var frame = root.find("iframe");
+        var to_image = root.find('#to_image');
         xb.iframeMax(frame);
+        
+        var options = {
+          useCORS: false,
+          allowTaint: true,
+          ignoreClear: true, 
+          ignoreDimensions: true,
+          ignoreMouse: true,
+        };
+        
+        to_image.click(function() {
+          var ibody = frame[0].contentWindow.document.body;
+          
+          html2canvas(ibody, options).then(function(canvas) {
+            $(ibody).find("svg").each(function() {
+              canvg(canvas, this.outerHTML, options);
+            });
+            // document.body.appendChild(canvas)
+            var a = document.createElement('a');
+            a.href = canvas.toDataURL('image/png');
+            a.download = id.replace('/', '-') + '.png';
+            a.click();
+          });
+        });
         
         xb.waitDisplay(frame, function() {
           frame.attr("src", url + id);
@@ -26,6 +52,8 @@
   
     <footer>
       <moda:cancel/>
+      <moda:button id='to_image' text='另存为图片'/>
+      <span>*部分组件无法正确转换为图片</span>
     </footer>
   </ui:form>
 </moda:frame>

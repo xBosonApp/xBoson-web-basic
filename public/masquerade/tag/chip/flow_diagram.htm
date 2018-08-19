@@ -57,7 +57,6 @@
   <script type="text/javascript" src="###config.contextPath###/face/web/mxgraph/grapheditor/js/Shapes.js"></script>
   <script type="text/javascript" src="###config.contextPath###/face/web/mxgraph/grapheditor/js/Extends.js"></script>
   <script type="text/javascript" src="###config.contextPath###/face/web/mxgraph/grapheditor/js/StyleSheet.js"></script>
-  
   <script type="text/javascript">
     xb.auto_filter('.tag_auto_chip_flow_diagram').each(function() {
       var thiz = $(this);
@@ -97,6 +96,12 @@
     		  var url = this.href.baseVal;
     		  this.href.baseVal = url.replace('masquerade/tag/chip', 'web/mxgraph/grapheditor');
     		});
+    		//
+    		// 页面绘制结束, 向父窗口发送全局消息.
+    		//
+    		if (window.parent) {
+    		  window.parent.postMessage({ type : 'diagramLoaded' }, '*');
+    		}
     	};
     });
   </script>
