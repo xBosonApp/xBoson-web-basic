@@ -5,7 +5,7 @@
 
 # API
 
-下文中的 `OBJ` 可以替换为 `sys`, `crypto`, `digest` 等模块, 
+下文中的 `OBJ` 可以替换为 `sys`, `crypto`, `digest`, `chain` 等模块, 
 因为这些模块都实现了下面的方法.
 
 

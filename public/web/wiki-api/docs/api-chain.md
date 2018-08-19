@@ -14,10 +14,14 @@ var bc = require('chain');
 创建一个链
 
 
-## Chain bc.open(string: chainID)
+## Chain bc.open(string: expression)
 
 打开一个链进行操作, 链首先要在区块链管理中创建,
 如果授权许可错误会抛出异常. 返回打开的链对象.
+
+expression: 该表达式有以下用法:   
+  1. 可以用 id 打开, 参数使用 'id://ID的值' 格式;  
+  2. 用名称打开, 参数使用 'name://名称' 格式.  
 
 
 ## KeyPair bc.generateKeyPair()
@@ -105,6 +109,12 @@ var bc = require('chain');
 ## type : int
 
 块类型
+
+1. 创世区块 
+2. 数据块
+3. 加密数据块
+4. 链码块
+5. 消息块
 
 ## chaincodeKey : Bytes
 

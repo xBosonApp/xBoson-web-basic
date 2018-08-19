@@ -216,6 +216,8 @@ function NewIDE(roleid) {
   // Add by J.ym 17.12.19
   // ide 窗口固定与浏览器窗口同步大小
   //
+  var COMMENT_HEIGHT = 105;
+  var CUT_HEIGHT = 220+COMMENT_HEIGHT;
   var _height;
   var _fix_height_now;
   function bind_fix_size_event() {
@@ -231,9 +233,9 @@ function NewIDE(roleid) {
     
     function fixsize() {
       _height = win.height();
-      _tree_code_height = _height - 220;
+      _tree_code_height = _height - CUT_HEIGHT;
       $('#maintree').css('height', _tree_code_height);
-      $('.fix_size').css('height', _tree_code_height);
+      $('.fix_size').css('height', _tree_code_height + COMMENT_HEIGHT);
     }
 
     function on_scroll() {
@@ -286,6 +288,30 @@ function NewIDE(roleid) {
     }
   };
   
+  //JYM: 注解组件
+  var DEFAULT_COMMENT_TEXT = '\n[递交到 '+ location.origin +']';
+  var jComment = _tools._label('textarea').attr('placeholder', '修改原因').val(DEFAULT_COMMENT_TEXT);
+  // 调用该方法将 jComment 与页面关联.
+  function buildComment(appendToDom) {
+    var _form = _tools._label('form').attr('onsubmit', 'return false;').addClass('smart-form');
+    var _section = _tools._label('_section')
+        .append(_tools._label('label').addClass('label').html('递交时的注解 (修改原因)'));
+    var _label = _tools._label('label').addClass('textarea has-warning')
+        .append(jComment)
+        .append(_tools._label('b')
+        .addClass('tooltip tooltip-bottom-right')
+        .html('修改原因为必填项'));
+    _section.append(_label);
+    _form.append($('<fieldset></fieldset>').append(_section));
+    appendToDom.append(_form);
+    
+    var tid = setInterval(function() {
+      if (_form.height() <= 0) return;
+      clearInterval(tid);
+      COMMENT_HEIGHT = _form.height() || 105;
+      // console.log("COMMENT_HEIGHT", COMMENT_HEIGHT, _form.height());
+    }, 100);
+  }
   
   //JYM: 字典缓存
   var __cache = {};
@@ -344,33 +370,41 @@ function NewIDE(roleid) {
     }
 
   function _dom(_id) {
+    //
+    //JYM: 修改, 不再弹出对话框, 而是将对话框显示于左下角.
+    //
     function _saveform() {
-      function _formDom(_c) {
-        var _form = _tools._label('form').attr('onsubmit', 'return false;').addClass('smart-form');
-        var _sbtn = _tools._label('button').addClass('btn btn-primary').html('确定');
-        var _cbtn = _tools._label('button').addClass('btn btn-default').attr('data-dismiss', "modal").html('取消');
-        var _section = _tools._label('_section').append(_tools._label('label').addClass('label').html('注解'));
-        var _label = _tools._label('label').addClass('textarea has-warning').append(_tools._label('textarea').attr('placeholder', '修改原因').val('测试')).append(_tools._label('b').addClass('tooltip tooltip-bottom-right').html('修改原因为必填项'));
-        _section.append(_label);
-        _form.append($('<fieldset></fieldset>').append(_section));
-        _form.append($('<footer></footer>').append(_cbtn).append(_sbtn));
-        _c.append(_form);
+      // function _formDom(_c) {
+        
+        // var _form = _tools._label('form').attr('onsubmit', 'return false;').addClass('smart-form');
+        // var _sbtn = _tools._label('button').addClass('btn btn-primary').html('确定');
+        // var _cbtn = _tools._label('button').addClass('btn btn-default').attr('data-dismiss', "modal").html('取消');
+        // var _section = _tools._label('_section').append(_tools._label('label').addClass('label').html('注解'));
+        // var _label = _tools._label('label').addClass('textarea has-warning').append(_tools._label('textarea').attr('placeholder', '修改原因').val('测试')).append(_tools._label('b').addClass('tooltip tooltip-bottom-right').html('修改原因为必填项'));
+        // _section.append(_label);
+        // _form.append($('<fieldset></fieldset>').append(_section));
+        // _form.append($('<footer></footer>').append(_cbtn).append(_sbtn));
+        // _c.append(_form);
 
-        _sbtn.unbind();
-        _sbtn.click(function() {
-          var _updatecmt = $(this).closest('form').find('textarea').val().trim();
+        // _sbtn.unbind();
+        // _sbtn.click(function() {
+          // var _updatecmt = $(this).closest('form').find('textarea').val().trim();
+          var _updatecmt = jComment.val().trim();
           if (_updatecmt === '')
             return zy.ui.msg('提示', '修改原因为必填项', 'w');
+            
           var _id = $('#zy_tabs').children('div:visible').find('pre').attr('id');
           // $('#zy_tabs').children('div:visible').find('pre').attr("style","position: absolute;width: 500px;height: 400px;");
           var _contendid = $('#zy_tabs').children('div:visible').find('div').attr('id');
           var _editor = ace.edit(_id);
           zy.setEditorExOptions(_editor);
+          
           $('#left-panel nav').bind('click', function() {
             _editor.destroy();
             _editor.container.remove();
           });
           var _apistatusbtn = $('#widget-grid').find('header .glyphicon-cloud-upload').closest('.widget-toolbar');
+          
           if (_editor && _contendid) {
             $(this).btnDisable(true);
             _tools._api({
@@ -383,23 +417,22 @@ function NewIDE(roleid) {
             }, function(msg) {
               if (msg) {
                 $(this).btnDisable(false);
-                zy.ui.msg('提示信息', 'API保存成功', 's');
+                zy.ui.msg('提示信息', msg.msg || 'API保存成功', 's');
                 $('.modal').modal('hide');
                 _apistatusbtn.trigger('show', '00');
               }
             })
-             
           }
-        })
-      }
+        // })
+      // }
 
-      zy.net.loadHTML("ide/htmlide/ide_edit.html", _mod, function() {
-        var _head = $('#ide_edit .modal-title');
-        var _jq = $('#ide_edit .modal-body');
-        _jq.empty();
-        _formDom(_jq);
-        $('#ide_edit').modal('show');
-      });
+      // zy.net.loadHTML("ide/htmlide/ide_edit.html", _mod, function() {
+      //   var _head = $('#ide_edit .modal-title');
+      //   var _jq = $('#ide_edit .modal-body');
+      //   _jq.empty();
+      //   _formDom(_jq);
+      //   $('#ide_edit').modal('show');
+      // });
     }
 
     function _header(_c) {
@@ -614,9 +647,7 @@ function NewIDE(roleid) {
               },_t,null,function(msg){
                 // zy.log(msg);
               });
-              zy.net.loadHTML('ide/htmlide/ide_run.html',_mod,function(){
-                RunApi(node,help_info);
-              })
+              runApiTest(node, help_info);
             })
           }
         })
@@ -665,6 +696,8 @@ function NewIDE(roleid) {
       _innerHeader(_tree);
       var _ul = _tools._label('ul').addClass('ztree').attr('id', 'maintree');
       _tree.append(_tools._label('div').attr('style','overflow: auto;').addClass('row').css('margin-top', '-15px').append(_ul));
+      buildComment(_tree);//JYM
+      
       return {
         container : _tree,
         ul : _ul
@@ -885,7 +918,7 @@ function NewIDE(roleid) {
           }, function(msg) {
             if (msg) {
               _btn.btnDisable(false);
-              zy.ui.msg('提示信息', 'API保存成功', 's');
+              zy.ui.msg('提示信息', msg.msg || 'API保存成功', 's');
             }
           })
         }
@@ -1022,6 +1055,20 @@ function NewIDE(roleid) {
     var _jq = $('#' + _id);
     var _mod = _tools._label('div');
     _mod._form = _form;
+    
+    //
+    // JYM: 缓存api测试页, 使之打开更快
+    //
+    var ide_run_html_cache;
+    zy.net.loadHTML('ide/htmlide/ide_run.html',_mod,function(r){
+      ide_run_html_cache = r;
+    });
+    // 打开测试页
+    function runApiTest(node, help_info) {
+      _mod.html(ide_run_html_cache);
+      RunApi(node, help_info);
+    }
+    
     var _row = _tools._label('div').addClass('row');
     var _ideC = _tools._label('div').addClass('col-xs-12 col-sm-9').css({
       // 'height' : '460px'

@@ -1,4 +1,4 @@
-  <link rel="stylesheet" type="text/css" href="projectmanagement/misc/core1.css" />
+<link rel="stylesheet" type="text/css" href="projectmanagement/misc/core1.css" />
   <link rel="stylesheet" type="text/css" href="projectmanagement/misc/core.css" />
   <script type="text/javascript" src="projectmanagement/misc/core.js"></script>
   <!-- jReject -->
@@ -6,7 +6,7 @@
   <script type="text/javascript" src="projectmanagement/misc/jquery.reject.js"></script>
   <script type="text/javascript" src="projectmanagement/misc/jquery.reject.360.js"></script>
 
- <div class="modal fade" id="ide_run" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+ <div class="modal" id="ide_run" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -141,7 +141,8 @@
 		// formatter
 		var formatter = new jsoneditor.JSONFormatter(modal.find('#jsonformatter').get(0), {});
 		
-		window.ee = editor;
+		// window.ee = editor;
+		modal.modal('show');
     
     function newlabel(row) {
       var row = row || {key:'',desc:'',value:''};
@@ -506,7 +507,7 @@
           }
           
           Event();
-          modal.modal('show');
+          // modal.modal('show');
           url.trigger('_change');
           url.trigger('_param');
         })
