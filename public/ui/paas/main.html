@@ -196,6 +196,18 @@
       
       <div id="setup_debug" class="btn-header transparent pull-right">
         <span class="btn-group" role="group">
+          <a href="javascript:void(0);" style="opacity: 0.3;" 
+             class="btn btn-default" data-toggle="dropdown">
+            <i class="fa fa-camera"></i>
+          </a>
+          <ul class="dropdown-menu" role="menu">
+              <li><a href="#" onclick="zy.print_screen('body')">整页截屏</a></li>
+              <li><a href="#" onclick="zy.print_screen('#content')">内容页截屏</a></li>
+              <li><a href="#">[实验阶段]</a></li>
+              <li class="divider"></li>
+              <li><a href="#">取消</a></li>
+          </ul>
+          
           <a href="javascript:void(0);" style="opacity: 0.3;" class="btn btn-default"
              onclick="zy.setup_debug(); $(this).hide();" title="开启调试模式">
             <i class="fa fa-bug"></i>

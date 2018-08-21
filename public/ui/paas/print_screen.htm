@@ -1,0 +1,99 @@
+<!-- Create By xBoson System -->
+<div class="modal fade" id="" tabindex="-1" role="dialog" 
+     aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" 
+     data-event-type='CLOSED' data-width='70%'>
+  <div class="modal-dialog">
+  <div class="modal-content">
+  <div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+  &times;
+  </button>
+  <h4 class="modal-title">页面截图</h4>
+  </div>
+  <div class="modal-body">
+        
+  <ui:form id='view_print_screen' class='update_form'>
+    <fieldset>
+      <form:checkbox name='aways_save' label='总是保存到文件' width='3'/>
+      <form:text name='file_name' label='文件名' width='8'></form:text>
+      <form:br/>
+      <layout:frsection width='10' label='预览'>
+        <img id='save_canvas' style='width: 100%'/>
+      </layout:frsection>
+    </fieldset>
+  
+    <footer>
+      <moda:cancel/>
+      <moda:button id='to_image' text='另存为图片'/>
+      <span>*部分组件无法正确转换为图片</span>
+    </footer>
+    
+    <js:canvg/> 
+    <js:html2canvas/>
+    <js:xboson/>
+    <script>
+      jQuery(function() {
+        var SKEY = "print_screen_aways_save_bool";
+        var root = $('#view_print_screen');
+        var moda = root.closest('.modal');
+        var save_canvas = root.find('#save_canvas');
+        var filename = root.find('[name=file_name]');
+        var aways_save = root.find('[name=aways_save]');
+        var to_image = root.find('#to_image');
+        var download = document.createElement('a');
+        var canvas;
+        
+        moda.find('.modal-dialog').css('width', '70%');
+        moda.on('hidden.bs.modal', function() {
+          moda.parent().remove();
+          window.do_print_screen = null;
+        });
+        
+        filename.val(zy.tool.Date.dateTime2str(new Date(), 'yyyy-MM-dd hh.mm.ss') +'平台截图');
+        to_image.click(savefile);
+        
+        aways_save.prop("checked", localStorage[SKEY] == 'true');
+        aways_save.change(function() {
+          localStorage[SKEY] = aways_save.prop("checked");
+        });
+        
+        if (aways_save.prop("checked")) {
+          moda.on('shown.bs.modal', savefile);
+        }
+        
+        function savefile() {
+          download.href = canvas.toDataURL('image/png');
+          download.download = filename.val() + '.png';
+          download.click();
+        }
+        
+        window.do_print_screen = function(selector) {
+          var ibody = $(selector);
+          var options = {
+            useCORS: false,
+            allowTaint: true,
+            ignoreClear: true, 
+            ignoreDimensions: true,
+            ignoreMouse: true,
+          };
+          
+          html2canvas(ibody[0], options).then(function(_canvas) {
+            ibody.find("svg").each(function() {
+              canvg(_canvas, this.outerHTML, options);
+            });
+            canvas = _canvas;
+            moda.modal('show');
+            save_canvas.attr('src', canvas.toDataURL('image/png'));
+          });
+        };
+      });
+    </script>
+  </ui:form>
+    
+  </div>
+  </div>
+  <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

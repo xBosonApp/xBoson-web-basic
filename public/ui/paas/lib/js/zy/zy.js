@@ -212,6 +212,21 @@ zy.fix_preview_url = function(url) {
 };
 
 
+// 截屏功能
+zy.print_screen = function(selector) {
+  var frame = $('.print_screen_container');
+  if (frame.size() < 1) {
+    frame = $("<div class='moda_frame print_screen_container'/>");
+    frame.appendTo(document.body);
+  }
+  frame.html('');
+  
+  zy.net.loadHTML('print_screen.htm', frame, function(d, e, t) {
+    window.do_print_screen(selector);
+  });
+};
+
+
 (function() {
   //
   // 刷新后还原 debug 模式
