@@ -1,0 +1,55 @@
+/* Create By xBoson System */
+window, body {
+  margin: 0; padding: 0; border: 0;
+}
+a {
+  text-decoration:none;
+}
+h1 {
+  font-size: 60px;
+}
+
+.top_bar {
+  background-color: #444; height: 40px;  overflow: hidden;
+}
+.main_menu, .main_menu * {
+  background-color: #2f2f2e; color: #EEE; height: 40px;
+  font-family: "SF Pro SC","HanHei SC","SF Pro Text","Myriad Set Pro","SF Pro Icons","PingFang SC","Helvetica Neue","Helvetica","Arial",sans-serif;
+  font-size: 12px;
+}
+.main_menu {
+  padding: 0 50px; text-align: center; overflow: hidden;
+}
+.main_menu a {
+  display: inline-block; line-height: 40px; transition: all 0.3s;
+}
+.main_menu a:hover {
+  color: #c77; transition: all 0.3s;
+}
+.main_menu .list {
+  padding: 0; margin: 0;
+}
+.main_menu .list li {
+  display: inline-block; padding: 0px 30px 0 30px;
+}
+.main_menu .vlist li {
+  padding: 0 30px; list-style: none;
+}
+.main_menu .sm_screen {
+  display: none; padding: 0 30px;
+}
+.row_one {
+  border-bottom: 12px solid #fff; height: 692px; overflow: hidden;
+}
+.fadein {
+  display: none;
+}
+
+@media screen and (max-width: 900px) {
+  .main_menu .sm_screen {
+    display: inline-block;
+  }
+  .main_menu .list {
+    display: none;
+  }
+}
