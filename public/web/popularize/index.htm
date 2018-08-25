@@ -24,19 +24,26 @@
       .rtxt {
         color: red;
       }
+      .font100 {
+        font-size: 100px;
+      }
+      
       @media screen and (max-width: 900px) {
         .xboson {
           font-size: 90px;
         }
         .show_boson span {
-          font-size: 12px; font-weight: normal;
+          font-size: 14px; font-weight: normal;
+        }
+        .font100 {
+          font-size: 50px;
         }
       }
     </style>
     
     <section class='row_one show_boson'>
       <div class='xboson'>x<b class='rtxt'>B</b>oson</div>
-      <div class='fadein'><span>现代开发平台</span></div>
+      <div class='fadein'><span>现代软件平台</span></div>
       <div class='fadein'><span>花更少的代价, 获得惊讶的成果</span></div>
       <div class='fadein'><span>让数据自由流动</span></div>
       <div class='fadein'><span>更通用, 更简单, 更统一</span></div>
@@ -121,33 +128,216 @@
       </div>
     </section>
     
-    <section class='row_one'>
-      <div style='height: 346px' class='blocks'>
-        <div style='width: 350px; overflow: hidden; text-align: right;'>
+    <style>
+      .cost_of_production li {
+        margin: 16px 30px;
+      }
+      .cost_of_production .a {
+        text-align: right; padding-right: 50px;
+      }
+      .cost_of_production .b {
+        padding-top: 100px;
+      }
+      .cost_of_production .c {
+        background-color: #eee; flex:4; padding-left: 100px;
+      }
+      .sm-xboson {
+        text-align: right; padding-top: 10%; padding-right: 40px;
+      }
+      .cost_of_production h3 {
+        font-size: 35px; margin-bottom: 60px;
+      }
+      
+      @media screen and (max-width: 900px) {
+        .cost_of_production .a {
+          display: none;
+        }
+        .cost_of_production .c {
+          height: 100%; padding-left: 40px
+        }
+        .cost_of_production li {
+          margin: 10px 10px;
+        }
+      }
+    </style>
+    <section class='row_one cost_of_production'>
+      <div style='height: 100%' class='blocks'>
+        <div style='width: 350px; overflow: hidden;' class='a b'>
           <!--<img src='comm/timg.jpg' style='width: 100%'/>-->
-          <b style='font-size: 100px;'>50%</b>
+          <b class='font100'>50%</b>
         </div>
-        <div style='background-color: #999; flex:1;'></div>
-        <div style='background-color: #eee; flex:4; padding: 20px'>
+        <div style='background-color: #999; flex:1;' class='font100 a b'>￥</div>
+        <div class='b c'>
           <h3>业务瞬息万变, 如何控制研发成本 ?</h3>
           <ul>
             <li>迅速组织人员, 平台上一致的开发流程使人员流动性增强, 有效提升人员利用率.</li>
             <li>没有高深的理论, 没有复杂的框架, 即使是新手也能迅速上手, 人力成本大为降低.</li>
             <li>全面的管理流程, 使每一个步骤都有严格的检验, 有效降低 BUG 数量.</li>
             <li>完整的跟踪修改记录和日志, 为意外事件做好预备措施, 降低企业损失.</li>
-            <li>线上服务, 随时开发新业务, 随时变更已有业务, 加快相应速度, 提升企业口碑.</li>
-            <li>经过了时间的检验, 比传统项目开发成本降低 50% 以上.</li>
+            <li>线上服务, 随时开发新业务, 随时变更已有业务, 加快响应速度, 提升企业口碑.</li>
+            <li>无门槛引进新技术, 可立即与已有业务集成, 无任何研发投入.</li>
+            <li>经过了时间的检验, 比传统项目开发成本<b>降低 50% 以上</b>.</li>
           </ul>
+          <div class='sm-xboson'>x<b class='rtxt'>B</b>oson</div>
         </div>
       </div>
-      <div style='height: 346px; background-color: #fff'>
-        <center><h1 style='margin:0; line-height: 300px' class='catch'>抓住现在, 就是抓住未来 !</h1></center>
+      <!--<div style='height: 346px; background-color: #fff'>-->
+      <!--  <center><h1 style='margin:0; line-height: 300px' class='catch'>抓住现在, 就是抓住未来 !</h1></center>-->
+      <!--</div>-->
+    </section>
+    
+    <style>
+      .info {
+      }
+      .info div, .info h1 {
+        text-align: center; padding: 10px;
+      }
+      .info a {
+        margin-right: 30px;
+      }
+      .right {
+        text-align: right !important;
+      }
+      .top-mid {
+        padding-top: 100px !important;
+      }
+      .white-txt {
+        color: #eee;
+      }
+      
+      @media screen and (max-width: 900px) {
+        .right {
+          text-align: center !important;
+        }
+        .top-mid {
+          padding-top: 20px !important;
+        }
+        img {
+          width: 80%; height: auto;
+        }
+      }
+    </style>
+    <section class='row_one info' style='background-color: #fff; border-top: 9px solid #6060ab;'>
+      <h1>企业大数据</h1>
+      <div>大数据描述了一个整体信息管理战略，其中包含并集成了众多新的数据、数据管理以及传统数据类型。</div>
+      <div><a href='#'>阅读详细内容 ➤</a></div>
+      
+      <div class='row_two'>
+        <article class='right'>
+          <img src='comm/b1.png'/>
+        </article>
+        <article class='top-mid'>
+          我们的世界越来越依赖数据。 <br/>
+          您的组织制定怎样的数据战略和方法（包括如何选择大数据技术和云技术）<br/>
+          将对您在未来的竞争力起到关键作用。
+          
+          <ul>
+            <li>利用云端大数据的优势</li>
+            <li>将可扩展性、可靠性和弹性扩展到整个环境</li>
+            <li>xBoson 提供更高的性价比</li>
+            <li>在大数据和云时代保护现有投资和技能</li>
+          </ul>
+        </article>
       </div>
     </section>
     
-    <section class='row_one' style='background-color: #fff9dc'>
-      (每个模块的简介)
+    <section class='row_one info' style='background-color: #eee'>
+      <h1>微服务</h1>
+      <div>微服务不仅是灵活的产品特性, 更是敏捷的开发过程, 而脚本在微服务开发上可大展身手.</div>
+      <div>
+        <a href='#'>阅读详细内容 ➤</a>
+        <a href='https://www.ibm.com/developerworks/cn/cloud/library/cl-microservices-in-action-part-1/' target='_blank'>什么是微服务 ➤</a>
+      </div>
+      
+      <div class='row_two'>
+        <article class='right'><img src='comm/wfw.png' width='350'/></article>
+        <article class='top-mid'>
+          <table>
+            <thead>
+              <th>传统应用</th>
+              <th style='font-size: 40px; padding-right: 30px'>VS</th>
+              <th>微服务应用</th>
+            </thead>
+            <tbody>
+              <tr>
+                <td>庞大的应用程序代码库</td>
+                <td></td>
+                <td>无代码库或很少</td>
+              </tr>
+              <tr>
+                <td>不频繁的更新</td>
+                <td></td>
+                <td>随时更新</td>
+              </tr>
+              <tr>
+                <td>难以扩展</td>
+                <td></td>
+                <td>随时扩展新的 API</td>
+              </tr>
+              <tr>
+                <td>依赖单一类型的技术</td>
+                <td></td>
+                <td>可在 B/S, C/S, 移动端无缝迁移</td>
+              </tr>
+            </tbody>
+          </table>
+        </article>
+      </div>
     </section>
+    
+    <style>
+      .blockchain a {
+        color: #8baaf3;
+      }
+    </style>
+    <section class='row_one info blockchain white-txt' style='background-color: #333;'>
+      <h1>区块链</h1>
+      <div>一个区块链网络的核心是一个分布式账本，在这个账本中记录了网络中发生的所有交易信息。</div>
+      <div><a href='#'>阅读详细内容 ➤</a>
+      </div>
+      
+      <div class='row_two'>
+        <article class='right'><img src='comm/bc.png' height='360'/></article>
+        <article class='top-mid'>
+          在区块链网络中，每一个参与者都保有一份账本的副本。<br/>
+          在区块链网络中，不仅仅是账本信息会被共享，<br/>
+          更新账本的流程也是共享的。<br/><br/>
+          不同于目前的系统——参与者使用私有的程序对私有的账本进行更新，<br/>
+          而区块链系统使用共享的程序对共享的账本进行更新。<br/>
+        </article>
+      </div>
+    </section>
+    
+    <section class='row_one info' style='background-color: #f9f9f9'>
+      <h1>线上开发</h1>
+      <div>
+        将平台接入互联网, 任何时间任何地点, 对业务进行修改, 一套测试方法, 一套审核机制.<br/>
+        微服务编码 / 区块链链码 / 前端 HTML5 开发 / 移动端画面开发 <br/>
+        开发者 / 设计者 / 审核者 / 测试者 / 管理者 协作平台
+      </div>
+      <div><a href='#'>阅读详细内容 ➤</a>
+      </div>
+      <div class='top-mid'>
+        <img src='comm/ide.jpg'/>
+      </div>
+    </section>
+    
+    <section class='row_one info white-txt' style='background-color: #1b729d'>
+      <div class='row_two' style='padding-top: 40px'>
+        <article class='right' style='overflow: hidden;'>
+          <img src='comm/diag.jpg' height='100%'/></article>
+        <article>
+          <h1 style='text-align: left'>在线作图，实时协作</h1>
+          <ul>
+            <li>支持流程图、思维导图、原型图、UML、网络拓扑图等</li>
+            <li>无需下载和更新，打开浏览器就可以随时随地的发挥创意，规划工作.</li>
+            <li>您可以把作品分享给团队成员或好友，无论何时何地大家都可以对作品进行编辑、阅读和评论</li>
+            <li>我们尽可能的将有价值的知识进行梳理，传递到您的眼前</li>
+            <li>支持 Windows, Mac, Linux </li>
+          </ul>
+        </article> 
+    </section>
+      
     
     <include src='./_footer.htm'/>
   </body>

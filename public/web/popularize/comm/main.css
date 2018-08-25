@@ -44,6 +44,12 @@ h1 {
 .fadein {
   display: none;
 }
+.row_two {
+  display: flex;
+}
+.row_two article {
+  flex: 1; text-align: left; padding: 40px;
+}
 
 @media screen and (max-width: 900px) {
   .main_menu .sm_screen {
@@ -51,5 +57,14 @@ h1 {
   }
   .main_menu .list {
     display: none;
+  }
+  .row_one {
+    height: auto; overflow: visible;
+  }
+  .row_two {
+    flex-direction: column;
+  }
+  .row_two article {
+    margin-right: auto; margin-left: auto;
   }
 }
