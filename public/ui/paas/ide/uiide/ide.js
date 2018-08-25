@@ -475,9 +475,13 @@
                     // edit by J.ym 17.12.20
                     var _u;
                     if (zy.isXBosonSystem) {
+                      if (! src.startsWith('web/')) {
                         _u = zy.g.host.ui + '/t/' 
                            + ( isplatorg() ? 'paas' : 'saas/'+zy.g.comm.org )
                            + '/emptymain.html#' + src;
+                      } else {
+                        _u = zy.g.host.ui + '/' + src;
+                      }
                     } else {
                         _u = 'http://'+location.host+'/t/'; // 设置或返回主机名和当前 URL 的端口号 + '/t'
                         // _u += orgpath + '/emptymain.html#' + src;
@@ -1425,7 +1429,7 @@
                 var _length = _tname.length;
                 if (!_checkContent(_form))
                     return;
-                var _type = $(this).closest('.modal-content').find('h4').text() === '修改' ? true : false;
+                var _type = $(this).closest('.modal-content').find('h4').text() === '修改文件名' ? true : false;
                 var r_param = $.extend(true, {}, {
                     path: _node.path,
                 }, _paramObject(_form), zy.g.comm);
@@ -1443,7 +1447,7 @@
                             zy.ui.msg('提示信息', '名称必须在60个字以内', 'w');
                         } else {
                             var parentnode=_node.getParentNode();
-                            // console.log(parentnode);
+                            // console.log(parentnode, '---------------------------');
                             _fromServer(parentnode.path, function (_nn) {
                               var _result = _nn;
                               if ($.isArray(_result)) {
