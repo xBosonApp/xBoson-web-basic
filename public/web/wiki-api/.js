@@ -36,9 +36,14 @@ function load_menu() {
   });
 
   function build_menu(data, parent, level, basepath) {
+    var ext = extAttribute(data.ext);
     // console.log(data.file, basepath, '-------------')
     if (basepath && data.file) {
-      data.file = basepath +'/'+ data.file;
+      if (ext['absolute']) {
+        console.log("Absolute path", data);
+      } else {
+        data.file = basepath +'/'+ data.file;
+      }
     }
     
     var m = $("<a class='menu_item'>");
@@ -51,16 +56,21 @@ function load_menu() {
     m.html(data.name);
 
     if (data.file) {
-      m.attr("href", "#");
-      m.click(function() {
-        open_doc(data);
-        if (current_select) {
-          current_select.removeClass("selected_menu");
-        }
-        m.addClass('selected_menu');
-        current_select = m;
-        return false;
-      });
+      if (ext['_blank']) {
+        m.attr('href', data.file);
+        m.attr('target', '_blank');
+      } else {
+        m.attr("href", "#");
+        m.click(function() {
+          open_doc(data);
+          if (current_select) {
+            current_select.removeClass("selected_menu");
+          }
+          m.addClass('selected_menu');
+          current_select = m;
+          return false;
+        });
+      }
     }
     m.appendTo(menu);
 
@@ -150,6 +160,17 @@ function aliasName(name) {
     default:
       return name;
   }
+}
+
+
+function extAttribute(a) {
+  if (!a) return {};
+  var ext = a.split(',');
+  var ret = {};
+  ext.forEach(function(n) {
+    ret[n.trim()] = 1;
+  });
+  return ret;
 }
 
 

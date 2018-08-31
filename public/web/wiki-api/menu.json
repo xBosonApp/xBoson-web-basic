@@ -58,6 +58,7 @@
     { "name": "vali", "file": "vali.md" },
     { "name": "web", "file": "web.md" },
     { "name": "常用模板", "file": "usetempate.md" },
-    { "name": "高级开发指南", "file": "adv.md" }
+    { "name": "高级开发指南", "file": "adv.md" },
+    { "name": "ACE Api Document", "file": "../ace-api/index.html", "ext": "absolute,_blank" }
   ]}
 ]

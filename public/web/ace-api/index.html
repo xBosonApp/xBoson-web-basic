@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="./resources/csses/ace_api.css" type="text/css">
+<script src="../wiki-api/jquery-2.0.3.min.js"></script>
+
+<style>
+a {
+	text-decoration:none;
+}
+body {
+	display: flex;
+}
+#ace_doc_menu {
+	width: 200px;
+	border-right: 2px solid #eee;
+	padding: 20px;
+}
+#ace_doc_menu a {
+	display: block;
+	margin: 4px;
+}
+#ace_doc_menu h2 {
+	border-bottom: 1px solid #eee;
+}
+#ace_doc_content {
+	flex: 1;
+	overflow: auto;
+	padding-left: 20px;
+}
+.memberHeader {
+	margin: 0;
+}
+.signatures {
+	padding-left: 0;
+}
+.ellipsis_description {
+	padding: 20px 40px;
+}
+li {
+	list-style-type: none;
+}
+.version {
+	color: #aaa;
+	float: right;
+}
+</style>
+
+<script>
+jQuery(function($) {
+	var menu_list = [
+		'ace', 'editor', 'edit_session', 'anchor', 'document', 'placeholder',
+		'scrollbar', 'range', 'search', 'tokenizer', 'background_tokenizer',
+		'renderloop', 'selection', 'undomanager', 'command_manager',
+		'split', 'virtual_renderer', 'token_iterator',
+	];
+	var content  = $('#disqus_thread');
+	var menu 		 = $('#ace_doc_menu');
+	var page_map = {};
+
+	menu_list.forEach(function(name) {
+		var page = name + '.html';
+		var bname = name[0].toLocaleUpperCase() + name.substr(1).replace('_', ' ');
+		var a = $('<a href="#"/>').html(bname).appendTo(menu);
+		page_map[page] = a;
+
+		a.click(function() {
+			$.get(page, function(html) {
+				content.html(html);
+				// 重新定义链接行为, # 开始忽略, 路径在本地使用 div 加载, 在外部打开新窗口.
+				content.find('a').each(function() {
+					var a = $(this);
+					var href = a.attr('href');
+					if (href[0] == '#') return;
+					var mapping = page_map[href];
+
+					a.click(function() {
+						if (mapping) {
+							mapping.trigger('click');
+						} else {
+							window.open(href);
+						}
+						return false;
+					});
+				});
+			});
+			return false;
+		});
+	});
+});
+</script>
+</head>
+
+<body>
+<div id='ace_doc_menu'>
+	<h2>Menu </h2>
+</div>
+
+<div id='ace_doc_content'>
+	<a href='../wiki-api/index.html' style='size: 8px;'>[Back to Wiki Home]</a>
+	<span class='version'>Ace Version 1.2.6</span>
+	<div id="disqus_thread">
+		<div id="documentation1" class="span9"><h1>Ace API Reference</h1>
+		<p>Welcome to the Ace API Reference Guide. Ace is a standalone code editor written
+			in JavaScript that you can embed onto any website. We&#39;re used in a bunch of places already,
+			like GitHub, Google, and Facebook.</p>
+		<p>On the left, you&#39;ll find a list of all of our currently documented classes.
+			There are plenty more to do, but these represent the &quot;core&quot;
+			set. For more information on how to work with Ace, check out the <a href="http://ace.ajax.org">main Ace website</a>.
+		</p>
+	</div>
+	</div>
+</div>
+
+<script defer src="./resources/javascripts/ux.js"></script>
+<script src="./resources/javascripts/clicker.js"></script>
+<script src="./resources/javascripts/jquery-scrollspy.js"></script>
+<script defer src="./resources/javascripts/disqus-ext.js"></script>
+<!-- <script defer src="./resources/javascripts/ga.js"></script> -->
+</body>
+</html>
