@@ -35,7 +35,12 @@ jQuery(function($) {
   function updateInfo() {
     get('81092b8cd82041a2b81296409eba92da', 'bosoncoin', 'wallet', function(ret) {
       var w = ret.result[0];
-      $('#coin').html(fixNum(w.coin));
+      var num = new Decimal(w.coin);
+      $('#coin').html(num.toFixed());
+      $('.split_unit>.b').html(num.floor().toFixed(0));
+      $('.split_unit>.mb').html(num.mul(1e3).mod(1000).floor().toFixed(0));
+      $('.split_unit>.ub').html(num.mul(1e6).mod(1000).floor().toFixed(0));
+      $('.split_unit>.nb').html(num.mul(1e9).mod(1000).floor().toFixed(1));
       $('#userid').html(w.user_id);
     });
   }
