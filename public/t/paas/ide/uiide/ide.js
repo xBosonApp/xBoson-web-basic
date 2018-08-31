@@ -1250,9 +1250,13 @@
     function _ide(_pre, _filetype) {
       var _savebtn = $('#widget-grid').find('header .glyphicon-saved');
         function _setValue(_str, _flg) {
-            editor.setValue(_str + "\n\n\n\n\n");
-            editor.navigateFileStart();
-            editor.setReadOnly(_flg);
+          editor.setValue(_str + "\n\n\n\n\n");
+          editor.navigateFileStart();
+          editor.setReadOnly(_flg);
+          // J.ym 修正 undo 操作将代码清除.
+          setTimeout(function() {
+            editor.getSession().getUndoManager().reset();
+          }, 1);
         }
 
         function _getValue() {

@@ -1,5 +1,12 @@
 function NewIDE(roleid) {
-
+  //
+  // Add by J.ym 17.12.19
+  // ide 窗口固定与浏览器窗口同步大小
+  //
+  var COMMENT_HEIGHT = 105;
+  var CUT_HEIGHT = 220 + COMMENT_HEIGHT;
+  var EDITOR_WRAP_SIZE= 80;
+  
   var _domLabel = {
     app : {
       add : [{
@@ -212,12 +219,6 @@ function NewIDE(roleid) {
   };
 
 
-  //
-  // Add by J.ym 17.12.19
-  // ide 窗口固定与浏览器窗口同步大小
-  //
-  var COMMENT_HEIGHT = 105;
-  var CUT_HEIGHT = 220+COMMENT_HEIGHT;
   var _height;
   var _fix_height_now;
   function bind_fix_size_event() {
@@ -1116,6 +1117,10 @@ function NewIDE(roleid) {
       editor.setValue(_str + "\n\n\n\n\n");
       editor.navigateFileStart();
       editor.setReadOnly(_flg);
+      // J.ym 修正 undo 操作将代码清除.
+      setTimeout(function() {
+        editor.getSession().getUndoManager().reset();
+      }, 1);
     }
 
     function _getValue() {
@@ -1142,7 +1147,7 @@ function NewIDE(roleid) {
     editor.setShowPrintMargin(false);
     editor.setFontSize(13.5);
     editor.setHighlightSelectedWord(true);
-    editor.setOption("wrap", 120);
+    editor.setOption("wrap", EDITOR_WRAP_SIZE);
     editor.setOption("tabSize", 2);
     editor.resize();
    }
@@ -1567,7 +1572,7 @@ function NewIDE(roleid) {
             editor.destroy();
             editor.container.remove();
           });
-          editor.setOption('wrap',120);
+          editor.setOption('wrap', EDITOR_WRAP_SIZE);
           editor.setOption('tabSize',2);
           _ide(_pre);
           zy.setEditorExOptions(editor);
@@ -1585,7 +1590,7 @@ function NewIDE(roleid) {
             editor.destroy();
             editor.container.remove();
           });
-          editor.setOption('wrap',120);
+          editor.setOption('wrap', EDITOR_WRAP_SIZE);
           editor.setOption('tabSize',2);
           _ide(_pre);
           zy.setEditorExOptions(editor);
