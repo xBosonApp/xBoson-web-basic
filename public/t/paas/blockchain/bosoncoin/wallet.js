@@ -38,9 +38,9 @@ jQuery(function($) {
       var num = new Decimal(w.coin);
       $('#coin').html(num.toFixed());
       $('.split_unit>.b').html(num.floor().toFixed(0));
-      $('.split_unit>.mb').html(num.mul(1e3).mod(1000).floor().toFixed(0));
-      $('.split_unit>.ub').html(num.mul(1e6).mod(1000).floor().toFixed(0));
-      $('.split_unit>.nb').html(num.mul(1e9).mod(1000).floor().toFixed(1));
+      $('.split_unit>.mb').html(num.mul(1e3).mod(1e3).floor().toFixed(0));
+      $('.split_unit>.ub').html(num.mul(1e6).mod(1e3).floor().toFixed(0));
+      $('.split_unit>.nb').html(num.mul(1e9).mod(1e3).floor().toFixed(1));
       $('#userid').html(w.user_id);
     });
   }
