@@ -68,7 +68,7 @@ var bytesObj = OBJ.joinBytes(bytesObj1, bytesObj2, bytesObjN);
 
 ## Bytes concat(Bytes other)
 
-将自身与另一个缓存连接, 返回包含两个缓冲区数据的缓冲区.
+将自身与另一个缓存连接, 返回包含两个缓冲区数据的新缓冲区.
 
 ## int length()
 

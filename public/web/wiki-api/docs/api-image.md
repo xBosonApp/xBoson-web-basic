@@ -24,7 +24,7 @@ buf = pic.toBuffer("jpeg");
 
 # 方法 
 
-## image.read(Buffer:picture)
+## image.read(Buffer: picture), image.read(Bytes: picture)
 
 从 Buffer 缓冲区中读取图片, 并返回 Picture 对象.
 
