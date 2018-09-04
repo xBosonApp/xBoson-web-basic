@@ -63,7 +63,7 @@ expression: 该表达式有以下用法:
 
 ## Block search(string: key), Block search(Bytes: key)
 
-查询并返回 key 指定的区块.
+查询并返回 key 指定的区块; 找不到 key 指定的块返回 null;
 
 ## Bytes push(String data)
 

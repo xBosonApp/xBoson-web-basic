@@ -7,6 +7,7 @@ Login = (function() {
   var PT = Login.prototype;
   var thiz;
   var ls_zy_user_info;
+  var NEED_CAPTCHA = 5;
 
   /**
    * 默认配置参数
@@ -30,6 +31,15 @@ Login = (function() {
   function Login() {
     thiz = this;
     return this;
+  }
+  
+  function showCaptcha(force) {
+    if (--NEED_CAPTCHA < 0 || force) {
+      var cap = $('#c');
+      var sec = cap.closest('section').show();
+      Event(cap);
+      sec.find('[name=c]').val('');
+    }
   }
 
   function Reg(){
@@ -297,8 +307,7 @@ Login = (function() {
       if(errorTime){
         var now = (new Date()).getTime();
         if(now - errorTime < 900000){
-          $('#c').closest('section').show();
-          Event($('#c'));
+          showCaptcha();
         }
       }
 
@@ -420,24 +429,17 @@ Login = (function() {
         ls_zy_user_info.set('errorTimeout',(new Date()).getTime());
         if (msg.ret === '1001') {
           zy.ui.msg("登录失败：", "用户名或密码错误请尝试重新输入", "e");
-          $('#c').closest('section').show();
-          Event($('#c'));
-          $('[name=c]').val('');
+          showCaptcha();
           $('#login-form input[name=password]').val('');
         }
         else if(msg.ret === '10'){
           zy.ui.msg("登录失败：", "验证码错误请重新输入", "e");
-          $('#c').closest('section').show();
-          Event($('#c'));
-          $('[name=c]').val('');
-        }
-	else{
-		zy.ui.msg('登录失败：',msg.msg, 'e');
-		$('#c').closest('section').show();
-		Event($('#c'));
-		$('[name=c]').val('');
-    $('#login-form input[name=password]').val('');
-	}
+          showCaptcha(true);
+        } else{
+      		zy.ui.msg('登录失败：',msg.msg, 'e');
+          showCaptcha();
+          $('#login-form input[name=password]').val('');
+      	}
       }
     };
     zy.log("登录之前 zy.g.comm.openid=" + zy.g.comm.openid);

@@ -66,7 +66,7 @@ var phone = db.collection("phone");
 ```
 
 
-## Database.all()
+## Database.docs(), Database.all()
 
 返回所有可用文档列表
 

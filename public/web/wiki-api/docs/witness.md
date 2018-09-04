@@ -60,7 +60,7 @@ http://localhost:80/xboson/witness/change?id=ewonvw3829nvcz&host=192.168.0.1&por
 
 参数说明:
 
-* `id` 必须, 注册时得到的标识.
+* `id` 必须, 见证者id, 注册时得到的标识.
 * `host` 必须, 新的主机地址.
 * `post` 必须, 新的端口号.
 * `urlperfix` 可选的, 新的 url 前缀.
@@ -79,6 +79,37 @@ http://localhost:80/xboson/witness/change?id=ewonvw3829nvcz&host=192.168.0.1&por
 * `code` [返回码说明](docs/codes.md), 成功返回 0.
 * `msg`  返回消息字符串.
 
+
+## `/xboson/witness/reqb`
+
+请求区块链上的数据块, 从 begin(包含) 到 end(包含) 范围内的区块将发送到 `deliver` 
+回调接口, 区块不保证发送顺序.
+
+```URL
+http://localhost:80/xboson/witness/reqb?id=&chain=&channel=&begin=&end=
+```
+
+参数说明:
+
+* `id` 必须, 见证者id, 注册时得到的标识.
+* `chain` 必须, 区块链 id
+* `channel` 必须, 通道 id
+* `begin` 必须, 开始区块 id, '开始' 表示区块链距离创世区块最远的(或最新的)区块数据.
+* `end` 可选, 结束区块 id, '结束区块' 可以是开始块与创世区块之间的区块, 默认为创世区块.
+
+返回:
+
+``` json
+{
+  "code" : 0,
+  "msg"  : "ok",
+}
+```
+
+返回说明:
+
+* `code` [返回码说明](docs/codes.md), 成功返回 0.
+* `msg`  返回消息字符串.
 
 
 # 回调接口
@@ -110,7 +141,8 @@ Content-Transfer-Encoding: binary
 http://192.168.0.1:7000/ws/deliver
 ```
 
-Http BODY 中是 utf8 编码的 json 字符串
+Http Header 中 `chain` 字段保存当前区块链 id, `channel` 字段保存通道 id;
+Http BODY 中是 utf8 编码的 json 字符串:
 
 ```json
 {
