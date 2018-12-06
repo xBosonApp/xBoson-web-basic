@@ -1,3 +1,12 @@
- @media screen and (max-width: 500px) {
-   
+@media screen and (max-width: 500px) {
+}
+
+.ace_editor, .ace_editor * {
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace !important;
+    color: inherit;
+    font-size: 12px;
+}
+
+.ace_text-input {
+    font: inherit;
 }
