@@ -4,6 +4,7 @@
     var splitBasePath = 'web4node'
     var basePathOnServer = '$';
     var enableFileType = { '':1, 'html':1, 'htm':1, 'md':1 };
+    var ACE_PATH = "lib/js/ace/1.2.9/ace.js";
     
     
     var _domLabel = {
@@ -1981,7 +1982,7 @@
     }
 
     function _initIde(_cb, _pre, _filetype) {
-        zy.net.loadScript.call(this,"lib/js/ace/1.2.9/ace.js", function () {
+        zy.net.loadScript.call(this, ACE_PATH, function () {
             // loadScript方法改变了上下文..
             editor = _ide(_pre, _filetype);
             _cb && _cb();

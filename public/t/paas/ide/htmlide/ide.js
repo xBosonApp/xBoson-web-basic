@@ -6,6 +6,7 @@ function NewIDE(roleid) {
   var COMMENT_HEIGHT = 105;
   var CUT_HEIGHT = 220 + COMMENT_HEIGHT;
   var EDITOR_WRAP_SIZE= 80;
+  var ACE_PATH = "lib/js/ace/1.2.9/ace.js";
   
   var _domLabel = {
     app : {
@@ -1610,7 +1611,7 @@ function NewIDE(roleid) {
   }
 
   function _initIde(_cb, _pre) {
-    zy.net.loadScript.call(this, "lib/js/ace/1.2.9/ace.js", function() {// loadScript方法改变了上下文..
+    zy.net.loadScript.call(this, ACE_PATH, function() {// loadScript方法改变了上下文..
       editor = _ide(_pre);
       _cb && _cb();
     })
