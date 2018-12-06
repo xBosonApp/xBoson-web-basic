@@ -41,6 +41,7 @@
   
   <table:api app='a1e22425b8574d67bf4f200b4ccde506' mod='webservice' 
       api='list' form='#listform' id='datatable0'>
+    <table:mapper label='KEY <a href="#" onclick="setWikiPage()" target="_blank">[用于API]</a>' key='wsid'/>
     <table:mapper label='名称' key='wsname'/>
     <table:mapper label='说明' key='wsnote'/>
     <table:mapper label='URI' key='ws_uri'/>
@@ -49,4 +50,12 @@
     <table:mapper label='状态' key='status'><table:render_status/></table:mapper>
     <table:mapper label='更新日期' key='updatedt'/>
   </table:api>
+  
+  <script>
+    function setWikiPage() {
+      sessionStorage.wikiPage = "docs/api-ws.md";
+      window.open('../../web/wiki-api/index.html')
+      return false
+    }
+  </script>
 </ui:grid>
