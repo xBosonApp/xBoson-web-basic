@@ -70,8 +70,8 @@ var zy = {
   g: {
     //主机IP地址
     host: {
-      api: 'http://localhost/xboson/',
-      ui: 'http://localhost/xboson/face'
+      api: location.protocol +'//localhost/xboson/',
+      ui: location.protocol +'//localhost/xboson/face'
     },
     //共通传参用
     comm: {
@@ -115,6 +115,7 @@ zy.check_xboson_system = function() {
     zy.isXBosonSystem = true;
     zy.g.host.api = zy.net.getHttpUrl("/xboson/");
     zy.g.host.ui = zy.net.getHttpUrl("/xboson/face");
+    console.log("xBoson System Call API: /app/{org-id}/{app-id}/{module-id}/{api-name}?arguments");
   } else {
     zy.isXBosonSystem = flase;
     zy.g.host.api = zy.net.getHttpUrl("/ds/");
@@ -169,7 +170,6 @@ zy.fix_api_call = function(uri, prm) {
 
   api_prefixs.forEach(function(api_prefix) {
     if (uri.indexOf(api_prefix) == 0) {
-      //Path format: /app/{org id}/{app id}/{module id}/{api name}
       var apiname = uri.substr(api_prefix.length);
       uri = ['app/', prm.org, '/', prm.app, '/', prm.mod, '/', apiname ].join('');
       delete prm.org;
@@ -197,7 +197,6 @@ zy.setup_debug = function() {
   var debug_msg = "开启调试模式, UI 文件从 /t 下获取, API 加调试参数.";
   console.log(debug_msg);
   zy.ui.msg("开发提示", debug_msg, 's');
-
 };
 
 // 修正预览画面 url 不正确
@@ -259,17 +258,17 @@ zy.tool = {
   },
   path:function(){
     if(location.href.indexOf(location.host + '/t'>-1))
-      var u ='http://' + location.host+ '/t/saas/'+zy.g.comm.org+'/';
+      var u = location.protocol +'//'+ location.host+ '/t/saas/'+zy.g.comm.org+'/';
     else
-      var u ='http://' + location.host+'/ui/saas/'+zy.g.comm.org+'/';
+      var u = location.protocol +'//'+ location.host+'/ui/saas/'+zy.g.comm.org+'/';
     // return u;
     return '';
   },
   xpath:function(){
     if(location.href.indexOf(location.host + '/t'>-1))
-      var u ='http://' + zy.g.host.ui + '/t/saas/'+zy.g.comm.org+'/';
+      var u = location.protocol +'//'+ zy.g.host.ui + '/t/saas/'+zy.g.comm.org+'/';
     else
-      var u ='http://' + zy.g.host.ui +'/ui/saas/'+zy.g.comm.org+'/';
+      var u = location.protocol +'//'+ zy.g.host.ui +'/ui/saas/'+zy.g.comm.org+'/';
     return u;
   },
   /**
@@ -1422,7 +1421,7 @@ zy.net = {
    * @return {String} url 返回处理好的链接地址
    */
   getHttpUrl: function (url) {
-    var host = "http://" + zy.ui.browser.getHost() + zy.ui.browser.getPort();
+    var host = location.protocol +'//'+ zy.ui.browser.getHost() + zy.ui.browser.getPort();
     if (!url)
       return host;
     if (url.indexOf("/") === 0) {

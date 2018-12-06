@@ -165,6 +165,12 @@ sys.setRetData(0, "OK", "list1");
 ```
 
 
+## sys.put(string: name, object: value) [NEW]
+
+不经过应答数据集, 直接将变量 value 输出到结果集的 name 属性上, 
+同样 name 调用两次, 取最后的值, 应答数据集查找不到该变量.
+
+
 ## sys.getUserPID([{string}Or{StringArray}: userId])
 
 获取用户的PID, userId 是用户名, pid 是用户对应的唯一 UUID;  

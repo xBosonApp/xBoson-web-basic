@@ -432,7 +432,7 @@
     // var host = location.host;
     var host = zy.g.host.ui;
     var href = location.href;
-    var http = 'http://';
+    var http = location.protocol; // 'http://';
     var ui = '';
     ui = href.indexOf(host + '/ui')>-1?'/ui/':'/t/';
     var uri = http + host + ui + $(a).attr('uri');

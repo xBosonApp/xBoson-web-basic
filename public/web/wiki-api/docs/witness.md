@@ -155,10 +155,13 @@ Http BODY 中是 utf8 编码的 json 字符串:
   "userid": "1f33f752805443e59bfe5f8f77481443",
   "chaincodeKey": "bhh3Af9CQt6rkCLGnBi0uw",
   "type": 2,
-  "sign": {
-    "2": "MEUCIQCUag5UQqtsV8VijTK0NkIxMDAZA0PsemwfMmTnUmUSugIgE7OYDZC4JaW-WQw8mpT4AUyfDxCAk2qBg7--ClNFoZs",
-    "edcede767f9f4004942e9e861ae7da13": "MEQCIDxlqqwpYPXgdVZjmHq3q-5GvdwFX0XNjyv1vbx3m2z5AiBMQZtUhndd_2MiYfYalYZzLysIBJW6-Pivm26QKXUYyw"
-  }
+  "sign": [{
+      "id" : "2", 
+      "si": "MEUCIQCUag5UQqtsV8VijTK0NkIxMDAZA0PsemwfMmTnUmUSugIgE7OYDZC4JaW-WQw8mpT4AUyfDxCAk2qBg7--ClNFoZs"
+    }, {
+      "id" : "edcede767f9f4004942e9e861ae7da13",
+      "si": "MEQCIDxlqqwpYPXgdVZjmHq3q-5GvdwFX0XNjyv1vbx3m2z5AiBMQZtUhndd_2MiYfYalYZzLysIBJW6-Pivm26QKXUYyw"
+    }]
 }
 ```
 
@@ -173,7 +176,7 @@ Http BODY 中是 utf8 编码的 json 字符串:
 * `userid` 生成该块的用户 uid
 * `chaincodeKey` base64 编码, 指向生成该块的链码块的 key
 * `type` 块类型
-* `sign` 签名字段, 属性的名称是见证者 id, 值是对数据块的签名, 签名不包括 `hash` 字段.
+* `sign` 签名对象数组, 每个元素表示一个见证者, id 是见证者 id, is 是签名的 base64 编码; 数组顺序就是 hash 顺序.
 
 返回说明:
 
