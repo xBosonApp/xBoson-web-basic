@@ -6,7 +6,7 @@ function NewIDE(roleid) {
   var COMMENT_HEIGHT = 105;
   var CUT_HEIGHT = 220 + COMMENT_HEIGHT;
   var EDITOR_WRAP_SIZE= 80;
-  var ACE_PATH = "lib/js/ace/1.2.9/ace.js";
+  var ACE_PATH = "lib/js/ace/1.4.2/ace.js";
   
   var _domLabel = {
     app : {

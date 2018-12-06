@@ -4,7 +4,7 @@
     var splitBasePath = 'web4node'
     var basePathOnServer = '$';
     var enableFileType = { '':1, 'html':1, 'htm':1, 'md':1 };
-    var ACE_PATH = "lib/js/ace/1.2.9/ace.js";
+    var ACE_PATH = "lib/js/ace/1.4.2/ace.js";
     
     
     var _domLabel = {
