@@ -331,7 +331,7 @@
       
       modal.find('[name=runApi]').click(function(e){
         // var url ='http://'+ host + ds + atype + '/' + apiid;
-        var url = 'http://' + modal.find('[name=fullurl]').val();
+        var url = location.protocol +'//' + modal.find('[name=fullurl]').val();
         zy.log('url=',url);
         // var common = $.extend({},zy.g.comm,{app:appid,mod:modid});
         var common = {};
