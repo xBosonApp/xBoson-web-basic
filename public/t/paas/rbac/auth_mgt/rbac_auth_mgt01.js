@@ -63,7 +63,7 @@ rbac_auth_mgt01 = (function () {
     staffTree.empty();
     assignedRoles.tagsInput({
       // 'height':'100%',
-       'height':'48px',
+       'height':'auto',
        'width':'100%',
        'interactive':false,
        'defaultText':'',

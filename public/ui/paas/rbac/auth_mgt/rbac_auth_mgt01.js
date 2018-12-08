@@ -53,9 +53,7 @@ rbac_auth_mgt01 = (function () {
   function rbac_auth_mgt01() {
     thiz = this;
     authData = zy.ui.authData(authDataKeeper, thisPage);
-    // if($('.SmallBox ').length === 0) {
-      thiz.init();
-    // }
+    thiz.init();
     return this;
   }
 
@@ -65,7 +63,7 @@ rbac_auth_mgt01 = (function () {
     staffTree.empty();
     assignedRoles.tagsInput({
       // 'height':'100%',
-       'height':'48px',
+       'height':'auto',
        'width':'100%',
        'interactive':false,
        'defaultText':'',
@@ -307,6 +305,6 @@ rbac_auth_mgt01 = (function () {
       }
     }, param);
   }
-
+  
   return rbac_auth_mgt01;
 })();
