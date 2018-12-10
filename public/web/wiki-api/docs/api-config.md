@@ -28,20 +28,6 @@ console.log(programConfig.id, programConfig.name, programConfig);
 
 # API
 
-## void create(Object meta)
-
-创建空的配置项, meta 为配置项数据源, 参数为:
-
-```js
-{ 'mode'        : 模式, 数字 1-5
-  'name'        : 名称, 字符串, 用于打开配置, 不可重复
-  'desc'        : 描述, 字符串, 可以空
-  'create_time' : 创建时间, 字符串
-}
-```
-
-不能创建相同 name 的配置项, 会抛出异常;
-
 
 ## Object get(String name)
 
@@ -57,9 +43,26 @@ console.log(programConfig.id, programConfig.name, programConfig);
 如果配置项不存在抛出异, 这将覆盖旧的数据.
 
 
+## void create(Object meta)
+
+创建空的配置项, meta 为配置项数据源, 参数为:
+
+```js
+{ 'mode'        : 模式, 数字 1-5
+  'name'        : 名称, 字符串, 用于打开配置, 不可重复
+  'desc'        : 描述, 字符串, 可以空
+  'create_time' : 创建时间, 字符串
+}
+```
+
+不能创建相同 name 的配置项, 会抛出异常; 
+平台上可通过画面直接创建配置项, 通常不需要调用该方法.
+
+
 ## void remove(String name)
 
 删除配置项, 只有创建配置项的用户有权删除, 否则会抛出异常.
+平台上可通过画面直接管理配置项, 通常不需要调用该方法.
 
 
 # 常量

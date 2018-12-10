@@ -57,7 +57,7 @@ form 标签本身在 [ui:form](ui-docs/ui.md) 中定义.
 * icon: 按钮图标 fa 名称, 
 
 ```html
-<form:button name='开始游戏'/>
+<form:button label='开始游戏'/>
 ```
 
 ## `<form:checkbox>`
