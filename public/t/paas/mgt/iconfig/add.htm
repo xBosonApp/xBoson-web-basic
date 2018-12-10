@@ -1,0 +1,27 @@
+<!-- Create By xBoson System -->
+<moda:frame title='创建交换标准'>
+    <ui:form id='create' class='update_form'>
+      <fieldset>
+        <form:text name='name' label='配置名称' tooltip='最少1字符' width='9'>
+          <vali:string min='1' max='50'/>
+        </form:text>
+        <form:dict name='mode' label='模式' width='9' typecd='ZR.0072'>
+          <vali:number min='1' max='10'/>
+        </form:dict>
+        <form:textarea name='desc' label='配置说明' tooltip='可选' width='9' rows='4'>
+          <vali:string min='0' max='500'/>
+        </form:textarea>
+      </fieldset>
+      
+      <footer>
+        <moda:cancel/>
+        <moda:ok>
+          <form:post app='ZYAPP_SYSMGT' mod='smartconfig' api='create'>
+            <mp:close when='this.code == 0'>
+              <mp:send type='TABLE_UPDATE_REQ' id='datatable0'/>
+            </mp:close>
+          </form:post>
+        </moda:ok>
+      </footer>
+    </ui:form>
+</moda:frame>

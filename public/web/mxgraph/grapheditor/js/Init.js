@@ -1,14 +1,15 @@
 // urlParams is null when used for embedding
 window.urlParams = window.urlParams || {};
+org = urlParams.org || 'a297dfacd7a84eab9656675f61750078';
 
 // Public global variables
 window.MAX_REQUEST_SIZE = window.MAX_REQUEST_SIZE  || 10485760;
 window.MAX_AREA = window.MAX_AREA || 15000 * 15000;
 
 // URLs for save and export
-window.SAVE_URL = window.SAVE_URL || '/xboson/app/a297dfacd7a84eab9656675f61750078/a510370fd076433dbe8eb33a885f0199/basic/save?id='+ urlParams.id;
-window.OPEN_URL = window.OPEN_URL || '/xboson/app/a297dfacd7a84eab9656675f61750078/a510370fd076433dbe8eb33a885f0199/basic/load?id='+ urlParams.id;
-window.EXPORT_URL = window.EXPORT_URL || '/xboson/face/masquerade/tag/chip/flow_diagram.htm?fileid='+ urlParams.id;
+window.SAVE_URL = window.SAVE_URL || '/xboson/app/'+ org +'/a510370fd076433dbe8eb33a885f0199/basic/save?id='+ urlParams.id;
+window.OPEN_URL = window.OPEN_URL || '/xboson/app/'+ org +'/a510370fd076433dbe8eb33a885f0199/basic/load?id='+ urlParams.id;
+window.EXPORT_URL = window.EXPORT_URL || '/xboson/face/masquerade/tag/chip/flow_diagram.htm?fileid='+ urlParams.id +"&org="+ org;
 window.RESOURCES_PATH = window.RESOURCES_PATH || 'resources';
 window.RESOURCE_BASE = window.RESOURCE_BASE || window.RESOURCES_PATH + '/grapheditor';
 window.STENCIL_PATH = window.STENCIL_PATH || 'stencils';

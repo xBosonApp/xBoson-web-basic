@@ -43,7 +43,8 @@
     { "name": "Digest", "file": "docs/api-digest.md" },
     { "name": "Blockchain", "file": "docs/api-chain.md" },
     { "name": "Crypto", "file": "docs/api-crypto.md" },
-    { "name": "Lock", "file": "docs/api-lock.md" }
+    { "name": "Lock", "file": "docs/api-lock.md" },
+    { "name": "Config", "file": "docs/api-config.md" }
   ]},
   
   { "name": "前端模板", "basepath":"ui-docs", "file": "basic.md", "sub": [

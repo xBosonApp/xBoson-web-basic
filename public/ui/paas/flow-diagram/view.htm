@@ -41,10 +41,14 @@
         });
         
         xb.waitDisplay(frame, function() {
-          frame.attr("src", url + id);
+          frame.attr("src", _url());
         });
         
-        root.find('#url').val(window.location.origin + url + id);
+        function _url() {
+          return url + id +"&org="+ zy.g.comm.org;
+        }
+        
+        root.find('#url').val(window.location.origin + _url());
         root.find('#mas').val(["<", 'chip:flow_diagram fileid="', id, '"/>'].join(''));
       })(jQuery);
       </script>

@@ -602,6 +602,7 @@ function select2fromApi(jobj) {
     // 用文本域做搜索条件
     //
     query[text_field] = term;
+    if (zy.debug) query.s = 'd';
     return query;
   }
 }

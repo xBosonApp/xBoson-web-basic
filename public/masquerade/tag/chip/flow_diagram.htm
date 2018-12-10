@@ -2,10 +2,11 @@
 <never>
   在当前位置绘制流程图, 该页面可以直接请求, 参数通过 url 传入, 参数:
     [必须] fileid - 文件 id (完整文件名)
+    [可选] org - 文件所在机构, 访问对应机构的文件, 默认为平台机构.
 </never>
 <js:default name='id' rand='true' prefix='flow_diagram_'/>
 <div id="###id###" class='tag_auto_chip_flow_diagram' data-fileid='###fileid###' 
-     data-qfileid='###query.fileid###'></div>
+     data-qfileid='###query.fileid###' data-qorg='###query.org###'></div>
 
 <once id='tag_auto_chip_flow_diagram.js'>
   <b data-contextpath='###config.contextPath###' id='contextpath'></b>
@@ -72,7 +73,8 @@
     	graph.setEnabled(false);
     	setuptGraphStyle(graph);
     	
-    	var url = contextPath +'/openapp/a297dfacd7a84eab9656675f61750078/a510370fd076433dbe8eb33a885f0199/basic/load';
+    	var org = thiz.data('qorg') || 'a297dfacd7a84eab9656675f61750078';
+    	var url = contextPath +'/openapp/'+ org +'/a510370fd076433dbe8eb33a885f0199/basic/load';
     	
      	$.get(url, { id: fileid }, function(ret) {
      	  if (ret.code == 0) {

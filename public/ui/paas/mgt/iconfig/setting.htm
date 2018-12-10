@@ -1,0 +1,40 @@
+<!-- Create By xBoson System -->
+<moda:frame title='配置项设置'>
+  <ui:form id='create' class='update_form' method='post'>
+      <script>
+        function __get_config_value(name) {
+          xb.api('ZYAPP_SYSMGT', 'smartconfig', 'reading', {name:name}, function(d) {
+            $("#create [name=setting]").val(JSON.stringify(d.data));
+          });
+        }
+      </script>
+      <mp:loaddata id='datatable0'>
+        <mp:handle>
+          function(data, type, id, handle) {
+            window.__get_config_value(data.name);
+          }
+        </mp:handle>
+      </mp:loaddata>
+      
+      <fieldset>
+        <form:text name='name' label='配置名称' width='9'>
+          <vali:string min='1' max='45'/>
+          <form:readonly/>
+        </form:text>
+        <form:textarea name='setting' label='配置内容(JSON)' tooltip='最少1字符' width='9' rows='10'>
+          <vali:string min='1' max='3999'/>
+        </form:textarea>
+      </fieldset>
+      
+      <footer>
+        <moda:cancel/>
+        <moda:ok>
+          <form:post app='ZYAPP_SYSMGT' mod='smartconfig' api='setting'>
+            <mp:close when='this.code == 0'>
+              <mp:send type='TABLE_UPDATE_REQ' id='datatable0'/>
+            </mp:close>
+          </form:post>
+        </moda:ok>
+      </footer>
+  </ui:form>
+</moda:frame>
