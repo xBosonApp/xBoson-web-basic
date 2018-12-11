@@ -2,7 +2,7 @@
 
 文件系统需要引入 require 方可使用.
 
-MongoDB 命令详细说明参考[这里](https://docs.mongodb.com/manual/reference/method/)
+MongoDB 命令详细说明[参考这里](https://docs.mongodb.com/manual/reference/method/)
 
 
 # 引入代码
@@ -211,7 +211,23 @@ phone.getIndexes().forEach(function(index) {
 
 返回所有文档的数量.
 
-## Collection.find([object:query])
+
+## Collection.count(object:query)
+
+查询符合条件的文档数量.
+
+
+## Collection.find()
+
+查询所有文档
+
+
+## Collection.find(int: pageNum, int: pageSize)
+
+分页查询所有文档, pageNum 从 1 开始.
+
+
+## Collection.find(object:query)
 
 条件查询文档, 返回数组, 无参数调用返回所有文档
 
@@ -221,6 +237,12 @@ phone.getIndexes().forEach(function(index) {
 //
 var findx = coll.find({ _id : 'jym-PC-1514958286201' });
 ```
+
+
+## Collection.find(object:query, int: pageNum, int: pageSize)
+
+带有分页功能 pageNum 从 1 开始.
+
 
 ## Collection.find(object: query, object: projection)
 
@@ -233,6 +255,12 @@ var findx = coll.find({ _id : 'jym-PC-1514958286201' });
 var findx = coll.find( { qty: { $gt: 25 } }, { item: 1, qty: 1 } );
 ```
 
+
+## Collection.find(object: query, object: projection, int: pageNum, int: pageSize)
+
+带有分页功能. pageNum 从 1 开始.
+
+
 ## Collection.drop()
 
 删除当前文档集合.
@@ -244,9 +272,11 @@ var findx = coll.find( { qty: { $gt: 25 } }, { item: 1, qty: 1 } );
 
 符合查询条件的文档数目
 
+
 ## UpdateResult.isModifiedCountAvailable()
 
 如果返回 true, 则 getModifiedCount() 可用.
+
 
 ## UpdateResult.getModifiedCount()
 

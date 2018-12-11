@@ -9,24 +9,44 @@
       attribute_template.html('');
       
       xb.api('ZYAPP_SYSMGT', 'smartconfig', 'reading', {name: data.name}, function(d) {
-        var names = [];
-        for (var n in d.data) {
-          names.push(n);
-        }
-        names.sort(); // 排序后显示
+        $("#state").text(d.state);
         
-        names.forEach(function(n) {
+        eachObjSort(d.data, function(n, v, i) {
           var item = $(html);
           attribute_template.append(item);
           item.find("[name=k]").val(n);
-          item.find("[name=v]").val(d.data[n]);
-          item.find("[name=t]").val(check_type(d.data[n]));
+          item.find("[name=v]").val(v);
+          item.find("[name=t]").val(check_type(v));
+        });
+        
+        eachObjSort(d.tpl, function(n, v) {
+          if (!d.data[n]) {
+            var item = $(html);
+            attribute_template.append(item);
+            item.find("[name=k]").val(n);
+            item.find("[name=t]").val(v);
+          }
         });
       });
     
       $('#add_item').click(function() {
         attribute_template.append($(html));
       });
+      
+      //
+      // 迭代 obj, 按键名排序, cb:function(k, v, i)
+      // 如果 obj 为空则立即返回
+      //
+      function eachObjSort(obj, cb) {
+        if (!obj) return;
+        var names = [];
+        for (var n in obj) {
+          names.push(n);
+        }
+        names.sort().forEach(function(n, i) {
+          cb(n, obj[n], i);
+        });
+      }
       
       
       function check_type(v) {
@@ -61,6 +81,10 @@
         <option value='2'>布尔</option>
         <option value='-1'>删除</option>
       </form:select>
+    </fieldset>
+    
+    <fieldset>
+      <span class='msg' id='state'></span>
     </fieldset>
     
     <footer>

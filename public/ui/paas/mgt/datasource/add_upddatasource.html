@@ -120,7 +120,7 @@
               </label>
               </section>
             </div>
-            <div class="row">
+            <div class="row hide">
              <section class="col col-6">
                 <label class="label">允许连接池</label>
                 <label class="input">
@@ -128,34 +128,34 @@
                </label>
              </section>
             </div>
-            <div>
-              <section>
-                <label>{<br/>
-"name":"通过名字区分监控。 缺省值 null",<br/>
-"url":"连接数据库的url",<br/>
-"driverClassName":"如果不配置druid会根据url自动识别dbType",<br/>
-"username":"连接数据库的用户名",<br/>
-"password":"连接数据库的密码",<br/>
-"filters":"stat",<br/>
-"initialSize":"初始化时建立物理连接的个数 缺省值 0",<br/>
-"minIdle":"最小连接池数量 缺省值 null",<br/>
-"maxActive":"最大连接池数量 缺省值 8",<br/>
-"timeBetweenEvictionRunsMillis":"如果连接空闲时间大于等于minEvictableIdleTimeMillis关闭物理连接 缺省值 1分钟",<br/>
-"minEvictableIdleTimeMillis":"连接保持空闲不被驱逐的最长时间 缺省值 30分钟",<br/>
-"validationQuery":"SELECT 'x'",<br/>
-"validationQueryTimeout":"单位：秒，检测连接是否有效的超时时间",<br/>
-"testWhileIdle":"true",<br/>
-"testOnBorrow":"false",<br/>
-"testOnReturn":"false",<br/>
-"poolPreparedStatements":"是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭。分库分表较多的数据库，建议配置为false。缺省值 false",<br/>
-"maxOpenPreparedStatements":"要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true。不会存在Oracle下PSCache占用内存过多的问题，可以把这个数值配置大一些，比如说100 缺省值 -1"<br/>
-}</label>
-                <label class="label">连接池配置JSON</label>
-                <label class="textarea">
-                  <textarea rows="2" name="prop" id="prop" placeholder="连接池配置JSON"></textarea>
-                </label>
-              </section>
-            </div>
+<!--            <div>-->
+<!--              <section>-->
+<!--                <label>{<br/>-->
+<!--"name":"通过名字区分监控。 缺省值 null",<br/>-->
+<!--"url":"连接数据库的url",<br/>-->
+<!--"driverClassName":"如果不配置druid会根据url自动识别dbType",<br/>-->
+<!--"username":"连接数据库的用户名",<br/>-->
+<!--"password":"连接数据库的密码",<br/>-->
+<!--"filters":"stat",<br/>-->
+<!--"initialSize":"初始化时建立物理连接的个数 缺省值 0",<br/>-->
+<!--"minIdle":"最小连接池数量 缺省值 null",<br/>-->
+<!--"maxActive":"最大连接池数量 缺省值 8",<br/>-->
+<!--"timeBetweenEvictionRunsMillis":"如果连接空闲时间大于等于minEvictableIdleTimeMillis关闭物理连接 缺省值 1分钟",<br/>-->
+<!--"minEvictableIdleTimeMillis":"连接保持空闲不被驱逐的最长时间 缺省值 30分钟",<br/>-->
+<!--"validationQuery":"SELECT 'x'",<br/>-->
+<!--"validationQueryTimeout":"单位：秒，检测连接是否有效的超时时间",<br/>-->
+<!--"testWhileIdle":"true",<br/>-->
+<!--"testOnBorrow":"false",<br/>-->
+<!--"testOnReturn":"false",<br/>-->
+<!--"poolPreparedStatements":"是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭。分库分表较多的数据库，建议配置为false。缺省值 false",<br/>-->
+<!--"maxOpenPreparedStatements":"要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true。不会存在Oracle下PSCache占用内存过多的问题，可以把这个数值配置大一些，比如说100 缺省值 -1"<br/>-->
+<!--}</label>-->
+<!--                <label class="label">连接池配置JSON</label>-->
+<!--                <label class="textarea">-->
+<!--                  <textarea rows="2" name="prop" id="prop" placeholder="连接池配置JSON"></textarea>-->
+<!--                </label>-->
+<!--              </section>-->
+<!--            </div>-->
             <div>
               <section>
                 <label class="label">说明</label>
