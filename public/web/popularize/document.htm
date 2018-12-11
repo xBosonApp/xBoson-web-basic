@@ -1,0 +1,80 @@
+<!-- Create By xBoson System -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <include src='./_meta.htm'/>
+  </head>
+  <body>
+    <include src='./_menu.htm'/>
+    <script src='comm/index.js'></script>
+    <style>
+      .doc { padding: 50px 50px 50px 80px; margin: 0px 50px; margin-bottom: 60px; background: #ececec;
+        border-radius:15px; display: flex; }
+      .itemcontent { margin: 20px 50px; flex:1;}
+      .pic  { display: flex; justify-content: center; flex-direction: column; }
+      .type { display: inline-block; width: 80px; }
+      .date { display: inline-block; width: 80px; }
+      .link { font-size: 30px; }
+      .note { text-align: right; font-size: 8px; color: #999; }
+      .link:hover { transition: all 0.3s; text-shadow: 3px 3px 5px #888; }
+      .down { flex: 0; }
+      .desc { margin-bottom: 10px; }
+      .gohome { margin: 10px 50px; margin-top: 100px; display: inline-block; border-radius:15px; 
+                background: #ececec; padding: 6px; }
+      .gohome:hover { transition: all 0.3s; box-shadow: 3px 3px 15px #888; }
+      
+      @media screen and (max-width: 900px) {
+        .link { font-size: 20px; }
+        .doc  { padding: 15px; margin-bottom: 20px; }
+        .down { width: 90px; padding-left: 20px; }
+        .note, .desc { font-size: 8px; }
+        .itemcontent { margin: 15px 30px; }
+      }
+    </style>
+    <script src='document.list.js'></script>
+    <script>
+    jQuery(function($) {
+      //
+      // 文件列表在脚本 'document.list.js' 中定义
+      //
+      var list = document_download_list;
+      
+      var cont = $("#template");
+      var html = cont.html();
+      cont.html('');
+        
+      list.forEach(function(doc) {
+        var item = $(html);
+        cont.append(item);
+        var type = doc.file.lastIndexOf('.');
+        type = doc.file.substring(type+1);
+        item.find(".link").text(doc.name).attr('href', '../../docx/'+ doc.file);
+        item.find(".type").text(type.toUpperCase());
+        item.find(".date").text(doc.date);
+        item.find(".desc").text(doc.desc);
+      });
+    });
+    </script>
+    
+    <a href='index.htm' class='gohome' alt='HOME'>
+      <img src='comm/home.png' width='60'/>
+    </a>
+    
+    <div style='min-height: 500px; margin: 10px 0 100px 0;' id='template'>
+      <div class='doc'>
+        <div class='pic'>
+          <img class='down' src='comm/down.png' width='150px'/>
+        </div>
+        <div class='itemcontent'>
+          <a href='../../docx/物理文件名' class='link'>[虚拟文件名]</a><br/>
+          <hr/>
+          <div class='desc'>[一句话介绍]</div>
+          <div class='note'>文档类型: <span class='type'>PDF</span></div>
+          <div class='note'>更新时间: <span class='date'></span></div>
+        </div>
+      </div>
+    </div>
+    
+    <include src='./_footer.htm'/>
+  </body>
+</html>
