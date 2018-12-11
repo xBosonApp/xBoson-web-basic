@@ -1,0 +1,42 @@
+<ui:grid id='idid' class='list' title='智能配置'>
+  <ui:form id='listform'>
+    <!--<form:text name='_id' label='配置 ID'/>-->
+    <form:text name='name' label='配置名称'/>
+    
+    <form:btn_toolbar>
+      <form:group>
+        <form:submit label='查询'/>
+        <form:reset/>
+      </form:group>
+      <form:group>
+        <form:button label='添加' icon='magic'>
+          <moda:open url='mgt/iconfig/add.htm'/>
+        </form:button>
+        <form:button label='配置内容' icon='edit'>
+          <mp:usability recvid='datatable0'/>
+          <moda:open url='mgt/iconfig/setting.htm'/>
+        </form:button>
+        <form:button label='删除' icon='trash-o'>
+          <mp:usability recvid='datatable0'/>
+          <mp:delete app='ZYAPP_SYSMGT' primary='name'
+              mod='smartconfig' api='remote' dataid='datatable0'>
+            <mp:send type='TABLE_UPDATE_REQ' id='datatable0'/>
+          </mp:delete>
+        </form:button>
+      </form:group>
+    </form:btn_toolbar>
+  </ui:form>
+  
+  <mp:savedata type='SELECT_TABLE_ROW' id='datatable0'/>
+  
+  <table:api app='ZYAPP_SYSMGT' mod='smartconfig' 
+      api='list' form='#listform' id='datatable0'>
+    <table:mapper label='配置名称' key='name'/>
+    <table:mapper label='模式' key='mode'>
+      <table:render_dict typecd='ZR.0072'/>
+    </table:mapper>
+    <table:mapper label='创建人' key='owner'/>
+    <table:mapper label='说明' key='desc'/>
+    <table:mapper label='创建时间' key='create_time'/>
+  </table:api>
+</ui:grid>

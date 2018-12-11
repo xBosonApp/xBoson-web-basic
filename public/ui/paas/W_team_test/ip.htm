@@ -1,0 +1,20 @@
+<!-- Create By xBoson System -->
+<js:xboson/>
+<script>
+  $("#ip").each(function() {
+    var ip = $(this);
+    xb.api('af1880a8938f4756a3f377c93be99d78', 'service', 'getip', function(d) {
+      if (d.code == 0) {
+        ip.text(d.data.province +" "+ d.data.city);
+      } else {
+        ip.text(d.msg);
+      }
+    });
+    $("#date").text(new Date());
+  });
+</script>
+
+<div>
+  <span id='ip' style='font-size: 30px'></span>
+  <div id='date'></div>
+</div>

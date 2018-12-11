@@ -38,7 +38,7 @@
   <script>
     jQuery('#open_graphe_editor').click(function() {
       var id = xb.load_data('datatable0')._id;
-      window.open(zy.g.host.ui +'/web/mxgraph/grapheditor/index.html?id='+ id);
+      window.open(zy.g.host.ui +'/web/mxgraph/grapheditor/index.html?id='+ id +'&org='+ zy.g.comm.org);
     });
   </script>
   

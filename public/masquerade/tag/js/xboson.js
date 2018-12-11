@@ -49,6 +49,7 @@ var xb = window.xb = {
   emit                : sendEvent,
   regListener         : regListener,
   on                  : regListener,
+  once                : once,
   events              : events,
   selectedTable       : selectedTable,
   usebilityControl    : usebilityControl,
@@ -129,6 +130,18 @@ function regListener(type, id, callback) {
       getEvent(type, id).remove(callback);
     },
   };
+}
+
+
+//
+// 只接受一次消息
+//
+function once(type, id, callback) {
+  var obj = regListener(type, id, function() {
+    callback.apply(this, arguments);
+    obj.remove();
+  });
+  return obj;
 }
 
 
@@ -602,6 +615,7 @@ function select2fromApi(jobj) {
     // 用文本域做搜索条件
     //
     query[text_field] = term;
+    if (zy.debug) query.s = 'd';
     return query;
   }
 }
