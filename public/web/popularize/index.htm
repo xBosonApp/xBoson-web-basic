@@ -1,5 +1,5 @@
-<!-- Create By xBoson System -->
 <!DOCTYPE html>
+<!-- Create By xBoson System -->
 <html>
   <head>
     <include src='./_meta.htm'/>
@@ -30,10 +30,13 @@
       
       @media screen and (max-width: 900px) {
         .xboson {
-          font-size: 90px;
+          width: 90%; font-size: 50px; padding: 10px 20px !important;
         }
         .show_boson span {
-          font-size: 14px; font-weight: normal;
+          font-size: 10px; font-weight: normal;
+        }
+        .show_boson {
+           min-height: 500px;
         }
         .font100 {
           font-size: 50px;
@@ -89,16 +92,25 @@
       
       @media screen and (max-width: 900px) {
         .info-block {
-          display: block;
+          display: block; width: 60%;
         }
         .blocks {
           display: block;
         }
         .feature {
-          height: 1200px;
+          height: auto;
         }
         .catch {
           /*display: none;*/
+        }
+        .tryit { 
+          text-align: left; margin-bottom: 50px;
+        }
+        .tryit a { 
+          margin: 10px;
+        }
+        h1 {
+          margin-top: 0; padding-top: 40px;
         }
       }
     </style>
@@ -154,10 +166,13 @@
           display: none;
         }
         .cost_of_production .c {
-          height: 100%; padding-left: 40px
+          height: 100%; padding: 40px
         }
         .cost_of_production li {
           margin: 10px 10px;
+        }
+        .cost_of_production ul {
+          padding-inline-start: 5px;
         }
       }
     </style>
@@ -323,12 +338,17 @@
       </div>
     </section>
     
+    <style>
+      @media screen and (max-width: 900px) {
+        .diag_pic { padding:0 !important; }
+      }
+    </style>
     <section class='row_one info white-txt' style='background-color: #1b729d'>
       <div class='row_two' style='padding-top: 80px'>
-        <article class='right' style='overflow: hidden;'>
+        <article class='right diag_pic' style='overflow: hidden; padding-top:100px'>
           <img src='comm/diag.jpg' height='70%'/></article>
         <article>
-          <h1 style='text-align: left'>在线作图，实时协作</h1>
+          <h1 style='text-align: left'>在线作图<br/>实时协作</h1>
           <ul>
             <li>支持流程图、思维导图、原型图、UML、网络拓扑图等</li>
             <li>无需下载和更新，打开浏览器就可以随时随地的发挥创意，规划工作.</li>
@@ -337,6 +357,7 @@
             <li>支持 Windows, Mac, Linux </li>
           </ul>
         </article> 
+      </div>
     </section>
       
     
