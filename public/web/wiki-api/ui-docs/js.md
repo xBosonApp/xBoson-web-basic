@@ -98,3 +98,33 @@ html2canvas(render_target, options).then(function(canvas) {
 });
 </script>
 ```
+
+## `<js:echarts>`
+
+加载 echart 相关脚本.
+
+```html
+<div id='id' url='/app/mod/api' title='chart'></div>
+<div id='txt' url='/app/mod/api' title='chart'>
+  <b name='val1'></b>
+  <b name='val2'></b>
+</div>
+<script>
+//
+// 创建 echart 图表, dom_select 选择器字符串选择一个 dom 对象, 并
+// 把对象转换成图表, 该dom 必须有属性:
+//    1. title 图表的标题,
+//    2. url 图表加载数据的数据服务 url, 
+// data 参数指定默认图表参数, 首先调用 requestArgGetter() 函数并把
+// 返回值作为调用数据服务的参数.
+// 数据服务返回的 json option 属性(或本身)即为 echart 的加载数据.
+// 当图表元素被点击, 发出 'chart-click' 事件
+//
+xb.buildChart(/*dom_select*/ '#id', /*data*/ {}, /*requestArgGetter*/ function() { return {}; });
+//
+// 从 dom 的 url 属性加载接口数据, 将数据绑定到含有 name 属性的子元素
+// 接口数据的 key 对应 name, 值设置到 innerText.
+//
+xb.bingValueForName(/*dom_select*/ '#txt', /*requestArgGetter*/ function() { return {}; });
+</script>
+```
