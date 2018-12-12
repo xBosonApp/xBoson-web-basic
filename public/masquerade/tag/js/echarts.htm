@@ -1,0 +1,128 @@
+<once id='echarts.js'><script src='###config.contextPath######baseurl###/ui/paas/lib/js/plugin/echart4.2.0-rc.2/echarts.min.js'></script></once>
+<script>
+  (function($) {
+    var x = xb || {};
+    x.bingValueForName = bingValueForName;
+    x.__api = __api;
+    x.buildChart = buildChart;
+    
+    //
+    // 从 dom 的 url 属性加载接口数据, 将数据绑定到含有 name 属性的子元素
+    // 接口数据的 key 对应 name, 值设置到 innerText.
+    //
+    function bingValueForName(dom_select, requestArgGetter) {
+      var jdom = $(dom_select);
+      // 格式: '/机构/应用/模块/api'
+      var url = jdom.attr('url');
+      if (!url) return;
+      
+      var arg = requestArgGetter ? requestArgGetter() : {};
+      jdom.find('[name]').text('');
+      __api(url, arg, over);
+      
+      function over(err, ret) {
+        if (err) {
+          jdom.append("<span class='error'>"+ err.message +"</span>");
+          return;
+        }
+        var d = ret.data || ret.result || ret;
+        for (var n in d) {
+          jdom.find('[name='+ n +']').text(d[n]);
+        }
+      }
+    }
+    
+    
+    function __api(url, arg, over) {
+      // 格式: '/应用/模块/api'
+      var apiUrl = zy.g.host.api +'app/'+ zy.g.comm.org + url;
+      if (zy.debug) arg.s = 'd';
+      
+      $.ajax(apiUrl, {
+        data : arg,
+        error : function (req, textStatus, errorThrown) {
+          over(new Error(textStatus));
+        },
+        success: function(data, textStatus, jqXHR) {
+          if (data.code == 0) {
+            over(null, data);
+          } else {
+            over(new Error(data.msg));
+          }
+        },
+      });
+    }
+    
+    
+    //
+    // 创建 echart 图表, dom_select 选择器字符串选择一个 dom 对象, 并
+    // 把对象转换成图表, 该dom 必须有属性:
+    //    1. title 图表的标题,
+    //    2. url 图表加载数据的数据服务 url, 
+    // data 参数指定默认图表参数, 首先调用 requestArgGetter() 函数并把
+    // 返回值作为调用数据服务的参数.
+    // 数据服务返回的 json option 属性(或本身)即为 echart 的加载数据.
+    // 当图表元素被点击, 发出 'chart-click' 事件
+    //
+    function buildChart(dom_select, data, requestArgGetter) {
+      var jdom = $(dom_select);
+      var myChart = jdom.data('bindEChart');
+      var url = jdom.attr('url');
+      var option = {
+        title: {
+          text: jdom.attr('title'),
+        }
+      };
+      _init();
+      
+      function _init() {
+        if (!myChart) {
+          myChart = echarts.init(jdom[0]);
+          myChart.on('click', function (params) {
+            jdom.trigger("chart-click", params);
+          });
+          jdom.data('bindEChart', myChart);
+          $(window).on('resize', __resize);
+        }
+  
+        if (url) {
+          myChart.showLoading();
+          
+          var arg = requestArgGetter ? requestArgGetter() : {};
+          __api(url, arg, over);
+          
+          function over(err, data) {
+            myChart.hideLoading();
+            if (data) {
+              $.extend(option, data.option || data);
+              myChart.setOption(option);
+            }
+            if (err) {
+              __free();
+              jdom.html("加载数据失败, "+ err.message);
+              var retry = $("<a href='#'>点击重试</a>");
+              jdom.append(retry);
+              retry.click(_init);
+            }
+          }
+        }
+      
+        $.extend(option, data);
+        myChart.setOption(option);
+      }
+      
+      function __free() {
+        if (!myChart) return;
+        myChart.clear();
+        myChart = null;
+        jdom.data('bindEChart', null);
+        $(window).off('resize', __resize);
+      }
+      
+      function __resize() {
+        myChart && myChart.resize();
+      }
+      return myChart;
+    }
+  })(jQuery);
+</script>
