@@ -160,6 +160,7 @@ jQuery(function($) {
   
   $('#year_report').on('chart-click', function(e, ce) {
     mm = parseInt(ce.name);
+    month.text(mm);
     initAutoChart($(".month_chart"));
   });
   

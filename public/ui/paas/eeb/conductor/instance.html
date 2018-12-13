@@ -5,7 +5,7 @@
   (function(){
     
     //var url = 'http://'+ window.location.host+'/trs/yy.html';
-    var url = 'http://'+ location.host+'/eeb/ui/index.htm'; //+zy.g.comm.org+'&openid='+zy.g.comm.openid;
+    var url = location.protocol +'//'+ location.host+'/eeb/ui/index.htm'; //+zy.g.comm.org+'&openid='+zy.g.comm.openid;
     var pym_sc = pym.Parent('instance_dummy', url, { renderCallback: drawGraphic });
     var jwin = $(window);
     var jframe = $('#instance_dummy iframe');
