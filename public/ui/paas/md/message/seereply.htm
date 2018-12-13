@@ -1,0 +1,33 @@
+<!-- Create By xBoson System -->
+<moda:frame title='查看回复'>
+  <style>
+    .reply_content {
+      margin: 10px; padding: 10px;
+    }
+  </style>
+  <ui:form id='create' class='update_form'>
+    <!-- 读取表格 datatable0 当前行的数据并绑定到 form 上, 需要与 mp:loaddata 配合 -->
+    <mp:loaddata id='datatable0'/>
+    <script>
+    jQuery(function($) {
+      // 该方法可以读取由 mp:savedata 保存的数据, 注意 id 要一致.
+      var data = xb.load_data('datatable0');
+      var main = $('#reply_text');
+      if (data.reply.length) {
+        data.reply.forEach(function(t) {
+          $("<pre class='reply_content'>").html(t).appendTo(main);
+        });
+      } else {
+        $("<pre class='reply_content'>没有回复</div>").appendTo(main);
+      }
+    });
+    </script>
+    <!-- 属性字段 -->
+    <fieldset id='reply_text'>
+    </fieldset>
+    <!-- 模态按钮 -->
+    <footer>
+      <moda:cancel/>
+    </footer>
+  </ui:form>
+</moda:frame>

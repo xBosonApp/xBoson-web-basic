@@ -167,7 +167,7 @@ phone.deleteOne({
 删除多个文档, 返回 DeleteResult 对象.
 
 ```javascript
-phone.deleteOne([{
+phone.deleteMany([{
   model: "BOOM8",
   name: "samsvng",
 }, {

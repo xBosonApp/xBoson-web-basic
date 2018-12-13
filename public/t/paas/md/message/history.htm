@@ -1,0 +1,53 @@
+<!-- Create By xBoson System -->
+<ui:grid id='idid' class='list' title='留言列表'>
+  <ui:form id='listform'>
+    <!-- 查询字段集合 -->
+    <form:select name='onlyunread' label='状态过滤' width='3'>
+        <option value='1'>未回复</option>
+        <option value=''>全部</option>
+    </form:select>
+    
+    <!-- 按钮组 -->
+    <form:btn_toolbar>
+      <form:group>
+        <form:submit label='查询'/>
+        <form:reset/>
+      </form:group>
+      <form:group>
+        <form:button label='回复' icon='edit'>
+          <!-- 修改配编辑数据的模态页面路径 -->
+          <mp:usability recvid='datatable0'/>
+          <moda:open url='md/message/reply.htm'/>
+        </form:button>
+        <form:button label='查看回复' icon='edit'>
+          <!-- 修改配编辑数据的模态页面路径 -->
+          <mp:usability recvid='datatable0'/>
+          <moda:open url='md/message/seereply.htm'/>
+        </form:button>
+      </form:group>
+    </form:btn_toolbar>
+  </ui:form>
+  
+  <!-- 当表格行被鼠标选中, 保存当前选中行的数据 -->
+  <mp:savedata type='SELECT_TABLE_ROW' id='datatable0'/>
+  
+  <!-- 修改 app/mod/api 为对应查询表格数据的接口 -->
+  <table:api app='af1880a8938f4756a3f377c93be99d78' mod='leave_msg' 
+      api='history' form='#listform' id='datatable0'>
+    <!-- 自定义字段, 如果删除全部的 mapper 可以看到原始数据表 -->
+    <table:mapper label='发送人' key='uid'/>
+    <table:mapper label='发送时间' key='createTime'/>
+    <table:mapper label='意见' key='message'/>
+    <table:mapper label='回复' key='reply'>
+      <table:render>
+      function(data, type, row, meta) {
+        var t = data.join(' ');
+        var max = 40;
+        return Math.min(t.length, max)==max ? (t.substring(0, max) + ' ...') : t;
+      }
+      </table:render>
+    </table:mapper>
+    <table:mapper label='评级' key='star'><table:render_enum 
+      map='{ 0: "", 1: "很差劲", 2:"不满意", 3:"一般", 4:"不错", 5:"效果拔群" }'/></table:mapper>
+  </table:api>
+</ui:grid>

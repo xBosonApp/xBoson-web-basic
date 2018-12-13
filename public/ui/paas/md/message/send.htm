@@ -1,0 +1,30 @@
+<!-- Create By xBoson System -->
+<ui:grid id='sendmessage' class='list' title='留言'>
+  <ui:form id='create' class='update_form'>
+    <!-- 属性字段 -->
+    <fieldset>
+      <form:textarea name='msg' label='留言内容' tooltip='最少1字符' width='9' rows='10'>
+        <vali:string min='1' max='999'/>
+      </form:textarea>
+      <form:select name='star' label='评级' width='6'>
+        <option value='3'>一般</option>
+        <option value='4'>不错</option>
+        <option value='5'>效果拔群</option>
+        <option value='2'>不满意</option>
+        <option value='1'>很差劲</option>
+      </form:select>
+    </fieldset>
+    <!-- 模态按钮 -->
+    <footer>
+      <moda:cancel/>
+      <moda:ok>
+        <!-- 修改 app/mod/api 为对应接口, 当接口执行成功 更新 datatable0 表格中的数据 -->
+        <form:post app='af1880a8938f4756a3f377c93be99d78' mod='leave_msg' api='send'>
+          <mp:close when='this.code == 0'>
+            <mp:send type='TABLE_UPDATE_REQ' id='datatable0'/>
+          </mp:close>
+        </form:post>
+      </moda:ok>
+    </footer>
+  </ui:form>
+</ui:grid>

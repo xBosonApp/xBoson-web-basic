@@ -2,49 +2,21 @@
 <js:xboson/>
 <js:echarts/>
 <style>
-  .brow {
-    display: flex;
-  }
-  .brow section, .brow .chart2 {
-    border: 1px solid #999; box-shadow: 5px; border-radius: 5px; margin: 10px; padding: 20px; 
-    flex: 1; min-height: 260px;
-  }
-  .add_button {
-    font-size: 20px; padding: 15px;
-  }
+  .add_button { font-size: 20px; padding: 15px; }
   .total_txt div { display: flex; border-bottom: 1px solid #eee; }
   .total_txt span { flex: 3; word-wrap: break-word; word-break: break-all; }
   .total_txt b { flex: 1}
-  .chart2 {
-    min-height: 500px !important;
-  }
+  .chart2 { min-height: 500px !important; }
   .width3 { flex: 3 !important; }
   .error { color: red; }
-  .column_box {
-    flex-direction: column; display: flex;
-  }
+  .column_box { flex-direction: column; display: flex; }
   .bigtxt { font-size: 100px; }
   .bigtxt_c { min-width: 200px; display: inline-block; }
-  
-  tr {
-    border-bottom: 1px solid #999;
-  }
-  td {
-    padding: 1px 9px; word-wrap: break-word; word-break: break-all; 
-  }
-  table { width: 100%; }
-  center {
-    padding-top: 40px;
-  }
-  
-  @media screen and (max-width: 900px) {
-    .brow { 
-      flex-direction: column;
-    }
-  }
+  th[name=createdt] { min-width: 170px; }
+  th[name=elapsed] { min-width: 100px; }
 </style>
 <ui:grid id='req_log_chart' class='year' title='本机构 API 请求分析报表 (年度)'>
-  <div class='brow'>
+  <div class='brow chart_container'>
     <section>
       <center>
         <a href='#' id='min_year' class='add_button'>-</a>
@@ -70,7 +42,7 @@
     </section>
   </div>
   
-  <div class='brow'>
+  <div class='brow chart_container'>
     <div class='chart2 width3 autoChart' id='year_report' title='年度每月报表' 
         url='/af1880a8938f4756a3f377c93be99d78/log_report/year_report'></div>
     <div class='chart2 autoChart' title='应用占比' 
@@ -82,7 +54,7 @@
 </ui:grid>
 
 <ui:grid id='req_log_chart' class='month_chart' title='本机构 API 请求分析报表 (月)'>
-  <div class='brow'>
+  <div class='brow chart_container'>
     <section>
       <center>
         <a href='#' id='min_month' class='add_button'>-</a>
@@ -107,19 +79,19 @@
     </section>
   </div>
   
-  <div class='brow'>
+  <div class='brow chart_container'>
     <div class='chart2 width3 autoChart month_report' title='月报表' 
         url='/af1880a8938f4756a3f377c93be99d78/log_report/month_report'></div>
     <div class='chart2 autoChart' title='应用占比' 
         url='/af1880a8938f4756a3f377c93be99d78/log_report/app_on_mon'></div>
   </div>
   
-  <div class='brow update_on_day_change'>
+  <div class='brow chart_container update_on_day_change'>
     <div class='chart2 autoChart day_report' title='日报表' 
         url='/af1880a8938f4756a3f377c93be99d78/log_report/day_report'></div>
   </div>
   
-  <div class='brow update_on_day_change update_on_hour_change'>
+  <div class='brow chart_container update_on_day_change update_on_hour_change'>
     <div class='chart2 autoChart hour-report' title='分时报表' 
         url='/af1880a8938f4756a3f377c93be99d78/log_report/hour_report'></div>
   </div>
@@ -206,33 +178,20 @@ jQuery(function($) {
     var arg = _requestArgGetter();
     arg.sec = parseInt(ce.name);
     // 请求接口后绘制表格
-    xb.__api(url, arg, function(err, ret) {
-      var html = [];
+    xb.apiCached(url, arg, function(err, ret) {
+      var dia = $("<div>").appendTo(document.body);
       if (err) {
-        html.push(err.message);
+        dia.html("拉取数据失败: "+ err.message);
       } else {
-        html.push("<h3>最慢的接口列表</h3>");
-        html.push('<table>');
-        html.push('<thead><tr>');
-        col('日期'); col('消耗(ms)'); col("机构"); col("API路径");
-        html.push('</tr></thead><tbody>');
-        
-        ret.data.forEach(function(r) {
-          html.push('<tr>');
-          col(r.createdt); col(r.elapsed); col(r.orgid); col(r.log);
-          html.push('</tr>');
+        var table = xb.buildTable(ret.data, {
+          createdt : '日期',
+          elapsed  : '消耗(ms)',
+          orgid    : "机构",
+          log      : "API路径",
         });
-        html.push('</tbody></table>');
+        dia.append(table);
       }
-      
-      var dia = $("<div>").appendTo(document.body).html(html.join(''));
       xb.openDialog(dia);
-          
-      function col(r) {
-        html.push('<td>');
-        html.push(r);
-        html.push('</td>');
-      }
     });
   });
   
