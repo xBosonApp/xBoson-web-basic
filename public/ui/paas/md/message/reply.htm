@@ -1,0 +1,26 @@
+<!-- Create By xBoson System -->
+<moda:frame title='回复'>
+  <ui:form id='create' class='update_form'>
+    <!-- 读取表格 datatable0 当前行的数据并绑定到 form 上, 需要与 mp:loaddata 配合 -->
+    <mp:loaddata id='datatable0'/>
+    <!-- 属性字段 -->
+    <fieldset>
+      <input type='hidden' name='_id'/>
+      <form:textarea name='msg' label='回复内容' tooltip='最少1字符' width='9' rows='10'>
+        <vali:string min='1' max='999'/>
+      </form:textarea>
+    </fieldset>
+    <!-- 模态按钮 -->
+    <footer>
+      <moda:cancel/>
+      <!-- 修改 app/mod/api 为对应接口, 当接口执行成功 更新 datatable0 表格中的数据 -->
+      <moda:ok>
+        <form:post app='af1880a8938f4756a3f377c93be99d78' mod='leave_msg' api='completed'>
+          <mp:close when='this.code == 0'>
+            <mp:send type='TABLE_UPDATE_REQ' id='datatable0'/>
+          </mp:close>
+        </form:post>
+      </moda:ok>
+    </footer>
+  </ui:form>
+</moda:frame>

@@ -1,0 +1,220 @@
+<!-- Create By xBoson System -->
+<js:xboson/>
+<js:echarts/>
+<style>
+  .add_button { font-size: 20px; padding: 15px; }
+  .total_txt div { display: flex; border-bottom: 1px solid #eee; }
+  .total_txt span { flex: 3; word-wrap: break-word; word-break: break-all; }
+  .total_txt b { flex: 1}
+  .chart2 { min-height: 500px !important; }
+  .width3 { flex: 3 !important; }
+  .error { color: red; }
+  .column_box { flex-direction: column; display: flex; }
+  .bigtxt { font-size: 100px; }
+  .bigtxt_c { min-width: 200px; display: inline-block; }
+  th[name=createdt] { min-width: 170px; }
+  th[name=elapsed] { min-width: 100px; }
+</style>
+<ui:grid id='req_log_chart' class='year' title='本机构 API 请求分析报表 (年度)'>
+  <div class='brow chart_container'>
+    <section>
+      <center>
+        <a href='#' id='min_year' class='add_button'>-</a>
+        <span class='bigtxt_c'><span class='bigtxt' id='year'>2018</span><b>年</b></span>
+        <a href='#' id='add_year' class='add_button'>+</a>
+      </center>
+    </section>
+    <section class='total_txt autoTxtReport' 
+        url='/af1880a8938f4756a3f377c93be99d78/log_report/year_sum'>
+      <div><b>总计访问</b><span name='total'></span></div>
+      <div><b>年度总耗时</b><span name='utime'></span></div>
+      <div><b>年度总计</b><span name='year'></span></div>
+      <div><b>年度环比</b><span name='ring'></span></div>
+      <div><b>年度活跃应用</b><span name='app'></span></div>
+      <div><b>年度活跃机构</b><span name='org'></span></div>
+      <div><b>最慢接口</b><span name='badapp'></span></div>
+    </section>
+    <section class='autoChart' id='app_y_s' title='平均耗时' 
+        url='/af1880a8938f4756a3f377c93be99d78/log_report/used_year'>
+    </section>
+    <section class='autoChart' title='机构占比' 
+        url='/af1880a8938f4756a3f377c93be99d78/log_report/org_on_year'>
+    </section>
+  </div>
+  
+  <div class='brow chart_container'>
+    <div class='chart2 width3 autoChart' id='year_report' title='年度每月报表' 
+        url='/af1880a8938f4756a3f377c93be99d78/log_report/year_report'></div>
+    <div class='chart2 autoChart' title='应用占比' 
+        url='/af1880a8938f4756a3f377c93be99d78/log_report/app_on_year'></div>
+  </div>
+  
+  <div class='brow'>
+  </div>
+</ui:grid>
+
+<ui:grid id='req_log_chart' class='month_chart' title='本机构 API 请求分析报表 (月)'>
+  <div class='brow chart_container'>
+    <section>
+      <center>
+        <a href='#' id='min_month' class='add_button'>-</a>
+        <span class='bigtxt_c'><span id='month' class='bigtxt'>12</span><b>月</b></span>
+        <a href='#' id='add_month' class='add_button'>+</a>
+      </center>
+    </section>
+    <section class='total_txt autoTxtReport' 
+        url='/af1880a8938f4756a3f377c93be99d78/log_report/mon_sum'>
+      <div><b>月总计访问</b><span name='total'></span></div>
+      <div><b>月总耗时</b><span name='utime'></span></div>
+      <div><b>月环比</b><span name='ring'></span></div>
+      <div><b>月同比</b><span name='tong'></span></div>
+      <div><b>月活跃应用</b><span name='app'></span></div>
+      <div><b>月活跃机构</b><span name='org'></span></div>
+    </section>
+    <section class='autoChart' title='平均耗时' 
+        url='/af1880a8938f4756a3f377c93be99d78/log_report/used_mon'>
+    </section>
+    <section class='autoChart' title='机构占比' 
+        url='/af1880a8938f4756a3f377c93be99d78/log_report/org_on_mon'>
+    </section>
+  </div>
+  
+  <div class='brow chart_container'>
+    <div class='chart2 width3 autoChart month_report' title='月报表' 
+        url='/af1880a8938f4756a3f377c93be99d78/log_report/month_report'></div>
+    <div class='chart2 autoChart' title='应用占比' 
+        url='/af1880a8938f4756a3f377c93be99d78/log_report/app_on_mon'></div>
+  </div>
+  
+  <div class='brow chart_container update_on_day_change'>
+    <div class='chart2 autoChart day_report' title='日报表' 
+        url='/af1880a8938f4756a3f377c93be99d78/log_report/day_report'></div>
+  </div>
+  
+  <div class='brow chart_container update_on_day_change update_on_hour_change'>
+    <div class='chart2 autoChart hour-report' title='分时报表' 
+        url='/af1880a8938f4756a3f377c93be99d78/log_report/hour_report'></div>
+  </div>
+  
+</ui:grid>
+
+<script>
+jQuery(function($) {
+  
+  var year  = $("#year");
+  var month = $("#month");
+  var d     = new Date();
+  var day   = d.getDate();
+  var hour  = d.getHours();
+  var yy    = d.getFullYear();
+  var mm    = d.getMonth()+1;
+  
+  var defaultOpt = {
+    color: ['#c23531','#2f4554', '#61a0a8', '#d48265', '#91c7ae','#749f83',  '#ca8622', '#bda29a','#6e7074', '#546570', '#c4ccd3'],
+    selectedMode: 'single',
+    tooltip : {
+        trigger: 'item',
+        axisPointer: {
+            type: 'cross'
+        }
+    },
+  }
+  
+  year.text(yy);
+  month.text(mm);
+  initAutoChart($("body"));
+  
+  var add_year = $("#add_year").click(function() {
+    year.text(yy+=1);
+    initAutoChart($("body"));
+    return false;
+  });
+  
+  var min_year = $("#min_year").click(function() {
+    year.text(yy-=1);
+    initAutoChart($("body"));
+    return false;
+  });
+  
+  $('#add_month').click(function() {
+    if (mm == 12) {
+      month.text(mm = 1);
+      add_year.click();
+      return false;
+    }
+    month.text(mm+=1);
+    initAutoChart($(".month_chart"));
+    return false;
+  });
+  
+  $('#min_month').click(function() {
+    if (mm == 1) {
+      month.text(mm = 12);
+      min_year.click();
+      return false;
+    }
+    month.text(mm-=1);
+    initAutoChart($(".month_chart"));
+    return false;
+  });
+  
+  $('#year_report').on('chart-click', function(e, ce) {
+    mm = parseInt(ce.name);
+    initAutoChart($(".month_chart"));
+  });
+  
+  $('.month_report').on('chart-click', function(e, ce) {
+    day = parseInt(ce.name);
+    initAutoChart($('.update_on_day_change'));
+  });
+  
+  $('.day_report').on('chart-click', function(e, ce) {
+    hour = parseInt(ce.name);
+    initAutoChart($('.update_on_hour_change'));
+  });
+  
+  $('.hour-report').on('chart-click', function(e, ce) {
+    var url = '/af1880a8938f4756a3f377c93be99d78/log_report/bad_api';
+    var arg = _requestArgGetter();
+    arg.sec = parseInt(ce.name);
+    // 请求接口后绘制表格
+    xb.apiCached(url, arg, function(err, ret) {
+      var dia = $("<div>").appendTo(document.body);
+      if (err) {
+        dia.html("拉取数据失败: "+ err.message);
+      } else {
+        var table = xb.buildTable(ret.data, {
+          createdt : '日期',
+          elapsed  : '消耗(ms)',
+          orgid    : "机构",
+          log      : "API路径",
+        });
+        dia.append(table);
+      }
+      xb.openDialog(dia);
+    });
+  });
+  
+  
+  // 在 jroot 元素的子元素中寻找自动化图表并初始化.
+  function initAutoChart(jroot) {
+    jroot.find(".autoChart").each(function() {
+      xb.buildChart(this, defaultOpt, _requestArgGetter);
+    });
+    jroot.find(".autoTxtReport").each(function() {
+      xb.bingValueForName(this, _requestArgGetter);
+    });
+  }
+  
+  
+  function _requestArgGetter() {
+    return {
+      year  : yy,
+      month : mm,
+      day   : day,
+      hour  : hour,
+    };
+  }
+  
+});
+</script>

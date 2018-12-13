@@ -788,7 +788,7 @@
       _fromServer('', function(_m) {
         var _result = [];
         _result[0] = {
-          appnm : '智云',
+          appnm : 'IDE',
           children : _m,
           open : true
         }

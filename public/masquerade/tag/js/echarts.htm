@@ -1,0 +1,265 @@
+<once id='echarts.js'><script src='###config.contextPath######baseurl###/ui/paas/lib/js/plugin/echart4.2.0-rc.2/echarts.min.js'></script>
+<style>
+  .chart_container {
+    display: flex; flex-wrap: wrap;
+  }
+  .chart_container section, .chart_container .chart2 {
+    border: 1px solid #999; box-shadow: 5px; border-radius: 5px; margin: 10px; padding: 20px; 
+    flex: 1; min-height: 260px; min-width: 240px; 
+  }
+  
+  .build_table tr {
+    border-bottom: 1px solid #999;
+  }
+  .build_table td {
+    padding: 1px 9px; word-wrap: break-word; word-break: break-all; 
+  }
+  table[class=build_table] { width: 100%; }
+  center { padding-top: 40px; }
+  
+  @media screen and (max-width: 900px) {
+    .chart_container { 
+      flex-direction: column;
+    }
+  }
+</style>
+<script>
+  (function($) {
+    // 默认缓存有效时间
+    var CACHE_TIME = 5*60*1000;
+    // 绑定到 xb 前缀对象上
+    var x = xb || {};
+    x.bingValueForName = bingValueForName;
+    x.apiCached        = __api;
+    x.buildChart       = buildChart;
+    x.createCache      = createCache;
+    x.buildTable       = buildTable;
+    
+    //
+    // 从 dom 的 url 属性加载接口数据, 将数据绑定到含有 name 属性的子元素
+    // 接口数据的 key 对应 name, 值设置到 innerText.
+    //
+    function bingValueForName(dom_select, requestArgGetter) {
+      var jdom = $(dom_select);
+      // 格式: '/机构/应用/模块/api'
+      var url = jdom.attr('url');
+      if (!url) return;
+      
+      var arg = requestArgGetter ? requestArgGetter() : {};
+      jdom.find('[name]').text('');
+      __api(url, arg, over);
+      
+      function over(err, ret) {
+        if (err) {
+          jdom.append("<span class='error'>"+ err.message +"</span>");
+          return;
+        }
+        var d = ret.data || ret.result || ret;
+        for (var n in d) {
+          jdom.find('[name='+ n +']').text(d[n]);
+        }
+      }
+    }
+    
+    
+    //
+    // data 数据转换为 html 表格, 并返回这个 jquery 对象, head 为表格头;
+    // data 是个数组, 元素为kv对象, 其中k是列名, v是数据.
+    // head 是个kv对象, k是数据列属性名, v是显示在表格中的名字.
+    // _order 可选项, 是个数组元素是数据列名, 决定表格列顺序.
+    //
+    function buildTable(data, head, _order) {
+      if (!_order) {
+        _order = [];
+        for (var n in head) {
+          _order.push(n);
+        }
+      }
+      
+      var rownum = 1;
+      var table = $("<table class='build_table'>");
+      var tbody = $("<thead>").appendTo(table);
+      var tr = _c_tr();
+      _order.forEach(function(n) {
+        th(head[n], n);
+      });
+      
+      tbody = $("<tbody>").appendTo(table);
+      data.forEach(function(row) {
+        tr = _c_tr();  
+        _order.forEach(function(n) {
+          td(row[n]);
+        });
+      });
+      return table;
+      
+      function _c_tr() {
+        var c = rownum%2==0 ? 'even' : 'odd'; ++rownum;
+        return $("<tr>").appendTo(tbody).addClass(c);
+      }
+      function td(t) {
+        return $("<td>").appendTo(tr).html(t);
+      }
+      function th(t, n) {
+        return $("<th>").appendTo(tr).html(t).attr('name', n);
+      }
+    }
+    
+    
+    //
+    // 该接口带有缓存, 缓存时间 1分钟, 调试模式忽略缓存.
+    //
+    function __api(url, arg, over) {
+      // 格式: '/应用/模块/api'
+      var apiUrl = zy.g.host.api +'app/'+ zy.g.comm.org + url;
+      var key = apiUrl +'?'+ $.param(arg);
+      var cache = createCache(key, callRemote);
+      if (zy.debug) {
+        arg.s = 'd';
+      }
+      cache.get(over);
+      
+      function callRemote(cb) {
+        $.ajax(apiUrl, {
+          data : arg,
+          error : function (req, textStatus, errorThrown) {
+            cb(new Error(textStatus));
+          },
+          success: function(data, textStatus, jqXHR) {
+            if (data.code == 0) {
+              cb(null, data);
+            } else {
+              cb(new Error(data.msg));
+            }
+          },
+        });
+      }
+    }
+    
+    
+    //
+    // 创建本地缓存, key 缓存主键, 
+    // getFromLocal(cb: Function(err, data)) 该方法总是通过cb返回(远程)实时数据;
+    // 如果处于 debug 模式, 则忽略缓存; _cache_time 可以设置一个缓存有效时间, 毫秒.
+    //
+    // 返回: { 
+    //    PREFIX : String 本地缓存前缀
+    //    TIME   : Int 本地缓存时间, 毫秒, 只读
+    //    get    : Function(cb: Function(err, data)) 获取 key 对应的数据 cb 会被回调.
+    // }
+    //
+    function createCache(key, getNoCache, _cache_time) {
+      var PREFIX = "_xb_cache:";
+      var cacheTime = CACHE_TIME || _cache_time;
+      key = PREFIX + key;
+      
+      var ret = {
+        PREFIX : PREFIX,
+        TIME   : cacheTime,
+        get    : zy.debug ? getNoCache : get,
+      };
+      return ret;
+      
+      function get(cb) {
+        var v = sessionStorage.getItem(key);
+        try {
+          v = JSON.parse(v);
+        } catch(e) {
+          v = null;
+        }
+        if (v==null || Date.now() - v.time > cacheTime) {
+          v = getRemoteAndCache(cb);
+        } else {
+          cb(null, v.obj);
+        }
+      }
+      
+      function getRemoteAndCache(cb) {
+        getNoCache(function(err, obj) {
+          if (err) {
+            return cb(err);
+          }
+          var v = {
+            obj  : obj,
+            time : Date.now(),
+          };
+          sessionStorage.setItem(key, JSON.stringify(v));
+          cb(null, obj);
+        });
+      }
+    }
+    
+    
+    //
+    // 创建 echart 图表, dom_select 选择器字符串选择一个 dom 对象, 并
+    // 把对象转换成图表, 该dom 必须有属性:
+    //    1. title 图表的标题,
+    //    2. url 图表加载数据的数据服务 url, 
+    // data 参数指定默认图表参数, 首先调用 requestArgGetter() 函数并把
+    // 返回值作为调用数据服务的参数.
+    // 数据服务返回的 json option 属性(或本身)即为 echart 的加载数据.
+    // 当图表元素被点击, 发出 'chart-click' 事件
+    //
+    function buildChart(dom_select, data, requestArgGetter) {
+      var jdom = $(dom_select);
+      var myChart = jdom.data('bindEChart');
+      var url = jdom.attr('url');
+      var option = {
+        title: {
+          text: jdom.attr('title'),
+        }
+      };
+      _init();
+      
+      function _init() {
+        if (!myChart) {
+          myChart = echarts.init(jdom[0]);
+          myChart.on('click', function (params) {
+            jdom.trigger("chart-click", params);
+          });
+          jdom.data('bindEChart', myChart);
+          $(window).on('resize', __resize);
+        }
+  
+        if (url) {
+          myChart.showLoading();
+          
+          var arg = requestArgGetter ? requestArgGetter() : {};
+          __api(url, arg, over);
+          
+          function over(err, data) {
+            myChart.hideLoading();
+            if (data) {
+              $.extend(option, data.option || data);
+              myChart.setOption(option);
+            }
+            if (err) {
+              __free();
+              jdom.html("加载数据失败, "+ err.message);
+              var retry = $("<a href='#'>点击重试</a>");
+              jdom.append(retry);
+              retry.click(_init);
+            }
+          }
+        }
+      
+        $.extend(option, data);
+        myChart.setOption(option);
+      }
+      
+      function __free() {
+        if (!myChart) return;
+        myChart.clear();
+        myChart = null;
+        jdom.data('bindEChart', null);
+        $(window).off('resize', __resize);
+      }
+      
+      function __resize() {
+        myChart && myChart.resize();
+      }
+      return myChart;
+    }
+  })(jQuery);
+</script>
+</once>

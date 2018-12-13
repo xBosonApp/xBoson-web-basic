@@ -1530,10 +1530,10 @@ function NewIDE(roleid) {
         if(_m.length != 0){
           var _result = [];
           _result[0] = {
-            appnm : '智云',
+            appnm : 'xBoson IDE',
             children : _m,
             open : true,
-            showid: '智云'
+            showid: 'xBoson IDE'
           }
           _tree = $.fn.zTree.init(_ul, _setting, _result); 
         }
