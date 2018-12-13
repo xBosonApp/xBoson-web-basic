@@ -166,7 +166,8 @@ jQuery(function($) {
       constructor() {
         this.points = [];
         this.sticks = [];
-        this.number_point = 20;
+        // 屏幕越大生成的原子越多
+        this.number_point = (window.innerWidth/80) || 20;
         for (var i = 0; i < this.number_point; i++) {
           this.points.push(new Point(Utl.random(0, W), Utl.random(0, H)));
         }
