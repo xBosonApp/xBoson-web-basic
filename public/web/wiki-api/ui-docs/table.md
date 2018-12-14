@@ -54,11 +54,13 @@ demo 见 table:api
 字段渲染器, 放在 table:mapper 标签中.
 
 ```html
-<table:render>
-function(data, type, row, meta) {
-  return {1:"创世块", 2:'数据块', 3:'加密数据块', 4:'链码块', 5:'消息块'}[data];
-}
-</table:render>
+<table:mapper label='显示名称' key='dataKey'>
+  <table:render>
+  function(data, type, row, meta) {
+    return {1:"创世块", 2:'数据块', 3:'加密数据块', 4:'链码块', 5:'消息块'}[data];
+  }
+  </table:render>
+</table:mapper>
 ```
 
 
@@ -72,7 +74,9 @@ function(data, type, row, meta) {
 * typecd 字典主键
 
 ```html
-<table:render_dict typecd='NS-APP-01-AUTHORITYTYPE'/>
+<table:mapper label='显示名称' key='dataKey'>
+  <table:render_dict typecd='NS-APP-01-AUTHORITYTYPE'/>
+</table:mapper>
 ```
     
     
@@ -86,7 +90,9 @@ function(data, type, row, meta) {
 * map - 枚举 json 字符串
   
 ```html
-<table:render_enum map='{ 1: "公共", 0: "私有" }'/>
+<table:mapper label='显示名称' key='dataKey'>
+  <table:render_enum map='{ 1: "公共", 0: "私有" }'/>
+</table:mapper>
 ```
   
   
@@ -96,7 +102,9 @@ function(data, type, row, meta) {
 字段渲染器, 放在 table:mapper 标签中.
 
 ```html
-<table:render_ms/>
+<table:mapper label='显示名称' key='dataKey'>
+  <table:render_ms/>
+</table:mapper>
 ```
 
 
@@ -106,7 +114,9 @@ function(data, type, row, meta) {
 字段渲染器, 放在 table:mapper 标签中.
 
 ```html
-<table:render_status/>
+<table:mapper label='显示名称' key='dataKey'>
+  <table:render_status/>
+</table:mapper>
 ```
 
 
@@ -116,5 +126,20 @@ function(data, type, row, meta) {
 字段渲染器, 放在 table:mapper 标签中.
 
 ```html
-<table:render_time/>
+<table:mapper label='显示名称' key='dataKey'>
+  <table:render_time/>
+</table:mapper>
+```
+
+## `<table:render_arr>`
+
+要渲染的字段是个数组, 使用该渲染器可以控制输出格式, 和最大长度
+参数:
+  [可选] split - 元素之间的分隔符, 默认 ','.
+  [可选] max - 输出字符串最大长度, 默认 40 字符.
+
+```html
+<table:mapper label='显示名称' key='dataKey'>
+  <table:render_arr split=' | ' max='40'/>
+</table:mapper>
 ```

@@ -1,0 +1,14 @@
+<never> 
+  要渲染的字段是个数组, 使用该渲染器可以控制输出格式, 和最大长度
+  参数:
+    [可选] split - 元素之间的分隔符, 默认 ','.
+    [可选] max - 输出字符串最大长度, 默认 40 字符.
+</never>
+<code class='render_function' style='display: none'>
+  function(data, type, row, meta) {
+    var split = '###split###' || ',';
+    var max   = parseInt('###max###') || 40;
+    var t     = data.join(split);
+    return Math.min(t.length, max)==max ? (t.substring(0, max) + ' ...') : t;
+  }
+</code>

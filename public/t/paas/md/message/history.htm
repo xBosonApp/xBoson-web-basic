@@ -39,13 +39,7 @@
     <table:mapper label='发送时间' key='createTime'/>
     <table:mapper label='意见' key='message'/>
     <table:mapper label='回复' key='reply'>
-      <table:render>
-      function(data, type, row, meta) {
-        var t = data.join(' ');
-        var max = 40;
-        return Math.min(t.length, max)==max ? (t.substring(0, max) + ' ...') : t;
-      }
-      </table:render>
+      <table:render_arr split=' '/>
     </table:mapper>
     <table:mapper label='评级' key='star'><table:render_enum 
       map='{ 0: "", 1: "很差劲", 2:"不满意", 3:"一般", 4:"不错", 5:"效果拔群" }'/></table:mapper>

@@ -1,7 +1,7 @@
 <!-- Create By xBoson System -->
 <moda:frame title='查看回复'>
   <style>
-    .reply_content {
+    .reply_content, .message1 {
       margin: 10px; padding: 10px;
     }
   </style>
@@ -13,9 +13,12 @@
       // 该方法可以读取由 mp:savedata 保存的数据, 注意 id 要一致.
       var data = xb.load_data('datatable0');
       var main = $('#reply_text');
+      main.find('.message1 .panel-body').text(data.message);
+      main.find('.title').text(data.uid);
+      
       if (data.reply.length) {
         data.reply.forEach(function(t) {
-          $("<pre class='reply_content'>").html(t).appendTo(main);
+          $("<pre class='reply_content'>").text(t).appendTo(main);
         });
       } else {
         $("<pre class='reply_content'>没有回复</div>").appendTo(main);
@@ -24,6 +27,12 @@
     </script>
     <!-- 属性字段 -->
     <fieldset id='reply_text'>
+      <div class="panel panel-default message1">
+        <h2 class='title'></h2>
+        <div class="panel-body">
+          Basic panel example
+        </div>
+      </div>
     </fieldset>
     <!-- 模态按钮 -->
     <footer>

@@ -3,10 +3,15 @@
   <ui:form id='create' class='update_form'>
     <!-- 属性字段 -->
     <fieldset>
-      <form:textarea name='msg' label='留言内容' tooltip='最少1字符' width='9' rows='10'>
+      <section class='col'>
+        <b style='font-size: 60px; pading-right: 10px;'>既然</b>
+        到了这里, 请留下一些话, 不论是吐槽还是称赞, 我们都会认真思索.
+      </section>
+      
+      <form:textarea name='msg' label='留言' tooltip='说点什么吧' width='9' rows='10'>
         <vali:string min='1' max='999'/>
       </form:textarea>
-      <form:select name='star' label='评级' width='6'>
+      <form:select name='star' label='心情' width='6'>
         <option value='3'>一般</option>
         <option value='4'>不错</option>
         <option value='5'>效果拔群</option>
