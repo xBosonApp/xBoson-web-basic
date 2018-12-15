@@ -111,3 +111,29 @@ blockquote p {
   border-radius:8px;
   font-family: '黑体', 'Times New Roman', Times, serif;
 }
+
+@media screen and (max-width: 1200px) {
+  #menu {
+    min-width: 80px; padding: 15px;
+    border-left-width: 15px;
+  }
+  h1 {
+    margin: 80px 0; border-right-width: 80px;
+  }
+  #content {
+    padding: 35px;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  #menu {
+    min-width: 80px; padding: 5px;
+    border-left-width: 5px;
+  }
+  h1 {
+    margin: 60px 0; border-right-width: 20px;
+  }
+  #content {
+    padding: 5px;
+  }
+}
