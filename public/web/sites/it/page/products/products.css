@@ -1,0 +1,64 @@
+h6 {
+  padding: 10px 0;
+  width: 100%;
+  height: 30px;
+  margin-bottom: 10px;
+  font-size:16px;
+  font-weight:600;
+  color: #337ab7;
+  border-bottom: 1px dotted #a3a3a3;
+  float: left;
+}
+img {box-shadow: 0px 0px 6px #999999;}
+.lis > li {font-size:14px !important;text-align:left;list-style:disc;margin-left:20px;margin-bottom:6px !important;}
+/*===section1===*/
+#section1 {
+  padding-top:120px;
+  padding-bottom:30px;
+  /*text-shadow:0 0px 1px rgba(0,0,0,.5);*/
+}
+#section1 h1 {
+  /*color:#FFF;*/
+  font-size:28px;
+  font-weight:600;
+  /*text-shadow:0 2px 3px rgba(0,0,0,.5);*/
+}
+#section1 .p1 {margin:0;padding-top:13px;font-size:22px;}
+#section1 hr {margin-top:6px;margin-bottom:28px;border-top:1px solid rgba(0,0,0,0.1);}
+#section1 ul {margin-bottom:20px;font-size:16px;}
+#section1 ul li {margin-bottom:16px;}
+#section1 ul li i {font-size:12px;margin-right:10px;color:rgba(51,131,251);}
+/*#section1 ul li span {text-shadow:0px -1px rgba(226,238,255,0.39),0 0px #3D1C8E;color:#0000003d;}*/
+
+#section1 .point {color:rgba(33,18,79,1);text-align:center;}
+#section1 .point i {font-size:38px;}
+#section1 .point h3 {color:rgba(33,18,79,1);font-size:22px;font-weight:300;margin-top:20px;}
+#section1 .point a {line-height:28px;}
+#section1 .point a i {font-size:14px;}
+
+/*===section2===*/
+#section2 {
+  padding-top:60px;
+  padding-bottom:30px;
+  /*text-shadow:0 0px 1px rgba(0,0,0,.5);*/
+}
+#section2 h4 {font-size:18px;font-weight:300;}
+#section2 ul {margin-bottom:20px;font-size:16px;}
+#section2 ul li {margin-bottom:16px;}
+#section2 ul li i {font-size:12px;margin-right:10px;color:rgba(51,131,251);}
+/*#section2 ul li span {text-shadow:0px 0px 1px rgba(0,3,255,1);}*/
+#section2 .point {text-align:center;}
+#section2 .point i {font-size:38px;}
+#section2 .point h3 {font-size:22px;font-weight:300; margin-top:20px;}
+#section2 .point a {line-height:28px;}
+#section2 .point a i {font-size:14px;}
+
+/*===section3===*/
+#section3 {
+  padding-bottom:30px;
+  /*text-shadow:0 0px 1px rgba(0,0,0,.5);*/
+}
+#section3 ul {margin-bottom:20px;font-size:16px;}
+#section3 ul li {margin-bottom:16px;}
+#section3 ul li i {margin-right:10px;color:rgba(227,152,15);}
+#section3 ul li span {text-shadow:0px 0px 1px rgba(0,3,255,1);}
