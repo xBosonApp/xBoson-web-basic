@@ -1,13 +1,14 @@
 .svn/*
+.streams/**
 .DS_store
+.idea/workspace.xml
+
 WebRoot/WEB-INF/classes/pc
 WebRoot/WEB-INF/classes/key
 WebRoot/WEB-INF/classes/*.properties
 WebRoot/WEB-INF/classes/**
 out/**
 Test/**
-.idea/workspace.xml
-xboson-db-dump.sql
 public/web/zxgl/**
 public/docx/*.*
 
@@ -16,3 +17,4 @@ public/lib/img/*gif
 public/lib/img/*png
 
 mongo-bak
+xboson-db-dump.sql
