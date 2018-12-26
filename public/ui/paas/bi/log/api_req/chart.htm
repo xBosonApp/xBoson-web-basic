@@ -175,9 +175,12 @@ jQuery(function($) {
   });
   
   $('.hour-report').on('chart-click', function(e, ce) {
-    var url = '/af1880a8938f4756a3f377c93be99d78/log_report/bad_api';
+    var url = [ 
+      '/af1880a8938f4756a3f377c93be99d78/log_report/count_ranking',
+      '/af1880a8938f4756a3f377c93be99d78/log_report/bad_api'][ce.componentIndex];
     var arg = _requestArgGetter();
     arg.sec = parseInt(ce.name);
+    
     // 请求接口后绘制表格
     xb.apiCached(url, arg, function(err, ret) {
       var dia = $("<div>").appendTo(document.body);
@@ -187,6 +190,7 @@ jQuery(function($) {
         var table = xb.buildTable(ret.data, {
           createdt : '日期',
           elapsed  : '消耗(ms)',
+          c        : '调用次数',
           orgid    : "机构",
           log      : "API路径",
         });
