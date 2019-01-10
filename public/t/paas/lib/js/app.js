@@ -1137,7 +1137,7 @@ function loadScript(url, callback) {
     body.appendChild(script);
 
   } else if (callback) { // changed else to else if(callback)
-    Console.log("JS 文件已经加载过了!");
+    zy.log("JS 已经加载:", url);
     //execute function
     callback();
   }

@@ -32,6 +32,9 @@
             <button id="rbac_auth_mgt01_refresh" class="btn btn-success">
               &emsp;<i class="fa fa-refresh"></i>&nbsp;重置&emsp;
             </button>
+            <button id="rbac_auth_mgt01_id" class="btn btn-info">
+              &emsp;<i class="fa fa-list"></i>&nbsp;生成 ID 列表&emsp;
+            </button>
           </div>
         </div>
       </div>
@@ -124,6 +127,11 @@
   <auth page="rbac_auth_mgt01" />
   <div id="rbac_auth_mgt01_auth" data-auth='###auth###'></div>
 </div>
+<style>
+  .id_arr {
+    word-break:break-all; word-wrap:break-word; z-index:1000;
+  }
+</style>
 <script src="lib/js/plugin/jquery-tagsinput/jquery.tagsinput.min.js"></script>
 <link rel="stylesheet" type="text/css" href="lib/js/plugin/jquery-tagsinput/jquery.tagsinput.min.css" />
 <script src="lib/js/plugin/jquery-jsrender/jsrender.min.js"></script>
