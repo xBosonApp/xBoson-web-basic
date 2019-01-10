@@ -36,7 +36,6 @@ jQuery(function($) {
       showFail(d.msg);
     }
   }, parm, {}, function(err) {
-    console.debug(err);
     showFail(err.msg);
   });
   
@@ -86,7 +85,7 @@ jQuery(function($) {
   function showWait(target) {
     setInterval(function() {
       target.append("<span>.</span>");
-    }, 1e3);
+    }, 700);
   }
 });
 </script>  
