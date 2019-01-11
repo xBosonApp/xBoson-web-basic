@@ -15,7 +15,7 @@
       </form:text>
       <form:textarea name='setcodenode' label='文本域' tooltip='最少1字符' width='6'>
         <vali:string min='1' max='45'/>
-      </form:text>
+      </form:textarea>
       <form:select_dict name='typecd' label='选择字典' width='6'>
         <vali:string min='1' max='100'/>
       </form:select_dict>
@@ -56,7 +56,7 @@
         </form:text>
         <form:textarea name='setcodenode' label='文本域' tooltip='最少1字符' width='6'>
           <vali:string min='1' max='45'/>
-        </form:text>
+        </form:textarea>
       </fieldset>
       <!-- 模态按钮 -->
       <footer>

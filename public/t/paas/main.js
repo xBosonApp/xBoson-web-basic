@@ -164,3 +164,64 @@ index = (function() {
 
   return index
 })();
+
+
+function drawGraphic(width) {
+  pageSetUp();
+  pym_sc.sendHeightToParent();
+}
+
+function clickToLocal(){
+  var _zyLocal = '_zy_user_lastclick';
+  var _host = document.domain;
+  var _localStorage = window.localStorage.getItem(_host + _zyLocal);
+  if(_localStorage){
+    var target = $('nav a[uri="' + _localStorage + '"]');
+    target.length>0?target.click():null;
+  }
+}
+
+function add_iframe(a) {
+  var url = window.location.href;
+  window.history.pushState('', '', url.replace(window.location.hash, ''));
+  $("#left-panel nav").find('li').removeClass();
+  $(a).closest('li').siblings('li').children('ul').slideUp();
+  $(a).closest('li').addClass('active');
+  $(a).closest('li').parents('li').addClass('active open');
+  $('#content').empty();
+  // var host = location.host;
+  var host = zy.g.host.ui;
+  var href = location.href;
+  var http = location.protocol; // 'http://';
+  var ui = '';
+  ui = href.indexOf(host + '/ui')>-1?'/ui/':'/t/';
+  var uri = http + host + ui + $(a).attr('uri');
+  if($(a).attr('uri').indexOf('http') > -1)
+    uri = $(a).attr('uri');
+  var pym_sc = pym.Parent('content', uri, {
+    renderCallback: drawGraphic
+  });
+  pym_sc._onHeightMessage($("#left-panel").height()+838);
+  var ifm= $('iframe');
+  $(ifm).attr('scroll','auto');
+}
+index();
+
+$('#userinfo').click(function() {
+  zy.net.loadHTML("userinfo.html", $("#modal"));
+});
+
+$('#changepassword').click(function() {
+  zy.net.loadHTML("changepassword.html", $("#modal"));
+});
+
+$('#bind_wx').click(function() {
+  zy.net.loadHTML("user/wx-bind.htm", $("#modal"));
+});
+
+$('nav').resize(function(){
+  var nav = $(this).height();
+  var iframe = $('iframe').height();
+  if(nav > iframe)
+    $('iframe').height(nav);
+});

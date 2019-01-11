@@ -1,0 +1,45 @@
+<!-- Create By xBoson System -->
+
+<moda:frame title='扫描二维码绑定微信帐号'>
+  <ui:form id='ps' class='update_form'>
+    <!-- 属性字段 -->
+    <fieldset>
+      <form:password name='password' label='请输入用户密码' tooltip='最少4字符' width='10'>
+        <vali:string min='1' max='50'/>
+      </form:password>
+    </fieldset>
+    <!-- 模态按钮 -->
+    <footer>
+      <moda:cancel/>
+      <moda:ok class='next_step'>
+      </moda:ok>
+    </footer>
+  </ui:form>
+  
+  <ui:form id='qr' class='update_form hide'>
+    <fieldset>
+      <iframe src=''></iframe>
+    </fieldset>
+    <footer>
+      <moda:cancel/>
+      <moda:ok class='next_step'>
+      </moda:ok>
+    </footer>
+  </ui:form>
+  
+  <script>
+  jQuery(function($) {
+    var step = 0;
+    
+    $(".next_step").click(function() {
+      switch (step) {
+        case 0: check_ps(); break;
+      }
+    });
+    
+    
+    function check_ps() {
+    }
+  });
+  </script>
+</moda:frame>
