@@ -245,6 +245,11 @@ for (var i in orgList) {
 ```
 
 
+## sys.isAnonymousUser()
+
+如果当前用户是匿名访问用户返回 true
+
+
 ## sys.getUserLoginExpiration()
 
 返回用户登录会话最大时长, 单位: 秒.
