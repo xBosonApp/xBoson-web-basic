@@ -1,27 +1,22 @@
 <!-- Create By xBoson System -->
 
-<moda:frame title='扫描绑定微信帐号'>
-  <ui:form id='ps' class='update_form'>
+<moda:frame title='扫描二维码绑定微信帐号' id='weixin'>
+  <ui:form class='update_form'>
     <!-- 属性字段 -->
-    <fieldset>
+    <fieldset id='ps' >
       <form:password name='password' label='请输入用户密码' tooltip='最少4字符' width='10'>
         <vali:string min='1' max='50'/>
       </form:password>
     </fieldset>
+    <fieldset id='qr' class='hide'>
+      <center>
+        <iframe id='wxqr' src='' scrolling='no'
+          style='width: 100%; height: 420px; border:0;'></iframe>
+      </center>
+    </fieldset>
     <!-- 模态按钮 -->
     <footer>
-      <moda:cancel/>
-      <moda:ok class='next_step'>
-      </moda:ok>
-    </footer>
-  </ui:form>
-  
-  <ui:form id='qr' class='update_form hide'>
-    <fieldset>
-      <iframe src=''></iframe>
-    </fieldset>
-    <footer>
-      <moda:cancel/>
+      <moda:close/>
       <moda:ok class='next_step'>
       </moda:ok>
     </footer>
@@ -29,16 +24,59 @@
   
   <script>
   jQuery(function($) {
-    var step = 0;
+    var root = $("#moda_weixin");
+    var step = check_ps;
     
-    $(".next_step").click(function() {
-      switch (step) {
-        case 0: check_ps(); break;
+    root.find(".next_step").click(function() {
+      try {
+        step ? step() : default_step();
+      } catch(e) {
+        zy.ui.msg("异常", e.message, 'e');
+      }
+    });
+    
+    window.addEventListener('message', function(e) {
+      console.log(e);
+      if (e.data && e.data.type == 'next_step') {
+        if (e.data.step == 'end') step = _end;
+        else step = e.data.step;
       }
     });
     
     
+    function _end() {
+      root.find(".close_modal").click();
+    }
+    
+    function scan_qr() {
+      zy.ui.msg("扫描二维码", '请打开手机微信,使用扫一扫功能扫描屏幕上的二维码', 'i');
+    }
+    
+    function default_step() {
+      zy.ui.msg("提示", '请按照屏幕提示操作', 'i');
+    }
+    
     function check_ps() {
+      var check = 'app/a297dfacd7a84eab9656675f61750078/af1880a8938f4756a3f377c93be99d78/wx_website/checkps';
+      var psi = root.find("[name=password]");
+      var ps = $.md5(psi.val());
+      psi.val(ps);
+      
+      zy.net.get(check, function(r) {
+        if (r && r.code === 0) {
+          $("#ps").hide();
+          show_qr(r.url);
+        } else {
+          psi.val('');
+        }
+      }, { ps: ps, curr_on_org: zy.g.comm.org });
+    }
+    
+    function show_qr(url) {
+      var geturi = 'app/a297dfacd7a84eab9656675f61750078/af1880a8938f4756a3f377c93be99d78/wx_website/bind_uri';
+      $('#qr').show().removeClass('hide');
+      var ifr = $('#wxqr').attr('src', url);
+      step = default_step();
     }
   });
   </script>

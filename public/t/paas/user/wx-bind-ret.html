@@ -1,0 +1,118 @@
+<!-- Create By xBoson System -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<style>
+  section {
+    display: none; font-size: 20px;
+  }
+  body {
+    margin-top: 100px;
+  }
+  .msg {
+    display: block; margin-left: 10px; color: #666;
+  }
+</style>
+</head>
+<body>
+<center>
+  <section id='rebind'>
+    当前微信帐号已经绑定另一个平台用户, <br/>
+    重新绑定到当前用户?<br/><br/><br/>
+    <button id='ok_force_rebind'>重新绑定</button>
+    <button id='cancle_rebind'>取消绑定</button>
+  </section>
+  <section id='cancle'>绑定已经取消</section>
+  <section id='error'>绑定用户错误</section>
+  <section id='ok'>成功, 之后可以直接扫描二维码进行登录, 当前窗口可关闭.</section>
+</center>
+</body>
+
+<script src='../lib/js/libs/jquery-2.0.3.min.js'></script>
+<script src='../lib/js/plugin/jquery-storageapi/jquery.storageapi.min.js'></script>
+<script src='../lib/js/zy/zy.js'></script>
+<script>
+(function() {
+zy.check_xboson_system();
+
+var parm = parseParm();
+var bindurl = 'app/a297dfacd7a84eab9656675f61750078/af1880a8938f4756a3f377c93be99d78/wx_website/bind';
+// parm.s = 'd'; // debug
+
+var ok_force_rebind = $('#ok_force_rebind').click(function() {
+  parm.force = true;
+  show(null);
+  doBind();
+});
+
+$('#cancle_rebind').click(function() {
+  show('cancle');
+  sendNext('end');
+});
+
+doBind();
+
+
+function sendNext(v) {
+  window.parent.postMessage({
+    type : 'next_step',
+    step : v,
+  }, "/");
+}
+
+
+function show(id, msg) {
+  $("section").hide();
+  if (id) {
+    var t = $("#"+ id).show();
+    if (msg) t.append("<span class='msg'>"+ msg +"</span>");
+  }
+}
+
+
+function doBind() {
+  zy.net.get(bindurl, bindRet, parm, null, errorRet);
+}
+
+
+function bindRet(r) {
+  if (!r) return show('error');
+  if (r.code === 0) {
+    show('ok');
+    sendNext('end');
+  }
+}
+
+
+function errorRet(r) {
+  if (!r) return show('error');
+  
+  switch (r.code) {
+    case 11:
+      show('rebind');
+      sendNext(function() {
+        ok_force_rebind.click();
+      });
+      break;
+      
+    default:
+      show('error', r.msg);
+      sendNext('end');
+      break;
+  }
+}
+
+
+function parseParm() {
+  var parts = location.search.substring(1).split('&');
+  var parm = {};
+  parts.forEach(function(p) {
+    var arg = p.split('=');
+    parm[arg[0]] = decodeURIComponent(arg[1]);
+  });
+  return parm;
+}
+
+})();
+</script>
+</html>
