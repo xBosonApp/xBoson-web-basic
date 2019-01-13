@@ -131,14 +131,17 @@ var zx = {
     //菜单事件（水平）
     menuH.find('li').bind('click touchend', function bindMenuH(e){
       zx.log('菜单事件（水平）');
+      var t = $(this);
+      var href = t.find('a').attr("href");
+      if (href.indexOf('#') !== 0) {
+        return;
+      }
       e.preventDefault();
       e.stopPropagation();
       menuH.find('.active').removeClass('active');
       menuV.find('.active').removeClass('active');
-      var t = $(this);
-      var href = t.find('a').attr("href"); 
       t.addClass('active');
-      menuV.find('li').each(function(){ 
+      menuV.find('li').each(function(){
         var th = $(this);
         if (href==th.find('a').attr("href")){
           th.addClass('active');
@@ -151,12 +154,15 @@ var zx = {
     //菜单事件（垂直）移动
     menuV.find('li').bind('mousedown touchend', function(){
       zx.log('菜单事件（垂直）移动');
+      var t = $(this);
+      var href = t.find('a').attr("href");
+      if (href.indexOf('#') !== 0) {
+        return;
+      }
       menuH.find('.active').removeClass('active');
       menuV.find('.active').removeClass('active');
-      var t = $(this);
-      var href = t.find('a').attr("href"); 
       t.addClass('active');
-      menuH.find('li').each(function(){ 
+      menuH.find('li').each(function(){
         var th = $(this);
         if (href==th.find('a').attr("href")){
           th.addClass('active');
@@ -234,7 +240,7 @@ var zx = {
   pause|自动滑动时停留时间，数字，ms|4000
   autoHover|当鼠标滑向滑动内容上时，是否暂停滑动|false
   */
-  $('.bxslider').bxSlider({auto:true,speed: 600,pause: 6000,autoHover: true,});
+  $('.bxslider').bxSlider({auto:true,speed:600,pause:6000,autoHover:true});
 
   $('#circle1').circleProgress({
     //value: 0.7,//值从0.0到1.0，默认值为0

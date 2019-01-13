@@ -1,4 +1,5 @@
 <!-- Create By xBoson System -->
+<include src='_uri.htm'/>
 <!DOCTYPE html>
 <html>
   <head>
@@ -39,7 +40,7 @@
           <img class='down' src='img/down.png' width='150px'/>
         </div>
         <div class='itemcontent'>
-          <a href='../../docx/物理文件名' class='link'>[虚拟文件名]</a><br/>
+          <a href='/xboson/face/docx/物理文件名' class='link'>[虚拟文件名]</a><br/>
           <hr/>
           <div class='desc'>[一句话介绍]</div>
           <div class='note'>文档类型: <span class='type'>PDF</span></div>
@@ -66,7 +67,7 @@
         cont.append(item);
         var type = doc.file.lastIndexOf('.');
         type = doc.file.substring(type+1);
-        item.find(".link").text(doc.name).attr('href', '../../docx/'+ doc.file);
+        item.find(".link").text(doc.name).attr('href', '/xboson/face/docx/'+ doc.file);
         item.find(".type").text(type.toUpperCase());
         item.find(".date").text(doc.date);
         item.find(".desc").text(doc.desc);

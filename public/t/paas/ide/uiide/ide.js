@@ -852,7 +852,7 @@
                         var _length = _filename.split('.').length;
                         var _lastname = _filename.split('.')[_length-1];
 
-                       if (/^(png)$|^(jpg)$|^(jpeg)$|^(gif)$|^(htm)$|^(html)$|^(js)$|^(css)$|^(woff2)$|^(woff)$|^(ttf)$|^(svg)$|^(eot)$|^(zip)$|^(rar)$|^(psd)$|^(ai)$|^(mp4)$|^(m4v)$|^(pdf)$|^(txt)$|^(md)$|^(swf)$|^(doc)$|^(ppt)$|^(xls)$/.test(_lastname)) {
+                       if (/^(png)$|^(jpg)$|^(jpeg)$|^(gif)$|^(ico)$|^(htm)$|^(html)$|^(js)$|^(css)$|^(woff2)$|^(woff)$|^(ttf)$|^(svg)$|^(eot)$|^(zip)$|^(rar)$|^(psd)$|^(ai)$|^(mp4)$|^(m4v)$|^(pdf)$|^(txt)$|^(md)$|^(swf)$|^(doc)$|^(ppt)$|^(xls)$/.test(_lastname)) {
 
                             _fromServer(_path, function (_mm) {
                               var msg;
@@ -1558,7 +1558,7 @@
             var filename=_node.name;
             var _length=filename.split('.').length;
             var _lname = _node.name.split('.')[_length-1];
-            if (/^(png)$|^(jpg)$|^(jpeg)$|^(gif)$|^(htm)$|^(html)$|^(js)$|^(css)$|^(woff2)$|^(woff)$|^(ttf)$|^(svg)$|^(eot)$|^(zip)$|^(rar)$|^(psd)$|^(ai)$|^(mp4)$|^(m4v)$|^(pdf)$|^(txt)$|^(md)$|^(swf)$|^(doc)$|^(ppt)$|^(xls)$/.test(_lname)){
+            if (/^(png)$|^(jpg)$|^(jpeg)$|^(gif)$|^(ico)$|^(htm)$|^(html)$|^(js)$|^(css)$|^(woff2)$|^(woff)$|^(ttf)$|^(svg)$|^(eot)$|^(zip)$|^(rar)$|^(psd)$|^(ai)$|^(mp4)$|^(m4v)$|^(pdf)$|^(txt)$|^(md)$|^(swf)$|^(doc)$|^(ppt)$|^(xls)$/.test(_lname)){
               _lastname=_lname
             }else{
               _lastname='文件夹'
@@ -1724,7 +1724,7 @@
                 var filelname=_name.split('.')[_length-1];
                 var _nid = _name + _node.path;
                 var _id=_nid.replace(/\//g,'').replace(/\./g,'');
-                if (/^(png)|(jpg)|(jpeg)|(gif)/.test(filelname)){
+                if (/^(png)|(jpg)|(jpeg)|(gif)|(ico)/.test(filelname)){
                     var param = {};
                     // var cb = function(msg) {
                     //     $.each(msg.result,function(i,v){
@@ -1902,7 +1902,7 @@
             }
             if ($('#jarviswidget-fullscreen-mode').length > 0) {
                 // $('.row').css('height','552px')
-                if (/^(png)|(jpg)|(jpeg)|(gif)/.test(filetype)){
+                if (/^(png)|(jpg)|(jpeg)|(gif)|(ico)/.test(filetype)){
                     $('img').each(function(i,v){
                         // v.setAttribute('height','400px');
                     })
@@ -1941,7 +1941,7 @@
             } else {
               
             //   $('.row').css('height','552px')
-                    if (/^(png)|(jpg)|(jpeg)|(gif)/.test(filetype)){
+                    if (/^(png)|(jpg)|(jpeg)|(gif)|(ico)/.test(filetype)){
                         $('img').each(function(i,v){
                             // v.setAttribute('height','500px');
                         })
@@ -2012,7 +2012,7 @@
             // var _height = $('#jarviswidget-fullscreen-mode').length > 0 ? '700px' : '640px';
             
             var _input = _tools._label('input').addClass('form-control').attr('readonly', 'readonly');
-            if (/^(png)|(jpg)|(jpeg)|(gif)/.test(filelname)) {
+            if (/^(png)|(jpg)|(jpeg)|(gif)|(ico)/.test(filelname)) {
                 var _img=_tools._image('img')
                 _img.attr('src',_path).css('z-index',9999).css('max-height','380px').css('max-width','380px');
                 var _pre1=_tools._label('pre');

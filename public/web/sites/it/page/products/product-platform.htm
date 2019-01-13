@@ -1,19 +1,20 @@
+<include src='/web/sites/it/_uri.htm'/>
 <!DOCTYPE html>
 <html lang="zh-cn">
   <head>
-    <include src='/web/zb/_meta.htm'/>
+    <include src='/web/sites/it/_meta.htm'/>
     <link rel="stylesheet" href="products.css" />
   </head>
   <body>
-    <include src='/web/zb/page/ss_menu.htm'/>
+    <include src='_menu.htm'/>
     <!-- MAIN PANEL -->
     <div id="main" class="wrapper">
       <div id="section1" class="section bg-02">
         <div class="container">
           <div class="row text-left">
-            <div class="col-md-3 col-sm-3"><h1>开放式支撑平台</h1></div>
+            <div class="col-md-3 col-sm-3"><h1>开放式云平台</h1></div>
             <div class="col-md-9 col-sm-9">
-              <p class="p1">基础支撑PaaS平台、区块链开发平台、微服务开发平台、信息资源共享服务平台。</p>
+              <p class="p1"><a href="#section2">《大数据云平台》</a><a href="#xboson_bc">《区块链云平台》</a>《微服务云平台》《信息资源共享服务平台》</p>
             </div>
           </div>
           <hr>
@@ -21,11 +22,12 @@
             <div class="col-md-3 col-sm-3 point">
               <i class="icon-puzzle"></i>
               <h3>xBoson-MS</h3>
-              <p>微服务开发平台</p>
-            </div>
+              <p>微服务云平台</p>
+              <a href="###paas_login###" target="_blank" class="button button-3d button-primary button-pill">开始试用</a><br><br>
+          </div>
             <div class="col-md-9 col-sm-9">
               <ul>
-                <li>　　提供在线云端集成开发环境，在线代码级别开发，实现快速响应需求的变化，随时可进行业务调整，无需重新编译、停机、部署调试等过程，基本实现所见即所得开发效率。</li>
+                <li>　　基于微服务运行时构建，提供在线云端集成开发环境，在线代码级别开发，实现快速响应需求的变化，随时可进行业务调整，无需重新编译、停机、部署调试等过程，基本实现所见即所得开发效率。</li>
 
                 <li>
                   <h6>产品功能特点</h6>
@@ -51,28 +53,69 @@
           </div>
         </div>
       </div>
+      <div id="xboson_bc" class="section panes bg-04">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-3 col-sm-3 points">
+              <i class="icon-share"></i>
+              <h3>xBoson-BC</h3>
+              <p>区块链云平台</p>
+              <a href="/xboson/face/docx/xboson-white-paper.pdf" target="_blank"><i class="glyphicon glyphicon-book"></i> 白皮书</a><br><br>
+              <a href="###paas_login###" target="_blank" class="button button-3d button-primary button-pill">开始试用</a><br><br>
+            </div>
+            <div class="col-md-9 col-sm-9">
+              <ul>
+                <li>　　是针对企业级应用而研发通用产品，基于高性能微服务运行时引擎构建，底层区块链与微服务完美融合BaaS平台，安全可靠，支持私有链和链盟链，并提供多链与跨链服务。</li>
+                <li>　　其包括平台架构、隐私保护、数据存储、共识机制、智能合约（在线开发、动态发布与执行）等核心区块链技术，具备与现有系统实现快速整合能力，同时降低区块链技术应用成本和难度，是构建公共信用基础设施，激发数据经济的关键服务。</li>
+                <li>
+                  <h6>产品架构</h6>
+                  <ul class="lis">
+                    <li>核心引擎：将SOA微服务架构技术与区块链核心技术进行高度融合的独有核心技术，有效的解决了智能合约开发及运维高门槛、服务分片、多链组合与跨链服务、BaaS服务等方面的不足，在实时性、高并发等性能效率上有所突破，智能合约服务可实现毫秒级响应效率。</li>
+                    <li>数据库：台各节点采用本地NoSql数据库进行记账数据存储。</li>
+                  </ul>
+                </li>
+                <li>
+                  <h6>产品特点</h6>
+                  <ul class="lis">
+                    <li>高性能：区块链节点采用微服务融合架构引擎，支持高并发、实时性、毫秒级响应，数据存储采用本地nosql数据库，写入一个数据块＜2毫秒，读取一个数据块＜1毫秒，15万数据大约占用100MB磁盘空间。</li>
+                    <li>易用性：提供云端在线开发智能合约及API服务，采用JavaScript语言编写代码，无需编译、部署调试支持多链、侧链和跨链开发，支持混合云应用开发。</li>
+                    <li>易融合：基于微服务架构，支持SQL/NoSQL共存，高效与现有业务集成，方便业务数据上链随时跟进业务变化。</li>
+                    <li>安全性：采用可靠一致的分布式记录存储，支持第三方见证者接入。通过非对称加密的数字签名保证业务请求在传输过程中不能被篡改，通过共识机制保证各节点的数据一致的存储。对于已经存储的数据记录通过节点内的自校验性和多节点数据校验来保证已经存储的数据记录不能被修改。</li>
+                    <li>简单：智能合约及服务采用JavaScript语言编写，简单易学，可大大降低项目总体成本及周期，不仅是区块链开发，对新业务应用开发也可适用。</li>
+                    <li>创新分布式应用：xBoson区块链云平台构建的业务应用与SaaS应用运行架构上有本质上的区别，SaaS应用是中心部署，而区块链应用是分布式部署和
+运行。区块链应用是在中心端主节点上开发，API服务/UI画面开发完成后将应用推送发布上链, 由应用发布合约服务智能同步到各节点
+上运行，这是利用区块链技术产生的新一代分布式应用技术架构，适用于所有业务协同场景。</li>
+                  </ul>
+                </li>
+                <li class="text-center"><img src="img/1.png" style="max-width:350px;" class="imgs" alt="" title=""></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
       <div id="section2" class="section bg-04">
         <div class="container">
           <div class="row">
             <div class="col-md-3 col-sm-3 point">
-              <i class="icon-puzzle"></i>
+              <i class="icon-layers"></i>
               <h3>xBoson-PaaS</h3>
-              <p>基础支撑PaaS平台</p>
+              <p>大数据云平台</p>
             </div>
             <div class="col-md-9 col-sm-9">
               <ul>
-                <li>　　大数据集成项目建设主要涉及数据采集与数据交换、数据加工融合处理，以及数据共享服务应用三个主要环节，每个环节中都有相应的平台系统支撑。</li>
-                <li>　　以下为数据融合各支撑系统架构，主要由前置中间件、数据融合平台、服务集成平台、云平台管理门户及其相关组件构成。</li>
+                <li>　　大数据云平台（简称ＰａａＳ）是基于SOA架构+微服务+区块链等技术构建的一体化技术平台。</li>
+                <li>　　面向数据中心的大数据集成项目建设，主要包括：数据标准化治理服务、数据融合服务、信息资源共享交换服务、数据利用服务等主要环节，每个环节中都有平台相应的平台功能模块及组件支撑。</li>
                 <li>
                   <h6>产品架构</h6>
                   <ul class="lis">
-                    <li>前置中间件：解决线上线下异构系统的数据通讯问题。帮助用户快速建立应用系统间的数据交换，支撑用户数据集成应用的快速实现，提供可按需流程定制及内外网之间的数据采集与交换业务、物联数据实时交换、可远程配置及监控管理等。</li>
-                    <li>数据融合平台：数据中心可以对任意多个线下或线上系统或数据源进行数据采集。对采集至数据中心的业务数据，根据数据之间的业务关联性进行比对、清洗、转换、加工等数据处理，以提高业务数据质量；以管理对象唯一标识为主索引，关联融合其相关业务信息，建立管理对象融合信息库；采用数据集模型、业务模型驱动并基于元数据管理、主数据管理，对数据及信息资源进行规范化、标准化管理；对上层应用的复杂分析计算需求，进行任务化的配置管理，由任务执行引擎自动完成。数据融合平台提供多个模块以实现上述功能，包括元数据模块，数据集模块，业务模型模块，主数据模块，在线编码模块等等。</li>
-                    <li>服务集成平台：将所有服务规范后，统一接入，形成统一的服务目录对外提供服务，同时标准化服务调用通讯接口和协议，提供在线API IDE服务开发工具工具，支持多版本的API服务管理、API服务的发布、API服务的上线审核、团队开发的API服务，帮助现有的开发团队和产品平滑地迁移到PaaS平台环境。建立按需服务，做到可管、可监、可控、可用，进而对服务进一步组织、整合，生成新的、满足更多更深层次需求的服务，提高信息资源的使用效率。</li>
-                    <li>云平台管理门户：实现对中间件、服务集群、数据服务及授权认证等进行集中配置、监控和管理，提高自动化运维水平，让运维人员能够随时掌握云平台的运行状态并能够及时发现和捕获异常。</li>
+                    <li>前置中间件：由分布式 xBoson ESB 提供边缘数据采集与服务交换，解决线上线下异构系统的数据通讯问题，帮助快速建立应用系统间的数据交换，支撑用户数据集成应用的快速实现，提供可按需流程定制及内外网之间的数据采集与交换业务、物联数据实时交换、可远程配置及监控管理等。</li>
+                    <li>信息标准服务：即数据标准化治理服务，提供主数据管理、数据元管理、数据集管理、标准服务等，对数据及信息资源进行规范化、标准化管理。</li>
+                    <li>数据融合服务：提供统一的数据采集、传输、处理、存储、数据资源管理。数据中心可以对任意多个线下或线上系统或数据源进行数据采集。对采集至数据中心的业务数据，根据数据之间的业务关联性进行比对、清洗、转换、加工等数据处理，以提高业务数据质量；以管理对象唯一标识为主索引，关联融合其相关业务信息，建立管理对象融合信息库；对上层应用的复杂分析计算需求，进行任务化的配置管理，由任务执行引擎自动完成。数据融合平台提供多个模块以实现上述功能，包括元数据模块，数据集模块，业务模型模块，主数据模块，在线编码模块等等。</li>
+                    <li>数据共享服务：即信息资源共享交换服务，提供数据共享服务创建、服务发布、服务目录、服务授权。将所有服务规范后，统一接入，形成统一的服务目录对外提供服务，同时标准化服务调用通讯接口和协议，提供服务项目管理、在线微服务开发工具，支持服务版本化管理、服务的发布、服务的上线审核、开发团队等，帮助现有的开发团队和产品平滑地迁移到PaaS平台环境。建立按需服务，做到可管、可监、可控、可用，进而对服务进一步组织、整合，生成新的服务，满足更多更深层次需求的服务，提高信息资源的使用效率。</li>
+                    <li>数据利用服务：数据分析，支持图表、报表、透视图等展现。AI机器学习（TensorFlow）</li>
+                    <li>其他组件：平台管理门户、统一身份认证、权限管理、在线制图等。其中平台管理门户实现对中间件、服务集群、数据共享服务及授权认证等进行集中配置、监控和管理，提高自动化运维水平，让运维人员能够随时掌握云平台的运行状态并能够及时发现和捕获异常。</li>
                   </ul>
                 </li>
-                <li><hr></li>
                 <li>
                   <h6>产品特点</h6>
                   <ul class="lis">
@@ -83,9 +126,9 @@
                     <li>高性能、高可用：采用轻量级微内核，支持大并发应用场景，采用动态集群运算服务（无需部署业务应用软件），通过动态增加服务器数量提高运算和并发能力。</li>
                   </ul>
                 </li>
-                <li class="text-center"><img src="img/xboson_dc.png" style="max-width:350px;"  alt="" title=""></li>
-                <li class="text-center"><img src="img/xboson_df.png" style="max-width:80%;"  alt="" title=""></li>
-                <li class="text-center"><img src="img/xboson_df1.png" style="max-width:80%;"  alt="" title=""></li>
+                <li class="text-center"><img src="img/xboson_dc.png" style="max-width:350px;" class="imgs" alt="" title=""></li>
+                <li class="text-center"><img src="img/xboson_df.png" style="max-width:80%;" class="imgs" alt="" title=""></li>
+                <li class="text-center"><img src="img/xboson_df1.png" style="max-width:80%;" class="imgs" alt="" title=""></li>
                 <li class="text-center"><img src="img/xboson-report.jpg" style="max-width:80%;" alt="" title=""></li>
                 <li class="text-center"><img src="img/jy_tixingtj700.jpg" style="max-width:70%;" alt="" title=""></li>
                 <li class="text-center"><img src="img/jy_zhishidiantj700.jpg" style="max-width:70%;" alt="" title=""></li>
@@ -107,8 +150,8 @@
           </div>
         </div>
       </div>
-<include src="/web/zb/_footer.htm"/>
+      <include src="/web/sites/it/_footer.htm"/>
     </div>
-<include src="/web/zb/_js.htm"/>
+    <include src="/web/sites/it/_js.htm"/>
   </body>
 </html>

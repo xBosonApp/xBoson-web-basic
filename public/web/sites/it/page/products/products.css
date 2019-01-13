@@ -9,8 +9,10 @@ h6 {
   border-bottom: 1px dotted #a3a3a3;
   float: left;
 }
-img {box-shadow: 0px 0px 6px #999999;}
+img {box-shadow:0px 0px 6px #999999;}
+.imgs {box-shadow:none;}
 .lis > li {font-size:14px !important;text-align:left;list-style:disc;margin-left:20px;margin-bottom:6px !important;}
+
 /*===section1===*/
 #section1 {
   padding-top:120px;
@@ -33,7 +35,6 @@ img {box-shadow: 0px 0px 6px #999999;}
 #section1 .point {color:rgba(33,18,79,1);text-align:center;}
 #section1 .point i {font-size:38px;}
 #section1 .point h3 {color:rgba(33,18,79,1);font-size:22px;font-weight:300;margin-top:20px;}
-#section1 .point a {line-height:28px;}
 #section1 .point a i {font-size:14px;}
 
 /*===section2===*/
@@ -62,3 +63,15 @@ img {box-shadow: 0px 0px 6px #999999;}
 #section3 ul li {margin-bottom:16px;}
 #section3 ul li i {margin-right:10px;color:rgba(227,152,15);}
 #section3 ul li span {text-shadow:0px 0px 1px rgba(0,3,255,1);}
+
+/*===panes===*/
+.panes {padding-top:60px;padding-bottom:30px;}
+.panes h4 {font-size:18px;font-weight:300;}
+.panes ul {margin-bottom:20px;font-size:16px;}
+.panes ul li {margin-bottom:16px;}
+.panes ul li i {font-size:12px;margin-right:10px;color:rgba(51,131,251);}
+.panes div.points {text-align:center;}
+.panes div.points i {font-size:38px;}
+.panes div.points h3 {font-size:22px;font-weight:300; margin-top:20px;}
+.panes div.points a {}
+.panes div.points a i {font-size:14px;}
