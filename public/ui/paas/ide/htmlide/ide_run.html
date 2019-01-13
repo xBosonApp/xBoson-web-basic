@@ -295,7 +295,7 @@
 
           // edit by J.ym 17.12.15
           if (zy.isXBosonSystem) {
-            full = host + "/xboson/" + zy.fix_api_call(atype + '/' + apiid, t)
+            full = zy.g.host.api + zy.fix_api_call(atype + '/' + apiid, t)
                  + '?' + param + last + zy.net.parseParam(t);
           } else {
             full = host + ds + atype + '/' + apiid + '?' + param + last + zy.net.parseParam(t);
@@ -304,7 +304,7 @@
         //post等
         else {
           if (zy.isXBosonSystem) {
-            full = host + "/xboson/" + zy.fix_api_call(atype + '/' + apiid, t)
+            full = zy.g.host.api + zy.fix_api_call(atype + '/' + apiid, t)
                  + '?' + zy.net.parseParam(t);
           } else {
             full = host + ds + atype + '/' + apiid + '?' + zy.net.parseParam(t);
@@ -331,7 +331,10 @@
       
       modal.find('[name=runApi]').click(function(e){
         // var url ='http://'+ host + ds + atype + '/' + apiid;
-        var url = location.protocol +'//' + modal.find('[name=fullurl]').val();
+        var url = modal.find('[name=fullurl]').val();
+        if (!url.startsWith('http')) {
+          url = location.protocol +'//'+ url;
+        }
         zy.log('url=',url);
         // var common = $.extend({},zy.g.comm,{app:appid,mod:modid});
         var common = {};

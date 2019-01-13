@@ -1,0 +1,100 @@
+<!-- Create By xBoson System -->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<style>
+  #ok, #fail {
+    display: none; font-size: 35px;
+  }
+  .info {
+    font-size: 8px; padding-top: 30px;
+  }
+</style>
+<script src='../lib/js/libs/jquery-2.0.3.min.js'></script>
+<script src='../lib/js/plugin/jquery-storageapi/jquery.storageapi.min.js'></script>
+<script src='../lib/js/zy/zy.js'></script>
+
+<script>
+jQuery(function($) {
+  zy.check_xboson_system();
+  var loginApi  = "openapp/a297dfacd7a84eab9656675f61750078/af1880a8938f4756a3f377c93be99d78/wx_website/wxlogin";
+  var parm = parseParm();
+  // parm.s = 'd'; // debug mode !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  
+  if (! parm.code) {
+    showFail();
+    return;
+  }
+  
+  var ok = $("#ok").show();
+  showWait(ok);
+  
+  zy.net.get(loginApi, function(d) {
+    if (d.code === 0) {
+      mainPage(d.orgid, d.userid, d.orgtype, d.isplatorg);
+    } else {
+      showFail(d.msg);
+    }
+  }, parm, {}, function(err) {
+    showFail(err.msg);
+  });
+  
+  
+  function mainPage(orgid, userid, org_type, isplatorg) {
+    try {
+      var ls_zy_user_info = zy.cache.get('_zy_user_info', 'ls');
+      var orgpath = isplatorg ? 'paas': 'saas/'+ orgid;
+      
+      zy.g.comm.org = orgid;
+      zy.g.comm.orgtype = org_type;
+      zy.g.comm.orgpath = orgpath;
+      ls_zy_user_info.set('user_openid', userid);
+      ls_zy_user_info.set('user_selected_org', orgid);
+      ls_zy_user_info.set('user_selected_org_type', org_type);
+      ls_zy_user_info.set('user_selected_org_path', orgpath);
+  
+      zy.net.loadIndex();
+    } catch(e) {
+      console.log(e)
+    }
+  }
+  
+  
+  function showFail(msg) {
+    $("#ok").hide();
+    var fail = $("#fail").show();
+    if (msg) {
+      fail.append("<div class='info'>"+ msg +"</div>");
+    }
+    showWait(fail);
+    setTimeout(function() {
+      zy.net.loadLogin();
+    }, 3e3);
+  }
+  
+  function parseParm() {
+    var parts = location.search.substring(1).split('&');
+    var parm = {};
+    parts.forEach(function(p) {
+      var arg = p.split('=');
+      parm[arg[0]] = decodeURIComponent(arg[1]);
+    });
+    return parm;
+  }
+  
+  function showWait(target) {
+    setInterval(function() {
+      target.append("<span>.</span>");
+    }, 700);
+  }
+});
+</script>  
+</head>
+
+<body>
+  <center style='padding-top: 150px;'>
+    <div id='ok'>......</div>
+    <div id='fail'>登录失败, 正在返回登录页面 ...</div>
+  </center>
+</body>
+</html>

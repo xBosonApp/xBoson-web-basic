@@ -223,6 +223,32 @@ rbac_auth_mgt01 = (function () {
     }
     setButton();
   });
+  
+  // 生成 id 列表按钮
+  $("#rbac_auth_mgt01_id").click(function() {
+    var thiz = $(this);
+    var submitRoleIds = [];
+    var tags = assignedRoles.val().split(',');
+    $.each(allRoles, function(i, v) {
+       $.each(tags, function(ii, vv) {
+          if (v.rolenm===vv) {
+            submitRoleIds = _.concat(submitRoleIds, v.roleid);
+          }
+       });
+    });
+    
+    if (submitRoleIds.length < 1) return;
+    
+    var dialog = $("<dialog class='id_arr'></dialog>");
+    var close = $("<a href='#'>关闭</a>");
+    dialog.append(close);
+    dialog.append("<div>"+ submitRoleIds.join(',') +"</div>");
+    dialog[0].show();
+    thiz.parent().append(dialog);
+    close.click(function() {
+      dialog.remove();
+    });
+  });
 
   // 根据有无变更来设置菜单Tree下面的保存和重置按钮的状态
   function setButton() {
@@ -240,6 +266,7 @@ rbac_auth_mgt01 = (function () {
         btnSave.hide();
       }
     }
+    $(".id_arr").remove();
   }
 
   function isChanged() {

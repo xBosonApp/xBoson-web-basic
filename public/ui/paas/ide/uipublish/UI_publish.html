@@ -4,12 +4,12 @@
     data-widget-editbutton="false" data-widget-colorbutton="false" role="widget">
   <header role="heading">
     <div id="ui_publish"  role="menu" class="widget-toolbar" title="发布">
+      <i class="glyphicon glyphicon-new-window"></i>
+    </div>
     
-    <i class="glyphicon glyphicon-new-window"></i></div>
-    
-    <div id="ui_publish2" api='publish2' role="menu" 
-         class="widget-toolbar" title="New发布">
-    <i class="glyphicon glyphicon-export"></i></div>
+    <div id="ui_publish2" role="menu" class="widget-toolbar" title="压缩发布">
+      <i class="glyphicon glyphicon-export"></i>
+    </div>
   </header>
   
   <div class="widget-body">
@@ -216,18 +216,28 @@
 				$.fn.zTree.init($("#righttree"), setting, _m);
       },'right');
 	
+	var wait_pub = false;
 	
+  $('#ui_publish').click(function(){
+    if (wait_pub) return;
+    publish();
+  });
 
-    $('#ui_publish,#ui_publish2').click(function(){
-      
-    var publish_api_name = $(this).attr('api') || 'publish';
-    zy.ui.msg("提示信息：", "发布中...", "s");
+  $('#ui_publish2').click(function(){
+    if (wait_pub) return;
+    publish(true);
+  });
+
+  function publish(min) {
+    wait_pub = true;
+    var publish_api_name = 'publish';
     
       //获取改变check状态的节点
 		var lefttreeObj = $.fn.zTree.getZTreeObj('lefttree');
 		var leftnodes = lefttreeObj.getCheckedNodes(true);
 		var righttreeObj = $.fn.zTree.getZTreeObj('righttree');
 		var rightnodes = righttreeObj.getCheckedNodes();
+		
 		function _each(_arr){
 		  var _larr=[];
 		  $.each(_arr,function(i,v){
@@ -236,62 +246,46 @@
 		  })
 		  return _larr;
 		}
-    
-    
+		
+		function _over() {
+		  wait_pub = false;
+		}
         
 		if(rightnodes.length==0 && leftnodes.length==0){
-		  zy.ui.msg("提示信息：", "未选择！", "w");
+		  zy.ui.msg("错误:", "未选择文件！", "w");
+		  _over();
 		  return;
-		}else{
-		  var right = _each(rightnodes);
-		  var left = _each(leftnodes);
-		}            
+		}
+		var right = _each(rightnodes);
+		var left = _each(leftnodes); 
 		 
 		if(right.length!=0){
-		  zy.ui.mask('请确认','点击确定会删除待下线的文件，确定要删除吗？',function(){
-		var param={
-		  up:left,
-		  down:right
+		  zy.ui.mask('请确认','点击确定会删除待下线的文件，确定要删除吗？', callPublishApi, _over);
+		} else {
+		  callPublishApi();
 		}
 		
-		console.log(param)
-		_tools._post(publish_api_name,function(m){
-		  console.log('pub', m);
-		  if(!Boolean(m.ret)) {
-        _fromServer('/', function (_m) {
-  				$.fn.zTree.init($("#righttree"), setting, _m);
-          zy.ui.msg("提示信息：", "发布成功", "s");
-        },'right');
-		  }else{
-		    zy.ui.msg("提示信息：","接口执行失败："+ m.msg, "e");
-		  }
-		  
-		},$.extend(true, param, zy.g.comm));
-	   // pageSetUp();
-				});
-		}else{
-		  var param={
-		  up:left,
-		  down:right
+		function callPublishApi() {
+  		zy.ui.msg("发布中", "请等待...", "i");
+    
+		  var param = {
+  		  up   : left,
+  		  down : right,
+  		  min  : min,
+  		};
+  		
+  		_tools._post(publish_api_name,function(m){
+  		  if(m.code === 0) {
+          _fromServer('/', function (_m) {
+    				$.fn.zTree.init($("#righttree"), setting, _m);
+            zy.ui.msg("发布成功", "文件列表已经更新", "s");
+          },'right');
+  		  }else{
+  		    zy.ui.msg("失败", m.msg, "e");
+  		  }
+  		  _over();
+  		},$.extend(true, param, zy.g.comm));
 		}
-		
-		console.log(param)
-		_tools._post(publish_api_name,function(m){
-		  if(!Boolean(m.ret)){
-	
-      _fromServer('/', function (_m) {
-				$.fn.zTree.init($("#righttree"), setting, _m);
-            zy.ui.msg("提示信息：", "发布成功", "s");
-        },'right');
-		  }else{
-		    zy.ui.msg("提示信息：","接口执行失败："+ m.msg, "e");
-		  }
-
-		},$.extend(true, param, zy.g.comm));
-		}
-		
-    });
-
-// 	_tree();
+  }
 })();
 </script>

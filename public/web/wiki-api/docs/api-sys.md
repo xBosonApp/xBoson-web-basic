@@ -245,6 +245,11 @@ for (var i in orgList) {
 ```
 
 
+## sys.isAnonymousUser()
+
+如果当前用户是匿名访问用户返回 true
+
+
 ## sys.getUserLoginExpiration()
 
 返回用户登录会话最大时长, 单位: 秒.
@@ -566,11 +571,6 @@ sys.format("hello {0}", ['xBoson'])
 ## sys.currentTimeString(), sys.getCurrentTimeString()
 
 返回当前日期+时间的字符串, 格式为 "yyyy-MM-dd HH:mm:ss".
-
-
-## sys.encodePlatformPassword(string:pid, string:date, string:password)
-
-返回加密后的密码, password 已经 md5 处理.
 
 
 ## sys.charAt(...), sys.indexOf(...), sys.size(...), sys.startWith(..), sys.endWith(...), sys.length(..), sys.subStringTo(..), sys.subString(..), sys.split(..), sys.contain(..), sys.toUpperCase(..), sys.toLowerCase(..), sys.replace(..), sys.trim(..), sys.trunc(..), sys.httpGet(..)

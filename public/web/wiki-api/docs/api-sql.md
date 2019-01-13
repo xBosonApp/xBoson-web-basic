@@ -28,7 +28,7 @@
 var sqlSel = "SELECT COUNT(*) CNT FROM transferLog WHERE POSITIONID = ? ";
 var paramSel = ["00"];
 var queryCount = sql.query(sqlSel, paramSel, "key2");
-var selResult = sys.result["key2"];
+var selResult = sys.result["key2"]; // selResult[0] 是第1行数据
 ```
 
 

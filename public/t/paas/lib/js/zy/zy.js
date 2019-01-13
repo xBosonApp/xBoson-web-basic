@@ -109,18 +109,26 @@ zy.setEditorExOptions = function(editor) {
   });
 }
 
-// 路径中有 '/xboson/' 认为是新版系统
+// 路径中有 '/ds/' 认为是老系统, 路径中有 '/face/' 认为是新系统.
 zy.check_xboson_system = function() {
-  if (location.pathname.indexOf('/xboson/') >= 0) {
-    zy.isXBosonSystem = true;
-    zy.g.host.api = zy.net.getHttpUrl("/xboson/");
-    zy.g.host.ui = zy.net.getHttpUrl("/xboson/face");
-    console.log("xBoson System Call API: /app/{org-id}/{app-id}/{module-id}/{api-name}?arguments");
-  } else {
-    zy.isXBosonSystem = flase;
-    zy.g.host.api = zy.net.getHttpUrl("/ds/");
-    zy.g.host.ui = zy.net.getHttpUrl();
+  if (location.pathname.indexOf('/ds/') >= 0) {
+    zy.isXBosonSystem = false;
+    zy.g.host.api     = zy.net.getHttpUrl("/ds/");
+    zy.g.host.ui      = zy.net.getHttpUrl();
+    return;
   }
+
+  var p = location.pathname.indexOf('/face/');
+  if (p >= 0) {
+    zy.isXBosonSystem = true;
+    var prefix        = location.pathname.substr(0, p);
+    zy.g.host.api     = zy.net.getHttpUrl(prefix +"/");
+    zy.g.host.ui      = zy.net.getHttpUrl(prefix +"/face");
+    console.log("xBoson System Call API: "+ zy.g.host.api +"app/{org-id}/{app-id}/{module-id}/{api-name}?arguments");
+    return;
+  }
+
+  zy.ui.msg('错误', '无法(通过路径)判断系统类型', 'e');
 };
 
 // 对 http 返回值做兼容
