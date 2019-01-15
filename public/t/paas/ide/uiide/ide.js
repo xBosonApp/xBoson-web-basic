@@ -106,7 +106,6 @@
                 type: _str || 'GET',
                 success: function (data) {
                     zy.fix_xboson_data(data);
-                    data.ret = data.code;
                     _cb(data);
                 },
                 error: function (xhr, status, error) {
@@ -114,8 +113,8 @@
                 }
             });
         },
-        _formPost: function (apinm, form, callback) {
-            var link = get_api_url(_apinm)+ '?' + zy.net.parseParam(zy.g.comm);
+        _formPost: function (_apinm, form, callback) {
+            var link = get_api_url(_apinm)+ '?onweb=1&' + zy.net.parseParam(zy.g.comm);
             form.ajaxSubmit({
                 url: link,
                 type: "post",
@@ -125,7 +124,6 @@
                 dataType: "json",
                 success: function (msg) {
                     zy.fix_xboson_data(msg);
-                    data.ret = data.code;
                     callback && callback(msg);
                 }
             });
@@ -809,12 +807,11 @@
         }
 
         function _fileupload(_container, _flg) {
-
-
             _container.empty();
+            
             function _innerHeader() {
-
-                var _div = _tools._label('div').addClass('input-group input-group-sm').attr('style', 'width:100%;margin-bottom:-15px');
+                var _div = _tools._label('div').addClass('input-group input-group-sm')
+                    .attr('style', 'width:100%;margin-bottom:-15px');
                 var _title = _tools._label('header');
                 _title.append(_tools._label('label').html('文件上传')).append(_tools._label('a').attr('href', 'javascript:void(0);').addClass('pull-right').append(_tools._label('i').addClass('fa fa-times')));
                 _container.append(_div.append(_title));
@@ -838,8 +835,8 @@
             }
 
             function _fileinput(_btn, _form) {
-                if (!_btn)
-                    return;
+                if (!_btn) return;
+                
                 _btn.unbind();
                 var _tagert = $('#zy_tabs').closest('.row').children(':last');
 
@@ -847,67 +844,65 @@
                     var _path = _tagert.find('[type=text]').val();
                     if (!_path || !$('input[type=file]').val()) {
                         zy.ui.msg('提示信息', '文件路径及文件不可为空', 'w');
-                    } else {
-                        var _filename = $('input[type=file]').val().toLowerCase();
-                        var _length = _filename.split('.').length;
-                        var _lastname = _filename.split('.')[_length-1];
-
-                       if (/^(png)$|^(jpg)$|^(jpeg)$|^(gif)$|^(ico)$|^(htm)$|^(html)$|^(js)$|^(css)$|^(woff2)$|^(woff)$|^(ttf)$|^(svg)$|^(eot)$|^(zip)$|^(rar)$|^(psd)$|^(ai)$|^(mp4)$|^(m4v)$|^(pdf)$|^(txt)$|^(md)$|^(swf)$|^(doc)$|^(ppt)$|^(xls)$/.test(_lastname)) {
-
-                            _fromServer(_path, function (_mm) {
-                              var msg;
-                              var _result = _mm;
-                              if ($.isArray(_result)) {
-                                  msg = _result;
-                                  } else {
-                                 msg = _result.children;
-                              }
-                              var _flg = false;
-                                $.each(msg, function (_i, _v) {
-                                    var _exitname = _v.name.toLowerCase();
-                                    if (_filename == _exitname) {
-                                        _flg = true;
-                                        return false
-                                    }
-                                });
-                                if (!_flg) {
-                                    _tools._formPost('uploadfile', _form, function (_m) {
-                                        _fromServer(_path, function (_mm) {
-                                            // console.log(_mm);
-                                            var _tree = $.fn.zTree.getZTreeObj("maintree");
-                                            var node = _tree.getNodesByParam('path', _path)[0];
-                                            var _result = _mm;
-                                            if ($.isArray(_result)) {
-                                                node.children = _result;
-                                            } else {
-                                                node.children = _result.children;
-                                            }
-                                            node.open = true;
-                                            _tree.refresh();
-                                            zy.ui.msg('提示信息', '成功', 's')
-                                        }, false)
-
-
-                                    });
-                                } else {
-                                    zy.ui.msg('提示信息', '存在', 'e');
-                                }
-                            }, false);
-
-                        } else {
-                            zy.ui.msg('提示信息', 'sorry，您选择的文件不符合规格', 'w')
-                        }
+                        return;
                     }
+                    
+                    var _filename = $('input[type=file]').val().toLowerCase();
+                    var _length = _filename.split('.').length;
+                    var _lastname = _filename.split('.')[_length-1];
 
-                })
-
+                    _fromServer(_path, function (_mm) {
+                      var msg;
+                      var _result = _mm;
+                      if ($.isArray(_result)) {
+                          msg = _result;
+                          } else {
+                         msg = _result.children;
+                      }
+                      var _flg = false;
+                        $.each(msg, function (_i, _v) {
+                            var _exitname = _v.name.toLowerCase();
+                            if (_filename == _exitname) {
+                                _flg = true;
+                                return false
+                            }
+                        });
+                        if (!_flg) {
+                            _btn.attr('disabled', true).text('正在上传...');
+                            _tools._formPost('uploadfile', _form, function (_m) {
+                                _btn.removeAttr('disabled').text('开始上传');
+                                if (_m.code !== 0) {
+                                  zy.ui.msg("失败", _m.msg, 'e');
+                                  return; 
+                                }
+                                zy.ui.msg('提示信息', _m.msg || '成功', 's');
+                                    
+                                _fromServer(_path, function (_mm) {
+                                    // console.log(_mm);
+                                    var _tree = $.fn.zTree.getZTreeObj("maintree");
+                                    var node = _tree.getNodesByParam('path', _path)[0];
+                                    var _result = _mm;
+                                    if ($.isArray(_result)) {
+                                        node.children = _result;
+                                    } else {
+                                        node.children = _result.children;
+                                    }
+                                    node.open = true;
+                                    _tree.refresh();
+                                }, false);
+                            });
+                        } else {
+                            zy.ui.msg('提示信息', '存在', 'e');
+                        }
+                    }, false);
+                });
             }
 
             _innerHeader();
             var _form = _tools._label('form').attr('id', 'uploadform').attr('onsubmit', 'return false;');
             var _ulSearch = _tools._label('ul').addClass('ztree').attr('id', 'resulttree');
 
-            var _search = _tools._label('div').addClass('input-group input-group-sm').attr('style', 'margin:-10px 0-5px');
+            var _search = _tools._label('div').attr('style', 'margin:-10px 0-5px');
             _container.append(_form);
             
             var treeObj = $.fn.zTree.getZTreeObj("maintree");
@@ -922,10 +917,9 @@
             }
 
             var _input1 = _tools._label('input').addClass('form-control').attr('type', 'text').attr('readonly', true).attr('name', 'path').val(defaultpath);
-            var _btn = _tools._label('button').addClass('btn btn-default').html('上传');
+            var _btn = _tools._label('button').addClass('btn btn-primary').html('开始上传');
 
             _container.append(_tools._label('legend'));
-            var _input = _tools._label('input').attr('type', 'file').addClass('input-group input-group-sm').attr('style', 'margin:-10px 0-5px').attr('name', 'file');
 
             var _i = _tools._label('a').attr('href', 'javascript:void(0);').addClass('pull-right').append(_tools._label('i').addClass('fa fa-times')).attr('style', 'margin-right:13px');
             var _style = 'overflow:auto;display:none;height:';
@@ -933,13 +927,34 @@
                 _style = 'overflow:auto;display:none;height:';
             _style = (_height-400) + 'px';
             _container.append(_tools._label('div').addClass('row').attr('style', _style).append(_ulSearch));
-            _search.append(_input1);
-            _search.append(_tools._label('span').addClass('input-group-btn').append(_btn));
-
-            _form.append(_search).append(_tools._label('legend')).append(_input);
+            _search.append(_tools._label('label').html('上传到:')).append(_input1);
+            var filesInput = _tools._label('div').addClass('input-group input-group-sm');
+            // _search.append(_tools._label('span').addClass('input-group-btn').append(_btn));
+            _form.append(_search).append(_tools._label('legend'));
+            _form.append(filesInput).append(_tools._label('legend'));
+            var funcBtn = _tools._label('span').addClass('input-group-btn');
+            funcBtn.append(_btn);
+            _form.append(funcBtn);
+            appendUpFile();
+            
+            var add = $("<button class='btn btn-default'>增加文件</button>").appendTo(funcBtn);
+            add.click(function() {
+              appendUpFile().click();
+            });
+            var reset = $("<button class='btn btn-default'>重置表单</button>").appendTo(funcBtn);
+            reset.click(function() {
+              filesInput.empty();
+              appendUpFile();
+            });
 
             _closeSearch(_i);
             _fileinput(_btn, _form);
+            
+            function appendUpFile() {
+              var _input = _tools._label('input').attr('type', 'file').attr('name', 'file');
+              filesInput.append(_input);
+              return _input;
+            }
         }
         
         function isplatorg(){
@@ -1249,15 +1264,22 @@
     }
 
     function _ide(_pre, _filetype) {
-      var _savebtn = $('#widget-grid').find('header .glyphicon-saved');
-        function _setValue(_str, _flg) {
+        var _savebtn = $('#widget-grid').find('header .glyphicon-saved');
+        
+        function _setValue(_str, _flg, filename) {
+          // J.ym 修正 undo 操作将代码清除.
+          if (editor.getValue().trim() == '') {
+            setTimeout(function() {
+              editor.getSession().getUndoManager().reset();
+            }, 1);
+          } else {
+            zy.ui.msg(filename || '', '文件已经在IDE中打开', 'i');
+            return;
+          }
+          
           editor.setValue(_str + "\n\n\n\n\n");
           editor.navigateFileStart();
           editor.setReadOnly(_flg);
-          // J.ym 修正 undo 操作将代码清除.
-          setTimeout(function() {
-            editor.getSession().getUndoManager().reset();
-          }, 1);
         }
 
         function _getValue() {
@@ -1756,7 +1778,7 @@
                             var _pre = _tab.add(_name, _node.path, _id);
                             _pre.inputc.val('');
                             _initIde(function () {
-                                editor.set(_m.result.content, false);
+                                editor.set(_m.result.content, false, _node.path);
                                 editor.initSize();
                                 _savebtn.show();
                             }, _pre.pre, _m.result.filetype);
