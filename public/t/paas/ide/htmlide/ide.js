@@ -1114,14 +1114,22 @@ function NewIDE(roleid) {
 
   function _ide(_pre) {
     var _savebtn = $('#widget-grid').find('header .glyphicon-saved');
-    function _setValue(_str, _flg) {
+    
+    function _setValue(_str, _flg, filename) {
+        console.log(new Error());
+      // J.ym 修正 undo 操作将代码清除.
+      if (editor.getValue().trim() == '') {
+        setTimeout(function() {
+          editor.getSession().getUndoManager().reset();
+        }, 1);
+      } else {
+        zy.ui.msg(filename || '', '文件已经在IDE中打开', 'i');
+        return;
+      }
+      
       editor.setValue(_str + "\n\n\n\n\n");
       editor.navigateFileStart();
       editor.setReadOnly(_flg);
-      // J.ym 修正 undo 操作将代码清除.
-      setTimeout(function() {
-        editor.getSession().getUndoManager().reset();
-      }, 1);
     }
 
     function _getValue() {
@@ -1452,7 +1460,7 @@ function NewIDE(roleid) {
             _initIde(function() {
               _apistatusbtn.trigger('show', [_m.stability]);
               editor.initSize();
-              editor.set(_m.content, false);
+              editor.set(_m.content, false, _node.apiid);
               _savebtn.show();
               _hisbtn.show();
               _runbtn.parent().show();
