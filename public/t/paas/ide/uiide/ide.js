@@ -868,7 +868,9 @@
                             }
                         });
                         if (!_flg) {
+                            _btn.attr('disabled', true).text('正在上传...');
                             _tools._formPost('uploadfile', _form, function (_m) {
+                                _btn.removeAttr('disabled').text('开始上传');
                                 if (_m.code !== 0) {
                                   zy.ui.msg("失败", _m.msg, 'e');
                                   return; 
