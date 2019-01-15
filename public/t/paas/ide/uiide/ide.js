@@ -951,7 +951,8 @@
             _fileinput(_btn, _form);
             
             function appendUpFile() {
-              var _input = _tools._label('input').attr('type', 'file').attr('name', 'file');
+              var _input = _tools._label('input').attr('type', 'file')
+                .attr('name', 'file').attr('multiple', 'true');
               filesInput.append(_input);
               return _input;
             }

@@ -230,6 +230,7 @@
 
   function publish(min) {
     wait_pub = true;
+    $("#ui_publish,#ui_publish2").css('opacity', '0.2');
     var publish_api_name = 'publish';
     
       //获取改变check状态的节点
@@ -249,6 +250,7 @@
 		
 		function _over() {
 		  wait_pub = false;
+		  $("#ui_publish,#ui_publish2").css('opacity', '1');
 		}
         
 		if(rightnodes.length==0 && leftnodes.length==0){
