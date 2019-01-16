@@ -6,6 +6,7 @@
     var enableFileType = { '':1, 'html':1, 'htm':1, 'md':1 };
     var ACE_PATH = "lib/js/ace/1.4.2/ace.js";
     var upload_html = $("#uploadfile_html_template").html();
+    var allow_file_ext;
     
     var _domLabel = {
         edit: [
@@ -44,6 +45,11 @@
     function setEditorOptions(editor) {
       zy.setEditorExOptions(editor);
     }
+    
+    zy.net.get('app/a297dfacd7a84eab9656675f61750078/ZYAPP_IDE/ZYMODULE_UI_IDE/file_ext_allow', function(m) {
+      allow_file_ext = m.data || {};
+    });
+    
 
     //
     // Add by J.ym 17.12.19
@@ -118,7 +124,7 @@
                 url: link,
                 type: "post",
                 async: true,
-                timeout: 15000,
+                // timeout: 15000,
                 cache: false,
                 dataType: "json",
                 success: function (msg) {
@@ -882,13 +888,8 @@
               var _lastname = _filename.split('.')[_length-1];
 
               _fromServer(_path, function (_mm) {
-                var msg;
                 var _result = _mm;
-                if ($.isArray(_result)) {
-                    msg = _result;
-                    } else {
-                   msg = _result.children;
-                }
+                var msg = $.isArray(_result) ? _result : _result.children;
                 var exists = false;
                 $.each(msg, function (_i, _v) {
                     var _exitname = _v.name.toLowerCase();
@@ -902,20 +903,29 @@
                   return;
                 }
                 
+                progresst.html("&nbsp;");
+                var state = _container.find('.file-state').empty();
+                try {
+                  filesInput.find('input').each(function() {
+                    for (var i=0; i<this.files.length; ++i) {
+                      var f = this.files[i];
+                      state.append(["<div style='display:flex'>", 
+                        '<div style="flex:1">', f.name, '</div><div>', 
+                        sunit(f.size), "</div>"].join(''));
+                        
+                      var ext = f.name.substr(f.name.lastIndexOf('.'));
+                      if (!allow_file_ext[ext]) {
+                        throw new Error("该文件的类型("+ ext +")不被服务器接受: "+ f.name);
+                      }
+                    }
+                  });
+                } catch(e) {
+                  return zy.ui.msg("错误", e, 'e');
+                }
+                
                 start.attr('disabled', true).text('正在上传...');
                 var progress = $(progresshtml);
                 progressc.removeClass('hide').find('.progress').empty().append(progress);
-                progresst.html("&nbsp;");
-                
-                var state = _container.find('.file-state').empty();
-                filesInput.find('input').each(function() {
-                  for (var i=0; i<this.files.length; ++i) {
-                    var f = this.files[i];
-                    state.append(["<div style='display:flex'>", 
-                      '<div style="flex:1">', f.name, '</div><div>', 
-                      sunit(f.size), "</div>"].join(''));
-                  }
-                });
                 
                 _tools._formPost('uploadfile', _form, function (_m) {
                   start.removeAttr('disabled').text('开始上传');
