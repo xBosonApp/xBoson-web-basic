@@ -5,7 +5,7 @@
     var basePathOnServer = '$';
     var enableFileType = { '':1, 'html':1, 'htm':1, 'md':1 };
     var ACE_PATH = "lib/js/ace/1.4.2/ace.js";
-    
+    var upload_html = $("#uploadfile_html_template").html();
     
     var _domLabel = {
         edit: [
@@ -26,7 +26,6 @@
         ]
     };
     
-
     //
     // ADD by J.ym 17.12.16
     //
@@ -113,19 +112,29 @@
                 }
             });
         },
-        _formPost: function (_apinm, form, callback) {
+        _formPost: function (_apinm, form, callback, _progress) {
             var link = get_api_url(_apinm)+ '?onweb=1&' + zy.net.parseParam(zy.g.comm);
             form.ajaxSubmit({
                 url: link,
                 type: "post",
-                async: false,
-                timeout: 10000,
+                async: true,
+                timeout: 15000,
                 cache: false,
                 dataType: "json",
                 success: function (msg) {
-                    zy.fix_xboson_data(msg);
-                    callback && callback(msg);
-                }
+                  zy.fix_xboson_data(msg);
+                  callback && callback(msg);
+                },
+                error: function(x, t, e) {
+                  callback && callback({code:1, msg: e.message || t});
+                },
+                xhr : function() {
+                  var x = $.ajaxSettings.xhr();
+                  if (_progress && x.upload) {
+                    x.upload.addEventListener('progress', _progress);
+                  }
+                  return x;
+                },
             });
         },
         _post: function (_apinm, _cb, _param) {
@@ -554,11 +563,9 @@
                         // });
                     }
                     // 972 追加
-
                 });
                 return _div.append(_btn);
             }
-
 
             _c.append(_searchbtn());
             _c.append(_savebtn());
@@ -794,7 +801,6 @@
         }
 
         function _sort(_arr) {
-
             var _fileArray = [], _dirArray = [];
             $.each(_arr, function (_i, _v) {
                 if (_v.isParent)
@@ -806,155 +812,149 @@
             return [].concat(_dirArray, _fileArray);
         }
 
-        function _fileupload(_container, _flg) {
-            _container.empty();
+        // Jym. 重构
+        function _fileupload(_container, _flg /*fullscreen mode*/) {
+            _container.html(upload_html);
+            var _close      = _container.find(".close_uploadfile_dialog");
+            var _form       = _container.find('form');
+            var _ulSearch   = _container.find('#resulttree');
+            var filesInput  = _container.find('.file_list');
+            var start       = _container.find('.start_update');
+            var target_path = _container.find('.upload_target_path');
+            var logdom      = _container.find('.log');
+            var progresst   = _container.find('.progress-txt');
+            var progresshtml= _container.find('.progress').html();
+            var progressc   = _container.find('.progressc');
             
-            function _innerHeader() {
-                var _div = _tools._label('div').addClass('input-group input-group-sm')
-                    .attr('style', 'width:100%;margin-bottom:-15px');
-                var _title = _tools._label('header');
-                _title.append(_tools._label('label').html('文件上传')).append(_tools._label('a').attr('href', 'javascript:void(0);').addClass('pull-right').append(_tools._label('i').addClass('fa fa-times')));
-                _container.append(_div.append(_title));
-                _container.append(_tools._label('legend'));
-                _title.children('a').unbind();
-                _title.children('a').click(function () {
-                    var _target = $(this).closest('.col-sm-3');
-                    _target.hide();
-                    _target.parent().children(':eq(1)').trigger('size');
-                })
-            }
-
-            function _closeSearch(_btn) {
-                _btn.unbind();
-                _btn.click(function () {
-                    var _mid = $(this).closest('div');
-                    _mid.hide();
-                    _mid.next().hide();
-                    _mid.prev().hide();
-                })
-            }
-
-            function _fileinput(_btn, _form) {
-                if (!_btn) return;
-                
-                _btn.unbind();
-                var _tagert = $('#zy_tabs').closest('.row').children(':last');
-
-                _btn.click(function () {
-                    var _path = _tagert.find('[type=text]').val();
-                    if (!_path || !$('input[type=file]').val()) {
-                        zy.ui.msg('提示信息', '文件路径及文件不可为空', 'w');
-                        return;
-                    }
-                    
-                    var _filename = $('input[type=file]').val().toLowerCase();
-                    var _length = _filename.split('.').length;
-                    var _lastname = _filename.split('.')[_length-1];
-
-                    _fromServer(_path, function (_mm) {
-                      var msg;
-                      var _result = _mm;
-                      if ($.isArray(_result)) {
-                          msg = _result;
-                          } else {
-                         msg = _result.children;
-                      }
-                      var _flg = false;
-                        $.each(msg, function (_i, _v) {
-                            var _exitname = _v.name.toLowerCase();
-                            if (_filename == _exitname) {
-                                _flg = true;
-                                return false
-                            }
-                        });
-                        if (!_flg) {
-                            _btn.attr('disabled', true).text('正在上传...');
-                            _tools._formPost('uploadfile', _form, function (_m) {
-                                _btn.removeAttr('disabled').text('开始上传');
-                                if (_m.code !== 0) {
-                                  zy.ui.msg("失败", _m.msg, 'e');
-                                  return; 
-                                }
-                                zy.ui.msg('提示信息', _m.msg || '成功', 's');
-                                    
-                                _fromServer(_path, function (_mm) {
-                                    // console.log(_mm);
-                                    var _tree = $.fn.zTree.getZTreeObj("maintree");
-                                    var node = _tree.getNodesByParam('path', _path)[0];
-                                    var _result = _mm;
-                                    if ($.isArray(_result)) {
-                                        node.children = _result;
-                                    } else {
-                                        node.children = _result.children;
-                                    }
-                                    node.open = true;
-                                    _tree.refresh();
-                                }, false);
-                            });
-                        } else {
-                            zy.ui.msg('提示信息', '存在', 'e');
-                        }
-                    }, false);
-                });
-            }
-
-            _innerHeader();
-            var _form = _tools._label('form').attr('id', 'uploadform').attr('onsubmit', 'return false;');
-            var _ulSearch = _tools._label('ul').addClass('ztree').attr('id', 'resulttree');
-
-            var _search = _tools._label('div').attr('style', 'margin:-10px 0-5px');
-            _container.append(_form);
-            
-            var treeObj = $.fn.zTree.getZTreeObj("maintree");
-            var node = treeObj.getSelectedNodes();
-            var defaultpath = '/';
-            if(node[0]){
-              if(node[0].isParent){
-                defaultpath = node[0].path;
-              }else{
-                defaultpath = node[0].getParentNode().path;
+            var node =$.fn.zTree.getZTreeObj("maintree").getSelectedNodes();
+            if (node[0]) {
+              if (node[0].isParent) {
+                target_path.val(node[0].path);
+              } else {
+                target_path.val(node[0].getParentNode().path);
               }
             }
-
-            var _input1 = _tools._label('input').addClass('form-control').attr('type', 'text').attr('readonly', true).attr('name', 'path').val(defaultpath);
-            var _btn = _tools._label('button').addClass('btn btn-primary').html('开始上传');
-
-            _container.append(_tools._label('legend'));
-
-            var _i = _tools._label('a').attr('href', 'javascript:void(0);').addClass('pull-right').append(_tools._label('i').addClass('fa fa-times')).attr('style', 'margin-right:13px');
-            var _style = 'overflow:auto;display:none;height:';
-            if (_flg)
-                _style = 'overflow:auto;display:none;height:';
-            _style = (_height-400) + 'px';
-            _container.append(_tools._label('div').addClass('row').attr('style', _style).append(_ulSearch));
-            _search.append(_tools._label('label').html('上传到:')).append(_input1);
-            var filesInput = _tools._label('div').addClass('input-group input-group-sm');
-            // _search.append(_tools._label('span').addClass('input-group-btn').append(_btn));
-            _form.append(_search).append(_tools._label('legend'));
-            _form.append(filesInput).append(_tools._label('legend'));
-            var funcBtn = _tools._label('span').addClass('input-group-btn');
-            funcBtn.append(_btn);
-            _form.append(funcBtn);
-            appendUpFile();
             
-            var add = $("<button class='btn btn-default'>增加文件</button>").appendTo(funcBtn);
-            add.click(function() {
+            start.click(begin_upload);
+            
+            _close.click(function() {
+              _container.hide();
+              _container.parent().children(':eq(1)').trigger('size');
+            });
+            
+            _container.find('.add_file').click(function() {
               appendUpFile().click();
             });
-            var reset = $("<button class='btn btn-default'>重置表单</button>").appendTo(funcBtn);
-            reset.click(function() {
+            
+            _container.find('.reset_file_list').click(function() {
               filesInput.empty();
               appendUpFile();
             });
-
-            _closeSearch(_i);
-            _fileinput(_btn, _form);
+            
             
             function appendUpFile() {
               var _input = _tools._label('input').attr('type', 'file')
                 .attr('name', 'file').attr('multiple', 'true');
               filesInput.append(_input);
               return _input;
+            }
+            
+            function log(m) {
+              // zy.ui.msg("失败", _m.msg, 'e');
+              // zy.ui.msg('提示信息', _m.msg || '成功', 's');
+              logdom.removeClass('hide')
+                .addClass(m.code ? 'alert-warning' : 'alert-info');
+              logdom.find('.content')
+                .prepend(['<p><small style="color:#aaa;">[', 
+                  new Date().toLocaleString(), 
+                  ']</small><br/>', m.msg, "</p>"].join(''));
+            }
+
+            function begin_upload() {
+              var _path = target_path.val();
+              if (!_path || !$('input[type=file]').val()) {
+                  zy.ui.msg('提示信息', '文件路径及文件不可为空', 'w');
+                  return;
+              }
+              
+              var _filename = $('input[type=file]').val().toLowerCase();
+              var _length = _filename.split('.').length;
+              var _lastname = _filename.split('.')[_length-1];
+
+              _fromServer(_path, function (_mm) {
+                var msg;
+                var _result = _mm;
+                if ($.isArray(_result)) {
+                    msg = _result;
+                    } else {
+                   msg = _result.children;
+                }
+                var exists = false;
+                $.each(msg, function (_i, _v) {
+                    var _exitname = _v.name.toLowerCase();
+                    if (_filename == _exitname) {
+                        exists = true;
+                        return false
+                    }
+                });
+                if (exists) {
+                  zy.ui.msg('提示信息', '存在', 'e');
+                  return;
+                }
+                
+                start.attr('disabled', true).text('正在上传...');
+                var progress = $(progresshtml);
+                progressc.removeClass('hide').find('.progress').empty().append(progress);
+                progresst.html("&nbsp;");
+                
+                var state = _container.find('.file-state').empty();
+                filesInput.find('input').each(function() {
+                  for (var i=0; i<this.files.length; ++i) {
+                    var f = this.files[i];
+                    state.append(["<div style='display:flex'>", 
+                      '<div style="flex:1">', f.name, '</div><div>', 
+                      sunit(f.size), "</div>"].join(''));
+                  }
+                });
+                
+                _tools._formPost('uploadfile', _form, function (_m) {
+                  start.removeAttr('disabled').text('开始上传');
+                  log(_m);
+                  if (_m.code !== 0) return;
+                      
+                  _fromServer(_path, function (_mm) {
+                      var _tree = $.fn.zTree.getZTreeObj("maintree");
+                      var node = _tree.getNodesByParam('path', _path)[0];
+                      var _result = _mm;
+                      if ($.isArray(_result)) {
+                          node.children = _result;
+                      } else {
+                          node.children = _result.children;
+                      }
+                      node.open = true;
+                      _tree.refresh();
+                  }, false);
+                }, progress_listener);
+                
+                function progress_listener(e) {
+                  var percent = Math.floor(e.loaded/ e.total* 100) +'%';
+                  progress.css('width', percent);
+                  progresst.empty().append("<div style='flex:1'>"+ percent +"<div>")
+                    .append("<div>"+ sunit(e.loaded) +' / '+ sunit(e.total) +"<div>");
+                }
+              }, false);
+            }
+            
+            function sunit(x) {
+              if (x<1024) {
+                return (x).toFixed(2) +'B';
+              } else if (x<1024*1024) {
+                return (x/(1024)).toFixed(2) +'K';
+              } if (x<1024*1024*1024) {
+                return (x/(1024*1024)).toFixed(2) +'M';
+              } else {
+                return (x/(1024*1024*1024)).toFixed(2) +'G';
+              }
             }
         }
         
@@ -2114,12 +2114,9 @@
             });
         }
 
-
         function _count(_tab) {
             return _tab.getCount();
         }
-
-        
 
         var _c = _d.pre;
         var _tab = new zyTabs(_c);
