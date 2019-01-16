@@ -15,34 +15,64 @@
       data-widget-custombutton="false"
       data-widget-collapsed="true"
       data-widget-sortable="false"
-
       -->
       <header>
-
       </header>
-
       <!-- widget div-->
       <div style="min-height:603px;max-height:100%;">
-
         <!-- widget edit box -->
         <div class="jarviswidget-editbox">
           <!-- This area used as dropdown edit box -->
-
         </div>
         <!-- end widget edit box -->
-
         <!-- widget content -->
         <div class="widget-body"></div>
-
         <!-- end widget content -->
-
       </div>
       <!-- end widget div -->
-
     </div>
-   
   </article>
-   </div>
+</div>
+
+<div id="uploadfile_html_template" class='hide'>
+  <div class="input-group input-group-sm" style="width:100%;margin-bottom:-15px">
+    <header>
+      <label>文件上传</label>
+      <a href="javascript:void(0);" class="pull-right">
+        <i class="fa fa-times close_uploadfile_dialog"></i>
+      </a></header>
+  </div>
+  <legend></legend>
+  <form id="uploadform" onsubmit="return false;">
+    <div style="margin:-10px 0-5px">
+      <label>上传到:</label>
+      <input class="form-control upload_target_path" type="text" readonly="readonly" name="path"/>
+    </div>
+    <legend></legend>
+    <div class="input-group input-group-sm file_list">
+      <input type="file" name="file" multiple="multiple"/>
+    </div>
+    <legend></legend>
+    <span class="input-group-btn">
+      <button class="btn btn-primary start_update">开始上传</button>
+      <button class="btn btn-default add_file">增加文件</button>
+      <button class="btn btn-default reset_file_list">重置表单</button>
+    </span>
+  </form>
+  <legend></legend>
+  <div class="row" style="392px"><ul class="ztree" id="resulttree"></ul></div>
+  <div class='progressc hide'>
+    <div class='file-state'></div>
+    <div class='progress-txt' style='display:flex'></div>
+    <div class="progress progress-xs progress-striped active">
+  		<div class="progress-bar bg-color-blue" role="progressbar" style="width: 0;"></div>
+  	</div>
+  </div>
+  <div class='alert alert-block log hide' style='overflow-y:auto; max-height:200px;'>
+    <h4 class="alert-heading">操作日志</h4>
+    <div class='content'></div>
+  </div>
+</div>
 
 <script type="text/javascript" src="lib/html/zy_tabs.js"></script>
 <script type="text/javascript" src="ide/uiide/ide.js"></script>
