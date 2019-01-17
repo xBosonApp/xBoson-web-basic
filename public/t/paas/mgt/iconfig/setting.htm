@@ -10,6 +10,7 @@
       
       xb.api('ZYAPP_SYSMGT', 'smartconfig', 'reading', {name: data.name}, function(d) {
         $("#state").text(d.state);
+        var desc = d.desc || {};
         
         eachObjSort(d.data, function(n, v, i) {
           var item = $(html);
@@ -17,6 +18,7 @@
           item.find("[name=k]").val(n);
           item.find("[name=v]").val(v);
           item.find("[name=t]").val(check_type(v));
+          bindDesc(item, n);
         });
         
         eachObjSort(d.tpl, function(n, v) {
@@ -25,8 +27,15 @@
             attribute_template.append(item);
             item.find("[name=k]").val(n);
             item.find("[name=t]").val(v);
+            bindDesc(item, n);
           }
         });
+        
+        function bindDesc(item, name) {
+          if (desc[name]) {
+            item.find("[name=k]").parents('section').find('.label').text(desc[name]);
+          }
+        }
       });
     
       $('#add_item').click(function() {

@@ -10,11 +10,11 @@
 var cfg = require("config");
 cfg.create({
   'mode': cfg.MODE_ORG,
-  'name': "ConfigName",
+  'name': "user-config",
   'desc': "DEMO",
   'create_time': new Date(),
 });
-var programConfig = cfg.get("ConfigFileName");
+var programConfig = cfg.get("user-config");
 console.log(programConfig.id, programConfig.name, programConfig);
 ```
 
@@ -27,6 +27,13 @@ console.log(programConfig.id, programConfig.name, programConfig);
 
 如果配置文件不存在抛出异常, 如果配置文件没有配置数据返回空对象.
 
+
+```js
+var cfg  = require("config");
+var user = cfg.get('user-config');
+var id   = user.id;
+var name = user.name;
+```
 
 ## void set(String name, Object setting)
 
@@ -65,10 +72,31 @@ template[k,v] 中 k 是配置属性名称, v 是数据类型,
 
 这将覆盖旧的配置模板, 如果配置文件不存在抛出异.
 
+```js
+var cfg = require("config");
+cfg.putTemplate('user-config', {
+  'id'  : cfg.TYPE_STRING,
+  'name': cfg.TYPE_STRING,
+});
+```
+
 
 ## Object getTemplate(String name)
 
 返回配置模板, 如果配置文件不存在抛出异.
+
+
+## void setDesc(String name, Object attrDesc) 
+
+设置配置文件属性说明, 在用户进行配置时在画面上显示这些说明.
+
+```js
+var cfg = require("config");
+cfg.setDesc('user-config', {
+  'id'   : "用户索引",
+  'name' : "用户名称",
+});
+```
 
 
 # 常量 / 模式
