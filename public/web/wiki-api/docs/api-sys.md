@@ -28,7 +28,7 @@ var values = sys.requestParameterMap.checkbox_values;
 
 ## sys.requestJson
 
-客户端使用 POST 请求递交 `ContentType: application/json` 类型的数据时, 调用 parseBody() 后,
+客户端使用 POST 请求递交 `Content-Type: application/json` 类型的数据时, 调用 parseBody() 后,
 POST Body 中的数据将被解析成 js 对象并绑定在 requestJson 属性上.
 
 
