@@ -1,5 +1,4 @@
 /**
- * 数据字典类型
  * @class Login
  */
 Login = (function() {
@@ -486,3 +485,211 @@ Login = (function() {
 
   return Login;
 })();
+
+
+$(function() {
+
+// zy.g.host.ui = zy.net.getHttpUrl();
+// zy.g.host.api = zy.net.getHttpUrl("/ds/");
+var login = new Login();
+ $('#form-password').hide();
+login.Init();
+
+// 注册/登陆
+$('#login-header-space a').click(function(){
+	var target = $('#form-section');
+	$('#div_login').find('input').val('');
+	$('#form-password').hide();
+	if(target.is(':visible')){
+		target.hide();
+		target.prev().show();
+		$(this).html('创建用户');
+	}else{
+		target.show();
+		target.prev().hide();
+		$(this).html('登陆');
+	}
+});
+
+var wxLogin = $("#wxLogin").click(function() {
+  var uri = 'openapp/a297dfacd7a84eab9656675f61750078/af1880a8938f4756a3f377c93be99d78/wx_website/redirect_uri';
+  zy.net.get(uri, function(d) {
+    if (d.code == 0) {
+      location.href = d.msg;
+    }
+  });
+});
+if (location.port == 80 || location.port == 443 || location.port === "") {
+  wxLogin.show();
+	// 执行一次登出操作, 否则已经登录的用户会妨碍匿名接口访问.
+	$.get(zy.g.host.api +'user/logout', console.log);
+}
+
+$('#i-agree').click(function () {
+	$this = $('#agree');
+	if ($this.checked) {
+		$('#myModal').modal('toggle');
+	} else {
+		$this.prop('checked', true);
+		$('#myModal').modal('toggle');
+	}
+});
+
+// 忘记密码
+$('#repw').click(function () {
+	var target = $('#form-password');
+	target.show();
+	target.prev().hide();
+	target.prev().prev().hide();
+
+  //默认手机找回
+  $('input[name=email]').detach();
+  $('#tel_forgotpassword').btnDisable(true);
+  $('#email_forgotpassword').btnDisable(false);
+  //获取验证码
+  verify();
+  GetValwords();
+});
+		
+validator = $("#forgotpassword-form").validate({
+  rules: {
+    userid: {
+      required: true,
+      minlength: 4,
+      maxlength: 16
+    },
+    tel: {
+      required: true,
+      tel: true
+    },
+    email: {
+      required: true,
+      email: true,
+    },
+    newpassword: {
+      required: true,
+      minlength: 6,
+      maxlength: 16
+    },
+    valwords: {
+      required: true,
+      minlength: 6,
+      maxlength: 6
+    },
+  },
+  messages: {
+    userid: {
+      required: '请输入用户ID'
+    },
+    tel: {
+      required: '请输入手机号码',
+    },
+    email: {
+      required: '请输入电子邮箱',
+    },
+    newpassword: {
+      required: '请输入新密码'
+    },
+    valwords: {
+      required: '请输入验证码'
+    },
+  },
+  onfocusout: function(element) {
+    $(element).valid();
+  },
+  onkeyup: function(element) {
+    $(element).valid();
+  },
+  errorElement: 'b',
+  errorPlacement: function(error, element) {
+    if (element.is(":checkbox")) {
+      error.appendTo(element.parent()).css('color', 'red');
+    } else {
+      error.appendTo(element.parent()).addClass("tooltip tooltip-top-right");
+    }
+  },
+  highlight: function(element, errorClass, validClass) {
+    $(element).parent().addClass('has-error');
+    $(element).parent().find('i').css('color', 'red');
+  },
+  unhighlight: function(element, errorClass, validClass) {
+    $(element).parent().removeClass('has-error');
+    $(element).parent().find('i').css('color', 'green');
+  },
+  submitHandler: function(form) {
+    $('#forgotpassword-button').click(function(event) {
+      Submit(form);
+    });
+  },
+});
+
+//自定义手机号码验证
+$.validator.addMethod("tel", function(value, element) {
+  var length = value.length;
+  var tel = /^(13[0-9]|14[57]|15[012356789]|17[678]|18[0-9])[0-9]{8}$/;
+  return this.optional(element) || (length == 11 && tel.test(value));
+}, "请输入正确的手机号码");
+
+//手机找回、邮箱找回切换
+$('.forgotpassword').on("click", 'button', function() {
+  $current = $(this); //当前按键
+  $other = $(this).parent().siblings().find('button'); //另一按键
+  currentName = $(this).attr('name');
+  otherName = $(this).parent().siblings().find('button').attr('name');
+  //密码找回按键切换
+  $current.btnDisable(true).addClass('btn-primary');
+  $other.btnDisable(false).removeClass('btn-primary');
+  //密码找回表单切换
+  $('input[name=' + otherName + ']').detach();
+  if ($(this).is('#tel_forgotpassword')) {
+    $('#' + currentName + '').parent().find('i').after('<input type="text" name="tel" placeholder="手机号码">');
+  } else {
+    $('#' + currentName + '').parent().find('i').after('<input type="text" name="email" placeholder="电子邮箱">');
+  }
+  //重置表单 清除样式
+  $("#forgotpassword-form label").removeClass('has-error');
+  $("#forgotpassword-form label i").removeAttr('style');
+  validator.resetForm();
+  $('#get_valwords').btnDisable(true);
+  verify();
+});
+
+//手机或邮箱验证通过 验证码按键可用
+function verify() {
+  $('#get_valwords').btnDisable(true);
+  $('#forgotpassword-form label.verify input').blur(function() {
+    if (validator.element($(this))) {
+      $('#get_valwords').btnDisable(false);
+    } else {
+      $('#get_valwords').btnDisable(true);
+    }
+  }).keyup(function() {
+    $(this).triggerHandler('blur');
+  }).focus(function() {
+    $(this).triggerHandler('blur');
+  });
+}
+
+//验证码60s倒计时
+function GetValwords() {
+  var countdown = 60;
+  function time(o) {
+    if (countdown == 0) {
+      o.btnDisable(false);
+      o.val('获取验证码');
+      countdown = 60;
+    } else {
+      o.btnDisable(true);
+      o.val("重新发送" + countdown);
+      countdown--;
+      setTimeout(function() {
+        time(o);
+      }, 1000);
+    }
+  }
+  $('#get_valwords').on('click', function(event) {
+    time($(this));
+  });
+}
+
+});
