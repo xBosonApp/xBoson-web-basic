@@ -58,8 +58,12 @@ body, window {
   background-color: #fff;
 }
 
-h2, h3, h4, h5, h6 {
+h2, h3, h5, h6 {
   margin-top: 90px;
+}
+
+h4 {
+  margin-top: 40px;
 }
 
 h1 {

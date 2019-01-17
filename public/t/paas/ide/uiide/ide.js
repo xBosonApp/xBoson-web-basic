@@ -7,6 +7,7 @@
     var ACE_PATH = "lib/js/ace/1.4.2/ace.js";
     var upload_html = $("#uploadfile_html_template").html();
     var allow_file_ext;
+    var max_post_body = 0;
     
     var _domLabel = {
         edit: [
@@ -48,6 +49,7 @@
     
     zy.net.get('app/a297dfacd7a84eab9656675f61750078/ZYAPP_IDE/ZYMODULE_UI_IDE/file_ext_allow', function(m) {
       allow_file_ext = m.data || {};
+      max_post_body = m.max_post_body || 0;
     });
     
 
@@ -118,8 +120,9 @@
                 }
             });
         },
-        _formPost: function (_apinm, form, callback, _progress) {
-            var link = get_api_url(_apinm)+ '?onweb=1&' + zy.net.parseParam(zy.g.comm);
+        _formPost: function (_apinm, form, callback, _progress, _path) {
+            var link = get_api_url(_apinm)+ '?onweb=1&path='+ 
+                encodeURIComponent(_path) +'&'+ zy.net.parseParam(zy.g.comm);
             form.ajaxSubmit({
                 url: link,
                 type: "post",
@@ -905,10 +908,12 @@
                 
                 progresst.html("&nbsp;");
                 var state = _container.find('.file-state').empty();
+                var total = 0;
                 try {
                   filesInput.find('input').each(function() {
                     for (var i=0; i<this.files.length; ++i) {
                       var f = this.files[i];
+                      total += f.size;
                       state.append(["<div style='display:flex'>", 
                         '<div style="flex:1">', f.name, '</div><div>', 
                         sunit(f.size), "</div>"].join(''));
@@ -921,6 +926,9 @@
                   });
                 } catch(e) {
                   return zy.ui.msg("错误", e, 'e');
+                }
+                if (max_post_body > 0 && total > max_post_body) {
+                  return zy.ui.msg("错误", "超过服务器上传文件尺寸上限 "+ sunit(max_post_body), 'e');
                 }
                 
                 start.attr('disabled', true).text('正在上传...');
@@ -944,7 +952,7 @@
                       node.open = true;
                       _tree.refresh();
                   }, false);
-                }, progress_listener);
+                }, progress_listener, _path);
                 
                 function progress_listener(e) {
                   var percent = Math.floor(e.loaded/ e.total* 100) +'%';

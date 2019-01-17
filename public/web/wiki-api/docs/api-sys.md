@@ -28,8 +28,8 @@ var values = sys.requestParameterMap.checkbox_values;
 
 ## sys.requestJson
 
-客户端使用 POST 请求递交 `ContentType: application/json` 类型的数据时,
-POST Body 中的数据将被解析成 js 对象并绑定在 requestJson 属性上, 其他时候该参数为 null.
+客户端使用 POST 请求递交 `ContentType: application/json` 类型的数据时, 调用 parseBody() 后,
+POST Body 中的数据将被解析成 js 对象并绑定在 requestJson 属性上.
 
 
 ## sys.result
@@ -108,23 +108,50 @@ POST Body 中的数据将被解析成 js 对象并绑定在 requestJson 属性�
 返回 HTTP 头域 'Content-Type' 的值.
 
 
-## sys.request.multipart()
+## sys.request.multipart(Function(MultipartItem): FileProcessing)
 
-返回解析后的 BODY 数据, 此时 `Content-type` 为 `multipart/form-data`.
-body 长度为 0 会返回 null, 出现错误会抛出异常.
+上传文件数据解析, 此时 `Content-type` 为 `multipart/form-data`.
+每个文件(参数)调用一次 FileProcessing 处理函数.
+出现错误会抛出异常, 如果没有异常, 返回处理的文件(参数)数量.
 
-返回数据结构:
-```json
-[{
-  /* 头域中的属性依请求不同而变 */
-  header: {
-    filename: 'string, 文件字段一定有这个头域'
-    name: 'string, 参数字段有这个头域'
-  }
-  content: Buffer /* 可以是文件内容或参数值 */
-}, 
-{.../*数组中元素为文件或参数*/}]
+DEMO:
+
+```js
+sys.request.multipart(function(item) {
+  // 表单参数名称
+  item.header.name;
+  // 文件名称, 如果是文件才有这个参数
+  item.header.filename;
+  // 文件 mime-type, 如果是文件才有这个参数
+  item.header['Content-Type'];
+  // 读取文件内容到 Buffer 并返回
+  item.readBuffer();
+});
 ```
+
+### class MultipartItem
+
+一个文件(参数)对象, 其中读取(read 开头)的方法只能调用一次, 超过一次调用会抛出异常.
+
+#### Object header
+
+文件头属性, 有 filename/name/Content-Type 等属性.
+
+#### Buffer readBuffer()
+
+读取文件内容到 [Buffer 对象](docs/api-buffer.md) 并返回.
+
+#### Bytes readBytes()
+
+读取文件内容到 [Bytes 对象](docs/api-bytes.md) 并返回.
+
+#### String readString([String: charset])
+
+读取文件内容到字符串并返回.
+
+#### int readTo(JsOutputStream: out)
+
+读取文件内容并写出到 [输出流 JsOutputStream 对象](docs/api-streamutil.md) 并返回读取的字节数.
 
 
 # 可用 API
