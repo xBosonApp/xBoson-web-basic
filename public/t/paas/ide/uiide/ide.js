@@ -135,7 +135,9 @@
                   callback && callback(msg);
                 },
                 error: function(x, t, e) {
-                  callback && callback({code:1, msg: e.message || t});
+                  var msg = e.message || t;
+                  if (msg == 'error' || msg == '') msg = "服务器关闭了连接";
+                  callback && callback({code:1, msg: msg});
                 },
                 xhr : function() {
                   var x = $.ajaxSettings.xhr();
@@ -1709,7 +1711,7 @@
             $.extend(true, _t, zy.g.comm);
             _t.path = _path;
             _tools._api('getfilelist', function (_m) {
-                console.log(_m, !Boolean(_m.ret))
+                // console.log(_m, !Boolean(_m.ret))
                 if (!Boolean(_m.ret)) {
                     var _mm = _m.result;
                     if ($.isArray(_mm)) {
