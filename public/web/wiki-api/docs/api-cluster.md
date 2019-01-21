@@ -40,6 +40,14 @@ for (var i=0; i<ids.length; ++i) {
 ```
 
 
+## cluster.state(id)
+
+测试节点的运行状态, 并返回状态码.
+
+* cluster.UNKNOW: 未知状态
+* cluster.RUNNING: 运行中
+* cluster.DOWN: 下线
+
 
 # class ComputeNodeInfo
 

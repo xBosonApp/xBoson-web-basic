@@ -106,13 +106,13 @@ ApiProcessManager = (function() {
           return formatUseTime(row.runningTime);
         }
       },
+      { "data": "nodeID" },
       { "data": "api" },
       { "data": "mod" },
       { "data": "app" },
       { "data": "org" },
       { "data": "callUser", },
       { "data": "processId" },
-      { "data": "nodeID" },
       {
         "render": function(data, type, row, meta) {
           return new Date(row.beginAt).toLocaleString();
