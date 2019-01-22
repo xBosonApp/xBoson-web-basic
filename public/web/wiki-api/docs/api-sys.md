@@ -326,6 +326,11 @@ for (var i in orgList) {
 返回 HZ 字符串中, 中文字符的首字母.
 
 
+## sys.fullPinyinLetter(string:HZ)
+
+将字符串中的中文字符转换为拼音, 英文保持不变, 并加入适当的空格使拼音易读.
+
+
 ## sys.formattedNumber(number:Val, string:Pattern)
 
 返回格式化数字的字符串
