@@ -294,16 +294,22 @@ MgtDataSource = (function() {
     }
     //测试jdbc连接按钮事件
     addup_form.find('button[name="test-jdbc-conn"]').click(function(){
-      var user_name=addup_form.find('input[name=user_name]').val();
-      var pass=addup_form.find('input[name=pass]').val();
-      var url=addup_form.find('input[name=url]').val();
+      var user_name = addup_form.find('input[name=user_name]').val();
+      var pass = addup_form.find('input[name=pass]').val();
+      var url  = addup_form.find('input[name=url]').val();
+      var type = addup_form.find('input[name=dbtype]').val();
+      var host = addup_form.find('input[name=dhost]').val();
+      var port = addup_form.find('input[name=dport]').val();
+      var db   = addup_form.find('input[name=en]').val();
+      // var did  = addup_form.find('input[name=did]').val();
+      
       //判断参数
       if(!user_name)
         return zy.ui.msg('提示：','请输入用户名','i');
       if(!pass)
         return zy.ui.msg('提示：','请输入密码','i');
-      if(!url)
-        return zy.ui.msg('提示：','请输入JDBC URL','i');
+      // if(!url)
+      //   return zy.ui.msg('提示：','请输入JDBC URL','i');
       
       zy.g.am.app = 'ZYAPP_SYSMGT';
       zy.g.am.mod = 'datasource';
@@ -312,6 +318,9 @@ MgtDataSource = (function() {
           if(msg.result&&msg.result[0]){
             if(msg.result[0].isconn=='1'){
               zy.ui.msg('提示信息：','连接成功','s');
+              if (!url && msg.jdbc_url) {
+                addup_form.find('input[name=url]').val(msg.jdbc_url);
+              }
             }else{
               zy.ui.msg('提示信息：','连接失败：'+msg.result[0].message,'i');
             }
@@ -320,9 +329,14 @@ MgtDataSource = (function() {
           }
         }
       },{
-        user_name:user_name,
-        pass:pass,
-        url:url
+        user_name : user_name,
+        pass : pass,
+        url  : url,
+        host : host,
+        port : port,
+        type : type,
+        db   : db,
+        // did  : did,
       });
     });
     //接口判断是否为开发商

@@ -163,7 +163,7 @@ var updatedcount = sql.updateBatch(sqlIns, paramIns, "0");
 
 ## sql.connection(string:connectId)
 
-切换当前脚本上下文的数据源为指定的数据源.
+切换当前脚本上下文的数据源为指定的数据源; 连接失败会抛出异常.
 
 参数: 
 
@@ -172,13 +172,30 @@ var updatedcount = sql.updateBatch(sqlIns, paramIns, "0");
 
 ## sql.connection(stirng:url, string:username, string:password)
 
-切换当前脚本上下文的数据源为指定的数据源.
+切换当前脚本上下文的数据源为指定的数据源, 该方法不使用数据库连接池保持连接;
+连接失败会抛出异常.
 
 参数:
 
 * url: jdbc 连接 url.
 * username: 数据库用户
 * password: 数据库密码
+
+
+## sql.connection(stirng:dbType, string:host, int:port, string:dbname, string:username, string:password)
+
+切换当前脚本上下文的数据源为指定的数据源; 返回 jdbc url 的连接字符串(不包括密码).  
+该方法不使用数据库连接池保持连接; 连接失败会抛出异常.
+
+参数:
+
+* dbType: DBMS 类型代码
+* host: DB 主机地址
+* port: DB 主机端口
+* dbname: 默认数据库名
+* username: 登录用户名
+* password: 登录密码
+
 
 
 ## sql.dbType()
