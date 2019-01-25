@@ -81,7 +81,7 @@ ClusterManager = (function() {
    * @method DataTable
    * @param {Object} data 数据对象
    */
-  PT.DataTable = function(data, state) {
+  PT.DataTable = function(data) {
     //定义绑定数据结构
     var columns = [
       { "data": "osName", title: '操作系统' },
@@ -108,7 +108,19 @@ ClusterManager = (function() {
       },
       { title: '状态',
         render: function(data, type, row, meta) {
-          return state[row.nodeID];
+          var nid = row.nodeID;
+          var url = zy.g.host.api
+ +'app/'+ zy.g.comm.org +'/e0ef1b25da204227b305fd40382693e6/cluster/nodestate'; 
+ 
+          $.get(url, { nodeid: nid }, function(ret) {
+            var state = dt.find("[nodeid="+ nid +"]");
+            if (ret.code === 0) {
+              state.text(ret.state);
+            } else {
+              state.text(ret.msg);
+            }
+          });
+          return "<span nodeid='"+ nid +"'>加载中...</span>";
         }
       }
     ];
@@ -191,7 +203,7 @@ ClusterManager = (function() {
         msg.list.sort(sortProcess);
         thiz._g.count = msg.count; //获取总记录数
         widgetDiv.find('[name=total_count]').text('总数：'+ msg.list.length);
-        thiz.DataTable(msg.list, msg.state);
+        thiz.DataTable(msg.list);
         thiz._g.count = 1;
         thiz._g.page = 1;
         $('#log_access_log_pagination').jqPaginator('destroy');
