@@ -5,6 +5,7 @@
 **/.streams/**
 *.tar
 *.gz
+*.sql
 
 WebRoot/WEB-INF/classes/pc
 WebRoot/WEB-INF/classes/key
