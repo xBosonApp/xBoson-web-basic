@@ -3,6 +3,8 @@
 .DS_store
 .idea/workspace.xml
 **/.streams/**
+*.tar
+*.gz
 
 WebRoot/WEB-INF/classes/pc
 WebRoot/WEB-INF/classes/key
