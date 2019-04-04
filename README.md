@@ -5,6 +5,10 @@
 * `xboson-node-modules` 脚本扩展目录
 * `webservice` WSDL 测试客户端
 
-# GIT
 
-ssh://git@w972.asuscomm.com:10022/ui0/web4xboson.git
+# 工具脚本
+
+* dump-db-all.cmd -- 打包平台 DB 数据, 输出到 xboson-db-dump.sql.
+* dump-db-small.cmd -- 最小平台 DB 数据, 输出到 xboson-db-dump-small.sql.
+* dump-mongo.cmd -- 打包 MongoDB 数据, 输出到 mongo-bak.tar.gz.
+* dump-web-all.cmd -- 打包 WEB 数据, 输出到 web4xboson-all.tar.gz.
