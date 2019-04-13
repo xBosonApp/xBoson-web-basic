@@ -1,7 +1,7 @@
 @echo on
 echo 只导出 '平台机构' 和 '数据机构', 最小导出
 
-set path=c:\Program Files\7-Zip;C:\Programs64\mysql-5.7.17-winx64\bin
+set path=c:\Program Files\7-Zip;D:\_dev_runtime\mysql-5.7.17-winx64\bin
 
 set dump=mysqldump.exe
 set zexe=7z.exe
