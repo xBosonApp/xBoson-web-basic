@@ -1,4 +1,4 @@
-	/*
+/*
 	 * Toggle Demo
 	 */
 	.toggle-demo {
@@ -199,5 +199,5 @@
 	}
 	.ztree * {
 	  font-size: 14px !important;
-	  font-family: Consolas,"Microsoft Yahei",SimHei,STHeiti,SimSun,STSong,sans-serif,FontAwesome !important;
+	  font-family: Consolas,PingFang SC,Source Han Sans SC,Microsoft YaHei,Arial,Sans-Serif,FontAwesome !important;
 	}

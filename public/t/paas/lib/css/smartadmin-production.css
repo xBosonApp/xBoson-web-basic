@@ -87,7 +87,7 @@ article.sortable-grid {
   height: 32px;
   float: left;
   position: relative;
-  font-family: Consolas,Microsoft YaHei,SimHei,STHeiti,SimSun,STSong,sans-serif;
+  font-family: Consolas,PingFang SC,Source Han Sans SC,Microsoft YaHei,Arial,Sans-Serif;
   border-left: 1px solid rgba(0, 0, 0, .09)
 }
 .jarviswidget-ctrls .button-icon:hover {
@@ -5315,7 +5315,7 @@ table.fc-border-separate {
   padding: 10px
 }
 .md-editor>textarea {
-  font-family: Consolas,Microsoft YaHei,SimHei,STHeiti,SimSun,STSong,sans-serif;
+  font-family: Consolas,PingFang SC,Source Han Sans SC,Microsoft YaHei,Arial,Sans-Serif;
   font-size: 13px;
   outline: 0;
   outline: thin dotted \9;
@@ -6920,7 +6920,7 @@ body.fd-slider-drag-vertical * {
   border: 1px dotted #000
 }
 .ui-widget {
-  font-family: Consolas,Microsoft YaHei,SimHei,STHeiti,SimSun,STSong,sans-serif;
+  font-family: Consolas,PingFang SC,Source Han Sans SC,Microsoft YaHei,Arial,Sans-Serif;
   font-size: 13px
 }
 .ui-widget .ui-widget {
@@ -6930,7 +6930,6 @@ body.fd-slider-drag-vertical * {
 .ui-widget input,
 .ui-widget select,
 .ui-widget textarea {
-  font-family: Consolas,Microsoft YaHei,SimHei,STHeiti,SimSun,STSong,sans-serif;
   font-size: inherit
 }
 .ui-widget-content {
@@ -8768,7 +8767,7 @@ div.wijmo-wijmenu .wijmo-wijmenu-child .wijmo-wijmenu-text {
   -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .1) inset, 0 1px 0 rgba(255, 255, 255, .25);
   box-shadow: 0 1px 2px rgba(0, 0, 0, .1) inset, 0 1px 0 rgba(255, 255, 255, .25);
   color: rgba(255, 255, 255, .75);
-  font-family: Consolas,Microsoft YaHei,SimHei,STHeiti,SimSun,STSong,sans-serif;
+  font-family: Consolas,PingFang SC,Source Han Sans SC,Microsoft YaHei,Arial,Sans-Serif;
   line-height: 1;
   margin: 5px 10px 0;
   padding: 4px 9px;
@@ -11746,7 +11745,7 @@ time.icon span {
   padding: 6px 20px 5px 10px;
   margin: 0;
   outline: 0;
-  font-family: Consolas,Microsoft YaHei,SimHei,STHeiti,SimSun,STSong,sans-serif;
+  font-family: Consolas,PingFang SC,Source Han Sans SC,Microsoft YaHei,Arial,Sans-Serif;
   font-size: 1em;
   border: 1px solid #aaa;
   -webkit-box-shadow: none;
@@ -11970,7 +11969,7 @@ time.icon span {
 .select2-container-multi .select2-choices .select2-search-field input {
   padding: 5px;
   margin: 1px 0;
-  font-family: Consolas,Microsoft YaHei,SimHei,STHeiti,SimSun,STSong,sans-serif;
+  font-family: Consolas,PingFang SC,Source Han Sans SC,Microsoft YaHei,Arial,Sans-Serif;
   font-size: 100%;
   color: #666;
   outline: 0;
@@ -12311,7 +12310,7 @@ body {
   padding: 0;
   height: 100%;
   overflow: hidden;
-  font-family: Consolas,Microsoft YaHei,SimHei,STHeiti,SimSun,STSong,sans-serif;
+  font-family: Consolas,PingFang SC,Source Han Sans SC,Microsoft YaHei,Arial,Sans-Serif;
   background: url(../img/mybg.png) #fff;
   direction: ltr
 }
@@ -12331,7 +12330,7 @@ h2,
 h3,
 h4 {
   margin: 0;
-  font-family: Consolas,Microsoft YaHei,SimHei,STHeiti,SimSun,STSong,sans-serif;
+  /*font-family: Consolas,Microsoft YaHei,SimHei,STHeiti,SimSun,STSong,sans-serif;*/
   font-weight: 300
 }
 .page-title {
@@ -13187,7 +13186,7 @@ nav ul ul>li:hover b {
   padding: 0;
   line-height: 15px;
   font-size: 10px;
-  font-family: Consolas,Microsoft YaHei,SimHei,STHeiti,SimSun,STSong,sans-serif;
+  font-family: Consolas,PingFang SC,Source Han Sans SC,Microsoft YaHei,Arial,Sans-Serif;
   font-weight: 700;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -14765,7 +14764,7 @@ img.away {
   color: #666;
   background: rgba(255, 255, 255, .8);
   border: solid 2px rgba(230, 230, 230, .8);
-  font-family: Consolas,Microsoft YaHei,SimHei,STHeiti,SimSun,STSong,sans-serif;
+  font-family: Consolas,PingFang SC,Source Han Sans SC,Microsoft YaHei,Arial,Sans-Serif;
   font-size: 12px;
   text-align: center
 }
@@ -15581,7 +15580,7 @@ img.away {
 .tooltip-inner {
   padding: 5px 10px;
   font-size: 11px;
-  font-family: Consolas,Microsoft YaHei,SimHei,STHeiti,SimSun,STSong,sans-serif;
+  font-family: Consolas,PingFang SC,Source Han Sans SC,Microsoft YaHei,Arial,Sans-Serif;
   font-weight: 700;
   border-radius: 0
 }
@@ -15595,7 +15594,7 @@ img.away {
   -webkit-box-sizing: content-box
 }
 .jqstooltip .jqsfield {
-  font-family: Consolas,Microsoft YaHei,SimHei,STHeiti,SimSun,STSong,sans-serif;
+  font-family: Consolas,PingFang SC,Source Han Sans SC,Microsoft YaHei,Arial,Sans-Serif;
   font-size: 11px
 }
 #sparks {
@@ -15865,7 +15864,7 @@ img.away {
   border-radius: 3px;
   background: #292929;
   color: #fff;
-  font-family: Consolas,Microsoft YaHei,SimHei,STHeiti,SimSun,STSong,sans-serif;
+  font-family: Consolas,PingFang SC,Source Han Sans SC,Microsoft YaHei,Arial,Sans-Serif;
   font-size: smaller;
   padding: 3px
 }
