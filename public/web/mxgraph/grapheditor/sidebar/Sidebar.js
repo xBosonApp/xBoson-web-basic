@@ -1297,7 +1297,7 @@
   	  var conf = thiz.configuration;
   	  var dialog = document.createElement('dialog');
   	  dialog.style = 'display: flex; flex-direction: row; max-height: 90%;'
-  	    +'border: 1px solid #999; margin-top: 20px; padding-left: 0;';
+  	    +'border: 1px solid #999; margin-top: 20px; padding-left: 0; min-height: 70%';
   	  
   	  //
   	  // 左边是菜单, 右边是预览
@@ -1344,7 +1344,7 @@
   	  }
   	  
   	  var close = document.createElement('a');
-  	  close.style = 'font-weight: bold; padding: 5px 60px; display: block';
+  	  close.style = 'font-weight: bold; padding: 5px 60px; display: block; font-size: 16px';
   	  close.href = '#';
   	  close.innerHTML = mxResources.get('ok');
   	  left.appendChild(close);

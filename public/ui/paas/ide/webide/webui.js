@@ -851,7 +851,7 @@
                 var _div =_tools._label('div').addClass('row').css('height', _height).append(_pre1.append(_img));
             }else{
               var _pre = _tools._label('pre');
-            _pre.attr('style', 'font-family:Consolas,Microsoft YaHei,微软雅黑,sans-serif,宋体;top:-14;height:100%; width:100%;').attr('id', _id).attr('name', _name);
+            _pre.attr('style', 'font-family:Consolas,PingFang SC,Source Han Sans SC Light,Microsoft YaHei,Arial,Sans-Serif;top:-14;height:100%; width:100%;').attr('id', _id).attr('name', _name);
             var _div =_tools._label('div').addClass('row').css('height', _height).append(_pre);
                 
             }
@@ -1753,7 +1753,7 @@ alert(_lastname);
         });
         var _tree = _treeDom();
         _jq.closest('#widget-grid').after(_mod);
-        _pre.attr('style', 'font-family:Consolas,Microsoft YaHei,微软雅黑,sans-serif,宋体;top:-14;height:100%; width:100%;');
+        _pre.attr('style', 'font-family:Consolas,PingFang SC,Source Han Sans SC Light,Microsoft YaHei,Arial,Sans-Serif;top:-14;height:100%; width:100%;');
         _row.append(_tree.container).append(_ideC).append(_toolbar);
         _jq.find('.widget-body').empty().append(_row);
         _header(_jq.children('header'));
