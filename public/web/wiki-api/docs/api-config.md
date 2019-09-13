@@ -8,14 +8,25 @@
 
 ```js
 var cfg = require("config");
-cfg.create({
-  'mode': cfg.MODE_ORG,
-  'name': "user-config",
-  'desc': "DEMO",
-  'create_time': new Date(),
-});
 var programConfig = cfg.get("user-config");
-console.log(programConfig.id, programConfig.name, programConfig);
+if (!programConfig) {
+  cfg.create({
+    'mode': cfg.MODE_ORG,
+    'name': "user-config",
+    'desc': "DEMO",
+    'create_time': new Date(),
+  });
+  cfg.putTemplate('user-config', {
+    'id'  : cfg.TYPE_STRING,
+    'name': cfg.TYPE_STRING,
+  });
+  cfg.setDesc('user-config', {
+    'id'   : "用户索引",
+    'name' : "用户名称",
+  });
+  programConfig = {/* default config */};
+}
+console.log(programConfig);
 ```
 
 # API
@@ -25,7 +36,7 @@ console.log(programConfig.id, programConfig.name, programConfig);
 
 根据配置文件的模式返回配置的内容.
 
-如果配置文件不存在抛出异常, 如果配置文件没有配置数据返回空对象.
+如果配置文件不存在或没有配置数据返回空对象.
 
 
 ```js
