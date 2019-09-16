@@ -76,7 +76,7 @@ Buffer.alloc 的别名.
 如果对象是缓冲区返回 true.
 
 
-## Buffer.isisEncoding(string:name)
+## Buffer.isEncoding(string:name)
 
 如果 encoding 是一个支持的字符编码则返回 true，否则返回 false 
 

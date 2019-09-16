@@ -1,6 +1,7 @@
 .svn/*
 .streams/**
 .DS_store
+._.DS_Store
 .idea/workspace.xml
 **/.streams/**
 *.tar
