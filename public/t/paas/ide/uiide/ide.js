@@ -937,6 +937,7 @@
                 var progress = $(progresshtml);
                 progressc.removeClass('hide').find('.progress').empty().append(progress);
                 
+                zy.g.comm.unzip = $("#unzip").prop("checked");
                 _tools._formPost('uploadfile', _form, function (_m) {
                   start.removeAttr('disabled').text('开始上传');
                   log(_m);

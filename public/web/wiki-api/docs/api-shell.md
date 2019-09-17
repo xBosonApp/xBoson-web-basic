@@ -21,20 +21,20 @@ sys.setRetData(process.code, process.output, "path");
 ## 引入
 
 ```javascript
-var shell = require("shell");
+var shell = require("shell").open(NODE_ID);
 ```
 
 
 # Class ShellStub
 
 
-## open()
+## Shell open()
 
 打开默认运算节点上的执行对象, 若当前用户没有管理员权限, 会抛出异常;  
 返回 Shell 的实例.
 
 
-## open(nodeID)
+## Shell open(nodeID)
 
 打开 nodeID 指定运算节点上的执行对象, 若当前用户没有管理员权限, 会抛出异常;  
 返回 Shell 的实例.
@@ -42,16 +42,33 @@ var shell = require("shell");
 
 # Class Shell
 
+链接到本机外壳脚本的对象, 不同的操作系统解析脚本的方法有差异, 需要脚本自行解决.
 
-## execute(string:path, string[]:args)
+外壳脚本默认环境变量从系统默认环境继承, 平台扩展如下环境变量:
+
+* `UI_URL` 前端文件根目录
+* `NODE_URL` nodejs 模块根目录
+* `SHELL_URL` 外壳脚本默认根目录
+* `VERSION` 当前平台版本
+* `HTTP_PORT` 服务器监听端口(独立运行模式有效)
+* `CLUSTER_NODE_ID` 当前运行时节点ID
+* `CONFIG_FILE` 平台配置文件
+
+
+## Process execute(string:path, string:pwd, string[]:args)
 
 执行外壳脚本目录中的脚本文件, 可以没有扩展名, 根据不同的操作系统附加不同的扩展名,  
 windows 平台使用 '.cmd'/'.bat'/'.exe' 扩展名, linux 平台使用 '.sh' 扩展名;  
-args 为脚本接收的参数数组;  
-返回一个结果集 Process de 的实例.
+pwd 为脚本工作目录, args 为脚本接收的参数数组;  
+返回一个结果集 Process 的实例.
 
 
-## execute(string:path)
+## Process execute(string:path, string[]:args)
+
+使用脚本所在目录作为工作目录启动脚本进程.
+
+
+## Process execute(string:path)
 
 没有参数的方式调用脚本.
 

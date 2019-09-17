@@ -19,11 +19,11 @@ var mongodb = require('mongodb');
 
 ## mongodb.connect(url)
 
-返回客户端连接对象 Client
+返回客户端连接对象 Client, [Mongodb URL 链接参数](https://docs.mongodb.com/manual/reference/connection-string/)
 
 ```javascript
 // 使用用户名密码, 并且连接集群
-var client = mongodb.connect('mongodb://username:password@localhost:27017,localhost:27018/?replicaSet=foo');
+var client = mongodb.connect('mongodb://username:password@localhost:27017,localhost:27018/dbname?replicaSet=foo');
 // 单机无密码
 var client = mongodb.connect("mongodb://localhost");
 // 连接到平台数据源

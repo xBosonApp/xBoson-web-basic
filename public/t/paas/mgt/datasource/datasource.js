@@ -286,7 +286,7 @@ MgtDataSource = (function() {
         case '06':
           //mpp
           jdbc_url='jdbc:inspur:thin:@'+dhost+(dport?':'+dport:'')+(en?':'+en:':kdb');
-        break;
+          break;
         default:
           jdbc_url='';
       }
@@ -303,11 +303,11 @@ MgtDataSource = (function() {
       var db   = addup_form.find('input[name=en]').val();
       // var did  = addup_form.find('input[name=did]').val();
       
-      //判断参数
-      if(!user_name)
-        return zy.ui.msg('提示：','请输入用户名','i');
-      if(!pass)
-        return zy.ui.msg('提示：','请输入密码','i');
+      //判断参数, 用户名和密码在接口中进行验证(规则不固定)
+      // if(!user_name)
+      //   return zy.ui.msg('提示：','请输入用户名','i');
+      // if(!pass)
+      //   return zy.ui.msg('提示：','请输入密码','i');
       // if(!url)
       //   return zy.ui.msg('提示：','请输入JDBC URL','i');
       
@@ -356,7 +356,7 @@ MgtDataSource = (function() {
       // Rules for form validation
       rules: {
         user_name: {
-          required: true,
+          required: false,
           maxlength: 50
         },
         dbtype: {

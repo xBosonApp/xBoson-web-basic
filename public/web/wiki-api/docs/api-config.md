@@ -8,19 +8,23 @@
 
 ```js
 var cfg = require("config");
-var programConfig = cfg.get("user-config");
+var programConfig = cfg.get("config-file-name");
+// 当配置文件不存在, 创建默认的配置文件
 if (!programConfig) {
+  // 创建配置文件
   cfg.create({
     'mode': cfg.MODE_ORG,
-    'name': "user-config",
+    'name': "config-file-name",
     'desc': "DEMO",
     'create_time': new Date(),
   });
-  cfg.putTemplate('user-config', {
+  // 创建配置内容
+  cfg.putTemplate('config-file-name', {
     'id'  : cfg.TYPE_STRING,
     'name': cfg.TYPE_STRING,
   });
-  cfg.setDesc('user-config', {
+  // 配置项说明
+  cfg.setDesc('config-file-name', {
     'id'   : "用户索引",
     'name' : "用户名称",
   });
@@ -36,12 +40,12 @@ console.log(programConfig);
 
 根据配置文件的模式返回配置的内容.
 
-如果配置文件不存在或没有配置数据返回空对象.
+如果配置文件不存在返回 null, 没有配置数据返回空对象.
 
 
 ```js
 var cfg  = require("config");
-var user = cfg.get('user-config');
+var user = cfg.get('config-file-name');
 var id   = user.id;
 var name = user.name;
 ```
@@ -85,7 +89,7 @@ template[k,v] 中 k 是配置属性名称, v 是数据类型,
 
 ```js
 var cfg = require("config");
-cfg.putTemplate('user-config', {
+cfg.putTemplate('config-file-name', {
   'id'  : cfg.TYPE_STRING,
   'name': cfg.TYPE_STRING,
 });
@@ -103,7 +107,7 @@ cfg.putTemplate('user-config', {
 
 ```js
 var cfg = require("config");
-cfg.setDesc('user-config', {
+cfg.setDesc('config-file-name', {
   'id'   : "用户索引",
   'name' : "用户名称",
 });

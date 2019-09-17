@@ -53,11 +53,15 @@
       <input type="file" name="file" multiple="multiple"/>
     </div>
     <legend></legend>
-    <span class="input-group-btn">
+    <div class="input-group-btn">
       <button class="btn btn-primary start_update">开始上传</button>
       <button class="btn btn-default add_file">增加文件</button>
       <button class="btn btn-default reset_file_list">重置表单</button>
-    </span>
+    </div>
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" id="unzip">
+      <label class="form-check-label" for="unzip">解压缩zip文件</label>
+    </div>
   </form>
   <legend></legend>
   <div class="row" style="392px"><ul class="ztree" id="resulttree"></ul></div>
