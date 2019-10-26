@@ -57,6 +57,21 @@ var all_key = se.cacheKeys("regionName", "*");
 ```
 
 
+## se.cacheKeys(string:region, string:pattern, Function:callback(index, key))
+
+* region: 缓存分组名称
+* pattern: 模式字符串
+* callback: 回调函数
+
+返回指定的 Region 中所有的 Key 的集合, 并用每个 key 调用 callback 函数, 返回 key 的总数量.
+
+```javascript
+se.cacheKeys('regionName', '*', function(index, key) {
+  console.log(index, key);
+});
+```
+
+
 ## se.dbType()
 
 返回当前平台机构 DB 的数据库连接类型, 返回类型为字符串.

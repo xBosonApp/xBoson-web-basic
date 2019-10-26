@@ -73,3 +73,14 @@ cache.delAll("regionName", ["keyName1", "keyName2"]);
 ```javascript
 var keys = cache.keys("regionName");
 ```
+
+
+## cache.keys(string:region, Function:callback(index, key))
+
+返回指定的 Region 中所有的 Key 的集合, 并用每个 key 调用 callback 函数, 返回 key 的总数量.
+
+```javascript
+cache.keys('regionName', function(index, key) {
+  console.log(index, key);
+});
+```

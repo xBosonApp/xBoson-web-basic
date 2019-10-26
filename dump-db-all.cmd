@@ -4,7 +4,7 @@ set path=c:\Program Files\7-Zip;D:\_dev_runtime\mysql-5.7.17-winx64\bin
 
 set dump=mysqldump.exe
 set zexe=7z.exe
-set sqlout=%~dp0\xboson-db-dump.sql
+set sqlout=%~dp0\dump.db
 set zipout=g:\[project-backup]\xboson\xboson-db-dump-%DATE:~0,4%.%DATE:~5,2%.%DATE:~8,2%.7z
 
 
