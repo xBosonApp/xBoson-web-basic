@@ -1,6 +1,6 @@
 @echo on
 
-set path=c:\Program Files\7-Zip;D:\_dev_runtime\mysql-5.7.17-winx64\bin
+set path=%path%;c:\Program Files\7-Zip;D:\_dev_runtime\mysql-5.7.17-winx64\bin
 
 set dump=mysqldump.exe
 set zexe=7z.exe
