@@ -153,6 +153,8 @@ sys.request.multipart(function(item) {
 
 读取文件内容并写出到 [输出流 JsOutputStream 对象](docs/api-streamutil.md) 并返回读取的字节数.
 
+out 在返回后一定不会关闭, 如果传输数据时发生异常, 该异常会被抛出.
+
 
 # 可用 API
 
@@ -192,7 +194,15 @@ sys.setRetData(0, "OK", "list1");
 ```
 
 
-## sys.put(string: name, object: value) [NEW]
+## sys.setStream(JsInputStream reader, String filename)
+
+应答二进制数据, 读取 reader 中的所有数据返回给客户端, 并设置一个文件名以提示客户端保存.
+
+这将忽略 $format 参数提供的任何对应答数据类型的提示; 同时通过 addRetData/put 等方绑定
+的数据无法正确返回给客户端; 该方法调用后不可能给客户端返回更多数据.
+
+
+## sys.put(string: name, object: value)
 
 不经过应答数据集, 直接将变量 value 输出到结果集的 name 属性上, 
 同样 name 调用两次, 取最后的值, 应答数据集查找不到该变量.
