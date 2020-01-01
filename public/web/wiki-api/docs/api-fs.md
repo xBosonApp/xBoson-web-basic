@@ -18,7 +18,7 @@ var file_system = require('fs');
 
 ## fs_system.open(String name) 
 
-可以打开一下类型文件系统:
+可以打开以下文件系统:
 
 1. 'ui' 文件系统映射到 web 静态文件上; 块类型.
 2. 'node' 文件系统映射到 nodejs 模块目录 (系统不支持立即修改可用); 块类型.
@@ -39,6 +39,19 @@ var fs = file_system.openShare("user0001");
 ```
 
 
+## fs_system.openURI(String URI)
+
+用 URI 描述符打开磁盘, 该方法可用打开如下的文件系统
+
+1. 'hdfs://host:port/' hadoop 文件系统, 流类型.
+2. 'share://diskName/' 与 fs_system.openShare() 相同的行为.
+ 
+```javascript
+var fs = file_system.openURI("hdfs://127.0.0.1:9000");
+fs.openInputStream("help.txt");
+```
+
+
 ## fs_system.pipe(inputStream, outputStream)
 
 读取输入流并写出到输出流, 完成后分别关闭输出/输出流.
@@ -53,19 +66,19 @@ var fs = file_system.openShare("user0001");
 2. 流式操作, 适合大文件.
 
 
-## fs.readFile(string:path)
+## byte[] fs.readFile(string:path)
 
 > 只在块模式有效
 
 读取文件内容, 返回字节数组对象, 文件不存在会抛出异常
 
 
-## fs.modifyTime(string:path)
+## long fs.modifyTime(string:path)
 
 返回文件最后修改时间毫秒值, 文件不存在抛出异常
 
 
-## fs.readAttribute(string:path)
+## FileAttr fs.readAttribute(string:path)
 
 返回文件的属性对象, 文件不存在返回 null
 
@@ -77,20 +90,20 @@ if (!attr) {
 ```
 
 
-## fs.readFileContent(FileAttr)
+## void fs.readFileContent(FileAttr)
 
 > 只在块模式有效
 
 读取文件内容到 FileAttr 中, 如果尝试读取目录会抛出异常, 无返回值.
 
 
-## fs.makeDir(string:path)
+## void fs.makeDir(string:path)
 
 创建目录, 如果上级目录是不存在的, 在必要时会自动生成这些目录.
 如果目录已经存在会立即返回, 如果路径是文件会抛出异常.
 
 
-## fs.writeFile(string:path, {byte[] | Buffer}:content)
+## void fs.writeFile(string:path, {byte[] | Buffer}:content)
 
 > 只在块模式有效
 
@@ -98,17 +111,17 @@ if (!attr) {
 如果文件的路径中包含不存在的目录, 必要时会自动生成这些目录.
 
 
-## fs.delete(string:file)
+## void fs.delete(string:file)
 
 删除文件/目录, 非空目录抛异常, 如果目录不存在则抛出异常.
 
 
-## fs.move(string:src, string:to)
+## void fs.move(string:src, string:to)
 
 移动文件/目录到新的目录, 如果目的目录已经存在或源目录不存在会抛出异常
 
 
-## fs.readDir(string:path)
+## Set<RedisFileAttr> fs.readDir(string:path)
 
 读取目录结构, 并返回结果集, 路径上如果是文件会抛出异常
 
@@ -128,7 +141,7 @@ while (itr.hasNext()) {
 ```
 
 
-## fs.findPath(string:pathName)
+## FinderResult fs.findPath(string:pathName)
 
 > 该方法可以不被实现
 
@@ -144,7 +157,7 @@ var files = finderResult.files;
 ```
 
 
-## fs.findContent(string:path, string:content, bool:caseSensitive)
+## FinderResult fs.findContent(string:path, string:content, bool:caseSensitive)
 
 > 该方法可以不被实现
 
@@ -158,14 +171,14 @@ var files = finderResult.files;
 ```
 
 
-## fs.openInputStream(string:file)
+## JsInputStream fs.openInputStream(string:file)
 
 > 仅在流模式有效
 
 返回一个输入流, 用于读取文件.
 
 
-## fs.openOutputStream(string:file)
+## JsOutputStream fs.openOutputStream(string:file)
 
 > 仅在流模式有效
 
