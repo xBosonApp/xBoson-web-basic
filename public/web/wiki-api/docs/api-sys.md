@@ -86,6 +86,10 @@ POST Body 中的数据将被解析成 js 对象并绑定在 requestJson 属性�
   * name 参数名
   * allowNull 允许空参数; 默认 false.
 
+## sys.request.getHeader(string:name)
+
+返回 http 请求头域.
+
 
 ## sys.request.body([int: limit])
 
@@ -206,6 +210,11 @@ sys.setRetData(0, "OK", "list1");
 
 不经过应答数据集, 直接将变量 value 输出到结果集的 name 属性上, 
 同样 name 调用两次, 取最后的值, 应答数据集查找不到该变量.
+
+
+## sys.setHeader(string: name, object: value)
+
+设置 http 响应头域.
 
 
 ## sys.getUserPID([{string}Or{StringArray}: userId])

@@ -130,6 +130,11 @@ var stream = require('streamutil');
 若缓冲区长度不够会抛出异常.
 
 
+## pipe(OutputStream: target)
+
+连接一个输出流, 把所有数据输出到 target 中.
+
+
 # LineNumberReader
 
 用于一行一行从流中读取字符串.
