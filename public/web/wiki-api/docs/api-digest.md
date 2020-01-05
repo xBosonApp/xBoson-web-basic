@@ -68,6 +68,11 @@ var hash = sha256.digest().bin();
 返回摘要的字节数组
 
 
+## number updatedBytes()
+
+返回被计算过摘要的数据的字节数
+
+
 ## JsInputStream bind(InputStream)
 
 该方法透明的绑定一个输入流, 在不影响读取数据的同时计算流中数据的摘要.

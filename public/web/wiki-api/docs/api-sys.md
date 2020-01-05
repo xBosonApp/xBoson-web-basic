@@ -112,6 +112,11 @@ POST Body 中的数据将被解析成 js 对象并绑定在 requestJson 属性�
 返回 HTTP 头域 'Content-Type' 的值.
 
 
+## sys.request.openStream()
+
+返回 JsInputStream 用于读取 post 方法中的数据.
+
+
 ## sys.request.multipart(Function(MultipartItem): FileProcessing)
 
 上传文件数据解析, 此时 `Content-type` 为 `multipart/form-data`.

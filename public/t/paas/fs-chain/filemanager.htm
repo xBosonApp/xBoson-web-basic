@@ -1,0 +1,143 @@
+<!-- Create By xBoson System -->
+<ui:grid id='filemanager' class='list' title='文件管理'>
+  <style>
+    #fs_path {
+      width: 70%; margin-left: 7px;
+    }
+    .fileitem img {
+      width: 64px; user-select: none;
+    }
+    .fileitem {
+      text-align: center; display: inline-block; padding: 10px 5px; border-radius: 5px;
+      border: 2px solid #fff; cursor: pointer; width: 100px;
+    }
+    .fileitem .name {
+      overflow: hidden; word-break: break-all;
+    }
+    .fileitem .info {
+      color: #999;
+    }
+    .fileitem .lock {
+      width: 28px; position: absolute; right: -10px; top: -15px;
+    }
+    .fileitem:hover {
+      background-color: #eee;
+    }
+    .fileitem .folder {
+      color: #e85656;
+    }
+    .selected_fileitem {
+      border: 2px solid #ddd;
+    }
+    .files_frame {
+      display: flex;
+    }
+    .log {
+      margin: 1px 3px;
+    }
+    #fs_showinfo {
+      width: 210px; border-left: 1px solid #eee; min-height: 400px; word-break: break-all;
+    }
+    #fs_showfiles {
+      flex: 1; display: flex; flex-direction: row; flex-wrap: wrap; align-items: flex-start;
+    }
+    #fs_showupload {
+      background: repeat left top url("data:image/gif;base64,R0lGODlhDgAOAIAAANjY2P///yH5BAAAAAAALAAAAAAOAA4AAAIVRIynFu3/GJyUyopt3vPy7X1YKFIFADs="); display: none; overflow-y: auto; z-index: 20;
+      height: 450px; width: 95%; position: fixed; top: 200px; border: 2px solid #999; padding: 30px;
+    }
+    .error {
+      color: red;
+    }
+    .mask {
+      display: none; width:100%; height:100%; position: fixed; background-color: #333; top:0; left:0;
+      z-index: 10; opacity: 0.3;
+    }
+  </style>
+  <section id='select_volume_msg' class=''>
+    <h4>打开数据卷</h4>
+  </section>
+  <section id='fs_toolbar' class='hide'>
+    <form>
+      <label>路径</label><input type='text' id='fs_path' style='height:28px; padding-top:0;'/>
+      <input type='submit' class='changepath btn btn-info btn-sm' value='确定'/>
+      <button class='mkdir btn btn-info btn-sm'>创建目录</button>
+      <button class='rmdir btn btn-info btn-sm'>删除目录</button>
+      <button class='rename btn btn-info btn-sm'>重命名</button>
+      <button class='upload btn btn-info btn-sm'>上传文件</button>
+    </form>
+  </section>
+  <hr/>
+  <div class='files_frame'>
+    <section id='fs_showfiles'>
+    </section>
+    <section id='fs_showinfo'>
+      <center>
+        <img class='icon' src='' style='width: 128px;'/>
+      </center>
+      <div style='padding: 10px;'>
+        <hr/>
+        <h3 class='name'></h3>
+        <div class='type'></div>
+        <div class='auth'></div>
+        <div class='owner'></div>
+        <div class='size'></div>
+        <div class='time'></div>
+        <hr/>
+        <div class='xinfo'></div>
+      </div>
+    </section>
+  </div>
+  
+  <div class='mask'></div>
+  <section id='fs_showupload'>
+    <div class='header'>
+      <a href='#' class='close'>关闭</a>
+      <legend>拖拽文件到这里...
+        <span class='note'>如需上传目录及其子目录中的文件, 使用上传按钮并选择目录.</span>
+      </legend>
+    </div>
+    <div class="progress">
+      <div class="bar_zone" style='height: 100%; background-color: rgb(170, 196, 253); width: 0;'></div>
+    </div>
+    <div class='log'></div>
+  </section>
+  
+  <section class='hide'>
+    <div class='fileitem' id='file_item_template'>
+      <div style='position: relative'>
+        <img class='lock' src='fs-chain/icon/lock.svg'/>
+        <img class='icon' src='fs-chain/icon/file.png'/>
+      </div>
+      <div class='name'>test.txt</div>
+      <div class='info'><span class='size'></span></div>
+    </div>
+    
+    <div class="modal fade" id="mkdirDialog" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h5 class="modal-title">创建目录</h5>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="fileName" class="col-form-label labelName">目录名</label>
+                <input type="text" autofocus class="form-control fileName">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary ok">确定</button>
+            <button type="button" class="btn btn-secondary cancel" data-dismiss="modal">取消</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <js:cdn src='filedrop/v2/filedrop-min.js'></js:cdn>
+  <script src='fs-chain/fm.js'></script>
+</ui:grid>

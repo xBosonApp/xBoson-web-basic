@@ -1,0 +1,32 @@
+<!-- Create By xBoson System -->
+<ui:grid id='idid' class='list' title='数据卷 列表'>
+  <ui:form id='volume_list' class=''>
+    <form:btn_toolbar>
+      <form:group>
+        <form:button label='添加' icon='magic'>
+          <moda:open url='fs-chain/addvol.htm'/>
+        </form:button>
+        <form:button label='修改' icon='edit'>
+          <mp:usability recvid='datatable0'/>
+          <moda:open url='fs-chain/editvol.htm'/>
+        </form:button>
+      </form:group>
+    </form:btn_toolbar>
+  </ui:form>
+  
+  <mp:savedata type='SELECT_TABLE_ROW' id='datatable0'/>
+  
+  <fieldset>
+    <table:api app='af1880a8938f4756a3f377c93be99d78' mod='chainfs' 
+        api='listvol' form='#volume_list' id='datatable0' hidepage='1'>
+      <table:mapper label='名称' key='name'/>
+      <table:mapper label='卷ID' key='_id'/>
+      <table:mapper label='可读用户' key='reader'/>
+      <table:mapper label='可写用户' key='writer'/>
+      <table:mapper label='区块链ID' key='bc'/>
+      <table:mapper label='创建时间' key='ctime'>
+        <table:render_time/>
+      </table:mapper>
+    </table:api>
+  </fieldset>
+</ui:grid>
