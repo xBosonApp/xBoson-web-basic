@@ -1,0 +1,85 @@
+<!-- Create By xBoson System -->
+<moda:frame title='编辑卷'>
+  <style>
+    .remove_link {
+      display: inline-block; margin: 1px 3px;  cursor: grabbing;
+    }
+    #reader_name, #writer_name {
+      height: 25px; width: 50%;
+    }
+  </style>
+  <ui:form id='details' class='update_form'>
+    <input type='hidden' name='_id'/>
+    
+    <fieldset>
+      <form:text name='name' label='卷名称' tooltip='' width='10'>
+        <vali:string min='3' max='99'/>
+      </form:text>
+      <section class="col col-10">
+        <label class="label">可读用户</label>
+        <input id='reader_name'/><form:button label='添加' id='add_reader'></form:button>
+        <label class="input" id='reader_all'>
+        </label>
+      </section>
+      <section class="col col-10">
+        <label class="label">可写用户</label>
+        <input id='writer_name'/><form:button label='添加' id='add_writer'></form:button>
+        <label class="input" id='writer_all'>
+        </label>
+      </section>
+    </fieldset>
+    
+    <script>
+    (function() {
+      var reader_all = $('#reader_all');
+      var writer_all = $('#writer_all');
+      var reader_name = $('#reader_name');
+      var writer_name = $('#writer_name');
+      
+      xb.on('LOAD_OVER', 'datatable0', function(d) {
+        d.reader.forEach(function(r) {
+          check('reader', r, reader_all);
+        });
+        
+        d.writer.forEach(function(w) {
+          check('writer', w, writer_all);
+        });
+      });
+      
+      $('#add_reader').click(function() {
+        var name = reader_name.val();
+        if (!name) return;
+        check('reader', name, reader_all);
+      });
+      
+      $('#add_writer').click(function() {
+        var name = writer_name.val();
+        if (!name) return;
+        check('writer', name, writer_all);
+      });
+      
+      function check(name, val, target) {
+        var i = $("<input type='hidden'/>").val(val).attr('name', name);
+        var a = $("<a class='remove_link'>").text(val);
+        target.append(i).append(a);
+        a.click(function() {
+          a.remove();
+          i.remove();
+        });
+      }
+    })();
+    </script>
+    <mp:loaddata id='datatable0'/>
+    
+    <footer>
+      <moda:cancel/>
+      <moda:ok>
+        <form:post app='af1880a8938f4756a3f377c93be99d78' mod='chainfs' api='editvol'>
+          <mp:close when='this.code == 0'>
+            <mp:send type='TABLE_UPDATE_REQ' id='datatable0'/>
+          </mp:close>
+        </form:post>
+      </moda:ok>
+    </footer>
+  </ui:form>
+</moda:frame>
