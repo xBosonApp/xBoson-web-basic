@@ -211,6 +211,13 @@ sys.setRetData(0, "OK", "list1");
 的数据无法正确返回给客户端; 该方法调用后不可能给客户端返回更多数据.
 
 
+## JsOutputStream sys.getResponseStream(String filename)
+
+开启二进制应答模式, 向返回的 JsOutputStream 输出数据, 并设置一个文件名以提示客户端保存.
+
+其他同 sys.setStream()
+
+
 ## sys.put(string: name, object: value)
 
 不经过应答数据集, 直接将变量 value 输出到结果集的 name 属性上, 
