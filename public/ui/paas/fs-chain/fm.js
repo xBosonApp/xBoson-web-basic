@@ -160,11 +160,10 @@ function toolbar() {
       }
       
       file.event('progress', function (current, total) {
-        var filec = fileIndex + 1;
-        var width = ((current/total) * (1/total_files) + (filec/total_files)) * 100;
+        var width = ((current/total) * (1/total_files) + (fileIndex/total_files)) * 100;
         bar.css('width', width+'%');
         pmsg.html([
-          '<span>', filec, '/', total_files, '</span>',
+          '<span>', fileIndex+1, '/', total_files, '</span>',
           '<span>', width.toFixed(2), '%</span>',
           '<span>', file.name, '</span>'].join(''));
       })

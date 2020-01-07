@@ -42,7 +42,7 @@
 }
 #fs_showupload {
   background: repeat left top url("data:image/gif;base64,R0lGODlhDgAOAIAAANjY2P///yH5BAAAAAAALAAAAAAOAA4AAAIVRIynFu3/GJyUyopt3vPy7X1YKFIFADs="); display: none; overflow-y: auto; z-index: 20;
-  height: 450px; width: 95%; position: fixed; top: 150px; border: 2px solid #999; padding: 30px;
+  height: 450px; width: 75%; position: fixed; top: 150px; border: 2px solid #999; padding: 30px;
 }
 .error {
   color: red; background: #480b0b;
