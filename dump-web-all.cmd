@@ -4,4 +4,5 @@ cp web4xboson-all.tar.gz g:\[project-backup]\xboson\xboson-web-dump-%DATE:~0,4%.
 
 echo OK.
 echo tar -xzvf web4xboson-all.tar.gz
-pause
+
+IF ERRORLEVEL 1 pause

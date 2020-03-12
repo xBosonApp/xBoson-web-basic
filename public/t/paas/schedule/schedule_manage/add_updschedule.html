@@ -445,7 +445,7 @@
         zy.extend.post({
           apinm: apinm,
           app: 'a20a0c6a82fb4cb085cb816e5526d4bc',
-          mod: 'cron'
+          mod: 'cron_x'
         }, function (msg) {
           zy.extend.msg('成功', 's');
           schedule_app.Pagination(1);
@@ -516,7 +516,7 @@
           zy.extend.get({
             apinm: 'taskinfo',
             app: 'a20a0c6a82fb4cb085cb816e5526d4bc',
-            mod: 'cron'
+            mod: 'cron_x'
           }, function (msg) {
             HanderDayAndTime(msg.result[0]);
             cb && cb(msg.result[0]);
