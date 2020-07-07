@@ -1518,12 +1518,14 @@
         var names = {}
 
         for (var i = 0; i < list.length; i++) {
-          var file = new global.File(list[i])
+          var navFile = list[i];
+          var file = new global.File(navFile)
+          var _name = navFile.webkitRelativePath || file.name
 
           // Safari Windows adds first file several times so skip them.
           // ...while iOS Safari adds files under the same name - image.jpg (#30).
-          if (!names[file.name] || file.name == 'image.jpg') {
-            names[file.name] = true
+          if (!names[_name] || file.name == 'image.jpg') {
+            names[_name] = true
             file.setNativeEntry(entries[i])
             global.callAllOfObject(self, 'fileSetup', file)
 
