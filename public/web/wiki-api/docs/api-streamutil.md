@@ -124,10 +124,11 @@ var stream = require('streamutil');
 关闭输入流
 
 
-## read(Buffer:target, int:begin, int:len)
+## int read(Buffer:target, int:begin, int:len)
 
 从输入流读取 len 字节的数据, 保存到 target 缓冲区的 begin 位置开始;
 若缓冲区长度不够会抛出异常.
+当读取到流的末尾, 没有更多数据需要返回, 该函数返回 -1, 否则返回读取的字节数.
 
 
 ## pipe(OutputStream: target)

@@ -114,7 +114,8 @@ POST Body 中的数据将被解析成 js 对象并绑定在 requestJson 属性�
 
 ## sys.request.openStream()
 
-返回 JsInputStream 用于读取 post 方法中的数据.
+返回 JsInputStream 用于读取 post 方法中的数据.  
+递交请求时, 'Content-Type' 不能是 'application/x-www-form-urlencoded' 否则读取不到任何数据.
 
 
 ## sys.request.multipart(Function(MultipartItem): FileProcessing)
