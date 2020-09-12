@@ -75,7 +75,7 @@ var headerValue = headers["Content-Type"];
 
 参数:
 
-* ApiInfo: { app: 应用id, mod: 模块id, api: 接口id, org: 机构 id }
+* ApiInfo: 在PASS平台中: { app: 应用id, mod: 模块id, api: 接口id, org: 机构 id }; 在边缘运算节点中, 该参数为接口路径字符串, 例: `/xedge/public/api/user-state`
 * Param: http 请求参数
 * header: 请求头
 
