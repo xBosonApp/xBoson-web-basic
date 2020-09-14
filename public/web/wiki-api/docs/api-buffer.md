@@ -156,6 +156,8 @@ var buf = Buffer.alloc(10);
 
 根据 encoding 指定的字符编码解码 buf 成一个字符串。 start 和 end 可传入用于只解码 buf 的一部分。
 
+如果无参数调用, 会 dump buffer 的部分内容.
+
 
 ## buf.entries()
 
