@@ -1,0 +1,156 @@
+<!-- Create By xBoson System -->
+<moda:frame title='OPC 服务器配置' id='opc_config_detail'>
+  <moda:tabpanel>
+    <script>
+    var pageloaded = false;
+    function load_connect_config(d) {
+      if (pageloaded) return;
+      pageloaded = true;
+      var parm = {_id : d._id };
+      
+      $(function() {
+        xb.api('ab59c369d5ca4bc5acc0cf44ed0caa89', 'manager', 'get_conn_info', parm, function(ret) {
+          init_attributes(ret.data);
+          init_data_table(ret.mapping);
+        });
+        
+        zy.cache.initDicts('OPC.MNG.TYPE', function() {
+          var dict_select = $("#moda_opc_config_detail [name=opc_type]");
+          var dict = zy.cache.getDict('OPC.MNG.TYPE');
+          dict.forEach(function(d) {
+            $("<option>").val(d.id).text(d.name).appendTo(dict_select);
+          });
+          dict_select.val(8);
+        });
+      });
+      
+      
+      function init_attributes(data) {
+        var jroot = $("#moda_opc_config_detail");
+        for (var name in data) {
+          var i = jroot.find("[name="+ name +"]").val(data[name]);
+        }
+      }
+      
+      
+      function init_data_table(mp) {
+        var jroot = $("#db_data_real");
+        var names = jroot.find('.columnname');
+        var types = jroot.find(".type");
+        var datas = jroot.find('.data');
+        
+        mp.meta.forEach(function(m) {
+          $("<th>").html(m.name).appendTo(names);
+          $("<th>").html(m.typename).appendTo(types).css('padding-left', "8px");
+        });
+        
+        mp.data.forEach(function(r) {
+          var tr = $("<tr>").appendTo(datas);
+          mp.meta.forEach(function(m) {
+            $("<td>").html(r[m.name]).appendTo(tr);
+          });
+        });
+      }
+    }
+    </script>
+    
+    <moda:tab title='基本配置' id='basic_opc_config'>
+      <ui:form id='update_config' class='update_form'>
+        <mp:loaddata id='datatable0'>
+          <mp:handle>
+            (function(data, a, b, handle) {
+              load_connect_config(data);
+            })
+          </mp:handle>
+        </mp:loaddata>
+        <fieldset>
+          <form:text name='desc' label='说明' tooltip='最少1字符' width='10'>
+            <vali:string min='1' max='555'/>
+          </form:text>
+          
+          <form:text name='host' label='数据库主机:端口' tooltip='最少1字符' width='5'>
+            <vali:string min='1' max='25'/>
+          </form:text>
+          <form:text name='schema' label='数据库 Schema' tooltip='可以空' width='5'>
+            <vali:string min='0' max='255'/>
+          </form:text>
+          
+          <form:text name='user' label='数据库用户名' tooltip='最少1字符' width='5'>
+            <vali:string min='1' max='16'/>
+          </form:text>
+          <form:password name='pass' label='数据库密钥' tooltip='最少1字符' width='5'>
+            <vali:string min='1' max='16'/>
+          </form:password>
+          
+          <form:text name='primary_column' label='主键列名' tooltip='最少1字符' width='5'>
+            <vali:string min='1' max='255'/>
+          </form:text>
+          <form:text name='val_column' label='数据列名' tooltip='最少1字符' width='5'>
+            <vali:string min='1' max='255'/>
+          </form:text>
+          
+          <form:textarea name='sql' label='SQL文' width='10' rows='10'>
+            <vali:string min='1' max='9999'/>
+          </form:textarea>
+          
+          <form:textarea name='key' label='服务端 KEY (设置到 OPC 服务器配置文件中)' width='10' rows='10'>
+            <vali:string min='1' max='9999'/>
+          </form:textarea>
+        </fieldset>
+        
+        <footer>
+          <moda:cancel/>
+          <moda:ok>
+            <form:post app='ab59c369d5ca4bc5acc0cf44ed0caa89' mod='manager' api='update_conf'>
+              <mp:close when='console.log(this), this.code == 0'>
+                <mp:send type='TABLE_UPDATE_REQ' id='datatable0'/>
+              </mp:close>
+            </form:post>
+          </moda:ok>
+        </footer>
+      </ui:form>
+    </moda:tab>
+    
+    <moda:tab title='OPC映射'>
+      <ui:form id='mapper'>
+        <form:title>变量定义</form:title>
+        
+        <div class='function_define_tpl'>
+          <fieldset>
+            <form:text name='opc_item_name' label='OPC 变量名' width='8'/>
+            <form:select name='opc_type' label='OPC 变量类型' width='4'></form:select>
+            <form:text name='db_pri' label='DB 主键值' width='4'/>
+            <form:text name='db_val' label='DB 数据值' width='4'/>
+            <form:text name='db_type' label='DB 数据类型' width='4'/>
+          </fieldset>
+          <hr class='simple'/>
+        </div>
+        
+        <footer>
+          <moda:cancel/>
+          <form:button label='自动映射' name='auto' icon='cog' class=''/>
+          <form:button label='确定' name='ok' icon='cog' class=''/>
+        </footer>
+      </ui:form>
+    </moda:tab>
+    
+    <moda:tab title='DB 数据'>
+      <ui:form>
+        <form:title>来自 OPC 服务器的 DB 数据</form:title>
+        
+        <fieldset class='dataTables_scrollHeadInner'>
+          <table id='db_data_real' class='table table-bordered table-striped dataTable no-footer'>
+            <thead><tr class='columnname'></tr></thead>
+            <thead class='type'></thead>
+            <tbody class='data'></tbody>
+          </table>
+        </fieldset>
+        
+        <footer>
+          <moda:cancel/>
+        </footer>
+      </ui:form>
+    </moda:tab>
+    
+  </moda:tabpanel>
+</moda:frame>

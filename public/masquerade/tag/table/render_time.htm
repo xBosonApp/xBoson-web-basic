@@ -1,6 +1,8 @@
 <never> 将毫秒值转换为年月日. </never>
 <code class='render_function' style='display: none'>
   function(data, type, row, meta) {
-    return zy.tool.Date.dateTime2str(new Date(parseInt(data)), 'yyyy-MM-dd hh:mm:ss');
+    var i = parseInt(data);
+    if (isNaN(i)) return '';
+    return zy.tool.Date.dateTime2str(new Date(i), 'yyyy-MM-dd hh:mm:ss');
   }
 </code>
