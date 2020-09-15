@@ -188,7 +188,7 @@ sys.addRetData("key:list1", list1);
 ```
 
 
-## sys.setRetData(int:Code [, string:Message, string...:KeyNames])
+## sys.setRetData(int:Code [, string:Message, string...:KeyNames]), sys.ret(...)
 
 设置应答数据, 并从应答数据集中选择数据返回, 若在脚本中从未调用该方法, Api 将应答给客户端代码 999.
 
@@ -200,7 +200,7 @@ sys.addRetData("key:list1", list1);
 
 ```javascript
 // 设置返回数据, 并从应答数据集中选择 "list1" 返回给客户端.
-sys.setRetData(0, "OK", "list1");
+sys.ret(0, "OK", "list1");
 ```
 
 
