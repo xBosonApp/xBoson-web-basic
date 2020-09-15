@@ -99,6 +99,13 @@ var cookie = ret["cookie"];
 该方法与 http.platformGet 意义相同, 由于是内部调用, 并不区分 post/get, body 参数将与 url 参数合并调用 api.
 
 
+## http.setTimeout(int:second)
+
+设置 http 调用远程 web 服务器的超时时间 (秒), 如果设置为 0 则永不超时, 默认为 10 (秒).
+
+必须在调用 get/post 方法之前调用该方法修改超时, 否则无效.
+
+
 ## http.get(string:URL [, object:HttpParm, string:RetType, object:Header])
 
 调用外部 api.

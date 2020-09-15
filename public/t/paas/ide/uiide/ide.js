@@ -1315,12 +1315,22 @@
           editor.container.remove();
         });
         
-        editor.setTheme("ace/theme/ambiance");
-        if (!_filetype || _filetype == 'htm') {
-            editor.getSession().setMode("ace/mode/html");
+        if (!_filetype) {
+          _filetype = 'html';
         } else {
-            editor.getSession().setMode("ace/mode/" + _filetype);
+          switch (_filetype) {
+          case 'htm':
+            _filetype = 'html';
+            break;
+            
+          case 'md':
+            _filetype = 'markdown';
+            break;
+          }
         }
+        
+        editor.setTheme("ace/theme/ambiance");
+        editor.getSession().setMode("ace/mode/" + _filetype);
         editor.$blockScrolling = Infinity;
         setEditorOptions(editor);
         // editor.setOptions({
