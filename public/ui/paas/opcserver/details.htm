@@ -1,0 +1,329 @@
+<!-- Create By xBoson System -->
+<moda:frame title='OPC 服务器配置' id='opc_config_detail'>
+<script>
+var pageloaded = false;
+
+function load_connect_config(d) {
+  if (pageloaded) return;
+  pageloaded = true;
+  
+  const VT_I8 = 20, VT_R8 = 5, VT_FILETIME = 64, VT_BSTR = 8;
+  
+  var jroot = $("#moda_opc_config_detail");
+  var opc_item_mapper = jroot.find("#opc_item_mapper_target");
+  var jinsert_item = jroot.find("#opc_item_mapper_form .insert");
+  var parm = {_id : d._id };
+  var item_conf_template;
+  var default_opt_type = VT_BSTR;
+  var dbmeta = {};
+  var row_data = [];
+  
+  jroot.find("[name=_id]").val(d._id);
+  
+  $(function() {
+    xb.api('ab59c369d5ca4bc5acc0cf44ed0caa89', 'manager', 'get_conn_info', parm, function(ret) {
+      init(ret);
+    });
+  });
+  
+  function init_options(jselect, val) {
+    zy.cache.initDicts('OPC.MNG.TYPE', function() {
+      // var dict_select = $("#moda_opc_config_detail [name=opc_type]");
+      var dict = zy.cache.getDict('OPC.MNG.TYPE');
+      dict.forEach(function(d) {
+        $("<option>").val(d.id).text(d.name).appendTo(jselect);
+      });
+      jselect.val(val || default_opt_type);
+    });
+  }
+  
+  function init(ret) {
+    init_meta_rows(ret);
+    check_type(ret.mapping.val_column);
+    init_attributes(ret.data);
+    init_data_table(ret.mapping);
+    item_conf_template = jroot.find(".function_define_tpl").html();
+    init_mapping(ret.mapping);
+    
+    jroot.find('.auto_mapping_button').click(function() {
+      auto_mapping(ret.mapping);
+    });
+    
+    jinsert_item.click(function() {
+      create_item_conf({
+        primary_column : ret.mapping.primary_column,
+        val_column     : ret.mapping.val_column,
+      });
+    });
+    
+    jroot.find(".update_key").click(function() {
+      xb.api('ab59c369d5ca4bc5acc0cf44ed0caa89', 'manager', 'updatekey', parm, function(ret) {
+        jroot.find("[name=key]").val(ret.key);
+        xb.sendEvent('TABLE_UPDATE_REQ', 'datatable0');
+      });
+    });
+    
+    jroot.find('.copy_key').click(function() {
+      jroot.find("[name=key]").select();
+      document.execCommand("copy");
+      zy.ui.msg('KEY 已经复制到剪切板');
+    });
+  }
+  
+  function check_type(val_column) {
+    var db_type = (dbmeta[val_column].typename).toUpperCase();
+    
+    if (findOr(db_type, 'INT')) {
+      default_opt_type = VT_I8;
+      return;
+    }
+    
+    if (findOr(db_type, 'DECIMAL', 'NUMERIC', 'FLOAT', 'DOUBLE')) {
+      default_opt_type = VT_R8;
+      return;
+    }
+    
+    if (findOr(db_type, 'DATE', 'TIME', 'DATETIME', 'TIMESTAMP', 'YEAR')) {
+      // default_opt_type = VT_FILETIME; 暂不支持时间类型
+      return;
+    }
+    
+    default_opt_type = VT_BSTR;
+  }
+  
+  function findOr(str) {
+    for (var i=1; i<arguments.length; ++i) {
+      if (str.indexOf(arguments[i]) >= 0) return true;
+    }
+    return false;
+  }
+  
+  function init_meta_rows(ret) {
+    ret.mapping.meta.forEach(function(m) {
+      dbmeta[m.name] = m;
+    });
+    row_data = ret.mapping.data;
+  }
+  
+  function init_mapping(mapping) {
+    for (var name in mapping.mapping) {
+      create_item_conf({
+        name    : name,
+        type    : mapping.mapping[name].type,
+        primary : mapping.mapping[name].primary,
+        db_val  : '',
+        
+        primary_column : mapping.primary_column,
+        val_column     : mapping.val_column,
+      });
+    }
+  }
+  
+  // mapping: {meta, data, mapping}
+  function auto_mapping(mapping) { 
+    if (mapping.data.length <= 0) {
+      zy.ui.msg('错误: 无法自动映射', '没有接受到远程 DB 数据, 没有足够的信息进行自动映射', 'w');
+    }
+    mapping.data.forEach(function(r) {
+      var name = r[mapping.primary_column];
+      if (opc_item_mapper.find("[name='"+ name +"']") > 0) {
+        return;
+      }
+      var opt = {
+        name    : 'xBoson.OPC.'+ name,
+        type    : default_opt_type,
+        primary : name,
+        db_val  : r[mapping.val_column],
+        
+        primary_column : mapping.primary_column,
+        val_column     : mapping.val_column,
+      };
+      create_item_conf(opt);
+    });
+  }
+  
+  function create_item_conf(opt) {
+    var item = opc_item_mapper.find("[item='"+ opt.name +"']");
+    if (item.length <= 0) {
+      item = $(item_conf_template).appendTo(opc_item_mapper).attr("item", opt.name);
+    }
+    
+    init_options(item.find('[name=type]'), opt.type);
+    item.find("[name=db_type]").val(dbmeta[opt.val_column].typename)
+    
+    item.find(':input').each(function() {
+      var thiz = $(this);
+      var v = opt[thiz.attr('name')];
+      v && thiz.val(v);
+    });
+    
+    item.find(".del").click(function() {
+      item.remove();
+    });
+    
+    item.find("[name=primary]").change(function() {
+      var v = $(this).val();
+      for (var i=0; i<row_data.length; ++i) {
+        if (v == row_data[i][opt.primary_column]) {
+          item.find("[name=db_val]").val(row_data[i][opt.val_column]).css('color', '#404040');
+          return;
+        }
+      }
+      // if not found
+      item.find("[name=db_val]").val('*[未找到主键对应的数据]').css('color', 'red');
+    }).trigger('change');
+  }
+  
+  function init_attributes(data) {
+    for (var name in data) {
+      var i = jroot.find("[name="+ name +"]").val(data[name]);
+    }
+  }
+  
+  function init_data_table(mp) {
+    var names = jroot.find('#db_data_real .columnname');
+    var types = jroot.find("#db_data_real .type");
+    var datas = jroot.find('#db_data_real .data');
+    
+    mp.meta.forEach(function(m) {
+      $("<th>").html(m.name).appendTo(names);
+      $("<th>").html(m.typename).appendTo(types).css('padding-left', "8px");
+    });
+    
+    mp.data.forEach(function(r) {
+      var tr = $("<tr>").appendTo(datas);
+      mp.meta.forEach(function(m) {
+        $("<td>").html(r[m.name]).appendTo(tr);
+      });
+    });
+  }
+}
+</script>
+    
+  <moda:tabpanel>
+    <moda:tab title='基本配置' id='basic_opc_config'>
+      <ui:form id='update_config' class='update_form'>
+        <mp:loaddata id='datatable0'>
+          <mp:handle>
+            (function(data, a, b, handle) {
+              load_connect_config(data);
+            })
+          </mp:handle>
+        </mp:loaddata>
+        <fieldset>
+          <form:text name='_id' label='服务器 ID' tooltip='' width='10'>
+            <form:readonly/>
+          </form:text>
+          <form:text name='desc' label='说明' tooltip='最少1字符' width='10'>
+            <vali:string min='1' max='555'/>
+          </form:text>
+          
+          <form:text name='host' label='数据库主机:端口' tooltip='最少1字符' width='5'>
+            <vali:string min='1' max='25'/>
+          </form:text>
+          <form:text name='schema' label='数据库 Schema' tooltip='可以空' width='5'>
+            <vali:string min='0' max='255'/>
+          </form:text>
+          
+          <form:text name='user' label='数据库用户名' tooltip='最少1字符' width='5'>
+            <vali:string min='1' max='16'/>
+          </form:text>
+          <form:password name='pass' label='数据库密钥' tooltip='最少1字符' width='5'>
+            <vali:string min='1' max='16'/>
+          </form:password>
+          
+          <form:text name='primary_column' label='主键列名' tooltip='最少1字符' width='5'>
+            <vali:string min='1' max='255'/>
+          </form:text>
+          <form:text name='val_column' label='数据列名' tooltip='最少1字符' width='5'>
+            <vali:string min='1' max='255'/>
+          </form:text>
+          
+          <form:textarea name='sql' label='SQL文' width='10' rows='10'>
+            <vali:string min='1' max='9999'/>
+          </form:textarea>
+          
+          <form:textarea name='key' label='服务端 KEY (设置到 OPC 服务器配置文件中)' width='10' rows='10'>
+            <vali:string min='1' max='9999'/>
+            <form:readonly/>
+          </form:textarea>
+        </fieldset>
+        
+        <footer>
+          <moda:cancel/>
+          <moda:button class='btn-success copy_key' text='复制 KEY'></moda:button>
+          <moda:button class='update_key' text='更新 KEY'></moda:button>
+          <moda:ok>
+            <form:post app='ab59c369d5ca4bc5acc0cf44ed0caa89' mod='manager' api='update_conf'>
+              <mp:close when='console.log(this), this.code == 0'>
+                <mp:send type='TABLE_UPDATE_REQ' id='datatable0'/>
+              </mp:close>
+            </form:post>
+          </moda:ok>
+        </footer>
+      </ui:form>
+    </moda:tab>
+    
+    
+    <moda:tab title='OPC映射'>
+      <ui:form id='opc_item_mapper_form'>
+        <form:title>DB 数据与 OPC 数据映射</form:title>
+        <input name='_id' type='hidden'/>
+        
+        <div id='opc_item_mapper_target'></div>
+        
+        <footer>
+          <moda:cancel/>
+          <form:button label='自动映射' name='auto' icon='cog' class='auto_mapping_button'/>
+          <form:button label='插入条目' class='insert'/>
+          
+          <moda:ok>
+            <form:post app='ab59c369d5ca4bc5acc0cf44ed0caa89' mod='manager' api='update_mapping'>
+              <mp:close when='console.log(this), this.code == 0'>
+                <mp:send type='TABLE_UPDATE_REQ' id='datatable0'/>
+              </mp:close>
+            </form:post>
+          </moda:ok>
+        </footer>
+      </ui:form>
+    
+      <div class='function_define_tpl hide'><!-- 代码模板, 不显示 -->
+        <fieldset>
+          <form:text name='name' label='OPC 变量名' width='8' tooltip='必填, 点分割的字符串'/>
+          <form:select name='type' label='OPC 变量类型' width='4' tooltip='必填, OPC 客户端获取数据时的类型'></form:select>
+          <form:text name='primary' label='DB 主键值' width='4' tooltip='必填, 必须在数据集中存在'></form:text>
+          <form:text name='db_val' label='DB 数据值' width='4' tooltip='无需填写'>
+            <form:readonly/>
+          </form:text>
+          <form:text name='db_type' label='DB 数据类型' width='3' tooltip='无需填写'>
+            <form:readonly/>
+          </form:text>
+          <form:btn_toolbar width='1'>
+            <form:button class='del' label='删除' width='1' icon='trash-o'></form:button>
+          </form:btn_toolbar>
+        </fieldset>
+        <hr class='simple'/>
+      </div>
+    </moda:tab>
+    
+    
+    <moda:tab title='DB 数据'>
+      <ui:form>
+        <form:title>来自 OPC 服务器的 DB 数据</form:title>
+        
+        <fieldset class='dataTables_scrollHeadInner'>
+          <table id='db_data_real' class='table table-bordered table-striped dataTable no-footer'>
+            <thead><tr class='columnname'></tr></thead>
+            <thead class='type'></thead>
+            <tbody class='data'></tbody>
+          </table>
+        </fieldset>
+        
+        <footer>
+          <moda:cancel/>
+        </footer>
+      </ui:form>
+    </moda:tab>
+    
+  </moda:tabpanel>
+</moda:frame>
