@@ -104,6 +104,7 @@ var cookie = ret["cookie"];
 设置 http 调用远程 web 服务器的超时时间 (秒), 如果设置为 0 则永不超时, 默认为 10 (秒).
 
 必须在调用 get/post 方法之前调用该方法修改超时, 否则无效.
+必要时, 每个调用远程 web 服务的接口都需要调用该方法修改超时值.
 
 
 ## http.get(string:URL [, object:HttpParm, string:RetType, object:Header])
