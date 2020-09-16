@@ -1,4 +1,5 @@
-set target=D:\javaee-project\xboson-docker
+
+set target=D:\javaee-project\xboson-docker\$upload
 
 rem 移动 db/web/war 到 docker 目录中
 
