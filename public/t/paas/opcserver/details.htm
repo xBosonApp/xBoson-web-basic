@@ -71,6 +71,7 @@ function load_connect_config(d) {
   }
   
   function check_type(val_column) {
+    if (!dbmeta[val_column]) return;
     var db_type = (dbmeta[val_column].typename).toUpperCase();
     
     if (findOr(db_type, 'INT')) {
