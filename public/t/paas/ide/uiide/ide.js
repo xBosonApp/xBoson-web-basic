@@ -127,7 +127,7 @@
                 url: link,
                 type: "post",
                 async: true,
-                timeout: 15000,
+                timeout: 3*60*60*1e3,
                 cache: false,
                 dataType: "json",
                 success: function (msg) {
