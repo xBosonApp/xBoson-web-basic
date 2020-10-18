@@ -7,7 +7,7 @@ function load_connect_config(d) {
   if (pageloaded) return;
   pageloaded = true;
   
-  const VT_I8 = 20, VT_R8 = 5, VT_FILETIME = 64, VT_BSTR = 8;
+  const VT_I8 = 20, VT_R8 = 5, VT_FILETIME = 64, VT_BSTR = 8, VT_I4 = 3, VT_R4 = 4, VT_BOOL = 11;
   
   var jroot = $("#moda_opc_config_detail");
   var opc_item_mapper = jroot.find("#opc_item_mapper_target");
@@ -18,6 +18,7 @@ function load_connect_config(d) {
   var default_opt_type = VT_BSTR;
   var dbmeta = {};
   var row_data = [];
+  var row_data_map = {};
   var mapping_array = [];
   var mapper_page;
   
@@ -67,7 +68,14 @@ function load_connect_config(d) {
     }, 10);
     
     jroot.find('.auto_mapping_button').click(function() {
+      // 删除全部
+      jroot.find('.remove_all_button').click();
+      // 自动映射
       auto_mapping(ret.mapping);
+    });
+    
+    jroot.find('.check_val_type').click(function() {
+      val_type_inference();
     });
     
     jroot.find('.remove_all_button').click(function() {
@@ -104,12 +112,12 @@ function load_connect_config(d) {
     var db_type = (dbmeta[val_column].typename).toUpperCase();
     
     if (findOr(db_type, 'INT')) {
-      default_opt_type = VT_I8;
+      default_opt_type = VT_I4;
       return;
     }
     
     if (findOr(db_type, 'DECIMAL', 'NUMERIC', 'FLOAT', 'DOUBLE')) {
-      default_opt_type = VT_R8;
+      default_opt_type = VT_R4;
       return;
     }
     
@@ -119,6 +127,31 @@ function load_connect_config(d) {
     }
     
     default_opt_type = VT_BSTR;
+  }
+  
+  function val_type_inference() {
+    opc_item_mapper.find("[item]").each(function() {
+      var thiz = $(this);
+      var v = row_data_map[thiz.find("[name=primary]").val()];
+      var t = thiz.find("[name=type]");
+      if (!v) return;
+      
+      var f = parseFloat(v);
+      if (isNaN(f)) {
+        if (v == 'true' || v == 'false') {
+          t.val(VT_BOOL);
+        } else {
+          t.val(VT_BSTR);
+        }
+      } else {
+        if (f != parseInt(v) || v.indexOf(".") >= 0) {
+          t.val(VT_R4);
+        } else {
+          t.val(VT_I4);
+        }
+      }
+    });
+    mapper_page.current_page();
   }
   
   function findOr(str) {
@@ -133,6 +166,10 @@ function load_connect_config(d) {
       dbmeta[m.name] = m;
     });
     row_data = ret.mapping.data;
+    
+    for (let i=0; i<row_data.length; ++i) {
+      row_data_map[ row_data[i][ret.mapping.primary_column] ] = row_data[i][ret.mapping.val_column];
+    }
   }
   
   function init_mapping(mapping) {
@@ -161,19 +198,6 @@ function load_connect_config(d) {
       mapper_page && mapper_page.update();
       _wait.prop("disabled", false);
     }, 100);
-    
-  return;
-    for (var name in mapping.mapping) {
-      create_item_conf({
-        name    : name,
-        type    : mapping.mapping[name].type,
-        primary : mapping.mapping[name].primary,
-        db_val  : '',
-        
-        primary_column : mapping.primary_column,
-        val_column     : mapping.val_column,
-      });
-    }
   }
   
   // mapping: {meta, data, mapping}
@@ -216,6 +240,7 @@ function load_connect_config(d) {
   function create_item_conf(opt) {
     var item = $(item_submit_template);
     item.appendTo(opc_item_mapper).attr("item", opt.name);
+    item.data("db_val", opt.db_val);
     mapping_array.push(item);
     
     item.find("[name=db_type]").val(dbmeta[opt.val_column].typename)
@@ -265,11 +290,17 @@ function load_connect_config(d) {
     
     show.find("[name=primary]").change(function() {
       var v = $(this).val();
-      for (var i=0; i<row_data.length; ++i) {
-        if (v == row_data[i][opt.primary_column]) {
-          show.find("[name=db_val]").val(row_data[i][opt.val_column]).css('color', '#404040');
-          return;
-        }
+      // for (var i=0; i<row_data.length; ++i) {
+      //   if (v == row_data[i][opt.primary_column]) {
+      //     show.find("[name=db_val]").val(row_data[i][opt.val_column]).css('color', '#404040');
+      //     row_data_map
+      //     return;
+      //   }
+      // }
+      var dbv = row_data_map[opt.primary];
+      if (dbv) {
+        show.find("[name=db_val]").val(dbv).css('color', '#404040');
+        return;
       }
       // if not found
       show.find("[name=db_val]").val('*[未找到主键对应的数据]').css('color', 'red');
@@ -538,8 +569,10 @@ function load_connect_config(d) {
         
         <footer>
           <moda:cancel/>
-          <form:button label='删除全部' class='remove_all_button wait_data_loader'/>
-          <form:button label='自动映射' name='auto' icon='cog' class='auto_mapping_button wait_data_loader'/>
+          <form:button label='删除全部' class='remove_all_button wait_data_loader btn-warning'/>
+          <form:button label='类型推断' class='check_val_type wait_data_loader' tooltip='根据数据值推断类型'/>
+          <form:button label='自动映射' name='auto' icon='cog' class='auto_mapping_button wait_data_loader' 
+            tooltip='将所有数据映射为 OPC 变量'/>
           <form:button label='插入条目' class='insert wait_data_loader'/>
           
           <moda:ok class='wait_data_loader'>
@@ -603,3 +636,7 @@ function load_connect_config(d) {
     
   </moda:tabpanel>
 </moda:frame>
+
+
+
+
