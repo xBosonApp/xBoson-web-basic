@@ -68,7 +68,7 @@ function load_connect_config(d) {
     }, 10);
     
     jroot.find('.auto_mapping_button').click(function() {
-      // 删除全部
+      // 删除全部 ! 这会导致已经映射的配置(必须被保留)被删除 !
       jroot.find('.remove_all_button').click();
       // 自动映射
       auto_mapping(ret.mapping);
@@ -136,15 +136,14 @@ function load_connect_config(d) {
       var t = thiz.find("[name=type]");
       if (!v) return;
       
-      var f = parseFloat(v);
-      if (isNaN(f)) {
+      if (isNaN(v)) {
         if (v == 'true' || v == 'false') {
           t.val(VT_BOOL);
         } else {
           t.val(VT_BSTR);
         }
       } else {
-        if (f != parseInt(v) || v.indexOf(".") >= 0) {
+        if (parseFloat(v) != parseInt(v) || v.indexOf(".") >= 0) {
           t.val(VT_R4);
         } else {
           t.val(VT_I4);
@@ -240,7 +239,6 @@ function load_connect_config(d) {
   function create_item_conf(opt) {
     var item = $(item_submit_template);
     item.appendTo(opc_item_mapper).attr("item", opt.name);
-    item.data("db_val", opt.db_val);
     mapping_array.push(item);
     
     item.find("[name=db_type]").val(dbmeta[opt.val_column].typename)
@@ -636,7 +634,4 @@ function load_connect_config(d) {
     
   </moda:tabpanel>
 </moda:frame>
-
-
-
 
