@@ -46,7 +46,8 @@
     { "name": "Crypto", "file": "docs/api-crypto.md" },
     { "name": "Lock", "file": "docs/api-lock.md" },
     { "name": "Config", "file": "docs/api-config.md" },
-    { "name": "Pack", "file": "docs/api-pack.md" }
+    { "name": "Pack", "file": "docs/api-pack.md" },
+    { "name": "Blas", "file": "docs/api-blas.md" }
   ]},
   
   { "name": "前端模板", "basepath":"ui-docs", "file": "basic.md", "sub": [
