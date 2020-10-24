@@ -639,6 +639,11 @@ sys.format("hello {0}", ['xBoson'])
 返回当前日期+时间的字符串, 格式为 "yyyy-MM-dd HH:mm:ss".
 
 
+## sys.syncMap()
+
+返回一个 js 普通对象(Object) 该对象既其中的属性可以在多个模块/接口之间共享, 而不会导致死锁或崩溃.
+
+
 ## sys.charAt(...), sys.indexOf(...), sys.size(...), sys.startWith(..), sys.endWith(...), sys.length(..), sys.subStringTo(..), sys.subString(..), sys.split(..), sys.contain(..), sys.toUpperCase(..), sys.toLowerCase(..), sys.replace(..), sys.trim(..), sys.trunc(..), sys.httpGet(..)
 
 这些方法不要再调用, 使用 js 原生方法替代.
