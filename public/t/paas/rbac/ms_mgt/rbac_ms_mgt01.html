@@ -1,0 +1,158 @@
+<!-- Create By xBoson System -->
+ <!-- widget grid -->
+<section id="widget-grid" class="">
+  <!-- row -->
+  <div class="row">
+    <!-- NEW WIDGET START -->
+    <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <!-- Widget ID (each widget will need unique ID)-->
+      <div id="get_system_api" class="jarviswidget jarviswidget-color-blueDark" data-widget-fullscreenbutton="false" data-widget-colorbutton="true" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-deletebutton="false">
+        <header>
+          <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+          <h2>API服务【帮助信息】</h2>
+        </header>
+        <!-- widget div-->
+        <div>
+          <!-- widget edit box -->
+          <div class="jarviswidget-editbox">
+            <!-- This area used as dropdown edit box -->
+          </div>
+          <!-- end widget edit box -->
+          <!-- widget content -->
+          <div class="widget-body no-padding">
+            <div class="widget-body-toolbar">
+            </div>
+            <div class="row">
+              <div class="col-xs-6">
+                <ul id="apilist" class="ztree"></ul>
+              </div>
+              <div class="col-xs-6">
+                <form method="post" onsubmit="return false;" class="smart-form" id="form_help" style="display:none;">
+                  <fieldset>
+                    <div class="row">
+    									<section class="col col-4">
+    										<label class="label">基本信息</label>
+    									</section>
+    									<section class="col col-4">
+    										创建日期：<label class="label" name="createdt"></label>
+    									</section>
+    									<section class="col col-4">
+    										更新日期：<label class="label" name="updatedt"></label>
+    									</section>
+    								</div>
+    								<legend></legend>
+    								<div class="row">
+    									<section class="col col-4">
+    										<label class="label">
+    										  API分类:
+    										</label>
+    									</section>
+    									<section class="col col-8">
+    										<label class="label" name="api_classify">
+    										</label>
+    									</section>
+    								</div>
+    								<legend></legend>
+    								<div class="row">
+    									<section class="col col-4">
+    										<label class="label">
+    										  APPID:
+    										</label>
+    									</section>
+    									<section class="col col-8">
+    										<label class="label" name="appid">
+    										</label>
+    									</section>
+    								</div>
+    								<legend></legend>
+    								<div class="row">
+    									<section class="col col-4">
+    										<label class="label">
+    										  MODULEID:
+    										</label>
+    									</section>
+    									<section class="col col-8">
+    										<label class="label" name="moduleid">
+    										</label>
+    									</section>
+    								</div>
+    								<legend></legend>
+    								<div class="row">
+    									<section class="col col-4">
+    										<label class="label">
+    										  APIID:
+    										</label>
+    									</section>
+    									<section class="col col-8">
+    										<label class="label" name="apiid">
+    										</label>
+    									</section>
+    								</div>
+    								<legend></legend>
+    								<div class="row">
+    									<section class="col col-4">
+    										<label class="label">
+    										  请求方式:
+    										</label>
+    									</section>
+    									<section class="col col-8">
+    										<label class="label" name="requests">
+    										</label>
+    									</section>
+    								</div>
+    								<legend></legend>
+                    <div class="row">
+    									<section class="col col-12">
+    										<label class="label">  参数</label>
+    									</section>
+    								</div>
+                    <div class="row">
+      								<section class="col col-3">
+      									<label class="label">参数ID</label>
+      								</section>
+      								<section class="col col-5">
+      									<label class="label">值</label>
+      								</section>
+      								<section class="col col-4">
+      									<label class="label">描述</label>
+      								</section>
+      							</div>
+    								<div id="param">
+    								</div>
+    								<legend></legend>
+                    <div class="row">
+    									<section class="col col-12">
+    										<label class="label">URL</label>
+    									</section>
+    								</div>
+    								<div class="row">
+      								<section class="col col-12">
+      									<textarea name="url" rows="6" style="border:0px;background:white;cursor:default;padding:0px;overflow-y: hidden;width:600px;" readonly="readonly"></textarea>
+      								</section>
+    								</div>
+    							</fieldset>
+                </form>
+              </div>
+            </div>
+
+            <div id="mgt_sys_system_getsystemlist_pagination"></div>
+          </div>
+          <!-- end widget content -->
+        </div>
+        <!-- end widget div -->
+      </div>
+      <!-- end widget -->
+    </article>
+    <!-- WIDGET END -->
+  </div>
+  <!-- end row -->
+</section>
+<!-- end widget grid -->
+<script type="text/javascript" src="lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+<script src="rbac/ms_mgt/rbac_ms_mgt01.js"></script>
+<!-- SCRIPTS ON PAGE EVENT -->
+<script type="text/javascript">
+  // DO NOT REMOVE : GLOBAL FUNCTIONS!
+  pageSetUp();
+  var rbac_ms_mgt01=new rbac_ms_mgt01();
+</script>

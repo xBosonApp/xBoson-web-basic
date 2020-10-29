@@ -126,6 +126,13 @@ function open_doc(data) {
         all.splice(0, 1);
         thiz.text(all.join('\n'));
         thiz.before(title);
+        return;
+      }
+      
+      // `anchor=` 作为锚点前缀
+      if (thiz.text().indexOf('anchor=') == 0) {
+        var name = thiz.text().split("=");
+        thiz.html("<a name='"+ name[1] +"'></a>");
       }
     });
     setPage(data.file);
