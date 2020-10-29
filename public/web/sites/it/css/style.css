@@ -538,6 +538,15 @@ header.common-header .logo img {width:100%;}
 #circle1{margin-bottom:50px;width:180px;height:180px;position:relative;}
 #circle1>strong{font-size:48px;color:#4697f2;position:absolute;top:60px;text-align:center;display:block;width:100%;left:0;}
 #circle1>strong i{font-size:28px;}
+/*===cp===*/
+#cp {}
+#cp h1 {margin-bottom:26px;font-weight:600;text-shadow:0 -1px 0px rgba(255,255,255,0.5);}
+#cp h2 {color:#394A81;font-size:24px;font-weight:500;text-shadow:0px 0px 1px rgba(255,255,255,1);}
+#cp p {margin:0 0 12px 0;}
+#cp hr {margin-top:6px;margin-bottom:38px;border-top:1px solid rgba(0,0,0,0.1);}
+#cp a {margin-right:30px;}
+#cp a:hover, a:focus {text-decoration:none;outline:none;}
+#cp img {max-width:80%;}
 /*===bigdata===*/
 #bigdata {}
 #bigdata h1 {margin-bottom:26px;font-weight:600;text-shadow:0 -1px 0px rgba(255,255,255,0.5);}

@@ -184,9 +184,10 @@
     $.extend(true, zy.g, parent.zy.g);
     zy.check_xboson_system();
     var url = zy.fix_preview_url(location.hash);
+    url = location.hash;
 
     zy.debug = true;
-    zy.net.loadHTML(url.substr(1), $('#content'), function() {
+    loadHTMLs(url.substr(1), $('#content'), function() {
       parent.$('iframe').css('min-height',$('body').css('min-height'));
       $('#content').resize(function(){
         var content = $(this).height();
@@ -197,6 +198,58 @@
       zy.g.comm.s = 'd';
     });
   });
+  
+    /**
+   * AJAX LOAD HTML PAGES 适用于开发商 saas/org
+   * @method loadHTMLs
+   * @param {String} url 请求页面链接地址
+   * @param {Object} container 父容器
+   * @param {Function} callback 回调函数
+   */
+  function loadHTMLs (url, container, callback) {
+    var flg = false;
+    // var _u = 'http://'+location.host; // 绝对路径
+    var _u = zy.g.host.ui + (zy.debug? '/t':'/ui'); // 调试用路径切换
+    _u += '/' + url;
+    zy.log('loadHTMLs : _u == '+_u);
+
+    $.ajax({
+      type: "get",
+      url: _u,
+      dataType: 'html',
+      cache: true,
+      async: false,
+      beforeSend: function () {
+        // cog placed
+        container.html('<h1><i class="fa fa-cog fa-spin"></i> 加载中...</h1>');
+      },
+      /*complete: function(){
+            // zy.log("complete");
+		},*/
+      success: function (data) {
+        // cog replaced here...
+        zy.log("loadHTMLs: success "+_u);
+        var htm = flg?data:zy.net.extractCss(data);
+        container.css({
+          opacity : '0.0'
+        }).html(htm).delay(50).animate({
+          opacity : '1.0'
+        }, 300);
+        setTimeout(function() {
+          if (callback) {
+            try {
+              callback(htm);
+            } catch(e) {
+              console.log('Load page:', _u, e);
+            }
+          }
+        }, 300);
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+        container.html('<h4 style="margin-top:10px; display:block; text-align:left"><i class="fa fa-warning txt-color-orangeDark"></i> Error 404! 找不到网页。<br>' + url + '</h4>');
+      }
+    });
+  }
   </script>
 </body>
 </html>
