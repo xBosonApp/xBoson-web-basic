@@ -74,6 +74,10 @@ var bytesObj = OBJ.joinBytes(bytesObj1, bytesObj2, bytesObjN);
 
 返回字节数组的长度
 
+## Bytes sub(int begin [, int end])
+
+截取数组中的一部分作为新的数组返回.
+
 ## [] 索引 (未实现)
 
 使用索引可以读写底层字节数组, 索引超出范围会抛出异常;

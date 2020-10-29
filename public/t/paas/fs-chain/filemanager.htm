@@ -49,10 +49,10 @@
               id="wrapFrame" style="display: none"></iframe>
       <form enctype="multipart/form-data" method="post" target="wrapFrame" style='display: flex;'>
         <input type="hidden" name="fd-callback"/>
-        <input type="file" class="fd-file" multiple/>
+        <input type="file" class="fd-file" multiple />
         <input type="checkbox" class="uploaddir" name='uploaddir'/><label for='uploaddir'>上传目录</label>
       </form>
-      <legend>拖拽文件到对话框中...
+      <legend><!--拖拽文件到对话框中...-->选择文件或目录后, 上传会立即开始
         <span class='note'>如需上传目录及其子目录中的文件, 使用上传按钮并选择目录.</span>
       </legend>
     </div>
@@ -130,6 +130,6 @@
   </section>
   
   <iframe id='downloadfile' class='hide'></iframe>
-  <js:cdn src='filedrop/v2/filedrop-min.js'></js:cdn>
+  <js:cdn src='filedrop/v2/filedrop.js'></js:cdn> <!-- filedrop 已经做了修改, min 没有修改 -->
   <script src='fs-chain/fm.js'></script>
 </ui:grid>

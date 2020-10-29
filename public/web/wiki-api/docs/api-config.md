@@ -8,23 +8,24 @@
 
 ```js
 var cfg = require("config");
-var programConfig = cfg.get("config-file-name");
+var conf_name = "[config-file-name]"
+var programConfig = cfg.get(conf_name);
 // 当配置文件不存在, 创建默认的配置文件
 if (!programConfig) {
   // 创建配置文件
   cfg.create({
     'mode': cfg.MODE_ORG,
-    'name': "config-file-name",
+    'name': conf_name,
     'desc': "DEMO",
     'create_time': new Date(),
   });
   // 创建配置内容
-  cfg.putTemplate('config-file-name', {
+  cfg.putTemplate(conf_name, {
     'id'  : cfg.TYPE_STRING,
     'name': cfg.TYPE_STRING,
   });
   // 配置项说明
-  cfg.setDesc('config-file-name', {
+  cfg.setDesc(conf_name, {
     'id'   : "用户索引",
     'name' : "用户名称",
   });
@@ -85,7 +86,7 @@ var name = user.name;
 template[k,v] 中 k 是配置属性名称, v 是数据类型, 
 配置模板在当前环境没有配置数据时, 为配置提供指导.
 
-这将覆盖旧的配置模板, 如果配置文件不存在抛出异.
+这将覆盖旧的配置模板, 如果配置文件不存在抛出异常.
 
 ```js
 var cfg = require("config");

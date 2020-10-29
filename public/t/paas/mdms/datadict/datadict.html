@@ -1,4 +1,4 @@
- <div class="modal fade" id="mdm_datadict_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+<div class="modal fade" id="mdm_datadict_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -108,6 +108,7 @@ function mdm_datadict_modal(params,flag,updGrid){
     			$("#mdm_datadict_title").text('添加');
     			$("#mdm_datadict_form input[name=status]").select2("val", '1'); //默认值
 		      $("#mdm_datadict_form input[name=typecd]").val(params.typecd);
+		      $("#mdm_datadict_form input[name=version]").val('1.0'); //默认值
 		      zy.log(3);
     		} else if (flag == 'u') {
     		  $("#mdm_datadict_title").text('修改');

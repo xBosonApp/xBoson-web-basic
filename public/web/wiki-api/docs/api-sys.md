@@ -95,6 +95,8 @@ POST Body 中的数据将被解析成 js 对象并绑定在 requestJson 属性�
 
 以 Buffer 对象的形式返回 http body 的二进制数据.  
 如果内容长度超过限制抛出异常; 如果没有 body 数据返回 null;
+无参数调用一定会截断数据(根据配置文件中的配置项), 
+如果数据长度不固定, 且不希望数据被阶段, 使用参数 0 调用;
 
 参数 :
 
@@ -114,7 +116,8 @@ POST Body 中的数据将被解析成 js 对象并绑定在 requestJson 属性�
 
 ## sys.request.openStream()
 
-返回 JsInputStream 用于读取 post 方法中的数据.
+返回 JsInputStream 用于读取 post 方法中的数据.  
+递交请求时, 'Content-Type' 不能是 'application/x-www-form-urlencoded' 否则读取不到任何数据.
 
 
 ## sys.request.multipart(Function(MultipartItem): FileProcessing)
@@ -187,7 +190,7 @@ sys.addRetData("key:list1", list1);
 ```
 
 
-## sys.setRetData(int:Code [, string:Message, string...:KeyNames])
+## sys.setRetData(int:Code [, string:Message, string...:KeyNames]), sys.ret(...)
 
 设置应答数据, 并从应答数据集中选择数据返回, 若在脚本中从未调用该方法, Api 将应答给客户端代码 999.
 
@@ -199,7 +202,7 @@ sys.addRetData("key:list1", list1);
 
 ```javascript
 // 设置返回数据, 并从应答数据集中选择 "list1" 返回给客户端.
-sys.setRetData(0, "OK", "list1");
+sys.ret(0, "OK", "list1");
 ```
 
 
@@ -634,6 +637,11 @@ sys.format("hello {0}", ['xBoson'])
 ## sys.currentTimeString(), sys.getCurrentTimeString()
 
 返回当前日期+时间的字符串, 格式为 "yyyy-MM-dd HH:mm:ss".
+
+
+## sys.syncMap()
+
+返回一个 js 普通对象(Object) 该对象既其中的属性可以在多个模块/接口之间共享, 而不会导致死锁或崩溃.
 
 
 ## sys.charAt(...), sys.indexOf(...), sys.size(...), sys.startWith(..), sys.endWith(...), sys.length(..), sys.subStringTo(..), sys.subString(..), sys.split(..), sys.contain(..), sys.toUpperCase(..), sys.toLowerCase(..), sys.replace(..), sys.trim(..), sys.trunc(..), sys.httpGet(..)

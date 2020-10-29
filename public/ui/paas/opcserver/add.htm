@@ -1,0 +1,46 @@
+<!-- Create By xBoson System -->
+<moda:frame title='创建 OPC 服务器配置'>
+  <ui:form id='create' class='update_form'>
+    <fieldset>
+      <form:text name='desc' label='说明' tooltip='最少1字符' width='10'>
+        <vali:string min='1' max='555'/>
+      </form:text>
+      
+      <form:text name='host' label='数据库主机:端口' tooltip='最少1字符' width='5'>
+        <vali:string min='1' max='25'/>
+      </form:text>
+      <form:text name='schema' label='数据库 Schema' tooltip='可以空' width='5'>
+        <vali:string min='0' max='255'/>
+      </form:text>
+      
+      <form:text name='user' label='数据库用户名' tooltip='最少1字符' width='5'>
+        <vali:string min='1' max='16'/>
+      </form:text>
+      <form:password name='pass' label='数据库密钥' tooltip='最少1字符' width='5'>
+        <vali:string min='1' max='16'/>
+      </form:password>
+      
+      <form:text name='primary_column' label='主键列名' tooltip='最少1字符' width='5'>
+        <vali:string min='1' max='255'/>
+      </form:text>
+      <form:text name='val_column' label='数据列名' tooltip='最少1字符' width='5'>
+        <vali:string min='1' max='255'/>
+      </form:text>
+      
+      <form:textarea name='sql' label='SQL文' width='10' rows='10'>
+        <vali:string min='1' max='9999'/>
+      </form:textarea>
+    </fieldset>
+    
+    <footer>
+      <moda:cancel/>
+      <moda:ok>
+        <form:post app='ab59c369d5ca4bc5acc0cf44ed0caa89' mod='manager' api='createserver'>
+          <mp:close when='this.code == 0'>
+            <mp:send type='TABLE_UPDATE_REQ' id='datatable0'/>
+          </mp:close>
+        </form:post>
+      </moda:ok>
+    </footer>
+  </ui:form>
+</moda:frame>

@@ -1,0 +1,70 @@
+<ui:grid id='idid' class='list' title='服务端列表'>
+  <ui:form id='listform'>
+    <form:text name='desc' label='描述' tooltip='模糊查询'/>
+    <form:text name='client_id' label='服务器 ID'/>
+    <form:status/>
+    
+    <form:btn_toolbar>
+      <form:group>
+        <form:submit label='查询'/>
+        <form:reset/>
+      </form:group>
+      <form:group>
+        <form:button label='添加' icon='magic'>
+          <moda:open url='opcserver/add.htm'/>
+        </form:button>
+        <form:button label='详情' icon='edit'>
+          <mp:usability recvid='datatable0'/>
+          <moda:open url='opcserver/details.htm'/>
+        </form:button>
+        <form:button label='删除' icon='trash-o'>
+          <mp:usability recvid='datatable0'/>
+          <mp:delete app='ab59c369d5ca4bc5acc0cf44ed0caa89' primary='_id'
+              mod='manager' api='deleteconf' dataid='datatable0'>
+            <mp:send type='TABLE_UPDATE_REQ' id='datatable0'/>
+          </mp:delete>
+        </form:button>
+      </form:group>
+    </form:btn_toolbar>
+  </ui:form>
+  
+  <mp:savedata type='SELECT_TABLE_ROW' id='datatable0'/>
+  <script>
+  function response_time(data) {
+    var t = parseInt(data);
+    if (isNaN(t)) return '<b style="color:red;">从未</b>';
+    
+    var how = (Date.now() - t) / 1000;
+    if (how < 30) return '<b style="color:green;">刚刚</b>';
+    how /= 60;
+    if (how < 60) return parseInt(how) +'分钟前';
+    how /= 60;
+    if (how < 24) return parseInt(how) +'小时前';
+    how /= 24;
+    return parseInt(how) +'天前';
+  }
+  </script>
+  
+  <table:api app='ab59c369d5ca4bc5acc0cf44ed0caa89' mod='manager' 
+      api='list' form='#listform' id='datatable0'>
+    <table:mapper label='说明' key='desc'/>
+    <table:mapper label='服务器ID' key='_id'/>
+    <table:mapper label='KEY' key='key'>
+      <table:render>
+      function(data, type, row, meta) {
+        return data.substr(0, 10) +' .. '+ data.substr(data.length-10);
+      }
+      </table:render>
+    </table:mapper>
+    <table:mapper label='最后连接时间' key='last'>
+      <table:render_time/>
+    </table:mapper>
+    <table:mapper label='应答时间' key='last'>
+      <table:render>
+      function(data, type, row, meta) {
+        return response_time(data);
+      }
+      </table:render>
+    </table:mapper>
+  </table:api>
+</ui:grid>

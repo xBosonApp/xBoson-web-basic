@@ -41,6 +41,8 @@ var global_events = new Set([
 
 
 var xb = window.xb = {
+  debug : false,
+  
   getDictNameByTypecd : getDictNameByTypecd,
   createDataTable     : createDataTable,
   select2fromApi      : select2fromApi,
@@ -84,6 +86,8 @@ var xb = window.xb = {
   api                 : callapi,
   waitDisplay         : waitDisplay,
   iframeMax           : iframeMax,
+  split_page          : split_page,
+  async_each          : async_each,
   
   // 事件处理框架
   getEventSettingFromParent      : getEventSettingFromParent,
@@ -107,7 +111,7 @@ xb.on(events.PAGE_DESTROY, null, onPageDestroy);
 // message: 消息参数
 //
 function sendEvent(type, id, message) {
-  zy.log("Send Event", type, id, message);
+  xb.debug && zy.log("Send Event", type, id, message);
   getEvent(type, id).fire(message);
 }
 
@@ -124,7 +128,7 @@ function regListener(type, id, callback) {
   
   if (!callback) throw new Error("xboson.js:regListener callback is null");
   getEvent(type, id).add(callback);
-  zy.log("Reg Event Listener", type, id);
+  xb.debug && zy.log("Reg Event Listener", type, id);
   return {
     remove: function() {
       getEvent(type, id).remove(callback);
@@ -505,7 +509,7 @@ function createDataTable(table) {
       headdrawd = true;
       options.columns.forEach(function(hset, i) {
         $('<th>').text(hset.data).appendTo(thead);
-        console.log(hset.data)
+        // console.debug(hset.data)
       });
     };
   }
@@ -1321,10 +1325,154 @@ function iframeMax(jiframe) {
   function fix() {
     // 一些组件在 resize 之后更改画面高度, 加入延迟可以修正这个问题.
     setTimeout(function() {
-      console.debug("fix iframe size");
+      // console.debug("fix iframe size");
       jdom.height(iwin.document.body.scrollHeight);
     }, 10);
   }
+}
+
+
+//
+// 异步迭代数组, 不会阻塞 ui 显示.
+// each 每个元素调用一次, 异常会被抛出并终止迭代.
+// over 所有元素迭代完成调用一次.
+// _loopc 每次执行窗口循环次数
+//
+function async_each(arr, each, over, _loopc) {
+  if (!_loopc) _loopc = 10;
+  let i = -1;
+  // 第一个循环同步执行
+  _for();
+  
+  function _for() {
+    let c = _loopc;
+    while (++i < arr.length) {
+      each(arr[i], i);
+      if (--c < 0) {
+        _sleep();
+        return;
+      }
+    }
+    
+    if (i >= arr.length) {
+      over();
+      return;
+    }
+  }
+  
+  function _sleep() {
+    setTimeout(_for, 1);
+  }
+}
+
+
+//
+// 通用分页组件实现
+// jpage 分页元素目标容器, 存储生成的分页元素(页码等)
+// _page_size 每页数据量
+// opt : {
+//  length() 返回总数据量
+//  clearPage() 清除数据页全部元素, 以准备加载新数据
+//  loadPage(begin, end) 加载数据(到页面)
+// }
+//
+function split_page(jpage, opt, _page_size) {
+  var one_page = _page_size || 30;
+  var pcount = 0;
+  var current = 0;
+  var last_nofull = 0;
+  
+  update_module();
+  if (opt.length() > 0) {
+    current = 0;
+    change_page(current);
+    update_state();
+  }
+  
+  function update_module() {
+    pcount = parseInt(opt.length() / one_page);
+    last_nofull = opt.length() % one_page;
+    if (last_nofull > 0) {
+      ++pcount;
+    }
+    if (pcount > 0) {
+      if (current >= pcount) {
+        current = pcount-1;
+      }
+      else if (current < 0) {
+        current = 0;
+      }
+    } else {
+      current = 0;
+    }
+  }
+  
+  function update_state() {
+    jpage.html('');
+    
+    if (pcount > 0) {
+      if (current-1 >= 0) add_p("上一页", current-1);
+      add_p("首页", 0);
+      for (var i=current-10; i<current; ++i) {
+        if (i>=0) add_p(i+1+'', i);
+      }
+      for (var i=current; i<pcount && i<current+10; ++i) {
+        add_p(i+1+'', i);
+      }
+      add_p("末页", pcount-1);
+      if (current+1 < pcount) add_p("下一页", current+1);
+      
+      $("<span>").appendTo(jpage).text('('+ opt.length() +"条数据 "+ pcount +"页)").css("padding-left", "7px");
+    } else {
+      $("<a>没有数据</a>").appendTo(jpage);
+    }
+  }
+  
+  function add_p(txt, page) {
+    var c = $("<a href='#'>").text(txt).appendTo(jpage).css("padding", "0 3px");
+    if (current == page) c.css({"font-weight": "bold", "font-size": "larger"});
+    c.click(function() {
+      update_module();
+      change_page(page);
+      update_state();
+      return false;
+    });
+  }
+  
+  function change_page(p) {
+    var begin = p * one_page;
+    var end = 0;
+    if (p == pcount-1 && last_nofull) {
+      end = begin + last_nofull;
+    } else {
+      end = begin + one_page;
+    }
+    opt.clearPage();
+    opt.loadPage(begin, end);
+    current = p;
+  }
+  
+  return {
+    update() {
+      update_module();
+      update_state();
+    },
+    change_page(p) {
+      update_module();
+      change_page(p);
+      update_state();
+    },
+    last_page() {
+      update_module();
+      this.change_page(pcount-1);
+    },
+    first_page() {
+      this.change_page(0);
+    },
+    current_page() {
+      this.change_page(current);
+    },
+  };
 }
 
 

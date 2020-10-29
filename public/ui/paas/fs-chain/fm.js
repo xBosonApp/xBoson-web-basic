@@ -48,6 +48,7 @@ function toolbar() {
   const _log    = fs_showupload.find(".log");
   const _FileReader = window.FileReader;
   
+  let isDirectorySel;
   let vol, path, pg;
   
   window.fd.logging = zy.debug;
@@ -55,6 +56,8 @@ function toolbar() {
   var bar = fs_showupload.find('.bar_zone');
   var closeUpload = fs_showupload.find('.close');
   var pmsg = fs_showupload.find('.progress_message');
+  
+  upzone._force_zero = true;
   upzone.multiple(true);
   upzone.event('send', on_send);
   closeUpload.click(close_upload_dialog);
@@ -64,8 +67,10 @@ function toolbar() {
     let dir = thiz.prop('checked');
     if (dir) {
       fs_showupload.find('[type=file]').prop('webkitdirectory', true);
+      isDirectorySel = true;
     } else {
       fs_showupload.find('[type=file]').removeProp('webkitdirectory');
+      isDirectorySel = false;
     }
   });
   
@@ -119,8 +124,10 @@ function toolbar() {
   function on_send(files) {
     let total_files = files.length;
     let fail = 0, succ = 0;
-    log("准备文件..");
+    log("准备文件.. ("+ files.length +")");
     closeUpload.hide();
+    
+    //console.log("ON send", files.length, files); //TODO
     
     // 新的浏览器不能显示自定义消息
     window.onbeforeunload = function (e) {
@@ -140,6 +147,7 @@ function toolbar() {
     });
   
     function up_file(file, parent, next, fileIndex) {
+      console.log("file::", file, parent)
       if (file.nativeEntry && file.nativeEntry.isDirectory) {
         log('目录 '+ file.name);
         
@@ -156,15 +164,15 @@ function toolbar() {
       
       if (file.size <= 0) {
         log(file.name +" 空文件", 'error');
-        return;
+        // next();
+        // return;
       }
       
       file.event('progress', function (current, total) {
-        var filec = fileIndex + 1;
-        var width = ((current/total) * (1/total_files) + (filec/total_files)) * 100;
+        var width = ((current/total) * (1/total_files) + (fileIndex/total_files)) * 100;
         bar.css('width', width+'%');
         pmsg.html([
-          '<span>', filec, '/', total_files, '</span>',
+          '<span>', fileIndex+1, '/', total_files, '</span>',
           '<span>', width.toFixed(2), '%</span>',
           '<span>', file.name, '</span>'].join(''));
       })
@@ -209,7 +217,7 @@ function toolbar() {
         window.FileReader = _FileReader;
       }
       
-      file.sendTo(get_url('upload', {
+      file.forceSendTo(get_url('upload', {
         v: pg().vol, 
         p: parent,
       }));

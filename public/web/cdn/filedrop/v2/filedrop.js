@@ -1500,6 +1500,7 @@
     // otherwise returns false in such occurrences instead of empty FileList.
     self.eventFiles = function (e, orFalse) {
       var result = new global.FileList(e)
+      var _force_zero = self._force_zero;
 
       // IE 8 supplies dataTransfer but it's of its own format (getData(), etc.)
       // and not standardized. Has no file objects.
@@ -1518,18 +1519,21 @@
         var names = {}
 
         for (var i = 0; i < list.length; i++) {
-          var file = new global.File(list[i])
+          var navFile = list[i];
+          var file = new global.File(navFile)
+          var _name = navFile.webkitRelativePath || file.name
 
           // Safari Windows adds first file several times so skip them.
           // ...while iOS Safari adds files under the same name - image.jpg (#30).
-          if (!names[file.name] || file.name == 'image.jpg') {
-            names[file.name] = true
+          if (!names[_name] || file.name == 'image.jpg') {
+            names[_name] = true
             file.setNativeEntry(entries[i])
             global.callAllOfObject(self, 'fileSetup', file)
 
             // Directories have zero size but in Chrome they are useful
             // since you can access underlying DIrectoryEntry and read files.
-            if (file.size > 0 || file.nativeEntry) {
+            // jym: 允许 0 字节文件
+            if (file.size > 0 || file.nativeEntry || _force_zero) {
               result.push(file)
             }
           }
@@ -2011,6 +2015,29 @@
         self.sendDataReadyTo(opt)
       }
 
+      return self
+    }
+    
+    //
+    // jym: 0字节文件也能上传
+    //
+    self.forceSendTo = function (url, opt) {
+      opt = global.extend(opt, self.opt)
+      opt.url = url
+
+      console.log("file size", self.size);
+      if (window.FileReader) {
+        // Using Firefox FileAPI.
+        var reader = new FileReader
+
+        reader.onload = function (e) { self.sendDataReadyTo(opt, e) }
+        reader.onerror = function (e) { global.callAllOfObject(self, 'error', [e]) }
+
+        reader.readAsArrayBuffer(self.nativeFile)
+      } else {
+        // Using early Chrome/Safari File API.
+        self.sendDataReadyTo(opt)
+      }
       return self
     }
 

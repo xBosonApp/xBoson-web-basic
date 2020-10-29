@@ -8,6 +8,7 @@
 *.gz
 *.sql
 dump.db
+tar*.log
 
 WebRoot/WEB-INF/classes/pc
 WebRoot/WEB-INF/classes/key

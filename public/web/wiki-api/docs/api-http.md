@@ -75,7 +75,7 @@ var headerValue = headers["Content-Type"];
 
 参数:
 
-* ApiInfo: { app: 应用id, mod: 模块id, api: 接口id, org: 机构 id }
+* ApiInfo: 在PASS平台中: { app: 应用id, mod: 模块id, api: 接口id, org: 机构 id }; 在边缘运算节点中, 该参数为接口路径字符串, 例: `/xedge/public/api/user-state`
 * Param: http 请求参数
 * header: 请求头
 
@@ -97,6 +97,14 @@ var cookie = ret["cookie"];
 ## http.platformPost(object:ApiInfo [, object:bodyParm, object:Param, object:header])
 
 该方法与 http.platformGet 意义相同, 由于是内部调用, 并不区分 post/get, body 参数将与 url 参数合并调用 api.
+
+
+## http.setTimeout(int:second)
+
+设置 http 调用远程 web 服务器的超时时间 (秒), 如果设置为 0 则永不超时, 默认为 10 (秒).
+
+必须在调用 get/post 方法之前调用该方法修改超时, 否则无效.
+必要时, 每个调用远程 web 服务的接口都需要调用该方法修改超时值.
 
 
 ## http.get(string:URL [, object:HttpParm, string:RetType, object:Header])

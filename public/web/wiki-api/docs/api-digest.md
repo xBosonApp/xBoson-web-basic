@@ -6,6 +6,14 @@ var digest = require("digest");
 
 # 方法
 
+```javascript
+var digest = require("digest");
+var tar = digest.sha256(); // 'sha256' 可替换为对应方法
+tar.update(lastBlockKey.toString());
+tar.update(randstr);
+var hash = tar.digest().bin();
+```
+
 ## digest.sha1()
 
 返回 sha-1 算法的 hash 对象.
@@ -34,13 +42,9 @@ var digest = require("digest");
 
 返回 md2 算法的 hash 对象.
 
-```javascript
-var digest = require("digest");
-var sha256 = digest.sha256();
-sha256.update(lastBlockKey.toString());
-sha256.update(randstr);
-var hash = sha256.digest().bin();
-```
+## digest.sm3()
+
+国密 sm3 摘要
 
 
 # Class Hash
