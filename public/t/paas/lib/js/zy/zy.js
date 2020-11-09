@@ -174,7 +174,7 @@ zy.fix_api_call = function(uri, prm) {
   if (! zy.isXBosonSystem) 
     return uri;
 
-  var api_prefixs = [ "api/", "ide/", "download/" ];
+  var api_prefixs = [ "api/", "ide/", "download/", "upload/" ];
 
   api_prefixs.forEach(function(api_prefix) {
     if (uri.indexOf(api_prefix) == 0) {
@@ -969,7 +969,14 @@ zy.net = {
     //prm = zy.fix_jsonp_parm(prm)// add by J.ym; not jsonp
     zy.g.am = {};
     //设置Url及参数
+    // uri = zy.fix_api_call(uri, prm);
     var link = zy.g.host.api + uri + "?" + zy.net.parseParam(prm);
+    // 添加form参数到url中
+    // if(link.endsWith("?")){
+    //   link += form.serialize();
+    // }else{
+    //   link += "&" + form.serialize();
+    // }
     zy.log("zy.net.postSubmit.link: " + link);
     form.ajaxSubmit({
       url: link,
