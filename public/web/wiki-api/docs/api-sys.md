@@ -141,6 +141,11 @@ sys.request.multipart(function(item) {
 });
 ```
 
+## sys.request.forEach(Function(key, value): Callback)
+
+迭代 http 请求参数, 每个参数调用一次 Callback
+
+
 ### class MultipartItem
 
 一个文件(参数)对象, 其中读取(read 开头)的方法只能调用一次, 超过一次调用会抛出异常.
