@@ -2506,9 +2506,9 @@ var sys_md_mm = (function () {
               if (i <= 9) {
                 var tr = $('<tr>');
                 var _td = $('<td>');
-                $.each(v, function (ii, vv) {
+                $.each(data,function(ii,vv){
                   var td = _td.clone();
-                  td.html(vv);
+                  td.html(v[vv]);
                   tr.append(td);
                 })
                 table.append(tr);
@@ -2667,7 +2667,8 @@ var sys_md_mm = (function () {
                   
                   zy.g.am.app = 'c879dcc94d204d96a98a34e0b7d75676';
                   zy.g.am.mod = 'import_data';
-                  zy.net.postForm('upload/upload_file', InportModal.find('#filemsg'), cb,null,function(mm){
+                  //  fix | upload/upload_file
+                  zy.net.postForm('files', InportModal.find('#filemsg'), cb,null,function(mm){
                     zy.ui.msg('提示信息',mm.msg,'w')
                   })
 

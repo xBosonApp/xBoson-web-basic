@@ -202,7 +202,8 @@ md_mmD_index = (function(zy, $) {
             InportModal.find("[name=download_template]").click(function(){
               zy.g.am.app='c879dcc94d204d96a98a34e0b7d75676';
               zy.g.am.mod='import_data';
-              zy.net.postDownload("download/export_template",{typecd:optdate==="DE"?"sys_mdm003":"sys_md_mm002"});
+              // 数据元 sys_mdm003:DS.SYS.01.03, 数据集 sys_md_mm002:DS.SYS.03.02
+              zy.net.postDownload("download/export_template",{typecd:optdate==="DE"?"DS.SYS.01.03":"DS.SYS.03.02"});
             });
     
           }
@@ -342,9 +343,9 @@ md_mmD_index = (function(zy, $) {
               if (i <= 9) {
                 var tr = $("<tr>");
                 var _td = $("<td>");
-                $.each(v, function (ii, vv) {
+                $.each(data,function(ii,vv){
                   var td = _td.clone();
-                  td.html(vv);
+                  td.html(v[vv]);
                   tr.append(td);
                 })
                 table.append(tr);
