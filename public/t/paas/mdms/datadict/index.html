@@ -1,0 +1,188 @@
+<div class="modal fade" id="mdm_datadict_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title"><span id="mdm_datadict_title"></span></h4>
+			</div>
+			<div class="modal-body no-padding">
+				<!-- FORM Start -->
+				<form id="mdm_datadict_form" method="post" onsubmit="return false;" class="smart-form">
+					<fieldset>
+						<input type="hidden" name="_version" />
+						<input type="hidden" name="_dictcd" />
+						<div class="row">
+						  <section class="col col-6">
+								<label class="label">类别编码</label>
+								<label class="input">
+									<input type="text" name="typecd" placeholder="类别编码" readonly="true">
+								</label>
+							</section>
+							<section class="col col-6">
+								<label class="label">版本</label>
+								<label class="input has-warning">
+								  <input type="text" name="version" placeholder="版本">
+									<!--<input type="hidden" name="version" data-type="select2" placeholder="版本">-->
+									<b class="tooltip tooltip-bottom-right">版本为必填项目</b>
+								</label>
+							</section>
+						</div>
+						<div class="row">
+							<section class="col col-6">
+								<label class="label">字典编码</label>
+								<label class="input has-warning">
+									<input type="text" name="dictcd" placeholder="字典编码">
+									<b class="tooltip tooltip-bottom-right">字典编码为必填项目</b>
+								</label>
+							</section>
+							<section class="col col-6">
+								<label class="label">字典名称</label>
+								<label class="input has-warning">
+									<input type="text" name="dictnm" placeholder="字典名称">
+									<b class="tooltip tooltip-bottom-right">字典名称为必填项目</b>
+								</label>
+							</section>
+						</div>
+						<div class="row">
+						  <section class="col col-6">
+								<label class="label">快捷码</label>
+								<label class="input">
+									<input type="text" name="shortkey" placeholder="快捷码">
+								</label>
+							</section>
+							<section class="col col-6">
+								<label class="label">状态</label>
+								<label class="input">
+									<input type="hidden" name="status" data-type="select2" placeholder="状态">
+								</label>
+							</section>
+						</div>
+						<section>
+							<label class="label">说明</label>
+							<label class="textarea">
+								<textarea rows="4" name="mark" placeholder="说明"></textarea>
+							</label>
+						</section>
+					</fieldset>
+					<footer>
+						<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+						<button type="submit" class="btn btn-primary">确定</button>
+					</footer>
+				</form>
+				<!-- FORM End -->
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<!-- SCRIPTS ON PAGE EVENT -->
+<script type="text/javascript">
+// DO NOT REMOVE : GLOBAL FUNCTIONS!
+// pageSetUp();
+function mdm_datadict_modal(params,flag,updGrid){
+  zy.log(1);
+	// 数据字典处理
+	var cb = function () {
+		// 字典数据绑定
+		$("#mdm_datadict_form input[name=status]").zySelect('ZR.0001', false, {
+			width: '100%', allowClear : false
+		});
+		zy.log(2);
+		//初始化版本select2或文本框
+		// zy.g.am.app = 'faac7c3dc3844e61a8ca4bd7ab2ff096';
+		// zy.g.am.mod = 'dict';
+		// zy.net.get("api/versions", function(msg){
+		//   if(msg&&msg.versions){
+		//     if(msg.versions.length==0){
+		//       $("#mdm_datadict_form input[name=version][type=hidden]").remove();
+		//     }else{
+		//       $("#mdm_datadict_form input[name=version][type=text]").remove();
+		//       $("#mdm_datadict_form input[name=version]").zySelectCustomData('',false,{'width':'100%'},msg.versions);
+		//     }
+		    if (flag == 'i') {
+    			//添加
+    			$("#mdm_datadict_title").text('添加');
+    			$("#mdm_datadict_form input[name=status]").select2("val", '1'); //默认值
+		      $("#mdm_datadict_form input[name=typecd]").val(params.typecd);
+		      $("#mdm_datadict_form input[name=version]").val('1.0'); //默认值
+		      zy.log(3);
+    		} else if (flag == 'u') {
+    		  $("#mdm_datadict_title").text('修改');
+    			$('#mdm_datadict_form').formDisable(true);
+    			//修改
+    			var callback = function (msg) {
+    				$('#mdm_datadict_form').formDisable(false);
+    				if (msg) {
+    				  $("#mdm_datadict_form input[name=_version]").val(msg.data[0].version);
+    				  $("#mdm_datadict_form input[name=_dictcd]").val(msg.data[0].dictcd);
+    					$('#mdm_datadict_form').json2form(msg.data[0]);
+    				}
+    			};
+    			zy.g.am.app = 'd2c8511b47714faba5c71506a5029d94';
+    			zy.g.am.mod = 'datadict';
+    			zy.net.get("api/getdataupt", callback, params);
+    		}
+		//   }
+		// }, params);
+	};
+	// 预处理该画面所需的字典类型
+	zy.cache.initDicts('ZR.0001', cb);
+	zy.log(4);
+  $('#mdm_datadict_modal').modal('show');
+  zy.log(5);
+	// Registration validation script
+	$("#mdm_datadict_form").validate({
+		// Rules for form validation
+		rules: {
+			dictcd: {
+				required: true,
+				maxlength: 100
+			},
+			dictnm: {
+				required: true,
+				maxlength: 100
+			},
+			shortkey: {
+				maxlength: 50
+			},
+			version: {
+			  required: true,
+				maxlength: 20
+			},
+			mark: {
+				maxlength: 600
+			}
+		},
+		// 验证成功后保存
+		submitHandler: function (form) {
+			var callback = function (msg) {
+				$('#mdm_datadict_form').formDisable(false);
+				if (msg) {
+					$('#mdm_datadict_modal').modal('hide');
+					zy.ui.msg("提示信息：", "保存成功！", "s");
+					// 更新表格数据
+					updGrid && updGrid();
+				}
+			};
+			zy.g.am.app = 'd2c8511b47714faba5c71506a5029d94';
+			zy.g.am.mod = 'datadict';
+			if (flag == 'i') {
+				zy.net.post("api/adddata", callback, $('#mdm_datadict_form').serialize());
+			} else if (flag == 'u') {
+				zy.net.post("api/updatedata", callback, $('#mdm_datadict_form').serialize());
+			}
+			$('#mdm_datadict_form').formDisable(true);
+		},
+		// Do not change code below
+		errorPlacement: function (error, element) {
+			error.insertAfter(element.parent());
+		}
+	});
+	zy.log(6);
+}
+	
+</script>

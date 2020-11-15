@@ -48,7 +48,7 @@
 
   <!-- zTree -->
   <!--<link rel="stylesheet" type="text/css" href="lib/js/plugin/ztreev35/zTreeStyle.css">-->
-  <link rel="stylesheet" type="text/css" href="lib/js/plugin/ztree3524/css/metroStyle/metroStyle.css">
+  <link rel="stylesheet" type="text/css" href="lib/js/plugin/ztree/3545/css/metroStyle/metroStyle.css">
   <!--<style>body {font:12px/1.5 tahoma,arial,'Hiragino Sans GB','\5b8b\4f53',sans-serif}</style>-->
 </head>
 
@@ -159,8 +159,8 @@
   <!-- ztree -->
   <!--<script src="lib/js/plugin/ztreev35/jquery.ztree.all-3.5.min.js"></script>-->
   <!--<script src="lib/js/plugin/ztreev35/jquery.ztree.exhide-3.5.min.js"></script>-->
-  <script src="lib/js/plugin/ztree3524/js/jquery.ztree.all.min.js"></script>
-  <script src="lib/js/plugin/ztree3524/js/jquery.ztree.exhide.min.js"></script>
+  <script src="lib/js/plugin/ztree/3545/js/jquery.ztree.all.min.js"></script>
+  <script src="lib/js/plugin/ztree/3545/js/jquery.ztree.exhide.min.js"></script>
 
   <!-- ZY Scripts -->
   <script src="lib/js/plugin/jquery-dateFormat.js"></script>
@@ -169,8 +169,8 @@
   <script src="lib/js/zy/zy_md5.js"></script>
   <script src="lib/js/plugin/hCharts/highcharts.js"></script>
   <!-- MAIN APP JS FILE -->
-  <script src="lib/js/app_extend.js"></script>
   <script src="lib/js/app.js"></script>
+  <script src="lib/js/app_extend.js"></script>
   <script src="bi/js/zy_alarm.js"></script>
 
   <!-- inline scripts related to this page -->
@@ -194,7 +194,6 @@
         var iframe = parent.$('iframe').height();
         parent.$('iframe').height(content);
       });
-      zy.debug = true;
       zy.g.comm.s = 'd';
     });
   });
@@ -229,7 +228,7 @@
       success: function (data) {
         // cog replaced here...
         zy.log("loadHTMLs: success "+_u);
-        var htm = flg?data:zy.net.extractCss(data);
+        var htm = flg?data:extractCss(data);
         container.css({
           opacity : '0.0'
         }).html(htm).delay(50).animate({
@@ -249,7 +248,66 @@
         container.html('<h4 style="margin-top:10px; display:block; text-align:left"><i class="fa fa-warning txt-color-orangeDark"></i> Error 404! 找不到网页。<br>' + url + '</h4>');
       }
     });
-  }
+  };
+    // html页面内引用的js、css文件路径处理（临时用）
+  // str - 输入 html 的字符串, 标签名字必须小写
+  function extractCss(str) {
+    var html = str;
+    // var _u = 'http://'+location.host; // 绝对路径
+    var _u = zy.g.host.ui + (zy.debug? '/t':'/ui'); // 调试用路径切换
+    zy.log('extractCss : _u == '+_u);
+
+    function findjs() {
+      find("<script ", '>', function(tag) {
+        if (tag.indexOf('src=') > 0) {
+          if (tag.indexOf('src="/') > 0) {
+            return tag;
+          } else if (tag.indexOf('src="http') > 0) {
+            return tag;
+          } else {
+            return tag.replace('src="','src="'+_u+'/paas/');
+          }
+        }else{
+          return tag;
+        }
+      });
+    }
+  
+    function findcss() {
+      find("<link", ">",function(tag){
+        if (tag.indexOf('href="/') > 0) {
+          return tag;
+        } else {
+          return tag.replace('href="','href="'+_u+'/paas/');
+        }
+      });
+    }
+  
+    function find(st_tag, ed_tag, filter) {
+      var st = 0;
+      for (;;) {
+        st = html.indexOf(st_tag, st);
+        if (st > -1) {
+          var ed = html.indexOf(ed_tag, st);
+          if (ed > 0) {
+            ed += ed_tag.length;
+            var sub = html.substring(st, ed);
+            var reg = new RegExp(sub);
+            filter && (changesub = filter(sub));
+            html = html.replace(reg,changesub);
+            st = ed;
+          } else {
+            st += st_tag.length;
+          }
+        } else {
+          break;
+        }
+      }
+    }
+    findcss();
+    findjs();
+    return html;
+    };
   </script>
 </body>
 </html>

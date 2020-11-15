@@ -1,0 +1,205 @@
+<!-- Create By xBoson System -->
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="description" content="xBoson 平台 - Web Portal">
+  <meta name="keywords" content="xBoson 平台">
+  <meta name="author" content="上海竹呗信息技术有限公司">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>xBoson Web Portal - Test</title>
+  <!-- FAVICONS -->
+  <link rel="shortcut icon" href="/xboson/face/ui/paas/lib/img/favicon/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/xboson/face/ui/paas/lib/img/favicon/favicon.ico" type="image/x-icon">
+
+  <!-- Basic Styles -->
+  <link rel="stylesheet" type="text/css" media="screen" href="/xboson/face/ui/paas/lib/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="/xboson/face/ui/paas/lib/css/font-awesome.min.css">
+
+  <!-- SmartAdmin Styles : Please note (smartadmin-production.css) was created using LESS variables -->
+  <link rel="stylesheet" type="text/css" media="screen" href="/xboson/face/ui/paas/lib/css/smartadmin-production.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="/xboson/face/ui/paas/lib/css/smartadmin-skins.css">
+
+  <!-- page specific plugin styles -->
+  <link rel="stylesheet" type="text/css" media="screen" href="/xboson/face/ui/paas/lib/js/plugin/jquery-poshytip/tip-yellowsimple/tip-yellowsimple.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="/xboson/face/ui/paas/lib/js/plugin/bootstrap-datepicker/datepicker3.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="/xboson/face/ui/paas/lib/css/app_extend.css">
+
+  <!-- GOOGLE FONT -->
+  <!--  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">-->
+  <link rel="stylesheet" type="text/css" media="screen" href="/xboson/face/ui/paas/lib/css/fonts.googleapis.com.css">
+
+  <!-- Specifying a Webpage Icon for Web Clip
+			 Ref: https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html -->
+  <link rel="apple-touch-icon" sizes="60x60" href="/xboson/face/ui/paas/lib/img/splash/sptouch-icon-iphone.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/xboson/face/ui/paas/lib/img/splash/touch-icon-ipad.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/xboson/face/ui/paas/lib/img/splash/touch-icon-iphone-retina.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/xboson/face/ui/paas/lib/img/splash/touch-icon-ipad-retina.png">
+
+  <!-- iOS web-app metas : hides Safari UI Components and Changes Status Bar Appearance -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <!-- Startup image for web apps -->
+  <link rel="apple-touch-startup-image" href="/xboson/face/ui/paas/lib/img/splash/ipad-landscape.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)">
+  <link rel="apple-touch-startup-image" href="/xboson/face/ui/paas/lib/img/splash/ipad-portrait.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)">
+  <link rel="apple-touch-startup-image" href="/xboson/face/ui/paas/lib/img/splash/iphone.png" media="screen and (max-device-width: 320px)">
+
+  <!-- zTree -->
+  <!--<link rel="stylesheet" type="text/css" href="lib/js/plugin/ztreev35/zTreeStyle.css">-->
+  <link rel="stylesheet" type="text/css" href="/xboson/face/ui/paas/lib/js/plugin/ztree3524/css/metroStyle/metroStyle.css">
+  <!--<style>body {font:12px/1.5 tahoma,arial,'Hiragino Sans GB','\5b8b\4f53',sans-serif}</style>-->
+</head>
+
+<body class="" style="overflow-y:scroll; border:1px solid;">
+  <!-- POSSIBLE CLASSES: minified, fixed-ribbon, fixed-header, fixed-width
+			 You can also add different skin classes such as "smart-skin-1", "smart-skin-2" etc...-->
+
+  <div id="content"></div>
+  <!-- END MAIN PANEL -->
+
+  <!-- SHORTCUT AREA : 可以添加自定义快捷磁贴 -->
+  <div id="shortcut">
+    <ul>
+      <li>
+        <a href="javascript:void(0);" id="userinfo" class="jarvismetro-tile big-cubes bg-color-blue">
+          <span class="iconbox">
+            <i class="fa fa-user fa-4x"></i>
+            <span style='text-align:center'><b>个人信息</b>
+            </span>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a href="javascript:void(0);" id="changepassword" class="jarvismetro-tile big-cubes bg-color-greenLight">
+          <span class="iconbox">
+            <i class="fa fa-edit fa-4x"></i>
+            <span style='text-align:center'><b>修改密码</b>
+            </span>
+          </span>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div id="modal"></div>
+  <!-- END SHORTCUT AREA -->
+
+  <!--================================================== -->
+
+  <!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices) -->
+  <!--  <script data-pace-options='{ "restartOnRequestAfter": true }' src="lib/js/plugin/pace/pace.min.js"></script>-->
+
+  <!-- jQuery + jQueryUI -->
+  <script src="/xboson/face/ui/paas/lib/js/libs/jquery-1.11.0.min.js"></script>
+  <!--[if !IE]> -->
+  <!--  <script src="/xboson/face/ui/paas/lib/js/libs/jquery-2.0.3.min.js"></script>-->
+  <!-- <![endif]-->
+  <script src="/xboson/face/ui/paas/lib/js/libs/jquery-ui-1.10.3.min.js"></script>
+  <script src="/xboson/face/ui/paas/lib/js/libs/lodash.min.js"></script>
+
+  <!-- JS TOUCH : include this plugin for mobile drag / drop touch events -->
+  <script src="/xboson/face/ui/paas/lib/js/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script>
+
+  <!-- BOOTSTRAP JS -->
+  <script src="/xboson/face/ui/paas/lib/js/bootstrap/bootstrap.min.js"></script>
+
+  <!-- CUSTOM NOTIFICATION -->
+  <script src="/xboson/face/ui/paas/lib/js/plugin/smart/SmartNotification.min.js"></script>
+
+  <!-- JARVIS WIDGETS -->
+  <script src="/xboson/face/ui/paas/lib/js/plugin/smart/jarvis.widget.min.js"></script>
+
+  <!-- JQUERY COOKIE -->
+  <script src="/xboson/face/ui/paas/lib/js/plugin/jquery-cookie/jquery.cookie.js"></script>
+
+  <!-- JQUERY Storage API -->
+  <script src="/xboson/face/ui/paas/lib/js/plugin/jquery-storageapi/jquery.storageapi.min.js"></script>
+
+  <!-- EASY PIE CHARTS -->
+  <script src="/xboson/face/ui/paas/lib/js/plugin/easy-pie-chart/jquery.easy-pie-chart.min.js"></script>
+
+  <!-- SPARKLINES -->
+  <script src="/xboson/face/ui/paas/lib/js/plugin/sparkline/jquery.sparkline.min.js"></script>
+
+  <!-- JQUERY FORM -->
+  <script src="/xboson/face/ui/paas/lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+
+  <!-- JQUERY VALIDATE -->
+  <script src="/xboson/face/ui/paas/lib/js/plugin/jquery-validate/jquery.validate.min.js"></script>
+  <script src="/xboson/face/ui/paas/lib/js/plugin/jquery-validate/messages_zh.js"></script>
+
+  <!-- JQUERY MASKED INPUT -->
+  <script src="/xboson/face/ui/paas/lib/js/plugin/masked-input/jquery.maskedinput.min.js"></script>
+
+  <!-- JQUERY SELECT2 INPUT -->
+  <script src="/xboson/face/ui/paas/lib/js/plugin/select2/select2.min.js"></script>
+
+  <!-- JQUERY POSHYTIP TOOLTIP -->
+  <script src="/xboson/face/ui/paas/lib/js/plugin/jquery-poshytip/jquery.poshytip.min.js"></script>
+
+  <!-- JQUERY DATA TABLES -->
+  <script src="/xboson/face/ui/paas/lib/js/plugin/datatables/media/js/jquery.dataTables.min.js"></script>
+
+  <!-- BOOTSTRAP UI + Slider -->
+  <script src="/xboson/face/ui/paas/lib/js/plugin/bootstrap-slider/bootstrap-slider.min.js"></script>
+
+  <!-- BOOTSTRAP UI + Datepicker -->
+  <script src="/xboson/face/ui/paas/lib/js/plugin/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+
+  <!-- PYM -->
+  <script src="/xboson/face/ui/paas/lib/js/plugin/pym.js"></script>
+
+  <!-- browser msie issue fix -->
+  <script src="/xboson/face/ui/paas/lib/js/plugin/msie-fix/jquery.mb.browser.min.js"></script>
+
+  <!-- FastClick: For mobile devices: you can disable this in app.js -->
+  <script src="/xboson/face/ui/paas/lib/js/plugin/fastclick/fastclick.js"></script>
+  <script src="/xboson/face/ui/paas/lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+  <script src="/xboson/face/ui/paas/lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+
+  <!-- ztree -->
+  <!--<script src="/xboson/face/ui/paas/lib/js/plugin/ztreev35/jquery.ztree.all-3.5.min.js"></script>-->
+  <!--<script src="/xboson/face/ui/paas/lib/js/plugin/ztreev35/jquery.ztree.exhide-3.5.min.js"></script>-->
+  <script src="/xboson/face/ui/paas/lib/js/plugin/ztree3524/js/jquery.ztree.all.min.js"></script>
+  <script src="/xboson/face/ui/paas/lib/js/plugin/ztree3524/js/jquery.ztree.exhide.min.js"></script>
+
+  <!-- ZY Scripts -->
+  <script src="/xboson/face/ui/paas/lib/js/plugin/jquery-dateFormat.js"></script>
+  <script src="/xboson/face/ui/paas/lib/js/zy/zy.js"></script>
+  <script src="/xboson/face/ui/paas/lib/js/zy/zy_extend.js"></script>
+  <script src="/xboson/face/ui/paas/lib/js/zy/zy_md5.js"></script>
+  <script src="/xboson/face/ui/paas/lib/js/plugin/hCharts/highcharts.js"></script>
+  <!-- MAIN APP JS FILE -->
+  <script src="/xboson/face/ui/paas/lib/js/app_extend.js"></script>
+  <script src="/xboson/face/ui/paas/lib/js/app.js"></script>
+  <script src="/xboson/face/ui/paas/bi/js/zy_alarm.js"></script>
+
+  <!-- inline scripts related to this page -->
+  <script type="text/javascript">
+  jQuery(function($){
+    if(window.opener) {
+      $.extend(true, zy.g, window.opener.zy.g);
+      zy.g.comm.s = 'd';
+    }
+    
+    $.extend(true, zy.g, parent.zy.g);
+    zy.check_xboson_system();
+    var url = zy.fix_preview_url(location.hash);
+
+    zy.debug = true;
+    zy.net.loadHTMLs(url.substr(1), $('#content'), function() {
+      parent.$('iframe').css('min-height',$('body').css('min-height'));
+      $('#content').resize(function(){
+        var content = $(this).height();
+        var iframe = parent.$('iframe').height();
+        parent.$('iframe').height(content);
+      });
+      zy.debug = true;
+      zy.g.comm.s = 'd';
+    });
+  });
+  </script>
+</body>
+</html>

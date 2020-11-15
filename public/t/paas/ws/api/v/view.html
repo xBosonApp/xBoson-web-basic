@@ -1,0 +1,113 @@
+<!-- Create By xBoson System -->
+<!--<hr class="simple">-->
+<div class="row">
+  <div class="col-md-12 alert alert-block alert-success">
+    <div class="col-md-10">
+    	<strong class="alert-heading" style="font-size:18px;">
+    	  <i class="fa fa-check-square-o"></i><span id="ws_api_v_view_apinm"></span>
+    	  <sup class="badge bg-color-red bounceIn animated" id="ws_api_v_view_ver">v2.0</sup>
+    	  <sup class="badge bg-color-orange bounceIn animated" id="ws_api_v_view_classify">API</sup>
+    	  <sup class="badge bg-color-green bounceIn animated" id="ws_api_v_view_sta">未知</sup>
+    	</strong>
+    	<p id="ws_api_v_view_desc" style="margin:0px;">描述：</p>
+    </div>
+    <div class="col-md-2">
+      <fieldset class="smart-form" novalidate="novalidate">
+        <section style="width:154px;float:right;">
+          <div class="rating txt-color-green">综合评分
+            <input type="radio" name="overall" id="overall-5">
+            <label for="overall-5"><i class="fa fa-star"></i></label>
+            <input type="radio" name="overall" id="overall-4">
+            <label for="overall-4"><i class="fa fa-star"></i></label>
+            <input type="radio" name="overall" id="overall-3">
+            <label for="overall-3"><i class="fa fa-star"></i></label>
+            <input type="radio" name="overall" id="overall-2">
+            <label for="overall-2"><i class="fa fa-star"></i></label>
+            <input type="radio" name="overall" id="overall-1">
+            <label for="overall-1"><i class="fa fa-star"></i></label>
+          </div>
+        </section>
+      </fieldset>
+    </div>
+  </div>
+  <div class="form-group has-success">
+    <div class="col-md-12">
+      <span class="help-block" style="margin-top:0px;margin-bottom:0px;">创建日期：<span id="ws_api_v_view_cdt"></span> | 更新日期：<span id="ws_api_v_view_udt"></span></span>
+      <div class="input-group">
+        <!-- add: non-hidden - to disable auto hide -->
+        <span class="input-group-addon dropdown-toggle" id="ws_api_v_view_requests" data-toggle="dropdown" style="cursor:pointer;"> GET <i class="fa fa-caret-down"></i></span>
+        <ul class="dropdown-menu pull-left request-method-update">
+          <li>
+            <a href="javascript:void(0);"><i class="fa fa-circle txt-color-green"></i> GET</a>
+          </li>
+          <li>
+            <a href="javascript:void(0);"><i class="fa fa-circle txt-color-red"></i> POST</a>
+          </li>
+          <li class="divider"></li>
+          <li>
+            <a href="javascript:void(0);"><i class="fa fa-circle txt-color-orange"></i> PUT</a>
+          </li>
+        </ul>
+        <input class="form-control" role="menu" type="text" id="ws_api_v_view_uri" value="">
+        <span class="input-group-addon" role="menu">
+          <span class="dropdown">
+            <span class="dropdown-toggle" id="ws_api_v_view_auth" data-toggle="dropdown" style="cursor:pointer;"><i class="fa fa fa-eye"> 认证 </i> <i class="fa fa-caret-down"></i></span>
+            <ul class="dropdown-menu pull-right auth-method-update">
+              <li>
+                <a href="javascript:void(0);"><i class="fa fa fa-eye"></i> 认证</a>
+              </li>
+              <li>
+                <a href="javascript:void(0);"><i class="fa fa-eye-slash"></i> 匿名</a>
+              </li>
+            </ul>
+          </span>
+        </span>
+        <span class="input-group-addon" role="menu" id="ws_api_v_view_test" style="cursor:pointer;" title="测试"><i class="fa fa-bug"></i></span>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <span class="help-block" style="margin-top:0px;margin-bottom:0px;" id="ws_api_v_view_ps">备注：<code>/app/</code>认证|<code>/openapp/</code>匿名|<code>cb=</code>[可选]回调函数名|<code>s=d/r</code>[可选]返回调试信息|<code>ems=ems</code>[可选]返回服务端处理耗时（毫秒）|<code>format=x</code>[可选]输出格式<code>XML</code>默认<code>JSON</code></span>
+    </div>
+  </div>
+</div>
+  <div class="widget-body">
+    <form class="form-horizontal">
+      <fieldset>
+        <legend style="margin-bottom:6px;padding-top:22px;">请求参数：</legend>
+        <div class="form-group has-warning">
+          <div class="col-md-12">
+            <div class="well">
+              <table id="ws_api_v_view_tb" class="table table-striped table-forum">
+                <thead>
+                  <tr class="txt-color-green">
+                    <th style="font-size:15px;">参数ID</th>
+                    <th style="font-size:15px;">参数类型</th>
+                    <th style="font-size:15px;">测试参数值</th>
+                    <th style="font-size:15px;">描述</th>
+                  </tr>
+                </thead>
+                <tbody>
+            <!--      <tr>-->
+            <!--        <td colspan="4">	-->
+            <!--<code style="white-space: normal;">&lt;a data-target="#modal" data-toggle="modal" href="remote.html"&gt; ... &lt;/a&gt;</code>-->
+            <!--        </td>-->
+            <!--      </tr>-->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+  		</fieldset>
+    </form>
+  </div>
+
+<div id="ws_api_v_pagination"></div>
+<div id="ws_api_v_test_modal"></div>
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script src="ws/api/v/view.js"></script>
+<script>
+  var api_viewObj;
+  function main(node){
+    api_viewObj=new api_view(node);
+  }
+</script>

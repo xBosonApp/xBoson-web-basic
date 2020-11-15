@@ -1,0 +1,71 @@
+<!-- Create By xBoson System -->
+<hr class="simple">
+<div class="row">
+  <form id="dict_view_search_form" method="post" onsubmit="return false;" class="smart-form">
+  	<input type="hidden" name="typecd" />
+  	<section class="col col-2">
+  		<label class="input">
+  			<input type="hidden" name="version" data-type="select2" placeholder="版本" />
+  			<input type="text" name="version" placeholder="版本" />
+  		</label>
+  	</section>
+  	<section class="col col-2">
+  		<label class="input">
+  			<input type="text" name="dictcd" placeholder="字典编码">
+  		</label>
+  	</section>
+  	<section class="col col-2">
+  		<label class="input">
+  			<input type="text" name="dictnm" placeholder="字典名称">
+  		</label>
+  	</section>
+  	<section class="col col-2">
+  		<label class="input">
+  			<input type="text" name="shortkey" placeholder="快捷码">
+  		</label>
+  	</section>
+  	<section class="col col-2">
+  		<label class="input">
+  			<input type="hidden" name="status" data-type="select2" placeholder="状态" />
+  		</label>
+  	</section>
+  	<section class="col col-2">
+  	<button id="dict_view_search" class="btn btn-info btn-sm" type="submit"><i class="fa fa-search fa-1"></i>&emsp;查 询&emsp;</button>
+  	</section>
+  </form>
+</div>
+<div>
+  <div class="btn-group">
+  	<button id="dict_view_add" class="btn btn-info btn-xs">&emsp;<i class="fa fa-magic"></i>&nbsp;添 加&emsp;</button>
+  	<button id="dict_view_edit" class="btn btn-info btn-xs">&emsp;<i class="fa fa-edit"></i>&nbsp;修 改&emsp;</button>
+  	<button id="dict_view_del" class="btn btn-info btn-xs">&emsp;<i class="fa fa-trash-o"></i>&nbsp;删 除&emsp;</button>
+  </div>
+  <div class="pull-right">
+    <b name="dict_view_total_count"></b>
+  </div>
+</div>
+<!--class="dataTables_wrapper"-->
+<div class="table-responsive">
+	<table id="dict_view_dt" class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>类别编码</th>
+				<th>版本</th>
+				<th>字典编码</th>
+				<th>字典名称</th>
+				<th>快捷码</th>
+				<th>状态</th>
+			</tr>
+		</thead>
+	</table>
+</div>
+<div id="dict_view_pagination"></div>
+<div id="dict_view_modal"></div>
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script src="ws/srds/m/dict_view.js"></script>
+<script>
+  var dict_viewObj;
+  function main(node){
+    dict_viewObj=new dict_view(node.typecd);
+  }
+</script>
