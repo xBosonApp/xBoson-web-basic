@@ -951,7 +951,7 @@ function load_data(id) {
 //
 function dataToForm(row, jform) {
   for (var name in row) {
-    jform.find("[name='"+ name +"']").val(row[name]);
+    jform.find("[name='"+ name +"']").val(row[name] +'');
     //console.log(name, row[name], jform.find("[name='"+ name +"']"))
   }
 }

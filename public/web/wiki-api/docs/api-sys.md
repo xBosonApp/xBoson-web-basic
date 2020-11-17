@@ -145,7 +145,6 @@ sys.request.multipart(function(item) {
 ## sys.request.forEach(Function(key, value): Callback)
 
 迭代 http 请求参数, 每个参数调用一次 Callback
-该方法效率较低, 只在必须处理所有参数时使用.
 
 
 ## sys.request.toObject()
