@@ -26,10 +26,6 @@ api_view = (function(){
       sys: "?s=d&ems=ems"
     };
     zy.cache.initDicts("ZR.0052,ZR.0053", ViewInit);
-    // JYM: 缓存api测试页, 使之打开更快
-    zy.net.loadHTML('ide/htmlide/ide_run.html',$('#ws_api_v_test_modal'),function(r){
-      _m.ide_run_html_cache = r;
-    });
   }
   
   // 画面 init
@@ -121,10 +117,10 @@ api_view = (function(){
 
   // 访问模式选择
   $('.auth-method-update a').click(function () {
-    var selText = $(this).text();
+    var selText = $(this).html();
     var $this = $(this);
     $('#ws_api_v_view_auth').html($this.html() + ' <span class="caret"></span>');
-    if ("匿名"===selText.trim()){
+    if (selText.indexOf('fa-eye-slash') >= 0){
       _m.path.auth = "openapp";
     }else{
       _m.path.auth = "app";
@@ -135,10 +131,13 @@ api_view = (function(){
 	});
 
   $('#ws_api_v_view_test').click(function () {
-    $('#ws_api_v_modal').html(_m.ide_run_html_cache);
-    // 打开测试页
-    RunApi(_m, _m.help_info);
-    // $('#ws_api_v_modal').modal('show');
+    zy.net.loadHTML('ws/api/v/run.html',$('#ws_api_v_test_modal'),function(r){
+      // JYM: 缓存api测试页, 使之打开更快
+      // _m.ide_run_html_cache = r;
+      // 打开测试页
+      RunApi(_m, _m.help_info);
+    });
+    // $('#ws_api_v_modal').html(_m.ide_run_html_cache);
   });
 
   /**
