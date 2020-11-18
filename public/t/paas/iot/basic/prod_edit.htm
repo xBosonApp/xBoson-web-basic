@@ -1,0 +1,252 @@
+<!-- Create By xBoson System -->
+
+<form class='hide'>
+
+<div class='prod_metas_ptorotype'>
+  <form:text name='m_name' label='属性名' width='3'>
+    <vali:string min='1' max='99'/>
+  </form:text>
+  <form:text name='m_desc' label='说明' width='6'>
+  </form:text>
+  
+  <form:select name='m_notnull' label='必填' width='2'>
+    <option value='0'>可以为空</option>
+    <option value='1'>必须填写</option>
+  </form:select> 
+  
+  <form:text name='m_defval' label='默认值' width='5'>
+  </form:text>
+  <form:select name='m_type' label='类型' width='3'>
+    <option value='100'>字符串</option>
+    <option value='101'>数字</option>
+    <option value='102'>字典</option>
+    <option value='103'>日期</option>
+  </form:select> 
+  
+  <section class="col form_select_dict_root col-3">
+    <label class="label">字典</label>
+  	<label class="input">
+  		<input class="form_select_dict" name='m_dict'
+  		       type='hidden' style='margin-top: 20px;'>
+  		</input>
+  		<input class='form_select_dict_disp' 
+  		       placeholder="选择字典" readonly style='cursor: pointer'/>
+  	</label>
+  </section>
+  
+  <a href='#' class='delete'>删除</a>
+  <hr style='display: block; width: 100%'/>
+</div>
+
+<div class='prod_data_prototype'>
+  <form:text name='d_name' label='数据名' width='3'>
+    <vali:string min='1' max='99'/>
+  </form:text>
+  
+  <form:text name='d_desc' label='说明' width='3'>
+  </form:text>
+  
+  <form:select name='d_type' label='类型' width='2'>
+    <option value='2'>浮点</option>
+    <option value='1'>整数</option>
+    <!--<option value='3'>虚拟</option>-->
+    <option value='4'>开关</option>
+    <option value='5'>字符串</option>
+  </form:select>
+  
+  <form:text name='d_unit' label='计量单位' width='3'>
+  </form:text>
+  
+  <a href='#' class='delete'>删除</a>
+  <hr style='display: block; width: 100%'/>
+</div>
+
+<div class='prod_cmd_prototype'>
+  <form:text name='c_name' label='命令名' width='4'>
+    <vali:string min='1' max='99'/>
+  </form:text>
+  
+  <form:text name='c_desc' label='说明' width='5'>
+  </form:text>
+  
+  <form:select name='c_type' label='类型' width='2'>
+    <option value='2'>浮点</option>
+    <option value='1'>整数</option>
+    <!--<option value='3'>虚拟</option>-->
+    <option value='4'>开关</option>
+    <option value='5'>字符串</option>
+  </form:select>
+  
+  <a href='#' class='delete'>删除</a>
+  <hr style='display: block; width: 100%'/>
+</div>
+
+</form>
+
+
+<ui:form id='update' class='update_form'>
+  <mp:loaddata id='datatable0'/>
+  
+  <fieldset>
+    <input type='hidden' name='_id'/>
+    <input type='hidden' name='scenes'/>
+    
+    <form:text name='name' label='名称' tooltip='最少1字符' width='6'>
+      <vali:string min='1' max='99'/>
+    </form:text>
+    
+    <form:text name='cd' label='创建时间' width='3'>
+      <form:readonly/>
+    </form:text>
+    
+    <form:text name='script' label='脚本' tooltip='选择脚本' width='6'>
+    </form:text>
+    
+    <form:text name='md' label='修改时间' width='3'>
+      <form:readonly/>
+    </form:text>
+    
+    <form:textarea name='desc' label='说明' width='10' rows='5'>
+    </form:textarea>
+  </fieldset>
+  
+  <style>
+    h4 {
+      margin-top: 70px; border-bottom: 1px solid #888;
+    }
+    .new_button {
+      float: right; margin-right: 30px;
+    }
+    hr {
+      margin-bottom: 10px !important; border-style: dashed;
+    }
+  </style>
+  
+  <fieldset id='prod_metas'>
+    <h4>属性列表</h4> <br/>
+  </fieldset>
+  <a href='#' id='add_new_prod_meta' class='new_button'>[插入属性]</a>
+  
+  <fieldset id='prod_datas'>
+    <h4>数据列表</h4> <br/>
+  </fieldset>
+  <a href='#' id='add_new_prod_data' class='new_button'>[插入数据]</a>
+  
+  <fieldset id='prod_cmds'>
+    <h4>命令列表</h4> <br/>
+  </fieldset>
+  <div style='height: 30px;'>
+  <a href='#' id='add_new_prod_cmd' class='new_button'>[插入命令]</a>
+  </div>
+  
+  <footer>
+    <moda:cancel/>
+    <moda:ok>
+      <form:post app='2e617eb7e1744bbcb6a0518fa85a84a5' mod='basic' api='edit_prod'>
+        <mp:send type='TABLE_UPDATE_REQ' id='datatable0'/>
+      </form:post>
+    </moda:ok>
+  </footer>
+  
+  <chip:dialog class="select_dict_modal" title='字典选择'>Loading ...</chip:dialog>
+  
+<script>
+jQuery(function($) {
+  var meta = dyn_form({
+    template : ".prod_metas_ptorotype", 
+    target   : "#prod_metas", 
+    button   : "#add_new_prod_meta",
+    filter   : process_dict,
+  });
+    
+  var data = dyn_form({
+    template : ".prod_data_prototype",  
+    target   : "#prod_datas", 
+    button   : "#add_new_prod_data" 
+  });
+  
+  var cmd  = dyn_form({
+    template : ".prod_cmd_prototype",
+    target   : "#prod_cmds",  
+    button   : "#add_new_prod_cmd"
+  });
+  
+  var formdata = xb.load_data("datatable0");
+  formdata.meta.forEach(function(x) {
+    meta.create(x, "m_");
+  });
+  
+  formdata.data.forEach(function(x) {
+    data.create(x, "d_");
+  });
+  
+  formdata.cmd.forEach(function(x) {
+    cmd.create(x, "c_");
+  });
+  
+  
+  function dyn_form(conf) {
+    var html = $(conf.template).html();
+    var con = $(conf.target);
+    var a = 0;
+    
+    $(conf.button).click(function() {
+      create();
+      return false;
+    });
+    
+    function create(data, prefix) {
+      var dom = $(html);
+      con.append(dom);
+      
+      if (data) {
+        for (var n in data) {
+          var name = '[name="'+ prefix+n +'"]';
+          dom.find(name).val(data[n]).change();
+        }
+      }
+      
+      if (conf.filter) conf.filter(dom);
+      dom.filter(".delete").click(function() {
+        dom.remove();
+        return false;
+      });
+    }
+    
+    return {
+      create,
+    };
+  }
+  
+  
+  function process_dict(dom) {
+    var dict = dom.find("[name=m_dict]");
+    var dict_unit = dict.parent().parent();
+    if (dom.find('[name=m_type]').val() != '102') {
+      dict_unit.hide();
+    }
+    init_dict(dict);
+    
+    dom.find("[name=m_type]").change(function() {
+      var thiz = $(this);
+      if (thiz.val() == '102') {
+        dict_unit.show();
+      } else {
+        dict_unit.hide();
+      }
+    });
+  }
+  
+  
+  function init_dict(select) {
+    var root = select.parents(".form_select_dict_root").first();
+    
+    xb.configDictDialog({
+      displayInput : root.find(".form_select_dict_disp"),
+      dialog       : $(".select_dict_modal"),
+      realInput    : select,
+    });
+  }
+});
+</script>
+</ui:form>

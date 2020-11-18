@@ -1,0 +1,27 @@
+<!-- Create By xBoson System -->
+<moda:frame title='创建产品'>
+  <script src='iot/basic/comm.js'></script>
+  
+  <ui:form id='create_product' class='add_form'>
+    <input type='hidden' name='scenes'/>
+    <fieldset>
+      <form:text name='name' label='名称' tooltip='最少1字符' width='10'>
+        <vali:string min='1' max='99'/>
+      </form:text>
+      
+      <form:textarea name='desc' label='说明' width='10' rows='10'>
+      </form:textarea>
+    </fieldset>
+    
+    <footer>
+      <moda:cancel/>
+      <moda:ok>
+        <form:post app='2e617eb7e1744bbcb6a0518fa85a84a5' mod='basic' api='create_prod'>
+          <mp:close when='this.code == 0'>
+            <mp:send type='TABLE_UPDATE_REQ' id='datatable0'/>
+          </mp:close>
+        </form:post>
+      </moda:ok>
+    </footer>
+  </ui:form>
+</moda:frame>

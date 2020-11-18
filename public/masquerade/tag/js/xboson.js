@@ -384,7 +384,7 @@ function postDataUseApi(jdata, jform, reciveDataCB) {
   zy.g.am.app = jdata.data('app');
   zy.g.am.mod = jdata.data('mod');
   var api = 'api/'+ jdata.data('api');
-  var conditions =jform.jquery ? jform.serialize() : jform;
+  var conditions = jform.jquery ? jform.serialize() : jform;
   
   zy.net.post(api, reciveDataCB, conditions, 0, reciveDataCB, new Error());
 }

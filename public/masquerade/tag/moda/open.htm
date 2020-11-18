@@ -14,6 +14,9 @@
       var frame = $("<div class='moda_frame'/>");
       
       who.click(do_open);
+      xb.on(xb.events.PAGE_DESTROY, null, function() {
+        frame.remove();
+      });
         
       function do_open() {
         frame.appendTo(document.body);

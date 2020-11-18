@@ -1,11 +1,193 @@
 <!-- Create By xBoson System -->
 <ui:grid id='idid' class='prodmanager' title='产品管理'>
-  <div id="ws_api_v_ztree" class="col-xs-3 custom-scroll" 
-        style="max-height:600px;overflow-y:scroll;overflow-x:hidden;border-width:0px 1px 0px 0px;border-style:solid;border-color:#CCC!important;">
-    <ul class="ztree"></ul>
+  <div class="row">
+    <div id="v_pm_nouislider" class="noUiSlider"></div>
   </div>
-  <div id="ws_api_v_innercontent" class="col-xs-9"></div>
+  
+  <div class="row">
+    <div id="prod_mang_ztree" class="col-xs-3 custom-scroll" 
+          style="max-height:600px;overflow-y:scroll;overflow-x:hidden;border-width:0px 1px 0px 0px;border-style:solid;border-color:#CCC!important;">
+      <ul class="ztree" id='product_tree'></ul>
+    </div>
+    <div id="v_pm_innercontent" class="col-xs-9"></div>
+  </div>
+  
+  <js:xboson/>
   <script src="lib/js/plugin/ztree/3545/js/jquery.ztree.all.min.js"></script> 
   <script src="lib/js/plugin/ztree/3545/js/jquery.ztree.exhide.min.js"></script> 
   <script src="lib/js/plugin/noUiSlider/jquery.nouislider.min.js"></script>
+  
+<script>
+jQuery(function($) {
+  var v_ztree = $('#prod_mang_ztree');
+  var v_nouislider= $("#v_pm_nouislider");
+  var v_content = $('#v_pm_innercontent');
+  var app = '2e617eb7e1744bbcb6a0518fa85a84a5';
+  
+  v_nouislider.noUiSlider({
+    range: [0, 100],
+    start: 25,
+    handles: 1,
+    connect: true,
+    slide: function(){
+      var values = $(this).val();
+      v_ztree.css({'display':'block','width': + values + '%'});
+      v_content.css({'display':'block','width':(100-values) + '%'});
+    }
+  });
+  
+  xb.api(app, 'basic', 'scenelist', {}, function(x) {
+    initTree(x.data);
+  });
+  
+  function open(url, cb) {
+    zy.net.loadHTML(url, v_content, function(data, errMsg, thrownError) {
+      if (errMsg || thrownError) {
+        v_content.html(errMsg || thrownError);
+      }
+      cb(v_content);
+    });
+  }
+  
+  function initTree(data) {
+    var option = {
+      view: {
+        showTitle: false,
+        //dblClickExpand: false
+        addHoverDom,
+        removeHoverDom,
+      },
+      data: {
+        keep:{parent: false},
+        key: {
+          name: "name",
+          isParent: "parent",
+          title: "_id"
+        },
+        simpleData: {
+          enable: true, //是否用简单数据
+          idKey: '_id', //对应json数据中的ID
+          pIdKey: 'scenes', //对应json数据中的父ID
+          rootPId: 0 // 用于修正根节点父节点数据，即 pIdKey 指定的属性值
+        }
+      },
+      callback: {
+        onClick,
+        onExpand,
+      }
+    };
+    
+    // 允许 node 属性中: [ open_method : 点击node打开, 
+    //    expand_method: 展开节点, 
+    //    add_hover : 添加扩展组件 ]
+    // 出现以下的值:
+    var tree_method = {
+      open_prod,
+      expand_scenes,
+      load_prod,
+      add_prod_method,
+      create_new_prod,
+    };
+    
+    data.forEach(function(x) {
+      x.parent = true;
+      x.open_method = 'expand_scenes';
+      x.expand_method = 'load_prod';
+      x.add_hover = 'create_new_prod';
+    });
+    
+    var tree = $.fn.zTree.init(v_ztree.find('.ztree'), option, data);
+    var current_scene;
+    
+    xb.on("TABLE_UPDATE_REQ", 'datatable0', function(d) {
+      if (!current_scene) return;
+      current_scene.prod_data_loaded = false;
+      tree.removeChildNodes(current_scene);
+      load_prod(null, null, current_scene);
+    });
+    
+    
+    function onClick(e, id, node) {
+      if (node.open_method) {
+        tree_method[node.open_method](e, id, node);
+      }
+    }
+    
+    
+    function onExpand(e, id, node) {
+      if (node.expand_method) {
+        tree_method[node.expand_method](e, id, node);
+      }
+    }
+    
+    
+    function load_prod(e, id, node) {
+      if (node.prod_data_loaded) return;
+      node.prod_data_loaded = true;
+      
+      xb.api(app, 'basic', 'prod_list', {scenes: node._id}, function(x) {
+        x.data.forEach(function(d) {
+          d.parent = true;
+          d.open_method = 'open_prod';
+          d.expand_method = 'add_prod_method';
+        });
+        tree.addNodes(node, x.data);
+      });
+    }
+  
+    
+    function addHoverDom(id, node) {
+      if (node.add_hover) {
+        tree_method[node.add_hover](id, node);
+      }
+    }
+    
+    
+    function create_new_prod(id, node) {
+      if (node.open_method != 'expand_scenes') return;
+      var n = $('#'+ node.tId +"_a");
+      if (n.find('.hoverdom').length) return;
+      
+      var addbtn = $("<span class='hoverdom button add' title='添加' onfocus='this.blur();'></span>");
+      n.append(addbtn);
+      
+      addbtn.click(function() {
+        open("iot/basic/prod_add.htm", function(dom) {
+          dom.find("[name=scenes]").val(node._id);
+          current_scene = node;
+        });
+      });
+    }
+    
+    
+    function removeHoverDom(id, node) {
+      var n = $('#'+ node.tId +"_a");
+      n.find(".hoverdom").remove();
+    }
+    
+    
+    function open_prod(e, id, node) {
+      current_scene = tree.getNodeByTId(node.parentTId);
+      xb.save_data('datatable0', node);
+      open('iot/basic/prod_edit.htm', function(v) {});
+    }
+    
+    
+    function expand_scenes(e, id, node) {
+      tree.expandNode(node, true, false, true, true);
+    }
+    
+    
+    function add_prod_method(e, id, node) {
+      if (node.add_prod_method) return;
+      node.add_prod_method = true;
+      tree.addNodes(node, [
+        { name: '设备账户', _id: 3 },
+        { name: '设备管理', _id: 1 },
+        { name: '脚本管理', _id: 2 },
+      ]);
+    }
+  }
+});
+</script>
 </ui:grid>
