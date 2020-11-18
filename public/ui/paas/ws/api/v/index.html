@@ -1,0 +1,76 @@
+<!-- Create By xBoson System -->
+<style>
+  .ws-api-ztree-node-n {
+    font-size: 9px !important;
+    font-weight: 300 !important;
+    padding: 2px !important;
+    margin: 0px 0px 0px 2px !important;
+    min-width: 16px !important;
+  }
+</style>
+<link rel="stylesheet" type="text/css" href="lib/js/plugin/ztree/3545/css/metroStyle/metroStyle.css">
+
+<section id="widget-grid">
+  <div id="ws_api_v_index" class="jarviswidget jarviswidget-color-green" data-widget-editbutton="true" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+  <header>
+    <h2></h2>
+    <div class="widget-toolbar">
+      <!-- add: non-hidden - to disable auto hide -->
+      <div class="btn-group">
+        <button class="btn dropdown-toggle btn-xs btn-success" data-toggle="dropdown" title="状态选择">
+          Status <i class="fa fa-caret-down"></i>
+        </button>
+        <ul class="dropdown-menu pull-right js-status-update">
+          <li>
+            <a href="javascript:void(0);"><i class="fa fa-circle txt-color-green"></i> Online</a>
+          </li>
+          <li>
+            <a href="javascript:void(0);"><i class="fa fa-circle txt-color-red"></i> Busy</a>
+          </li>
+          <li>
+            <a href="javascript:void(0);"><i class="fa fa-circle txt-color-orange"></i> Away</a>
+          </li>
+          <li class="divider"></li>
+          <li>
+            <a href="javascript:void(0);"><i class="fa fa-power-off"></i> Log Off</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div name="ws_api_v_tree" class="widget-toolbar button-icon jarviswidget-custom-btn" data-placement="bottom" role="menu" title="显示/隐藏服务列表">
+      <i class="glyphicon glyphicon-folder-open"></i>
+    </div>
+  </header>
+  <!-- widget div-->
+  <div>
+    <!-- widget edit box -->
+    <div class="jarviswidget-editbox">
+      <input class="form-control" type="text">	
+    </div>
+    <!-- widget content -->
+    <div class="widget-body">
+    <!-- widget edit box -->
+      <div class="row">
+        <div id="ws_api_v_nouislider" class="noUiSlider"></div>
+      </div>
+      <div class="row">
+        <div id="ws_api_v_ztree" class="col-xs-3 custom-scroll" style="max-height:600px;overflow-y:scroll;overflow-x:hidden;border-width:0px 1px 0px 0px;border-style:solid;border-color:#CCC!important;">
+          <ul class="ztree"></ul>
+        </div>
+        <div id="ws_api_v_innercontent" class="col-xs-9"></div>
+      </div>
+    </div>
+  <!-- end widget content -->
+  </div>
+  <!-- end widget div -->
+</div>
+</section>
+<div id="ws_api_v_modal"></div>
+<script src="lib/js/plugin/ztree/3545/js/jquery.ztree.all.min.js"></script> 
+<script src="lib/js/plugin/ztree/3545/js/jquery.ztree.exhide.min.js"></script> 
+<script src="lib/js/plugin/noUiSlider/jquery.nouislider.min.js"></script>
+<script src="ws/api/v/index.js"></script>
+<script>
+  // 页面初始化设置
+  pageSetUp();
+</script>

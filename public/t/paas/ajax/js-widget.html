@@ -1,121 +1,120 @@
-
-<!--<div id="ajax-js-widget">-->
-  <!--<button class="btn btn-primary" name="additem" data-toggle="modal" data-target="#ajax-js-widget-modal">添加JS插件</button>-->
+<div id="ajax-js-widget">
+  <button class="btn btn-primary" name="additem" data-toggle="modal" data-target="#ajax-js-widget-modal">添加JS插件</button>
   <div name="items">
     <h3><a href="https://github.com/josdejong/jsoneditor/" target="_blank">jsoneditor</a></h3>
     <h3><a href="https://github.com/Pym/pym.js" target="_blank">Pym</a></h3>
     <h3><a href="https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts" target="_blank">IDE快捷键</a></h3>
   </div>
   <!--模态-->
-  <!--<div id="ajax-js-widget-modal" class="modal fade">-->
-  <!--  <div class="modal-dialog modal-sm">-->
-  <!--    <div class="modal-content">-->
-  <!--      <div class="modal-header">-->
-  <!--        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
-  <!--        <h4 class="modal-title">添加</h4>-->
-  <!--      </div>-->
-  <!--      <div class="modal-body">-->
-  <!--        <input class="form-control" name="name" type="text" placeholder="JS插件名称"/>-->
-  <!--        <input class="form-control" name="url" type="text" placeholder="URL"/>-->
-  <!--      </div>-->
-  <!--      <div class="modal-footer">-->
-  <!--        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
-  <!--        <button type="button" class="btn btn-primary" name="submit">Save changes</button>-->
-  <!--      </div>-->
-      <!--</div>-->
-    <!--</div>-->
-  <!--</div>-->
+  <div id="ajax-js-widget-modal" class="modal fade">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">添加</h4>
+        </div>
+        <div class="modal-body">
+          <input class="form-control" name="name" type="text" placeholder="JS插件名称"/>
+          <input class="form-control" name="url" type="text" placeholder="URL"/>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" name="submit">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
   
   <script type="text/javascript">
     
-    // var ajax_js_widget = (function(){
-    //   var pt = ajax_js_widget.prototype;
-    //   var thiz;
+    var ajax_js_widget = (function(){
+      var pt = ajax_js_widget.prototype;
+      var thiz;
       
-    //   var root = $('#ajax-js-widget');
-    //   pt.d={
-    //     html: '',
-    //     clone: null
-    //   };
-    //   pt.v={
-    //     items: root.find('[name=items]'), // 插件项
-    //     modal: root.find('#ajax-js-widget-modal'),  // 模态
-    //     modal_submit: root.find('[name=submit]'),  // 模态按钮
-    //     jwname: root.find('[name=name]'), // js插件名输入框
-    //     url: root.find('[name=url]')
-    //   };
+      var root = $('#ajax-js-widget');
+      pt.d={
+        html: '',
+        clone: null
+      };
+      pt.v={
+        items: root.find('[name=items]'), // 插件项
+        modal: root.find('#ajax-js-widget-modal'),  // 模态
+        modal_submit: root.find('[name=submit]'),  // 模态按钮
+        jwname: root.find('[name=name]'), // js插件名输入框
+        url: root.find('[name=url]')
+      };
       
-    //   // 构造方法
-    //   function ajax_js_widget(){
-    //     thiz = this;
-    //     thiz.Init();
-    //   }
+      // 构造方法
+      function ajax_js_widget(){
+        thiz = this;
+        thiz.Init();
+      }
       
-    //   // 初始化
-    //   pt.Init = function(){
-    //     // 初始页面内容
-    //     pt.d.html = root.html();
-    //     pt.d.jqObj = root.clone(false,false);
+      // 初始化
+      pt.Init = function(){
+        // 初始页面内容
+        pt.d.html = root.html();
+        pt.d.jqObj = root.clone(false,false);
         
-    //     pt.v.url.val('http://');
-    //     // 事件
-    //     pt.Event.savebtn();
-    //   }
+        pt.v.url.val('http://');
+        // 事件
+        pt.Event.savebtn();
+      }
       
-    //   // 事件
-    //   pt.Event = {
-    //     // 模态保存按钮
-    //     savebtn: function(){
-    //       pt.v.modal_submit.click(function(){
-    //         // 检查用户是否登陆
-    //       zy.net.get('user/seislogin',function(msg){
-    //         saveFile();
-    //       },{},null,function(msg){
-    //         if(msg.ret === "1002"){
-    //           saveFile();
-    //         }
-    //       });
-    //       });
-    //     }
-    //   };
+      // 事件
+      pt.Event = {
+        // 模态保存按钮
+        savebtn: function(){
+          pt.v.modal_submit.click(function(){
+            // 检查用户是否登陆
+          zy.net.get('user/seislogin',function(msg){
+            saveFile();
+          },{},null,function(msg){
+            if(msg.ret === "1002"){
+              saveFile();
+            }
+          });
+          });
+        }
+      };
       
-    //   // 更新文件
-    //   function saveFile(){
-    //     zy.log('savefile')
-    //     // 添加的项
-    //     var add_item = '<h3><a href="'+pt.v.url.val()+'" target="_blank">'+pt.v.jwname.val()+'</a></h3>';
-    //     pt.v.items.append(add_item);
+      // 更新文件
+      function saveFile(){
+        zy.log('savefile')
+        // 添加的项
+        var add_item = '<h3><a href="'+pt.v.url.val()+'" target="_blank">'+pt.v.jwname.val()+'</a></h3>';
+        pt.v.items.append(add_item);
         
-    //     pt.d.jqObj.find('[name=items]').append(add_item);
-    //     // savefile参数
-    //     var params = {path:'/ajax/js-widget.html',content:pt.d.jqObj.html()};
+        pt.d.jqObj.find('[name=items]').append(add_item);
+        // savefile参数
+        var params = {path:'/ajax/js-widget.html',content:pt.d.jqObj.html()};
         
-    //     // 调接口
-    //     $.post('http://' + location.host + '/api/savefile', $.extend(true,params, zy.g.comm), function (msg)         {
-    //       msg = JSON.parse(msg);
-    //       if(msg.ret == 0){
-    //         publish2('/ajax/js-widget.html');
-    //         pt.v.modal.modal('hide');
-    //       }else{
-    //         zy.ui.msg('提示信息', msg.msg, 'e');
-    //       }
-    //     });
-    //   }
+        // 调接口
+        $.post('http://' + location.host + '/api/savefile', $.extend(true,params, zy.g.comm), function (msg)         {
+          msg = JSON.parse(msg);
+          if(msg.ret == 0){
+            publish2('/ajax/js-widget.html');
+            pt.v.modal.modal('hide');
+          }else{
+            zy.ui.msg('提示信息', msg.msg, 'e');
+          }
+        });
+      }
       
-    //   // 发布文件
-    //   function publish2(file){
-    //     $.post('http://' + location.host + '/api/publish2', $.extend(true,{up:[file]}, zy.g.comm), function (msg){
-    //       msg = JSON.parse(msg);
-    //       if(msg.ret == 0){
-    //         zy.ui.msg('提示信息', '文件保存成功', 's');
-    //         pt.v.modal.modal('hide');
-    //       }else{
-    //         zy.ui.msg('提示信息', msg.msg, 'e');
-    //       }
-    //     });
-    //   }
-    //   return ajax_js_widget;
-    // })();
-    // var ajax_js_widget_obj = new ajax_js_widget();
+      // 发布文件
+      function publish2(file){
+        $.post('http://' + location.host + '/api/publish2', $.extend(true,{up:[file]}, zy.g.comm), function (msg){
+          msg = JSON.parse(msg);
+          if(msg.ret == 0){
+            zy.ui.msg('提示信息', '文件保存成功', 's');
+            pt.v.modal.modal('hide');
+          }else{
+            zy.ui.msg('提示信息', msg.msg, 'e');
+          }
+        });
+      }
+      return ajax_js_widget;
+    })();
+    var ajax_js_widget_obj = new ajax_js_widget();
   </script>
-<!--</div>-->
+</div>

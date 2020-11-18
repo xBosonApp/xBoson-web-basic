@@ -1682,13 +1682,14 @@
                 data: {
                     key: {
                         name: 'name',
+                        isParent: 'isParent',
                         title: 'path'
                     },
                     simpleData: {
                         enable: false
                     },
                     keep: {
-                        parent: true
+                        parent: false
                     }
                 },
                 edit: {
@@ -1740,6 +1741,9 @@
 
             var _fileArray = [], _dirArray = [];
             $.each(_arr, function (_i, _v) {
+                if (0===Object.keys(_v.children).length) {
+                  _v.children = undefined;
+                }
                 if (_v.isParent)
                     _dirArray.push(_v);
                 else
@@ -1755,7 +1759,7 @@
         }
 
         function _dbClick(_e, _id, _node) {
-          // console.log(_node);
+          // console.log("_node.isParent=="+_node.isParent);//*********
           if(_node.isParent){
             var _tagert = $('#zy_tabs').closest('.row').children(':last');
                 _tagert.find('[type=text]').val(_node.path)
@@ -1765,7 +1769,7 @@
                     path: _node.path,
                     orgid: zy.g.comm.org
                 };
-          // console.log(_node.path)
+          // console.log("_node.path=="+_node.path)//*********
           var _a=_e.target;
         if(!$(_a).attr('title')){
             if (!_node)
@@ -1913,7 +1917,7 @@
 
         var _setting = _treeOption();
         _setting.callback = {
-            //   onClick : _click, //双击是两次单击.. 两个事件不可同时使用
+            // dblClickExpand : _click, //双击是两次单击.. 两个事件不可同时使用
             onExpand: _expand,
             onClick: _dbClick
         }
@@ -1926,6 +1930,7 @@
             _tree = $.fn.zTree.init(_ul, _setting, _data);
         } else
             _fromServer('/', function (_m) {
+// console.log("_m tree Data=="+JSON.stringify(_m));//*********
                 _tree = $.fn.zTree.init(_ul, _setting, _m);
             });
     }

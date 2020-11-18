@@ -64,7 +64,7 @@ rbac_ms_mgt01 = (function() {
         $.fn.zTree.init($("#apilist"), setting(), msg.result);
         var treeObj = $.fn.zTree.getZTreeObj("apilist");
         treeObj.expandAll(true);
-    }, {flg:0});
+    }, {flg:'0'});
   };
 
   /**
@@ -74,7 +74,7 @@ rbac_ms_mgt01 = (function() {
   function setting() {
     //点击树触发的事件
     function onclickTree(event, treeId, treeNode) {
-      if (treeNode.flg===0) {
+      if (treeNode.flg==='0') {
       //获取API帮助信息
         _m.appid=treeNode.aid;
         _m.moduleid=treeNode.pid;
@@ -198,7 +198,6 @@ rbac_ms_mgt01 = (function() {
   }
 
   function fullurl() {
-
     var atype = 'api';
     var host = location.host;
     var ds = '/ds/';

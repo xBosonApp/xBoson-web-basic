@@ -33,8 +33,8 @@
 		<!-- widget content -->
 		<div class="widget-body">
 
-			<div class="tabs-left">
-				<ul class="nav nav-tabs tabs-left" id="demo-pill-nav">
+			<div class="tabs">
+				<ul class="nav nav-tabs bordered" id="demo-pill-nav">
 					<li class="active">
 						<a href="#tab-r1" data-toggle="tab">
 						<span class="badge bg-color-blue txt-color-white"></span>
@@ -60,7 +60,7 @@
 				<div class="tab-content">
 					<div class="tab-pane active" id="tab-r1">
 					<fieldset>
-				      <legend>
+				      <legend style="padding-left:13px;padding-right:13px;margin-bottom:3px;">
                 <i class="fa fa-lightbulb-o">&nbsp;&nbsp;变更记录(月)</i>
               </legend>
   			      <table name="logtable_dt" class="table table-bordered table-striped"></table>
@@ -68,13 +68,9 @@
             </fieldset>
 					</div>
 					<div class="tab-pane" id="tab-r2">
-					  <div class="row">
               <div id="nouislider" class="noUiSlider"></div>
-              <fieldset>
-                <legend>
-                  <i id="tree_title" class="fa fa-lightbulb-o title_strong"></i>
-                </legend>
-                <div id="mdms_dataductD_zydm_ztree" class="col-xs-4">
+              <fieldset style="padding-top:13px;">
+                <div id="mdms_dataductD_zydm_ztree" class="col-xs-4" style="padding-bottom:13px;">
                   <div class="well" style="overflow-x:hidden">
                     <fieldset>
   							    	<legend>值域代码
@@ -124,10 +120,8 @@
                   <div id="mdms_datadictD_zydm_table"></div>
                 </div>
               </fieldset>
-              
-            </div>
 					</div>
-					<div class="tab-pane" id="tab-r3">
+					<div class="tab-pane" id="tab-r3" style="padding-top:13px;">
 					  <form class="smart-form" name="mdms_datadictD_czjl_form" onsubmit="return false;" style="z-index:2">
   				    <section class="col col-xm-4 col-sm-4">
   							<div class="input-group">
@@ -165,13 +159,14 @@
   						</section>
   			  </form>
     			  <div class="table-responsive">
-    			    <div class="pull-right" style="margin-top: 35px;margin-right: 15px;"><b name="total_count"></b></div>
+    			    <div class="pull-right" style="margin-top: 35px;margin-right:15px;"><b name="total_count"></b></div>
             	<table name="mdms_datadict_czjl_table" class="table table-bordered table-striped">
             	</table>
             </div>
             <div id="mdms_datadict_czjl_pagination"></div>
 					</div>
-					<div class="tab-pane" id="tab-r4">
+					<div class="tab-pane" id="tab-r4" style="padding-top:13px;">
+					  <fieldset>
 					  <div class="col-xs-12 col-sm-6">
 					    <pre>
               <h6>API：</h6>
@@ -199,6 +194,7 @@
               charset：字符集（非必需）
             </pre>
 					  </div>
+					  </fieldset>
 					</div>
 				</div>
 			</div>
