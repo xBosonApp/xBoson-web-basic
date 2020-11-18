@@ -98,6 +98,10 @@ var str = 'w6uEV4G9RZW9-uS1Kr-Sew';
 var uuidHandle = uuid.unzip(str);
 ```
 
+## Bytes uuid.getBytes(uuidHandle)
+
+返回 uuid 的原始字节对象
+
 
 # UUID 的版本
 
