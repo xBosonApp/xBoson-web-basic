@@ -36,6 +36,10 @@
         });
         thiz.select2('val', val);
       });
+      
+      xb.on(xb.events.PAGE_DESTROY, null, function() {
+        thiz.select2('destroy');
+      });
     });
   </script>
 </once>

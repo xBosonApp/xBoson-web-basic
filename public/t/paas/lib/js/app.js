@@ -1434,6 +1434,7 @@ function pageSetUp() {
   if ($.device === "desktop") {
     // is desktop
     Console.log("pageSetUp = desktop");
+    // $(".tip-yellowsimple").remove()
     // activate tooltips
     $("body [title]").poshytip();
     // activate tooltips

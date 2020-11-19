@@ -1,5 +1,6 @@
 <never>
   用 post 方法请求 api, 作为按钮子节点; 返回数据除了弹出提示, 并将数据发送到消息总线.
+  在执行 post 方法之前, 从按钮冒泡一个 'beforeSubmit' 事件.
   参数:
     [必须] api, app, mod, 
     [可选] id: 消息id, formid: 从指定的表单接收参数.
@@ -20,6 +21,7 @@
     var id     = data.data('id');
     
     button.click(function() {
+      button.trigger("beforeSubmit");
       if (! form.valid()) 
         return;
         

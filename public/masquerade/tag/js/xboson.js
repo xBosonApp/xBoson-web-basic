@@ -183,6 +183,7 @@ function sendToEachParents(jdata, type, data) {
 function onPageDestroy(newPage) {
   ebus = {};
   dataPool = {};
+  $(".tip-yellowsimple").remove();
   xb.on(events.PAGE_DESTROY, null, onPageDestroy);
 }
 
@@ -571,6 +572,7 @@ function select2fromApi(jobj) {
     if (!val) return;
     var q = {};
     q[id_field] = jobj.val();
+    if (zy.debug) q.s = 'd';
     
     $.get(url, q, function(r) {
       var arr = r && (r[result_field] || r.data || r.result);

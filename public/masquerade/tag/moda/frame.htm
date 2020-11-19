@@ -1,5 +1,5 @@
 <never>
-  模态对话框框架.
+  模态对话框框架. 在关闭后冒泡 'closed' 事件
   参数:
     [可选] id, class, width - css 样式的宽度
     [必填] title
@@ -53,10 +53,13 @@
     function close() {
       if (isclose) return;
       isclose = true;
+      frame.trigger("closed");
+      var mf = frame.parent(".moda_frame");
       frame.removeData('bs.modal');
       frame.empty();
       frame.remove();
       xb.emit('CLOSED', id, frame);
+      mf.remove();
     }
   });
   </script>
