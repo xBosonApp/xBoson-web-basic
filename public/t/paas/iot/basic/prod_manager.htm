@@ -40,14 +40,16 @@ jQuery(function($) {
     initTree(x.data);
   });
   
+  
   function open(url, cb) {
     zy.net.loadHTML(url, v_content, function(data, errMsg, thrownError) {
       if (errMsg || thrownError) {
         v_content.html(errMsg || thrownError);
       }
-      cb(v_content);
+      cb && cb(v_content);
     });
   }
+  
   
   function initTree(data) {
     var option = {
@@ -67,7 +69,7 @@ jQuery(function($) {
         simpleData: {
           enable: true, //是否用简单数据
           idKey: '_id', //对应json数据中的ID
-          pIdKey: 'scenes', //对应json数据中的父ID
+          pIdKey: '_pid', //对应json数据中的父ID
           rootPId: 0 // 用于修正根节点父节点数据，即 pIdKey 指定的属性值
         }
       },
@@ -87,6 +89,8 @@ jQuery(function($) {
       load_prod,
       add_prod_method,
       create_new_prod,
+      open_address,
+      open_device,
     };
     
     data.forEach(function(x) {
@@ -103,25 +107,25 @@ jQuery(function($) {
       if (!current_scene) return;
       current_scene.prod_data_loaded = false;
       tree.removeChildNodes(current_scene);
-      load_prod(null, null, current_scene);
+      load_prod(current_scene);
     });
     
     
     function onClick(e, id, node) {
       if (node.open_method) {
-        tree_method[node.open_method](e, id, node);
+        tree_method[node.open_method](node, id, e);
       }
     }
     
     
     function onExpand(e, id, node) {
       if (node.expand_method) {
-        tree_method[node.expand_method](e, id, node);
+        tree_method[node.expand_method](node, id, e);
       }
     }
     
     
-    function load_prod(e, id, node) {
+    function load_prod(node) {
       if (node.prod_data_loaded) return;
       node.prod_data_loaded = true;
       
@@ -138,13 +142,13 @@ jQuery(function($) {
     
     function addHoverDom(id, node) {
       if (node.add_hover) {
-        tree_method[node.add_hover](id, node);
+        tree_method[node.add_hover](node, id);
       }
     }
     
     
-    function create_new_prod(id, node) {
-      if (node.open_method != 'expand_scenes') return;
+    function create_new_prod(node) {
+      // if (node.open_method != 'expand_scenes') return;
       var n = $('#'+ node.tId +"_a");
       if (n.find('.hoverdom').length) return;
       
@@ -166,26 +170,44 @@ jQuery(function($) {
     }
     
     
-    function open_prod(e, id, node) {
+    function open_prod(node) {
       current_scene = tree.getNodeByTId(node.parentTId);
       xb.save_data('datatable0', node);
-      open('iot/basic/prod_edit.htm', function(v) {});
+      open('iot/basic/prod_edit.htm');
     }
     
     
-    function expand_scenes(e, id, node) {
+    function expand_scenes(node) {
       tree.expandNode(node, true, false, true, true);
     }
     
     
-    function add_prod_method(e, id, node) {
+    function add_prod_method(node) {
       if (node.add_prod_method) return;
       node.add_prod_method = true;
+      
       tree.addNodes(node, [
-        { name: '设备账户', _id: 3 },
-        { name: '设备管理', _id: 1 },
-        { name: '脚本管理', _id: 2 },
+        { name: '地址/账户', _id: node._id, pid: node.pid, scenes: node.scenes,
+          open_method: 'open_address' },
+        { name: '设备管理',  _id: '', pid: node.pid, scenes: node.scenes,
+          open_method: 'open_device' },
+        { name: '进程管理',  _id: node._id, },
+        { name: '事件',  _id: node._id, },
+        { name: '命令',  _id: node._id, },
       ]);
+    }
+    
+    
+    function open_address(node) {
+      xb.save_data('datatable0', node);
+      open('iot/basic/address_edit.htm');
+    }
+    
+    
+    function open_device(node) {
+    console.log(node)
+      xb.save_data('datatable0', node);
+      open('iot/basic/dev_list.htm');
     }
   }
 });

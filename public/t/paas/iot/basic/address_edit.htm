@@ -1,0 +1,116 @@
+<!-- Create By xBoson System -->
+<div>
+  <h5>消息地址管理</h5>
+  <style>
+    .desc { min-width: 130px; display: inline-block; }
+    .addr { color: #339; }
+    .label { height: 19px; }
+  </style>
+  <form id='address_message_template' class='hide'>
+    <div class='send'>
+      <form:checkbox name='send'></form:checkbox>
+    </div>
+    <div class='recv'>
+      <form:checkbox name='recv'></form:checkbox>
+    </div>
+    <div class='info'>
+      <div class=''>
+        <span class='desc'></span>
+        <span class='addr'></span>
+      </div>
+    </div>
+  </form>
+  
+  <ui:form id='address_message_form' class='update_form'>
+    <mp:loaddata id='datatable0'/>
+    
+    <fieldset class='info'>
+      <input type='hidden' name='_id'/>
+      <input type='hidden' name='scenes'/>
+    </fieldset>
+    
+    <fieldset class='send'>
+      <h4>可写入消息的设备账户</h4>
+    </fieldset>
+    
+    <fieldset class='recv'>
+      <h4>可接收消息的设备账户</h4>
+    </fieldset>
+    
+    <footer>
+      <moda:cancel/>
+      <moda:ok>
+        <form:post app='2e617eb7e1744bbcb6a0518fa85a84a5' mod='basic' api='addr_edit'>
+        </form:post>
+      </moda:ok>
+    </footer>
+  </ui:form>
+  
+<script>
+jQuery(function($) {
+  var root = $("#address_message_form");
+  var tpl = $("#address_message_template");
+  tpl.find("script").remove();
+  
+  var recv_tpl = tpl.find(".recv:not(script)").html();
+  var send_tpl = tpl.find(".send:not(script)").html();
+  var info_tpl = tpl.find(".info").html();
+  var recv_tar = root.find(".recv");
+  var send_tar = root.find(".send");
+  
+  xb.api('2e617eb7e1744bbcb6a0518fa85a84a5', 'basic', 'listuser', {enb:1}, function(x) {
+    if (x.data.length < 1) {
+      var msg = "没有可用的用户";
+      recv_tar.html(msg);
+      send_tar.html(msg);
+      return;
+    }
+    
+    x.data.forEach(function(u) {
+      var inf = u.info;
+      recv_tar.append(new_ck(recv_tpl, u._id, inf));
+      send_tar.append(new_ck(send_tpl, u._id, inf));
+    });
+  });
+  
+  var p = { _id: root.find("[name=_id]").val() };
+  xb.api('2e617eb7e1744bbcb6a0518fa85a84a5', 'basic', 'addr_get', p, function(x) {
+    for (var n in x.data.send) {
+      root.find(".send [value='"+ n +"']").prop("checked", true);
+    }
+    for (var n in x.data.recv) {
+      root.find(".recv [value='"+ n +"']").prop("checked", true);
+    }
+    update_addr_info(x.data.fmt, x.mq);
+  });
+  
+  
+  function update_addr_info(fmt, mq) {
+    in_addr("设备发送数据地址",   [fmt, '设备ID', 'data']);
+    in_addr("SAAS接收数据地址",   [fmt, '+',      'data']);
+    in_addr("处理后数据发送地址", [fmt, '设备ID', 'save']);
+    in_addr("设备接收命令地址",   [fmt, '设备ID', 'cmd']);
+    in_addr("设备发送状态地址",   [fmt, '设备ID', 'state']);
+    in_addr("设备发送消息地址",   [fmt, '设备ID', 'event']);
+    in_addr("MQTT 服务器",        [mq.mqhost, mq.mqport], ':');
+  }
+  
+  
+  function new_ck(tpl, username, info) {
+    var r = $(tpl);
+    r.find(".label").text(info);
+    r.find(".form-control").text(username);
+    r.find(":checkbox").val(username);
+    return r;
+  }
+  
+  
+  function in_addr(desc, addr, sp) {
+    var i = $(info_tpl);
+    i.find(".desc").html(desc);
+    i.find(".addr").html(addr.join(sp || "/"));
+    root.find(".info").append(i);
+  }
+});
+</script>
+</div>

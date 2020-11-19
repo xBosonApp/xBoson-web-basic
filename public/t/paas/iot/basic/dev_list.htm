@@ -1,0 +1,39 @@
+<!-- Create By xBoson System -->
+<div id='idid' class='list'>
+  <h5>设备列表</h5>
+  
+  <ui:form id='listform'>
+    <form:text name='devid' label='设备ID'/>
+    <input type='hidden' name='scenes'/>
+    <input type='hidden' name='pid'/>
+    <mp:loaddata id='datatable0'/>
+    
+    <form:btn_toolbar>
+      <form:group>
+        <form:submit label='查询'/>
+        <form:reset/>
+      </form:group>
+      <form:group>
+        <form:button label='添加' icon='magic'>
+          <moda:open url='iot/basic/dev_add.htm'/>
+        </form:button>
+        <form:button label='详情' icon='edit'>
+          <mp:usability recvid='datatable1'/>
+          <moda:open url='iot/basic/dev_edit.htm'/>
+        </form:button>
+      </form:group>
+    </form:btn_toolbar>
+  </ui:form>
+  
+  <mp:savedata type='SELECT_TABLE_ROW' id='datatable1'/>
+  
+  <table:api app='2e617eb7e1744bbcb6a0518fa85a84a5' mod='basic' 
+      api='dev_list' form='#listform' id='datatable1'>
+    <table:mapper label='设备ID' key='devid'/>
+    <table:mapper label='状态' key='state'/>
+    <table:mapper label='数据量' key='dc'/>
+    <table:mapper label='数据时间' key='dd'/>
+    <table:mapper label='修改时间' key='md'/>
+    <table:mapper label='创建时间' key='cd'/>
+  </table:api>
+</div>
