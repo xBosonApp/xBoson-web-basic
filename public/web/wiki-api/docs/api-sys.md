@@ -91,6 +91,13 @@ POST Body 中的数据将被解析成 js 对象并绑定在 requestJson 属性�
 返回 http 请求头域.
 
 
+## sys.request.getMember(string:name)
+
+该方法与 `sys.request[name]` 相同的效果, 不对参数做任何转换和检查;
+当 http 参数中有特殊字符时, `sys.request[name]` 会返回 null, 
+此时用 `sys.request.getMember(name)` 可以返回正确结果.
+
+
 ## sys.request.body([int: limit])
 
 以 Buffer 对象的形式返回 http body 的二进制数据.  

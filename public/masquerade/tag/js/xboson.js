@@ -543,6 +543,7 @@ function apiURL(jobj, _app, _mod, _api) {
 
 //
 // 从 api 返回的数据组装为 selet2, 支持标准分页参数.
+// 设置 val() 之后, 触发 updateval 事件可动态修改选中值
 // select doc: /xboson/face/t/paas/lib/js/plugin/select2/Select2-3.4.8.html
 //
 function select2fromApi(jobj) {
@@ -564,6 +565,18 @@ function select2fromApi(jobj) {
       results : filterResult,
     },
     initSelection: initSelection,
+  });
+  
+  jobj.on("updateval", function() {
+    val = jobj.val();
+    initSelection(null, function(d) {
+      var option = new Option(d.text, d.id, true, true);
+      jobj.append(option).trigger('change');
+      jobj.trigger({
+        type: 'select2:select',
+        params: { data: d },
+      });
+    });
   });
   return jobj;
   

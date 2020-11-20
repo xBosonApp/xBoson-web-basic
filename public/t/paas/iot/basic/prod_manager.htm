@@ -91,6 +91,7 @@ jQuery(function($) {
       create_new_prod,
       open_address,
       open_device,
+      open_process_manager,
     };
     
     data.forEach(function(x) {
@@ -187,11 +188,12 @@ jQuery(function($) {
       node.add_prod_method = true;
       
       tree.addNodes(node, [
-        { name: '地址/账户', _id: node._id, pid: node.pid, scenes: node.scenes,
+        { name: '地址/账户/处理器', _id: node._id, pid: node.pid, scenes: node.scenes,
           open_method: 'open_address' },
         { name: '设备管理',  _id: '', pid: node.pid, scenes: node.scenes,
           open_method: 'open_device' },
-        { name: '进程管理',  _id: node._id, },
+        { name: '线程管理',  _id: node._id,
+          open_method: 'open_process_manager' },
         { name: '事件',  _id: node._id, },
         { name: '命令',  _id: node._id, },
       ]);
@@ -205,9 +207,14 @@ jQuery(function($) {
     
     
     function open_device(node) {
-    console.log(node)
       xb.save_data('datatable0', node);
       open('iot/basic/dev_list.htm');
+    }
+    
+    
+    function open_process_manager(node) {
+      xb.save_data('datatable0', node);
+      open("iot/basic/process_manager.htm");
     }
   }
 });

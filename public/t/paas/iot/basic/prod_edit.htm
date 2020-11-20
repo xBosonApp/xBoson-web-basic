@@ -37,7 +37,7 @@
   </section>
   
   <a href='#' class='delete'>删除</a>
-  <hr style='display: block; width: 100%'/>
+  <hr class='linehr'/>
   </div>
 </div>
 
@@ -62,7 +62,7 @@
   </form:text>
   
   <a href='#' class='delete'>删除</a>
-  <hr style='display: block; width: 100%'/>
+  <hr class='linehr'/>
   </div>
 </div>
 
@@ -84,7 +84,22 @@
   </form:select>
   
   <a href='#' class='delete'>删除</a>
-  <hr style='display: block; width: 100%'/>
+  <hr class='linehr'/>
+  </div>
+</div>
+
+<div class='prod_event_prototype'>
+  <div class='select_group'>
+    <form:text name='e_key' label='事件主键' width='5'>
+      <vali:string min='1' max='99'/>
+    </form:text>
+    
+    <form:text name='e_val' label='说明' width='6'>
+      <vali:string min='1' max='99'/>
+    </form:text>
+    
+    <a href='#' class='delete'>删除</a>
+    <hr class='linehr'/>
   </div>
 </div>
 
@@ -99,7 +114,7 @@
     <input type='hidden' name='_id'/>
     <input type='hidden' name='scenes'/>
     
-    <form:text name='name' label='名称' tooltip='最少1字符' width='6'>
+    <form:text name='name' label='名称' tooltip='最少1字符' width='8'>
       <vali:string min='1' max='99'/>
     </form:text>
     
@@ -107,17 +122,12 @@
       <form:readonly/>
     </form:text>
     
-    <form:api_select2 name='script' label='脚本' tooltip='脚本可以空' width='6'
-        app='2e617eb7e1744bbcb6a0518fa85a84a5' mod='basic' api='scriptlist'
-        text_field='_id' id_field='_id'>
-    </form:api_select2>
+    <form:textarea name='desc' label='说明' width='8' rows='5'>
+    </form:textarea>
     
     <form:text name='md' label='修改时间' width='4'>
       <form:readonly/>
     </form:text>
-    
-    <form:textarea name='desc' label='说明' width='10' rows='5'>
-    </form:textarea>
   </fieldset>
   
   <style>
@@ -127,7 +137,8 @@
     .new_button {
       width: 90%; display: block; text-align: right;
     }
-    hr {
+    .linehr {
+      display: block; width: 100%;
       margin-bottom: 10px !important; border-style: dashed;
     }
     .select_group:hover {
@@ -148,9 +159,12 @@
   <fieldset id='prod_cmds'>
     <h4>命令列表</h4> <br/>
   </fieldset>
-  <div style='height: 30px;'>
   <a href='#' id='add_new_prod_cmd' class='new_button'>[插入命令]</a>
-  </div>
+  
+  <fieldset id='prod_events'>
+    <h4>事件字典</h4> <br/>
+  </fieldset>
+  <a href='#' id='add_new_prod_event' class='new_button'>[插入事件]</a>
   
   <footer>
     <moda:cancel/>
@@ -184,6 +198,12 @@ jQuery(function($) {
     button   : "#add_new_prod_cmd"
   });
   
+  var event = dyn_form({
+    template : ".prod_event_prototype",
+    target   : "#prod_events",
+    button   : "#add_new_prod_event",
+  });
+  
   var formdata = xb.load_data("datatable0");
   formdata.meta.forEach(function(x) {
     meta.create(x, "m_");
@@ -196,6 +216,10 @@ jQuery(function($) {
   formdata.cmd.forEach(function(x) {
     cmd.create(x, "c_");
   });
+  
+  for (var k in formdata.event) {
+    event.create({ key: k, val: formdata.event[k] }, "e_");
+  }
   
   
   function dyn_form(conf) {
