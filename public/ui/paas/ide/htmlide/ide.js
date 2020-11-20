@@ -1116,7 +1116,7 @@ function NewIDE(roleid) {
     var _savebtn = $('#widget-grid').find('header .glyphicon-saved');
     
     function _setValue(_str, _flg, filename) {
-        console.log(new Error());
+        // console.log(new Error());
       // J.ym 修正 undo 操作将代码清除.
       if (editor.getValue().trim() == '') {
         setTimeout(function() {

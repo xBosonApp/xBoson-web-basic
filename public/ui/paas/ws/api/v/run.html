@@ -1,22 +1,31 @@
-<link rel="stylesheet" type="text/css" href="projectmanagement/misc/core1.css" />
-  <link rel="stylesheet" type="text/css" href="projectmanagement/misc/core.css" />
-  <script type="text/javascript" src="projectmanagement/misc/core.js"></script>
-  <!-- jReject -->
-  <link rel="stylesheet" type="text/css" href="projectmanagement/misc/jquery.reject.css" />
-  <script type="text/javascript" src="projectmanagement/misc/jquery.reject.js"></script>
-  <script type="text/javascript" src="projectmanagement/misc/jquery.reject.360.js"></script>
-
- <div class="modal" id="ide_run" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+<!--<link rel="stylesheet" type="text/css" href="projectmanagement/misc/core1.css" />-->
+<!--<link rel="stylesheet" type="text/css" href="projectmanagement/misc/core.css" />-->
+<!--<script type="text/javascript" src="projectmanagement/misc/core.js"></script>-->
+<!-- jReject -->
+<link rel="stylesheet" type="text/css" href="projectmanagement/misc/jquery.reject.css" />
+<script type="text/javascript" src="projectmanagement/misc/jquery.reject.js"></script>
+<script type="text/javascript" src="projectmanagement/misc/jquery.reject.360.js"></script>
+<style>
+  .content-green {
+    border-color: #8ac38b;
+  }
+  .header-green {
+    border-color: #8ac38b;
+    color: #356635;
+    background: #cde0c4;
+  }
+</style>
+<div class="modal" id="ws_api_v_run" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
   <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
+    <div class="modal-content content-green">
+      <div class="modal-header header-green">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-          &times;
+          <i class="fa fa-times"></i>
         </button>
-        <h4 class="modal-title">API 测试</h4>
+        <h4 class="modal-title"><i class="fa fa-bug"></i> API 测试</h4>
       </div>
       <div class="modal-body no-padding">
-      <form method="post" onsubmit="return false;" class="smart-form">
+        <form method="post" onsubmit="return false;" class="smart-form">
           <fieldset>
             <div class="row">
               <section class="col col-6">
@@ -32,23 +41,15 @@
                 </label>
               </section>
             </div>
-            
           </fieldset>
-         
-        </form>
-      <div>
-              <div class="row">
-                <section name="parameters"  class="col-sm-2" style="margin-left: 10px">
-                  参数列表<i class="fa fa-fw fa-plus-circle txt-color-green" name="addkey" style="cursor:pointer"></i>
-                </section>
-              </div>
-              <div id="api_assist_2">
-              
-              </div>
-            </div>
-        <form method="post" onsubmit="return false;" class="smart-form">
           <fieldset>
-            
+            <h5 class="col-md-3">请求参数：</h5>
+            <section name="parameters">添加参数 <i class="fa fa-fw fa-plus-circle txt-color-green" name="addkey" style="cursor:pointer"></i>
+            </section>
+            <hr class="simple">
+            <div id="ws_api_v_run_api_assist" class="col-md-12"></div>
+      		</fieldset>
+          <fieldset style="display:none;">
             <div style="display:none;">
               <section>
                 <label>参数</label>
@@ -57,60 +58,28 @@
                 </label>
               </section>
             </div>
-            
-            <div>
-              <section>
-                <label class="label">完整URL</label>
-                <label class="textarea">
-                  <!--<p name="fullurl"></p>-->
-                  <textarea style="border: 0px;background:white;cursor: default;padding:0px;overflow-y: hidden;height:20px;" onpropertychange="this.style.height = this.scrollHeight + 'px';" oninput="this.style.height = this.scrollHeight + 'px';" readonly="readonly" name="fullurl"></textarea>
-                </label>
-              </section>
-            </div>
           </fieldset>
-        </form>
-        <div class="row">
-          <div class="col-xs-2" style="margin-left:13px">
-            返回结果
-          </div>
-          <div class="col-xs-2" style="margin-left:13px">
-            <button class="btn btn-default btn-sm" name="switch">Tree/文本</button>
-          </div>
-          <!--<div class="col-xs-2" style="margin-left:13px">-->
-            <!--<button name="api_help" class="btn btn-sm btn-primary">API 帮助</button>-->
-          <!--  <textarea style="display:none" name="help_info"></textarea>-->
-          <!--</div>-->
-          <div class="col-xs-2" style="margin-left:13px">
-            <button name="runApi" class="btn btn-sm btn-primary">测试</button>
-          </div>
-        </div>
-            <div class="row">
-              <!--<section class="col col-10">-->
-              <!--  <label class="label">接口返回</label>-->
-              <!--  <lable class="textarea has-warning">-->
-                  <!--<textarea style="border: 0px;background:white;cursor: default;padding:0px;overflow-y: hidden;height:20px;" onpropertychange="this.style.height = this.scrollHeight + 'px';" oninput="this.style.height = this.scrollHeight + 'px';" readonly="readonly" name="apiReturn"></textarea>style="margin-left: 13px"-->
-                <div class="col-md-12">
-                  <div id="jsoneditor" style="width:100%;"></div>
-                </div>
-                <div class="col-md-12">
-                  <div id="jsonformatter" style="display:none;height:400px;width:100%;"></div>
-                </div>
-                <!--</lable>-->
-              <!--</section> -->
-              <!--<section class="col col-2">-->
-              <!--  <lable class="input has-warning">-->
-                  
-              <!--  </lable>-->
-              <!--</section>-->
+          <fieldset>
+            <h5>完整URL</h5>
+            <label class="textarea">
+              <textarea style="border: 0px;background:white;cursor: default;padding:0px;overflow-y: hidden;height:20px;" onpropertychange="this.style.height = this.scrollHeight + 'px';" oninput="this.style.height = this.scrollHeight + 'px';" readonly="readonly" name="fullurl"></textarea>
+            </label>
+      		</fieldset>
+          <fieldset>
+            <h5 class="col-md-6">返回结果：【JSON】</h5>
+            <button type="button" name="runApi" class="btn btn-green btn-sm">　测　试　</button>
+            <hr class="simple">
+            <div class="form-group has-warning">
+              <div class="col-md-12">
+                <div id="ws_api_v_run_jsoneditor"></div>
+              </div>
             </div>
-
-        <form method="post" onsubmit="return false;" class="smart-form">
+      		</fieldset>
           <footer>
-            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-            <button name="runSubmit" class="btn btn-primary">保存</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">关　闭</button>
+            <!--<button name="runSubmit" class="btn btn-green">保　存</button>-->
           </footer>
         </form>
-
       </div>
     </div>
   </div>
@@ -119,7 +88,7 @@
 <script>
   function RunApi(node,help_info){
     
-    var modal = $('#ide_run');
+    var modal = $('#ws_api_v_run');
     var appid = node.appid,
         modid = node.moduleid,
         apiid = node.apiid;
@@ -131,16 +100,17 @@
     var help = null;
     var rowList = {};
     
-    //editor
-		var editor = new jsoneditor.JSONEditor(modal.find('#jsoneditor').get(0), {
-		  mode : 'viewer',
-			change: function () {
-				app.lastChanged = editor;
-			}
-		});
-		// formatter
-		var formatter = new jsoneditor.JSONFormatter(modal.find('#jsonformatter').get(0), {});
-		
+    // JsonEditor初始化,可以两种只读模式切换
+    var container = document.getElementById('ws_api_v_run_jsoneditor');
+    var options = {
+      mode: 'view',
+      modes: ['view', 'preview'],
+      onError: function (err) {
+        alert(err.toString());
+      }
+    };
+    var editor = new JSONEditor(container, options); 
+
 		// window.ee = editor;
 		modal.modal('show');
     
@@ -207,7 +177,7 @@
       
       var h4='<h4><i name="removekey" class="fa fa-fw fa-times-circle txt-color-red" style="display:none"></i></h4>'
       var _c = $('<div>').addClass('row').attr('_index',rk);
-      modal.find('#api_assist_2').append(_c);
+      modal.find('#ws_api_v_run_api_assist').append(_c);
       
       var rowdata={
         key:createkey(_c),
@@ -351,7 +321,7 @@
       // $('[name=help_info]').val(help_info);
       // modal.find('[name=api_help]').click(function(e){
       //   zy.net.loadHTML('projectmanagement/api_assist.html',$('#modal_container3'),function(){
-      //     $('#ide_run').modal('hide');
+      //     $('#ws_api_v_run').modal('hide');
       //     $('#api_assist').modal('show');
       //     var apiinfo;
           
@@ -366,16 +336,7 @@
       //     api_help.init(apiinfo,$('[name=help_info]'));
       //   });
       // });
-      
-      modal.find('[name=switch]').click(function(e){
-        if(modal.find('#jsoneditor').is(':hidden')){
-          modal.find('#jsoneditor').show();
-          modal.find('#jsonformatter').hide();
-        }else{
-          modal.find('#jsoneditor').hide();
-          modal.find('#jsonformatter').show();
-        }
-      });
+
       //  保存 API帮助
       modal.find('[name=runSubmit]').click(function(e){
         var _tools = {
@@ -408,9 +369,9 @@
         zy.g.am.mod='ZYMODULE_IDE'
         zy.net.get('api/getapiinfo',function(msg){
           var data = msg.result[0];
-          var r_param_vals = $('#ide_run [name=value]');
+          var r_param_vals = $('#ws_api_v_run [name=value]');
           var r_param = [];
-          $('#ide_run [name=key]').each(function(index,el){
+          $('#ws_api_v_run [name=key]').each(function(index,el){
             r_param[index] = {};
             r_param[index].key = $(el).html();
             r_param[index].value = r_param_vals.eq(index).html();
@@ -435,8 +396,9 @@
           } 
           else if (r_param.length){
             var param_help_info = {
-              api_classify:$('#ide_run').find('[name=apitype]').val(),
-              requests:$('#ide_run').find('[name=ajaxtype]').val(),
+              api_classify:$('#ws_api_v_run').find('[name=apitype]').val(),
+              requests:$('#ws_api_v_run').find('[name=ajaxtype]').val(),
+              result:editor.get(),
               param:r_param,
             };
             _o.r_param.help_info = JSON.stringify(param_help_info);
@@ -541,8 +503,7 @@
           });
         }
         editor.set(msg);
-        formatter.set(msg);
-        
+
         // $('[name=apiReturn]').val(msg);
         // $('[name=apiReturn]').trigger('input');
       }

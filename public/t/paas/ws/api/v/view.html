@@ -1,4 +1,5 @@
 <!-- Create By xBoson System -->
+<link rel="stylesheet" type="text/css" media="screen" href="/xboson/face/web/cdn/jsoneditor/9.1.2/jsoneditor.green.min.css">
 <style>
   .btn-blue {
     color: #fff!Important;
@@ -90,16 +91,6 @@
         <!-- add: non-hidden - to disable auto hide -->
         <span class="input-group-addon dropdown-toggle btn btn-green" id="ws_api_v_view_requests" data-toggle="dropdown"> GET <i class="fa fa-caret-down"></i></span>
         <ul class="dropdown-menu pull-left request-method-update" role="menu">
-          <li class="active">
-            <a href="javascript:void(0);"><i class="fa fa-circle txt-color-green"></i> GET</a>
-          </li>
-          <li>
-            <a href="javascript:void(0);"><i class="fa fa-circle txt-color-red"></i> POST</a>
-          </li>
-          <li class="divider"></li>
-          <li>
-            <a href="javascript:void(0);"><i class="fa fa-circle txt-color-orange"></i> PUT</a>
-          </li>
         </ul>
         <span class="input-group-addon btn btn-c-green">
           <span class="dropdown-toggle" id="ws_api_v_view_auth" data-toggle="dropdown"><i class="fa fa fa-eye"></i> <i class="fa fa-caret-down"></i></span>
@@ -107,12 +98,13 @@
             <li class="active">
               <a href="javascript:void(0);"><i class="fa fa-eye"></i> 认证</a>
             </li>
+            <li class="divider"></li>
             <li>
               <a href="javascript:void(0);"><i class="fa fa-eye-slash"></i> 匿名</a>
             </li>
           </ul>
         </span>
-        <input class="form-control" role="menu" type="text" id="ws_api_v_view_uri" value="">
+        <input class="form-control" role="menu" type="text" id="ws_api_v_view_url" value="">
         <span class="input-group-addon btn-c-green" role="menu" id="ws_api_v_view_test" title="运行测试"><i class="fa fa-bug"></i> Run Test</span>
       </div>
     </div>
@@ -149,11 +141,23 @@
           </div>
         </div>
   		</fieldset>
+      <fieldset>
+        <legend style="margin-bottom:6px;padding-top:22px;">返回数据参考：【JSON】</legend>
+        <div class="form-group has-warning">
+          <div class="col-md-12">
+            <div id="ws_api_v_view_jsoneditor"></div>
+          </div>
+        </div>
+  		</fieldset>
     </form>
   </div>
+<div class="row">
+  <hr class="simple">
+</div>
 
 <div id="ws_api_v_pagination"></div>
 <div id="ws_api_v_test_modal"></div>
+<script src="/xboson/face/web/cdn/jsoneditor/9.1.2/jsoneditor.min.js"></script>
 <script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
 <script src="ws/api/v/view.js"></script>
 <script>
