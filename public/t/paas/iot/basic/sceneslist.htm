@@ -1,6 +1,7 @@
 <!-- Create By xBoson System -->
 <ui:grid id='idid' class='list' title='场景管理'>
   <ui:form id='listform'>
+    <mp:clear_event type='TABLE_UPDATE_REQ' id='datatable0'/>
     <form:text name='name' label='场景名'/>
     <form:status/>
     
@@ -16,6 +17,14 @@
         <form:button label='详情' icon='edit'>
           <mp:usability recvid='datatable0'/>
           <moda:open url='iot/basic/scenes_edit.htm'/>
+        </form:button>
+        
+        <form:button label='删除' icon='trash-o'>
+          <mp:usability recvid='datatable0'/>
+          <mp:delete app='2e617eb7e1744bbcb6a0518fa85a84a5' primary='_id'
+              mod='basic' api='scene_remove' dataid='datatable0'>
+            <mp:send type='TABLE_UPDATE_REQ' id='datatable0'/>
+          </mp:delete>
         </form:button>
       </form:group>
     </form:btn_toolbar>
