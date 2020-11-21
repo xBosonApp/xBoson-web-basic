@@ -7,6 +7,7 @@
     [可选] id: 表格 id, class : 表格的 class,
            dataName: 在 ajax 返回结果集中的数据属性名称, 默认 'result' 或 'data'.
            hidepage: 为 1 时将不显示分页组件
+           sort: 用','号分割的列名表, 按优先级排序
 </never>
 
 <div class="dataTables_wrapper">
@@ -19,7 +20,7 @@
   </div>
   <style> td { word-break: break-all; min-width: 80px; } </style>
   <table id="###id###" class="###class### table table-bordered table-striped auto_tag_table_api"
-          data-api='###api###' data-app='###app###' data-mod='###mod###' 
+          data-api='###api###' data-app='###app###' data-mod='###mod###' data-sort='###sort###'
           data-form='###form###' data-dataName='###dataName###' data-hidepage='###hidepage###'>
     <thead>
       <tr>

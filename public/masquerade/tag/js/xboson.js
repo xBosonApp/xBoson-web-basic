@@ -52,6 +52,7 @@ var xb = window.xb = {
   regListener         : regListener,
   on                  : regListener,
   once                : once,
+  off                 : off,
   events              : events,
   selectedTable       : selectedTable,
   usebilityControl    : usebilityControl,
@@ -134,6 +135,14 @@ function regListener(type, id, callback) {
       getEvent(type, id).remove(callback);
     },
   };
+}
+
+
+function off(type, id) {
+  if (!type) throw new Error("xboson.js:off type is null");
+  if (!id  ) throw new Error("xboson.js:off id is null");
+  var n = type +":"+ id;
+  delete ebus[n];
 }
 
 
@@ -399,10 +408,18 @@ function createDataTable(table) {
   var form    = $(table.data('form'));
   var pageset = defaultPageset();
   var mapper  = table.find('.table_mapper');
+  var sort    = table.data("sort");
   var tableObj;
   
   var pagination      = table.parent().find('.auto_tag_table_api_pagination');
   var total_count_num = table.parent().find('.total_count_num');
+  
+  if (sort) {
+    sort = sort.split(",");
+    for (var i=0; i<sort.length; ++i) {
+      sort[i] = sort[i].trim();
+    }
+  }
   
   var options = $.extend(null, {}, zy.ui.dataTable, {
     "data"      : [],
@@ -427,6 +444,20 @@ function createDataTable(table) {
     sendDataRequest(table, form, pageset, reciveData);
   }
   
+  function __sort(rows) {
+    if (!sort) return;
+    if (!rows) return;
+    rows.sort(function(a, b) {
+      for (var i=0; i<sort.length; ++i) {
+        var c = sort[i];
+        if (a[c] < b[c]) return -1;
+        if (a[c] > b[c]) return 1;
+      }
+      return 0;
+    });
+    return rows;
+  }
+  
   function reciveData(ret) {
     if (ret && ret.code==0) {
       var rows = ret[table.data('dataName')] || ret.data || ret.result;
@@ -444,6 +475,7 @@ function createDataTable(table) {
         }
       }
       
+      __sort(rows);
       options.data = rows || [];
       
       if (tableObj) {

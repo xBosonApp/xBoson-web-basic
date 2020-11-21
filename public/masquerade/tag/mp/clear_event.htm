@@ -1,0 +1,15 @@
+<never>
+  清除总线上的消息监听器, 这可以防止因为无刷新页面而导致重复调用 api 的问题.
+  参数:
+    [必须] type: 发出的事件类型, id: 发出的事件 id.
+</never>
+<b style='display:none' class='auto_tag_mp_clear_event' data-type='###type###' data-id='###id###'></b>
+<once id='auto_tag_mp_clear_event.js'>
+  <js:xboson/>
+  <script>
+    xb.auto_filter('.auto_tag_mp_clear_event').each(function() {
+      var jdata = $(this);
+      xb.off(jdata.data('type'), jdata.data('id'));
+    });
+  </script>
+</once>

@@ -19,10 +19,11 @@
 * class : 表格的 class,         
 * dataName: 在 ajax 返回结果集中的数据属性名称, 默认 'result' 或 'data'.         
 * hidepage: 为 1 时将不显示分页组件
+* sort: 用','号分割的列名表, 按优先级排序
 
 ```html
 <table:api app='9da3e4550d1f42d3979ae30931d498c9' mod='nsdata' api='remote_list' 
-      form='#listform' id='datatable0'>
+      form='#listform' id='datatable0' sort='node,name,tid'>
   <table:mapper label='配置名称' key='rname'/>
   <table:mapper label='用户名' key='username'/>
   <table:mapper label='安全配置类型' key='authoritytype'>

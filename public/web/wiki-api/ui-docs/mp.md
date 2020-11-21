@@ -200,3 +200,16 @@
   <mp:usability recvid='event0'/>
 </form:button>
 ```
+
+## `<mp:clear_event>`
+
+清除总线上的消息监听器, 这可以防止因为无刷新页面而导致重复调用 api 的问题.
+
+必填参数:
+
+* type: 发出的事件类型
+* id: 发出的事件 id
+
+```html
+<mp:clear_event type='TABLE_UPDATE_REQ' id='datatable2'/>
+```
