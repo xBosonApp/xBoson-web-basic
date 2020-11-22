@@ -422,7 +422,7 @@ function createDataTable(table) {
   }
   
   var options = $.extend(null, {}, zy.ui.dataTable, {
-    "data"      : [],
+    "data" : [],
   });
   setTimeout(init, 230);
   
@@ -524,6 +524,12 @@ function createDataTable(table) {
         var code = config.text();
         if (code) {
           render_func = eval('('+ code +')');  
+        } else {
+          render_func = function(data, type, row, meta) {
+            // 防止 table 弹出警告
+            if (data === undefined) return '';
+            return data;
+          };
         }
       }
       

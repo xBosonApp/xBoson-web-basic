@@ -2,7 +2,7 @@
 <code class='render_function' style='display: none'>
   function(data, type, row, meta) {
     var i = parseInt(data);
-    if (isNaN(i)) return '';
+    if (isNaN(i) || 0 > i) return '';
     return zy.tool.Date.dateTime2str(new Date(i), 'yyyy-MM-dd hh:mm:ss');
   }
 </code>

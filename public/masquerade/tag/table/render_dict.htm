@@ -17,6 +17,7 @@
       
       zy.cache.initDicts(typecd, function() {
         var dict = zy.cache.getDict(typecd);
+        if (!dict) return;
         
         for (var i=dict.length-1; i>=0; --i) {
           map[dict[i].id] = dict[i];
@@ -24,7 +25,7 @@
       });
     
       jdata.data(delayid, function(data, type, row, meta) {
-        return map[data].text;
+        return (map[data] && map[data].text) || data;
       });
     });
   </script>

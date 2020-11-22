@@ -1,0 +1,53 @@
+<!-- Create By xBoson System -->
+<div id='idid' class='list'>
+  <h5>事件列表</h5>
+  
+  <ui:form id='listform'>
+    <mp:clear_event type='TABLE_UPDATE_REQ' id='event_list_table'/>
+    <input type='hidden' name='pid'/>
+    <input type='hidden' name='scenes'/>
+    <mp:loaddata id='datatable0'/>
+    
+    <form:text name='devid' label='设备id' width='3'/>
+    <form:text name='code' label='代码' width='2'/>
+    <form:text name='level' label='等级' width='2'/>
+    <form:select name='resp_type' label='应答状态' width='2'>
+      <option value='0'>全部</option>
+      <option value='1'>已经应答</option>
+      <option value='2'>没有应答</option>
+    </form:select>
+    
+    <form:btn_toolbar>
+      <form:group>
+        <form:submit label='查询'/>
+        <form:reset/>
+      </form:group>
+      <form:group>
+        <form:button label='详情' icon='edit'>
+          <mp:usability recvid='event_list_table'/>
+          <moda:open url='iot/basic/event_edit.htm'/>
+        </form:button>
+      </form:group>
+    </form:btn_toolbar>
+  </ui:form>
+  
+  <mp:savedata type='SELECT_TABLE_ROW' id='event_list_table'/>
+  
+  <table:api app='2e617eb7e1744bbcb6a0518fa85a84a5' mod='basic' 
+      api='event_list' form='#listform' id='event_list_table'>
+    <table:mapper label='等级' key='level'>
+      <table:render_dict typecd='EVENT_LEVEL'/>
+    </table:mapper>
+    <table:mapper label='代码' key='code'/>
+    <table:mapper label='消息' key='msg'/>
+    <table:mapper label='设备' key='devid'>
+      <table:render>
+      function(data, type, row, meta) {
+        return data.split(".")[3]
+      }
+      </table:render>
+    </table:mapper>
+    <table:mapper label='响应用户' key='repwho'/>
+    <table:mapper label='消息时间' key='cd'/>
+  </table:api>
+</div>
