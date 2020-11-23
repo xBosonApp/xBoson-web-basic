@@ -1,0 +1,46 @@
+<!-- Create By xBoson System -->
+<div id='idid' class='list'>
+  <h5>命令历史</h5>
+  
+  <ui:form id='listform'>
+    <mp:clear_event type='TABLE_UPDATE_REQ' id='cmd_list_table'/>
+    <input type='hidden' name='pid'/>
+    <input type='hidden' name='scenes'/>
+    <mp:loaddata id='datatable0'/>
+    
+    <form:text name='devid' label='设备id' width='3'/>
+    
+    <form:btn_toolbar>
+      <form:group>
+        <form:submit label='查询'/>
+        <form:reset/>
+      </form:group>
+      <form:group>
+        <form:button label='详情' icon='edit'>
+          <mp:usability recvid='cmd_list_table'/>
+          <moda:open url='iot/basic/cmd_detail.htm'/>
+        </form:button>
+      </form:group>
+    </form:btn_toolbar>
+  </ui:form>
+  
+  <mp:savedata type='SELECT_TABLE_ROW' id='cmd_list_table'/>
+  
+  <table:api app='2e617eb7e1744bbcb6a0518fa85a84a5' mod='basic' 
+      api='cmd_list' form='#listform' id='cmd_list_table'>
+    <table:mapper label='设备' key='devid'/>
+    <table:mapper label='数据' key='data'>
+       <table:render>
+      function(data, type, row, meta) {
+        var buf = [];
+        for (var n in data) {
+          buf.push(n, '="', data[n], '" ');
+        }
+        return buf.join('');
+      }
+      </table:render>
+    </table:mapper>
+    <table:mapper label='载荷' key='payload'/>
+    <table:mapper label='发送时间' key='cd'/>
+  </table:api>
+</div>

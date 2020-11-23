@@ -98,6 +98,7 @@ jQuery(function($) {
       open_process_manager,
       remove_this_product,
       open_event_list,
+      open_cmd_list,
     };
     
     data.forEach(function(x) {
@@ -226,9 +227,17 @@ jQuery(function($) {
         { name: '事件',  _id: node._id, pid: node.pid, scenes: node.scenes,
           open_method: 'open_event_list',
         },
-        { name: '命令',  _id: node._id, },
+        { name: '命令',  _id: node._id, pid: node.pid, scenes: node.scenes,
+          open_method: 'open_cmd_list',
+        },
         { name: '数据',  _id: node._id, },
       ]);
+    }
+    
+    
+    function open_cmd_list(node) {
+      xb.save_data('datatable0', { pid: node.pid, scenes: node.scenes });
+      open('iot/basic/cmd_list.htm');
     }
     
     
