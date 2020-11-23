@@ -30,6 +30,12 @@ var client = mongodb.connect("mongodb://localhost");
 var client = mongodb.connect("source://source_id");
 ```
 
+## mongodb.newObjectId(string: id)
+
+构造 ObjectId 对象的实例
+
+[什么是 ObjectId](https://docs.mongodb.com/manual/reference/method/ObjectId/)
+
 
 # Client 客户端连接对象
 
@@ -261,6 +267,15 @@ var findx = coll.find( { qty: { $gt: 25 } }, { item: 1, qty: 1 } );
 带有分页功能. pageNum 从 1 开始.
 
 
+## Cursor Collection.find2(object: query)
+
+查询文档, 返回一个游标用于对结果集进行操作.
+
+```javascript
+var list = collection.find2({_id:'xxx'}).page(sys).sort({_id:-1}).toArray();
+```
+
+
 ## Collection.drop()
 
 删除当前文档集合.
@@ -288,3 +303,79 @@ var findx = coll.find( { qty: { $gt: 25 } }, { item: 1, qty: 1 } );
 ## DeleteResult.getDeletedCount()
 
 返回被删除的文档数量
+
+
+# Cursor 对象
+
+结果集游标, 其中的方法可以串联操作
+
+```javascript
+// 串联操作
+cursor.skip(10).limit(20);
+```
+
+## projection(object)
+
+字段过滤, 设置一个文档，描述要返回的所有匹配文档的字段.
+
+## filter(object)
+
+设置查询过滤器以应用于查询
+
+## limit(number)
+
+限制结果集数量
+
+## skip(number)
+
+结果集跳过一些文档
+
+## maxTimeMS(number:MILLI_SECONDS)
+
+设置此操作在服务器上的最大执行时间(毫秒)
+
+## maxAwaitTimeMS(number:MILLI_SECONDS)
+
+服务器等待新文档以满足可尾光标查询的最长时间
+
+## sort(object)
+
+设置要应用于查询的排序条件
+
+## partial(boolean)
+
+true 如果一个或多个分片不可达（而不是引发错误），则从分片集群中获得部分结果.
+
+## hint(object)
+
+设置要使用哪个索引的提示
+
+## max(object)
+
+设置特定索引的排他上限
+
+## min(object)
+
+设置特定索引的最小包含下限
+
+## returnKey(boolean)
+
+修改光标以返回索引键而不是文档
+
+## showRecordId(boolean)
+
+通过将字段添加$recordId到匹配的文档来修改查询的输出。$recordId是唯一标识集合中文档的内部关键字
+
+## snapshot(boolean)
+
+设置快照
+
+## page(sys)
+
+将 sys 对象传递到该函数, 取出 pagenum 和 pagesize 作为分页参数,
+该方法是 limit  和 skip 的简便操作; 如果没有分页参数或参数无效, 
+则抛出异常.
+
+## toArray()
+
+该方法返回查询结果文档对象数组.

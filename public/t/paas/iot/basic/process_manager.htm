@@ -47,6 +47,13 @@
   <table:mapper label='集群节点ID' key='node'/>
   <table:mapper label='处理数据' key='count'/>
   <table:mapper label='错误' key='error'/>
+  <table:mapper label='CPU使用' key='cpu'>
+    <table:render>
+      function(data, type, row, meta) {
+        return data +"%"
+      }
+    </table:render>
+  </table:mapper>
   <table:mapper label='最后数据时间' key='time'>
     <table:render_time></table:render_time>
   </table:mapper>
