@@ -28,19 +28,42 @@
   
   <table:api app='2e617eb7e1744bbcb6a0518fa85a84a5' mod='basic' 
       api='cmd_list' form='#listform' id='cmd_list_table'>
-    <table:mapper label='设备' key='devid'/>
+    <table:mapper label='设备' key='devid'>
+      <table:render>
+        function(data, type, row, meta) {
+          return data.split('.')[3];
+        }
+      </table:render>
+    </table:mapper>
+    
     <table:mapper label='数据' key='data'>
-       <table:render>
+      <table:render>
       function(data, type, row, meta) {
         var buf = [];
         for (var n in data) {
-          buf.push(n, '="', data[n], '" ');
+          buf.push(n, '=');
+          if (buf.length > 5) {
+            buf.push(" ...");
+            break;
+          }
+          buf.push('"', data[n], '" ');
         }
         return buf.join('');
       }
       </table:render>
     </table:mapper>
-    <table:mapper label='载荷' key='payload'/>
+    
+    <table:mapper label='载荷' key='payload'>
+      <table:render>
+        function(data, type, row, meta) {
+          if (data.length > 20) {
+            return data.substr(0, 20) +' ...('+ data.length +')';
+          }
+          return data;
+        }
+      </table:render>
+    </table:mapper>
+    
     <table:mapper label='发送时间' key='cd'/>
   </table:api>
 </div>
