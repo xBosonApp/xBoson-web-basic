@@ -1,0 +1,466 @@
+<moda:frame title='设备数据' width='90%'>
+<div id='dev_data_frame'>
+  
+  <input name='proto_id' type='hidden'/>
+  <div class='chart_content'></div>
+  <ui:form>
+    <footer>
+      <moda:cancel/>
+    </footer>
+  </ui:form>
+
+  <div class='html_template' id='dev_data_item_template'>
+    <form class="smart-form" action='dev_data_read'>
+      <legend>
+        数据 <span class='name'></span> 
+        <span class='desc' style='padding: 0 20px;'></span>
+        <b class='hide nodata'>(该数据类型没有上传过数据)</b>
+      </legend>
+      
+      <fieldset>
+        <input name='did' type='hidden'/>
+        <input name='time' type='hidden'/>
+        <input name='name' type='hidden'/>
+
+          <form:select name='type' label='时间类型' width='1'>
+          </form:select>
+          
+          <form:select name='' label='样式' class='chart_type' width='1'>
+            <option value='{"type":"bar"}' selected>柱状</option>
+            <option value='{"type":"line"}'>折线</option>
+            <option value='{"type":"line", "areaStyle":{}}'>折线区域</option>
+            <option value='{"type":"line", "symbol":"none"}'>无点折线</option>
+            <option value='{"type":"line", "smooth":true}'>平滑线</option>
+            <option value='{"type":"line", "smooth":true, "areaStyle":{}}'>平滑线区域</option>
+          </form:select>
+
+          <form:btn_toolbar label='' width='1'>
+            <button class="btn btn-info btn-sm" quick='-1' type='button'>
+              &emsp;<i class="fa"></i>&nbsp; &lt; &emsp;
+            </button>
+          </form:btn_toolbar>
+          
+            <section class="col col-1" t='1'>
+              <label class="label">年</label>
+              <label class="select">
+                <select f='FullYear' ></select>
+              </label>
+            </section>
+            
+            <section class="col col-1" t='2'>
+              <label class="label">月</label>
+              <label class="select">
+                <select f='Month' m='1,12' off='-1' ></select>
+              </label>
+            </section>
+            
+            <section class="col col-1" t='3'>
+              <label class="label">日</label>
+              <label class="select">
+                <select f='Date' m='1,31' ></select>
+              </label>
+            </section>
+            
+            <section class="col col-1" t='4'>
+              <label class="label">时</label>
+              <label class="select">
+                <select f='Hours' m='0,23' ></select>
+              </label>
+            </section>
+            
+            <section class="col col-1" t='5'>
+              <label class="label">分</label>
+              <label class="select">
+                <select f='Minutes' m='0,59' ></select>
+              </label>
+            </section>
+          
+          <form:btn_toolbar label='' width='1'>
+            <button class="btn btn-info btn-sm" quick='1' type='button'>
+              &emsp;<i class="fa"></i>&nbsp; &gt; &emsp;
+            </button>
+          </form:btn_toolbar>
+          
+          <form:btn_toolbar label='操作 (修改时间控件后需更新)' width='2'>
+            <form:submit label='更新' class='update'></form:submit>
+            <form:button label='清除' class='clear'></form:button>
+            <span class='ajax-message'></span>
+          </form:btn_toolbar>
+      </fieldset>
+    </form>
+    <fieldset>
+      <div class='chart col' style="height: 400px;"></div>
+    </fieldset>
+  </div>
+
+<style>
+.html_template {
+    display: none;
+}
+</style>
+<!--<script src="../../web/cdn/echarts/4.8.0/echarts.min.js"></script>-->
+<!--<script src="../../web/cdn/echarts/4.8.0/roma.js"></script>-->
+<script>
+jQuery(function($) {
+  const ic = {
+    get(api, parm, cb) {
+      xb.api('2e617eb7e1744bbcb6a0518fa85a84a5', 'basic', api, parm, function(r) {
+        if (r.code > 0) {
+          cb(new Error(r.msg));
+          return;
+        }
+        if ((!r.data) || r.data.length < 1) {
+          cb(new Error('没有数据'));
+        } else {
+          cb(null, r);
+        }
+      });
+    },
+    
+    popo(msg) {
+      zy.ui.msg('提示', msg, 'w');
+    },
+    
+    getTemplate(selector) {
+      let t = $(selector).clone();
+      if (t.length == 0) {
+        throw new Error("错误: HTML 模板标签不存在, "+ selector);
+      }
+      t.removeClass('html_template');
+      t.removeAttr("id");
+      return t;
+    },
+    
+    buildSelectOpt(jselect, map, value) {
+      for (let k in map) {
+        let opt = $("<option>");
+        opt.val(k);
+        opt.text(map[k]);
+        jselect.append(opt);
+      }
+      if (value) jselect.val(value).trigger("change");
+      return jselect;
+    },
+  };
+  
+  const root = $("#dev_data_frame");
+  const content = root.find(".chart_content");
+  const parm = xb.load_data('datatable1');
+  const dev_id = parm._id;
+  let ranges = {1: "年", 2: "月", 3: "日", 4: "时", 5: "分", 6: "秒"};
+
+  zy.net.loadScript("../../web/cdn/echarts/4.8.0/echarts.min.js", ()=>{
+    zy.net.loadScript("../../web/cdn/echarts/4.8.0/roma.js", ()=>{
+      update_data_list();
+    });
+  });
+  
+  function update_data_list() {
+    
+    let p = { _id : ['', parm.scenes, parm.product].join("."), scenes : parm.scenes };
+    xb.api("2e617eb7e1744bbcb6a0518fa85a84a5", 'basic', 'prod_list', p, function(ret) {
+      ret.data[0].data.forEach(function(v) {
+        createItem(v.name, v.desc);
+      });
+    });
+  }
+  
+
+  function createItem(name, desc) {
+    const item = ic.getTemplate("#dev_data_item_template");
+    const form = item.find("form");
+    const clear = form.find(".clear");
+    const range = item.find("[name=type]");
+    const itime = form.find("[name=time]");
+    const msg = item.find(".ajax-message");
+    const all_time_ut = form.find("[f]");
+    const chart_type = item.find(".chart_type");
+    const chart_dom = item.find(".chart");
+    const chart = echarts.init(chart_dom[0], 'roma');
+    const chart_option = createOptions(chart);
+    const show_unit = [];
+    const date = new Date();
+    let unit = '年';
+    
+    chart_dom.width($(window).width() * 0.85);
+
+    chart_option.update();
+    content.append(item);
+    item.find(".name").html(name);
+    item.find(".desc").html(desc);
+    item.find("[name=did]").val(dev_id);
+    item.find("[name=name]").val(name);
+    ic.buildSelectOpt(range, ranges, 1);
+
+    // 这里调用顺序很重要
+    form.unbind("submit");
+    form.submit(()=>false);
+    all_time_ut.each(init_time_unit);
+    range.change(update_show).trigger('change');
+    form.one('submit', data_to_chart);
+
+    get_date(function(err, ret) {
+      if (ret) {
+        for (let y in ret.data.v) {
+          addOpt(form.find("[f=FullYear]"), y+'', y+"年");
+        }
+        update_chart(ret.data);
+      } else {
+        // 没有年度数据就是根本没有数据
+        chart_dom.remove();
+        form.find('fieldset').remove();
+        form.find('.nodata').removeClass('hide').show();
+      }
+    });    
+
+    clear.click(function() {
+      chart_option.clearData();
+      chart_option.update();
+    });
+
+    chart.on("click", function(p) {
+      let data_down = p.data.bind;
+      if (!data_down.func) return ic.popo("到底了.");
+      // console.log('cc', p);
+
+      let v = parseInt(p.name);
+      let fname = 'set'+ data_down.func;
+      let dt = data_down.date;
+      if (data_down.func == 'Month') --v;
+      dt[fname](v);
+      range.val(data_down.range).change();
+
+      for (let i=0; i<data_down.range; ++i) {
+        let l = form.find('[t='+i+'] select').trigger("sync_date", dt);
+      }
+      form.submit();
+    });
+
+    form.find("[quick]").each(function() {
+      const q = $(this);
+      const off = parseInt(q.attr("quick"));
+      const max = range.find("option").length;
+
+      q.click(function() {
+        let v = parseInt(range.val()) + off;
+        if (v > 0 && v <= max) {
+          range.val(v).change();
+          form.submit();
+        }
+      });
+    });
+
+
+    function data_to_chart(e) {
+      get_date(function(err, r) {
+        if (r) {
+          update_chart(r.data);
+        }
+        form.one('submit', data_to_chart);
+      });
+    }
+
+    function init_time_unit() {
+      const thiz = $(this);
+      const func = thiz.attr('f');
+      const mm = thiz.attr('m');
+      const parentT = thiz.parent().parent();
+      const unit_name = parentT.find('.label').text();
+      const idx = parseInt(parentT.attr('t'));
+      const setter = 'set'+ func;
+
+      thiz.change(function() {
+        let v = parseInt(thiz.val());
+        sync_unit(v);
+      });
+
+      thiz.on('hidden', function() {
+        show_unit[idx] = '';
+        return false; // 防止窗口关闭
+      });
+
+      if (mm) {
+        let m = mm.split(',');
+        let off = parseInt(thiz.attr('off')) || 0;
+        loopOptions(thiz, m[0], m[1], off, unit_name);
+      }
+
+      sync_date(date);
+      thiz.on("sync_date", function(_, _date) {
+        sync_date(_date);
+      })
+
+      function sync_date(_date) {
+        let v = _date['get'+ func]()
+        thiz.val(v);
+        sync_unit(v);
+      }
+
+      function sync_unit(v) {
+        date[setter](v);
+        show_unit[idx] = thiz.find("option:selected").text();
+      }
+    }
+
+    function update_chart(data) {
+      // chart_dom.show();
+      let label = show_unit.join('') || '年统计';
+      chart_option.setTitle(desc +'分时数据');
+      let conf = JSON.parse(chart_type.val());
+      let s = chart_option.addSeries(label, conf);
+      let _fn = item.find("[t="+ range.val() +"] select").attr("f");
+      let data_down = {
+        'range' : parseInt(range.val())+1,
+        'date'  : new Date(date),
+        'func'  : _fn,
+      };
+
+      let map = data.v;
+      for (let n in map) {
+        s.push(n + unit, map[n], data_down);
+      }
+      chart_option.update();
+    }
+
+    function get_date(cb) {
+      itime.val(date.toISOString());
+      let p = form.serialize();
+
+      ic.get("dev_data_read", p, function(err, ret) {
+        if (err) {
+          msg.html(err.message);
+          return cb(err) ;
+        }
+        msg.html('');
+        cb(null, ret);
+      });
+    }
+
+    function update_show(e) {
+      let v = parseInt( range.val() );
+      let new_unit = item.find('[t='+ v +']').find(".label").text();
+      if (unit != new_unit) {
+        chart_option.clearData();
+      }
+      unit = new_unit;
+
+      form.find('[t]').each(function() {
+        let thiz = $(this);
+        let t = parseInt(thiz.attr('t'));
+        let s = thiz.find('select');
+        if (t < v) {
+          s.show();
+          s.trigger('change');
+        } else {
+          s.hide();
+          s.trigger('hidden');
+        }
+      });
+      if (! e.isTrigger) {
+        form.submit();
+      }
+    }
+  }
+
+
+  function addOpt(t, id, v) {
+    let opt = $("<option>");
+    opt.val(id).text(v);
+    t.append(opt);
+    return opt;
+  }
+  
+
+  function loopOptions(t, begin, end, idu, txtu) {
+    end = parseInt(end);
+    for (let i = parseInt(begin); i<=end; ++i) {
+      addOpt(t, i + idu, i + txtu);
+    }
+  }
+
+
+  function createOptions(chartObj) {
+    const option = {
+      title   : { text: '' },
+      tooltip : {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'cross',
+            label: {
+                backgroundColor: '#6a7985'
+            }
+        }
+      },
+      legend  : { data: [] },
+      xAxis   : { data: [] },
+      yAxis   : { name: '' },
+      series  : [],
+      dataZoom: [
+        {
+            type: 'slider',
+            show: true,
+            xAxisIndex: [0],
+            start: 1,
+            end: 100,
+        },
+      ],
+    };
+
+    class Series {
+      constructor(v, name, x) {
+        this.v = v;
+        this.x = x;
+        this.name = name;
+      }
+
+      // x 是横轴参数, v 是数值, bind 绑定一个数据对象
+      push(x, v, bind) {
+        let i = this.x.indexOf(x)
+        if (i < 0) {
+          i = this.x.length;
+          // this.v.push(v);
+          this.x.push(x);
+        }
+        this.v[i] = {value: v, bind};
+      }
+    };
+
+    return {
+      setUnit(u) {
+        option.yAxis.name = u;
+      },
+      getOptions() {
+        return option;
+      },
+      setTitle(t) {
+        option.title.text = t;
+      },
+      addSeries(name, conf) {
+        let s = $.extend({
+          name : name,
+          type : 'bar',
+          data : [],
+        }, conf);
+        option.legend.data.push(name);
+        option.series.push(s);
+        return new Series(s.data, name, option.xAxis.data);
+      },
+      clearData() {
+        option.legend.data = [];
+        option.xAxis.data  = [];
+        option.series = [];
+        chartObj.clear();
+        this.setTitle('没有数据');
+        this.update();
+      },
+      update() {
+        // console.log(option);
+        chartObj.setOption(option);
+        chartObj.resize();
+      },
+    };
+  }
+});
+</script>
+</div>
+</moda:frame>

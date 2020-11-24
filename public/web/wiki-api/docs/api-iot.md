@@ -43,3 +43,19 @@ var iot = require("iot").open();
 * tid 线程id
 
 停止指定的线程
+
+
+## iot.dataId(String:devicdID, String:name, Number:data_type, Number:time) 
+
+* devicdID 设备完整 ID
+* name 数据名
+* data_type 数据范围类型
+  * 1: 所有年数据
+  * 2: 当年月数据
+  * 3: 当月日数据
+  * 4: 当日分时数据
+  * 5: 小时内分钟数据
+  * 6: 分钟内秒数据
+* time 要查询数据的时间, UNIX 时间戳
+
+返回数据的主键

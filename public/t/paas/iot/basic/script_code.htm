@@ -12,13 +12,14 @@
     <pre class='js_code'></pre>
     
     <footer>
-      <button id='exit_full_edit' class="btn btn-default close_modal">退出全屏</button>
+      <ui:button label='全屏编辑' id='full_edit'/>
+      <button id='exit_full_edit' class="btn btn-success close_modal">退出全屏</button>
+      
       <button type="button" class="btn btn-default close_modal" data-dismiss="modal">关闭</button>
       <button type="submit" class="btn btn-primary" id='save_code'>保存
         <form:post app='2e617eb7e1744bbcb6a0518fa85a84a5' mod='basic' api='script_code_edit'>
         </form:post>
       </button>
-      <ui:button label='全屏编辑' id='full_edit'/>
     </footer>
   </ui:form>
 
@@ -41,6 +42,8 @@
 <script src="lib/js/ace/1.4.2/ace.js"></script>
 <script>
 jQuery(function($) {
+  const lskey = 'iot_script_code_editor_fullscreen';
+  
   var root = $(".update_form_script_code");
   var js_code = root.find(".js_code");
   var i_code = root.find("[name=code]");
@@ -81,6 +84,8 @@ jQuery(function($) {
     exitfull.show();
     full.hide();
     footer.addClass("full_tool_bar");
+    footer.css("background-color", '#262626');
+    localStorage.setItem(lskey, 1);
   });
   
   exitfull.click(function() {
@@ -91,11 +96,30 @@ jQuery(function($) {
     exitfull.hide();
     full.show();
     footer.removeClass("full_tool_bar");
+    footer.css("background-color", 'rgba(248, 248, 248, .9)');
+    localStorage.setItem(lskey, 0);
   });
   
   // 禁用 ESC
   root.parents(".auto_tag_moda_frame").modal({
     keyboard : false,
+  });
+  
+  setTimeout(function() {
+    if (parseInt(localStorage.getItem(lskey))) {
+      full.click();
+    }
+  }, 200);
+  
+  editor.commands.addCommand({
+    name: 'save code',
+    bindKey: {
+      win: 'Ctrl+S',
+      mac: 'Command+S'
+    },
+    exec: function (editor) {
+      save_code.click();
+    }
   });
 });
 </script>
