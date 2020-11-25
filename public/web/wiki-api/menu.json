@@ -8,7 +8,8 @@
     { "name": "模块", "file": "docs/api.md" },
     { "name": "OAuth 2.0 登录", "file": "docs/oauth2.md" },
     { "name": "区块链见证者接入", "file": "docs/witness.md" },
-    { "name": "开放式接口", "file": "docs/openapi.md" }
+    { "name": "开放式接口", "file": "docs/openapi.md" },
+    { "name": "IoT 接入指南", "file": "docs/iot-access.md"}
   ]},
 
   { "name": "全局模块", "file": "docs/api.md", "sub": [
