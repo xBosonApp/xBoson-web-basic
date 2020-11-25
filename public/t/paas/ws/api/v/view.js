@@ -1,5 +1,5 @@
 /* Create By xBoson System */
-// 数据字典一览
+// api_view
 api_view = (function(){
   var _m = {param:"",pam:null}; //API请求参数
   var pt = api_view.prototype;
@@ -27,6 +27,15 @@ api_view = (function(){
       api: '/'+pt.node.uri,
       sys: "?s=d&ems=ems"
     };
+    // API 帮助信息
+    _m.help_info={
+      requests: "01",
+      methodid: "01",
+      methodnm: "GET",
+      api_classify: "api",
+      ver: "1.0",
+      api_desc: '',
+    };
     zy.cache.initDicts("ZR.0052,ZR.0053", ViewInit);
   }
   
@@ -34,9 +43,10 @@ api_view = (function(){
   function ViewInit(){
     $('#ws_api_v_view_apinm').html(' '+pt.node.apinm+'【'+pt.node.id+'】');
     $('#ws_api_v_view_sta').html(pt.node.sta);
-    v_url.val(pt.FullUrl(null));
     $('#ws_api_v_view_cdt').html(pt.node.createdt);
     $('#ws_api_v_view_udt').html(pt.node.updatedt);
+    MethodInit();
+    v_url.val(pt.FullUrl(null));
 
     // 获取API帮助信息
     _m.appid=pt.node.aid;
@@ -50,32 +60,17 @@ api_view = (function(){
     }, function (msg) {
       // API 帮助信息
       if (msg.result[0].help_info){
-        _m.help_info = msg.result[0].help_info;
-        var _h = JSON.parse(_m.help_info);
+        var _h = JSON.parse(msg.result[0].help_info);
         _m.help_info_obj=_h;
         if(_h.requests) _m.path.method =_h.requests;
+        if(_h.methodid) _m.help_info.methodid=_h.methodid;
+        if(_h.methodnm) _m.help_info.methodnm=_h.methodnm;
         // $('#ws_api_v_view_classify').html(_h.api_classify?_h.api_classify:'API');
         $('#ws_api_v_view_classify').html(_h.api_classify?zy.cache.cd2name("ZR.0053", _h.api_classify):'API');
+        if(_h.ver) $('#ws_api_v_view_ver').html('v'+_h.ver);
         $('#ws_api_v_view_desc').append(_h.api_desc?_h.api_desc:'');
         v_requests.data("id",_m.path.method);
         v_requests.html(_h.method?_h.method+' <span class="caret"></span>':'GET <span class="caret"></span>');
-        var list=zy.cache.getDict("ZR.0052");
-        var txtColor={
-          '01':'txt-color-green',
-          '02':'txt-color-red',
-          '03':'txt-color-yellow',
-          '04':'txt-color-blue',
-          '05':'txt-color-red',
-          '06':'txt-color-pink',
-          '07':'txt-color-yellow',
-          '08':'txt-color-orange',
-        };
-        for (var i in list) {
-          if (list[i].id === _m.path.method)
-            $('.request-method-update').append('<li class="active"><a href="javascript:void(0);" data-id="'+list[i].id+'"><i class="fa fa-circle '+txtColor[list[i].id]+'"></i> '+list[i].name+'</a></li>');
-          else
-            $('.request-method-update').append('<li><a href="javascript:void(0);" data-id="'+list[i].id+'"><i class="fa fa-circle '+txtColor[list[i].id]+'"></i> '+list[i].name+'</a></li>');
-        }
 
         // 参数列表项
         if(_h.param) {
@@ -88,12 +83,52 @@ api_view = (function(){
           jsoneditorInit(_m.help_info_obj.result);
           // jsonEditor.set(_m.help_info);
         }
+        MethodInit({id:_m.help_info.methodid,name:_m.help_info.methodnm});
       } else {}
       //事件绑定
       pt.Events.methodBtn();
       pt.Events.authBtn();
       pt.Events.testBtn();
     },_m);
+  }
+
+  //Method 画面元素初始化（请求模式）
+  function MethodInit(_method){
+    if (!_method) {
+      _m.help_info.methodid ='01';
+      v_requests.data("id",_m.help_info.methodid);
+      v_requests.html(_m.help_info.methodnm+' <span class="caret"></span>');
+      var list=zy.cache.getDict("ZR.0052");
+      var txtColor={
+        '01':'txt-color-green',
+        '02':'txt-color-red',
+        '03':'txt-color-yellow',
+        '04':'txt-color-blue',
+        '05':'txt-color-red',
+        '06':'txt-color-pink',
+        '07':'txt-color-yellow',
+        '08':'txt-color-orange',
+        '09':'txt-color-orange',
+        '10':'txt-color-orange',
+      };
+      for (var i in list) {
+        if (list[i].id === v_requests.data())
+          $('.request-method-update').append('<li class="active"><a href="javascript:void(0);" data-id="'+list[i].id+'"><i class="fa fa-circle '+txtColor[list[i].id]+'"></i> '+list[i].name+'</a></li>');
+        else
+          $('.request-method-update').append('<li><a href="javascript:void(0);" data-id="'+list[i].id+'"><i class="fa fa-circle '+txtColor[list[i].id]+'"></i> '+list[i].name+'</a></li>');
+      }
+    } else {
+        _m.help_info.methodid = _method.id;
+        _m.help_info.methodnm = _method.name;
+        v_requests.data("id",_m.help_info.methodid);
+        v_requests.html(_m.help_info.methodnm + ' <span class="caret"></span>');
+        if("01"===_m.help_info.methodid){ // GET
+          v_url.val(pt.FullUrl(_m.pam));
+        }else{
+          v_url.val(pt.FullUrl(null));
+        }
+        $('request-method-update').find('li').removeClass('active');
+    }
   }
 
   //JsonEditor初始化,可以两种只读模式切换
@@ -143,17 +178,10 @@ api_view = (function(){
     methodBtn: function(){
       // 请求方式选择
       $('.request-method-update a').click(function () {
-        var selId = $(this).data("id");
-        var selText = $(this).text();
         var $this = $(this);
-        _m.path.method = selId;
-        v_requests.data("id",selId);
-        v_requests.html(selText + ' <span class="caret"></span>');
-        if("01"===selId){ // GET
-          v_url.val(pt.FullUrl(_m.pam));
-        }else{
-          v_url.val(pt.FullUrl(null));
-        }
+        var selId = $this.data("id");
+        var selText = $this.text();
+        MethodInit({id:selId,name:selText});
         $this.parents('.dropdown-menu').find('li').removeClass('active');
         $this.parent().addClass('active');
     	});
