@@ -104,31 +104,33 @@ function isMD(file) {
 }
 
 
+function highlight(str, lang) {
+  var code;
+  lang = aliasName(lang);
+  try {
+    code = hljs.highlight(lang, str).value;
+  } catch(e) {
+    code = $("<b>").text(str).html();
+    console.error(e);
+  }
+  var buf = ["<pre>", "<div class='firstLine'>", lang.toUpperCase(), "</div>"];
+  buf.push("<code class='language-", lang, "'>", code, "</code>", "</pre>");
+  return buf.join('');
+}
+
+
 function open_doc(data) {
   $.get(data.file, function(txt) {
     var html;
     if (isMD(data.file)) {
-      html = markdown.toHTML(txt);
+      html = markdownit({highlight:highlight}).render(txt);
     } else {
       html = txt;
     }
     content.html(html);
 
-    var code = content.find("code");
-    code.each(function() {
+    content.find("code").each(function() {
       var thiz = $(this);
-      var all = thiz.text().split('\n');
-
-      if (all.length > 1) {
-        thiz.wrap("<pre>").css('display', 'inline-block');
-        var title = "<div class='firstLine'>" + all[0].toUpperCase() + "</div>";
-        thiz.addClass(aliasName(all[0]));
-        all.splice(0, 1);
-        thiz.text(all.join('\n'));
-        thiz.before(title);
-        return;
-      }
-      
       // `anchor=` 作为锚点前缀
       if (thiz.text().indexOf('anchor=') == 0) {
         var name = thiz.text().split("=");
@@ -151,8 +153,8 @@ function open_doc(data) {
       }
     });
     
-    hljs.initHighlighting.called = null;
-    hljs.initHighlighting();
+    // hljs.initHighlighting.called = null;
+    // hljs.initHighlighting();
   });
   console.debug("Open", data.file);
 } 
