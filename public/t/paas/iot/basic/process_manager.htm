@@ -15,13 +15,13 @@
     <form:group>
       <form:submit label='刷新页面'/>
       
-      <form:button label='启动/恢复线程' icon='magic'>
+      <form:button label='启动/恢复线程' icon='play'>
         <form:post app='2e617eb7e1744bbcb6a0518fa85a84a5' mod='basic' api='thread_restore'>
           <mp:send type='TABLE_UPDATE_REQ' id='datatable2'/>
         </form:post>
       </form:button>
       
-      <form:button label='停止线程' icon='stop' class='stop_the_thread'>
+      <form:button label='停止线程' icon='pause' class='stop_the_thread'>
         <mp:usability recvid='datatable2'/>
         <form:post app='2e617eb7e1744bbcb6a0518fa85a84a5' mod='basic' api='thread_stop'>
           <mp:send type='TABLE_UPDATE_REQ' id='datatable2'/>

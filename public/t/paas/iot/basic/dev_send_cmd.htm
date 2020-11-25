@@ -1,0 +1,85 @@
+<!-- Create By xBoson System -->
+<moda:frame title='发送命令'>
+  <!--<script src='iot/basic/comm.js'></script>-->
+  <form class='hide command_item_template'>
+    <form:text name='k' label='命令名' width='3'><form:readonly/></form:text>
+    <form:text name='v' label='发送值' width='5'/>
+    <form:text class='desc' label='说明' width='2'><form:readonly/></form:text>
+    <form:text class='type' label='类型' width='2'><form:readonly/></form:text>
+  </form>
+  
+  <ui:form id='command_send_form' class='update_form'>
+    <input name='scenes' type='hidden'/>
+    <mp:loaddata id='datatable1'/>
+    <input type='hidden' name='_id'/>
+    
+    <fieldset class='data_fields'>
+      <form:text name='devid' label='设备ID' width='10'>
+        <form:readonly/>
+      </form:text>
+    </fieldset>
+    
+    <footer>
+      <moda:cancel/>
+      <moda:ok>
+        <form:post app='2e617eb7e1744bbcb6a0518fa85a84a5' mod='basic' api='send_cmd'>
+          <mp:close when='this.code == 0'></mp:close>
+        </form:post>
+      </moda:ok>
+    </footer>
+  </ui:form>
+<style>
+.data_fields .title {
+  display: inline-block; width: 15%; word-break: break-all;
+  border-bottom: 1px solid #ccc; min-height: 18px;
+}
+.data_fields .content {
+  display: inline-block; width: 35%; word-break: break-all; border:0;
+  border-bottom: 1px solid #ccc; min-height: 18px; vertical-align: bottom;
+}
+</style>
+<script>
+jQuery(function($) {
+  var tpl   = get_template();
+  var root  = $("#command_send_form");
+  var jdata = root.find(".data_fields");
+  var x     = xb.load_data("datatable1");
+  
+  var p = { scenes: x.scenes, _id: ['', x.scenes, x.product].join(".") };
+  xb.api("2e617eb7e1744bbcb6a0518fa85a84a5", 'basic', 'prod_list', p, function(r) {
+    init_event_data(r.data[0].cmd);
+  });
+  
+  root.find("[name=devid]").val(x._id.split('.')[3]);
+  
+  function init_event_data(cmd_list) {
+    for (var i=0; i<cmd_list.length; ++i) {
+      var cmd = cmd_list[i];
+      var fs = $(tpl);
+      fs.find("[name=k]").val(cmd.name);
+      fs.find(".desc").val(cmd.desc);
+      fs.find(".type").val(get_type(cmd.type));
+      jdata.append(fs);
+    }
+  }
+  
+  
+  function get_template() {
+    var t = $(".command_item_template");
+    t.find("script").remove();
+    return t.html();
+  }
+  
+  
+  function get_type(t) {
+    switch (parseInt(t)) {
+      case 1: return '整数';
+      case 2: return '浮点';
+      case 3: return '虚拟';
+      case 4: return '开关';
+      case 5: return '字符串';
+    }
+  }
+});
+</script>
+</moda:frame>

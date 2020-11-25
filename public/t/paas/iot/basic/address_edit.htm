@@ -38,6 +38,7 @@
       <h5>MQTT 可接收消息的设备账户</h5>
     </fieldset>
     
+    
     <fieldset>
       <h5>PASS 消息处理器设置</h5>
       
@@ -98,6 +99,13 @@
         </form:select>
       </div>
       
+      <div class='row'>
+        <section class='col col-10'>
+          <input type="checkbox" name='auto_restart' value='true' id='auto_restart'>
+          <label class="custom-control-label" for="auto_restart">
+            PAAS 平台重启时自动恢复线程, 请保证主题配置正确</label>
+        </section>
+      </div>
     </fieldset>
     
     <footer>
@@ -151,6 +159,7 @@ jQuery(function($) {
       root.find(".recv [value='"+ n +"']").prop("checked", true);
     }
     
+    root.find("[name=auto_restart]").prop('checked', Boolean(x.data.auto_restart));
     set_val_with_obj(x.data, 'data');
     set_val_with_obj(x.data, 'state');
     set_val_with_obj(x.data, 'event');
@@ -198,6 +207,7 @@ jQuery(function($) {
     // 列表同步用户选中状态
     r.change(function() {
       var c = ck.prop("checked");
+      
       opt_tar.each(function() {
         var sl = $(this);
         var o = sl.find("[value='"+ username +"']").hide();
