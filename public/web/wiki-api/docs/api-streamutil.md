@@ -124,14 +124,26 @@ var stream = require('streamutil');
 关闭输入流
 
 
-## int read(Buffer:target, int:begin, int:len)
+## int read(Buffer:target[, int:begin, int:len])
 
 从输入流读取 len 字节的数据, 保存到 target 缓冲区的 begin 位置开始;
 若缓冲区长度不够会抛出异常.
 当读取到流的末尾, 没有更多数据需要返回, 该函数返回 -1, 否则返回读取的字节数.
 
 
-## pipe(OutputStream: target)
+## Bytes readBytes([int:len])
+
+读取输入流 len 字节并返回存储数据的字节缓冲区, 未设置 len 则读取一个数据分片.
+当没有更多数据可以读取时, 返回 null.
+
+
+## String readString([charsetName])
+
+读取输入流中的所有数据为字符串, 未设置 charsetName 参数时使用 'UTF-8' 编码字符串.
+当没有更多数据可以读取时, 返回 null.
+
+
+## pipe(JsOutputStream: target)
 
 连接一个输出流, 把所有数据输出到 target 中.
 

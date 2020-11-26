@@ -26,7 +26,24 @@ z.close()
 ```
 
 
-# PackData
+## UnPackData pack.createUnZipReader(JsInputStream)
+
+返回一个解包对象
+
+```javascript
+// 处理所有上传的文件
+sys.request.multipart(function(item) {
+  var uz = pack.createUnZipReader(item.openInputStream());
+  while (uz.hasNext()) {
+    var pathname = uz.path();
+    var istream = uz.openInput();
+  }
+});
+
+```
+
+
+# class PackData
 
 打包器对象
 
@@ -49,3 +66,33 @@ z.close()
 ## close()
 
 关闭打包器
+
+
+# class UnPackData
+
+解包器
+
+## boolean hasNext()
+
+如果有未处理的文件条目返回 true, 同时将上下文切换到该文件条目.  
+在处理第一个文件之前, 必须调用一次该方法.
+
+## String path()
+
+返回文件的完整路径
+
+## boolean isDirectory()
+
+如果是目录返回 true
+
+## long size()
+
+返回文件大小
+
+## long getTime()
+
+返回文件的时间, UNIX 时间戳.
+
+## JsInputStream openInput()
+
+打开一个输入流用于读取数据
