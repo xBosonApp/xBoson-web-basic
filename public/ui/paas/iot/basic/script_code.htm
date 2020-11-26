@@ -1,0 +1,126 @@
+<!-- Create By xBoson System -->
+<moda:frame title='代码编辑器'>
+  
+  <ui:form id='update' class='update_form_script_code'>
+    <mp:loaddata id='datatable0'/>
+    
+    <input class='code_title' name='_id' readonly/>
+    <input class='code_title' name='md' readonly/>
+    <input class='code_title' name='owner' readonly/>
+    <input type='hidden' name='code'/>
+      
+    <pre class='js_code'></pre>
+    
+    <footer>
+      <ui:button label='全屏编辑' id='full_edit'/>
+      <button id='exit_full_edit' class="btn btn-success close_modal">退出全屏</button>
+      
+      <button type="button" class="btn btn-default close_modal" data-dismiss="modal">关闭</button>
+      <button type="submit" class="btn btn-primary" id='save_code'>保存
+        <form:post app='2e617eb7e1744bbcb6a0518fa85a84a5' mod='basic' api='script_code_edit'>
+        </form:post>
+      </button>
+    </footer>
+  </ui:form>
+
+<style>
+  .js_code {
+    min-height: 300px;
+  }
+  .full_screen_editor {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%; border: 0;
+  }
+  .code_title {
+    border: 0;
+  }
+  .full_tool_bar {
+    position: fixed; top: 2px; right: 2px; display: none; border-radius: 3px;
+    padding: 3px !important; color: #fff; background: #3276b1; border: 0;
+  }
+</style>
+<script src="lib/js/ace/1.4.2/ace.js"></script>
+<script>
+jQuery(function($) {
+  const lskey = 'iot_script_code_editor_fullscreen';
+  
+  var root = $(".update_form_script_code");
+  var js_code = root.find(".js_code");
+  var i_code = root.find("[name=code]");
+  var i_id = root.find("[name=_id]");
+  var save_code = root.find("#save_code");
+  var full = root.find("#full_edit");
+  var exitfull = root.find("#exit_full_edit");
+  var dialog = root.parents(".modal-dialog");
+  var footer = root.find("footer");
+  var win = $(window);
+  var dia_w = dialog.width();
+  exitfull.hide();
+  
+  var editor = ace.edit(js_code[0]);
+  editor.setOptions({
+    theme: "ace/theme/ambiance",
+    mode: "ace/mode/javascript",
+    wrap: true,
+    minLines: 20,
+    tabSize: 2,
+  });
+  
+  xb.api('2e617eb7e1744bbcb6a0518fa85a84a5', 'basic', 'scriptlist', {_id:i_id.val()}, function(d) {
+    editor.setValue(d.data[0].code || '// Created by xBoson system');
+    editor.moveCursorTo(0,0);
+  });
+  
+  root.on('beforeSubmit', function() {
+    let new_code = editor.getValue().trim();
+    i_code.val(new_code);
+  });
+  
+  full.click(function() {
+    dialog.css("width", '90%');
+    js_code.addClass("full_screen_editor");
+    js_code.css("height", win.height()*0.9);
+    editor.resize();
+    exitfull.show();
+    full.hide();
+    footer.addClass("full_tool_bar");
+    footer.css("background-color", '#262626');
+    localStorage.setItem(lskey, 1);
+  });
+  
+  exitfull.click(function() {
+    js_code.removeClass("full_screen_editor");
+    js_code.css("height", 'auto');
+    dialog.css("width", dia_w);
+    editor.resize();
+    exitfull.hide();
+    full.show();
+    footer.removeClass("full_tool_bar");
+    footer.css("background-color", 'rgba(248, 248, 248, .9)');
+    localStorage.setItem(lskey, 0);
+  });
+  
+  // 禁用 ESC
+  root.parents(".auto_tag_moda_frame").modal({
+    keyboard : false,
+  });
+  
+  setTimeout(function() {
+    if (parseInt(localStorage.getItem(lskey))) {
+      full.click();
+    }
+  }, 200);
+  
+  editor.commands.addCommand({
+    name: 'save code',
+    bindKey: {
+      win: 'Ctrl+S',
+      mac: 'Command+S'
+    },
+    exec: function (editor) {
+      save_code.click();
+    }
+  });
+});
+</script>
+</moda:frame>

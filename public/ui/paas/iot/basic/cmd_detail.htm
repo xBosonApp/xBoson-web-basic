@@ -1,0 +1,140 @@
+<!-- Create By xBoson System -->
+<moda:frame title='命令详情'>
+  <!--<script src='iot/basic/comm.js'></script>-->
+  
+  <ui:form id='command_detail_form' class='update_form'>
+    <input name='scenes' type='hidden'/>
+    <mp:loaddata id='cmd_list_table'/>
+    
+    <fieldset>
+      <form:text name='_id' label='ID' width='10'>
+        <form:readonly/>
+      </form:text>
+      
+      <form:text name='devid' label='设备ID' width='6'>
+        <form:readonly/>
+      </form:text>
+      
+      <form:text name='cd' label='时间' width='4'>
+        <form:readonly/>
+      </form:text>
+      
+      <form:textarea name='payload' label='载荷' width='10' rows='3'>
+        <label class='note'>(<span class='payload_length'></span> 字节)</label>
+        <form:readonly/>
+      </form:textarea>
+      
+      <section class='col col-10'>
+        <label class='label'>数据</label>
+        <label class='textarea data_fields'>
+        </label>
+        <label class='note'>
+          (<span class='data_length'></span>个参数, 
+          <span class='not_use'></span>个参数未设置)
+        </label>
+      </section>
+      
+    </fieldset>
+    
+    <footer>
+      <moda:cancel/>
+      <moda:button text='转2进制' class='to_2'/>
+      <!--<moda:button text='转8进制' class='to_8'/>-->
+      <moda:button text='转10进制' class='to_10'/>
+      <moda:button text='转16进制' class='to_16'/>
+    </footer>
+  </ui:form>
+<style>
+.data_fields .title {
+  display: inline-block; width: 15%; word-break: break-all;
+  border-bottom: 1px solid #ccc; min-height: 18px;
+}
+.data_fields .content {
+  display: inline-block; width: 35%; word-break: break-all; border:0;
+  border-bottom: 1px solid #ccc; min-height: 18px; vertical-align: bottom;
+}
+</style>
+<script>
+jQuery(function($) {
+  var root = $("#command_detail_form");
+  var data = root.find(".data_fields");
+  var x = xb.load_data("cmd_list_table");
+  var ldict;
+  
+  var p = { scenes: x.scenes, _id: ['', x.scenes, x.product].join(".") };
+  xb.api("2e617eb7e1744bbcb6a0518fa85a84a5", 'basic', 'prod_list', p, function(r) {
+    init_event_data(r.data[0].cmd);
+  });
+  
+  root.find("[name=devid]").val(x.devid.split('.')[3]);
+  root.find(".payload_length").text(x.payload.length/2);
+  
+  root.find(".to_2").click(function() {
+    root.find("[name=payload]").val(split_hex(x.payload, 2).join(' '));
+  });
+  
+  root.find(".to_8").click(function() {
+    root.find("[name=payload]").val(split_hex(x.payload, 8).join(' '));
+  });
+  
+  root.find(".to_10").click(function() {
+    root.find("[name=payload]").val(split_hex(x.payload, 10).join(' '));
+  });
+  
+  root.find(".to_16").click(function() {
+    root.find("[name=payload]").val(split_hex(x.payload, 16).join(' '));
+  });
+  
+  function init_event_data(cmd_list) {
+    var count = 0;
+    for (var n in x.data) {
+      var cmd = find(n);
+      var _name = $("<div class='title'>").text(cmd.name);
+      var _type = $("<div class='title'>").text(get_type(cmd.type));
+      var _desc = $("<div class='content'>").text(cmd.desc || '-');
+      var _val  = $("<pre class='content'>").text(x.data[n]);
+      data.append(_name).append(_type).append(_desc).append(_val);
+      ++count;
+    }
+    root.find(".data_length").text(count);
+    root.find(".not_use").text(cmd_list.length - count);
+    
+    function find(name) {
+      for (var i=cmd_list.length-1; i>=0; --i) {
+        if (cmd_list[i].name == name) {
+          return cmd_list[i];
+        }
+      }
+    }
+  }
+  
+  function split_hex(x, n) {
+    var r = [];
+    for (var i=0; i<x.length; i+=2) {
+      var s = x[i] + x[i+1];
+      
+      if (n != 16) {
+        s = parseInt(s, 16).toString(n);
+        if (n == 2) {
+          for (var l=8-s.length; l>0; --l) {
+            s = '0'+ s;
+          }
+        }
+      }
+      r.push(s);
+    }
+    return r;
+  }
+  
+  function get_type(t) {
+    switch (parseInt(t)) {
+      case 1: return '整数';
+      case 2: return '浮点';
+      case 3: return '虚拟';
+      case 4: return '开关';
+      case 5: return '字符串';
+    }
+  }
+});
+</script>
+</moda:frame>

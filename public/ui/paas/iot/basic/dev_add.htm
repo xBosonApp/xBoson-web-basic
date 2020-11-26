@@ -1,0 +1,28 @@
+<!-- Create By xBoson System -->
+<moda:frame title='创建设备'>
+  <ui:form id='create_device_user' class='add_form'>
+    <mp:loaddata id='datatable0'/>
+    <input type='hidden' name='scenes'/>
+    <input type='hidden' name='pid'/>
+    
+    <fieldset>
+      <form:text name='devid' label='设备ID' tooltip='最少1字符' width='10'>
+        <vali:string min='1' max='99'/>
+      </form:text>
+      
+      <form:text name='state' label='状态' width='10'>
+      </form:text>
+    </fieldset>
+    
+    <footer>
+      <moda:cancel/>
+      <moda:ok>
+        <form:post app='2e617eb7e1744bbcb6a0518fa85a84a5' mod='basic' api='dev_create'>
+          <mp:close when='this.code == 0'>
+            <mp:send type='TABLE_UPDATE_REQ' id='datatable1'/>
+          </mp:close>
+        </form:post>
+      </moda:ok>
+    </footer>
+  </ui:form>
+</moda:frame>

@@ -1,8 +1,8 @@
 <!-- Create By xBoson System -->
-<ui:grid id='idid' class='list' title='设备账户管理'>
+<ui:grid id='idid' class='list' title='场景管理'>
   <ui:form id='listform'>
     <mp:clear_event type='TABLE_UPDATE_REQ' id='datatable0'/>
-    <form:text name='_id' label='账户名'/>
+    <form:text name='name' label='场景名'/>
     <form:status/>
     
     <form:btn_toolbar>
@@ -12,16 +12,17 @@
       </form:group>
       <form:group>
         <form:button label='添加' icon='magic'>
-          <moda:open url='iot/basic/adduser.htm'/>
+          <moda:open url='iot/basic/scenes_add.htm'/>
         </form:button>
         <form:button label='详情' icon='edit'>
           <mp:usability recvid='datatable0'/>
-          <moda:open url='iot/basic/edituser.htm'/>
+          <moda:open url='iot/basic/scenes_edit.htm'/>
         </form:button>
+        
         <form:button label='删除' icon='trash-o'>
           <mp:usability recvid='datatable0'/>
           <mp:delete app='2e617eb7e1744bbcb6a0518fa85a84a5' primary='_id'
-              mod='basic' api='del_dev_user' dataid='datatable0'>
+              mod='basic' api='scene_remove' dataid='datatable0'>
             <mp:send type='TABLE_UPDATE_REQ' id='datatable0'/>
           </mp:delete>
         </form:button>
@@ -32,13 +33,12 @@
   <mp:savedata type='SELECT_TABLE_ROW' id='datatable0'/>
   
   <table:api app='2e617eb7e1744bbcb6a0518fa85a84a5' mod='basic' 
-      api='listuser' form='#listform' id='datatable0'>
-    <table:mapper label='账户名' key='_id'/>
-    <table:mapper label='密钥' key='password'/>
-    <table:mapper label='说明' key='info'/>
+      api='scenelist' form='#listform' id='datatable0'>
+    <table:mapper label='名称' key='name'/>
+    <table:mapper label='ID' key='_id'/>
+    <table:mapper label='说明' key='desc'/>
     <table:mapper label='属主' key='owner'/>
-    <table:mapper label='状态' key='enb'>
-      <table:render_status/>
-    </table:mapper>
+    <table:mapper label='创建时间' key='cd'/>
+    <table:mapper label='修改时间' key='md'/>
   </table:api>
 </ui:grid>

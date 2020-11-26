@@ -1,0 +1,31 @@
+<!-- Create By xBoson System -->
+<moda:frame title='编辑场景'>
+  <ui:form id='update' class='update_form'>
+    <mp:loaddata id='datatable0'/>
+    
+    <fieldset>
+      <input type='hidden' name='_id'/>
+      
+      <form:text name='name' label='名称' tooltip='最少2字符' width='10'>
+        <vali:string min='2' max='99'/>
+      </form:text>
+      
+      <form:textarea name='desc' label='说明' width='10' rows='10'>
+      </form:textarea>
+      
+      <form:textarea name='share' label='共享用户(逗号分割用户名)' width='10' rows='10'>
+      </form:textarea>
+    </fieldset>
+    
+    <footer>
+      <moda:cancel/>
+      <moda:ok>
+        <form:post app='2e617eb7e1744bbcb6a0518fa85a84a5' mod='basic' api='sceneedit'>
+          <mp:close when='this.code == 0'>
+            <mp:send type='TABLE_UPDATE_REQ' id='datatable0'/>
+          </mp:close>
+        </form:post>
+      </moda:ok>
+    </footer>
+  </ui:form>
+</moda:frame>

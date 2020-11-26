@@ -1,0 +1,151 @@
+<!-- Create By xBoson System -->
+<moda:frame title='编辑设备'>
+  <form class='hide dev_edit_template_root'>
+    <div class='textunit_template'>
+      <section class="col col-4">
+        <label class="label"></label>
+        <label class="input">
+          <i class="icon-append fa fa-pencil-square-o"></i>
+          <input type="text" name="" placeholder="" 
+                 class="form-control input-sm " value=''></input>
+          <b class="tooltip tooltip-top-right"></b>
+        </label>
+      </section>
+    </div>
+    
+    <div class='dtunit_template'>
+      <section class="col col-4">
+        <label class="label"></label>
+        <label class="input">
+          <i class="icon-append fa fa-pencil-square-o"></i>
+          <input type="datetime-local" name="" placeholder="" 
+                 class="form-control input-sm " value=''></input>
+          <b class="tooltip tooltip-top-right"></b>
+        </label>
+      </section>
+    </div>
+    
+    <div class='dict_template'>
+      <section class="col col-4">
+        <label class="label"></label>
+        <label class="input">
+          <input type="hidden" name="" data-type="select2" 
+                 placeholder=""><pit/></input>
+        </label>
+      </section>
+    </div>
+  </form>
+  
+  <ui:form id='update' class='update_form'>
+    <mp:loaddata id='datatable1'/>
+    
+    <fieldset>
+      <input type='hidden' name='_id'/>
+      
+      <form:text name='devid' label='设备ID' width='4'>
+        <form:readonly/>
+      </form:text>
+      
+      <form:text name='product' label='产品ID' width='3'>
+        <form:readonly/>
+      </form:text>
+      
+      <form:text name='scenes' label='场景ID' width='3'>
+        <form:readonly/>
+      </form:text>
+      
+      <form:text name='state' label='状态' width='10'>
+      </form:text>
+    </fieldset>
+    
+    <fieldset class='dev_edit_dyn_meta'>
+    </fieldset>
+    
+    <footer>
+      <moda:cancel/>
+      <moda:ok>
+        <form:post app='2e617eb7e1744bbcb6a0518fa85a84a5' mod='basic' api='dev_edit'>
+          <mp:close when='this.code == 0'>
+            <mp:send type='TABLE_UPDATE_REQ' id='datatable1'/>
+          </mp:close>
+        </form:post>
+      </moda:ok>
+    </footer>
+  </ui:form>
+<style>
+.select2-choice {
+  height: 28px !important;
+}
+</style>
+<script>
+jQuery(function($) {
+  var tpl     = $(".dev_edit_template_root");
+  var texttpl = tpl.find(".textunit_template").html();
+  var dttpl   = tpl.find(".dtunit_template").html();
+  var dicttpl = tpl.find(".dict_template").html();
+  var dyn     = $(".dev_edit_dyn_meta");
+  
+  var d = xb.load_data("datatable1");
+  
+  var p = { scenes: d.scenes, _id: ['', d.scenes, d.product].join(".") };
+  xb.api("2e617eb7e1744bbcb6a0518fa85a84a5", 'basic', 'prod_list', p, function(r) {
+    var meta = r.data[0].meta;
+    meta.forEach(function(m) {
+      switch (parseInt(m.type)) {
+      case 100: //字符串
+      case 101: //数字
+        add_unit(texttpl, m);
+        break;
+        
+      case 102: //字典
+        add_dict(m);
+        break;
+      
+      case 103: //日期
+        add_unit(dttpl, m);
+        break;
+      }
+    });
+  });
+  
+  
+  
+  function add_dict(m) {
+    var u = add_unit(dicttpl, m);
+    var jdict = u.find("input");
+    
+    zy.cache.initDicts(m.dict, function() {
+      jdict.zySelect(m.dict, false, { width: '100%' });
+      jdict.select2('val', d.meta[m.name] || m.defval);
+    });
+    
+    tpl.parents(".modal").one('closed', function() {
+      jdict.select2('destroy');
+    });
+  }
+  
+  
+  function add_unit(tpl, m) {
+    var u = $(tpl);
+    u.find(".label").text(m.name);
+    var i = u.find("input");
+    i.attr('name', m.name);
+    
+    if (m.desc) {
+      u.find('.tooltip').html(m.desc);
+    } else {
+      u.find('.tooltip').remove();
+    }
+    
+    if (m.notnull) {
+      i.attr("placeholder", "必填");
+    } else {
+      i.removeAttr('placeholder');
+    }
+    i.val(d.meta[m.name] || m.defval);
+    dyn.append(u);
+    return u;
+  }
+})
+</script>
+</moda:frame>

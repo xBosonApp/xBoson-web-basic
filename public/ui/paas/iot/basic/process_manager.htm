@@ -1,0 +1,78 @@
+<!-- Create By xBoson System -->
+<div>
+<h5>消息处理器线程管理</h5>
+
+<ui:form id='list_process_form' class='update_form'>
+  <mp:clear_event type='TABLE_UPDATE_REQ' id='datatable2'/>
+  <mp:loaddata id='datatable0'/>
+  <input type='hidden' name='pid'/>
+  <input type='hidden' name='scenes'/>
+  <input type='hidden' name='tid'/>
+  <input type='hidden' name='node'/>
+  <input type='hidden' name='name'/>
+  
+  <form:btn_toolbar>
+    <form:group>
+      <form:submit label='刷新页面'/>
+      
+      <form:button label='启动/恢复线程' icon='play'>
+        <form:post app='2e617eb7e1744bbcb6a0518fa85a84a5' mod='basic' api='thread_restore'>
+          <mp:send type='TABLE_UPDATE_REQ' id='datatable2'/>
+        </form:post>
+      </form:button>
+      
+      <form:button label='停止线程' icon='pause' class='stop_the_thread'>
+        <mp:usability recvid='datatable2'/>
+        <form:post app='2e617eb7e1744bbcb6a0518fa85a84a5' mod='basic' api='thread_stop'>
+          <mp:send type='TABLE_UPDATE_REQ' id='datatable2'/>
+        </form:post>
+      </form:button>
+      
+      <form:button label='停止全部' icon='stop'>
+        <form:post app='2e617eb7e1744bbcb6a0518fa85a84a5' mod='basic' api='thread_stopall'>
+          <mp:send type='TABLE_UPDATE_REQ' id='datatable2'/>
+        </form:post>
+      </form:button>
+    </form:group>
+  </form:btn_toolbar>
+</ui:form>
+
+<table:api app='2e617eb7e1744bbcb6a0518fa85a84a5' mod='basic' sort='node,name,tid'
+    api='thead_list' form='#list_process_form' id='datatable2'>
+  <table:mapper label='类型' key='name'/>
+  <table:mapper label='状态' key='stateMsg'/>
+  <table:mapper label='主题' key='topic'/>
+  <table:mapper label='质量' key='qos'/>
+  <table:mapper label='线程ID' key='tid'/>
+  <table:mapper label='集群节点ID' key='node'/>
+  <table:mapper label='处理数据' key='count'/>
+  <table:mapper label='错误' key='error'/>
+  <table:mapper label='CPU使用' key='cpu'>
+    <table:render>
+      function(data, type, row, meta) {
+        return data +"%"
+      }
+    </table:render>
+  </table:mapper>
+  <table:mapper label='最后数据时间' key='time'>
+    <table:render_time></table:render_time>
+  </table:mapper>
+</table:api>
+
+<script>
+jQuery(function($) {
+  var d;
+  
+  $(".stop_the_thread").on("beforeSubmit", function() {
+    var form = $("#list_process_form");
+    for (var n in d) {
+      form.find("[name='"+ n +"']").val(d[n]);
+    }
+  });
+  
+  xb.on('SELECT_TABLE_ROW', 'datatable2', function(data) {
+    d = data;
+  });
+});
+</script>
+</div>

@@ -1,0 +1,40 @@
+<!-- Create By xBoson System -->
+<moda:frame title='编辑设备账户'>
+  <script src='iot/basic/comm.js'></script>
+  
+  <ui:form id='update' class='update_form'>
+    <mp:loaddata id='datatable0'/>
+    
+    <fieldset>
+      <form:text name='_id' label='名称' tooltip='最少1字符' width='10'>
+        <vali:string min='1' max='99'/>
+      </form:text>
+      
+      <form:text name='password' label='密钥' tooltip='最少8字符' width='8'>
+        <vali:string min='8' max='99'/>
+        <a href='#' id='random_password'>随机生成</a>
+      </form:text>
+      
+      <form:select name='enb' label='状态' width='2'>
+        <option value='true'>有效</option>
+        <option value='false'>无效</option>
+      </form:select>
+      
+      <form:textarea name='info' label='说明' width='10' rows='10'>
+      </form:textarea>
+    </fieldset>
+    
+    <footer>
+      <moda:cancel/>
+      <moda:ok>
+        <form:post app='2e617eb7e1744bbcb6a0518fa85a84a5' mod='basic' api='edituser'>
+          <mp:close when='this.code == 0'>
+            <mp:send type='TABLE_UPDATE_REQ' id='datatable0'/>
+          </mp:close>
+        </form:post>
+      </moda:ok>
+      <form:button label='生成登录密钥' id='genloginpass'/>
+      <span id='login_password'></span>
+    </footer>
+  </ui:form>
+</moda:frame>
