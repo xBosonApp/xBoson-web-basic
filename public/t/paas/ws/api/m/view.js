@@ -87,12 +87,14 @@ zy.log('_m.help_info.var111==='+_m.help_info.ver);
         if(_h.ver) _m.help_info.ver=_h.ver;
         if(_h.api_desc) _m.help_info.api_desc=_h.api_desc;
         if(_h.result) _m.help_info.result=_h.result;
+        if(_h.header) _m.help_info.header=_h.header;
 
         $('#ws_api_v_view_classify').html(zy.cache.cd2name("ZR.0053", _m.help_info.api_classify));
         $('#ws_api_v_view_ver').html('v'+_m.help_info.ver);
         $('#ws_api_v_view_desc').append(_m.help_info.api_desc);
         // API返回数据JSON内容
         jsoneditorInit(_m.help_info.result);
+        _m.jsonEditorHeader = jsoneditorInit1('ws_api_v_view_jsoneditor_header',_m.help_info.header);
          // 参数列表项
         if(_h.param) {
           _m.pam = _h.param;
@@ -103,6 +105,7 @@ zy.log('_m.help_info.var111==='+_m.help_info.ver);
         MethodInit({id:_m.help_info.methodid,name:_m.help_info.methodnm});
       } else {
         jsoneditorInit(null);
+        _m.jsonEditorHeader = jsoneditorInit1('ws_api_v_view_jsoneditor_header',null);
       }
       //事件绑定
       pt.Events.descBtn();
@@ -284,6 +287,23 @@ zy.log('_m.help_info.var111==='+_m.help_info.ver);
       }
     };
     _m.jsonEditor = new JSONEditor(container, options, _json); 
+  }
+
+  /**
+    * JsonEditor初始化,可以多种只读模式切换
+    * @property {String} _id 元素id
+    * @property {Object} _json 对象 
+    */
+  function jsoneditorInit1(_id,_json){
+    var container = document.getElementById(_id);
+    var options = {
+      mode: 'tree',
+      modes: ['code','tree','preview'], //['code', 'form', 'text', 'tree', 'view', 'preview'], // allowed modes
+      onError: function (err) {
+        zy.ui.msg('错误', err.toString(), 'e');
+      }
+    };
+    return new JSONEditor(container, options, _json); 
   }
 
   /**
