@@ -99,12 +99,12 @@ se.cacheKeys('regionName', '*', function(index, key) {
 返回平台机构数据库连接信息对象.
 
 ```json
-"返回的数据结构": {
+{ // 返回的数据结构
   "url"     : "jdbc 连接字符串",
   "user"    : "数据库用户名",
   "password": "数据库密码",
   "dbtype"  : "数据库类型",
-  "owner"   : "机构 id",
+  "owner"   : "机构 id"
 }
 ```
 

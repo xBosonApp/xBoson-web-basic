@@ -872,5 +872,16 @@ if (isNaN(num = parseInt(str))) {
 ans = eval("3 + (6 * 4)");  // ans的值为27
 </pre>
 </div>
-
 <hr>
+<b style='color: #ccc'>文档结束</b>
+
+<script>
+$("pre").filter(".c").each(function() {
+  try {
+    var code = hljs.highlight('javascript', this.innerText).value;
+    this.innerHTML = code;
+  } catch(e) {
+    console.error(e);
+  }
+});
+</script>

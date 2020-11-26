@@ -141,7 +141,9 @@ JSON 数据格式, 必须包含的固定字段, 规则如下:
 // Created by xBoson system
 
 // !! 不要这样做, 脚本可能在多线程中运行, 访问/修改这样的变量会导致脚本崩溃.
-var dont_Do_This
+var dont_Do_This = {}
+// 常量, 只读取不修改, 可以安全的在脚本中访问
+var const_var = "dont write value"
 
 //
 // 该函数必须定义, 接收 data 主题发来的数据时被调用
@@ -158,6 +160,8 @@ function on_data(payload, dev) {
   payload.toJavaString();
   // 保存数据
   dev.saveData(d);
+  // 修改函数外变量会引起崩溃!
+  dont_Do_This.a = "Don't do this!"
 }
 
 //
@@ -174,7 +178,7 @@ function on_cmd(cmd, dev) {
 }
 ```
 
-## Device 类
+## class Device
 
 对设备进行操作
 
@@ -263,7 +267,7 @@ Java 代码如下:
 import java.security.MessageDigest;
 import java.util.Base64;
 
-String genPassword(String username, String password) {
+String genPassword(String username, String password) throws Exception {
   byte[] b = new byte[16 + 16];
   rand.nextBytes(b);
   MessageDigest md = MessageDigest.getInstance("md5");
@@ -296,20 +300,19 @@ C 代码:
 ```c
 #include <openssl/md5.h>
 #include <stdlib.h>
-typedef unsigned char BYTE
 
-int genPassword(BYTE *digest, BYTE *name, int namelen, BYTE *pass, int passlen) {
+int genPassword(char *loginPass, char *name, int namelen, char *pass, int passlen) {
   // srand(time(NULL));
   for (int i=0; i<16; ++i) {
-    digest[i] = (unsigned char)(rand() % 0xFF);
+    loginPass[i] = (char)(rand() % 0xFF);
   }
   
   MD5_CTX c;
   MD5_Init(&c);
-  MD5_Update(&c, digest, 16);
+  MD5_Update(&c, loginPass, 16);
   MD5_Update(&c, name, namelen);
   MD5_Update(&c, pass, passlen);
-  MD5_Final(digest+16, &c);
+  MD5_Final(loginPass+16, &c);
   return 32;
 }
 ```

@@ -186,6 +186,11 @@ sys.request.multipart(function(item) {
 
 out 在返回后一定不会关闭, 如果传输数据时发生异常, 该异常会被抛出.
 
+#### JsInputStream openInputStream()
+
+返回一个输入流, 用于读取当前文件内容.  
+该方法不可与 readTo 同时调用, 会导致数据错乱.
+
 
 # 可用 API
 
@@ -663,6 +668,8 @@ sys.format("hello {0}", ['xBoson'])
 返回一个 js 普通对象(Object) 该对象既其中的属性可以在多个模块/接口之间共享, 而不会导致死锁或崩溃.
 
 
-## sys.charAt(...), sys.indexOf(...), sys.size(...), sys.startWith(..), sys.endWith(...), sys.length(..), sys.subStringTo(..), sys.subString(..), sys.split(..), sys.contain(..), sys.toUpperCase(..), sys.toLowerCase(..), sys.replace(..), sys.trim(..), sys.trunc(..), sys.httpGet(..)
+## 过时的方法
+
+> sys.charAt(...), sys.indexOf(...), sys.size(...), sys.startWith(..), sys.endWith(...), sys.length(..),  sys.subStringTo(..), sys.subString(..), sys.split(..), sys.contain(..), sys.toUpperCase(..), sys.toLowerCase(..), sys.replace(..), sys.trim(..), sys.trunc(..), sys.httpGet(..)
 
 这些方法不要再调用, 使用 js 原生方法替代.
