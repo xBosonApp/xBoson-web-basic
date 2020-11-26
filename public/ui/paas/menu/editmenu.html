@@ -51,6 +51,25 @@
 					<div id="menu_getmenu_form2" class="col-sm-12">
 					</div>
 				</div>
+				
+				<style>
+				  .export_import_div { border: 1px dashed #ccc; padding: 10px; text-align: right; margin: 20px 10px 0 10px; }
+				  .export_import_div form, .export_import_div input { display: inline-block; }
+				  .export_import_div iframe { border:0; margin:0; padding: 2px; display: inline-block; max-height: 4em;
+				      vertical-align: middle; width: 600px; }
+				</style>
+  			<div class='row export_import_div'>
+      	  <iframe name='upload_file_form_target' src=''>x</iframe>
+  			  <form action='/ZYAPP_MENU/ZYMODULE_MENU/imports' class='fix_action_url'
+  			        method="post" enctype="multipart/form-data" target='upload_file_form_target'>
+      	    <input type="file" name="file"/>
+      　　  　<input type="submit" value="导入" id='menu_imports'/>
+      	  </form>
+      	  <form action='/ZYAPP_MENU/ZYMODULE_MENU/exports' id='menu_exports' class='fix_action_url'>
+      	    <input type='submit' value='导出'/>
+      	  </form>
+  			</div>
+  			
 			</div>
 		</div>
 	</div>
@@ -60,4 +79,14 @@
 <script type="text/javascript" src="menu/editmenu.js"></script>
 <SCRIPT type="text/javascript">
 var menu_getmenu = new MenuGetMenu();
+$('.fix_action_url').each(function() {
+  var form = $(this);
+  var url = [zy.g.host.api, 'app/', zy.g.comm.org, form.attr("action")].join('');
+  if (zy.debug) {
+    // form.append("<input name='s' value='d' type='hidden'>");
+    url += "?s=d";
+  }
+  form.attr('action', url);
+});
+
 </SCRIPT>
