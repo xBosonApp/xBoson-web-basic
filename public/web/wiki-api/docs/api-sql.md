@@ -88,7 +88,7 @@ var resultTotalCount = sys.result.key1_count;
 
 * sql: sql 文, 可以有 '?' 待绑定参数.
 * paramBind: 绑定参数数组, 与 sql 文中的 '?' 一一对应.
-* flag: 是否提交事务标记，"0"：提交，"1"：不提交，默认为提交"0"，不提交时后续可使用 sql.commit() 方法进行提交操作
+* flag: 是否提交事务标记，"0"：提交，"1"：不提交，默认为提交"0"，不提交时后续可使用 sql.commit() 方法进行提交操作, 未设置该参数时不改变当前事务状态.
 
 ```javascript
 var sqlIns = "INSERT INTO transferLog (POSITIONID, HOSPUNITORGCODE, "+
@@ -107,7 +107,7 @@ var updatedcount = sql.update(sqlIns, paramIns, "0");
 
 * sql: sql 文, 可以有 '?' 待绑定参数.
 * paramBind: 绑定参数数组的数组; 与 sql 文中的 '?' 一一对应.
-* flag: 是否提交事务标记，"0"：提交，"1"：不提交，默认为提交"0"，不提交时后续可使用 sql.commit() 方法进行提交操作
+* flag: 是否提交事务标记，"0"：提交，"1"：不提交，默认为提交"0"，不提交时后续可使用 sql.commit() 方法进行提交操作, 未设置该参数时不改变当前事务状态.
 
 
 ```javascript
@@ -139,6 +139,10 @@ var updatedcount = sql.updateBatch(sqlIns, paramIns, "0");
   ...更多
 ]	
 ```
+
+## sql.setAutoCommit(boolean)
+
+设置当前连接是否自动递交(或支持回滚)
 
 
 ## sql.commit()

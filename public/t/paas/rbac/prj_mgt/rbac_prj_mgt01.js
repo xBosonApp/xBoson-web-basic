@@ -436,7 +436,9 @@ var rbac_prj_mgt11_cache = {};
     });
     
     
+    container.find("[name=prjid]").val(projectObject.prjid);
     init_tab6();
+    
     function init_tab6(){
       zy.cache.initDicts('ZR.0030',function(){
         container.find("[name=apizt]").each(function(){

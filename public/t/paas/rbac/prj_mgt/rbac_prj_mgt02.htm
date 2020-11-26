@@ -57,29 +57,45 @@
                 </p>
                 <p id="projectDe"></p>
                 <br>
+                <div>
+                  <div class='row export_import_div'>
+            			  <form action='/03229cbe4f4f11e48d6d6f51497a883b/XMGL/import' class='fix_action_url'
+            			        method="post" enctype="multipart/form-data">
+                      <input type='hidden' name='prjid'/>
+                	    <input type="file" name="file"/>
+                      <input type="submit" value="导入" id='menu_imports'/>
+                	  </form>
+                	  <form action='/03229cbe4f4f11e48d6d6f51497a883b/XMGL/export' id='menu_exports' 
+                	        class='fix_action_url'>
+                	    <input type='submit' value='导出'/>
+                	    <input type='hidden' name='prjid'/>
+                	  </form>
+                	  <!--<iframe name='upload_file_form_target' src=''></iframe>-->
+            			</div>
+                </div>
               </div>
             </div>
           </div>
           <div id="tab-r2" class="tab-pane">
             <div class="row">
-            <div class="col-xs-9">
-              <ul id="apilist" class="ztree"></ul>
-            </div>
-            <div class="col-xs-3">
-              <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">API&nbsp;操作&nbsp;<span
-                class="caret"></span></button>
-              <ul class="dropdown-menu">
-                <li>
-                  <a href="javascript:void(0);" id="up">上线</a>
-                </li>
-                <li>
-                  <a href="javascript:void(0);" id="down">下线</a>
-                </li>
-                <li>
-                  <a href="javascript:void(0);" id="redit">转开发</a>
-                </li>
-              </ul>
-            </div>
+              <div class="col-xs-9">
+                <ul id="apilist" class="ztree"></ul>
+              </div>
+              <div class="col-xs-3">
+                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">API&nbsp;操作&nbsp;<span
+                  class="caret"></span></button>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="javascript:void(0);" id="up">上线</a>
+                  </li>
+                  <li>
+                    <a href="javascript:void(0);" id="down">下线</a>
+                  </li>
+                  <li>
+                    <a href="javascript:void(0);" id="redit">转开发</a>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
           <div id="tab-r4" class="tab-pane">
@@ -155,3 +171,51 @@
     </div>
   </div>
 </div>
+<style>
+  .export_import_div { border: 1px dashed #ccc; padding: 0 10px; margin: 10px 0px 0 0px; }
+  .export_import_div form, .export_import_div input { display: inline-block; }
+  .export_import_div iframe { border:0; margin:0; padding: 2px; display: inline-block; max-height: 4em;
+      vertical-align: middle; width: 50%; }
+</style>
+
+<script type="text/javascript">
+// 项目导入/导出脚本 
+$(function() {
+  
+$('.fix_action_url').each(function() {
+  var form = $(this);
+  if (form.data("fix_url")) return;
+  
+  var url = [zy.g.host.api, 'app/', zy.g.comm.org, form.attr("action"), '?'];
+  if (zy.debug) {
+    form.append("<input name='s' value='d' type='hidden'>");
+    url.push("s=d");
+  }
+  form.attr('action', url.join(''));
+  form.data("fix_url", true);
+  
+  form.one("submit", function() {
+    var url = form.attr('action');
+    if (url.indexOf("prjid") < 0) {
+      var prjid = form.find("[name=prjid]").val();
+      form.attr('action', url + "&prjid="+ prjid);
+    }
+  });
+});
+
+
+if (!window.rbac_export_index) window.rbac_export_index = 1;
+$(".export_import_div").each(function() {
+  let thiz = $(this);
+  if (thiz.data("fix_target")) return;
+  
+  let name = 'upload_file_form_target_' + rbac_export_index;
+  // iframe 的 name 不能动态绑定, 创建时定死
+  let iframe = $("<iframe src='' name='"+ name +"'>").appendTo(thiz);
+  thiz.find("form").prop("target", name);
+  ++rbac_export_index;
+  thiz.data("fix_target", true);
+});
+
+});
+</script>
