@@ -1,0 +1,62 @@
+<style>
+  .content-green {
+    border-color: #8ac38b;
+  }
+  .header-green {
+    border-color: #8ac38b;
+    color: #356635;
+    background: #cde0c4;
+  }
+  .btn-me {
+    padding: 3px 18px 3px;
+    font-size: 14px;
+  }
+</style>
+<div class="modal" id="ws_api_m_desc" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content content-green">
+      <div class="modal-header header-green">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+          <i class="fa fa-times"></i>
+        </button>
+        <h4 class="modal-title"><i class="fa fa-bug"></i> API 功能描述</h4>
+      </div>
+      <div class="modal-body no-padding">
+        <form method="post" onsubmit="return false;" class="smart-form">
+          <textarea id="ws_api_m_desc_txt" class="custom-scroll" style="max-height:180px;padding:0px;"></textarea>
+          <footer>
+            <button type="button" class="btn btn-default" data-dismiss="modal">关　闭</button>
+            <button type="button" class="btn btn-green" name="desc_txt_save" id="desc_txt_save">保　存</button>
+          </footer>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  function ApiDesc(_txt,_cb){
+  	/*
+  	 * MARKDOWN EDITOR
+  	 */
+  	loadScript("lib/js/plugin/markdown/markdown.min.js", loadToMarkdown);
+  	function loadToMarkdown (){
+  		loadScript("lib/js/plugin/markdown/to-markdown.min.js", loadBSMarkdown);
+  	}
+  	function loadBSMarkdown(){
+  		loadScript("lib/js/plugin/markdown/bootstrap-markdown.min.js", markdownStart);
+  	}
+  	function markdownStart() {
+  		$('#ws_api_m_desc_txt').val(_txt);
+  		$('#ws_api_m_desc_txt').markdown({
+  			autofocus:false,
+  			//savable:true
+  		});
+      // 保存 API 描述
+      $('#desc_txt_save').click(function(e){
+        _cb($('#ws_api_m_desc_txt').val());
+        $("#ws_api_m_desc").modal('hide');
+      });
+  		$('#ws_api_m_desc').modal('show');
+  	}
+  }
+</script>

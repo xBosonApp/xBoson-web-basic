@@ -1782,7 +1782,7 @@
                 var filelname=_name.split('.')[_length-1];
                 var _nid = _name + _node.path;
                 var _id=_nid.replace(/\//g,'').replace(/\./g,'');
-                if (/^(png)|(jpg)|(jpeg)|(gif)|(ico)/.test(filelname)){
+                if (/^(png)|(jpg)|(jpeg)|(svg)|(gif)|(ico)/.test(filelname)){
                     var param = {};
                     // var cb = function(msg) {
                     //     $.each(msg.result,function(i,v){
@@ -1800,11 +1800,18 @@
                     // zy.g.am.app = 'zyapp_login';
                     // zy.g.am.mod = 'zymodule_login';
                     // zy.net.get('api/getuserorgtype', cb, param);
-                    var __base;
-                    if (zy.isXBosonSystem) __base = zy.g.host.ui;
+                    var __base,__path;
+                    if (zy.isXBosonSystem){
+                      __base = zy.g.host.ui;
+                      // W972:修正图像加载 PaaS 路径
+                      if (_node.path.indexOf('/paas') >= 0){
+                        __path = "/t" +_node.path;
+                      }else{
+                        __path = _node.path;
+                      }
+                    }
                     else __base = '/web/zr';
-
-                    _path = __base + _node.path;
+                    _path = __base + __path;
                     var _pre = _tab.add(_name, _node.path, _id,filelname,_path);
                     _pre.inputc.val('');
     
@@ -1961,7 +1968,7 @@
             }
             if ($('#jarviswidget-fullscreen-mode').length > 0) {
                 // $('.row').css('height','552px')
-                if (/^(png)|(jpg)|(jpeg)|(gif)|(ico)/.test(filetype)){
+                if (/^(png)|(jpg)|(jpeg)|(svg)|(gif)|(ico)/.test(filetype)){
                     $('img').each(function(i,v){
                         // v.setAttribute('height','400px');
                     })
@@ -2000,7 +2007,7 @@
             } else {
               
             //   $('.row').css('height','552px')
-                    if (/^(png)|(jpg)|(jpeg)|(gif)|(ico)/.test(filetype)){
+                    if (/^(png)|(jpg)|(jpeg)|(svg)|(gif)|(ico)/.test(filetype)){
                         $('img').each(function(i,v){
                             // v.setAttribute('height','500px');
                         })
@@ -2071,7 +2078,7 @@
             // var _height = $('#jarviswidget-fullscreen-mode').length > 0 ? '700px' : '640px';
             
             var _input = _tools._label('input').addClass('form-control').attr('readonly', 'readonly');
-            if (/^(png)|(jpg)|(jpeg)|(gif)|(ico)/.test(filelname)) {
+            if (/^(png)|(jpg)|(jpeg)|(svg)|(gif)|(ico)/.test(filelname)) {
                 var _img=_tools._image('img')
                 _img.attr('src',_path).css('z-index',9999).css('max-height','380px').css('max-width','380px');
                 var _pre1=_tools._label('pre');

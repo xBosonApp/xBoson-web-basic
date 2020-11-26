@@ -1,11 +1,65 @@
 <!-- Create By xBoson System -->
+<link rel="stylesheet" type="text/css" media="screen" href="/xboson/face/web/cdn/jsoneditor/9.1.2/jsoneditor.green.min.css">
+<style>
+  .btn-blue {
+    color: #fff!Important;
+    background-color: #3276b1!Important;
+    border-color: #2c699d!Important;
+  }
+  .btn-blue.active,.btn-blue:active,.btn-blue:focus,.btn-blue:hover,.open .dropdown-toggle.btn-blue {
+    color: #fff;
+    background-color: #296191!Important;
+    border-color: #1f496d!Important;
+  }
+  .btn-blue.active,.btn-blue:active,.open .dropdown-toggle.btn-blue {
+    background-image: none
+  }
+  .btn-green {
+    color: #fff!Important;
+    background-color: #739e73!Important;
+    border-color: #659265!Important;
+  }
+  .btn-green.active,.btn-green:active,.btn-green:focus,.btn-green:hover,.open .dropdown-toggle.btn-green {
+    color: #fff;
+    background-color: #5f895f!Important;
+    border-color: #4c6e4c!Important;
+  }
+  .btn-green.active,.btn-green:active,.open .dropdown-toggle.btn-green {
+    background-image: none
+  }
+  .btn-red {
+    color: #fff!Important;
+    background-color: #a90329!Important;
+    border-color: #900323!Important;
+  }
+  .btn-red.active,.btn-red:active,.btn-red:focus,.btn-red:hover,.open .dropdown-toggle.btn-red {
+    color: #fff;
+    background-color: #81021f!Important;
+    border-color: #540114!Important;
+  }
+  .btn-red.active,.btn-red:active,.open .dropdown-toggle.btn-red {
+    background-image: none
+  }
+  .btn-c-green {
+    cursor:pointer;
+  }
+  .btn-c-green.active,.btn-c-green:active,.btn-c-green:focus,.btn-c-green:hover,.open .dropdown-toggle.btn-c-green {
+    color: #fff;
+    background-color: #468847;
+    border-color: #468847;
+  }
+  .btn-c-green.active,.btn-c-green:active,.open .dropdown-toggle.btn-c-green {
+    background-image: none
+  }
+
+</style>
 <!--<hr class="simple">-->
 <div class="row">
   <div class="col-md-12 alert alert-block alert-success">
     <div class="col-md-10">
     	<strong class="alert-heading" style="font-size:18px;">
     	  <i class="fa fa-check-square-o"></i><span id="ws_api_v_view_apinm"></span>
-    	  <sup class="badge bg-color-red bounceIn animated" id="ws_api_v_view_ver">v2.0</sup>
+    	  <sup class="badge bg-color-red bounceIn animated" id="ws_api_v_view_ver">v1.0</sup>
     	  <sup class="badge bg-color-orange bounceIn animated" id="ws_api_v_view_classify">API</sup>
     	  <sup class="badge bg-color-green bounceIn animated" id="ws_api_v_view_sta">未知</sup>
     	</strong>
@@ -35,38 +89,27 @@
       <span class="help-block" style="margin-top:0px;margin-bottom:0px;">创建日期：<span id="ws_api_v_view_cdt"></span> | 更新日期：<span id="ws_api_v_view_udt"></span></span>
       <div class="input-group">
         <!-- add: non-hidden - to disable auto hide -->
-        <span class="input-group-addon dropdown-toggle" id="ws_api_v_view_requests" data-toggle="dropdown" style="cursor:pointer;"> GET <i class="fa fa-caret-down"></i></span>
-        <ul class="dropdown-menu pull-left request-method-update">
-          <li>
-            <a href="javascript:void(0);"><i class="fa fa-circle txt-color-green"></i> GET</a>
-          </li>
-          <li>
-            <a href="javascript:void(0);"><i class="fa fa-circle txt-color-red"></i> POST</a>
-          </li>
-          <li class="divider"></li>
-          <li>
-            <a href="javascript:void(0);"><i class="fa fa-circle txt-color-orange"></i> PUT</a>
-          </li>
+        <span class="input-group-addon dropdown-toggle btn btn-green" id="ws_api_v_view_requests" data-toggle="dropdown"> GET <i class="fa fa-caret-down"></i></span>
+        <ul class="dropdown-menu pull-left request-method-update" role="menu">
         </ul>
-        <input class="form-control" role="menu" type="text" id="ws_api_v_view_uri" value="">
-        <span class="input-group-addon" role="menu">
-          <span class="dropdown">
-            <span class="dropdown-toggle" id="ws_api_v_view_auth" data-toggle="dropdown" style="cursor:pointer;"><i class="fa fa fa-eye"> 认证 </i> <i class="fa fa-caret-down"></i></span>
-            <ul class="dropdown-menu pull-right auth-method-update">
-              <li>
-                <a href="javascript:void(0);"><i class="fa fa fa-eye"></i> 认证</a>
-              </li>
-              <li>
-                <a href="javascript:void(0);"><i class="fa fa-eye-slash"></i> 匿名</a>
-              </li>
-            </ul>
-          </span>
+        <span class="input-group-addon btn btn-c-green">
+          <span class="dropdown-toggle" id="ws_api_v_view_auth" data-toggle="dropdown"><i class="fa fa fa-eye"></i> <i class="fa fa-caret-down"></i></span>
+          <ul class="dropdown-menu pull-left text-left auth-method-update" role="menu">
+            <li class="active">
+              <a href="javascript:void(0);"><i class="fa fa-eye"></i> 认证</a>
+            </li>
+            <li class="divider"></li>
+            <li>
+              <a href="javascript:void(0);"><i class="fa fa-eye-slash"></i> 匿名</a>
+            </li>
+          </ul>
         </span>
-        <span class="input-group-addon" role="menu" id="ws_api_v_view_test" style="cursor:pointer;" title="测试"><i class="fa fa-bug"></i></span>
+        <input class="form-control" role="menu" type="text" id="ws_api_v_view_url" value="">
+        <span class="input-group-addon btn-c-green" role="menu" id="ws_api_v_view_test" title="运行测试"><i class="fa fa-bug"></i> Run Test</span>
       </div>
     </div>
     <div class="col-md-12">
-      <span class="help-block" style="margin-top:0px;margin-bottom:0px;" id="ws_api_v_view_ps">备注：<code>/app/</code>认证|<code>/openapp/</code>匿名|<code>cb=</code>[可选]回调函数名|<code>s=d/r</code>[可选]返回调试信息|<code>ems=ems</code>[可选]返回服务端处理耗时（毫秒）|<code>format=x</code>[可选]输出格式<code>XML</code>默认<code>JSON</code></span>
+      <span class="help-block" style="margin-top:0px;margin-bottom:0px;" id="ws_api_v_view_ps">备注：<code>[/app/]</code><i class="fa fa-eye"></i>认证，<code>[/openapp/]</code><i class="fa fa-eye-slash"></i>匿名，<code>cb=</code>[可选]回调函数名，<code>s=d/r</code>[可选]返回调试信息，<code>ems=ems</code>[可选]返回服务端处理耗时（毫秒），<code>format=x</code>[可选]输出格式<code>XML</code>默认<code>JSON</code></span>
     </div>
   </div>
 </div>
@@ -98,11 +141,23 @@
           </div>
         </div>
   		</fieldset>
+      <fieldset>
+        <legend style="margin-bottom:6px;padding-top:22px;">返回数据参考：【JSON】</legend>
+        <div class="form-group has-warning">
+          <div class="col-md-12">
+            <div id="ws_api_v_view_jsoneditor"></div>
+          </div>
+        </div>
+  		</fieldset>
     </form>
   </div>
+<div class="row">
+  <hr class="simple">
+</div>
 
 <div id="ws_api_v_pagination"></div>
 <div id="ws_api_v_test_modal"></div>
+<script src="/xboson/face/web/cdn/jsoneditor/9.1.2/jsoneditor.min.js"></script>
 <script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
 <script src="ws/api/v/view.js"></script>
 <script>

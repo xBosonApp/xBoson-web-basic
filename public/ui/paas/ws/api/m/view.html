@@ -1,6 +1,12 @@
 <!-- Create By xBoson System -->
 <link rel="stylesheet" type="text/css" media="screen" href="/xboson/face/web/cdn/jsoneditor/9.1.2/jsoneditor.green.min.css">
 <style>
+  hr.simple {
+    margin-top: 3px;
+    margin-bottom: 5px;
+    border-style: dashed;
+    border-top: 1px solid #46884729;
+  }
   .btn-blue {
     color: #fff!Important;
     background-color: #3276b1!Important;
@@ -63,7 +69,8 @@
     	  <sup class="badge bg-color-orange bounceIn animated" id="ws_api_v_view_classify">API</sup>
     	  <sup class="badge bg-color-green bounceIn animated" id="ws_api_v_view_sta">未知</sup>
     	</strong>
-    	<p id="ws_api_v_view_desc" style="margin:0px;">描述：</p>
+    	<hr class="simple">
+    	<p id="ws_api_v_view_desc" style="margin:0px;cursor:pointer;"><i class="fa fa-pencil-square-o fa-fw"></i>描述：</p>
     </div>
     <div class="col-md-2">
       <fieldset class="smart-form" novalidate="novalidate">
@@ -82,6 +89,7 @@
           </div>
         </section>
       </fieldset>
+      <button name="ws_api_m_api_info_save" class="btn btn-green" style="float:right;"><i class="fa fa-save"></i> 保存API帮助信息</button>
     </div>
   </div>
   <div class="form-group has-success">
@@ -113,53 +121,27 @@
     </div>
   </div>
 </div>
-  <div class="widget-body">
-    <form class="form-horizontal">
-      <fieldset>
-        <legend style="margin-bottom:6px;padding-top:22px;">请求参数：</legend>
-        <div class="form-group has-warning">
-          <div class="col-md-12">
-            <div class="well">
-              <table id="ws_api_v_view_tb" class="table table-striped table-forum">
-                <thead>
-                  <tr class="txt-color-green">
-                    <th style="font-size:15px;">参数ID</th>
-                    <th style="font-size:15px;">参数类型</th>
-                    <th style="font-size:15px;">测试参数值</th>
-                    <th style="font-size:15px;">描述</th>
-                  </tr>
-                </thead>
-                <tbody>
-            <!--      <tr>-->
-            <!--        <td colspan="4">	-->
-            <!--<code style="white-space: normal;">&lt;a data-target="#modal" data-toggle="modal" href="remote.html"&gt; ... &lt;/a&gt;</code>-->
-            <!--        </td>-->
-            <!--      </tr>-->
-                </tbody>
-              </table>
-            </div>
-          </div>
+<div class="widget-body">
+  <fieldset>
+    <legend style="margin-bottom:6px;padding-top:22px;">请求参数：<i class="fa fa-fw fa-plus-circle txt-color-green" id="ws_api_m_api_param_addkey" style="cursor:pointer"></i></legend>
+    <div id="ws_api_m_api_param"></div>
+  </fieldset>
+  <form class="form-horizontal">
+    <fieldset>
+      <legend style="margin-bottom:6px;padding-top:22px;">返回数据参考：【JSON】</legend>
+      <div class="form-group has-warning">
+        <div class="col-md-12">
+          <div id="ws_api_v_view_jsoneditor"></div>
         </div>
-  		</fieldset>
-      <fieldset>
-        <legend style="margin-bottom:6px;padding-top:22px;">返回数据参考：【JSON】</legend>
-        <div class="form-group has-warning">
-          <div class="col-md-12">
-            <div id="ws_api_v_view_jsoneditor"></div>
-          </div>
-        </div>
-  		</fieldset>
-    </form>
-  </div>
-<div class="row">
-  <hr class="simple">
+      </div>
+  	</fieldset>
+  </form>
 </div>
-
 <div id="ws_api_v_pagination"></div>
 <div id="ws_api_v_test_modal"></div>
 <script src="/xboson/face/web/cdn/jsoneditor/9.1.2/jsoneditor.min.js"></script>
-<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
-<script src="ws/api/v/view.js"></script>
+<!--<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>-->
+<script src="ws/api/m/view.js"></script>
 <script>
   var api_viewObj;
   function main(node){
