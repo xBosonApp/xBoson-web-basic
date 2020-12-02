@@ -82,6 +82,8 @@
 ```html
 <ui:grid id='idid' class='list' title='[TITLE]表'>
   <ui:form id='listform'>
+    <!-- 防止 table 多次重复拉取表格数据 -->
+    <mp:clear_event type='TABLE_UPDATE_REQ' id='datatable0'/>
     <!-- 查询字段集合 -->
     <form:text name='[NAME]' label='[LABEL]名称' tooltip='模糊查询'/>
     <form:date name='dt_from' label='开始日期'/>
