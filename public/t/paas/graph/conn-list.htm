@@ -1,0 +1,52 @@
+<!-- Create By xBoson System -->
+<ui:grid id='idid' class='list' title='图数据库连接列表'>
+  
+  <ui:form id='listform'>
+    <mp:clear_event type='TABLE_UPDATE_REQ' id='conntable'/>
+    <form:text name='_id' label='ID'/>
+    <form:text name='name' label='名称'/>
+    
+    <form:btn_toolbar>
+      <form:group>
+        <form:submit label='查询'/>
+        <form:reset/>
+      </form:group>
+      <form:group>
+        <form:button label='添加' icon='magic'>
+          <moda:open url='graph/conn-add.htm'/>
+        </form:button>
+        <form:button label='详情' icon='edit'>
+          <mp:usability recvid='conntable'/>
+          <moda:open url='graph/conn-edit.htm'/>
+        </form:button>
+        <form:button label='打开' icon='calculator' id='open_graph_ide'>
+        </form:button>
+        <form:button label='删除' icon='trash-o'>
+          <mp:usability recvid='conntable'/>
+          <mp:delete app='0d8b740dbaa9440c8ddfc392cc9780a4' primary='_id'
+              mod='basic' api='rm_conn' dataid='conntable'>
+            <mp:send type='TABLE_UPDATE_REQ' id='conntable'/>
+          </mp:delete>
+        </form:button>
+      </form:group>
+    </form:btn_toolbar>
+  </ui:form>
+  
+  <mp:savedata type='SELECT_TABLE_ROW' id='conntable'/>
+  
+  <table:api app='0d8b740dbaa9440c8ddfc392cc9780a4' mod='basic' 
+      api='connlist' form='#listform' id='conntable'>
+    <table:mapper label='ID' key='_id'/>
+    <table:mapper label='名称' key='name'/>
+    <table:mapper label='URI' key='uri'/>
+    <table:mapper label='修改时间' key='md'/>
+    <table:mapper label='创建时间' key='cd'/>
+  </table:api>
+  
+  <script>
+    $('#open_graph_ide').click(function() {
+      var x = xb.load_data("conntable");
+      window.open('graph/ide.htm?_id='+ x._id +"&uri="+ encodeURIComponent(x.uri));
+    });
+  </script>
+</ui:grid>

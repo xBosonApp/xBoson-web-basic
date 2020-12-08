@@ -1,0 +1,33 @@
+<!-- Create By xBoson System -->
+<moda:frame title='创建图数据库连接'>
+  <ui:form id='create_graph_conn' class='add_form'>
+    <fieldset>
+      <form:text name='name' label='名称' tooltip='最少1字符' width='10'>
+        <vali:string min='1' max='99'/>
+      </form:text>
+      
+      <form:text name='uri' label='连接URI' tooltip='最少1字符' width='10'>
+        <vali:string min='1' max='99'/>
+      </form:text>
+      
+      <form:text name='authUser' label='登录用户名' width='5' tooltip='可用空'>
+      </form:text>
+      
+      <form:password name='authPass' label='密码' width='5'></form:password>
+      
+      <form:textarea name='desc' label='说明' width='10'>
+      </form:textarea>
+    </fieldset>
+    
+    <footer>
+      <moda:cancel/>
+      <moda:ok>
+        <form:post app='0d8b740dbaa9440c8ddfc392cc9780a4' mod='basic' api='conn_add'>
+          <mp:close when='this.code == 0'>
+            <mp:send type='TABLE_UPDATE_REQ' id='conntable'/>
+          </mp:close>
+        </form:post>
+      </moda:ok>
+    </footer>
+  </ui:form>
+</moda:frame>
