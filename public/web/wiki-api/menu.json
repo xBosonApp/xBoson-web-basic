@@ -49,7 +49,8 @@
     { "name": "Config", "file": "docs/api-config.md" },
     { "name": "Pack", "file": "docs/api-pack.md" },
     { "name": "Blas", "file": "docs/api-blas.md" },
-    { "name": "IoT", "file": "docs/api-iot.md" }
+    { "name": "IoT", "file": "docs/api-iot.md" },
+    { "name": "graph", "file": "docs/api-graph.md" }
   ]},
   
   { "name": "前端模板", "basepath":"ui-docs", "file": "basic.md", "sub": [

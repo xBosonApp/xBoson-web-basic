@@ -39,7 +39,6 @@ sys.request.multipart(function(item) {
     var istream = uz.openInput();
   }
 });
-
 ```
 
 
@@ -47,19 +46,19 @@ sys.request.multipart(function(item) {
 
 打包器对象
 
-## void add(String filename, InputStream data)
+## void add(String filepath, InputStream data)
 
 打包文件, 文件内容从 data 中读取.
 
-## void add(String filename, String data)
+## void add(String filepath, String data)
 
 打包文件, 使用字符串作为内容
 
-## void add(String filename, Bytes data)
+## void add(String filepath, Bytes data)
 
 打包文件, 使用字节数组作为内容
 
-## void add(String filename, Buffer data)
+## void add(String filepath, Buffer data)
 
 打包文件, 使用缓冲区作为内容
 
