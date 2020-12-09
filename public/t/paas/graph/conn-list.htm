@@ -46,7 +46,14 @@
   <script>
     $('#open_graph_ide').click(function() {
       var x = xb.load_data("conntable");
-      window.open('graph/ide.htm?_id='+ x._id +"&uri="+ encodeURIComponent(x.uri));
+      var uri = 'graph/ide.htm?_id='+ x._id
+        +"&uri="+ encodeURIComponent(x.uri)
+        +"&pf="+ encodeURIComponent(zy.g.host.api)
+        +"&org="+ encodeURIComponent(zy.g.comm.org);
+      if (zy.debug) {
+        uri += "&s=d";
+      }
+      window.open(uri);
     });
   </script>
 </ui:grid>
