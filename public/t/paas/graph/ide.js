@@ -4,13 +4,16 @@ jQuery(function($) {
   const parm = parseParm();
   const state = $(".state");
   const jlabels = $("#labels");
+  const propertie_show = state.find('.propertie');
   const jbody = $(document.body);
+  const jwin = $(window);
   
   // {id:数据}
   let nodes = {};
   let edges = {};
   // {类型: 样式表}
   let types = {};
+  let dialogIndex = 50;
   
   const operator = {
     // 定义模块
@@ -35,6 +38,8 @@ jQuery(function($) {
     eachNode,
     // Function()
     newTable,
+    // Function()
+    new_analysis,
   };
   
   const layout_opt = {
@@ -58,13 +63,14 @@ jQuery(function($) {
     nodeRepulsion(node) {
       //indegree 200000
       var r = node.indegree() * 5000000 + 10000;
-      console.log(r)
+      // console.log(r)
       return r;
     },
   };
   
   const cy = operator.cy = cytoscape({
     container: document.getElementById('graph'),
+    style : '.selected { overlay-color: blue; overlay-opacity: 0.3 }',
   });
   
   state.find(".id").text(parm._id);
@@ -100,9 +106,44 @@ jQuery(function($) {
     }
   });
   
-  $(window).resize(function() {
+  jwin.resize(function() {
     cy.resize();
+    $("#data_tables").css("max-width", jbody.innerWidth() - $("#menus").outerWidth() - 10);
+  }).trigger("resize");
+  
+  
+  cy.on("select", (e)=>{ 
+    e.target.addClass("selected");
+    var data = e.target.data();
+    propertie_show.empty();
+    
+    insert_prop('ID', data.id);
+    for (var n in data.x) {
+      insert_prop(n, data.x[n]);
+    }
   });
+  
+  cy.on('unselect', (e)=>{
+    e.target.removeClass('selected');
+  });
+  
+  $.fn.extend({
+    center() {
+      var x = (jwin.width()  - this.outerWidth()) / 2;
+      var y = (jwin.height() - this.outerHeight()) / 2;
+      this.offset({left:x, top:y});
+      return this;
+    }
+  });
+  
+  update_analysis_list();
+  
+  
+  function insert_prop(k, v) {
+    var row = $("<tr>").appendTo(propertie_show);
+    $("<td class='tag'>").text(k).appendTo(row);
+    $("<td>").text(v).appendTo(row);
+  }
   
   
   function update() {
@@ -117,14 +158,20 @@ jQuery(function($) {
     
     var st = {
       'label' : 'data(id)',
+      'background-color': randomColor(),
     };
     
     if (typeof type == 'string') {
-      setStyle(type, st, data);
+      _set_style(type);
     } else {
-      for (var i=0; i<type.length; ++i) {
-        setStyle(type[i], st, data);
-      }
+      type.forEach(_set_style);
+    }
+    
+    function _set_style(type) {
+      setStyle(type, st, data, { 
+        colorAttr : 'background-color',
+        editType  : 'node',
+      });
     }
     
     cy.add({
@@ -146,9 +193,12 @@ jQuery(function($) {
       'curve-style'       : 'bezier',
       'line-color'        : lc,
       'target-arrow-color': lc,
-      'width'             : 2,
+      'width'             : 1,
       'label'             : 'data(name)',
-    }, data);
+    }, data, {
+      colorAttr : 'line-color',
+      editType  : 'edge',
+    });
     
     cy.add({
       group   : 'edges',
@@ -159,7 +209,7 @@ jQuery(function($) {
   }
   
   
-  function setStyle(type, exstyle, attr) {
+  function setStyle(type, exstyle, attr, opt) {
     if (types[type]) {
       types[type] = $.extend(types[type], attr);
       return;
@@ -168,64 +218,39 @@ jQuery(function($) {
     }
     
     const style_key = 'graph.'+ parm._id +'.style.'+ type;
-    var st = $.extend({
-      'background-color': randomColor(),
-      'color'           : '#aaa',
-      'font-size'       : '10px',
+    let style_change = 0;
+    let st = $.extend({
+      'color'     : '#aaa',
+      'font-size' : '10px',
     }, exstyle, load_label_style());
     updateStyle();
     
-    var l = $("<label>").text(type).css({
-      'background-color' : st['background-color'],
-      'color' : reverseColor(st['background-color']),
-    });
-    jlabels.append(l);
-    
-    
-    var editor = template('.label_editor');
-    editor.find(".title").text(type);
-    editor.hide();
-    
-    var alist = editor.find(".attr_list");
-    label_item('默认', exstyle.label);
-    label_item('id', 'data(id)');
-    for (var n in attr) {
-      label_item(n);
-    }
-    
-    jbody.on("close_editor", function() {
-      editor.hide();
+    let editor = newStyleEditor({
+      title     : type,
+      type      : type,
+      style     : st,
+      editType  : opt.editType,
+      colorAttr : opt.colorAttr,
+      
+      updateStyle,
+      save_label_style,
     });
     
-    l.click(function(e) {
-      var attr = types[type];
-      jbody.trigger('close_editor');
-      editor.css({
-        'position': 'absolute', 
-        'top'     : l.offset().top +'px', 
-        'left'    : (l.offset().left + l.outerWidth()) +'px',
-        'z-index' : 30,
-      }).show();
-      return false;
-    });
-    
-    function label_item(n, labelExp) {
-      var li = $("<a href='#'>").text(n).appendTo(alist);
-      li.click(function() {
-        st.label = labelExp || ('data(x.'+ n +')');
-        updateStyle();
-        editor.hide();
-        save_label_style(st)
-        return false;
-      });
+    editor.insertAttr('默认', exstyle.label);
+    editor.insertAttr('id', 'data(id)');
+    for (let n in attr) {
+      editor.insertAttr(n);
     }
     
     function updateStyle() {
       cy.style().selector('.'+ type).style(st).update();
+      style_change = 1;
     }
     
     function save_label_style() {
+      if (!style_change) return;
       localStorage.setItem(style_key, JSON.stringify(st));
+      style_change = 0;
     }
     
     function load_label_style() {
@@ -237,6 +262,83 @@ jQuery(function($) {
   }
   
   
+  function newStyleEditor(opt) {
+    const editor = template('.label_editor');
+    const alist = editor.find(".attr_list");
+    editor.find(".title").text(opt.title);
+    editor.hide();
+    
+    editor.find("form").not('.'+ opt.editType).remove();
+    const form = editor.find("form");
+    let in_editor_range = 0;
+    
+    const l = $("<label>").text(opt.type).appendTo(jlabels);
+    updateLabel();
+    
+    l.click(function(e) {
+      var attr = types[opt.type];
+      jbody.trigger('close_editor');
+      editor.css({
+        'position': 'absolute', 
+        'top'     : l.offset().top +'px', 
+        'left'    : (l.offset().left + l.outerWidth()) +'px',
+        'z-index' : 30,
+      }).show();
+      return false;
+    });
+    
+    editor.mouseover(function() {
+      in_editor_range = 1;
+    }).mouseleave(function() {
+      in_editor_range = 0;
+    });
+    
+    jbody.on("close_editor", function() {
+      if (in_editor_range) return;
+      editor.hide();
+      opt.save_label_style();
+      updateLabel();
+    });
+    
+    
+    for (var n in opt.style) {
+      form.find('[name="'+ n +'"]').val(opt.style[n]);
+    }
+    
+    form.find(":input").each(function() {
+      const thiz = $(this);
+      const name = thiz.attr("name");
+      
+      thiz.change(function() {
+        opt.style[name] = thiz.val();
+        opt.updateStyle();
+      });
+    });
+    
+    return {
+      editor,
+      insertAttr,
+    }
+    
+    function updateLabel() {
+      let bg = opt.style[opt.colorAttr];
+      l.css({
+        'background-color' : bg,
+        'color' : reverseColor(bg),
+      });
+    }
+    
+    function insertAttr(n, labelExp) {
+      const li = $("<a href='#'>").text(n).appendTo(alist);
+      li.click(function() {
+        opt.style.label = labelExp || ('data(x.'+ n +')');
+        opt.updateStyle();
+        return false;
+      });
+    }
+  }
+  
+  
   function eachNode(cb) {
     for (var n in nodes) {
       cb(n, nodes[n]);
@@ -244,10 +346,23 @@ jQuery(function($) {
   }
   
   
+  function capi(name, _parm, cb) {
+    __api('basic', name, _parm, cb);
+  }
+  
+  
   function api(name, _parm, cb) {
-    var url = [parm.pf, 'app/', parm.org, '/', App, '/', operator.module, '/', name].join('');
+    __api(operator.module, name, _parm, cb);
+  }
+    
+  function __api(module, name, _parm, cb) {
+    var url = [parm.pf, 'app/', parm.org, '/', App, '/', module, '/', name].join('');
     if (parm.s == 'd') {
-      _parm.s = 'd';
+      if (typeof _parm == 'string') {
+        _parm += '&s=d';
+      } else {
+        _parm.s = 'd';
+      }
     }
     
     $.ajax(url, {
@@ -262,6 +377,7 @@ jQuery(function($) {
       
       success(data) {
         if (data.code == 0) {
+          operator.msg("完成");
           cb(null, data);
         } else {
           operator.error("请求 "+ name +" 时错误,", data.msg);
@@ -273,6 +389,11 @@ jQuery(function($) {
   
   
   function init_graph_type(uri) {
+    if (!uri) {
+      error("初始化失败, 缺少参数, 请返回图连接列表重试");
+      throw new Error();
+    }
+    
     var type = uri.split("://")[0];
     switch (type) {
       case "bolt":
@@ -282,6 +403,10 @@ jQuery(function($) {
       case "neo4j+s":
         type = 'neo4j';
         break;
+        
+      default:
+        error("无法识别的 URI "+ uri);
+        return;
     }
     $("<script>").attr("src", type +".op.js").appendTo(jbody);
     for (var n in window.graph_operator) {
@@ -297,6 +422,182 @@ jQuery(function($) {
     types = {};
     cy.remove('*');
     jlabels.empty();
+    $(".label_editor_section").remove();
+  }
+  
+  
+  function open_analysis_form(name, parm, cb) {
+    var dia = openDialog(".open_analysis_form");
+    dia.find(".title").text(name);
+    var message = dia.find('.message');
+    var content = dia.find(".gen_target");
+    message.text("正在读取...")
+    
+    capi('gen_form', parm, function(err, r) {
+      message.text('');
+      if (err) {
+        content.html("错误: "+ err.message);
+        return;
+      }
+      content.html(r.form.join(''));
+      cb(dia, message);
+    });
+  }
+  
+  
+  function update_analysis_list() {
+    var jlist = $(".analysis_list");
+    jlist.empty();
+    
+    capi('analysis_list', {connid: parm._id}, function(err, r) {
+      if (err) return;
+      r.data.forEach(insertAnalysis);
+    });
+    
+    function insertAnalysis(d) {
+      let jdiv = $("<div>").appendTo(jlist);
+      
+      $("<a href='#'>").text(d.name).appendTo(jdiv).click(function() {
+        open_analysis_form(d.name, d, query_form);
+      });
+      
+      $("<a href='#' class='delete_button'>x</a>").appendTo(jdiv).click(function() {
+        if (!confirm('点击 "确定" 删除分析项 '+ d.name)) return;
+        capi('del_analysis', d, function(err) {
+          if (!err) update_analysis_list();
+        });
+      });
+      
+      $("<a href='#' class='edit_button'>E</a>").appendTo(jdiv).click(function() {
+        var edit = new_analysis();
+        edit.find(".title").text("修改分析项");
+        capi('get_analysis', d, function(err, r) {
+          if (err) return;
+          for (var n in r.data) {
+            edit.find("[name='"+ n +"']").val(r.data[n]);
+          }
+          edit.find("form").attr('action', 'edit_analysis');
+        });
+      });
+    }
+    
+    function query_form(dia, message) {
+      var form = dia.find("form");
+      
+      form.submit(function() {
+        var data = form.serialize();
+        capi(form.attr("action"), data, (err, r)=>{
+          if (err) {
+            message.text(err.message);
+            return;
+          }
+          operator.query({_id:parm._id, cql: r.data.join('')}, function(err, r) {
+            if (err) {
+              message.text(err.message);
+            } else {
+              dia.hide(); 
+            }
+          });
+        });
+        return false;
+      });
+    }
+  }
+  
+  
+  function new_analysis() {
+    var dia = openDialog(".new_analysis_dialog");
+    dia.find("[name=connid]").val(parm._id);
+    
+    dia.on("submit_success", function() {
+      update_analysis_list();
+      dia.trigger("close");
+    });
+    
+    dia.find('.help').click(function() {
+      dia.find(".help-text").removeClass('hide');
+    });
+    
+    dia.find('.test').click(function() {
+      var parm = {
+        name : dia.find('[name=name]').val(),
+        cql  : dia.find('[name=cql]').val(),
+        tpl  : dia.find('[name=tpl]').val(),
+      };
+      if (!parm.cql) {
+        dia.find(".ajax-message").text("必须填写 cql");
+        return;
+      }
+      open_analysis_form(parm.name || parm.cql, parm, function(dia) {
+        dia.find("[type=submit]").remove();
+      });
+    });
+    return dia;
+  }
+  
+  
+  // 可用安全的在一个 dom 上多次调用
+  // 对话框可移动位置, 默认显示, 绑定关闭按钮
+  // 绑定表单递交
+  function openDialog(sl) {
+    const dia = $(sl).clone().appendTo(jbody);
+    const form = dia.find("form");
+    const amsg = form.find(".ajax-message");
+    let x = 0, y = 0, dx = 0, dy = 0;
+    let closed = false;
+    
+    dia.show().center();
+    
+    // jbody.one("close_editor", _close);
+    // dia.click(()=>{ return false; });
+    dia.find(".close").click(_close);
+    dia.find("[href=close]").click(_close);
+    dia.css("z-index", dialogIndex++);
+    dia.on("close", _close);
+    
+    dia.find("h5").mousedown((e)=>{
+      x = e.pageX;
+      y = e.pageY;
+      let off = dia.position();
+      dx = off.left;
+      dy = off.top;
+      jbody.one('mouseup', ()=>{
+        jbody.off('mousemove', _move);
+      });
+      jbody.mousemove(_move);
+    });
+    
+    form.submit(function() {
+      var data = form.serialize();
+      capi(form.attr("action"), data, (err, r)=>{
+        if (err) {
+          amsg.text(err.message);
+          return;
+        }
+        form.trigger("submit_success", r);
+        msg("完成");
+      });
+      return false;
+    });
+    
+    function _move(e) {
+      dia.offset({
+        left : dx + e.pageX - x,
+        top  : dy + e.pageY - y,
+      });
+    }
+    
+    function _close() {
+      if (closed) return;
+      closed = true;
+      dia.hide();
+      dia.find(":input").val('');
+      jbody.off('mousemove', _move);
+      dia.remove();
+      --dialogIndex;
+      return false;
+    }
+    return dia;
   }
   
   
@@ -399,9 +700,13 @@ jQuery(function($) {
     var hasdata = false;
     
     function put(c, d) {
-      let tw = table.body[rc];
+      putx(rc, c, d);
+    }
+    
+    function putx(r, c, d) {
+      let tw = table.body[r];
       if (!tw) {
-        tw = table.body[rc] = [];
+        tw = table.body[r] = [];
       }
       tw[c] = JSON.stringify(d);
       hasdata = true;
@@ -425,6 +730,10 @@ jQuery(function($) {
     
     function hasData() {
       return rc > 0;
+    }
+    
+    function rowNum() {
+      return rc;
     }
     
     function show(title) {
@@ -458,12 +767,17 @@ jQuery(function($) {
       col,
       // (col, data) 向当前行 col 列中插入数据
       put,
+      // (row, col, data) 向指定行列插入数据
+      putx,
       // () 下一行数据
       next,
       // () 有数据返回 true
       hasData,
       // () 显示表格
       show,
+      // () 返回当前行号
+      rowNum,
     }
   }
 });
+console.log("上海竹呗信息技术有限公司, 版权所有 http://xboson.net");

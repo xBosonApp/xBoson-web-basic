@@ -26,7 +26,7 @@ function query(parm, cb) {
           break;
           
         case 'rel':
-          edges.push(o);
+          edges.push({rel : o, table, k, r : table.rowNum() });
           break;
           
         default:
@@ -40,14 +40,22 @@ function query(parm, cb) {
     edges.forEach(addEdge);
     if (table.hasData()) {
       table.show(parm.cql);
-      cb();
-    } else {
-      requestNodesEdge();
-    }
+    } 
+    requestNodesEdge();
   });
   
-  function addEdge(o) {
-    thiz.addEdge('node.'+ o.id, o.type, o.start+'', o.end+'', o.propertie);
+  function addEdge(r) {
+    try {
+      var o = r.rel;
+      thiz.addEdge('edge.'+ o.id, o.type, o.start+'', o.end+'', o.propertie);
+    } catch(e) {
+      if (r.table) {
+        r.table.putx(r.r, r.table.col(r.k), r.rel.propertie);
+      } else {
+        console.error(e);
+      }
+      // r.table.putx(r.r, r.table.col('error'), e.message);
+    }
   }
   
   function requestNodesEdge() {
@@ -65,7 +73,7 @@ function query(parm, cb) {
         cb(err);
       } else {
         data.data.forEach(function(row) {
-          addEdge(row.r);
+          addEdge({ rel : row.r });
         });
         cb();
       }

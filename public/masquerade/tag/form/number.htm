@@ -1,0 +1,17 @@
+<never>
+  参数:
+    [必须] name: 表单名称, label: 显示名称,
+    [可选] id, class, icon: 图标名, 不需要 fa 前缀, tooltip: 弹出提示, value: 默认值, width: 宽度
+</never>
+<js:default name='width' dval='3'/>
+<section class="col col-###width###">
+  <label class="label">###label###</label>
+  <label class="input">
+    <js:default name='icon' dval='pencil-square-o'/>
+    <i class="icon-append fa fa-###icon###"></i>
+    <input type="number" id='###id###' name="###name###" placeholder="###label###" 
+           class="form-control input-sm ###class###" value='###value###'></input>
+    <if var='tooltip'><b class="tooltip tooltip-top-right">###tooltip###</b></if>
+    <pit/>
+  </label>
+</section>
