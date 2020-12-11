@@ -4,9 +4,9 @@ jQuery(function($) {
   const parm = parseParm();
   const state = $(".state");
   const jlabels = $("#labels");
-  const propertie_show = state.find('.propertie');
   const jbody = $(document.body);
   const jwin = $(window);
+  const analysis_list = new_analysis_list();
   
   // {id:数据}
   let nodes = {};
@@ -16,16 +16,26 @@ jQuery(function($) {
   let dialogIndex = 50;
   
   const operator = {
+    //--- 从外部模块中导入的函数 ---
     // 定义模块
     module : null,
-    // Function() 生成基础查询参数
-    gen_parm,
-    // Function() 
-    clean_graph,
-    // Function(...)
-    error, msg, warn,
     // Function(parm:{_id, cql, limit}, cb:(err)) 执行查询, 更新图
     query : null,
+    // Function(id, label, del_rel, isEdge) 生成一个 cql 用于删除节点或边
+    genDeleteCql : null,
+    // Function(id, label, k, v, isEdge) 生成 cql 用于修改/插入属性
+    genInsertAttrCql : null,
+    // Function(id, label, k, isEdge) 生成 cql 用于删除属性
+    genDeleteProp : null,
+    // Function (label, prop:{}) 生成 cql 用于创建无关系节点
+    genCreateNode : null,
+    // Function(beginNodeId, endNodeId, label, prop) 生成 cql 用于创建关系
+    genCreateEdge : null,
+    
+    // Function() 生成基础查询参数
+    gen_parm,
+    // Function(...)
+    error, msg, warn,
     // Function(apiname, parameater, callback:(err, data)) http错误或接口返回错误视为 err, 同时打印错误消息
     api,
     // Function(id, type:""|[], data) id 必须是字符串
@@ -38,117 +48,384 @@ jQuery(function($) {
     eachNode,
     // Function()
     newTable,
-    // Function()
+    
+    //--- Function() 菜单函数
     new_analysis,
+    update_analysis_list,
+    remove_select,
+    insert_attr,
+    create_node_menu,
+    clean_graph,
+    create_rel_menu,
   };
   
   const layout_opt = {
-    name: 'cose', // breadthfirst: 树, cose: 星
-    animate: true,
-    idealEdgeLength: 100,
-    nodeOverlap: 20,
-    refresh: 20,
-    fit: true,
-    padding: 30,
-    randomize: false,
-    componentSpacing: 100,
-    edgeElasticity: 100,
-    nestingFactor: 5,
-    gravity: 80,
-    numIter: 1000,
-    initialTemp: 200,
-    coolingFactor: 0.95,
-    minTemp: 1.0,
-    
-    nodeRepulsion(node) {
-      //indegree 200000
-      var r = node.indegree() * 5000000 + 10000;
-      // console.log(r)
-      return r;
-    },
+    cose : {
+      name: 'cose', // breadthfirst: 树, cose: 星
+      animate: true,
+      idealEdgeLength: 100,
+      nodeOverlap: 20,
+      refresh: 20,
+      fit: true,
+      padding: 30,
+      randomize: false,
+      componentSpacing: 100,
+      edgeElasticity: 100,
+      nestingFactor: 5,
+      gravity: 80,
+      numIter: 1000,
+      initialTemp: 200,
+      coolingFactor: 0.95,
+      minTemp: 1.0,
+      
+      nodeRepulsion(node) {
+        //indegree 200000
+        var r = node.indegree() * 5000000 + 10000;
+        // console.log(r)
+        return r;
+      },
+    }
   };
   
-  const cy = operator.cy = cytoscape({
-    container: document.getElementById('graph'),
-    style : '.selected { overlay-color: blue; overlay-opacity: 0.3 }',
-  });
+  const cy = operator.cy = new_cytoscape();
   
+  jquery_plugin();
   state.find(".id").text(parm._id);
   init_graph_type(parm.uri);
-  
-  $('.operator a').click(function() {
-    var thiz = $(this);
-    try {
-      operating(thiz.attr("href"));
-    } catch(e) {
-      operator.error("异常", e.message);
-    }
-    return false;
-  });
+  analysis_list.update();
+  resize_event();
+  inmediatamente_query();
+  operator_menu_bind();
   
   jbody.click(function() {
     jbody.trigger('close_editor');
-  })
-  
-  $("#cql").keydown(function(e) {
-    if (e.keyCode == ENTER) {
-      if (!this.value) return;
-      var p = operator.gen_parm();
-      p.cql = this.value;
-      
-      operating("query", p, function(err) {
-        if (err) {
-          operator.error("查询错误", err.message);
-        } else {
-          operator.msg("完成");
-        }
-      });
-    }
   });
   
-  jwin.resize(function() {
-    cy.resize();
-    $("#data_tables").css("max-width", jbody.innerWidth() - $("#menus").outerWidth() - 10);
-  }).trigger("resize");
   
+  function new_cytoscape() {
+    const propertie_show = state.find('.propertie');
+    const cy = cytoscape({
+      container: document.getElementById('graph'),
+      // style : '.selected { background-color: #fff }',
+    });
+    let selected_obj = null;
   
-  cy.on("select", (e)=>{ 
-    e.target.addClass("selected");
-    var data = e.target.data();
-    propertie_show.empty();
+    cy.on("select", (e)=>{ 
+      e.target.style({'background-color': '#fff', 'line-color': '#fff'});
+      update(e.target);
+      selected_obj = e.target;
+    });
     
-    insert_prop('ID', data.id);
-    for (var n in data.x) {
-      insert_prop(n, data.x[n]);
+    cy.on('unselect', unselect);
+    cy.on('select_none', unselect);
+    
+    cy.on("get_select", (e, cb)=>{
+      if (selected_obj) {
+        cy.animate({zoom: 4, center: {eles: selected_obj}});
+        cb(null, selected_obj);
+      } else {
+        cb(new Error("没有选中任何对象"));
+      }
+    });
+    
+    cy.on('update_prop', (e, obj)=>{
+      update(obj);
+    });
+    
+    function unselect() {
+      selected_obj.removeStyle('background-color line-color');
+      selected_obj = null;
+      propertie_show.empty();
     }
-  });
-  
-  cy.on('unselect', (e)=>{
-    e.target.removeClass('selected');
-  });
-  
-  $.fn.extend({
-    center() {
-      var x = (jwin.width()  - this.outerWidth()) / 2;
-      var y = (jwin.height() - this.outerHeight()) / 2;
-      this.offset({left:x, top:y});
-      return this;
+    
+    function update(obj) {
+      let data = obj.data();
+      propertie_show.empty();
+      
+      insert_prop('ID', data.id, true);
+      for (let n in data.x) {
+        insert_prop(n, data.x[n]);
+      }
     }
-  });
   
-  update_analysis_list();
+    function insert_prop(k, v, notDel) {
+      let row = $("<tr>").appendTo(propertie_show);
+      $("<td class='tag'>").text(k).appendTo(row);
+      $("<td>").text(v).appendTo(row);
+      if (!notDel) {
+        let del = $("<td><a href='#' class='button'>x</a></td>").appendTo(row)
+        del.click(remove_prop(k, row));
+      } else {
+        $("<td>").appendTo(row);
+      }
+    }
+    
+    function remove_prop(k, row) {
+      return function() {
+        let dia = openDialog('.yes_no_dialog');
+        dia.find(".message").html('是否删除属性' + k);
+        
+        let pos = propertie_show.offset();
+        pos.left -= dia.outerWidth() + 10;
+        dia.offset(pos);
+      
+        dia.find(".yes").click(function() {
+          let d = selected_obj.data();
+          let cql = operator.genDeleteProp(d.realID, d.label, k, selected_obj.isEdge());
+          
+          operator.query(gen_parm(cql), (err, r)=>{
+            if (err) return operator.error("删除属性失败", err.message);
+            operator.msg(k +" 属性已经删除");
+            row.remove();
+            delete d.x[k];
+            selected_obj.data(d);
+          });
+        });
+      }
+    }
+    
+    return cy;
+  }
+    
+  
+  function operator_menu_bind() {
+    $('.operator a').click(function() {
+      var thiz = $(this);
+      try {
+        operating(thiz.attr("href"));
+      } catch(e) {
+        operator.error("异常", e.message);
+      }
+      return false;
+    });
+  }
   
   
-  function insert_prop(k, v) {
-    var row = $("<tr>").appendTo(propertie_show);
-    $("<td class='tag'>").text(k).appendTo(row);
-    $("<td>").text(v).appendTo(row);
+  function inmediatamente_query() {
+    $("#cql").keydown(function(e) {
+      if (e.keyCode == ENTER) {
+        if (!this.value) return;
+        var p = operator.gen_parm();
+        p.cql = this.value;
+        
+        operating("query", p, function(err) {
+          if (err) {
+            operator.error("查询错误", err.message);
+          } else {
+            operator.msg("完成");
+          }
+        });
+      }
+    });
+  }
+  
+  
+  function resize_event() {
+    jwin.resize(function() {
+      cy.resize();
+      $("#data_tables").css("max-width", jbody.innerWidth() - $("#menus").outerWidth() - 10);
+    }).trigger("resize");
+  }
+  
+  
+  function jquery_plugin() {
+    $.fn.extend({
+      center() {
+        var x = (jwin.width()  - this.outerWidth()) / 2;
+        var y = (jwin.height() - this.outerHeight()) / 2;
+        this.offset({left:x, top:y});
+        return this;
+      }
+    });
   }
   
   
   function update() {
-    cy.layout(layout_opt).run();
+    cy.layout(layout_opt.cose).run();
     cy.center();
+  }
+  
+  
+  function remove_select() {
+    cy.emit('get_select', [select_cb]);
+    
+    function select_cb(err, obj) {
+      if (err) {
+        operator.error('删除失败', err.message);
+        return;
+      }
+    
+      flash_obj(obj);
+      
+      var dia = openDialog('.yes_no_dialog');
+      dia.find(".message").html('是否删除选中的' + (obj.isNode()? '节点?': '关系?') 
+        + (obj.isNode() ? '<br/><input value="true" type="checkbox" class="rel"/>同时删除关联关系' : ''));
+      follow_render(dia, obj);
+      
+      dia.find(".yes").click(function() {
+        var d = obj.data();
+        var del_rel = dia.find('.rel').prop('checked');
+        var cql = operator.genDeleteCql(d.realID, d.label, del_rel, obj.isEdge());
+        
+        operator.query(gen_parm(cql), (err, d)=>{
+          if (err) return error('删除失败', err.message);
+          msg("数据已经删除");
+          obj.remove();
+          cy.emit("select_none");
+        });
+      });
+    }
+  }
+  
+  
+  function follow_render(dialog, render) {
+    cy.animate({ complete, duration:1 });
+    
+    function complete() {
+      let pos = render.renderedPosition();
+      // 边会返回 null
+      if (pos) {
+        dialog.animate({left: pos.x + 100, top: pos.y});
+      }
+    }
+  }
+  
+  
+  function insert_attr() {
+    cy.emit('get_select', [(err, obj)=>{
+      if (err) return operator.error(err.message);
+      let dia = openDialog('.new_attr_dialog');
+      let msg = dia.find(".msg");
+      follow_render(dia, obj);
+      
+      dia.find(".yes").click(function() {
+        let k = dia.find("[name=k]").val();
+        let v = dia.find("[name=v]").val();
+        let d = obj.data();
+        let cql = operator.genInsertAttrCql(d.realID, d.label, k, v, obj.isEdge());
+        
+        operator.query(gen_parm(cql), (err, r)=>{
+          if (err) return msg.text("设置属性失败", err.message);
+          msg.text("属性已经设置");
+          d.x[k] = v;
+          obj.data(d);
+          cy.emit("update_prop", [obj]);
+        });
+      });
+    }]);
+  }
+  
+  
+  function create_node_menu() {
+    let dia = openDialog(".new_node_dialog");
+    let jprop = dia.find(".prop").clone();
+    let target = dia.find(".prop_target");
+    let msg = dia.find(".msg");
+    
+    dia.find(".iprop").click(function() {
+      target.before(jprop.clone());
+    });
+    
+    dia.find(".yes").click(function() {
+      let label = dia.find("[name=label]").val();
+      let prop = {};
+      if (!label) return msg.text("必须填写标签名");
+      
+      dia.find('.prop').each(function() {
+        let n = $(this).find("[name=name]").val();
+        let k = $(this).find("[name=val]").val();
+        if (n && k) {
+          prop[n] = k;
+        }
+      });
+      
+      let cql = operator.genCreateNode(label, prop);
+      operator.query(gen_parm(cql), (err, r)=>{
+        if (err) return msg.text("创建节点失败", err.message);
+        msg.text("节点已经创建");
+        dia.find(":input").val('');
+      });
+    });
+  }
+  
+  
+  function create_rel_menu() {
+    let dia = openDialog(".new_edge_dialog");
+    let jprop = dia.find(".prop").clone();
+    let target = dia.find(".prop_target");
+    let sl = { begin:null, end:null };
+    let curr_name = null;
+    let msg = dia.find(".msg");
+    
+    cy.on("select", on_select);
+    
+    dia.one('closing', function() {
+      cy.removeListener('select', on_select);
+    });
+    
+    dia.find(".iprop").click(function() {
+      target.before(jprop.clone());
+    });
+    
+    dia.find(".yes").click(function() {
+      if (!sl.begin) return msg.text("必须选择起始节点");
+      if (!sl.end) return msg.text("必须选择结束节点");
+      let label = dia.find("[name=label]").val();
+      let prop = {};
+      if (!label) return msg.text("必须填写标签名");
+      
+      dia.find('.prop').each(function() {
+        let n = $(this).find("[name=name]").val();
+        let k = $(this).find("[name=val]").val();
+        if (n && k) {
+          prop[n] = k;
+        }
+      });
+      
+      let cql = operator.genCreateEdge(sl.begin, sl.end, label, prop);
+      operator.query(gen_parm(cql), (err, r)=>{
+        if (err) return msg.text("创建关系失败", err.message);
+        msg.text("关系已经创建");
+        dia.find(":input").val('');
+        delete sl.begin;
+        delete sl.end;
+      });
+    });
+    
+    dia.find(".select_node").click(function() {
+      curr_name = $(this).attr("href");
+      dia.find("[name='"+ curr_name +"']").val('选择节点...');
+      return false;
+    });
+    
+    function on_select(e) {
+      var d = e.target.data();
+      dia.find("[name='"+ curr_name +"']").val(d.id);
+      sl[curr_name] = d.realID;
+    }
+  }
+  
+  
+  function flash_obj(obj) {
+    try {
+      let bg = obj.style("background-color");
+      
+      _next("red", ()=>{
+        _next('#fff', ()=>{
+          _next('red', ()=>{
+            _next('#fff', ()=>{
+              _next(bg);
+            });
+          })
+        });
+      });
+      
+      function _next(c, n) {
+        obj.animate({ style: { backgroundColor: c }, complete : n });
+      }
+    } catch(e) {
+      console.error(e)
+    }
   }
   
   
@@ -177,7 +454,12 @@ jQuery(function($) {
     cy.add({
       group   : 'nodes',
       classes : type,
-      data    : { id, x:data },
+      data    : { 
+        id      : 'node.'+ id, 
+        x       : data, 
+        realID  : id ,
+        label   : type,
+      },
     });
     return true;
   }
@@ -203,7 +485,15 @@ jQuery(function($) {
     cy.add({
       group   : 'edges',
       classes : type,
-      data    : { id, name: type, source, target, x:data } 
+      data    : { 
+        id      : 'edge.'+ id, 
+        name    : type, 
+        source  : 'node.'+ source, 
+        target  : 'node.'+ target, 
+        x       : data,
+        realID  : id,
+        label   : type,
+      } 
     });
     return true;
   }
@@ -267,6 +557,7 @@ jQuery(function($) {
     const alist = editor.find(".attr_list");
     editor.find(".title").text(opt.title);
     editor.hide();
+    editor.addClass('label_editor_instance');
     
     editor.find("form").not('.'+ opt.editType).remove();
     const form = editor.find("form");
@@ -422,7 +713,8 @@ jQuery(function($) {
     types = {};
     cy.remove('*');
     jlabels.empty();
-    $(".label_editor_section").remove();
+    $(".label_editor_instance").remove();
+    $("#data_tables").empty();
   }
   
   
@@ -440,22 +732,37 @@ jQuery(function($) {
         return;
       }
       content.html(r.form.join(''));
-      cb(dia, message);
+      cb(dia, message, r);
     });
   }
   
   
   function update_analysis_list() {
+    analysis_list.update();
+  }
+  
+  
+  function new_analysis_list() {
     var jlist = $(".analysis_list");
-    jlist.empty();
     
-    capi('analysis_list', {connid: parm._id}, function(err, r) {
-      if (err) return;
-      r.data.forEach(insertAnalysis);
-    });
+    return {
+      // (d: {_id, name})
+      insertAnalysis,
+      update,
+    };
+    
+    function update() {
+      jlist.empty();
+      
+      capi('analysis_list', {connid: parm._id}, function(err, r) {
+        if (err) return;
+        r.data.forEach(insertAnalysis);
+      });
+    }
     
     function insertAnalysis(d) {
       let jdiv = $("<div>").appendTo(jlist);
+      jdiv.addClass(d._id);
       
       $("<a href='#'>").text(d.name).appendTo(jdiv).click(function() {
         open_analysis_form(d.name, d, query_form);
@@ -464,11 +771,13 @@ jQuery(function($) {
       $("<a href='#' class='delete_button'>x</a>").appendTo(jdiv).click(function() {
         if (!confirm('点击 "确定" 删除分析项 '+ d.name)) return;
         capi('del_analysis', d, function(err) {
-          if (!err) update_analysis_list();
+          if (!err) {
+            jlist.find("."+ d._id).remove();
+          }
         });
       });
       
-      $("<a href='#' class='edit_button'>E</a>").appendTo(jdiv).click(function() {
+      $("<a href='#' class='edit_button'>m</a>").appendTo(jdiv).click(function() {
         var edit = new_analysis();
         edit.find(".title").text("修改分析项");
         capi('get_analysis', d, function(err, r) {
@@ -481,26 +790,34 @@ jQuery(function($) {
       });
     }
     
-    function query_form(dia, message) {
+    function query_form(dia, message, r) {
       var form = dia.find("form");
       
       form.submit(function() {
         var data = form.serialize();
+        var submits = form.find("[type=submit]").prop("disabled", true);
+        
         capi(form.attr("action"), data, (err, r)=>{
           if (err) {
+            submits.prop("disabled", false);
             message.text(err.message);
             return;
           }
           operator.query({_id:parm._id, cql: r.data.join('')}, function(err, r) {
             if (err) {
+              submits.prop("disabled", false);
               message.text(err.message);
             } else {
-              dia.hide(); 
+              dia.trigger('close'); 
             }
           });
         });
         return false;
       });
+      
+      if (r.empty_form) {
+        form.submit();
+      }
     }
   }
   
@@ -509,8 +826,8 @@ jQuery(function($) {
     var dia = openDialog(".new_analysis_dialog");
     dia.find("[name=connid]").val(parm._id);
     
-    dia.on("submit_success", function() {
-      update_analysis_list();
+    dia.on("submit_success", function(e, r) {
+      analysis_list.insertAnalysis(r.data);
       dia.trigger("close");
     });
     
@@ -540,12 +857,13 @@ jQuery(function($) {
   // 对话框可移动位置, 默认显示, 绑定关闭按钮
   // 绑定表单递交
   function openDialog(sl) {
-    const dia = $(sl).clone().appendTo(jbody);
+    const dia = $(sl).not('.usage').clone().appendTo(jbody);
     const form = dia.find("form");
     const amsg = form.find(".ajax-message");
     let x = 0, y = 0, dx = 0, dy = 0;
     let closed = false;
     
+    dia.addClass("usage");
     dia.show().center();
     
     // jbody.one("close_editor", _close);
@@ -589,6 +907,7 @@ jQuery(function($) {
     
     function _close() {
       if (closed) return;
+      dia.trigger("closing");
       closed = true;
       dia.hide();
       dia.find(":input").val('');
@@ -601,8 +920,9 @@ jQuery(function($) {
   }
   
   
-  function gen_parm() {
+  function gen_parm(cql) {
     return {
+      cql   : cql,
       _id   : parm._id,
       limit : 100,
     };

@@ -5,7 +5,76 @@
 const op = window.graph_operator = {
   module : 'neo4j',
   query,
+  genDeleteCql,
+  genInsertAttrCql,
+  genDeleteProp,
+  genCreateNode,
+  genCreateEdge,
 };
+
+
+function genCreateEdge(begin, end, label, prop) {
+//   MATCH (a), (b) WHERE id(a) = 1 AND id(b) = 2
+// CREATE (a)-[: Relation]->(b) 
+  let cql = ['MATCH (begin), (end) WHERE id(begin) = ', begin, 
+    ' AND id(end) = ', end,
+    ' CREATE (begin)-[:', label];
+  out_prop(cql, prop);
+  cql.push(']->(end) Return begin, end');
+  return cql.join('');
+}
+
+
+function genDeleteCql(id, label, del_rel, isEdge) {
+  if (label.constructor == Array) {
+    label = label[0];
+  }
+  if (isEdge) {
+    return ['MATCH ()-[r:', label, ']->() WHERE id(r) = ', id, ' DELETE r'].join('');
+  } else if (del_rel) {
+    return ['MATCH (obj: ', label, ')-[r]->(x) Where id(obj) = ', id, ' DELETE obj, r'].join('');
+  } else {
+    return ['MATCH (obj: ', label, ') Where id(obj) = ', id, ' DELETE obj'].join('');
+  }
+}
+
+
+function genInsertAttrCql(id, label, k, v, isEdge) {
+  if (isEdge) {
+    return ['MATCH ()-[obj: ', label, ']->() Where id(obj) = ', id, ' SET obj.', k, " = ", JSON.stringify(v)].join('');
+  }
+  return ['MATCH (obj: ', label, ') Where id(obj) = ', id, ' SET obj.', k, " = ", JSON.stringify(v)].join('');
+}
+
+
+function genDeleteProp(id, label, k, isEdge) {
+  if (isEdge) {
+    return ['MATCH ()-[obj: ', label, ']->() Where id(obj) = ', id, ' REMOVE obj.', k].join('');
+  }
+  return ['MATCH (obj: ', label, ') Where id(obj) = ', id, ' REMOVE obj.', k].join('');
+}
+
+
+function genCreateNode(label, prop) {
+  let cql = ['CREATE (o:', label];
+  out_prop(cql, prop);
+  cql.push(')');
+  return cql.join('');
+}
+
+
+function out_prop(out, prop) {
+  out.push('{');
+  let needpop;
+  for (let n in prop) {
+    out.push(n, ':');
+    out.push(JSON.stringify(prop[n]));
+    out.push(',');
+    needpop = 1;
+  }
+  if (needpop) out.pop(); // pop last ','
+  out.push('}');
+}
 
 
 function query(parm, cb) {
@@ -15,6 +84,9 @@ function query(parm, cb) {
     if (err) return cb(err);
     var table = thiz.newTable();
     var edges = [];
+    if (data.data.length < 1) {
+      return cb(null, data)
+    }
     
     data.data.forEach(function(row) {
       for (var k in row) {
@@ -22,7 +94,7 @@ function query(parm, cb) {
         
         switch(o.$type) {
         case 'node':
-          thiz.addNode(o.id+'', o.label, o.propertie);
+          thiz.addNode(o.id, o.label, o.propertie);
           break;
           
         case 'rel':
@@ -47,7 +119,7 @@ function query(parm, cb) {
   function addEdge(r) {
     try {
       var o = r.rel;
-      thiz.addEdge('edge.'+ o.id, o.type, o.start+'', o.end+'', o.propertie);
+      thiz.addEdge(o.id, o.type, o.start, o.end, o.propertie);
     } catch(e) {
       if (r.table) {
         r.table.putx(r.r, r.table.col(r.k), r.rel.propertie);
@@ -75,7 +147,7 @@ function query(parm, cb) {
         data.data.forEach(function(row) {
           addEdge({ rel : row.r });
         });
-        cb();
+        cb(null, data);
       }
       thiz.update();
     });

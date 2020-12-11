@@ -71,16 +71,25 @@ a:hover, .button:hover {
   display: none;
 }
 .dialog {
-  position: absolute; min-width: 300px; min-height: 185px; z-index: 50; display: none;
+  position: absolute; min-width: 300px; z-index: 50; display: none;
+}
+.small_dialog {
+  min-width: 100px; width: auto;
+}
+.big_dialog {
+  width: 50%;
+}
+.half {
+  width: 49%; display: inline-block;
 }
 label {
   padding-right: 5px; color: #888;
 }
 input, select, .tag, textarea {
-  background-color: #222; color: #888; border: 0;
-  border: 0; border-radius: 3px; padding: 3px; vertical-align: middle;
+  background-color: #222; color: #888; border: 1px solid #484848;
+  border-radius: 3px; padding: 3px; vertical-align: middle;
 }
-.row input, .row textarea {
+.row>input, .row textarea {
   width: 95%;
 }
 .error {
@@ -174,7 +183,8 @@ th {
         </select>
       </form>
       <form class='edge'>
-        颜色: <input type='color' name='line-color'/><br/>
+        线颜色: <input type='color' name='line-color'/><br/>
+        端点颜色: <input type='color' name='target-arrow-color'/><br/>
         线宽: <input type="range" name="width" min="1" max="20" step="1" value="1"><br/>
         曲线样式: 
         <select name='curve-style'>
@@ -251,12 +261,13 @@ th {
       <h5>操作</h5>
       <div class='content operator'>
         <a href='clean_graph'>清除图</a>
-        <a href='get_labels'>查询标签</a>
-        <a href='new_node'>创建节点</a>
-        <a href='new_rel'>创建关系</a>
-        <a href='edit'>编辑</a>
-        <a href='remove'>删除</a>
+        <!--<a href='get_labels'>查询标签</a>-->
+        <a href='create_node_menu'>创建节点</a>
+        <a href='create_rel_menu'>创建关系</a>
+        <a href='insert_attr'>设置属性</a>
+        <a href='remove_select'>删除</a>
         <a href='new_analysis'>新建分析</a>
+        <a href='update_analysis_list'>刷新分析列表</a>
       </div>
     </section>
     
@@ -269,7 +280,7 @@ th {
   </div>
 </div>
 
-<section class='dialog item new_analysis_dialog' style='width:50%'>
+<section class='dialog item new_analysis_dialog big_dialog'>
   <h5><span class='title'>创建分析项</span> <a href='close'>关闭</a></h5>
   <form class='content split' action='add_analysis'>
     <input type='hidden' name='connid'/>
@@ -306,12 +317,68 @@ th {
   </pre>
 </section>
 
-<section class='dialog item open_analysis_form' style='width: 50%'>
+<section class='dialog item open_analysis_form small_dialog'>
   <h5><span class='title'></span> <a href='close'>关闭</a></h5>
   <div class='content'>
-    <div class='gen_target'></div>
+    <pre class='gen_target'></pre>
     <div class='message'></div>
   </div>
+</section>
+
+<section class='dialog item yes_no_dialog small_dialog'>
+  <h5><span class='title'>确认</span> <a href='close'>关闭</a></h5>
+  <div class='content' style='padding: 20px; width: 200px; min-height: 0;'>
+    <div class='message split' style='margin-bottom: 20px'></div>
+    <button class='yes close button'>确定</button>
+    <button class='no close button'>取消</button>
+  </div>
+</section>
+
+<section class='dialog item new_attr_dialog small_dialog'>
+  <h5><span class='title'>插入新属性</span> <a href='close'>关闭</a></h5>
+  <div class='content' style='padding: 20px; width: 300px; min-height: 0;'>
+    <div class='row'>属性名: <input name='k'/></div>
+    <div class='row split'>属性值: <textarea name='v'></textarea></div>
+    <button class='yes button'>确定</button>
+    <button class='no close button'>取消</button>
+    <div class='msg'></div>
+  </div>
+</section>
+
+<section class='dialog item new_node_dialog'>
+  <h5><span class='title'>创建新节点</span> <a href='close'>关闭</a></h5>
+  <div class='content'>
+    <div class='row'>标签 <input name='label'/></div>
+    <div>
+      <div class='row prop'>
+        <span class='half'>属性名: <input name='name'/></span>
+        <span class='half'>属性值: <input name='val'/></span>
+      </div>
+      <div class='split prop_target'></div>
+      <button class='iprop button'>插入属性</button>
+      <button class='yes button'>确定</button>
+      <button class='no close button'>取消</button>
+      <div class='msg'></div>
+    </div>
+</section>
+
+<section class='dialog item new_edge_dialog'>
+  <h5><span class='title'>创建新关系</span> <a href='close'>关闭</a></h5>
+  <div class='content'>
+    起始节点: <a href='begin' class='select_node'>选择</a> <input name='begin' disabled="disabled"/>
+    目的节点: <a href='end' class='select_node'>选择</a> <input name='end' disabled="disabled"/>
+    <div class='row'>标签 <input name='label'/></div>
+    <div>
+      <div class='row prop'>
+        <span class='half'>属性名: <input name='name'/></span>
+        <span class='half'>属性值: <input name='val'/></span>
+      </div>
+      <div class='split prop_target'></div>
+      <button class='iprop button'>插入属性</button>
+      <button class='yes button'>确定</button>
+      <button class='no close button'>取消</button>
+      <div class='msg'></div>
+    </div>
 </section>
 
 <script src='ide.js'></script>
