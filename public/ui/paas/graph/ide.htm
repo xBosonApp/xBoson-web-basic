@@ -1,0 +1,386 @@
+<!-- Create By xBoson System -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>xBoson 图数据管理</title>
+<style>
+body {
+  display: block; width: 100%; height: 100%; border 0; margin: 0; padding: 0;
+  background-color: #111; color: #ccc; font-size: smaller; overflow: hidden;
+}
+
+*::-webkit-scrollbar {
+  width: 5px;
+}
+*::-webkit-scrollbar-track {
+  background: #000;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: #444; border: 0
+}
+
+#graph {
+  flex: 1; width: 100%; z-index: 10;
+}
+#frame {
+  width: 100%; height: 100%; overflow: hidden;
+  position: absolute; display: flex;
+}
+#frame .left {
+  flex: 1; display: flex; flex-direction: column;
+}
+#menus {
+  width: 300px; text-align: left; display: inline-block;  padding: 10px; overflow-y: auto;
+}
+.item {
+  text-align: left; border-radius: 3px; margin-bottom: 10px; 
+}
+.item h5 {
+  padding: 3px; margin: 0; border-radius: 3px; display: flex;
+}
+.item .content {
+  min-height: 150px; padding: 5px; border-radius: 3px;
+}
+.item {
+  background-color: #1d1d1d;
+}
+.item h5, #cql {
+  background: #4a4949; color: #ccc;
+}
+.item h5 .title {
+  flex:1; margin-right: 30px;
+}
+#cql {
+  height: 30px; width: 100%; font-weight: bold; padding: 3px 0 3px 10px; margin-right: 10px;
+}
+a, .button {
+  display: inline-block; padding: 1px 3px; border-radius: 2px; text-decoration: none; color: #ccc;
+  background: #636903; margin: 0 2px 3px 0; border: 0;
+}
+a:hover, .button:hover {
+  background-color: #333;
+}
+#labels {
+  display: inline-flex; flex-direction: column;
+}
+#labels label {
+  padding: 3px; margin: 2px; border-radius: 2px;
+}
+#template {
+  display: none;
+}
+.dialog {
+  position: absolute; min-width: 300px; z-index: 50; display: none;
+}
+.small_dialog {
+  min-width: 100px; width: auto;
+}
+.big_dialog {
+  width: 50%;
+}
+.half {
+  width: 49%; display: inline-block;
+}
+label {
+  padding-right: 5px; color: #888;
+}
+input, select, .tag, textarea {
+  background-color: #222; color: #888; border: 1px solid #484848;
+  border-radius: 3px; padding: 3px; vertical-align: middle;
+}
+.row>input, .row textarea {
+  width: 95%;
+}
+.error {
+  color: red;
+}
+.warn {
+  color: yellow;
+}
+.split {
+  border-bottom: 1px dashed #666; margin-bottom: 6px; padding-bottom: 6px;
+}
+table {
+  width: 100%;
+}
+thead {
+  background: #111;
+}
+td {
+  border-bottom: 1px solid #404040;
+}
+th {
+  border-bottom: 2px solid #999;
+}
+.hide {
+  display: none;
+}
+.delete_button {
+  background-color: #560202;
+}
+.edit_button {
+  background-color: #11047d;
+}
+.analysis_list a {
+  word-break: break-all; max-width: 80%; vertical-align: text-top;
+}
+</style>
+<js:jquery/>
+<script src='../../../web/cdn/cytoscape.js/3.17.0/cytoscape.min.js'></script>
+</head>
+<body>
+  
+<div id='template'>
+  <div class='label_editor'>
+    <section style='padding: 5px; background-color: #191919;' class='label_editor_section'>
+      <div class='title'></div>
+      <hr/>
+      <div>指定属性作为显示:</div>
+      <div class='attr_list'></div>
+      <form class='node'>
+        颜色: <input type='color' name='background-color'/><br/>
+        宽度: <input type="range" name="width" min="10" max="150" step="1" value="30"><br/>
+        高度: <input type="range" name="height" min="10" max="150" step="1" value="30"><br/>
+        形状: 
+        <select name='shape'>
+          <option value='ellipse'>椭圆</option>
+          <option value='triangle'>三角形</option>
+          <option value='round-triangle'>圆角三角形</option>
+          <option value='rectangle'>长方形</option>
+          <option value='round-rectangle'>圆角长方形</option>
+          <option value='bottom-round-rectangle'>底部圆角矩形</option>
+          <option value='cut-rectangle'>切矩形</option>
+          <option value='barrel'>桶</option>
+          <option value='rhomboid'>菱形</option>
+          <option value='diamond'>钻石</option>
+          <option value='round-diamond'>圆角钻石</option>
+          <option value='pentagon'>五角型</option>
+          <option value='round-pentagon'>圆五角型</option>
+          <option value='hexagon'>六边形</option>
+          <option value='round-hexagon'>圆六边形</option>
+          <option value='concave-hexagon'>凹六边形</option>
+          <option value='heptagon'>七边形</option>
+          <option value='round-heptagon'>圆七边形</option>
+          <option value='octagon'>八边形</option>
+          <option value='round-octagon'>圆八边形</option>
+          <option value='star'>星</option>
+          <option value='tag'>标签</option>
+          <option value='round-tag'>圆标签</option>
+          <option value='vee'>V</option>
+        </select><br/>
+        文字水平位置:
+        <select name='text-halign'>
+          <option value='center'>居中</option>
+          <option value='left'>左</option>
+          <option value='right'>右</option>
+        </select><br/>
+        文字垂直位置:
+        <select name='text-valign'>
+          <option value='top'>上</option>
+          <option value='center'>中</option>
+          <option value='bottom'>下</option>
+        </select>
+      </form>
+      <form class='edge'>
+        线颜色: <input type='color' name='line-color'/><br/>
+        端点颜色: <input type='color' name='target-arrow-color'/><br/>
+        线宽: <input type="range" name="width" min="1" max="20" step="1" value="1"><br/>
+        曲线样式: 
+        <select name='curve-style'>
+          <option value='bezier'>贝塞尔曲线</option>
+          <option value='unbundled-bezier'>非捆绑贝塞尔曲线</option>
+          <option value='haystack'>一堆草垛</option>
+          <option value='taxi'>直角线</option>
+          <option value='straight'>直线</option>
+          <option value='segments'>线段</option>
+        </select><br/>
+        线条样式: 
+        <select name='line-style'>
+          <option value='solid'>实线</option>
+          <option value='dotted'>点线</option>
+          <option value='dashed'>虚线</option>
+        </select><br/>
+        终点样式: 
+        <select name='target-arrow-shape'>
+          <option value='triangle'>三角</option>
+          <option value='triangle-tee'>三角+三通</option>
+          <option value='circle-triangle'>三角+圆</option>
+          <option value='triangle-cross'>三角+交叉</option>
+          <option value='triangle-backcurve'>弧度三角</option>
+          <option value='vee'>箭头</option>
+          <option value='tee'>三通</option>
+          <option value='square'>方块</option>
+          <option value='circle'>圆</option>
+          <option value='diamond'>菱形</option>
+          <option value='chevron'>直角箭头</option>
+          <option value='none'>无</option>
+        </select>
+      </form>
+    </section>
+  </div>
+  
+  <div class='data_table'>
+    <section class='item'>
+      <h5>
+        <span class='title'></span>
+        <a href='#' class='close'>关闭</a>
+      </h5>
+      <div class='content'></div>
+    </section>
+  </div>
+</div>
+  
+<div id='frame'>
+  <div class='left'>
+    <div style='padding: 10px 10px 0 10px'>
+      <input placeholder='CQL' id='cql' type='text'/>
+    </div>
+    <div style='top: 50px; left: 10px; z-index: 20; position: absolute; height: 95%; overflow-y: auto;'>
+      <div id='data_tables'></div>
+      <div id='labels'></div>
+    </div>
+    <div id='graph'></div>
+  </div>
+  
+  <div id='menus'>
+    
+    <section class='item'>
+      <h5>状态</h5>
+      <div class='content state'>
+        <div class='split'>
+          <label>Connect ID</label><span class='id'></span>
+        </div>
+        <table class='propertie split'></table>
+        <div class='msg '>
+        </div>
+      </div>
+    </section>
+    
+    <section class='item'>
+      <h5>操作</h5>
+      <div class='content operator'>
+        <a href='clean_graph'>清除图</a>
+        <!--<a href='get_labels'>查询标签</a>-->
+        <a href='create_node_menu'>创建节点</a>
+        <a href='create_rel_menu'>创建关系</a>
+        <a href='insert_attr'>设置属性</a>
+        <a href='remove_select'>删除</a>
+        <a href='new_analysis'>新建分析</a>
+        <a href='update_analysis_list'>刷新分析列表</a>
+      </div>
+    </section>
+    
+    <section class='item'>
+      <h5>业务分析</h5>
+      <div class='content analysis_list'>
+      </div>
+    </section>
+    
+  </div>
+</div>
+
+<section class='dialog item new_analysis_dialog big_dialog'>
+  <h5><span class='title'>创建分析项</span> <a href='close'>关闭</a></h5>
+  <form class='content split' action='add_analysis'>
+    <input type='hidden' name='connid'/>
+    <input type='hidden' name='_id'/>
+    <label>名称</label>
+    <div class='row'>
+      <input type='text' name='name' placeholder="必填"/>
+    </div>
+    <label>CQL</label>
+    <div class='row'>
+      <textarea name='cql' rows='6' placeholder="必填"></textarea>
+    </div>
+    <label>表单文字模板</label>
+    <div class='row'>
+      <textarea name='tpl' rows='6' placeholder="必填"></textarea>
+    </div>
+    <button class='button' type='submit'>确定</button>
+    <button class='button test' type='button'>测试</button>
+    <button class='button help' type='button'>帮助</button>
+    <span class='ajax-message'></span>
+  </form>
+  
+  <pre class='help-text hide'>
+    CQL 中填写: 
+      <b>Match (p:Person) Where p.name="${name}" Return p</b>
+    则会生成表单: 
+      <input placeholder="name"/>
+    最终的查询将用填入的参数替换.
+    
+    如果 '表单文字模板' 中同时填写: 
+      <b>要搜索谁: ${name}</b>
+    则会生成表单: 
+      要搜索谁: <input placeholder="name"/>
+  </pre>
+</section>
+
+<section class='dialog item open_analysis_form small_dialog'>
+  <h5><span class='title'></span> <a href='close'>关闭</a></h5>
+  <div class='content'>
+    <pre class='gen_target'></pre>
+    <div class='message'></div>
+  </div>
+</section>
+
+<section class='dialog item yes_no_dialog small_dialog'>
+  <h5><span class='title'>确认</span> <a href='close'>关闭</a></h5>
+  <div class='content' style='padding: 20px; width: 200px; min-height: 0;'>
+    <div class='message split' style='margin-bottom: 20px'></div>
+    <button class='yes close button'>确定</button>
+    <button class='no close button'>取消</button>
+  </div>
+</section>
+
+<section class='dialog item new_attr_dialog small_dialog'>
+  <h5><span class='title'>插入新属性</span> <a href='close'>关闭</a></h5>
+  <div class='content' style='padding: 20px; width: 300px; min-height: 0;'>
+    <div class='row'>属性名: <input name='k'/></div>
+    <div class='row split'>属性值: <textarea name='v'></textarea></div>
+    <button class='yes button'>确定</button>
+    <button class='no close button'>取消</button>
+    <div class='msg'></div>
+  </div>
+</section>
+
+<section class='dialog item new_node_dialog'>
+  <h5><span class='title'>创建新节点</span> <a href='close'>关闭</a></h5>
+  <div class='content'>
+    <div class='row'>标签 <input name='label'/></div>
+    <div>
+      <div class='row prop'>
+        <span class='half'>属性名: <input name='name'/></span>
+        <span class='half'>属性值: <input name='val'/></span>
+      </div>
+      <div class='split prop_target'></div>
+      <button class='iprop button'>插入属性</button>
+      <button class='yes button'>确定</button>
+      <button class='no close button'>取消</button>
+      <div class='msg'></div>
+    </div>
+</section>
+
+<section class='dialog item new_edge_dialog'>
+  <h5><span class='title'>创建新关系</span> <a href='close'>关闭</a></h5>
+  <div class='content'>
+    起始节点: <a href='begin' class='select_node'>选择</a> <input name='begin' disabled="disabled"/>
+    目的节点: <a href='end' class='select_node'>选择</a> <input name='end' disabled="disabled"/>
+    <div class='row'>标签 <input name='label'/></div>
+    <div>
+      <div class='row prop'>
+        <span class='half'>属性名: <input name='name'/></span>
+        <span class='half'>属性值: <input name='val'/></span>
+      </div>
+      <div class='split prop_target'></div>
+      <button class='iprop button'>插入属性</button>
+      <button class='yes button'>确定</button>
+      <button class='no close button'>取消</button>
+      <div class='msg'></div>
+    </div>
+</section>
+
+<script src='ide.js'></script>
+</body>
+</html>
