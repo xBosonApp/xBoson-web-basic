@@ -90,7 +90,7 @@ input, select, .tag, textarea {
   border-radius: 3px; padding: 3px; vertical-align: middle;
 }
 .row>input, .row textarea {
-  width: 95%;
+  width: 98%;
 }
 .error {
   color: red;
@@ -137,7 +137,10 @@ th {
       <div class='title'></div>
       <hr/>
       <div>指定属性作为显示:</div>
-      <div class='attr_list'></div>
+      <div>
+        <span class='fix_attr_list'></span>
+        <span class='attr_list'></span>
+      </div>
       <form class='node'>
         颜色: <input type='color' name='background-color'/><br/>
         宽度: <input type="range" name="width" min="10" max="150" step="1" value="30"><br/>
@@ -252,8 +255,7 @@ th {
           <label>Connect ID</label><span class='id'></span>
         </div>
         <table class='propertie split'></table>
-        <div class='msg '>
-        </div>
+        <div class='logger' style='max-height: 6em; overflow-y: auto'></div>
       </div>
     </section>
     
@@ -268,6 +270,9 @@ th {
         <a href='remove_select'>删除</a>
         <a href='new_analysis'>新建分析</a>
         <a href='update_analysis_list'>刷新分析列表</a>
+        <a href='create_index'>创建索引</a>
+        <a href='remove_index'>删除索引</a>
+        <a href='set_limit'>查询限制</a>
       </div>
     </section>
     
@@ -341,7 +346,7 @@ th {
     <div class='row split'>属性值: <textarea name='v'></textarea></div>
     <button class='yes button'>确定</button>
     <button class='no close button'>取消</button>
-    <div class='msg'></div>
+    <span class='msg'></span>
   </div>
 </section>
 
@@ -358,15 +363,16 @@ th {
       <button class='iprop button'>插入属性</button>
       <button class='yes button'>确定</button>
       <button class='no close button'>取消</button>
-      <div class='msg'></div>
+      <span class='msg'></span>
     </div>
+  </div>
 </section>
 
 <section class='dialog item new_edge_dialog'>
   <h5><span class='title'>创建新关系</span> <a href='close'>关闭</a></h5>
   <div class='content'>
-    起始节点: <a href='begin' class='select_node'>选择</a> <input name='begin' disabled="disabled"/>
-    目的节点: <a href='end' class='select_node'>选择</a> <input name='end' disabled="disabled"/>
+    <a href='begin' class='select_node'>选择起始节点</a> <input name='begin' disabled="disabled"/>
+    <a href='end' class='select_node'>选择目的节点</a> <input name='end' disabled="disabled"/>
     <div class='row'>标签 <input name='label'/></div>
     <div>
       <div class='row prop'>
@@ -377,8 +383,36 @@ th {
       <button class='iprop button'>插入属性</button>
       <button class='yes button'>确定</button>
       <button class='no close button'>取消</button>
-      <div class='msg'></div>
+      <span class='msg'></span>
     </div>
+  </div>
+</section>
+
+<section class='dialog item index_dialog small_dialog'>
+  <h5><span class='title'>索引</span> <a href='close'>关闭</a></h5>
+  <div class='content'>
+    <div class='row'>
+      标签 <input name='label'/>
+    </div>
+    <div class='row split'>
+      属性名 <input name='pname'/>
+    </div>
+    <button class='yes button'>确定</button>
+    <button class='no close button'>取消</button>
+    <span class='msg'></span>
+  </div>
+</section>
+
+<section class='dialog item limit_dialog small_dialog'>
+  <h5><span class='title'>设置查询结果限制</span> <a href='close'>关闭</a></h5>
+  <div class='content'>
+    <div class='row split'>
+      行数限制 <input name='limit'/>
+    </div>
+    <button class='yes button'>确定</button>
+    <button class='no close button'>取消</button>
+    <span class='msg'></span>
+  </div>
 </section>
 
 <script src='ide.js'></script>

@@ -1,13 +1,15 @@
 jQuery(function($) {
-  const ENTER = 13;
-  const App = "0d8b740dbaa9440c8ddfc392cc9780a4";
-  const parm = parseParm();
-  const state = $(".state");
+  const ENTER   = 13;
+  const App     = "0d8b740dbaa9440c8ddfc392cc9780a4";
+  const df      = createDateFormat();
+  const parm    = parseParm();
+  const state   = $(".state");
   const jlabels = $("#labels");
-  const jbody = $(document.body);
-  const jwin = $(window);
+  const jbody   = $(document.body);
+  const jwin    = $(window);
   const analysis_list = new_analysis_list();
   
+  let LIMIT = 1000;
   // {id:数据}
   let nodes = {};
   let edges = {};
@@ -31,6 +33,10 @@ jQuery(function($) {
     genCreateNode : null,
     // Function(beginNodeId, endNodeId, label, prop) 生成 cql 用于创建关系
     genCreateEdge : null,
+    // Function(label, prop_name) 在标签上创建指定属性的索引
+    genCreateIndex: null,
+    // Function(label, prop_name) 删除标签上指定属性的索引
+    genDeleteIndex: null,
     
     // Function() 生成基础查询参数
     gen_parm,
@@ -57,6 +63,9 @@ jQuery(function($) {
     create_node_menu,
     clean_graph,
     create_rel_menu,
+    create_index,
+    remove_index,
+    set_limit,
   };
   
   const layout_opt = {
@@ -80,7 +89,7 @@ jQuery(function($) {
       
       nodeRepulsion(node) {
         //indegree 200000
-        var r = node.indegree() * 5000000 + 10000;
+        let r = node.indegree() * 5000000 + 10000;
         // console.log(r)
         return r;
       },
@@ -96,6 +105,7 @@ jQuery(function($) {
   resize_event();
   inmediatamente_query();
   operator_menu_bind();
+  msg("当前查询限制", LIMIT, "行");
   
   jbody.click(function() {
     jbody.trigger('close_editor');
@@ -190,7 +200,7 @@ jQuery(function($) {
   
   function operator_menu_bind() {
     $('.operator a').click(function() {
-      var thiz = $(this);
+      let thiz = $(this);
       try {
         operating(thiz.attr("href"));
       } catch(e) {
@@ -205,7 +215,7 @@ jQuery(function($) {
     $("#cql").keydown(function(e) {
       if (e.keyCode == ENTER) {
         if (!this.value) return;
-        var p = operator.gen_parm();
+        let p = operator.gen_parm();
         p.cql = this.value;
         
         operating("query", p, function(err) {
@@ -231,8 +241,8 @@ jQuery(function($) {
   function jquery_plugin() {
     $.fn.extend({
       center() {
-        var x = (jwin.width()  - this.outerWidth()) / 2;
-        var y = (jwin.height() - this.outerHeight()) / 2;
+        let x = (jwin.width()  - this.outerWidth()) / 2;
+        let y = (jwin.height() - this.outerHeight()) / 2;
         this.offset({left:x, top:y});
         return this;
       }
@@ -257,15 +267,15 @@ jQuery(function($) {
     
       flash_obj(obj);
       
-      var dia = openDialog('.yes_no_dialog');
+      let dia = openDialog('.yes_no_dialog');
       dia.find(".message").html('是否删除选中的' + (obj.isNode()? '节点?': '关系?') 
         + (obj.isNode() ? '<br/><input value="true" type="checkbox" class="rel"/>同时删除关联关系' : ''));
       follow_render(dia, obj);
       
       dia.find(".yes").click(function() {
-        var d = obj.data();
-        var del_rel = dia.find('.rel').prop('checked');
-        var cql = operator.genDeleteCql(d.realID, d.label, del_rel, obj.isEdge());
+        let d = obj.data();
+        let del_rel = dia.find('.rel').prop('checked');
+        let cql = operator.genDeleteCql(d.realID, d.label, del_rel, obj.isEdge());
         
         operator.query(gen_parm(cql), (err, d)=>{
           if (err) return error('删除失败', err.message);
@@ -305,7 +315,7 @@ jQuery(function($) {
         let cql = operator.genInsertAttrCql(d.realID, d.label, k, v, obj.isEdge());
         
         operator.query(gen_parm(cql), (err, r)=>{
-          if (err) return msg.text("设置属性失败", err.message);
+          if (err) return msg.text("设置属性失败 "+ err.message);
           msg.text("属性已经设置");
           d.x[k] = v;
           obj.data(d);
@@ -341,7 +351,7 @@ jQuery(function($) {
       
       let cql = operator.genCreateNode(label, prop);
       operator.query(gen_parm(cql), (err, r)=>{
-        if (err) return msg.text("创建节点失败", err.message);
+        if (err) return msg.text("创建节点失败 "+ err.message);
         msg.text("节点已经创建");
         dia.find(":input").val('');
       });
@@ -384,7 +394,7 @@ jQuery(function($) {
       
       let cql = operator.genCreateEdge(sl.begin, sl.end, label, prop);
       operator.query(gen_parm(cql), (err, r)=>{
-        if (err) return msg.text("创建关系失败", err.message);
+        if (err) return msg.text("创建关系失败 "+ err.message);
         msg.text("关系已经创建");
         dia.find(":input").val('');
         delete sl.begin;
@@ -399,10 +409,80 @@ jQuery(function($) {
     });
     
     function on_select(e) {
-      var d = e.target.data();
+      let d = e.target.data();
       dia.find("[name='"+ curr_name +"']").val(d.id);
       sl[curr_name] = d.realID;
     }
+  }
+  
+  
+  function create_index() {
+    let dia = openDialog(".index_dialog");
+    let msg = dia.find(".msg");
+    dia.find(".title").text("创建索引");
+    
+    dia.find(".yes").click(function() {
+      let label = dia.find("[name=label]").val();
+      let pname = dia.find("[name=pname]").val();
+      if (!label) {
+        return msg.text("必须填写标签名");
+      }
+      if (!pname) {
+        return msg.text("必须填写属性名");
+      }
+      let cql = operator.genCreateIndex(label, pname);
+      operator.query(gen_parm(cql), (err, r)=>{
+        if (err) return msg.text("创建索引失败 "+ err.message);
+        msg.text("索引已经创建");
+        dia.find(":input").val('');
+      });
+    });
+  }
+  
+  
+  function remove_index() {
+    let dia = openDialog(".index_dialog");
+    let msg = dia.find(".msg");
+    dia.find(".title").text("删除索引");
+    
+    dia.find(".yes").click(function() {
+      let label = dia.find("[name=label]").val();
+      let pname = dia.find("[name=pname]").val();
+      if (!label) {
+        return msg.text("必须填写标签名");
+      }
+      if (!pname) {
+        return msg.text("必须填写属性名");
+      }
+      let cql = operator.genDeleteIndex(label, pname);
+      operator.query(gen_parm(cql), (err, r)=>{
+        if (err) return msg.text("删除索引失败 "+ err.message);
+        msg.text("索引已经删除");
+        dia.find(":input").val('');
+      });
+    });
+  }
+  
+  
+  function set_limit() {
+    let dia = openDialog('.limit_dialog');
+    let jl = dia.find('[name=limit]');
+    let msg = dia.find(".msg");
+    jl.val(LIMIT);
+    
+    dia.find(".yes").click(function() {
+      let v = parseInt(jl.val());
+      if (isNaN(v)) {
+        msg.text("不是有效数字");
+        jl.val(LIMIT);
+      } else if (v <= 0) {
+        msg.text("必须大于 0");
+        jl.val(LIMIT);
+      } else {
+        LIMIT = v;
+        msg.text("限制为 "+ v +'行');
+      }
+    });
   }
   
   
@@ -433,7 +513,7 @@ jQuery(function($) {
     if (nodes[id]) return false;
     nodes[id] = data;
     
-    var st = {
+    let st = {
       'label' : 'data(id)',
       'background-color': randomColor(),
     };
@@ -469,7 +549,7 @@ jQuery(function($) {
     if (edges[id]) return false;
     edges[id] = data;
     
-    var lc = randomColor();
+    let lc = randomColor();
     setStyle(type, {
       'target-arrow-shape': 'vee',
       'curve-style'       : 'bezier',
@@ -504,7 +584,7 @@ jQuery(function($) {
       types[type] = $.extend(types[type], attr);
       return;
     } else {
-      types[type] = $.extend({id:1}, attr);
+      types[type] = $.extend({}, attr);
     }
     
     const style_key = 'graph.'+ parm._id +'.style.'+ type;
@@ -526,11 +606,11 @@ jQuery(function($) {
       save_label_style,
     });
     
-    editor.insertAttr('默认', exstyle.label);
-    editor.insertAttr('id', 'data(id)');
-    for (let n in attr) {
-      editor.insertAttr(n);
-    }
+    editor.insertAttr('默认', exstyle.label, true);
+    editor.insertAttr('id', 'data(id)', true);
+    // for (let n in attr) {
+    //   editor.insertAttr(n);
+    // }
     
     function updateStyle() {
       cy.style().selector('.'+ type).style(st).update();
@@ -555,6 +635,7 @@ jQuery(function($) {
   function newStyleEditor(opt) {
     const editor = template('.label_editor');
     const alist = editor.find(".attr_list");
+    const fix_alist = editor.find(".fix_attr_list");
     editor.find(".title").text(opt.title);
     editor.hide();
     editor.addClass('label_editor_instance');
@@ -567,7 +648,12 @@ jQuery(function($) {
     updateLabel();
     
     l.click(function(e) {
-      var attr = types[opt.type];
+      alist.empty();
+      let attr = types[opt.type];
+      for (let n in attr) {
+        insertAttr(n, null, false);
+      }
+      
       jbody.trigger('close_editor');
       editor.css({
         'position': 'absolute', 
@@ -592,7 +678,7 @@ jQuery(function($) {
     });
     
     
-    for (var n in opt.style) {
+    for (let n in opt.style) {
       form.find('[name="'+ n +'"]').val(opt.style[n]);
     }
     
@@ -619,8 +705,8 @@ jQuery(function($) {
       });
     }
     
-    function insertAttr(n, labelExp) {
-      const li = $("<a href='#'>").text(n).appendTo(alist);
+    function insertAttr(n, labelExp, fixed) {
+      const li = $("<a href='#'>").text(n).appendTo(fixed ? fix_alist : alist);
       li.click(function() {
         opt.style.label = labelExp || ('data(x.'+ n +')');
         opt.updateStyle();
@@ -631,7 +717,7 @@ jQuery(function($) {
   
   
   function eachNode(cb) {
-    for (var n in nodes) {
+    for (let n in nodes) {
       cb(n, nodes[n]);
     }
   }
@@ -647,7 +733,7 @@ jQuery(function($) {
   }
     
   function __api(module, name, _parm, cb) {
-    var url = [parm.pf, 'app/', parm.org, '/', App, '/', module, '/', name].join('');
+    let url = [parm.pf, 'app/', parm.org, '/', App, '/', module, '/', name].join('');
     if (parm.s == 'd') {
       if (typeof _parm == 'string') {
         _parm += '&s=d';
@@ -668,8 +754,18 @@ jQuery(function($) {
       
       success(data) {
         if (data.code == 0) {
-          operator.msg("完成");
-          cb(null, data);
+          try {
+            cb(null, data);
+            
+            if (data.warn) {
+              operator.warn("警告:", data.warn);
+            } else {
+              operator.msg("完成", name);
+            }
+          } catch(err) {
+            operator.error("系统异常", err.message);
+            console.error(err);
+          }
         } else {
           operator.error("请求 "+ name +" 时错误,", data.msg);
           cb(new Error(data.msg));
@@ -685,7 +781,7 @@ jQuery(function($) {
       throw new Error();
     }
     
-    var type = uri.split("://")[0];
+    let type = uri.split("://")[0];
     switch (type) {
       case "bolt":
       case "bolt+ssc":
@@ -700,7 +796,7 @@ jQuery(function($) {
         return;
     }
     $("<script>").attr("src", type +".op.js").appendTo(jbody);
-    for (var n in window.graph_operator) {
+    for (let n in window.graph_operator) {
       operator[n] = window.graph_operator[n];
     }
   }
@@ -715,14 +811,16 @@ jQuery(function($) {
     jlabels.empty();
     $(".label_editor_instance").remove();
     $("#data_tables").empty();
+    state.find(".logger").empty();
+    state.find('.propertie').empty();
   }
   
   
   function open_analysis_form(name, parm, cb) {
-    var dia = openDialog(".open_analysis_form");
+    let dia = openDialog(".open_analysis_form");
     dia.find(".title").text(name);
-    var message = dia.find('.message');
-    var content = dia.find(".gen_target");
+    let message = dia.find('.message');
+    let content = dia.find(".gen_target");
     message.text("正在读取...")
     
     capi('gen_form', parm, function(err, r) {
@@ -743,7 +841,7 @@ jQuery(function($) {
   
   
   function new_analysis_list() {
-    var jlist = $(".analysis_list");
+    let jlist = $(".analysis_list");
     
     return {
       // (d: {_id, name})
@@ -778,11 +876,11 @@ jQuery(function($) {
       });
       
       $("<a href='#' class='edit_button'>m</a>").appendTo(jdiv).click(function() {
-        var edit = new_analysis();
+        let edit = new_analysis();
         edit.find(".title").text("修改分析项");
         capi('get_analysis', d, function(err, r) {
           if (err) return;
-          for (var n in r.data) {
+          for (let n in r.data) {
             edit.find("[name='"+ n +"']").val(r.data[n]);
           }
           edit.find("form").attr('action', 'edit_analysis');
@@ -791,11 +889,11 @@ jQuery(function($) {
     }
     
     function query_form(dia, message, r) {
-      var form = dia.find("form");
+      let form = dia.find("form");
       
       form.submit(function() {
-        var data = form.serialize();
-        var submits = form.find("[type=submit]").prop("disabled", true);
+        let data = form.serialize();
+        let submits = form.find("[type=submit]").prop("disabled", true);
         
         capi(form.attr("action"), data, (err, r)=>{
           if (err) {
@@ -803,7 +901,8 @@ jQuery(function($) {
             message.text(err.message);
             return;
           }
-          operator.query({_id:parm._id, cql: r.data.join('')}, function(err, r) {
+          // {_id:parm._id, cql: r.data.join(''), limit: LIMIT}
+          operator.query(gen_parm(r.data.join('')), function(err, r) {
             if (err) {
               submits.prop("disabled", false);
               message.text(err.message);
@@ -823,7 +922,7 @@ jQuery(function($) {
   
   
   function new_analysis() {
-    var dia = openDialog(".new_analysis_dialog");
+    let dia = openDialog(".new_analysis_dialog");
     dia.find("[name=connid]").val(parm._id);
     
     dia.on("submit_success", function(e, r) {
@@ -836,7 +935,7 @@ jQuery(function($) {
     });
     
     dia.find('.test').click(function() {
-      var parm = {
+      let parm = {
         name : dia.find('[name=name]').val(),
         cql  : dia.find('[name=cql]').val(),
         tpl  : dia.find('[name=tpl]').val(),
@@ -856,6 +955,7 @@ jQuery(function($) {
   // 可用安全的在一个 dom 上多次调用
   // 对话框可移动位置, 默认显示, 绑定关闭按钮
   // 绑定表单递交
+  // 返回对话框 jquery 对象, 该对象禁止 hide(), 发送 close 事件来关闭
   function openDialog(sl) {
     const dia = $(sl).not('.usage').clone().appendTo(jbody);
     const form = dia.find("form");
@@ -886,7 +986,7 @@ jQuery(function($) {
     });
     
     form.submit(function() {
-      var data = form.serialize();
+      let data = form.serialize();
       capi(form.attr("action"), data, (err, r)=>{
         if (err) {
           amsg.text(err.message);
@@ -924,51 +1024,69 @@ jQuery(function($) {
     return {
       cql   : cql,
       _id   : parm._id,
-      limit : 100,
+      limit : LIMIT,
     };
   }
   
   
   function error() {
-    var div = $("<div class='error'>").html(array(arguments).join(' '));
-    state.find(".msg").empty().append(div);
+    _log('error', arguments);
   }
   
   
   function warn() {
-    var div = $("<div class='warn'>").html(array(arguments).join(' '));
-    state.find(".msg").empty().append(div);
+    _log('warn', arguments);
   }
   
   
   function msg() {
-    state.find(".msg").html(array(arguments).join(' '));
+    _log('msg', arguments);
+  }
+  
+  
+  function createDateFormat() {
+    return {
+      toString() {
+        let d = new Date();
+        return this.n(d.getHours()) +":"+ this.n(d.getMinutes()) +":"+ this.n(d.getSeconds());
+      },
+      
+      n(x) {
+        if (x < 10) return '0'+ x;
+        return x;
+      }
+    }
+  }
+  
+  
+  function _log(type, arg) {
+    let div = $("<div>").addClass(type).html(array([df], arg).join(' '));
+    state.find(".logger").prepend(div);
   }
   
   
   function operating(name) {
     if (!operator[name]) {
-      var err = new Error("系统错误, 不存在的操作函数 "+ name);
+      let err = new Error("系统错误, 不存在的操作函数 "+ name);
       operator.error(err.message);
       throw err;
     }
-    operator[name].apply(operator, array(arguments, 1));
+    operator[name].apply(operator, array([], arguments, 1));
   }
   
   
-  function array(arg, begin) {
-    var a = [];
-    for (var i=begin || 0; i<arg.length; ++i) {
-      a.push(arg[i]);
+  function array(arr, arg, begin) {
+    for (let i=begin || 0; i<arg.length; ++i) {
+      arr.push(arg[i]);
     }
-    return a;
+    return arr;
   }
   
   
   function parseParm() {
-    var pm = {};
+    let pm = {};
     location.search.substr(1).split('&').forEach(function(p) {
-      var x = p.split('=');
+      let x = p.split('=');
       pm[x[0]] = decodeURIComponent(x[1]);
     });
     // console.log("URI P", pm);
@@ -982,9 +1100,9 @@ jQuery(function($) {
   
   
   function reverseColor(str) {
-    var buf = ['#'];
-    for (var i=1; i<str.length; ++i) {
-      var c = str[i];
+    let buf = ['#'];
+    for (let i=1; i<str.length; ++i) {
+      let c = str[i];
       c = (0x8 + parseInt(c, 16)) & 0xF;
       buf[i] = c.toString(16);
     }
@@ -1006,7 +1124,7 @@ jQuery(function($) {
   
   
   function cc() {
-    var a = Math.random() * 0xDF + 0x20;
+    let a = Math.random() * 0xDF + 0x20;
     a = parseInt(a).toString(16);
     if (a.length < 2) a = '0'+ a;
     return a;
@@ -1014,10 +1132,10 @@ jQuery(function($) {
   
     
   function newTable() {
-    var table = { head:[], body:[] };
-    var colmap = {};
-    var rc = 0;
-    var hasdata = false;
+    let table = { head:[], body:[] };
+    let colmap = {};
+    let rc = 0;
+    let hasdata = false;
     
     function put(c, d) {
       putx(rc, c, d);
@@ -1057,21 +1175,21 @@ jQuery(function($) {
     }
     
     function show(title) {
-      var jtable = $("<table class='datatable'>");
-      var jhead = $("<thead>").appendTo(jtable);
+      let jtable = $("<table class='datatable'>");
+      let jhead = $("<thead>").appendTo(jtable);
       table.head.forEach(function(h) {
         $("<th>").text(h).appendTo(jhead);
       });
       
-      var jbody = $("<tbody>").appendTo(jtable);
+      let jbody = $("<tbody>").appendTo(jtable);
       table.body.forEach(function(r) {
-        var tr = $("<tr>").appendTo(jbody);
+        let tr = $("<tr>").appendTo(jbody);
         r.forEach(function(c) {
           $("<td>").text(c).appendTo(tr);
         });
       });
       
-      var tpl = template(".data_table");
+      let tpl = template(".data_table");
       tpl.find('.title').text(title).click(function() {
         $("#cql").val(this.innerText);
       });

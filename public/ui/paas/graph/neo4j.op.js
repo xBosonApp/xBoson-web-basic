@@ -10,7 +10,19 @@ const op = window.graph_operator = {
   genDeleteProp,
   genCreateNode,
   genCreateEdge,
+  genDeleteIndex,
+  genCreateIndex,
 };
+
+
+function genCreateIndex(label, name) {
+  return ['CREATE INDEX ON :', label, ' (', name, ')'].join('');
+}
+
+
+function genDeleteIndex(label, name) {
+  return ['DROP INDEX ON :', label, ' (', name, ')'].join('');
+}
 
 
 function genCreateEdge(begin, end, label, prop) {
