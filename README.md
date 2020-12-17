@@ -12,3 +12,10 @@
 * dump-db-small.cmd -- 最小平台 DB 数据, 输出到 xboson-db-dump-small.sql.
 * dump-mongo.cmd -- 打包 MongoDB 数据, 输出到 mongo-bak.tar.gz.
 * dump-web-all.cmd -- 打包 WEB 数据, 输出到 web4xboson-all.tar.gz.
+
+
+# git
+
+在 online 分支上合并远程 master 分支
+
+`git merge origin/master`

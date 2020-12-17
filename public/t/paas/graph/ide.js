@@ -878,6 +878,7 @@ jQuery(function($) {
       $("<a href='#' class='edit_button'>m</a>").appendTo(jdiv).click(function() {
         let edit = new_analysis();
         edit.find(".title").text("修改分析项");
+        edit.off('submit_success');
         capi('get_analysis', d, function(err, r) {
           if (err) return;
           for (let n in r.data) {
