@@ -55,7 +55,7 @@ var src = sys.joinBytes(all);
 如果密码是字符串, 应该使用 generateAesPass() 转换为 Bytes;
 iv 是 16 字节固定长度, 使用 generateAesIV() 来生成;
 
-可用 algorithm 列表: `AES/CBC/PKCS5Padding`, `SM4/CBC/PKCS5Padding`, `SM4/CBC/NoPadding`
+可用 algorithm 列表: `AES/CBC/NoPadding`, `AES/CBC/PKCS5Padding`, `SM4/CBC/PKCS5Padding`, `SM4/CBC/NoPadding`
 
 ```js
 var crypto = require('crypto');
@@ -89,7 +89,8 @@ var data = cd.end();
 
 ## CipherJs createDecipher(String algorithm, Bytes pass, Bytes iv)
 
-该方法专门用来处理 `AES/CBC/PKCS5Padding` 算法, 其中 pass 参数必须是 16/32 字节固定长度,
+该方法专门用来处理 `AES/CBC/NoPadding`, `AES/CBC/PKCS5Padding` 算法, 
+其中 pass 参数必须是 16/32 字节固定长度,
 如果密码是字符串, 应该使用 generateAesPass() 转换为 Bytes;
 iv 是 16 字节固定长度;
 
