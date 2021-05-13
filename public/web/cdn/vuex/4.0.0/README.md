@@ -1,0 +1,1 @@
+浏览器使用 vuex.global.js
