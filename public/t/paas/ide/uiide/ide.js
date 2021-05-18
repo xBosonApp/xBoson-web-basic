@@ -3,11 +3,24 @@
     // 如果历史记录功能不正确, 则修改这个配置
     var splitBasePath = 'web4node'
     var basePathOnServer = '$';
-    var enableFileType = { '':1, 'html':1, 'htm':1, 'md':1 };
+    var enableFileType = { '':1, 'html':1, 'htm':1, 'md':1, 'pug':1 };
     var ACE_PATH = "lib/js/ace/1.4.2/ace.js";
     var upload_html = $("#uploadfile_html_template").html();
     var allow_file_ext;
     var max_post_body = 0;
+      
+    // 文件扩展名对应的 ace 语言解释器
+    // 扩展名与解释器名称相同时自动映射(不用写)
+    // 没有扩展名使用 'html'
+    var aceFileTypeMapping = {
+      'htm' : 'html',
+      'md'  : 'markdown',
+      'ts'  : 'typescript',
+      'vue' : 'html',
+      'styl': 'stylus',
+      'pug' : 'jade',
+      'js'  : 'javascript',
+    };
     
     var _domLabel = {
         edit: [
@@ -1317,16 +1330,8 @@
         
         if (!_filetype) {
           _filetype = 'html';
-        } else {
-          switch (_filetype) {
-          case 'htm':
-            _filetype = 'html';
-            break;
-            
-          case 'md':
-            _filetype = 'markdown';
-            break;
-          }
+        } else if (aceFileTypeMapping[_filetype]) {
+          _filetype = aceFileTypeMapping[_filetype];
         }
         
         editor.setTheme("ace/theme/ambiance");
