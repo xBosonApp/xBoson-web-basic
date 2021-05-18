@@ -1,0 +1,13 @@
+<link rel="stylesheet" href="###config.contextPath######baseurl###/web/cdn/element/2.15.1/theme-chalk/index.css">
+<js:cdn src='element/2.15.1/index.js'/>
+<script>
+(function() {
+  let _element = ELEMENT;
+  if (!window.Vue) {
+    alert("没有找到 Vue, 请先引入");
+    return;
+  }
+  Vue.use(ELEMENT);
+  delete window.ELEMENT;
+})()
+</script>

@@ -53,7 +53,7 @@
     { "name": "graph", "file": "docs/api-graph.md" }
   ]},
   
-  { "name": "前端模板", "basepath":"ui-docs", "file": "basic.md", "sub": [
+  { "name": "引擎前端", "basepath":"ui-docs", "file": "basic.md", "sub": [
     { "name": "chip", "file": "chip.md" },
     { "name": "form", "file": "form.md" },
     { "name": "js", "file": "js.md" },
@@ -64,6 +64,7 @@
     { "name": "ui", "file": "ui.md" },
     { "name": "vali", "file": "vali.md" },
     { "name": "web", "file": "web.md" },
+    { "name": "VUE", "file": "vue-app.md" },
     { "name": "常用模板", "file": "usetempate.md" },
     { "name": "高级开发指南", "file": "adv.md" },
     { "name": "ACE Api Document", "file": "../ace-api/index.html", "ext": "absolute,_blank" }
