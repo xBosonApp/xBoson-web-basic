@@ -9,16 +9,23 @@
     <meta name="author" content="上海竹呗信息技术有限公司">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PaaS 云平台 - Web Portal</title>
+    <style>
+      html, body, #xboson_vue_app_root_dom {
+        border: 0; margin: 0; padding: 0; height: 100%;
+      }
+    </style>
   </head>
   <body>
+    <hide data-cdn-path='###config.contextPath######baseurl###/web/cdn/' id='cdn-path'></hide>
+    <script src='###config.contextPath######baseurl###/masquerade/tag/vue/app-boot.js'></script>
+    
     <vue:vue/>
     <vue:router/>
     <vue:resource/>
-    <hide data-cdn-path='###config.contextPath######baseurl###/web/cdn/' id='cdn-path'></hide>
+    
     <pit/>
     
-    <script src='###config.contextPath######baseurl###/masquerade/tag/vue/app-boot.js'></script>
-    <div id='app_root_dom'>
+    <div id='xboson_vue_app_root_dom'>
       <boot-component></boot-component>
     </div>
   </body>

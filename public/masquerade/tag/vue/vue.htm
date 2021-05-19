@@ -1,1 +1,6 @@
 <js:cdn src='vue/2.6.11/vue.min.js'></js:cdn>
+<script>
+(function() {
+  window.defineModule && window.defineModule('vue', { exports: Vue });
+})();
+</script>

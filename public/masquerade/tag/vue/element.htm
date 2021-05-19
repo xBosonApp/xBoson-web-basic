@@ -8,6 +8,6 @@
     return;
   }
   Vue.use(ELEMENT);
-  delete window.ELEMENT;
+  window.defineModule && window.defineModule('element', { exports: ELEMENT });
 })()
 </script>

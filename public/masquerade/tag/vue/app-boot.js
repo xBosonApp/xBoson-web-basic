@@ -1,9 +1,39 @@
 /* Create By xBoson System */
 (function() {
-  /// path 模块
+  const cdn_path = document.getElementById('cdn-path').dataset["cdnPath"];
+  const cdnpre = 'cdn/';
+  // 全局模块, 通过 defineModule 定义
+  const export_modules = {};
+  // path 模块
   let pathmod;
   
+  // 导出到全局变量
+  const export_global = {
+    defineModule,
+    loadCdn,
+  };
+  
   checkEnv();
+  export_to_global();
+  
+  
+  function export_to_global() {
+    for (let name in export_global) {
+      if (window[name]) {
+        console.warn("在导出 window."+ name, '时冲突');
+        continue;
+      }
+      window[name] = export_global[name];
+    }
+  }
+  
+  
+  function defineModule(name, module) {
+    if (!name) throw new Error("must have name");
+    if (!module) throw new Error("must have module");
+    if (!module.exports) throw new Error("must have module.exports");
+    export_modules[name] = module;
+  }
   
   
   function checkEnv() {
@@ -12,14 +42,16 @@
       let path = location.href.substr(location.href.lastIndexOf('#') +1);
       location.href = zy.g.host.ui +'/'+( zy.debug?'t':'ui' )+'/'+ path;
     } else {
-      pre_init();
+      // 该脚本最先执行, 所有的程序库都没有加载, 必须等待
+      window.addEventListener('load', pre_init);
     }
   }
   
   
   function pre_init() {
     if (window.require) throw new Error("require 全局冲突");
-    Vue.http.get(location.href).then((res)=>{
+    
+    Vue.http.head(location.href).then((res)=>{
       let fullPath = res.headers.get('Full-Path');
       boot(fullPath);
     }).catch((err)=>{
@@ -31,25 +63,26 @@
   
   function boot(fullPath) {
     let prefix = location.href.substr(0, location.href.indexOf(fullPath));
-    let cdn_path = document.getElementById('cdn-path').dataset["cdnPath"];
     pathmod = lite_require(cdn_path +"path-browserify/1.0.1/index.js");
     
     let basePath = pathmod.dirname(fullPath);
     let rootModule = createRootModule(prefix, basePath, cdn_path);
       
+    defineModule('path', {exports: pathmod});
     window.require = rootModule.require;
+    window.debug = window._xboson_debug = basePath.startsWith("/t");
     boot_vue();
   }
   
   
   function boot_vue() {
     new Vue({
-      el : '#app_root_dom',
+      el : '#xboson_vue_app_root_dom',
       components : {
         'boot-component' : require('./app.vue'),
       },
       errorCaptured(err, vm, info) {
-        console.error(err, vm, info)
+        console.error("Vue app Error:", vm, info, err);
       }
     });
   }
@@ -65,8 +98,18 @@
   }
   
   
+  function loadCdn(path) {
+    let code = syncload(cdn_path + path);
+    try {
+      return eval(code);
+    } catch(e) {
+      console.error("Load cdn", path, "fail:", e.stack);
+    }
+  }
+  
+  
   function syncload(url, data) {
-    console.debug('load', url);
+    console.debug('sync ajax', url);
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url, false);
     xhr.send(data);
@@ -90,8 +133,8 @@
   function createModule(urlprefix, _parent) {
     let mod = { 
       exports: {},
-      _cache: _parent._cache,
-      _base  : '?',
+      _cache    : _parent._cache,
+      _base     : _parent._base,
       _cdn_path : _parent._cdn_path,
       require,
     };
@@ -104,31 +147,42 @@
     // 4. 以 '/' 结尾的路径自动添加 `index.js` 文件后缀.
     //
     function require(name) {
-      if (window[name]) {
-        return window[name];
-      }
-      if (window[name.toLowerCase()]) {
-        return window[name.toLowerCase()];
-      }
-      
-      let rmod = mod._cache[name];
-      if (!rmod) {
-        const cdnpre = 'cdn/';
+      let rmod;
+      do {
+        rmod = export_modules[name];
+        if (rmod) {
+          console.debug("require from export_modules", name);
+          break;
+        }
+        
+        rmod = mod._cache[name];
+        if (rmod) {
+          console.debug("require from cache", name);
+          break;
+        }
         
         if (name.startsWith(cdnpre)) {
+          console.debug("require from cdn", name);
           let p = _parent._cdn_path + name.substr(cdnpre.length);
           rmod = loadModule(p);
         }
         else if (name.startsWith("./") || name.startsWith('../')) {
-          let p = pathmod.join(_parent._base, name);
+          console.debug("relatively require", mod._base, '>',name);
+          let p = pathmod.join(mod._base, name);
           rmod = loadModule(p);
+        }
+        else if (name[0] == '/') {
+          console.debug("absolute require", name);
+          rmod = loadModule(name);
         }
         
         if (!rmod) {
           throw new Error("require() cannot load "+ name);
         }
         mod._cache[name] = rmod;
-      }
+        
+      } while(false);
+      
       return _return(name, rmod);
     }
     
