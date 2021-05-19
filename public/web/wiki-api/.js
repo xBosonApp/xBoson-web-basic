@@ -106,15 +106,15 @@ function isMD(file) {
 
 function highlight(str, lang) {
   var code;
-  lang = aliasName(lang);
+  var codelang = aliasName(lang);
   try {
-    code = hljs.highlight(lang, str).value;
+    code = hljs.highlight(codelang, str).value;
   } catch(e) {
     code = $("<b>").text(str).html();
     console.error(e);
   }
   var buf = ["<pre>", "<div class='firstLine'>", lang.toUpperCase(), "</div>"];
-  buf.push("<code class='language-", lang, "'>", code, "</code>", "</pre>");
+  buf.push("<code class='language-", codelang, "'>", code, "</code>", "</pre>");
   return buf.join('');
 }
 
@@ -166,6 +166,8 @@ function aliasName(name) {
     case 'sh':
     case 'shell':
       return 'bash';
+    case 'vue':
+      return 'html';
     default:
       return name;
   }
