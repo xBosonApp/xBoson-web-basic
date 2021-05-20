@@ -83,6 +83,14 @@
       },
       errorCaptured(err, vm, info) {
         console.error("Vue app Error:", vm, info, err);
+        // ElementUI 提供
+        if (this.$notify) {
+          this.$notify.error({
+            title: 'Vue app 错误' +info,
+            message: err.message,
+            dangerouslyUseHTMLString: true,
+          });
+        }
       }
     });
   }

@@ -1,4 +1,4 @@
-<js:cdn src='vuex/4.0.0/vuex.global.prod.js'/>
+<js:cdn src='vuex/3.6.2/vuex.min.js'/>
 <script>
 (function() {
   if (!window.Vue) {
@@ -6,5 +6,6 @@
     return;
   }
   Vue.use(Vuex);
+  window.defineModule && window.defineModule('vuex', { exports: Vuex });
 })()
 </script>

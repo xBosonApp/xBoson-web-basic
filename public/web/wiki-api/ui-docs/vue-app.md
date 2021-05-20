@@ -5,28 +5,27 @@
 
 ## Vue 应用
 
-一个 vue 应用, 由 vue 基础组件和 ui 组件组成,
+一个 vue 应用, 由 vue(ver 2.x) 基础组件和 ui 组件组成,
 通常在目录中创建一个 index.htm:
 
 ```html
 <!-- index.htm -->
 <vue:app>
   <vue:element/>
-  <vue:vuex/>
   .... 插入一些 css 代码, 或引入非 vue js 库 等 ....
 </vue:app>
 ```
 
 `<vue:app`> 标签是多个子组件的聚合, 其中 `<vue:element/>` 可以替换为其他 ui 库, 这是可选的;
-`<vue:vuex/>` 是状态管理模式库, 这是可选的; 你也可是加载其他依赖的 vue 库组件.
+你也可是加载其他依赖的 vue 库组件.
 
 此时浏览器绑定了如下组件:
 
 * Vue - 固定
 * Vue Router - 固定
 * Vue Resource - 固定
+* VueX - 固定
 * Element UI - 可选
-* VueX - 可选
 
 在 index.htm 同一目录中创建 app.vue 的文件作为应用引导:
 
@@ -51,7 +50,8 @@ export default {
 </script>
 ```
 
-一个最简单 vue 项目构建完成.  
+该 app.vue 文件是应用程序的根组件, 可以在其中初始化 Vuex, 设置全局样式等操作.  
+这样一个最简单 vue 项目构建完成.  
 
 注意: vue 单文件组件中 `<template>` 只能有一个根节点, 超过一个节点则整个组件都不显示. 
 组件中不支持 Masquerade(.htm) 模板.

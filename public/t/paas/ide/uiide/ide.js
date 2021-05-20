@@ -8,6 +8,7 @@
     var upload_html = $("#uploadfile_html_template").html();
     var allow_file_ext;
     var max_post_body = 0;
+    var last_select_filetype;
       
     // 文件扩展名对应的 ace 语言解释器
     // 扩展名与解释器名称相同时自动映射(不用写)
@@ -203,6 +204,16 @@
             window.onbeforeunload = null;
             $(window).unbind('resize');
             bind_fix_size_event();
+    }
+    
+    function saveLastSelectedCreateFileType(_mod) {
+      var types = _mod.find('[name=type]');
+      if (last_select_filetype) {
+        types.filter('[value="'+last_select_filetype+'"]').prop('checked', true);
+      }
+      types.on('click', function() {
+        last_select_filetype = $(this).val();
+      });
     }
     
     function browserRedirect() {
@@ -1673,6 +1684,8 @@
                 _head.html('创建新文件');
                 $('.modal').modal('show');
                 _initEvent(_mod.find('form'), _node, false);
+                saveLastSelectedCreateFileType(_mod);
+                _mod.find('[name=filenm]').focus();
             });
         }
 

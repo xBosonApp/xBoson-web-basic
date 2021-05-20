@@ -76,6 +76,7 @@ Less（代表Leaner样式表）是CSS的向后兼容语言扩展. 渲染为 css 
 ## `.vue`
 
 Vue 单文件组件, 渲染为 javascript 文件, 其中包含 Vue 组件的定义,  
+在组件中, 支持使用 less/sass 编写样式, typescript 语言编写脚本.  
 在请求 vue 组件文件时带有 es6 参数时, 则返回 es6 模块, 否则默认返回 es5 模块: `app.vue?es6`.  
 要正确渲染 vue 组件必须使用 [vue-app 垫片](ui-docs/vue-app.md).
 
