@@ -1,8 +1,6 @@
 <template>
-  <el-menu  background-color="#796547"
-            text-color="#ffffff"
-            active-text-color="#ffd04b"
-            @select='openPage'>
+  <open-file-menu dir='element'>
+    
     <el-menu-item-group title='Basic'>
       <el-menu-item index='layout'>Layout 布局</el-menu-item>
       <el-menu-item index='container'>Container 布局容器</el-menu-item>
@@ -13,32 +11,32 @@
     <el-menu-item-group title='Form'>
       <el-menu-item index='radio'>Radio 单选框</el-menu-item>
       <el-menu-item index='checkbox'>Checkbox 多选框</el-menu-item>
-      <el-menu-item index='input'></el-menu-item>
-      <el-menu-item index='inputNumber'></el-menu-item>
-      <el-menu-item index='select'></el-menu-item>
-      <el-menu-item index='cascader'></el-menu-item>
-      <el-menu-item index='switch'></el-menu-item>
-      <el-menu-item index='slider'></el-menu-item>
-      <el-menu-item index='timerpicker'></el-menu-item>
-      <el-menu-item index='datepicker'></el-menu-item>
-      <el-menu-item index='datetimepicker'></el-menu-item>
-      <el-menu-item index='upload'></el-menu-item>
-      <el-menu-item index='rate'></el-menu-item>
-      <el-menu-item index='colorpicker'></el-menu-item>
-      <el-menu-item index='transfer'></el-menu-item>
-      <el-menu-item index='form'></el-menu-item>
+      <el-menu-item index='input'>Input 输入框</el-menu-item>
+      <el-menu-item index='inputnumber'>InputNumber 计数器</el-menu-item>
+      <el-menu-item index='select'>Select 选择器</el-menu-item>
+      <el-menu-item index='cascader'>Cascader 级联选择器</el-menu-item>
+      <el-menu-item index='switch'>Switch 开关</el-menu-item>
+      <el-menu-item index='slider'>Slider 滑块</el-menu-item>
+      <el-menu-item index='timerpicker'>TimePicker 时间选择器</el-menu-item>
+      <el-menu-item index='datepicker'>DatePicker 日期选择器</el-menu-item>
+      <el-menu-item index='datetimepicker'>DateTimePicker 日期时间选择器</el-menu-item> 
+      <el-menu-item index='upload'>Upload 上传</el-menu-item>
+      <el-menu-item index='rate'>Rate 评分</el-menu-item>
+      <el-menu-item index='colorpicker'>ColorPicker 颜色选择器</el-menu-item>
+      <el-menu-item index='transfer'>Transfer 穿梭框</el-menu-item>
+      <el-menu-item index='form'>Form 表单</el-menu-item>
     </el-menu-item-group>
-  </el-menu>
+    
+    <el-menu-item-group title='Data'>
+      <el-menu-item index='table'>Table 表格</el-menu-item>
+      <el-menu-item index='tag'>Tag 标签</el-menu-item>
+      <el-menu-item index='progress'>Progress 进度条</el-menu-item>
+    </el-menu-item-group>
+    
+  </open-file-menu>
 </template>
 
 <script>
 export default {
-  methods : {
-    openPage(id) {
-      let path = './'+ id +'.vue';
-      let mod = require(path);
-      this.$emit("change-content", mod, id);
-    }
-  }
 }
 </script>

@@ -11,7 +11,12 @@
 </template>
 
 <script>
+let default_data = { 
+  x:false, v:true, a:[], s:'string', d:'', i:5,
+};
+
 export default {
+  
   mounted() {
     let dpre = this.$el.getElementsByTagName('pre')[0];
     let dcode = dpre.firstElementChild.firstElementChild;
@@ -20,14 +25,34 @@ export default {
     dcode.innerHTML = rcode;
     
     let target = this.$el.getElementsByTagName('target')[0];
+    let data = default_data;
+    let methods = {};
+    
+    // 用 x 属性中的值对 data 进行扩展, 在组件上明确 :x='x'
+    let x = this.$attrs.x;
+    if (x) {
+      merge(data, x.data);
+      merge(methods, x.methods);
+    }
+    
     new Vue({
       el : target,
-      template : "<div class='indentation'>"+ html +"</div>",
+      template : "<div class='indentation preview'>"+ html +"</div>",
       data() {
-        return { x:false, v:true, a:[] }
-      }
+        return data;
+      },
+      methods,
     });
     this.$forceUpdate();
+    
+    
+    function merge(a, b) {
+      if (b) {
+        for (let n in b) {
+          a[n] = b[n];
+        }
+      }
+    }
   },
   
   data() {

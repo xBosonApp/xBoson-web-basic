@@ -50,7 +50,7 @@
     </div>
   </demo-layout>
   
-  <h2>按钮样式</h2>
+  <h3>按钮样式</h3>
   <demo-layout>
     <div v-pre>
 <div>
