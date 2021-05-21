@@ -3,13 +3,13 @@
 <template>
   <div class='menu-container'>
     <transition name="menu-rev">
-      <el-aside class='menu1' v-show='!showMainMenu' width='50px'
+      <el-aside class='menu1' v-show='!showMainMenu' :width='menu2width'
         @mouseover.native='menu1enter=true'
         @click.native='menu1enter=true, menu2enter=false'>
       </el-aside>
     </transition>
     <transition name="menu">
-      <el-aside class='menu1' v-show='showMainMenu' >
+      <el-aside class='menu1' v-show='showMainMenu' :width='menu1width'>
         <el-menu  background-color="#2b2b2b"
                   text-color="#cccccc"
                   active-text-color="#ffd04b"
@@ -17,7 +17,7 @@
   <div class='title'>{{title}}</div>
   <!-- 主菜单插槽 -->
   <slot name='main'></slot>
-  <a class='footer' href='http://xboson.net'>上海竹呗信息技术有限公司</a>
+  <a class='footer' href='http://xboson.net' v-show='showMainMenu'>上海竹呗信息技术有限公司</a>
         </el-menu>
       </el-aside>
     </transition>
@@ -25,11 +25,11 @@
     <transition name="menu-rev">
       <el-aside class='menu2' v-show="!showSubMenu"
           @click.native='menu2enter=true, menu1enter=false'
-          @mouseover.native='menu2enter=true' width='50px'>
+          @mouseover.native='menu2enter=true' :width='menu2width'>
       </el-aside>
     </transition>
     <transition name="menu">
-      <el-aside class='menu2' v-show="showSubMenu">
+      <el-aside class='menu2' v-show="showSubMenu" :width='menu1width'>
   <!-- 二级菜单插槽 -->
   <slot name='sub'></slot>
       </el-aside>
@@ -54,6 +54,8 @@ export default {
       submenuFirstSet : false,
       menu1enter : true,
       menu2enter : false,
+      menu1width : '300px',
+      menu2width : '50px',
     }
   },
   
@@ -93,7 +95,29 @@ export default {
       this.submenuFirstSet = true;
       this.menu2enter = true;
     },
-  }
+    
+    onResize() {
+      let h = window.innerWidth;
+      if (h > 660) {
+        this.menu1width = '300px';
+        this.menu2width = '50px';
+      } else {
+        this.menu1width = (h * 0.45)+'px'; //不支持百分比
+        this.menu2width = '20px';
+      }
+    }
+  },
+  
+  mounted() {
+    this.onResize();
+    this.$nextTick(() => {
+      window.addEventListener('resize', this.onResize);
+    })
+  },
+
+  beforeDestroy() { 
+    window.removeEventListener('resize', this.onResize); 
+  },
 }
 </script>
 
@@ -114,7 +138,7 @@ export default {
 }
 
 .menu-rev-enter-to {
-  width: 50px!important;
+  /*width: 50px!important;*/
 }
 .menu-rev-leave-to {
   width: 0!important;
@@ -127,7 +151,7 @@ export default {
 }
 
 .menu-enter-to  {
-  width: 300px!important;
+  /*width: 300px!important;*/
 }
 .menu-leave-to  {
   width: 0px!important;
@@ -148,5 +172,23 @@ export default {
 .footer {
   position: fixed; left:0; bottom: 0; font-size: 8px; white-space: nowrap; border-top: 1px dashed;
   color: #3e3e3e; width: 300px; text-decoration:none;
+}
+
+@media screen and (max-device-width: 660px) {
+  .menu-enter-to  {
+    /*max-width: 45%!important;*/
+  }
+  .menu-leave  {
+    max-width: 45%!important;
+  }
+  .menu-rev-enter-to {
+    /*max-width: 20px!important;*/
+  }
+  .menu-rev-leave  {
+    max-width: 20px!important;
+  }
+  .footer {
+    width: 45%;
+  }
 }
 </style>

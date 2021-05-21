@@ -31,7 +31,11 @@ export default {
     // 用 x 属性中的值对 data 进行扩展, 在组件上明确 :x='x'
     let x = this.$attrs.x;
     if (x) {
-      merge(data, x.data);
+      if (typeof x.data == 'function') {
+        merge(data, x.data());
+      } else {
+        merge(data, x.data);
+      }
       merge(methods, x.methods);
     }
     

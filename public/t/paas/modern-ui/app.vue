@@ -3,21 +3,22 @@
     <menu2 @openSubMenu='openSubMenu' :hideAll='hideAllMenu' title='xBoson 大数据 UI'>
       <template v-slot:main>
         <el-menu-item index='element'>Element UI</el-menu-item>
+        <el-menu-item index='ant'>Ant Design</el-menu-item>
         <el-menu-item index='bigscreen'>大屏演示</el-menu-item>
         <el-menu-item index='report'>报表演示</el-menu-item>
       </template>
       <template v-slot:sub>
-        <sub-menu-comp></sub-menu-comp>
+        <component :is="subMenuId"></component>
       </template>
     </menu2>
     
     <el-container class='content-container' @mouseover.native="hideAllMenu++">
       <el-header class='pagetitle'>
-        <h1>xBoson Modern UI DEMO <a>{{currentTitle}}</a> 
-          <small style='color: #ccc; float: right;'>只作为演示, 不可作为开发文档</small>
+        <h1 class='header-title'>xBoson Modern UI DEMO <a>{{currentTitle}}</a> 
+          <small style='color: #ccc; float: right;'>只作为演示, 不可用作开发文档</small>
         </h1>
       </el-header>
-      <el-main>
+      <el-main class='main-content'>
         <content-comp></content-comp>
       </el-main>
       <!--<el-footer>Footer</el-footer>-->
@@ -32,6 +33,8 @@
 ].forEach(function(name) {
   Vue.component(name, require('./modern-app-components/'+ name +'.vue'));
 });
+// 别名, 方便写代码
+Vue.component('demo', require('./modern-app-components/demo-layout.vue'));
 
 const store = new Vuex.Store({
   state: {
@@ -52,7 +55,12 @@ export default {
   data () {
     return {
       hideAllMenu : 0,
+      subMenuId : '',
     }
+  },
+  
+  components: {
+    'content-comp': require('./default.vue', 1, 1),
   },
   
   computed : {
@@ -72,7 +80,9 @@ export default {
     openSubMenu(id) {
       let path = './'+ id +'/index.vue';
       let mod = require(path);
-      this.$options.components['sub-menu-comp'] = mod;
+      let compId = 'sub-menu-comp-'+ id;
+      this.$options.components[compId] = mod;
+      this.subMenuId = compId;
       this.$forceUpdate();
     },
   }
@@ -98,6 +108,18 @@ p {
   color: #909090;
 }
 .content-container {
-  padding-left: 150px;
+  padding-left: 150px; 
+}
+.main-content {
+  padding-right: 7%!important;
+}
+.header-title {
+  /*padding-left: 200px;*/
+}
+
+@media screen and (max-device-width: 660px) {
+  .content-container {
+    padding-left: 40px; 
+  }
 }
 </style>
