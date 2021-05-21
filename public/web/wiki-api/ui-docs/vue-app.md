@@ -76,7 +76,7 @@ export default {
 
 0. 默认以同步方法加载资源并直接返回模块的导出对象.
 1. 如果以 'cdn/' 开头, 则使用 cjs 加载模块, 返回模块的导出
-2. 导入通过 defintModule 定义的模块(不支持子目录).
+2. 导入通过 defineModule 定义的模块(不支持子目录).
 3. 以 './' 开头的文件以当前引入页面作为根目录, 加载模块.
 4. 以 '/' 结尾的路径自动添加 `index.js` 文件后缀.
 5. 引入文件使用相对路径时, 总是以父模块路径为根路径.
@@ -96,12 +96,12 @@ Vue.component('doc', require("./doc.vue", 1, 1));
 ```
  
 
-#### `defintModule(module_name: String, module: {exports:{}})`
+#### `defineModule(module_name: String, module: {exports:{}})`
 
-定义全局模块, 通过 require 方法导入.
+定义全局模块, 然后可以通过 require 方法导入.
 
 ```js
-defintModule('vue', { exports: Vue });
+defineModule('vue', { exports: Vue });
 ```
 
 
@@ -151,4 +151,4 @@ loadCdn('element/2.15.1/index.js');
 
 ### `<vue:antd>`
 
-引入 [Ant Design 的 Vue 实现，开发和服务于企业级后台产品。](https://www.antdv.com/docs/vue/introduce-cn/)
+引入 [Ant Design](https://www.antdv.com/docs/vue/introduce-cn/) 的 Vue 实现，开发和服务于企业级后台产品。

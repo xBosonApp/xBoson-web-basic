@@ -30,7 +30,8 @@ TypeScript 语言文件, 渲染为 javascript 前端文件.
 ## `.jsx .tsx`
 
 一种 javascript 变体, 可在脚本逻辑中内嵌 xml 文档, 与 React 前端库配合使用.  
-渲染为 javascript 前端文件, 必须引入 react-app 垫片.
+渲染为 javascript 前端文件, 必须引入 react-app 垫片.  
+如果有 `minified` 的 url 参数, 则返回压缩过的代码.  
 
 [JSX简介](https://reactjs.org/docs/introducing-jsx.html)
 
@@ -38,7 +39,8 @@ TypeScript 语言文件, 渲染为 javascript 前端文件.
 ## `.es5`
 
 文件内容为 javascript 语言, 可以使用最新 ES 语法;   
-渲染为旧的 es5 javascript 前端文件;
+渲染为旧的 es5 javascript 前端文件;  
+如果有 `minified` 的 url 参数, 则返回压缩过的代码.  
 
 
 ## `.less`
@@ -77,7 +79,8 @@ Less（代表Leaner样式表）是CSS的向后兼容语言扩展. 渲染为 css 
 
 Vue 单文件组件, 渲染为 javascript 文件, 其中包含 Vue 组件的定义,  
 在组件中, 支持使用 less/sass 编写样式, typescript 语言编写脚本.  
-在请求 vue 组件文件时带有 es6 参数时, 则返回 es6 模块, 否则默认返回 es5 模块: `app.vue?es6`.  
+在请求 vue 组件文件时带有`es6` 参数时, 则返回 es6 模块, 否则默认返回 es5 模块: `app.vue?es6`;
+如果有 `minified` 的 url 参数, 则返回压缩过的代码.  
 要正确渲染 vue 组件必须使用 [vue-app 垫片](ui-docs/vue-app.md).
 
 [单文件组件](https://cn.vuejs.org/v2/guide/single-file-components.html)  
