@@ -1,4 +1,8 @@
-/* Create By xBoson System */
+//
+// xBoson Vue app bootloader
+// Copyright (c) 上海竹呗信息技术有限公司
+// https://xboson.net
+//
 (function() {
   const cdn_path = document.getElementById('cdn-path').dataset["cdnPath"];
   const cdnpre = 'cdn/';
@@ -11,6 +15,7 @@
   const export_global = {
     defineModule,
     loadCdn,
+    popError,
   };
   
   checkEnv();
@@ -32,6 +37,7 @@
     if (!name) throw new Error("must have name");
     if (!module) throw new Error("must have module");
     if (!module.exports) throw new Error("must have module.exports");
+    if (!module.name) module.name = name;
     export_modules[name] = module;
   }
   
@@ -55,13 +61,13 @@
       let fullPath = res.headers.get('Full-Path');
       boot(fullPath);
     }).catch((err)=>{
-      alert("错误 "+ err.message);
-      console.error(err);
+      popError('Vue 应用引导错误', err);
     });
   }
   
   
   function boot(fullPath) {
+    // 从 http:// 开始到 face/ 为止
     let prefix = location.href.substr(0, location.href.indexOf(fullPath));
     pathmod = lite_require(cdn_path +"path-browserify/1.0.1/index.js");
     
@@ -79,20 +85,29 @@
     new Vue({
       el : '#xboson_vue_app_root_dom',
       components : {
-        'boot-component' : require('./app.vue'),
+        'boot-component' : require('./app.vue', 1, 1),
       },
       errorCaptured(err, vm, info) {
-        console.error("Vue app Error:", vm, info, err);
-        // ElementUI 提供
-        if (this.$notify) {
-          this.$notify.error({
-            title: 'Vue app 错误' +info,
-            message: err.message,
-            dangerouslyUseHTMLString: true,
-          });
-        }
+        popError.call(this, "Vue 应用错误: "+ info, err);
       }
     });
+  }
+  
+  
+  function popError(title, err) {
+    console.error(title, err);
+    
+    // ElementUI 提供
+    if (this.$notify) {
+      this.$notify.error({
+        title,
+        message: err.message,
+        dangerouslyUseHTMLString: true,
+      });
+    } 
+    else {
+      alert(title +'\n'+ err.message);
+    }
   }
   
   
@@ -106,8 +121,13 @@
   }
   
   
-  function loadCdn(path) {
+  function loadCdn(path, _not_run) {
+    if (path.startsWith(cdnpre)) {
+      path = path.substring(cdnpre.length);
+    }
     let code = syncload(cdn_path + path);
+    if (!_not_run) return code;
+    
     try {
       return eval(code);
     } catch(e) {
@@ -117,19 +137,42 @@
   
   
   function syncload(url, data) {
-    console.debug('sync ajax', url);
+    let _return;
+    _load_resource(url, data, false, function(err, data) {
+      if (err) throw err;
+      _return = data;
+    });
+    return _return;
+  }
+  
+  
+  function _load_resource(url, data, use_async, cb) {
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", url, false);
-    xhr.send(data);
-    if (xhr.status === 200) {
-      return xhr.responseText;
+    if (use_async) {
+      console.debug('Async load', url);
+      xhr.addEventListener('load', _check);
+      xhr.addEventListener('error', _check);
     }
-    throw new Error(xhr.status +':'+ xhr.responseText);
+    xhr.open("GET", url, use_async);
+    xhr.send(data);
+    if (!use_async) {
+      console.debug('Sync load', url);
+      _check();
+    }
+    
+    function _check() {
+      if (xhr.status === 200) {
+        cb(null, xhr.responseText);
+      } else {
+        cb(new Error(xhr.status +':'+ xhr.responseText));
+      }
+    }
   }
   
   
   function createRootModule(urlprefix, _base, _cdn_path) {
     return createModule(urlprefix, { 
+      name : '[root-module]',
       exports: {},
       _cache: {},
       _base,
@@ -140,12 +183,38 @@
   
   function createModule(urlprefix, _parent) {
     let mod = { 
-      exports: {},
+      name      : '[unknow]',
+      exports   : {},
       _cache    : _parent._cache,
       _base     : _parent._base,
       _cdn_path : _parent._cdn_path,
       require,
     };
+    
+    function getFullPath(name) {
+      let absPath;
+      if (name.startsWith(cdnpre)) {
+        console.debug("require from cdn", name);
+        absPath = '/web/' + name;
+      }
+      else if (name.startsWith("./") || name.startsWith('../')) {
+        console.debug("relatively require", mod._base, '>',name);
+        absPath = pathmod.join(mod._base, name);
+      }
+      else if (name[0] == '/') {
+        console.debug("absolute require", name);
+        absPath = name;
+      }
+      else {
+        console.debug("direct require", name);
+        absPath = name;
+      }
+      
+      if (absPath[absPath.length-1] == '/') {
+        absPath += 'index.js';
+      }
+      return absPath;
+    }
     
     //
     // 全能 require, 规则:
@@ -154,44 +223,46 @@
     // 3. 以 './' 开头的文件以当前引入页面作为根目录, 同步加载模块.
     // 4. 以 '/' 结尾的路径自动添加 `index.js` 文件后缀.
     //
-    function require(name) {
+    function require(name, _use_promise, _use_promise_factory) {
       let rmod;
-      do {
+      let absPath = getFullPath(name);
+      
+      function process(ok, fail) {
         rmod = export_modules[name];
         if (rmod) {
           console.debug("require from export_modules", name);
-          break;
+          _pf_ok(rmod);
+          return;
         }
         
-        rmod = mod._cache[name];
+        rmod = mod._cache[absPath];
         if (rmod) {
           console.debug("require from cache", name);
-          break;
+          _pf_ok(rmod);
+          return;
         }
         
-        if (name.startsWith(cdnpre)) {
-          console.debug("require from cdn", name);
-          let p = _parent._cdn_path + name.substr(cdnpre.length);
-          rmod = loadModule(p);
-        }
-        else if (name.startsWith("./") || name.startsWith('../')) {
-          console.debug("relatively require", mod._base, '>',name);
-          let p = pathmod.join(mod._base, name);
-          rmod = loadModule(p);
-        }
-        else if (name[0] == '/') {
-          console.debug("absolute require", name);
-          rmod = loadModule(name);
-        }
+        loadModule(absPath, _pf_ok, fail, _use_promise || _use_promise_factory);
+        return;
         
-        if (!rmod) {
-          throw new Error("require() cannot load "+ name);
+        function _pf_ok(mod) {
+          ok(_return(name, mod))
         }
-        mod._cache[name] = rmod;
-        
-      } while(false);
+      }
       
-      return _return(name, rmod);
+      if (_use_promise_factory) {
+        return function() {
+          return new Promise(process);
+        }
+      }
+      
+      if (_use_promise) {
+        return new Promise(process);
+      }
+      
+      let _r;
+      process((m)=>{ _r = m; }, (err)=>{ throw err; });
+      return _r;
     }
     
     
@@ -203,17 +274,28 @@
     }
     
     
-    function loadModule(absPath) {
-      if (absPath[absPath.length-1] == '/') absPath += 'index.js';
-      let code = syncload(urlprefix + absPath);
-      let wcode = '(function(module, require, exports) {'+
-                    code +
-                  '})';
-      let fn = eval(wcode);
-      let module = createModule(urlprefix, mod);
-      module._base = pathmod.dirname(absPath);
-      fn(module, module.require, module.exports);
-      return module;
+    function loadModule(absPath, ok, fail, use_async) {
+      _load_resource(urlprefix + absPath, null, use_async, function(err, code) {
+        if (err) return fail(err);
+        
+        let wcode = '(function(module, require, exports) {'+
+                      code +
+                    '\n})';
+        let fn;
+        try {
+          fn = eval(wcode);
+        } catch(err) {
+          let msg = ['Load', absPath, 'from', _parent.name, 'fail:', err.message];
+          fail(new Error(msg.join(' ')));
+          return;
+        }
+        let module = createModule(urlprefix, mod);
+        module._base = pathmod.dirname(absPath);
+        fn(module, module.require, module.exports);
+        mod._cache[absPath] = module;
+        mod.name = pathmod.basename(absPath);
+        ok(module);
+      });
     }
     
     return mod;

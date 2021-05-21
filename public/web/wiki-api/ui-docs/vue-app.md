@@ -1,6 +1,9 @@
 # Vue
 
-方便 vue 应用开发的 htm 模板组件
+xBoson 平台 Vue 应用开发指南.
+
+一个 Vue 应用除了一个 index.htm 是应用引导文件外, 不应该再有其他的页面文件,  
+Vue 应用全部由且只由 vue 组件构成.
 
 
 ## Vue 应用
@@ -66,21 +69,30 @@ export default {
 此时在引入 `.vue` 文件时需要带上 es6 参数: `..path/file.vue?es6`.
 
 
-#### `require(name: String)`
+#### `require(name: String [, _use_promise: Boolean, _use_promise_factory: Boolean])`
 
 返回 cjs 导出模块, 模块如果是 ES6 导出, 在编译为 ES5 后返回模块的 `.default` 属性,  
 同步的 require(name) 方法模拟了 nodejs 中的加载器, 有以下规则:
 
-1. 如果以 'cdn/' 开头, 则使用 cjs 同步加载模块, 返回模块的导出
+0. 默认以同步方法加载资源并直接返回模块的导出对象.
+1. 如果以 'cdn/' 开头, 则使用 cjs 加载模块, 返回模块的导出
 2. 导入通过 defintModule 定义的模块(不支持子目录).
-3. 以 './' 开头的文件以当前引入页面作为根目录, 同步加载模块.
+3. 以 './' 开头的文件以当前引入页面作为根目录, 加载模块.
 4. 以 '/' 结尾的路径自动添加 `index.js` 文件后缀.
 5. 引入文件使用相对路径时, 总是以父模块路径为根路径.
 6. 首页文件调用 require 时, 以首页文件路径作为根路径.
 
+如果 `_use_promise` 为 true (或任何布尔为true 的值), 则返回一个 Promise 对象, 并使用异步加载资源.  
+如果 `_use_promise_factory` 为 true, 则 `_use_promise` 被忽略, 总是返回一个 Promise 对象工厂函数,
+调用该工厂函数, 会返回一个异步 Promise 用来加载资源, 该参数为 Vue 异步加载组件提供支持
+
+
 ```js
+// 同步加载js模块
 var path = require('path');
 path.dirname('/a/b/c.js'); // return string: '/a/b'
+// 异步延迟加载 Vue 组件, 只有在组件被使用时才加载.
+Vue.component('doc', require("./doc.vue", 1, 1));
 ```
  
 
@@ -100,6 +112,11 @@ defintModule('vue', { exports: Vue });
 ```js
 loadCdn('element/2.15.1/index.js');
 ```
+
+
+#### `popError(info: String, err: Error)`
+
+尽可能在页面上弹出一个错误提示.
 
 
 #### `debug`
