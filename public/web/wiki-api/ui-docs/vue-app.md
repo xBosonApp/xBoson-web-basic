@@ -30,7 +30,7 @@ Vue 应用全部由且只由 vue 组件构成.
 * VueX - 固定
 * Element UI - 可选
 
-在 index.htm 同一目录中创建 app.vue 的文件作为应用引导:
+在 index.htm 同一目录中创建 app.vue 的文件:
 
 ```vue
 <template>
@@ -53,7 +53,7 @@ export default {
 </script>
 ```
 
-该 app.vue 文件是应用程序的根组件, 可以在其中初始化 Vuex, 设置全局样式等操作.  
+该 app.vue 文件是应用程序的根组件, 可以在其中初始化 Vuex, 设置全局样式, 加载更多组件等操作.  
 这样一个最简单 vue 项目构建完成.  
 
 注意: vue 单文件组件中 `<template>` 只能有一个根节点, 超过一个节点则整个组件都不显示. 
@@ -126,7 +126,7 @@ loadCdn('element/2.15.1/index.js');
 
 ## 独立组件
 
-通常完整前端应用程序会组合使用多个组件
+通常完整前端应用程序会组合使用多个组件, 组件必须在应用引导页 `index.htm` 中引入.
 
 
 ### `<vue:vue>`
@@ -148,3 +148,7 @@ loadCdn('element/2.15.1/index.js');
 ### `<vue:element>`
 
 引入 [Elemenu UI 前端框架库](https://element.eleme.io/#/zh-CN)
+
+### `<vue:antd>`
+
+引入 [Ant Design 的 Vue 实现，开发和服务于企业级后台产品。](https://www.antdv.com/docs/vue/introduce-cn/)
