@@ -17,6 +17,15 @@
     <css:scroll/>
   </head>
   <body>
+    <div id='xboson_vue_app_root_dom'>
+      <transition name="el-fade-in">
+        <boot-component>
+          <!-- 这些 dom 在 vue 组件加载后被移除 -->
+          <css:loading/>
+        </boot-component>
+      </transition>
+    </div>
+    
     <hide data-cdn-path='###config.contextPath######baseurl###/web/cdn/' id='cdn-path'></hide>
     <script src='###config.contextPath######baseurl###/masquerade/tag/vue/app-boot.js'></script>
     
@@ -26,9 +35,5 @@
     <vue:vuex/>
     
     <pit/>
-    
-    <div id='xboson_vue_app_root_dom'>
-      <boot-component></boot-component>
-    </div>
   </body>
 </html>

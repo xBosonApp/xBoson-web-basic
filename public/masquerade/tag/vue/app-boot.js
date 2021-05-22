@@ -16,10 +16,16 @@
     defineModule,
     loadCdn,
     popError,
+    xAppState,
+    cdn_path,
   };
   
-  checkEnv();
+  const init_state = checkEnv();
   export_to_global();
+  
+  init_state.catch(function(err) {
+    popError('Vue 应用引导错误', err);
+  });
   
   
   function export_to_global() {
@@ -33,6 +39,11 @@
   }
   
   
+  function xAppState() {
+    return init_state;
+  }
+  
+  
   function defineModule(name, module) {
     if (!name) throw new Error("must have name");
     if (!module) throw new Error("must have module");
@@ -43,26 +54,32 @@
   
   
   function checkEnv() {
-    if (window.zy) {
-      // alert('vue app 不支持在 zy 环境下开发, 即将跳转');
-      let path = location.href.substr(location.href.lastIndexOf('#') +1);
-      location.href = zy.g.host.ui +'/'+( zy.debug?'t':'ui' )+'/'+ path;
-    } else {
-      // 该脚本最先执行, 所有的程序库都没有加载, 必须等待
-      window.addEventListener('load', pre_init);
-    }
+    return new Promise(function(ok, fail) {
+      if (window.zy) {
+        // alert('vue app 不支持在 zy 环境下开发, 即将跳转');
+        let path = location.href.substr(location.href.lastIndexOf('#') +1);
+        location.href = zy.g.host.ui +'/'+( zy.debug?'t':'ui' )+'/'+ path;
+      } else {
+        // 该脚本最先执行, 所有的程序库都没有加载, 必须等待
+        window.addEventListener('load', pre_init(ok, fail), {once:true});
+      }
+    });
   }
   
   
-  function pre_init() {
-    if (window.require) throw new Error("require 全局冲突");
-    
-    Vue.http.head(location.href).then((res)=>{
-      let fullPath = res.headers.get('Full-Path');
-      boot(fullPath);
-    }).catch((err)=>{
-      popError('Vue 应用引导错误', err);
-    });
+  function pre_init(ok, fail) {
+    return function() {
+      if (window.require) return fail(new Error("require 全局冲突"));
+      
+      Vue.http.head(location.href).then((res)=>{
+        let fullPath = res.headers.get('Full-Path');
+        boot(fullPath);
+        boot_vue();
+        ok();
+      }).catch((err)=>{
+        fail(err);
+      });
+    }
   }
   
   
@@ -77,7 +94,6 @@
     defineModule('path', {exports: pathmod});
     window.require = rootModule.require;
     window.debug = window._xboson_debug = basePath.startsWith("/t");
-    boot_vue();
   }
   
   
