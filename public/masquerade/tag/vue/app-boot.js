@@ -114,8 +114,8 @@
     console.error(title, err);
     
     // ElementUI 提供
-    if (this.$notify) {
-      this.$notify.error({
+    if (Vue.prototype.$notify) {
+      Vue.prototype.$notify.error({
         title,
         message: err.message,
         dangerouslyUseHTMLString: true,
@@ -177,10 +177,14 @@
     }
     
     function _check() {
-      if (xhr.status === 200) {
-        cb(null, xhr.responseText);
-      } else {
-        cb(new Error(xhr.status +':'+ xhr.responseText));
+      try {
+        if (xhr.status === 200) {
+          cb(null, xhr.responseText);
+        } else {
+          cb(new Error(xhr.status +':'+ xhr.responseText));
+        }
+      } catch(err) {
+        popError('Load resource'+ url +'fail', err);
       }
     }
   }
