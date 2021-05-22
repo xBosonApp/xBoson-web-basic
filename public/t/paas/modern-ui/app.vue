@@ -6,7 +6,7 @@
         <el-menu-item index='ant'>Ant Design Vue</el-menu-item>
         <el-menu-item index='boot'>Bootstrap Vue</el-menu-item>
         <el-menu-item index='bigscreen'>大屏演示</el-menu-item>
-        <el-menu-item index='report'>报表演示</el-menu-item>
+        <el-menu-item index='echarts'>图表演示</el-menu-item>
       </template>
       <template v-slot:sub>
         <component :is="subMenuId"></component>
@@ -21,6 +21,7 @@
       </el-header>
       <el-main class='main-content'>
         <content-comp></content-comp>
+        <el-backtop target='.main-content'></el-backtop>
       </el-main>
       <!--<el-footer>Footer</el-footer>-->
     </el-container>
@@ -29,7 +30,7 @@
 
 <script>
 [
-  'demo-layout', 'doc', 'open-file-menu', 'menu2',
+  'demo-layout', 'doc', 'open-file-menu', 'menu2', 'chart', 'copy',
   
 ].forEach(function(name) {
   Vue.component(name, require('./modern-app-components/'+ name +'.vue',1,1));
@@ -113,6 +114,10 @@ p {
 }
 .header-title {
   /*padding-left: 200px;*/ border-bottom: 1px solid #eee;
+}
+.echarts {
+  width: 100%;
+  height: 600px;
 }
 
 @media screen and (max-device-width: 660px) {

@@ -6,6 +6,7 @@
     <pre class='preview-code indentation' v-show='showCode'><code class='hljs'><slot></slot></code></pre>
     <center class='indentation'>
       <el-button @click='showCode = !showCode'>{{ showCode ? '隐藏源代码':'显示源代码'}}</el-button>
+      <copy :text='source'/>
     </center>
   </div>
 </template>
@@ -23,10 +24,12 @@ export default {
     let html = html_beautify(dcode.innerHTML, {indent_size: 2});
     let rcode = hljs.highlight('html', html).value;
     dcode.innerHTML = rcode;
+    this.source = html;
     
     let target = this.$el.getElementsByTagName('target')[0];
     let data = default_data;
     let methods = {};
+    let computed = {};
     
     // 用 x 属性中的值对 data 进行扩展, 在组件上明确 :x='x'
     let x = this.$attrs.x;
@@ -37,6 +40,7 @@ export default {
         merge(data, x.data);
       }
       merge(methods, x.methods);
+      computed = x.computed;
     }
     
     new Vue({
@@ -46,7 +50,7 @@ export default {
         return data;
       },
       methods,
-      computed : x.computed,
+      computed,
     });
     this.$forceUpdate();
     
@@ -63,6 +67,7 @@ export default {
   data() {
     return {
       showCode : false,
+      source : '',
     }
   }
 }
