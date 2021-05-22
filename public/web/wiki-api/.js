@@ -27,20 +27,36 @@ load_menu();
 
 
 function load_menu() {
-  var open_page = setPage();
+  var open_page = jump_url_hash() || setPage();
 
   $.get('menu.json', function(menu_data) {
-    console.log('load', menu_data)
+    console.debug('load', menu_data)
     menu.html("");
     menu_data.forEach(function(d) { build_menu(d, null, 0, d.basepath) });
   });
+  
+  //
+  // index.html#ui-docs/xboson-vue.md 可跳转到指定文档
+  //
+  function jump_url_hash() {
+    let h = location.hash;
+    if (h) {
+      h = h.substr(1);
+      let i = h.lastIndexOf('.');
+      if (i <= 0) {
+        h += '.md';
+      }
+      // menu.find('a[file="'+ h +'"]').click();
+      return h;
+    }
+  }
 
   function build_menu(data, parent, level, basepath) {
     var ext = extAttribute(data.ext);
     // console.log(data.file, basepath, '-------------')
     if (basepath && data.file) {
       if (ext['absolute']) {
-        console.log("Absolute path", data);
+        console.debug("Absolute path", data);
       } else {
         data.file = basepath +'/'+ data.file;
       }
@@ -60,7 +76,7 @@ function load_menu() {
         m.attr('href', data.file);
         m.attr('target', '_blank');
       } else {
-        m.attr("href", "#");
+        m.attr("href", "#"+ data.file);
         m.click(function() {
           open_doc(data);
           if (current_select) {
@@ -68,6 +84,7 @@ function load_menu() {
           }
           m.addClass('selected_menu');
           current_select = m;
+          location.href = '#'+ data.file;
           return false;
         });
       }
@@ -140,6 +157,7 @@ function open_doc(data) {
     setPage(data.file);
     
     //
+    // 文档内链接
     // 如果连接在菜单中能找到, 则内页跳转到指定页面, 支持 md 格式.
     // 路径必须是 'docs/' 开头.
     //
