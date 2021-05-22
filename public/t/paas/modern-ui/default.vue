@@ -11,8 +11,10 @@
         <a href='https://vuex.vuejs.org/zh/'>Vuex</a>
         <a href='https://router.vuejs.org/zh/guide/'>Vue Router</a>
         <a href='https://github.com/pagekit/vue-resource/tree/develop/docs'>Vue resource</a>
+        <a href='../../../web/wiki-api/index.html#ui-docs/xboson-vue.md'>xBoson Vue</a>
         <a href='https://element.eleme.io/#/zh-CN/component/layout'>Element UI</a>
         <a href='https://element.eleme.io/#/zh-CN/component/layout'>Ant Design</a>
+        <a href='https://bootstrap-vue.org/docs'>Bootstrap Vue</a>
       </el-col>
     </el-row>
   </div>

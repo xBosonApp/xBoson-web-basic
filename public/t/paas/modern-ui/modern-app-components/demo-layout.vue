@@ -46,6 +46,7 @@ export default {
         return data;
       },
       methods,
+      computed : x.computed,
     });
     this.$forceUpdate();
     

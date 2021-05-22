@@ -1,22 +1,23 @@
 <template>
   <el-container>
-    <menu2 @openSubMenu='openSubMenu' :hideAll='hideAllMenu' title='xBoson 大数据 UI'>
+    <x-menu2 @openSubMenu='openSubMenu' :hideAll='hideAllMenu' title='xBoson 大数据 UI'>
       <template v-slot:main>
         <el-menu-item index='element'>Element UI</el-menu-item>
-        <el-menu-item index='ant'>Ant Design</el-menu-item>
+        <el-menu-item index='ant'>Ant Design Vue</el-menu-item>
+        <el-menu-item index='boot'>Bootstrap Vue</el-menu-item>
         <el-menu-item index='bigscreen'>大屏演示</el-menu-item>
         <el-menu-item index='report'>报表演示</el-menu-item>
       </template>
       <template v-slot:sub>
         <component :is="subMenuId"></component>
       </template>
-    </menu2>
+    </x-menu2>
     
     <el-container class='content-container' @mouseover.native="hideAllMenu++">
       <el-header class='pagetitle'>
-        <h1 class='header-title'>xBoson Modern UI DEMO <a>{{currentTitle}}</a> 
+        <h5 class='header-title'>xBoson Modern UI DEMO <a>{{currentTitle}}</a> 
           <small style='color: #ccc; float: right;'>只作为演示, 不可用作开发文档</small>
-        </h1>
+        </h5>
       </el-header>
       <el-main class='main-content'>
         <content-comp></content-comp>
@@ -31,7 +32,7 @@
   'demo-layout', 'doc', 'open-file-menu', 'menu2',
   
 ].forEach(function(name) {
-  Vue.component(name, require('./modern-app-components/'+ name +'.vue'));
+  Vue.component(name, require('./modern-app-components/'+ name +'.vue',1,1));
 });
 // 别名, 方便写代码
 Vue.component('demo', require('./modern-app-components/demo-layout.vue'));
@@ -98,9 +99,6 @@ h3 { padding-top: 60px; }
   color: #85c126!important;
   border-bottom: 1px dotted #c1a06f;
 }
-.pagetitle h1 {
-  border-bottom: 1px solid #eee;
-}
 .pagetitle a {
   color: #999;
 }
@@ -114,7 +112,7 @@ p {
   padding-right: 7%!important;
 }
 .header-title {
-  /*padding-left: 200px;*/
+  /*padding-left: 200px;*/ border-bottom: 1px solid #eee;
 }
 
 @media screen and (max-device-width: 660px) {
