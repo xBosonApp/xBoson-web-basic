@@ -119,6 +119,11 @@ loadCdn('element/2.15.1/index.js');
 尽可能在页面上弹出一个错误提示.
 
 
+#### `Promise xAppState()`
+
+该方法可以等待直到 app 引导成功/失败, then/cache 会被回调, 以通知监听器.
+
+
 #### `debug`
 
 如果处于调试模式则为 true.
@@ -131,24 +136,32 @@ loadCdn('element/2.15.1/index.js');
 
 ### `<vue:vue>`
 
-引入 [Vue 基础库](https://cn.vuejs.org/v2/guide/index.html)
+引入 [Vue 2.6.11 基础库](https://cn.vuejs.org/v2/guide/index.html)
 
 ### `<vue:resource>`
 
-引入 [资源加载库](https://github.com/pagekit/vue-resource/blob/develop/docs/api.md), 用于远程(ajax)资源加载
+引入 [资源加载库 1.5.2](https://github.com/pagekit/vue-resource/blob/develop/docs/api.md), 用于远程(ajax)资源加载
 
 ### `<vue:router>`
 
-引入 [vue 路由库](https://router.vuejs.org/zh/guide/)
+引入 [vue 路由库 3.5.1](https://router.vuejs.org/zh/guide/)
 
 ### `<vue:vuex>`
 
-引入 [状态管理模式库](https://vuex.vuejs.org/)
+引入 [状态管理模式库 3.6.2](https://vuex.vuejs.org/)
+
+### `<vue:xboson>`
+
+引入 [平台组件库](ui-docs/xboson-vue.md)
 
 ### `<vue:element>`
 
-引入 [Elemenu UI 前端框架库](https://element.eleme.io/#/zh-CN)
+引入 [Elemenu UI 2.15.1](https://element.eleme.io/#/zh-CN) 前端框架库
 
 ### `<vue:antd>`
 
-引入 [Ant Design](https://www.antdv.com/docs/vue/introduce-cn/) 的 Vue 实现，开发和服务于企业级后台产品。
+引入 [Ant Design 1.7.5](https://www.antdv.com/docs/vue/introduce-cn/) 的 Vue 实现，开发和服务于企业级后台产品。
+
+### `<vue:bootstrap>`
+
+引入 [BootstrapVue 2.21.2](https://bootstrap-vue.org/docs)

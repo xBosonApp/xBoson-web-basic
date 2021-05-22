@@ -1,0 +1,59 @@
+<!-- Create By xBoson System -->
+<div id='xboson-preloading'>
+<div id="loader">
+  <div id="shadow"></div>
+  <div id="box"></div>
+  <span id='text'>正在加载..</span>
+</div>
+<style>
+#loader {
+  position: absolute;
+  top: calc(50% - 20px);
+  left: calc(50% - 20px);
+}
+@keyframes loader {
+  0% { left: -100px }
+  100% { left: 110%; }
+}
+#box {
+  width: 50px;  height: 50px;  background: #fff;  animation: animate .5s linear infinite; position: absolute;
+  top: 0; left: 0;border-radius: 3px; border: 1px solid #333;
+}
+@keyframes animate {
+  17% { border-bottom-right-radius: 3px; }
+  25% { transform: translateY(9px) rotate(22.5deg); }
+  50% {
+    transform: translateY(18px) scale(1,.9) rotate(45deg) ;
+    border-bottom-right-radius: 40px;
+  }
+  75% { transform: translateY(9px) rotate(67.5deg); }
+  100% { transform: translateY(0) rotate(90deg); }
+} 
+#text {
+  animation: t .5s linear infinite;  position: absolute;  bottom: 20px;  left: -5px;
+  margin: 0;  opacity: .5;	font-family: sans-serif!important;	font-size: 14px;  color: #000;
+  width: 100px;
+}
+@keyframes t {
+  20% {
+    transform: scale(0.9, 1.5);
+  }
+  50% {
+    transform: scale(1.2, 1.3);
+  }
+}
+#shadow { 
+  width: 50px;height: 5px;background: #000; opacity: 0.1; position: absolute; top: 59px;
+  left: 0;border-radius: 50%; animation: shadow .5s linear infinite;
+}
+@keyframes shadow {
+  50% {
+    transform: scale(1.2,1);
+    opacity: 0.6;
+  }
+}
+body {
+  overflow: hidden;
+}
+</style>
+</div>

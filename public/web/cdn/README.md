@@ -1,5 +1,17 @@
 # 模块说明
 
+模块目录结构:
+
+```
+库名
+ - LICENSE
+ - package.json
+ - README.md
+ - 版本号+
+   - js 文件
+   - css 文件
+```
+
 ## axios
 
 https://github.com/axios/axios
