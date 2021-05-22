@@ -1,0 +1,12 @@
+<once id='@vue/composition-api'>
+<js:cdn src='composition-api/1.0.0/vue-composition-api.prod.js'/>
+<script>
+(function() {
+  if (!window.Vue) {
+    alert("没有找到 Vue, 请先引入");
+    return;
+  }
+  // Vue.use(VueCompositionAPI); //自动引入
+  window.defineModule && window.defineModule('@vue/composition-api', { exports: VueCompositionAPI });
+})();
+</script></once>
