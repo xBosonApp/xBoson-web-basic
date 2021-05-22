@@ -1,0 +1,13 @@
+<vue:composition-api/>
+<js:cdn src='echarts/5.1.1/echarts.min.js'/>
+<js:cdn src='vue-echarts/6.0.0/index.umd.min.js'/>
+<script>
+(function() {
+  if (!window.Vue) {
+    alert("没有找到 Vue, 请先引入");
+    return;
+  }
+  Vue.component('v-chart', VueECharts);
+  window.defineModule && window.defineModule('vue-echarts', { exports: VueECharts });
+})();
+</script>
