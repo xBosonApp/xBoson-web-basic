@@ -165,3 +165,11 @@ loadCdn('element/2.15.1/index.js');
 ### `<vue:bootstrap>`
 
 引入 [BootstrapVue 2.21.2](https://bootstrap-vue.org/docs)
+
+### `<vue:echarts`>
+
+引入 [Echarts 5.1.1](https://echarts.apache.org/zh/tutorial.html) 的 [vue-echarts 6](https://github.com/ecomfe/vue-echarts) 组件.
+
+### `<vue:composition-api>`
+
+引入 [vue2 的兼容层 1.0.0](https://github.com/vuejs/composition-api), 从而支持部分 vue3 api, 可引入 vue3 的组件.
