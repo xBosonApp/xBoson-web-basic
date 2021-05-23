@@ -15,7 +15,8 @@
         <a href='https://element.eleme.io/#/zh-CN/component/layout'>Element UI</a>
         <a href='https://element.eleme.io/#/zh-CN/component/layout'>Ant Design</a>
         <a href='https://bootstrap-vue.org/docs'>Bootstrap Vue</a>
-        <a href='https://echarts.apache.org/examples/zh/index.html'>ECHARTS</a>
+        <a href='https://echarts.apache.org/examples/zh/index.html'>echarts</a>
+        <a href='https://github.com/ecomfe/vue-echarts'>vue-echarts</a>
       </el-col>
     </el-row>
   </div>

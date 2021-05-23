@@ -115,10 +115,10 @@ p {
 .header-title {
   /*padding-left: 200px;*/ border-bottom: 1px solid #eee;
 }
-.echarts {
-  width: 100%;
-  height: 600px;
-}
+/*.echarts {*/
+/*  width: 100%;*/
+/*  height: 600px;*/
+/*}*/
 
 @media screen and (max-device-width: 660px) {
   .content-container {
