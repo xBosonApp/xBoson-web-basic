@@ -8,8 +8,10 @@
   const cdnpre = 'cdn/';
   // 全局模块, 通过 defineModule 定义
   const export_modules = {};
+  const xv = window.xv = {};
   // path 模块
   let pathmod;
+  let devMode;
   
   // 导出到全局变量
   const export_global = {
@@ -21,20 +23,20 @@
   };
   
   const init_state = checkEnv();
-  export_to_global();
+  export_to_global(export_global);
   
   init_state.catch(function(err) {
     popError('Vue 应用引导错误', err);
   });
   
   
-  function export_to_global() {
-    for (let name in export_global) {
+  function export_to_global(ex) {
+    for (let name in ex) {
       if (window[name]) {
         console.warn("在导出 window."+ name, '时冲突');
         continue;
       }
-      window[name] = export_global[name];
+      xv[name] = window[name] = ex[name];
     }
   }
   
@@ -92,8 +94,13 @@
     let rootModule = createRootModule(prefix, basePath, cdn_path);
       
     defineModule('path', {exports: pathmod});
-    window.require = rootModule.require;
-    window.debug = window._xboson_debug = basePath.startsWith("/t");
+    window._xboson_debug = devMode = basePath.startsWith("/t");
+    
+    export_to_global({
+      require     :  rootModule.require,
+      debug       :  devMode,
+      url_prefix  : prefix,
+    });
   }
   
   
@@ -119,6 +126,7 @@
         title,
         message: err.message,
         dangerouslyUseHTMLString: true,
+        customClass: 'vue-app-big-notify',
       });
     } 
     else {
@@ -184,7 +192,7 @@
           cb(new Error(xhr.status +':'+ xhr.responseText));
         }
       } catch(err) {
-        popError('Load resource'+ url +'fail', err);
+        popError('Load resource '+ url +' fail', err);
       }
     }
   }
@@ -243,7 +251,7 @@
     // 3. 以 './' 开头的文件以当前引入页面作为根目录, 同步加载模块.
     // 4. 以 '/' 结尾的路径自动添加 `index.js` 文件后缀.
     //
-    function require(name, _use_promise, _use_promise_factory) {
+    function require(name, _use_promise, _use_promise_factory, _donot_default) {
       let rmod;
       let absPath = getFullPath(name);
       
@@ -266,7 +274,7 @@
         return;
         
         function _pf_ok(mod) {
-          ok(_return(name, mod))
+          ok(_return(name, mod, _donot_default))
         }
       }
       
@@ -286,8 +294,8 @@
     }
     
     
-    function _return(name, mod) {
-      if (mod.exports && mod.exports.__esModule) {
+    function _return(name, mod, _donot_default) {
+      if ((!_donot_default) && mod.exports && mod.exports.__esModule) {
         return mod.exports.default;
       }
       return mod.exports;
@@ -298,7 +306,7 @@
       _load_resource(urlprefix + absPath, null, use_async, function(err, code) {
         if (err) return fail(err);
         
-        let wcode = '(function(module, require, exports) {'+
+        let wcode = '(function(module, require, exports, __dirname, __filename) {'+
                       code +
                     '\n})';
         let fn;
@@ -311,9 +319,12 @@
         }
         let module = createModule(urlprefix, mod);
         module._base = pathmod.dirname(absPath);
-        fn(module, module.require, module.exports);
+        let name = pathmod.basename(absPath);
+        
+        fn(module, module.require, module.exports, module._base, name);
+        
         mod._cache[absPath] = module;
-        mod.name = pathmod.basename(absPath);
+        mod.name = name;
         ok(module);
       });
     }

@@ -64,12 +64,12 @@ export default {
 
 ### 全局函数/属性
 
-可直接在浏览器上下文中使用.
+可直接在浏览器上下文中使用; 或者使用 xv 这个前缀.  
 如果需要异步导入, 可以使用浏览器自带的 `import(..)` 函数,   
 此时在引入 `.vue` 文件时需要带上 es6 参数: `..path/file.vue?es6`.
 
 
-#### `require(name: String [, _use_promise: Boolean, _use_promise_factory: Boolean])`
+#### `require(name: String [, _use_promise: Boolean, _use_promise_factory: Boolean, _donot_default: Boolean])`
 
 返回 cjs 导出模块, 模块如果是 ES6 导出, 在编译为 ES5 后返回模块的 `.default` 属性,  
 同步的 require(name) 方法模拟了 nodejs 中的加载器, 有以下规则:
@@ -84,7 +84,8 @@ export default {
 
 如果 `_use_promise` 为 true (或任何布尔为true 的值), 则返回一个 Promise 对象, 并使用异步加载资源.  
 如果 `_use_promise_factory` 为 true, 则 `_use_promise` 被忽略, 总是返回一个 Promise 对象工厂函数,
-调用该工厂函数, 会返回一个异步 Promise 用来加载资源, 该参数为 Vue 异步加载组件提供支持
+调用该工厂函数, 会返回一个异步 Promise 用来加载资源, 该参数为 Vue 异步加载组件提供支持.  
+如果 `_donot_default` 为 true, 则不会自动导出模块中的 `default`.  
 
 
 ```js
@@ -105,9 +106,10 @@ defineModule('vue', { exports: Vue });
 ```
 
 
-#### `loadCdn(path)`
+#### `loadCdn(path, _do_not_run)`
 
-从 CDN 中加载全局js库, 通常没有任何返回, 程序库会挂载到 window 全局变量中.
+从 CDN 中加载并运行全局js库, 通常没有任何返回, 程序库会挂载到 window 全局变量中.  
+如果 `_do_not_run` 为 true 则返回文件内容.
 
 ```js
 loadCdn('element/2.15.1/index.js');
@@ -127,6 +129,11 @@ loadCdn('element/2.15.1/index.js');
 #### `debug`
 
 如果处于调试模式则为 true.
+
+
+#### `url_prefix`
+
+通常为: `http://host[:port]/xboson/face/`
 
 
 ## 独立组件
@@ -169,6 +176,8 @@ loadCdn('element/2.15.1/index.js');
 ### `<vue:echarts`>
 
 引入 [Echarts 5.1.1](https://echarts.apache.org/zh/tutorial.html) 的 [vue-echarts 6](https://github.com/ecomfe/vue-echarts) 组件.
+
+如需渲染 3d 图表, 需要额外引入 `<js:echarts-gl/>`
 
 ### `<vue:composition-api>`
 
