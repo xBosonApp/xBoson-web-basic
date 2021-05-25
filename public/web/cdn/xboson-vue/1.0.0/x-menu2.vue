@@ -164,7 +164,7 @@ export default {
 }
 
 .menu-container {
-  display:flex; flex-direction:row; position: absolute; z-index:10; height:100%;
+  display:flex; flex-direction:row; position: absolute; z-index:9999; height:100%;
 }
 .title {
   font-size: 8px;  color: #777;  border-bottom: 1px dashed; white-space: nowrap;

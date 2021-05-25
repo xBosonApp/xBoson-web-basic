@@ -17,6 +17,7 @@
         <a href='https://bootstrap-vue.org/docs'>Bootstrap Vue</a>
         <a href='https://echarts.apache.org/examples/zh/index.html'>echarts</a>
         <a href='https://github.com/ecomfe/vue-echarts'>vue-echarts</a>
+        <a href='http://datav.jiaminghi.com/'>Vue Big screen</a>
       </el-col>
     </el-row>
   </div>

@@ -30,13 +30,14 @@
 
 <script>
 [
-  'demo-layout', 'doc', 'open-file-menu', 'menu2', 'chart', 'copy',
+  'demo-layout', 'doc', 'open-file-menu', 'menu2', 'chart', 'copy', 
+  'bs1', 'bs2',
   
 ].forEach(function(name) {
   Vue.component(name, require('./modern-app-components/'+ name +'.vue',1,1));
 });
 // 别名, 方便写代码
-Vue.component('demo', require('./modern-app-components/demo-layout.vue'));
+Vue.component('demo', require('./modern-app-components/demo-layout.vue', 1,1));
 
 const store = new Vuex.Store({
   state: {
