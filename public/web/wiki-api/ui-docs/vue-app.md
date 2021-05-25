@@ -53,7 +53,7 @@ export default {
 </script>
 ```
 
-该 app.vue 文件是应用程序的根组件, 可以在其中初始化 Vuex, 设置全局样式, 加载更多组件等操作.  
+该 app.vue 文件是应用程序的根组件, 可以在其中初始化 Vuex, 配置路由, 设置全局样式, 加载更多组件等操作.  
 这样一个最简单 vue 项目构建完成.  
 
 注意: vue 单文件组件中 `<template>` 只能有一个根节点, 超过一个节点则整个组件都不显示. 
@@ -182,3 +182,8 @@ loadCdn('element/2.15.1/index.js');
 ### `<vue:composition-api>`
 
 引入 [vue2 的兼容层 1.0.0](https://github.com/vuejs/composition-api), 从而支持部分 vue3 api, 可引入 vue3 的组件.
+
+
+### `<vue:data-view/>`
+
+引入 [数据大屏 2.10.0](https://github.com/DataV-Team/DataV) 组件
