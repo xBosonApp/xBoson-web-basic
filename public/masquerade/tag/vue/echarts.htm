@@ -8,6 +8,9 @@
     return;
   }
   Vue.component('v-chart', VueECharts);
-  window.defineModule && window.defineModule('vue-echarts', { exports: VueECharts });
+  if (window.defineModule) {
+    window.defineModule('vue-echarts', { exports: VueECharts });
+    window.defineModule('echarts', { exports: echarts });
+  }
 })();
 </script>

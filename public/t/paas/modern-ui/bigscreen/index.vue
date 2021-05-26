@@ -41,7 +41,7 @@ export default {
   }
   
   .content {
-    padding: 20px;
+    padding: 20px; height: calc(100% - 40px);
   }
 }
 </style>
