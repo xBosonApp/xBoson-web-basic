@@ -31,7 +31,8 @@
 <script>
 [
   'demo-layout', 'doc', 'open-file-menu', 'menu2', 'chart', 'copy', 
-  'bs1', 'bs2', 'bs3', 'bs4',
+  'bs1', 'bs2', 'bs3', 'bs4', 'colcol', 'colrow', 'rowrow', 'rowcol',
+  'dv-border-box-undefined',
   
 ].forEach(function(name) {
   Vue.component(name, require('./modern-app-components/'+ name +'.vue',1,1));
