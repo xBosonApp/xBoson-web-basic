@@ -1,7 +1,7 @@
 <!-- Create By xBoson System -->
 
 <template>
-  <dv-border-box-7 style='padding: 10px; display: flex'>
+  <dv-border-box-7 style='display: flex'>
     <div>
       <h5 class='title'>{{title}}</h5> 
       <span class='index'>0{{index}}</span>
@@ -47,7 +47,7 @@ export default {
 
 <style scoped>
 .x {
-  background-color: #001c35; flex:1; padding: 5px; margin: 3px;
+  background-color: #001c35; flex:1; padding: 3px; margin: 1px;
 }
 .a {
   color: #da5f04; font-size: 15px; display: inline-block;

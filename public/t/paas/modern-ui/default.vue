@@ -20,6 +20,13 @@
         <a href='http://datav.jiaminghi.com/'>Vue Big screen</a>
       </el-col>
     </el-row>
+    <el-row class='note'>
+      <h3>平台 Vue 应用设计原则</h3>
+      <li>尽可能将重复部分封装到组件中</li>
+      <li>不用 js 脚本访问 dom 元素</li>
+      <li>除首页 html 页面, 再没有其他 html 页面文件</li>
+      <li>不访问 vue 中的如下变量: 'vm.$el' 'vm.$parent' 'vm.$root' 'vm.$children' 'vm.$refs'</li>
+    </el-row>
   </div>
 </template>
 
@@ -34,5 +41,8 @@ export default {
 }
 .url-title {
   text-align: right; border-right: 1px solid #777;
+}
+.note {
+  color: #999; padding-left: 200px;
 }
 </style>

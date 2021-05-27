@@ -28,7 +28,7 @@
     </el-row>
     
     <el-row style='flex:1' type='flex' gutter='20'>
-      <el-col :span='4'><dv-border-box-7 style='padding: 20px'>
+      <el-col :span='4'><dv-border-box-7 style=''>
         <h4>巡查上报记录数量</h4>
         <dv-scroll-ranking-board :config="d1" style="width:100%;height:50%"/>
       </dv-border-box-7></el-col>
