@@ -53,7 +53,14 @@
     { "name": "graph", "file": "docs/api-graph.md" }
   ]},
   
-  { "name": "引擎前端", "basepath":"ui-docs", "file": "basic.md", "sub": [
+  { "name": "Vue App", "basepath":"ui-docs", "file": "vue-app.md", "sub": [
+    { "name": "概述", "file": "vue-app.md" },
+    { "name": "第三方库", "file": "vue-thrid.md" },
+    { "name": "xBoson Vue", "file": "xboson-vue.md" }
+  ]},
+  
+  { "name": "模板引擎", "basepath":"ui-docs", "file": "basic.md", "sub": [
+    { "name": "概述", "file": "basic.md" },
     { "name": "chip", "file": "chip.md" },
     { "name": "form", "file": "form.md" },
     { "name": "js", "file": "js.md" },
@@ -65,10 +72,11 @@
     { "name": "ui", "file": "ui.md" },
     { "name": "vali", "file": "vali.md" },
     { "name": "web", "file": "web.md" },
-    { "name": "VUE", "file": "vue-app.md" },
-    { "name": "xBoson Vue", "file": "xboson-vue.md" },
     { "name": "常用模板", "file": "usetempate.md" },
-    { "name": "高级开发指南", "file": "adv.md" },
+    { "name": "高级开发指南", "file": "adv.md" }
+  ]},
+  
+  { "name": "其他文档", "basepath":"ui-docs", "file": "basic.md", "sub": [
     { "name": "ACE Api Document", "file": "../ace-api/index.html", "ext": "absolute,_blank" }
   ]}
 ]
