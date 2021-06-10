@@ -1,0 +1,87 @@
+<!-- Create By xBoson System -->
+
+<template>
+  <div id='main-frame'>
+    <div class='main-menu'>
+      <cl-menu></cl-menu>
+    </div>
+    <div class='component-choose'>
+      <cl-component-choose></cl-component-choose>
+    </div>
+    <div class='editor'>
+      <cl-editor></cl-editor>
+    </div>
+    <div class='adjustment'>
+      <cl-adjustment></cl-adjustment>
+    </div>
+    <div class='message'>{{$store.state.message}}</div>
+  </div>
+</template>
+
+<script>
+[
+  'cl-menu', 
+  'cl-editor', 
+  'cl-editor-component',
+  'cl-component-choose',
+  'cl-adjustment',
+  
+].forEach(function(name) {
+  Vue.component(name, require('./'+ name +'.vue', 1,1));
+});
+
+
+const store = new Vuex.Store({
+  state: {
+    showDropTip: true,
+    message: '',
+    currentAdjustmentComponentConfig: null,
+  },
+  
+  mutations: {
+    closeDropTip(state) {
+      state.showDropTip = false;
+    },
+    
+    setAdjustmentComponent(s, cfg) {
+      s.currentAdjustmentComponentConfig = cfg;
+    },
+    
+    setMessage(s, msg) {
+      s.message = msg;
+    },
+  }
+});
+
+
+export default {
+  store,
+}
+</script>
+
+<style scoped lang='less'>
+@borderPad: 4px;
+
+#main-frame {
+  display: grid;
+  grid-template-columns: 300px 1fr 300px;
+  grid-template-rows: 30px 1fr 30px;
+  height: 100%;
+  
+  .main-menu, .message {
+    grid-column: 1 / 4;
+  }
+  
+  .main-menu {
+    background-color: #f6faff; padding: @borderPad;
+  }
+  
+  .message {
+    background-color: #fbf2c8; padding: @borderPad;
+  }
+  
+  .editor {
+    border-left: 1px dashed #e8e8e8; border-right: 1px dashed #e8e8e8;
+  }
+}
+</style>
