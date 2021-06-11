@@ -63,3 +63,7 @@
 ## `<vue:draggable>`
 
 引入[拖拽 2.24.3](https://github.com/SortableJS/Vue.Draggable)组件
+
+## `<vue:color>`
+
+引入颜色[选择器 2.8.1](https://github.com/xiaokaike/vue-color)

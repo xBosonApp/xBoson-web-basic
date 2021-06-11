@@ -1,0 +1,18 @@
+<js:cdn src='vue-color/2.8.1/vue-color.min.js'/>
+<script>
+(function() {
+  let map = { // 非全部
+    'material-picker': VueColor.Material,
+    'compact-picker': VueColor.Compact,
+    'swatches-picker': VueColor.Swatches,
+    'slider-picker': VueColor.Slider,
+    'sketch-picker': VueColor.Sketch,
+    'chrome-picker': VueColor.Chrome,
+    'photoshop-picker': VueColor.Photoshop,
+  };
+  
+  for (let n in map) {
+    Vue.component(n, map[n]);
+  }
+})();
+</script>
