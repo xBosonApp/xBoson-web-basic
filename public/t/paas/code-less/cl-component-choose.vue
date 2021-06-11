@@ -1,49 +1,30 @@
 <!-- Create By xBoson System -->
 
 <template>
-  <a-collapse v-model="activeKey" class='components'>
-    <a-collapse-panel key="1" header="基础组件">
-      <draggable :group="{ name: 'ui-component', pull: 'clone', put: false }" v-model="list"
-          chosenClass="clst-chosen" ghostClass='clst-ghost' @start='start'>
-        <span v-for="(e, idx) in list" :id.prop='e.id'>{{e.txt}}</span>
+  <a-collapse class='components'>
+    
+    <a-collapse-panel v-for="(c, i) in componentLibrary" :key="i" :header="c.title">
+      
+      <draggable :group="{ name: 'ui-component', pull: 'clone', put: false }" 
+                v-model="c.list" chosenClass="clst-chosen" ghostClass='clst-ghost' @start='start'>
+        <span v-for="(e, idx) in c.list" :id.prop='e.id'>{{e.txt}}</span>
       </draggable>
+      
     </a-collapse-panel>
     
-    <a-collapse-panel key="2" header="布局" :disabled="false">
-      <draggable :group="{ name: 'ui-component', pull: 'clone', put: false }">
-        <div>文本</div>
-        <div>标签</div>
-        <div>段落</div>
-        <div>标题1</div>
-      </draggable>
-    </a-collapse-panel>
-    
-    <a-collapse-panel key="3" header="智能表单" disabled>
-      <p>{{ text }}</p>
-    </a-collapse-panel>
   </a-collapse>
 </template>
 
 <script>
-let basic = require('./basic.js');
+const clib = require("./component-library.js");
+
+loadLib('基础组件', './basic.js');
 
 export default {
   data() {
     let data = { 
-      list:[],
+      componentLibrary: clib.getLibrary(),
     };
-    
-    //TODO: 所有组件加载
-    require('./basic.js', 1).then(function(b) {
-      let list = [];
-      for (let id in b) {
-        list.push({
-          id,
-          txt : b[id].txt,
-        });
-      }
-      data.list = list;
-    });
     return data;
   },
   
@@ -51,7 +32,14 @@ export default {
     start() {
       this.$store.commit('closeDropTip');
     }
-  }
+  },
+}
+
+
+function loadLib(name, path) {
+  require(path, 1).then(function(list) {
+    clib.loadLib(name, list);
+  });
 }
 </script>
 

@@ -63,10 +63,10 @@ export default {
 @borderPad: 4px;
 
 #main-frame {
+  height: 100%;
   display: grid;
   grid-template-columns: 300px 1fr 300px;
-  grid-template-rows: 30px 1fr 30px;
-  height: 100%;
+  grid-template-rows: 30px calc(100vh - 60px) 30px;
   
   .main-menu, .message {
     grid-column: 1 / 4;
@@ -82,6 +82,10 @@ export default {
   
   .editor {
     border-left: 1px dashed #e8e8e8; border-right: 1px dashed #e8e8e8;
+  }
+  
+  .adjustment, .editor, .component-choose {
+    height: 100%; overflow-y: auto;
   }
 }
 </style>

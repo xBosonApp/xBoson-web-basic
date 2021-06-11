@@ -15,6 +15,8 @@
 </template>
 
 <script>
+const clib = require("./component-library.js");
+
 export default {
   data() {
     return {
@@ -30,13 +32,13 @@ export default {
     add(ev) {
       let i = ev.newIndex;
       let tplcfg = this.list[i];
-      let cfg = {};
+      let cfg = this.list[i] = {};
       for (let n in tplcfg) {
         cfg[n] = tplcfg[n];
       }
       cfg.props = {};
       cfg.on = {};
-      this.list[i] = cfg;
+      clib.initProps(cfg.id, cfg.props);
       
       this.$nextTick(function () {
         this.$store.commit('setAdjustmentComponent', this.list[i]);
@@ -50,9 +52,7 @@ export default {
     },
     
     getComponentName(id) {
-      //TODO: 所有组件加载
-      let basic = require('./basic.js');
-      return basic[id].component;
+      return clib.getComponent(id).component;
     }
   }
 }
