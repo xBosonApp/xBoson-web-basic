@@ -57,6 +57,8 @@ const store = new Vuex.Store({
 export default {
   store,
 }
+
+console.log("上海竹呗信息技术有限公司, 版权所有 http://xboson.net");
 </script>
 
 <style scoped lang='less'>

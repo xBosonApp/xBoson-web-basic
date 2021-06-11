@@ -3,6 +3,7 @@
 <template>
   <div class='root'>
     <a class='title' href='http://xboson.net' target='_blank'>xBoson 低代码开发平台</a>
+    <a class='logo'>xBoson</a>
     <a-dropdown>
       <a class="ant-dropdown-link" @click="e => e.preventDefault()">
         文件 <a-icon type="down" />
@@ -55,6 +56,9 @@ export default {
 }
 .title {
   float: right; color: #ccc; padding-right: 20px;
+}
+.logo {
+  color: #ccc;
 }
 .ant-dropdown-link {
   padding-left: 20px;
