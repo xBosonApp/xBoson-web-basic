@@ -21,10 +21,17 @@
 <script>
 [
   'cl-menu', 
-  'cl-editor', 
-  'cl-editor-component',
-  'cl-component-choose',
   'cl-adjustment',
+  'cl-page-design',
+  'cl-style-adj',
+  
+  'cl-editor', 
+  'cl-component-container',
+  'cl-component-choose',
+  
+  'cl-icon-select',
+  'cl-color-picker',
+  'cl-css-number',
   
 ].forEach(function(name) {
   Vue.component(name, require('./'+ name +'.vue', 1,1));

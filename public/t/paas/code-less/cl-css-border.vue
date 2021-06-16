@@ -22,11 +22,6 @@
 
 <script>
 export default {
-  components: {
-    'cl-color-picker': require("./cl-color-picker.vue", 1, 1),
-    'cl-css-number'  : require("./cl-css-number.vue", 1, 1),
-  },
-  
   props: ['value'],
   
   computed: {

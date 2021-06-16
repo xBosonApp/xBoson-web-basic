@@ -44,11 +44,6 @@ const compMap = {
 };
 
 export default {
-  components: {
-    'cl-icon-select' : require("./cl-icon-select.vue", 1, 1),
-    'cl-style-adj'   : require("./cl-style-adj.vue", 1, 1),
-  },
-  
   computed: {
     config() {
       return this.$store.state.currentAdjustmentComponentConfig;
@@ -65,7 +60,7 @@ export default {
     },
     
     getComponent() {
-      return clib.getComponent(this.config.id);
+      return clib.getComponent(this.config.cid);
     },
     
     _getSelectOpt(select) {

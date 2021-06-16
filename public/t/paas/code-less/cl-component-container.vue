@@ -7,7 +7,7 @@
   <draggable :group="{ name: 'ui-component' }" v-model="list" @add='add' class='draggable'
         animation='100' chosenClass="clst-chosen" ghostClass='clst-ghost' @choose='chooseSelf'>
     
-    <component v-for="(e, idx) in list" :is='getComponentName(e.id)' 
+    <component v-for="(e, idx) in list" :is='getComponentName(e.cid)' 
       v-bind='e.props' v-on='e.on'>{{e.txt}}</component>
     
   </draggable>
@@ -16,11 +16,13 @@
 
 <script>
 const clib = require("./component-library.js");
+const crole = require("./component-role.js");
 
 export default {
+  props: ['list'],
+  
   data() {
     return {
-      list : [],
     }  
   },
   
@@ -32,13 +34,10 @@ export default {
     add(ev) {
       let i = ev.newIndex;
       let tplcfg = this.list[i];
-      let cfg = this.list[i] = {};
-      for (let n in tplcfg) {
-        cfg[n] = tplcfg[n];
-      }
-      cfg.props = {};
-      cfg.on = {};
-      clib.initProps(cfg.id, cfg.props);
+      
+      let component = clib.getComponent(tplcfg.id);
+      let instance = crole.createInstance(component);
+      this.list[i] = instance;
       
       this.$nextTick(function () {
         this.$store.commit('setAdjustmentComponent', this.list[i]);
@@ -51,7 +50,9 @@ export default {
       this.$store.commit('setAdjustmentComponent', cfg);
     },
     
+    // 必须调用该方法, 否则直接用 component 属性会产生数组错位
     getComponentName(id) {
+      if (!id) return 'div'; // 第一次渲染, 元素没有改变
       return clib.getComponent(id).component;
     }
   }

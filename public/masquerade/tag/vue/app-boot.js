@@ -129,18 +129,25 @@
         customClass: 'vue-app-big-notify',
       });
     } 
-    else {
+    // Antd
+    else if (antd && antd.notification) {
+      antd.notification.error({
+        message : title,
+        description : err.message,
+      });
+    } else {
       alert(title +'\n'+ err.message);
     }
   }
   
   
   function lite_require(s) {
-    let wcode = '(function(module, exports) {'+
-                  syncload(s) +
-                '})';
+    // let wcode = '(function(module, exports) {'+
+    //               syncload(s) +
+    //             '})';
     let mod = {exports:{}};
-    eval(wcode)(mod, mod.exports);
+    // eval(wcode)(mod, mod.exports);
+    new Function('module', 'exports', syncload(s))(mod, mod.exports);
     return mod.exports;
   }
   
@@ -153,7 +160,8 @@
     if (!_not_run) return code;
     
     try {
-      return eval(code);
+      // return new eval(code);
+      return new Function(code)();
     } catch(e) {
       console.error("Load cdn", path, "fail:", e.stack);
     }
@@ -306,12 +314,14 @@
       _load_resource(urlprefix + absPath, null, use_async, function(err, code) {
         if (err) return fail(err);
         
-        let wcode = '(function(module, require, exports, __dirname, __filename) {'+
-                      code +
-                    '\n})';
+        // let wcode = '(function(module, require, exports, __dirname, __filename) {'+
+        //               code +
+        //             '\n})';
         let fn;
         try {
-          fn = eval(wcode);
+          // fn = eval(wcode);
+          fn = new Function('module', 'require', 'exports', '__dirname', '__filename', code);
+          // fn.name = absPath;
         } catch(err) {
           let msg = ['Load', absPath, 'from', _parent.name, 'fail:', err.message];
           fail(new Error(msg.join(' ')));
