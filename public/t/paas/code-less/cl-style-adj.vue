@@ -4,28 +4,20 @@
   <a-collapse>
     <a-collapse-panel v-for="(c, i) in config" :key="i" :header="c.title">
       <div v-for='item in c.list'>
-        <label>{{item[1]}} <span class='tip'>{{item[0]}}</span></label>
-        <hr v-if='item[0]==null'/>
+        <label :class='item[0]'>{{item[1]}} <span class='tip'>{{item[0]}}</span></label>
         
-        <a-input 
-          v-model='styleVal[item[0]]' v-if='item[2]==2' :placeholder='item[3]'/>
-        <a-input-number
-          v-model='styleVal[item[0]]' v-if='item[2]==6' :placeholder='item[3]' style='width:100%'/>
-        <cl-color-picker 
-          v-model="styleVal[item[0]]" v-if='item[2]==1' :default='item[3]'/>
-        <cl-css-number
-          v-model="styleVal[item[0]]" v-if='item[2]==3' :default='item[3]'/>
-        <a-select
-          v-model="styleVal[item[0]]" v-if='item[2]==4' :options='getSelectOpt(item[3])' style='width:100%' />
-        <cl-css-border
-          v-model="styleVal[item[0]]" v-if='item[2]==5' />
+        <component 
+          :is='tagMap[item[2]]'
+          v-model='styleVal[item[0]]'
+          v-bind='getTagOptions(item)'/>
+        
       </div>
     </a-collapse-panel>
   </a-collapse>
 </template>
 
 <script>
-// 1:颜色选择器, 2:字符串, 3:css长度, 4:选项, 5:边框, 6:数字
+// 1:颜色选择器, 2:字符串, 3:css长度, 4:选项, 5:边框, 6:数字, 7:数字滑动条
 const config = [
   { title : '文字',
     list: [
@@ -107,13 +99,26 @@ const config = [
     ]
   },
   
+  { title: '网格布局',
+    list: [
+      ['classify','容器', 8],
+      ['row-gap', '行间隙(容器)', 3, 0],
+      ['column-gap', '列间隙', 3, 0],
+      ['classify','元素', 8],
+      ['grid-row-start', '起始行网格线位置', 2, 'auto', gridAreaVal],
+      ['grid-row-end', '结束行网格线位置', 2, 'auto', gridAreaVal],
+      ['grid-column-start', '起始列网格线位置', 2, 'auto', gridAreaVal],
+      ['grid-column-end', '结束列网格线位置', 2, 'auto', gridAreaVal],
+    ],
+  },
+  
   { title: '其他',
     list: [
       [ 'caption-side', '表格标题位置', 4, {'表格顶*':'top', '表格底':'bottom', '继承':'inherit'}],
       [ 'caret-color', '光标颜色', 1],
       [ 'clear', '清除浮动元素', 4, {'允许*':'none', '清除左侧':'left', '清除右侧':'right', '不允许浮动':'both', '继承':'inherit'}],
       [ 'cursor', '光标样式', 4, ['auto', 'default', 'crosshair', 'pointer', 'move', 'e-resize', 'ne-resize', 'nw-reset', 'n-resize', 'se-resize', 'sw-resize', 's-resize', 'w-resize', 'text', 'wait', 'help']],
-      [ 'opacity', '透明度 (0-1)', 6],
+      [ 'opacity', '透明度 (0-1)', 7, 0, 1, 0.01],
       [ 'overflow-x', '水平剪裁', 4, {'总是显示*':'visible', '总是剪裁':'hidden', '滚动条':'scroll', '自动':'auto', '发生剪裁时删除':'no-display'}],
       [ 'overflow-y', '垂直剪裁', 4, {'总是显示*':'visible', '总是剪裁':'hidden', '滚动条':'scroll', '自动':'auto', '发生剪裁时删除':'no-display'}],
       [ 'user-select', '选择文本', 4, {'自动*':'auto', '禁止选择':'none', '可以选择':'text', '单击选中':'all'}],
@@ -121,6 +126,13 @@ const config = [
     ]
   },
 ];
+
+function gridAreaVal(v) {
+  if (isNaN(v)) {
+    return 'auto';
+  }
+  return v;
+}
 
 export default {
   components: {
@@ -134,10 +146,41 @@ export default {
   data() {
     return {
       config,
+      tagMap : {
+        1: 'cl-color-picker',
+        2: 'cl-input-fmt',
+        3: 'cl-css-number',
+        4: 'a-select',
+        5: 'cl-css-border',
+        6: 'a-input-number',
+        7: 'a-slider',
+        8: 'h4',
+      }
     };
   },
   
   methods: {
+    getTagOptions(item) {
+      switch(item[2]) {
+        case 1:
+          return { 'default': item[3] };
+        case 2:
+          return { placeholder: item[3], format: item[4] };
+        case 3:
+          return { 'default': item[3] };
+        case 4:
+          return { 'options': this.getSelectOpt(item[3]), 'style': 'width:100%'};
+        case 5:
+          return {};
+        case 6:
+          return { placeholder: item[3], 'style': 'width:100%' };
+        case 7:
+          return { min: item[3], max: item[4], step: item[5] };
+        default: 
+          return {};
+      }
+    },
+    
     getSelectOpt(opt) {
       let ret = [];
       if (opt.constructor == Array) {
@@ -161,5 +204,12 @@ hr {
 }
 .tip {
   font-size: smaller; color: #aaa; float: right;
+}
+.classify {
+  background-color: #837ce5; border-right: 160px solid #e0defd; color: #fff; padding: 3px;
+  word-break: keep-all; margin-top: 5px; display: block;
+}
+.classify .tip {
+  display: none;
 }
 </style>

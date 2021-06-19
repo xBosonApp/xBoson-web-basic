@@ -1,17 +1,28 @@
 <!-- Create By xBoson System -->
 
 <template>
-  <div>
-  <div class='dd-footer' v-if='showtip()'>拖拽组件到这里</div>
-  
-  <draggable :group="{ name: 'ui-component' }" v-model="list" @add='add' class='draggable'
-        animation='100' chosenClass="clst-chosen" ghostClass='clst-ghost' @choose='chooseSelf'>
+  <draggable 
+    :group="{ name: 'ui-component' }" 
+    :list="nestedList"
+    :style='style'
+    :root-config='rootConfig'
+    class='component-container draggable-item'
+    animation='100' 
+    chosenClass="clst-chosen" 
+    ghostClass='clst-ghost' 
+    @add='add' 
+    @choose='chooseSelf'>
     
-    <component v-for="(e, idx) in list" :is='getComponentName(e.cid)' 
-      v-bind='e.props' v-on='e.on'>{{e.txt}}</component>
+    <component 
+      :is='getComponentName(e)' 
+      :styleProp='e.props && e.props.style'
+      :root-config='rootConfig'
+      class='draggable-item'
+      v-for="(e, idx) in nestedList" 
+      v-bind='e.props'
+      v-on='e.on'>{{e.txt}}</component>
     
   </draggable>
-  </div>
 </template>
 
 <script>
@@ -19,7 +30,7 @@ const clib = require("./component-library.js");
 const crole = require("./component-role.js");
 
 export default {
-  props: ['list'],
+  props: ['nestedList', 'style', 'rootConfig'],
   
   data() {
     return {
@@ -27,51 +38,59 @@ export default {
   },
   
   methods : {
-    showtip() {
-      return this.list.length == 0 && this.$store.state.showDropTip;
-    },
-    
     add(ev) {
       let i = ev.newIndex;
-      let tplcfg = this.list[i];
+      let tplcfg = this.nestedList[i];
+      if (tplcfg == null || tplcfg.isInstance) return;
       
       let component = clib.getComponent(tplcfg.id);
-      let instance = crole.createInstance(component);
-      this.list[i] = instance;
+      let instance = crole.createInstance(this.rootConfig, component);
+      this.nestedList[i] = instance;
+      
+      if (component.plugins) {
+        for (let n in component.plugins) {
+          Vue.component(n, require(component.plugins[n], 1,1));
+        }
+      }
       
       this.$nextTick(function () {
-        this.$store.commit('setAdjustmentComponent', this.list[i]);
+        this.setAdjRef(i);
         this.$forceUpdate();
       });
     },
     
     chooseSelf(ev) {
-      let cfg = this.list[ev.oldIndex];
+      this.setAdjRef(ev.oldIndex);
+    },
+    
+    setAdjRef(index) {
+      let cfg = this.nestedList[index];
       this.$store.commit('setAdjustmentComponent', cfg);
+      this.$store.commit('setNestedItemRef', { list: this.nestedList, index });
     },
     
     // 必须调用该方法, 否则直接用 component 属性会产生数组错位
-    getComponentName(id) {
-      if (!id) return 'div'; // 第一次渲染, 元素没有改变
-      return clib.getComponent(id).component;
+    getComponentName(instance) {
+      if (!instance.cid) return 'div'; // 第一次渲染, 元素没有改变
+      return instance.helpTag || instance.component;
     }
   }
 }
 </script>
 
 <style scoped>
-.dd-footer {
-  text-align: center; color: #999; padding: 150px 0; background-color: #eee; position: absolute;
-  width: 99%; font-size: 1.5em;
+.component-container {
+  border: 1px dashed #ccc; padding: 5px;
+  min-height: 30px;
 }
-.draggable {
-  min-height: 300px;
+.draggable-item:hover {
+  border: 1px dashed #ccc;
 }
 </style>
 
 <style>
 .clst-chosen {
-  border: 1px dashed #ccc;
+  border: 1px dashed #ccc; background-color: antiquewhite;
 }
 .clst-ghost {
   background-color: antiquewhite;

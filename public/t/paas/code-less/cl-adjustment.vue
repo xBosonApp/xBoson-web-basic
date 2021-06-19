@@ -5,14 +5,32 @@
     
     <a-tab-pane key="1" tab="属性" class='panel'>
       <div v-if='config != null'>
-        <div>文本</div>
-        <a-textarea v-model='config.txt'
+        <div>ID</div>
+        <a-input :value='config.id' disabled='true' />
+        
+        <div v-if='!config.removeTxt'>文本</div>
+        <a-textarea 
+          v-model='config.txt'
           placeholder="组件显示文本"
+          v-if='!config.removeTxt'
           :auto-size="{ minRows: 2, maxRows: 10 }"/>
           
+        <div>备注</div>
+        <a-textarea 
+          v-model='config.note'
+          placeholder="备注"
+          :auto-size="{ minRows: 1, maxRows: 10 }"/>
+          
+        <a-popover title="确认删除?" trigger="click">
+          <a-button type="danger" slot="content" @click="removeComponent">立即删除选中组件!</a-button>
+          <a-button type='dashed' size='small' block class='space'>删除组件</a-button>
+        </a-popover>
+        
+        <space/>  
+        
         <div v-for='(p, name) in getComponentProps()'>
           <div>{{p.desc}}</div>
-          <component :is='getComponentName(p.type)' v-bind='getOption(name)' 
+          <component :is='getComponentName(p)' v-bind='getOption(name)' 
               v-model='config.props[name]'/>
         </div>
       </div>
@@ -44,6 +62,11 @@ const compMap = {
 };
 
 export default {
+  data() {
+    return {
+    }  
+  },
+  
   computed: {
     config() {
       return this.$store.state.currentAdjustmentComponentConfig;
@@ -51,8 +74,12 @@ export default {
   },
   
   methods : {
-    getComponentName(i) {
-      return compMap[i];
+    getComponentName(p) {
+      if (p.type == 7) {
+        if (!p.component) throw new Error("component attribute null");
+        return p.component;
+      }
+      return compMap[p.type];
     },
     
     getComponentProps() {
@@ -74,9 +101,11 @@ export default {
       return options;
     },
     
+    // 返回的所有属性绑定到创建的组件上, 来自组件定义数据
     getOption(name) {
       let p = this.getComponent().props[name];
-      // 1:字符串, 2:整数, 3:选项select属性, 4:字符串,并且带有select选项, 5:来自变量, 6:图标选择
+      // 1:字符串, 2:整数, 3:选项select属性, 4:字符串,并且带有select选项, 
+      // 5:来自变量, 6:图标选择, 7:自定义插件
       switch (p.type) {
         case 1:
           return { maxLength: p.max };
@@ -91,9 +120,15 @@ export default {
           return {};
         case 6:
           return { style: 'width: 100%' };
+        case 7:
+          return p.props || {};
         default:
           throw new Error("无效的值类型"+ p.type);
       }
+    },
+    
+    removeComponent() {
+      this.$store.commit('removeNestedItem');
     },
   }
 }
@@ -102,5 +137,11 @@ export default {
 <style scoped>
 .panel {
   padding: 2px 5px;
+}
+.space {
+  margin: 2px 0;
+}
+space {
+  height: 1em; width: 100%; display: block;
 }
 </style>

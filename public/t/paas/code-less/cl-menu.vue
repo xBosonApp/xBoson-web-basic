@@ -10,13 +10,13 @@
       </a>
       <a-menu slot="overlay">
         <a-menu-item key="0">
-          <a href='#'>新建组件</a>
+          <a href='#' @click='createComponent'>新建组件</a>
         </a-menu-item>
         <a-menu-item key="1">
-          <a href="#">打开组件</a>
+          <a href="#" @click='openComponent'>打开组件</a>
         </a-menu-item>
         <a-menu-item key="2">
-          <a href="#">组件管理</a>
+          <a href="#" @click='managerComponent'>组件管理</a>
         </a-menu-item>
         
         <a-menu-divider />
@@ -37,16 +37,68 @@
         <a-menu-item key="3">
           <a href='#'>组件注册表</a>
         </a-menu-item>
-        <a-menu-item key="6">
-          <a href="#">虚拟菜单</a>
-        </a-menu-item>
       </a-menu>
     </a-dropdown>
+    
+    <a-drawer
+      title="打开组件"
+      placement="top"
+      height='calc(100% - 80px)'
+      :closable="true"
+      :visible="showOpen"
+      @close="showOpen = false">
+      <p>Some contents...</p>
+      <p>Some contents...</p>
+      <p>Some contents...</p>
+    </a-drawer>
+    
+    <a-drawer
+      title="新建组件"
+      placement="top"
+      height='calc(100% - 80px)'
+      :closable="true"
+      :visible="showCreate"
+      @close="showCreate = false">
+      <p>Some contents...</p>
+      <p>Some contents...</p>
+      <p>Some contents...</p>
+    </a-drawer>
+    
+    <a-drawer
+      title="组件管理"
+      placement="top"
+      height='calc(100% - 80px)'
+      :closable="true"
+      :visible="showMgr"
+      @close="showMgr = false">
+      <p>Some contents...</p>
+      <p>Some contents...</p>
+      <p>Some contents...</p>
+    </a-drawer>
   </div>
 </template>
 
 <script>
 export default {
+  data() {
+    return {
+      showCreate : false,
+      showOpen : false,
+      showMgr : false,
+    };
+  },
+  
+  methods: {
+    createComponent() {
+      this.showCreate = true;
+    },
+    openComponent() {
+      this.showOpen = true;
+    },
+    managerComponent() {
+      this.showMgr = true;
+    },
+  },
 }
 </script>
 
@@ -62,5 +114,8 @@ export default {
 }
 .ant-dropdown-link {
   padding-left: 20px;
+}
+.ant-dropdown-menu-item {
+  padding: 0 80px 0 20px;
 }
 </style>

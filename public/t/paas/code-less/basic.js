@@ -86,10 +86,42 @@ module.exports = {
   bc007: {
     txt:'分割线',
     component:'hr',
+    removeTxt: true,
   },
   
   bc008: {
     txt: '格式化文本',
     component: 'pre',
+  },
+  
+  bc009: {
+    txt: '网格布局',
+    component: 'div',
+    helpTag: 'cl-grid',
+    isContainer: true,
+    plugins: {
+      'cl-grid': './cl-grid.vue',
+      'cl-css-grid-val': './cl-css-grid-val.vue',
+    },
+    props: {
+      rows: {
+        // 类型7必须有 component 属性, props 是可选的
+        desc: '行设置',
+        type: 7,
+        component: 'cl-css-grid-val',
+        props: {},
+      },
+      columns: {
+        desc: '列设置',
+        type: 7,
+        component: 'cl-css-grid-val',
+        def : ['auto', 'auto'],
+      },
+    },
+    style: {
+      'display': 'grid',
+      'grid-template-rows': 'auto',
+      'grid-template-columns': 'auto auto',
+    },
   }
 }

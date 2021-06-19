@@ -45,6 +45,7 @@ function loadLib(name, path) {
 
 <style scoped>
 .components span {
-  display: block; padding: 3px 10px; border: 1px dashed #ccc; margin: 3px 0; cursor: move;
+  display: inline-block; padding: 3px 10px; border: 1px dashed #ccc; margin: 3px 2px; cursor: move;
+  width: calc(50% - 4px);
 }
 </style>

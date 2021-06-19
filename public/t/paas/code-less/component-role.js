@@ -3,25 +3,51 @@ module.exports = {
 };
 
 
-function createInstance(component) {
-  let cfg = newInstance(component);
+function createInstance(root, component) {
+  let cfg = newInstance(root, component);
   initProps(component, cfg.props);
   return cfg;
+}
+
+
+function genID(root, component) {
+  return component.txt +'-'+ (++root.id);
 }
 
 
 //
 // 创建组建实力对象
 //
-function newInstance(component) {
+function newInstance(root, component) {
+  let nestedList = component.isContainer && [];
+  let containerStyle = component.isContainer && component.containerStyle;
+  let props = {
+    // 组件实例的样式
+    style: component.style || {},
+    // 如果是组件容器, 表示内嵌组建列表
+    nestedList,
+  };
   return {
-    // id        : component.id,
-    props     : { style:{} },         // 标签属性
-    on        : {},                   // 事件函数列表
-    cid       : component.id,         // 平台组件id
-    txt       : component.txt,        // 标签文本
-    component : component.component,  // vue 组件名
-    isInstance: true,
+    id : genID(root, component),
+    note : '',
+    // 标签属性
+    props,
+    // 事件函数列表
+    on : {},
+    // 平台组件id
+    cid : component.id,
+    // 标签文本
+    txt : component.removeTxt ?'' :component.txt,
+    // 删除与标签文本相关的数据
+    removeTxt : component.removeTxt,
+    // vue 组件名, 可以是 html 标签名, 是最终渲染时的标签.
+    component : component.component,
+    // 在设计时使用这个 tag 进行辅助
+    helpTag : component.helpTag,
+    // 组件的实例
+    isInstance : true,
+    // true 表示一个组件容器, 容器中可拖拽组件
+    isContainer : component.isContainer,
   }
 }
 
@@ -38,11 +64,13 @@ function newInstance(component) {
 function initProps(c, props) {
   for (let n in c.props) {
     let p = c.props[n];
+    if (props[n] !== undefined) continue; 
     if (p.def) {
       props[n] = p.def;
     } 
     else {
-      // 1:字符串, 2:整数, 3:选项select属性, 4:字符串,并且带有select选项, 5:来自变量, 6:图标选择
+      // 1:字符串, 2:整数, 3:选项select属性, 4:字符串,并且带有select选项, 
+      // 5:来自变量, 6:图标选择, 7:自定义组件
       switch (p.type) {
         case 1:
         case 4:
@@ -52,9 +80,10 @@ function initProps(c, props) {
         case 3:
         case 5:
         case 6:
+        case 7:
           props[n] = null; break;
         default:
-          throw new Error("无效的值类型");
+          throw new Error("init props invaild type val:"+ n);
       }
     }
   }

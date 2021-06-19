@@ -32,34 +32,14 @@
   'cl-icon-select',
   'cl-color-picker',
   'cl-css-number',
+  'cl-input-fmt',
   
 ].forEach(function(name) {
   Vue.component(name, require('./'+ name +'.vue', 1,1));
 });
 
 
-const store = new Vuex.Store({
-  state: {
-    showDropTip: true,
-    message: '',
-    currentAdjustmentComponentConfig: null,
-  },
-  
-  mutations: {
-    closeDropTip(state) {
-      state.showDropTip = false;
-    },
-    
-    setAdjustmentComponent(s, cfg) {
-      s.currentAdjustmentComponentConfig = cfg;
-    },
-    
-    setMessage(s, msg) {
-      s.message = msg;
-    },
-  }
-});
-
+const store = require("./store.js");
 
 export default {
   store,
@@ -90,7 +70,7 @@ console.log("上海竹呗信息技术有限公司, 版权所有 http://xboson.ne
   }
   
   .editor {
-    border-left: 1px dashed #e8e8e8; border-right: 1px dashed #e8e8e8;
+    /*border-left: 1px dashed #e8e8e8; border-right: 1px dashed #e8e8e8;*/
   }
   
   .adjustment, .editor, .component-choose {
