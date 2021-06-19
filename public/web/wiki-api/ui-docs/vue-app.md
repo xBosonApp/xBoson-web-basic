@@ -116,7 +116,7 @@ loadCdn('element/2.15.1/index.js');
 ```
 
 
-#### `popError(info: String, err: Error)`
+#### `popError(title: String, err: Error)`
 
 尽可能在页面上弹出一个错误提示.
 
@@ -133,4 +133,9 @@ loadCdn('element/2.15.1/index.js');
 
 #### `url_prefix`
 
-通常为: `http://host[:port]/xboson/face/`
+通常为: `http://host[:port]/xboson/face`
+
+
+#### `ctx_prefix`
+
+通常为: `http://host[:port]/xboson`

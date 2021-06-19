@@ -87,7 +87,7 @@
   
   function boot(fullPath) {
     // 从 http:// 开始到 face/ 为止
-    let prefix = location.href.substr(0, location.href.indexOf(fullPath));
+    let prefix = location.href.substr(0, location.href.lastIndexOf(fullPath));
     pathmod = lite_require(cdn_path +"path-browserify/1.0.1/index.js");
     
     let basePath = pathmod.dirname(fullPath);
@@ -97,9 +97,10 @@
     window._xboson_debug = devMode = basePath.startsWith("/t");
     
     export_to_global({
-      require     :  rootModule.require,
-      debug       :  devMode,
+      require     : rootModule.require,
+      debug       : devMode,
       url_prefix  : prefix,
+      ctx_prefix  : prefix.substr(0, prefix.lastIndexOf('/face')),
     });
   }
   
@@ -134,6 +135,7 @@
       antd.notification.error({
         message : title,
         description : err.message,
+        style: {'word-break': 'break-all', 'white-space':'pre-wrap'},
       });
     } else {
       alert(title +'\n'+ err.message);

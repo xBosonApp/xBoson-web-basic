@@ -5,6 +5,7 @@ module.exports = new Vuex.Store({
     message: '',
     currentAdjustmentComponentConfig: null,
     nestedItemRef: null,
+    project: null,
   },
   
   mutations: {
@@ -34,6 +35,10 @@ module.exports = new Vuex.Store({
         s.nestedItemRef = null;
         this.commit('clearAdjComponent');
       }
+    },
+    
+    setProject(s, p) {
+      s.project = p;
     },
   }
 });

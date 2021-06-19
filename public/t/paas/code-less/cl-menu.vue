@@ -3,7 +3,7 @@
 <template>
   <div class='root'>
     <a class='title' href='http://xboson.net' target='_blank'>xBoson 低代码开发平台</a>
-    <a class='logo'>xBoson</a>
+    <span class='note'>{{projectName}}</span>
     <a-dropdown>
       <a class="ant-dropdown-link" @click="e => e.preventDefault()">
         文件 <a-icon type="down" />
@@ -20,7 +20,7 @@
         </a-menu-item>
         
         <a-menu-divider />
-        <a-menu-item key="3" disabled>
+        <a-menu-item key="3" @click='quit'>
           退出
         </a-menu-item>
       </a-menu>
@@ -80,6 +80,8 @@
 
 <script>
 export default {
+  props: ['projectName'],
+  
   data() {
     return {
       showCreate : false,
@@ -98,6 +100,9 @@ export default {
     managerComponent() {
       this.showMgr = true;
     },
+    quit() {
+      this.$emit('quit');
+    }
   },
 }
 </script>
@@ -109,13 +114,13 @@ export default {
 .title {
   float: right; color: #ccc; padding-right: 20px;
 }
-.logo {
-  color: #ccc;
-}
 .ant-dropdown-link {
   padding-left: 20px;
 }
 .ant-dropdown-menu-item {
   padding: 0 80px 0 20px;
+}
+.note {
+  color: #ccc; margin-right: 20px; display: inline-block;
 }
 </style>

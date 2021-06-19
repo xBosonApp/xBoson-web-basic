@@ -24,7 +24,8 @@ const base = '/web/cdn/xboson-vue/1.0.0/';
 // xboson vue 注册组件列表
 //
 const componentNames = [
-  'x-menu2'
+  'x-menu2',
+  'x-api',
 ];
 
 
