@@ -5,6 +5,7 @@ function NewIDE(roleid) {
   //
   var COMMENT_HEIGHT = 105;
   var CUT_HEIGHT = 220 + COMMENT_HEIGHT;
+  var CUT_HEIGHT_FULL_SCREEN = 100 + COMMENT_HEIGHT;
   var EDITOR_WRAP_SIZE= 80;
   var ACE_PATH = "lib/js/ace/1.4.2/ace.js";
   
@@ -221,21 +222,28 @@ function NewIDE(roleid) {
 
 
   var _height;
-  var _fix_height_now;
   function bind_fix_size_event() {
     var api_content = $('#api_ide_content');
     var win = $(window).resize(fixsize).scroll(on_scroll);
     var _tree_code_height;
     var current_scroll = 0;
 
+    api_content.find('.jarviswidget-fullscreen-btn').click(fixdelay);
     $.ready(fixsize);
     fixsize();
     
-    _fix_height_now = fixsize;
+    function fixdelay() {
+      setTimeout(fixsize, 10);
+    }
     
     function fixsize() {
+      var isfullscreen = $('#jarviswidget-fullscreen-mode').length > 0;
       _height = win.height();
-      _tree_code_height = _height - CUT_HEIGHT;
+      if (isfullscreen) {
+        _tree_code_height = _height - CUT_HEIGHT_FULL_SCREEN;
+      } else {
+        _tree_code_height = _height - CUT_HEIGHT;
+      }
       $('#maintree').css('height', _tree_code_height);
       $('.fix_size').css('height', _tree_code_height + COMMENT_HEIGHT);
     }
@@ -244,8 +252,9 @@ function NewIDE(roleid) {
       current_scroll = win.scrollTop();
       api_content.css('margin-top', current_scroll);
     }
+    return fixdelay;
   }
-  bind_fix_size_event();
+  var $fixsize = bind_fix_size_event();
 
 
   /**工具方法*/
@@ -1404,7 +1413,7 @@ function NewIDE(roleid) {
           _children(_result.value)
 
         _cb && _cb(_result.value);
-        _fix_height_now();
+        $fixsize();
       })
     }
 
@@ -1445,6 +1454,7 @@ function NewIDE(roleid) {
             _hisbtn.hide();
             _runbtn.parent().hide();
             _apistatusbtn.hide();
+            $fixsize();
           }, _pre.pre);
         });
       if (_node.contentid)
@@ -1465,6 +1475,7 @@ function NewIDE(roleid) {
               _hisbtn.show();
               _runbtn.parent().show();
               _runbtn.trigger('_init',[_node,_m['help_info']]);
+              $fixsize();
             }, _pre.pre);
           } catch(e) {
             console.log("ide/htmlide/ide.js", e);
@@ -1587,17 +1598,17 @@ function NewIDE(roleid) {
           zy.setEditorExOptions(editor);
         }
 
-        var s = $($('.col-xs-12.col-sm-3')[0]).children(':last').attr('style');
-        s = s.replace(/530/,'435');
-        $($('.col-xs-12.col-sm-3')[0]).children(':last').attr('style',s);
+        // var s = $($('.col-xs-12.col-sm-3')[0]).children(':last').attr('style');
+        // s = s.replace(/530/,'435');
+        // $($('.col-xs-12.col-sm-3')[0]).children(':last').attr('style',s);
 
-        bind_fix_size_event(false);
+        // bind_fix_size_event(false); 
       } else {
         if($('pre').length != 0){
           editor=ace.edit(id);
           $('#left-panel nav').bind('click', function() {
             editor.destroy();
-            editor.container.remove();
+            editor.container.remove(); 
           });
           editor.setOption('wrap', EDITOR_WRAP_SIZE);
           editor.setOption('tabSize',2);
@@ -1605,15 +1616,15 @@ function NewIDE(roleid) {
           zy.setEditorExOptions(editor);
         }
 
-        var s = $($('.col-xs-12.col-sm-3')[0]).children(':last').attr('style');
-        s = s.replace(/435/,'530');
-        $($('.col-xs-12.col-sm-3')[0]).children(':last').attr('style',s);
+        // var s = $($('.col-xs-12.col-sm-3')[0]).children(':last').attr('style');
+        // s = s.replace(/435/,'530');
+        // $($('.col-xs-12.col-sm-3')[0]).children(':last').attr('style',s);
 
-        var s = $($('.col-xs-12.col-sm-3')[0]).children(':last').attr('style');
-        s = s.replace(/435/,'525');
-        $($('.col-xs-12.col-sm-3')[0]).children(':last').attr('style',s);
+        // var s = $($('.col-xs-12.col-sm-3')[0]).children(':last').attr('style');
+        // s = s.replace(/435/,'525');
+        // $($('.col-xs-12.col-sm-3')[0]).children(':last').attr('style',s);
 
-        bind_fix_size_event(true);
+        // bind_fix_size_event(true);
       }
     })
   }

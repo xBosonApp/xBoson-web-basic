@@ -72,6 +72,7 @@
     // ide 窗口固定与浏览器窗口同步大小
     //
     var _top_height = 220;
+    var _top_height_fullscreen = 100;
     var _height;
     var _fix_height_now;
     function bind_fix_size_event() {
@@ -80,14 +81,23 @@
         var _tree_code_height;
         var current_scroll = 0;
 
+        ide.on('fixsize', fixsize);
+        ide.find('.jarviswidget-fullscreen-btn').click(function() {
+          setTimeout(fixsize, 1);
+        });
         $.ready(fixsize);
         fixsize();
         
         _fix_height_now = fixsize;
         
         function fixsize() {
+            var isfullscreen = $('#jarviswidget-fullscreen-mode').length > 0;
             _height = win.height();
-            _tree_code_height = _height - _top_height;
+            if (isfullscreen) {
+              _tree_code_height = _height - _top_height_fullscreen;
+            } else {
+              _tree_code_height = _height - _top_height;
+            }
             $('#maintree').css('height', _tree_code_height);
             $('.fix_size').css('height', _tree_code_height);
         }
@@ -96,8 +106,9 @@
             current_scroll = win.scrollTop();
             ide.css('margin-top', current_scroll);
         }
+        return fixsize;
     }
-    bind_fix_size_event();
+    var $fixsize = bind_fix_size_event();
 
 
     var _tools = {
@@ -1842,6 +1853,7 @@
                                 editor.set(_m.result.content, false, _node.path);
                                 editor.initSize();
                                 _savebtn.show();
+                                $fixsize();
                             }, _pre.pre, _m.result.filetype);
                             
                             if (enableFileType[_m.result.filetype]) {
@@ -2062,6 +2074,7 @@
                 //     'height': '600px'
                 // });
             }
+            _c.wid.trigger('fixsize');
         })
     }
 
