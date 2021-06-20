@@ -29,6 +29,7 @@
   'cl-page-design',
   'cl-style-adj',
   'cl-prj',
+  'cl-file-manager',
   
   'cl-editor', 
   'cl-component-container',
@@ -109,5 +110,8 @@ console.log("上海竹呗信息技术有限公司, 版权所有 http://xboson.ne
 }
 .fade-enter, .fade-leave-to, .fade-leave-active /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+}
+.note {
+  color: #ccc; display: inline-block;
 }
 </style>

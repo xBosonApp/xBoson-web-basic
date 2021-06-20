@@ -45,13 +45,30 @@
           <a-input v-model="createParams.name"/>
         </a-form-model-item>
         
-        <a-form-model-item label='MongoDB URL' prop='url'>
+        <a-form-model-item label='Mongo URL' prop='url'>
           <a-input v-model="createParams.url" :disabled='stage != 1'/>
         </a-form-model-item>
         
         <a-form-model-item label='数据库名' prop='db'>
           <a-input v-model="createParams.db" defaultValue='code-less-prj' 
             :disabled='stage != 1'/>
+        </a-form-model-item>
+        
+        <a-form-model-item label='UI根目录' prop='basedir'>
+          <a-tree-select
+            v-if='stage == 1'
+            v-model="createParams.basedir"
+            :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+            placeholder="项目中的文件存放目录"
+            allow-clear
+            :tree-data="dirData"
+            :load-data="onLoadDirData"
+          />
+          <a-input v-else v-model="createParams.basedir" disabled/>
+        </a-form-model-item>
+        
+        <a-form-model-item label='所有者' v-if='stage == 2'>
+          <a-input v-model="createParams.owner" :disabled='true'/>
         </a-form-model-item>
         
         <a-form-model-item label='可访问角色'>
@@ -84,6 +101,15 @@
             style="margin-left: 30px;" @click='preDelete'>
             删除
           </a-button>
+          
+          <a-tooltip placement='right'>
+            <template slot="title">
+              项目操作中可能会覆盖已有文件!
+            </template>
+            <a-switch checked-children="允许非空目录" v-if='stage == 1'
+              un-checked-children="必须空目录" style='margin-left: 30px'
+              v-model='createParams.nonemtp'/>
+          </a-tooltip>
         </a-form-model-item>
       </a-form-model>
     </div>
@@ -93,8 +119,9 @@
 </template>
 
 <script>
-let defurl = 'mongodb://mongo-x';
-let defdb = 'code-less-prj';
+const filelisturl = window.xv.ctx_prefix+ '/app/a297dfacd7a84eab9656675f61750078/ZYAPP_IDE/ZYMODULE_UI_IDE/getfilelist';
+const defurl = 'mongodb://mongo-x';
+const defdb = 'code-less-prj';
 
 export default {
   data() {
@@ -105,18 +132,24 @@ export default {
       listParams:{},
       stage:0,
       message:'',
+      dirData:[
+        { title: '平台UI目录', value: '/', key: '/', selectable: false }
+      ],
       
       createParams: {
         name:'',
         roles:[],
         url:defurl,
         db:defdb,
+        basedir:'',
+        nonemtp:false,
       },
       
       rules: {
         name: [{ required: true, message: '必须输入有效名称', trigger: 'blur' }],
         url : [{ required: true, message: '必须输入数据库url', trigger: 'blur' }],
         db  : [{ required: true, message: '必须输入基础库名', trigger: 'blur' }],
+        basedir: [{ required: true, message: '必须选择一个存储目录', }],
       },
     }
   },
@@ -128,6 +161,42 @@ export default {
   },
   
   methods : {
+    onLoadDirData(treeNode) {
+      return new Promise((resolve, reject) => {
+        let config = { emulateJSON:true };
+        let params = {
+          path : treeNode.dataRef.key,
+          org  : null,
+        };
+        Vue.http.post(filelisturl, params, config).then(resp=>{
+          resp.json().then(ret=>{
+            if (treeNode.dataRef.key == '/') {
+              treeNode.dataRef.children = this.getChildList(ret.result.children);
+            } else {
+              treeNode.dataRef.children = this.getChildList(ret.result);
+            }
+            this.dirData = [...this.dirData];
+            resolve();
+          }).catch(reject);
+        }).catch(reject);
+      });
+    },
+    
+    getChildList(arr) {
+      let ch = [];
+      arr.forEach(function(d) {
+        if (d.virtual) return;
+        if (d.isParent) {
+          ch.push({
+            title : d.name,
+            key   : d.path,
+            value : d.path,
+          });
+        }
+      });
+      return ch;
+    },
+    
     setPrjList(v) {
       this.prjlist = v.data;
     },
@@ -138,7 +207,7 @@ export default {
     
     setEdit(prj) {
       this.stage = 2;
-      ['name', 'roles', '_id', 'url', 'db'].forEach(n=>{
+      ['name', 'roles', '_id', 'url', 'db', 'owner', 'basedir'].forEach(n=>{
         this.createParams[n] = prj[n];
       });
     },
@@ -156,6 +225,9 @@ export default {
       this.createParams._id = null;
       this.createParams.url = defurl;
       this.createParams.db = defdb;
+      this.createParams.owner = null;
+      this.createParams.basedir = '';
+      this.createParams.nonemtp = false;
     },
     
     submit(e) {

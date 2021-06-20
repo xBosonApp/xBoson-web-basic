@@ -77,6 +77,12 @@ POST Body 中的数据将被解析成 js 对象并绑定在 requestJson 属性�
   * max 值必须 <= max; 默认为 double 最大值
 
 
+## sys.request.isTrue(string:name)
+
+如果 http 参数可以表示布尔真, 则返回 true.  
+为 true 的值可以是: 字符串 ‘true’ 忽略大小写, 非零整数, 大于等于1的浮点数.
+
+
 ## sys.request.getSafePath(string:name [, boolean:allowNull])
 
 路径字符串安全检查, 不安全的路径会抛出异常
@@ -328,6 +334,16 @@ for (var i in orgList) {
   var orgType = row.org_type;  // "v":开发商, "t":租户
 }
 ```
+
+
+## sys.getUserRolesList()
+
+返回调用 api 用户的角色列表数组, 每个元素是一个角色id.
+
+
+## sys.getUserRolesMap()
+
+返回调用 api 用户的角色列表映射表, {roleID: true}.
 
 
 ## sys.isAnonymousUser()
@@ -665,8 +681,8 @@ sys.format("hello {0}", ['xBoson'])
 
 ## sys.syncMap()
 
-返回一个 js 普通对象(Object) 该对象既其中的属性可以在多个模块/接口之间共享, 而不会导致死锁或崩溃.
-
+返回一个 Map 对象, 该对象其中的属性可以在多个模块/接口之间共享, 而不会导致死锁或崩溃.  
+应该使用 ‘map’ 中的方法创建特殊功能哈希表.
 
 ## 过时的方法
 

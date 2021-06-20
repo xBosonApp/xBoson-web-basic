@@ -212,7 +212,7 @@ var files = finderResult.files;
 是文件返回 true
 
 
-## containFiles()
+## Set<String> containFiles()
 
 返回所有子节点路径列表, 路径中不包含当前目录的路径前缀.
 

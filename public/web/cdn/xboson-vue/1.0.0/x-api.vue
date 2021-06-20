@@ -51,16 +51,18 @@ export default {
     
     callApi() {
       let url = [window.xv.ctx_prefix, 'app', this.org, this.app, this.mod, this.api];
+      let params = this.params;
       let config = {
         url : url.join('/'),
-        params : this.params,
+        params : {},
+        emulateJSON : true,
       };
       
       if (window.xv.debug) {
-        config.params.s = 'd';
+        params.s = 'd';
       }
       
-      this.$http.get(url.join('/'), config).then(resp => {
+      this.$http.post(url.join('/'), params, config).then(resp => {
         resp.json().then(ret=>{
           if (ret.code) {
             this.error(ret.msg, config);
@@ -68,10 +70,10 @@ export default {
           }  
           this.$emit('success', ret);  
         }, e=>{
-          this.error(config.url +'\nJSON parse fail');
+          this.error(config.url +'\nJSON parse fail'+ e.message);
         });
       }, resp => {
-        this.error(config.url +'\n'+ statusText, config);
+        this.error(config.url +'\n'+ resp.statusText, config);
       });
     },
   }

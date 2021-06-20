@@ -9,14 +9,19 @@
         文件 <a-icon type="down" />
       </a>
       <a-menu slot="overlay">
+        <a-menu-item key="s">
+          <a href='#' @click='saveFile'>保存 (ctrl+s)</a>
+        </a-menu-item>
+        
+        <a-menu-divider />
         <a-menu-item key="0">
-          <a href='#' @click='createComponent'>新建组件</a>
+          <a href='#' @click='createComponent'>新建</a>
         </a-menu-item>
         <a-menu-item key="1">
-          <a href="#" @click='openComponent'>打开组件</a>
+          <a href="#" @click='openComponent'>打开</a>
         </a-menu-item>
         <a-menu-item key="2">
-          <a href="#" @click='managerComponent'>组件管理</a>
+          <a href="#" @click='managerComponent'>文件管理</a>
         </a-menu-item>
         
         <a-menu-divider />
@@ -41,7 +46,7 @@
     </a-dropdown>
     
     <a-drawer
-      title="打开组件"
+      title="打开文件"
       placement="top"
       height='calc(100% - 80px)'
       :closable="true"
@@ -53,7 +58,7 @@
     </a-drawer>
     
     <a-drawer
-      title="新建组件"
+      title="新建文件"
       placement="top"
       height='calc(100% - 80px)'
       :closable="true"
@@ -65,15 +70,13 @@
     </a-drawer>
     
     <a-drawer
-      title="组件管理"
+      title="文件管理"
       placement="top"
       height='calc(100% - 80px)'
       :closable="true"
       :visible="showMgr"
       @close="showMgr = false">
-      <p>Some contents...</p>
-      <p>Some contents...</p>
-      <p>Some contents...</p>
+      <cl-file-manager/>
     </a-drawer>
   </div>
 </template>
@@ -102,7 +105,9 @@ export default {
     },
     quit() {
       this.$emit('quit');
-    }
+    },
+    saveFile() {
+    },
   },
 }
 </script>
@@ -121,6 +126,6 @@ export default {
   padding: 0 80px 0 20px;
 }
 .note {
-  color: #ccc; margin-right: 20px; display: inline-block;
+  margin-right: 20px;
 }
 </style>
