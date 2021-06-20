@@ -74,21 +74,17 @@
     var _top_height = 220;
     var _top_height_fullscreen = 100;
     var _height;
-    var _fix_height_now;
     function bind_fix_size_event() {
         var ide = $('#ide');
         var win = $(window).resize(fixsize).scroll(on_scroll);
         var _tree_code_height;
         var current_scroll = 0;
-
-        ide.on('fixsize', fixsize);
+        
         ide.find('.jarviswidget-fullscreen-btn').click(function() {
           setTimeout(fixsize, 1);
         });
         $.ready(fixsize);
         fixsize();
-        
-        _fix_height_now = fixsize;
         
         function fixsize() {
             var isfullscreen = $('#jarviswidget-fullscreen-mode').length > 0;
@@ -1365,8 +1361,10 @@
         //     enableSnippets: true,
         //     enableLiveAutocompletion: true,
         //   });
+        $(window).resize(function() {
+          editor.resize();
+        });
 
-          
         function _initSize() {
             editor.setShowPrintMargin(false);
             editor.setFontSize(13.5);
@@ -1389,7 +1387,8 @@
         return {
             get: _getValue,
             set: _setValue,
-            initSize: _initSize
+            initSize: _initSize,
+            root: editor,
         };
     }
 
@@ -1854,6 +1853,7 @@
                                 editor.initSize();
                                 _savebtn.show();
                                 $fixsize();
+                                editor.root.resize();
                             }, _pre.pre, _m.result.filetype);
                             
                             if (enableFileType[_m.result.filetype]) {

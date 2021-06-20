@@ -232,8 +232,12 @@ function NewIDE(roleid) {
     $.ready(fixsize);
     fixsize();
     
-    function fixdelay() {
-      setTimeout(fixsize, 10);
+    function fixdelay(imm) {
+      if (imm === true) {
+        fixsize();
+      } else { 
+        setTimeout(fixsize, 10);
+      }
     }
     
     function fixsize() {
@@ -1160,6 +1164,9 @@ function NewIDE(roleid) {
     //   enableSnippets: true,
     //   enableLiveAutocompletion: true,
     // });
+    $(window).resize(function() {
+      editor.resize();
+    });
    
    function _initsize(){
     editor.setShowPrintMargin(false);
@@ -1449,12 +1456,12 @@ function NewIDE(roleid) {
           _pre.inputc.val(_m.updatecmt);
           _initIde(function() {
             editor.set(_m.content, true);
+            $fixsize(true);
             editor.initSize();
             _savebtn.hide();
             _hisbtn.hide();
             _runbtn.parent().hide();
             _apistatusbtn.hide();
-            $fixsize();
           }, _pre.pre);
         });
       if (_node.contentid)
@@ -1469,13 +1476,13 @@ function NewIDE(roleid) {
             
             _initIde(function() {
               _apistatusbtn.trigger('show', [_m.stability]);
-              editor.initSize();
               editor.set(_m.content, false, _node.apiid);
               _savebtn.show();
               _hisbtn.show();
               _runbtn.parent().show();
               _runbtn.trigger('_init',[_node,_m['help_info']]);
-              $fixsize();
+              $fixsize(true);
+              editor.initSize();
             }, _pre.pre);
           } catch(e) {
             console.log("ide/htmlide/ide.js", e);
