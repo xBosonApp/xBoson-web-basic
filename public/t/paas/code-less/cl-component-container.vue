@@ -28,6 +28,7 @@
 <script>
 const clib = require("./component-library.js");
 const crole = require("./component-role.js");
+const tool = require("./tool.js");
 
 export default {
   props: ['nestedList', 'style', 'rootConfig'],
@@ -48,11 +49,10 @@ export default {
       this.nestedList[i] = instance;
       
       if (component.plugins) {
-        for (let n in component.plugins) {
-          Vue.component(n, require(component.plugins[n], 1,1));
-        }
+        tool.loadPlugins(component.plugins);
       }
       
+      this.$store.commit('setEditFileChanged', true);
       this.$nextTick(function () {
         this.setAdjRef(i);
         this.$forceUpdate();

@@ -129,6 +129,7 @@ export default {
     
     removeComponent() {
       this.$store.commit('removeNestedItem');
+      this.$store.commit('setEditFileChanged', true);
     },
   }
 }

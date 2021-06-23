@@ -54,6 +54,16 @@
             :disabled='stage != 1'/>
         </a-form-model-item>
         
+        <a-form-model-item label='平台机构' prop='orgid'>
+          <a-tree-select 
+            :disabled='stage != 1'
+            v-model='createParams.orgid'
+            :tree-data="orgList"
+            @change='clearBasedir' 
+          />
+          <!--<a-input v-else v-model="createParams.orgid" disabled/>-->
+        </a-form-model-item>
+        
         <a-form-model-item label='UI根目录' prop='basedir'>
           <a-tree-select
             v-if='stage == 1'
@@ -119,12 +129,17 @@
 </template>
 
 <script>
-const filelisturl = window.xv.ctx_prefix+ '/app/a297dfacd7a84eab9656675f61750078/ZYAPP_IDE/ZYMODULE_UI_IDE/getfilelist';
+const p = xv.ctx_prefix;
+const filelisturl = p +'/app/a297dfacd7a84eab9656675f61750078/ZYAPP_IDE/ZYMODULE_UI_IDE/getfilelist';
+const orglisturl = p +'/user/getuserorg?app=ZYAPP_LOGIN&mod=ZYMODULE_LOGIN&openid=';
+const openidurl = p +'/app/a297dfacd7a84eab9656675f61750078/19cb7c3b79e949b88a9c76396854c2b1/prjmgr/getopenid';
 const defurl = 'mongodb://mongo-x';
 const defdb = 'code-less-prj';
+const tool = require('./tool.js');
 
 export default {
   data() {
+    this.getOpenID();
     return {
       f1:0, f2:0,
       rolelist:[],
@@ -132,9 +147,10 @@ export default {
       listParams:{},
       stage:0,
       message:'',
-      dirData:[
-        { title: '平台UI目录', value: '/', key: '/', selectable: false }
-      ],
+      
+      dirData:[ ],
+      orgList:[],
+      openid : null, 
       
       createParams: {
         name:'',
@@ -143,13 +159,15 @@ export default {
         db:defdb,
         basedir:'',
         nonemtp:false,
+        orgid:'',
       },
       
       rules: {
-        name: [{ required: true, message: '必须输入有效名称', trigger: 'blur' }],
-        url : [{ required: true, message: '必须输入数据库url', trigger: 'blur' }],
-        db  : [{ required: true, message: '必须输入基础库名', trigger: 'blur' }],
-        basedir: [{ required: true, message: '必须选择一个存储目录', }],
+        name    : [{ required: true, message: '必须输入有效名称', trigger: 'blur' }],
+        url     : [{ required: true, message: '必须输入数据库url', trigger: 'blur' }],
+        db      : [{ required: true, message: '必须输入基础库名', trigger: 'blur' }],
+        basedir : [{ required: true, message: '必须选择一个存储目录', }],
+        orgid   : [{ required: true, message: '必须选择一个机构', }],
       },
     }
   },
@@ -161,24 +179,66 @@ export default {
   },
   
   methods : {
+    error(e) {
+      xv.popError('错误', e);
+    },
+    
+    clearBasedir() {
+      let key = 'root:'+ (this.createParams.orgid);
+      this.dirData = [ { title: '平台UI目录', value: '/', key, selectable: false } ];
+    },
+    
     onLoadDirData(treeNode) {
       return new Promise((resolve, reject) => {
+        if (!this.createParams.orgid) {
+          reject();
+          return this.error(new Error("请先选择机构"));
+        }
+        
         let config = { emulateJSON:true };
         let params = {
-          path : treeNode.dataRef.key,
-          org  : null,
+          path : treeNode.dataRef.value,
+          org  : this.createParams.orgid,
         };
-        Vue.http.post(filelisturl, params, config).then(resp=>{
-          resp.json().then(ret=>{
-            if (treeNode.dataRef.key == '/') {
-              treeNode.dataRef.children = this.getChildList(ret.result.children);
-            } else {
-              treeNode.dataRef.children = this.getChildList(ret.result);
-            }
-            this.dirData = [...this.dirData];
-            resolve();
-          }).catch(reject);
-        }).catch(reject);
+        
+        tool.apiurl(filelisturl, params, (e, ret)=>{
+          if (e) {
+            reject();
+            this.error(e);
+            return;
+          }
+          
+          if (treeNode.dataRef.value == '/') {
+            treeNode.dataRef.children = this.getChildList(ret.result.children);
+          } else {
+            treeNode.dataRef.children = this.getChildList(ret.result);
+          }
+          this.dirData = [...this.dirData];
+          resolve();
+        });
+      });
+    },
+    
+    getOpenID() {
+      tool.apiurl(openidurl, {}, (err, ret)=>{
+        if (err) return this.error(err);
+        this.openid = ret.openid;
+        this.getOrgList();
+      });
+    },
+    
+    getOrgList() {
+      tool.apiurl(orglisturl + this.openid, {}, (e, ret)=>{
+        if (e) return this.error(e);
+        let list = [];
+        ret.result.forEach(d=>{
+          list.push({
+            title : d.orgnm,
+            key   : d.orgid,
+            value : d.orgid,
+          });
+        });
+        this.orgList = list;
       });
     },
     
@@ -207,7 +267,7 @@ export default {
     
     setEdit(prj) {
       this.stage = 2;
-      ['name', 'roles', '_id', 'url', 'db', 'owner', 'basedir'].forEach(n=>{
+      ['name', 'roles', '_id', 'url', 'db', 'owner', 'basedir', 'orgid'].forEach(n=>{
         this.createParams[n] = prj[n];
       });
     },
@@ -228,9 +288,14 @@ export default {
       this.createParams.owner = null;
       this.createParams.basedir = '';
       this.createParams.nonemtp = false;
+      this.createParams.orgid = '';
     },
     
     submit(e) {
+      // if (this.stage == 3) { // 如果开发时数据错误则强制删除
+      //   ++this.f1;
+      //   return;
+      // }
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
           ++this.f1;

@@ -2,21 +2,9 @@
 
 <template>
   <div class="card-container">
-    <a-tabs type="card">
-      <a-tab-pane key="1" tab="Tab Title 1" :closable='close'>
-        <cl-page-design></cl-page-design>
-      </a-tab-pane>
-      
-      <a-tab-pane key="2" tab="Tab Title 2">
-        <p>Content of Tab Pane 2</p>
-        <p>Content of Tab Pane 2</p>
-        <p>Content of Tab Pane 2</p>
-      </a-tab-pane>
-      
-      <a-tab-pane key="3" tab="Tab Title 3">
-        <p>Content of Tab Pane 3</p>
-        <p>Content of Tab Pane 3</p>
-        <p>Content of Tab Pane 3</p>
+    <a-tabs @change='changeFile' :activeKey='getActiveKey()'>
+      <a-tab-pane v-for='(f, k) in this.editorFiles' :key="k" :tab="getName(f)">
+        <cl-page-design :file='f'/>
       </a-tab-pane>
     </a-tabs>
   </div>
@@ -24,39 +12,32 @@
 
 <script>
 export default {
+  props: ['editorFiles'],
+  
   data() {
     return {
-      close : true,
     }
-  }
+  },
+  
+  methods: {
+    getActiveKey() {
+      let f = this.$store.state.editFile;
+      return f && f._id;
+    },
+    
+    getName(f) {
+      if (f.changed) {
+        return f.name +' *';
+      }
+      return f.name;
+    },
+    
+    changeFile(key) {
+      this.$store.commit('setEditFile', this.editorFiles[key]);
+    },
+  },
 }
 </script>
 
 <style>
-.card-container {
-  overflow: hidden;
-}
-.card-container > .ant-tabs-card > .ant-tabs-content {
-  margin-top: -16px;
-}
-
-.card-container > .ant-tabs-card > .ant-tabs-content > .ant-tabs-tabpane {
-  background: #fff; 
-  padding: 10px;
-}
-
-.card-container > .ant-tabs-card > .ant-tabs-bar {
-  border-color: #fff;
-  /*background: #f5f5f5;*/
-}
-
-.card-container > .ant-tabs-card > .ant-tabs-bar .ant-tabs-tab {
-  border-color: transparent; border: 0 !important;
-  background: transparent; 
-}
-
-.card-container > .ant-tabs-card > .ant-tabs-bar .ant-tabs-tab-active {
-  border-color: #fff;
-  background: #fff;
-}
 </style>

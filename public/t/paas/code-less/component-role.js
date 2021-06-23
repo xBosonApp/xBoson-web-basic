@@ -1,3 +1,5 @@
+const tool = require('./tool.js');
+
 module.exports = {
   createInstance,
 };
@@ -6,6 +8,7 @@ module.exports = {
 function createInstance(root, component) {
   let cfg = newInstance(root, component);
   initProps(component, cfg.props);
+  marginPlugin(root, component);
   return cfg;
 }
 
@@ -15,8 +18,19 @@ function genID(root, component) {
 }
 
 
+function marginPlugin(root, comp) {
+  let p = root.plugins;
+  if (!p) {
+    p = root.plugins = {};
+  }
+  for (let n in comp.plugins) {
+    p[n] = comp.plugins[n];
+  }
+}
+
+
 //
-// 创建组建实力对象
+// 创建组建实例对象
 //
 function newInstance(root, component) {
   let nestedList = component.isContainer && [];
@@ -66,7 +80,7 @@ function initProps(c, props) {
     let p = c.props[n];
     if (props[n] !== undefined) continue; 
     if (p.def) {
-      props[n] = p.def;
+      props[n] = tool.deepCopy(p.def);
     } 
     else {
       // 1:字符串, 2:整数, 3:选项select属性, 4:字符串,并且带有select选项, 

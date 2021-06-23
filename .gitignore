@@ -22,6 +22,7 @@ public/docx/*.*
 public/lib/img/*jpg
 public/lib/img/*gif
 public/lib/img/*png
+public/*/paas/W_team_test/codelessprjtest/**
 
 mongo-bak
 xboson-db-dump.sql

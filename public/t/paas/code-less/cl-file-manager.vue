@@ -2,22 +2,49 @@
 
 <template>
   <div class='main'>
-    <div class='tree'>
-      <a-directory-tree
-        show-line="true"
-        show-icon="true"
-        :replace-fields='replaceFields'
-        :load-data="onLoadData" 
-        :tree-data='dirData'
-        @select='onSelect'
-      />
-    </div>
+    <a-directory-tree
+      :replace-fields='replaceFields'
+      :load-data="onLoadData" 
+      :tree-data='dirData'
+      @select='onSelect'
+    />
     
     <div class='edit'>
       <div v-if='showButton'>
-        <a-button icon='plus' @click='openAdd'></a-button>
-        <a-button icon='edit' @click='openEdit' v-if='!selected.readOnly'></a-button>
-        <a-button icon='delete' @click='openDel' v-if='!selected.readOnly'></a-button>
+        <a-tooltip placement="top">
+          <template slot="title">
+            创建目录
+          </template>
+          <a-button icon='plus' @click='openAdd' v-if='selected.isDir'></a-button>
+        </a-tooltip>
+        <a-tooltip placement="top">
+          <template slot="title">
+            重命名
+          </template>
+          <a-button icon='edit' @click='openEdit' v-if='!selected.readOnly'></a-button>
+        </a-tooltip>
+        <a-tooltip placement="top">
+          <template slot="title">
+            删除
+          </template>
+          <a-button icon='delete' @click='openDel' v-if='!selected.readOnly'></a-button>  
+        </a-tooltip>
+        
+        <section>
+          <div v-if='selected.ctime'>
+            <span class='note'>创建时间</span> 
+            <span>{{selected.ctime}}</span>
+            <span class='user'>{{selected.cuser}}</span>
+          </div>
+          <div v-if='selected.mtime'>
+            <span class='note'>修改时间</span> 
+            <span>{{selected.mtime}}</span>
+            <span class='user'>{{selected.muser}}</span>
+          </div>
+        </section>
+        <section class='note'>
+          推荐目录结构: [项目]/应用/模块/页面
+        </section>
       </div>
       
       <div v-if='state == 1'>
@@ -35,12 +62,13 @@
               关闭
             </a-button>
           </a-form-model-item>
-        </a-form-model>
+        </a-form-model> 
       </div>
       
       <div v-if='state == 2'>
-        <a-button type='danger' @click='doDelete'>删除目录</a-button>
-        <p>{{this.selected.name}}</p>
+        <p>即将删除: {{this.selected.name}}</p>
+        <a-button type='danger' @click='doDelete'>立即删除</a-button>
+        <a-button @click='state=0' >取消</a-button>
       </div>
       
     </div>
@@ -51,6 +79,13 @@
 const tool = require("./tool.js");
 
 export default {
+  props: {
+    preDelete: {
+      required: true,
+      type: Function,
+    },
+  },
+  
   data() {
     let name = this.$store.state.project.name;
     return {
@@ -121,6 +156,7 @@ export default {
       this.state = 0;
       this.selected.name = this.form.name;
       this.updateTree();
+      this.$emit('changeName', this.form);
     },
     
     createBack(ret) {
@@ -136,16 +172,26 @@ export default {
     },
     
     doDelete() {
+      let delmsg = this.preDelete(this.selected._id);
+      if (delmsg) {
+        this.$notification.open({
+          message: '删除失败',
+          description: delmsg,
+        });
+        return;
+      }
+      
       tool.api('file', 'del', this.form, (err, ret)=>{
         if (err) return this.error(err);
         this.state = 0;
+        //TODO: 删除节点
         this.selected.name = '--';
         this.selected._id = '';
       });
     },
     
     error(err) {
-      xv.popError('错误', err.message);
+      xv.popError('错误', err);
     },
     
     onCreate() {
@@ -191,7 +237,7 @@ export default {
         }
         
         this.dir(n.dataRef._id, (err, data)=>{
-          n.dataRef.child = data;
+          n.dataRef.child = data.sort(tool.filesort);
           this.updateTree();
           resolve();
         });
@@ -199,7 +245,7 @@ export default {
     },
     
     updateTree() {
-      this.dirData = [...this.dirData];
+      this.dirData.sort();
     },
   },
 }
@@ -215,5 +261,14 @@ export default {
 }
 .main > *:first-of-type {
   border-right: 1px solid #ccc;
+}
+section {
+  margin-top: 50px;
+}
+section span {
+  margin-right: 15px;
+}
+.user {
+  color: green;
 }
 </style>

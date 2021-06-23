@@ -3,24 +3,33 @@
 <template>
   <div class='page-design'>
     <div class='dd-footer' v-if='showtip()'>拖拽组件到这里</div>
-    <cl-component-container :nested-list='list' :root-config='root'></cl-component-container>
+    <cl-component-container 
+      :nested-list='file.content.list' 
+      :root-config='file.content.root'
+    />
   </div>
 </template>
 
 <script>
+const tool = require("./tool.js");
+
 export default {
+  props: ['file'],
+  
   data() {
-    return {
-      list : [],
-      root : {
-        id : 0,
-      },
+    return {};
+  },
+  
+  mounted() {
+    let p = this.file.content.root.plugins;
+    if (p) {
+      tool.loadPlugins(p);
     }
   },
   
   methods : {
     showtip() {
-      return this.list.length == 0 && this.$store.state.showDropTip;
+      return this.file.content.list.length == 0 && this.$store.state.showDropTip;
     },
   },
 }

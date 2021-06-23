@@ -6,6 +6,7 @@ module.exports = new Vuex.Store({
     currentAdjustmentComponentConfig: null,
     nestedItemRef: null,
     project: null,
+    editFile: null,
   },
   
   mutations: {
@@ -19,6 +20,17 @@ module.exports = new Vuex.Store({
     
     clearAdjComponent(s) {
       s.currentAdjustmentComponentConfig = null;
+    },
+    
+    setEditFile(s, f) {
+      s.editFile = f;
+      this.commit('clearAdjComponent');
+    },
+    
+    setEditFileChanged(s, changed) {
+      if (s.editFile) {
+        s.editFile.changed = changed;
+      }
     },
     
     setMessage(s, msg) {

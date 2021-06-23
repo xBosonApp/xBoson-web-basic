@@ -4,13 +4,13 @@
 <transition name="fade">
   <div id='main-frame' v-if='prjid != null' :key='1'>
     <div class='main-menu'>
-      <cl-menu :project-name='projectName' @quit='returnChoosePrj'></cl-menu>
+      <cl-menu :editor-files='editorFiles' :project-name='projectName' @quit='returnChoosePrj'></cl-menu>
     </div>
     <div class='component-choose'>
       <cl-component-choose></cl-component-choose>
     </div>
     <div class='editor'>
-      <cl-editor></cl-editor>
+      <cl-editor :editor-files='editorFiles'></cl-editor>
     </div>
     <div class='adjustment'>
       <cl-adjustment></cl-adjustment>
@@ -30,6 +30,8 @@
   'cl-style-adj',
   'cl-prj',
   'cl-file-manager',
+  'cl-create-file',
+  'cl-open-file',
   
   'cl-editor', 
   'cl-component-container',
@@ -54,6 +56,7 @@ export default {
     return {
       prjid : null,
       projectName : '',
+      editorFiles : {},
     }
   },
   
@@ -112,6 +115,6 @@ console.log("上海竹呗信息技术有限公司, 版权所有 http://xboson.ne
   opacity: 0;
 }
 .note {
-  color: #ccc; display: inline-block;
+  color: #ccc; 
 }
 </style>

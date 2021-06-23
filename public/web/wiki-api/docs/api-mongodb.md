@@ -87,7 +87,7 @@ for (var i in names) {
 
 # Collection 文档数据集对象
 
-## Collection.insert(array|object:document)
+## void Collection.insert(array|object:document)
 
 将文档插入 DB, 如果参数是数组, 则插入多个文档.
 
@@ -101,7 +101,7 @@ var hw_meta = {
 phone.insert(hw_meta);
 ```
 
-## Collection.insertMany(array:documentList)
+## void Collection.insertMany(array:documentList)
 
 插入多个文档到 DB.
 
@@ -121,7 +121,7 @@ phone.insertMany(i_many);
 ```
 
 
-## Collection.insertOne(object:document)
+## void Collection.insertOne(object:document)
 
 ```javascript
 var hw_meta = {
