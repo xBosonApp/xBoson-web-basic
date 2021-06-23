@@ -1,5 +1,6 @@
 /* Create By xBoson System */
 const store = require("./store.js");
+const requirePlugin = {};
 
 module.exports = {
   api,
@@ -55,8 +56,31 @@ function filesort(a, b) {
 
 function loadPlugins(plugins) {
   for (let n in plugins) {
+    let p = requirePlugin[n];
+    if (requirePlugin[n]) {
+      if (p.path != plugins[n]) {
+        console.warn("插件", n, '从不同文件加载', plugins[n], '=>', p.path);
+      }
+      continue;
+    }
+    
     Vue.component(n, require(plugins[n], 1,1));
+    requirePlugin[n] = {
+      path : plugins[n],
+      type : getPluginType(plugins[n]),
+    };
   }
+}
+
+
+function getPluginType(file) {
+  if (file.endsWith('.vue')) {
+    return 'vue';
+  }
+  if (file.endsWith('.js')) {
+    return 'js';
+  }
+  throw new Error("unknow plugin "+ file);
 }
 
 

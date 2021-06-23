@@ -69,6 +69,8 @@
         <p>即将删除: {{this.selected.name}}</p>
         <a-button type='danger' @click='doDelete'>立即删除</a-button>
         <a-button @click='state=0' >取消</a-button>
+        <a-switch checked-children="删除物理文件" 
+          un-checked-children="保留物理文件" v-model='form.delreal'/>
       </div>
       
     </div>
@@ -89,9 +91,10 @@ export default {
   data() {
     let name = this.$store.state.project.name;
     return {
-      form : null,
+      form : {},
       selected: null,
       state : 0,
+      delreal : false,
       
       rules : {
         name : [
@@ -137,6 +140,7 @@ export default {
     openDel() {
       this.form = {
         _id : this.selected._id,
+        delreal : false,
       },
       this.state = 2;
     },
