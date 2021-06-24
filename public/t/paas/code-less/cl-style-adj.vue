@@ -8,6 +8,7 @@
         
         <component 
           :is='tagMap[item[2]]'
+          @change='onChange'
           v-model='styleVal[item[0]]'
           v-bind='getTagOptions(item)'/>
         
@@ -193,6 +194,10 @@ export default {
         }
       }
       return ret;
+    },
+    
+    onChange() {
+      this.$store.commit('setEditFileChanged', true);
     },
   }
 }

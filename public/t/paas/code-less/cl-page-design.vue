@@ -6,6 +6,7 @@
     <cl-component-container 
       :nested-list='file.content.list' 
       :root-config='file.content.root'
+      :is-root='true'
     />
   </div>
 </template>

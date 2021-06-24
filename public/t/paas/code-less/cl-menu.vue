@@ -9,27 +9,27 @@
         文件 <a-icon type="down" />
       </a>
       <a-menu slot="overlay">
-        <a-menu-item key="s" :disabled='!hasFile' @click='saveFile'>
+        <a-menu-item key="3" :disabled='!hasFile' @click='saveFile'>
           保存 <span class='note'>ctrl+s</span>
         </a-menu-item>
-        <a-menu-item key='close' :disabled='!hasFile' @click='closeFile'>
+        <a-menu-item key='4' :disabled='!hasFile' @click='closeFile'>
           关闭 <span class='note'>ctrl+w</span>
         </a-menu-item>
         
         <a-menu-divider />
         <a-menu-item key="0" @click='createComponent'>
-          新建
+          新建 <span class='note'>ctrl+n</span>
         </a-menu-item>
         <a-menu-item key="1" @click='openComponent'>
-          打开
+          打开 <span class='note'>ctrl+o</span>
         </a-menu-item>
         <a-menu-item key="2" @click='managerComponent'>
-          文件管理
+          文件管理 <span class='note'>ctrl+m</span>
         </a-menu-item>
         
         <a-menu-divider />
         <a-menu-item key="3" @click='quit'>
-          退出
+          退出 <span class='note'>ctrl+q</span>
         </a-menu-item>
       </a-menu>
     </a-dropdown>
@@ -39,7 +39,12 @@
         选项 <a-icon type="down" />
       </a>
       <a-menu slot="overlay">
-        <a-menu-item key="0">
+        <a-menu-item key="0" @click='preview'>
+          预览 <span class='note'>ctrl+x</span>
+        </a-menu-item>
+        
+        <a-menu-divider />
+        <a-menu-item key="1">
           页面设置
         </a-menu-item>
         <a-menu-item key="3">
@@ -107,6 +112,7 @@ export default {
       showMgr : false,
       showDelete : false,
       deleteContent : '',
+      keyMap : {},
     };
   },
   
@@ -114,6 +120,21 @@ export default {
     hasFile() {
       return this.getEditFile() != null;
     },
+  },
+  
+  mounted() {
+    document.addEventListener('keydown', this.onKeydown);
+    this.monitorKey('s', this.saveFile, true);
+    this.monitorKey('w', this.closeFile, true);
+    this.monitorKey('q', this.quit);
+    this.monitorKey('x', this.preview, true);
+    this.monitorKey('o', this.openComponent);
+    this.monitorKey('n', this.createComponent);
+    this.monitorKey('m', this.managerComponent);
+  },
+  
+  beforeDestroy() {
+    document.removeEventListener('keydown', this.onKeydown);
   },
   
   methods: {
@@ -205,8 +226,15 @@ export default {
       this.$store.commit('setEditFile', this.editorFiles[fileid]);
     },
     
-    changeName(file) {
-      this.editorFiles[file._id].name = file.name;
+    preview() {
+      console.log('Preview');
+    },
+    
+    changeName(fileinfo) {
+      let fd = this.getEditFile(fileinfo._id);
+      if (fd) {
+        fd.name = fileinfo.name;
+      }
     },
     
     preDelete(fileid) {
@@ -214,6 +242,22 @@ export default {
         return "不能删除正在编辑的文件";
       }
       return;
+    },
+    
+    monitorKey(key, fn, needOpenedFile) {
+      this.keyMap[key.toLowerCase()] = {
+        fn, needOpenedFile,
+      };
+    },
+    
+    onKeydown(e) {
+      if (!e.ctrlKey) return;
+      // console.log(e.code, e.keyCode, e.key)
+      let cfg = this.keyMap[e.key.toLowerCase()];
+      if (!cfg) return;
+      if (cfg.needOpenedFile && (!this.hasFile)) return;
+      cfg.fn();
+      return false;
     },
   },
 }
@@ -230,9 +274,9 @@ export default {
   padding-left: 20px;
 }
 .ant-dropdown-menu-item {
-  padding: 0 80px 0 20px;
+  min-width: 220px;
 }
-.note {
-  margin-right: 20px;
+.ant-dropdown-menu-item .note {
+  float: right; font-family: Monospace;
 }
 </style>

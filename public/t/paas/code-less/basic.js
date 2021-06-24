@@ -110,12 +110,14 @@ module.exports = {
         type: 7,
         component: 'cl-css-grid-val',
         props: {},
+        propsConfig: {type:'design'},
       },
       columns: {
         desc: '列设置',
         type: 7,
         component: 'cl-css-grid-val',
         def : ['auto', 'auto'],
+        propsConfig: {type:'design'},
       },
     },
     style: {

@@ -7,7 +7,7 @@
       
       <draggable :group="{ name: 'ui-component', pull: 'clone', put: false }" 
                 v-model="c.list" chosenClass="clst-chosen" ghostClass='clst-ghost' @start='start'>
-        <span v-for="(e, idx) in c.list" :id.prop='e.id'>{{e.txt}}</span>
+        <span class='component' v-for="(e, idx) in c.list" :id.prop='e.id'>{{e.txt}}</span>
       </draggable>
       
     </a-collapse-panel>
@@ -44,8 +44,17 @@ function loadLib(name, path) {
 </script>
 
 <style scoped>
-.components span {
+.component {
   display: inline-block; padding: 3px 10px; border: 1px dashed #ccc; margin: 3px 2px; cursor: move;
   width: calc(50% - 4px);
+}
+.component:hover {
+  border-color: blue;
+}
+.clst-chosen {
+  border: 1px solid #13bc13 !important; background-color: antiquewhite;
+}
+.clst-ghost {
+  background-color: antiquewhite;
 }
 </style>

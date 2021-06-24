@@ -7,7 +7,7 @@ module.exports = {
 
 function createInstance(root, component) {
   let cfg = newInstance(root, component);
-  initProps(component, cfg.props);
+  initProps(component, cfg);
   marginPlugin(root, component);
   return cfg;
 }
@@ -34,20 +34,25 @@ function marginPlugin(root, comp) {
 //
 function newInstance(root, component) {
   let nestedList = component.isContainer && [];
-  let containerStyle = component.isContainer && component.containerStyle;
+  // let containerStyle = component.isContainer && component.containerStyle;
   let props = {
     // 组件实例的样式
     style: component.style || {},
     // 如果是组件容器, 表示内嵌组建列表
     nestedList,
   };
+  
+  let propsConfig = {
+    style       : { type:'design' },
+    nestedList  : { type:'design' },
+  };
+  
   return {
     id : genID(root, component),
     note : '',
     // 标签属性
     props,
-    // 事件函数列表
-    on : {},
+    propsConfig,
     // 平台组件id
     cid : component.id,
     // 标签文本
@@ -75,27 +80,34 @@ function newInstance(root, component) {
 // def: false,                          -- 默认值
 // min: 0, max:10,                      -- 数字最大最小值, 字符串长度限制
 //
-function initProps(c, props) {
+function initProps(c, cfg) {
   for (let n in c.props) {
     let p = c.props[n];
-    if (props[n] !== undefined) continue; 
+    if (!cfg.propsConfig[n]) {
+      cfg.propsConfig[n] = p.propsConfig || {
+        type    : 'attribute',// attribute / design / event
+        varType : 'constant', // constant / variable
+      };
+    }
+    
+    if (cfg.props[n] !== undefined) continue; 
     if (p.def) {
-      props[n] = tool.deepCopy(p.def);
+      cfg.props[n] = tool.deepCopy(p.def);
     } 
     else {
       // 1:字符串, 2:整数, 3:选项select属性, 4:字符串,并且带有select选项, 
-      // 5:来自变量, 6:图标选择, 7:自定义组件
+      // 6:图标选择, 7:自定义组件
       switch (p.type) {
         case 1:
         case 4:
-          props[n] = ''; break;
+          cfg.props[n] = ''; break;
         case 2:
-          props[n] = 0; break;
+          cfg.props[n] = 0; break;
         case 3:
         case 5:
         case 6:
         case 7:
-          props[n] = null; break;
+          cfg.props[n] = null; break;
         default:
           throw new Error("init props invaild type val:"+ n);
       }
