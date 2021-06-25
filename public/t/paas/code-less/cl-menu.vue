@@ -230,9 +230,10 @@ export default {
     
     doClose() {
       let file = this.getEditFile();
+      this.showDelete = false;
       this.$delete(this.editorFiles, file._id);
       this.$store.commit('clearAdjComponent');
-      this.showDelete = false;
+      this.$store.commit('setEditFile', null);
     },
     
     getEditFile() {

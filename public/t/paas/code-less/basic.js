@@ -128,14 +128,14 @@ module.exports = {
       rowGap: {
         desc: '行间隙',
         type: 7,
-        def: '1px',
+        def: '2px',
         component: 'cl-css-number',
         propsConfig: {type:'design'},
       },
       columnGap: {
         desc: '列间隙',
         type: 7,
-        def: '1px',
+        def: '2px',
         component: 'cl-css-number',
         propsConfig: {type:'design'},
       },
