@@ -6,7 +6,12 @@ module.exports = {
   
   bc002: {
     txt:'标签', 
-    component:'label'
+    component:'label',
+    style: {
+      'display': 'inline-flex',
+      'align-items': 'center',
+      'justify-content': 'flex-end',
+    },
   },
   
   bc003: {
@@ -99,6 +104,7 @@ module.exports = {
     component: 'div',
     helpTag: 'cl-grid',
     isContainer: true,
+    removeTxt: true,
     plugins: {
       'cl-grid': './cl-grid.vue',
       'cl-css-grid-val': './cl-css-grid-val.vue',

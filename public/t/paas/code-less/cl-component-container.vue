@@ -64,23 +64,29 @@ export default {
       let i = ev.newIndex;
       let tplcfg = this.nestedList[i];
       
-      if (tplcfg == null || tplcfg.isInstance) {
+      if (tplcfg == null) {
+        console.error("why is null?");
+        return;
+      }
+      
+      if (tplcfg.isInstance) {
         // Draggable 有时发送错位的索引: 把对象插入数组位置1上, 返回的索引为2
-        let removed;
+        let needInstantiated;
         for (let x=0; x<this.nestedList.length; ++x) {
           if (!this.nestedList[x].isInstance) {
-            removed = this.nestedList.splice(x, 1);
+            needInstantiated = this.nestedList.splice(x, 1);
             break;
           }
         }
         
-        if (removed) {
-          tplcfg = removed[0];
+        if (needInstantiated) {
+          tplcfg = needInstantiated[0];
         } else {
-          console.warn('Draggable bad index', i, 'cannot fix', tplcfg);
-          this.nestedList.forEach((c, i)=>{
-            console.log(i, c.id);
-          });
+          // 如果把一个实例从一个容器移动到另一个容器上, 发生这种情况
+          // console.warn('Draggable bad index', i, 'cannot fix', tplcfg);
+          // this.nestedList.forEach((c, i)=>{
+          //   console.log(i, c.id);
+          // });
           return;
         }
       }
@@ -121,7 +127,7 @@ export default {
 
 <style scoped>
 .component-container {
-  border: 1px dashed #ccc; padding: 5px;
+  border: 1px dashed #ccc; padding: 8px; margin: 10px 2px;
   min-height: 30px;
 }
 .root-component-container {
@@ -135,6 +141,6 @@ export default {
   border: 1px solid #13bc13 !important; background-color: antiquewhite;
 }
 .clst-ghost {
-  background-color: antiquewhite;
+  background-color: antiquewhite; color: #fff; background-color: #000;
 }
 </style>

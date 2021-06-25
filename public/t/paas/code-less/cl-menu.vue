@@ -39,7 +39,7 @@
         选项 <a-icon type="down" />
       </a>
       <a-menu slot="overlay">
-        <a-menu-item key="0" @click='preview'>
+        <a-menu-item key="0" @click='preview' :disabled='!hasFile'>
           预览 <span class='note'>ctrl+x</span>
         </a-menu-item>
         
@@ -96,6 +96,18 @@
       @cancel="showDelete = false">
         <div>{{deleteContent}}</div>
     </a-modal>
+    
+    <a-drawer
+      title="设计预览"
+      placement="bottom"
+      :destroyOnClose='true'
+      :closable="true"
+      :visible="showPreview"
+      height='99%'
+      @close="showPreview = false">
+      <component :is='previewComponent' :key='previewComponentKey'/>
+    </a-drawer>
+    
   </div>
 </template>
 
@@ -111,8 +123,11 @@ export default {
       showOpen : false,
       showMgr : false,
       showDelete : false,
+      showPreview : false,
       deleteContent : '',
       keyMap : {},
+      previewComponent : null,
+      previewComponentKey : 1,
     };
   },
   
@@ -123,6 +138,7 @@ export default {
   },
   
   mounted() {
+    window.addEventListener('beforeunload', this.checkFileStateWhenWindowClose);
     document.addEventListener('keydown', this.onKeydown);
     this.monitorKey('s', this.saveFile, true);
     this.monitorKey('w', this.closeFile, true);
@@ -134,6 +150,7 @@ export default {
   },
   
   beforeDestroy() {
+    window.removeEventListener('beforeunload', this.checkFileStateWhenWindowClose);
     document.removeEventListener('keydown', this.onKeydown);
   },
   
@@ -148,22 +165,41 @@ export default {
       this.showMgr = true;
     },
     
+    checkFileStateWhenWindowClose(e) {
+      if (this.hasFileNotSave()) {
+        let msg = "有文件尚未保存, 退出后将丢失修改的内容, 退出么?";
+        e.returnValue = msg;
+        return msg;
+      }
+    },
+    
     quit() {
+      let fid = this.hasFileNotSave();
+      if (fid) {
+        this.$notification.warning({
+          message: '退出',
+          description: '有文件尚未保存: '+ this.editorFiles[id].name,
+        });
+        return;
+      }
+      
       for (let id in this.editorFiles) {
-        if (this.editorFiles[id].changed) {
-          this.$notification.warning({
-            message: '退出',
-            description: '有文件尚未保存: '+ this.editorFiles[id].name,
-          });
-          return;
-        }
         this.$delete(this.editorFiles, id);
       }
       this.$store.commit('clearAdjComponent');
       this.$emit('quit');
     },
     
-    saveFile() {
+    hasFileNotSave() {
+      for (let id in this.editorFiles) {
+        if (this.editorFiles[id].changed) {
+          return id;
+        }
+      }
+      return null;
+    },
+    
+    saveFile(success) {
       let file = this.getEditFile();
       let parm = {
         _id : file._id,
@@ -174,10 +210,11 @@ export default {
         if (err) return xv.popError('错误', err);
         
         file.changed = false;
-        this.$notification.success({
-          message: ret.msg,
-          description: file.name,
-        });
+        this.$message.success(file.name +', '+ ret.msg, 1);
+        
+        if (typeof success == 'function') {
+          success();
+        }
       });
     },
     
@@ -227,7 +264,22 @@ export default {
     },
     
     preview() {
-      console.log('Preview');
+      if (this.showPreview) {
+        this.showPreview = false;
+        return;
+      }
+      
+      this.previewComponent = null;
+      this.saveFile(()=>{
+        let uipath = (xv.debug? '/t': '/ui')
+          + this.$store.state.project.basedir  
+          +'/'+ this.$store.state.editFile.filename;
+        // console.log('preview', uipath);
+        delete module._cache[uipath];
+        this.previewComponent = require(uipath, 1, 1);
+        this.previewComponentKey++;
+        this.showPreview = true;
+      });
     },
     
     changeName(fileinfo) {

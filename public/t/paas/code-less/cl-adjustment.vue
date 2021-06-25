@@ -13,25 +13,29 @@
           v-model='config.txt'
           placeholder="组件显示文本"
           v-if='!config.removeTxt'
+          @change='fileChanged'
           :auto-size="{ minRows: 2, maxRows: 10 }"/>
           
         <div>备注</div>
         <a-textarea 
           v-model='config.note'
           placeholder="备注"
+          @change='fileChanged'
           :auto-size="{ minRows: 1, maxRows: 10 }"/>
           
         <a-popover title="确认删除?" trigger="click">
           <a-button type="danger" slot="content" @click="removeComponent">立即删除选中组件!</a-button>
-          <a-button type='dashed' size='small' block class='space'>删除组件</a-button>
+          <a-button type='primary' size='small' block class='space'>删除组件</a-button>
         </a-popover>
         
         <space/>  
         
         <div v-for='(p, name) in getComponentProps()'>
           <div>{{p.desc}}</div>
-          <component :is='getComponentName(p)' v-bind='getOption(name)' 
-              v-model='config.props[name]'/>
+          <component :is='getComponentName(p)' 
+              v-bind='getOption(name)' 
+              v-model='config.props[name]' 
+              @change='fileChanged'/>
         </div>
       </div>
     </a-tab-pane>
@@ -129,6 +133,10 @@ export default {
     
     removeComponent() {
       this.$store.commit('removeNestedItem');
+      this.fileChanged();
+    },
+    
+    fileChanged() {
       this.$store.commit('setEditFileChanged', true);
     },
   }
