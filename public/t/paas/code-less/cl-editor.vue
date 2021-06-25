@@ -7,6 +7,9 @@
         <cl-page-design :file='f'/>
       </a-tab-pane>
     </a-tabs>
+    <center v-if='noOpendFile' class='tip'>
+      请 <span>打开</span> 或 <span>新建</span> 一个文件.
+    </center>
   </div>
 </template>
 
@@ -16,6 +19,12 @@ export default {
   
   data() {
     return {
+    }
+  },
+  
+  computed: {
+    noOpendFile() {
+      return this.$store.state.editFile == null;
     }
   },
   
@@ -39,5 +48,11 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.tip {
+  font-size: 12px; color: #ccc; padding-top: 200px;
+}
+.tip span {
+  font-size: 15px; color: #999; display: inline-block; margin: 0 3px;
+}
 </style>

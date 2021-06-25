@@ -40,13 +40,14 @@
       </div>
     </a-tab-pane>
     
-    <a-tab-pane key="2" tab="样式" class='panel'>
+    <a-tab-pane key="2" tab="样式" class=''>
       <div v-if='config != null'>
         <cl-style-adj :styleVal='config.props.style'></cl-style-adj>
       </div>
     </a-tab-pane>
     
     <a-tab-pane key="3" tab="高级" class='panel'>
+      <cl-adj-advanced/>
     </a-tab-pane>
     
     <a-tab-pane key="4" tab="接口" class='panel'>

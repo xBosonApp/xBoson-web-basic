@@ -26,6 +26,7 @@
 [
   'cl-menu', 
   'cl-adjustment',
+  'cl-adj-advanced',
   'cl-page-design',
   'cl-style-adj',
   'cl-prj',
@@ -116,5 +117,8 @@ console.log("上海竹呗信息技术有限公司, 版权所有 http://xboson.ne
 }
 .note {
   color: #ccc; 
+}
+.ant-collapse-borderless {
+  background-color: #fff!important;
 }
 </style>

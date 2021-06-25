@@ -1,0 +1,129 @@
+<!-- Create By xBoson System -->
+
+<template>
+  <div class='row'>
+    <a-input-group compact v-for='(s, id) in value'>
+      <a-tooltip :title='message[id]' :visible='message[id] != null' placement='left'>
+        <a-input v-model='s.name' @change='checkName(id, s)' @blur='setName(id, s)'/>
+      </a-tooltip>
+      <a-button type="primary" icon='edit' @click='openEdit(s)'/>
+      <a-button type="danger" icon='delete' @click='remove(id)'/>
+    </a-input-group>
+    <a-button type="" icon='plus' @click='add' size='small'/>
+    
+    <a-drawer
+      placement="right"
+      :visible="showConfig"
+      :width='configWidth'
+      @close='showConfig = false'
+    >
+      <slot name='title'>
+        <span>{{configTitle}}</span>
+        <span class='name'>{{name}}</span>
+      </slot>
+      <component :is='configComponent' v-bind='configData'/>
+    </a-drawer>
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    'value' : { required:true, type:Object }, 
+    // 名字前缀
+    'pname' : { required:true, type:String }, 
+     // id 前缀
+    'pid'   : { required:true, type:String },
+    // 配置页面标题 
+    'configTitle' : { required:true, type:String }, 
+    // 配置页面组件 'cl-style-adj'
+    'configComponent' : { required:true, type:String }, 
+    // 配置页面宽度
+    'configWidth' : { type:String, default: '400px' }, 
+    // 创建新对象函数 Function(opt) name/num属性已经设置
+    'initItem' : { required:true, type:Function }, 
+    // 创建一个属性对象, 用来初始化 configComponent 组件实例. 
+    // Object Function(opt)
+    'createConfigData' : { required:true, type:Function },
+  },
+  
+  data() {
+    return {
+      message     : {},
+      showConfig  : false,
+      configData  : null,
+      name        : '',
+    };
+  },
+  
+  methods: {
+    add() {
+      let num = this.nextid();
+      let opt = {
+        num,
+        name : this.pname + num,
+      };
+      this.initItem(opt);
+      this.$set(this.value, this.pid + num, opt);
+    },
+    
+    remove(id) {
+      this.$delete(this.value, id);
+    },
+    
+    openEdit(opt) {
+      this.configData = this.createConfigData(opt);
+      this.name = opt.name,
+      this.showConfig = true;
+    },
+    
+    conflictName(oid, opt) {
+      for (let id in this.value) {
+        if (id != oid && this.value[id].name == opt.name) {
+          return id;
+        }
+      }
+    },
+    
+    checkName(id, opt) {
+      let cid = this.conflictName(id, opt);
+      if (cid) {
+        this.$set(this.message, id, '名字重复');
+        this.$set(this.message, cid, '名字重复');
+      } else {
+        this.message = {};
+      }
+    },
+    
+    setName(id, opt) {
+      if (this.conflictName(id, opt) || (!opt.name)) {
+        opt.name = this.pname + opt.num;
+      }
+      this.message = {};
+    },
+    
+    nextid() {
+      let f = this.$store.state.editFile;
+      if (f) {
+        return ++f.content.root.id;
+      }
+      throw new Error("not opend file");
+    },
+  },
+}
+</script>
+
+<style scoped>
+.row {
+  display: grid; grid-auto-rows: 1fr; row-gap: 2px;
+}
+.row>button {
+  width: 100%;
+}
+.ant-input-group-compact {
+  display: grid!important; grid-template-columns: 0 1fr auto auto;
+}
+.name {
+  margin-left: 8px; display: inline-block; text-decoration: underline; font-size: large;
+}
+</style>

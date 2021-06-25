@@ -95,18 +95,16 @@ function initProps(c, cfg) {
       cfg.props[n] = tool.deepCopy(p.def);
     } 
     else {
-      // 1:字符串, 2:整数, 3:选项select属性, 4:字符串,并且带有select选项, 
-      // 6:图标选择, 7:自定义组件
       switch (p.type) {
-        case 1:
-        case 4:
+        case 1: // 字符串(允许变量), 
+        case 4: // 字符串,并且带有select选项, 
           cfg.props[n] = ''; break;
-        case 2:
+        case 2: // 整数(允许变量), 
           cfg.props[n] = 0; break;
-        case 3:
-        case 5:
-        case 6:
-        case 7:
+        case 3: // 选项select属性, 
+        case 5: // 变量(废弃)
+        case 6: // 图标选择, 
+        case 7: // 自定义组件
           cfg.props[n] = null; break;
         default:
           throw new Error("init props invaild type val:"+ n);

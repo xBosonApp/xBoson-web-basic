@@ -4,7 +4,13 @@
   <div>
     <div v-for='(v, i) in value' class='row'>
       <a-input :value='i+1' disabled='true'/>
-      <a-tooltip placement="top">
+      <cl-css-number v-model='value[i]' optionComponent='cl-css-grid-length-unit-options'/> 
+      <a-button type="danger" @click='remove(i)' 
+        icon='close' shape=""/>
+    </div>
+    
+    <div class='row'>
+      <a-tooltip placement="left">
         <template slot="title">
           <div>auto : 自动调整</div>
           <div>1% : 按比例调整</div>
@@ -12,13 +18,11 @@
           <div>1fr : 轨道弹性系数</div>
           <div>minmax(min, max) : 函数用法</div>
         </template>
-        <a-input v-model='value[i]'/> 
+        <a-button type="dashed" size='small'>?</a-button>
       </a-tooltip>
-      <a-button type="danger" @click='remove(i)' 
-        icon='close' shape="circle"></a-button>
+      <a-button type="" @click='add' icon='plus' size='small'/>
+      <a-button type="dashed" @click='removeLast' icon='minus' size='small'/>
     </div>
-    <a-button type="dashed" @click='add' block 
-      icon='plus' class='insert'></a-button>
   </div>
 </template>
 
@@ -36,7 +40,11 @@ export default {
     },
     
     remove(i) {
-      this.value = this.value.splice(i, 1);
+      this.value.splice(i, 1);
+    },
+    
+    removeLast() {
+      this.value.pop();
     },
   },
 }
@@ -45,9 +53,9 @@ export default {
 <style scoped>
 .row {
   display: grid;
-  grid-template-columns: 35px 1fr auto; gap: 2px;
+  grid-template-columns: 35px 1fr 32px; gap: 2px; margin: 2px;
 }
-.insert {
-  margin: 2px;
+.row>button {
+  width: 100% !important;
 }
 </style>

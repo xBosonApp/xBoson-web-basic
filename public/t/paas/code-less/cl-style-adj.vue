@@ -1,7 +1,7 @@
 <!-- Create By xBoson System -->
 
 <template>
-  <a-collapse>
+  <a-collapse :bordered="false">
     <a-collapse-panel v-for="(c, i) in config" :key="i" :header="c.title">
       <div v-for='item in c.list'>
         <label :class='item[0]'>{{item[1]}} <span class='tip'>{{item[0]}}</span></label>
@@ -34,8 +34,8 @@ const config = [
       [ 'text-decoration', '装饰', 4, {'无*':'none', '下划线':'underline', '上划线':'overline', '删除线':'line-through', '闪烁':'blink'}],
       [ 'text-indent', '首行缩进', 3],
       [ 'text-overflow', '文本溢出', 4, {'修剪*':'clip', '显示省略号':'ellipsis'}],
-      [ 'white-space', '空白', 4, {'忽略*':'normal', '保留':'pre', '不换行':'nowrap', '保留并换行':'pre-wrap', '合并空白并换行':'pre-line'}],
-      [ 'word-break', '折行方式', 4, {'默认*':'normal', '可以打断单词':'break-all', '保留单词':'keep-all'}],
+      [ 'white-space', '空白/折行', 4, {'忽略*':'normal', '保留':'pre', '不换行':'nowrap', '保留并换行':'pre-wrap', '合并空白并换行':'pre-line'}],
+      [ 'word-break', '单词/折行', 4, {'默认*':'normal', '可以打断单词':'break-all', '保留单词':'keep-all'}],
       [ 'font-variant', '大写字母化', 4, {'普通*':'normal', '应用':'small-caps', '继承':'inherit'}],
       [ 'direction', '文本方向', 4, {'左到右*':'ltr', '右到左':'rtl', '继承':'inherit'}],
       [ 'writing-mode', '书写方向', 4, {'水平*':'horizontal-tb', '垂直右至左':'vertical-rl', '垂直左至右':'vertical-lr'}],

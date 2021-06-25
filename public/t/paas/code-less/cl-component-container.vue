@@ -141,6 +141,6 @@ export default {
   border: 1px solid #13bc13 !important; background-color: antiquewhite;
 }
 .clst-ghost {
-  background-color: antiquewhite; color: #fff; background-color: #000;
+  color: #fff; background-color: #000;
 }
 </style>

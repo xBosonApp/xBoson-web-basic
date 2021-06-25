@@ -8,10 +8,12 @@ module.exports = {
   filesort,
   loadPlugins,
   deepCopy,
+  makeComponents,
 };
 
 
 function api(mod, name, params, cb) {
+  // TODO: 切换org
   let url = [window.xv.ctx_prefix, 'app/a297dfacd7a84eab9656675f61750078/19cb7c3b79e949b88a9c76396854c2b1', 
             mod, name].join('/');
             
@@ -21,26 +23,8 @@ function api(mod, name, params, cb) {
 
 
 function apiurl(url, params, cb) {
-  let config = {
-    emulateJSON : true,
-  };
-  
-  if (window.xv.debug) {
-    params.s = 'd';
-  }
-  
-  Vue.http.post(url, params, config).then(resp=>{
-    resp.json().then(ret=>{
-      if (ret.code) {
-        return cb(new Error(ret.msg));
-      }  
-      cb(null, ret);  
-    }, err=>{
-      cb(err);
-    });
-  }).catch(resp=>{
-    cb(new Error(resp.statusText));
-  });
+  let p = Vue.xapi(url, params);
+  p.then(ret => {cb(null, ret)}).catch(cb);
 }
 
 
@@ -87,4 +71,13 @@ function getPluginType(file) {
 // 只支持扁平对象
 function deepCopy(obj) {
   return JSON.parse(JSON.stringify(obj));
+}
+
+
+function makeComponents(arr) {
+  let c = {};
+  arr.forEach(n => {
+    c[n] = require('./'+ n +'.vue', 1, 1);
+  });
+  return c;
 }

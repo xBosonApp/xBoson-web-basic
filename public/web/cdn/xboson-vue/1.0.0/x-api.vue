@@ -40,9 +40,9 @@ export default {
   },
   
   methods : {
-    error(msg, config) {
-      let err = new Error(msg);
-      err.url = config.url;
+    error(err, url) {
+      // let err = new Error(msg);
+      err.url = url;
       this.$emit('error', err);
       if (this.showMsg) {
         window.xv.popError('API 返回错误', err);
@@ -50,30 +50,12 @@ export default {
     },
     
     callApi() {
-      let url = [window.xv.ctx_prefix, 'app', this.org, this.app, this.mod, this.api];
-      let params = this.params;
-      let config = {
-        url : url.join('/'),
-        params : {},
-        emulateJSON : true,
-      };
+      let url = [window.xv.ctx_prefix, 'app', this.org, this.app, this.mod, this.api].join('/');
       
-      if (window.xv.debug) {
-        params.s = 'd';
-      }
-      
-      this.$http.post(url.join('/'), params, config).then(resp => {
-        resp.json().then(ret=>{
-          if (ret.code) {
-            this.error(ret.msg, config);
-            return;
-          }  
-          this.$emit('success', ret);  
-        }, e=>{
-          this.error(config.url +'\nJSON parse fail'+ e.message);
-        });
-      }, resp => {
-        this.error(config.url +'\n'+ resp.statusText, config);
+      this.$xapi(url, this.params).then(ret => {
+        this.$emit('success', ret);
+      }).catch(err => {
+        this.error(err, url);
       });
     },
   }

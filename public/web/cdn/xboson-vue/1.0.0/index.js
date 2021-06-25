@@ -5,6 +5,14 @@
 //
 (function() {
   
+//
+// xboson vue 注册组件列表
+//
+const componentNames = [
+  'x-menu2',
+  'x-api',
+];
+
 if (!window.Vue) {
   const msg = "错误: 未安装 Vue 到环境";
   alert(msg);
@@ -20,15 +28,6 @@ if (!window.xAppState) {
 
 const base = '/web/cdn/xboson-vue/1.0.0/';
 
-//
-// xboson vue 注册组件列表
-//
-const componentNames = [
-  'x-menu2',
-  'x-api',
-];
-
-
 function reg(name) {
   Vue.component(name, require(base + name +'.vue', 1, 1));
 }
@@ -36,5 +35,48 @@ function reg(name) {
 window.xAppState().then(function() {
   componentNames.forEach(reg);
 });
+
+const xbosonPlugin = { install };
+Vue.use(xbosonPlugin, {});
+
+
+function install(vue, opt) {
+  Vue.xapi = Vue.prototype.$xapi = pluginXapi;
+}
+
+
+function pluginXapi(url, params) {
+  return new Promise((ok, fail)=>{
+    if (!url) return fail(new Error("must hava url parameter"));
+    if (!params) params = {};
+    
+    let config = {
+      emulateJSON : true,
+    };
+    
+    if (window.xv.debug) {
+      params.s = 'd';
+    }
+    
+    Vue.http.post(url, params, config).then(resp => {
+      resp.json().then(ret=>{
+        if (ret.code) {
+          let msg = ret.msg;
+          if (ret.data && xv.debug) {
+            msg += '\n\n'+ ret.data;
+          }
+          fail(new Error(msg));
+          return;
+        }  
+        
+        ok(ret);  
+      }, err => {
+        fail(err);
+      });
+    }).catch(resp => {
+      fail(new Error(resp.statusText));
+    });
+  });
+}
 
 })();

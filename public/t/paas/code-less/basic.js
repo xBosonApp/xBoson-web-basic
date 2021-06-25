@@ -125,6 +125,20 @@ module.exports = {
         def : ['auto', 'auto'],
         propsConfig: {type:'design'},
       },
+      rowGap: {
+        desc: '行间隙',
+        type: 7,
+        def: '1px',
+        component: 'cl-css-number',
+        propsConfig: {type:'design'},
+      },
+      columnGap: {
+        desc: '列间隙',
+        type: 7,
+        def: '1px',
+        component: 'cl-css-number',
+        propsConfig: {type:'design'},
+      },
     },
     style: {
       'display': 'grid',

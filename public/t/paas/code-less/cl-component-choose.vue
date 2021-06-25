@@ -1,7 +1,7 @@
 <!-- Create By xBoson System -->
 
 <template>
-  <a-collapse class='components'>
+  <a-collapse class='components' :bordered="false">
     
     <a-collapse-panel v-for="(c, i) in componentLibrary" :key="i" :header="c.title">
       
@@ -55,6 +55,6 @@ function loadLib(name, path) {
   border: 1px solid #13bc13 !important; background-color: antiquewhite;
 }
 .clst-ghost {
-  background-color: antiquewhite;
+  color: #fff; background-color: #000;
 }
 </style>

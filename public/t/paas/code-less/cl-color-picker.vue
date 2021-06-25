@@ -1,7 +1,7 @@
 <!-- Create By xBoson System -->
 
 <template>
-  <a-popover title="选择颜色">
+  <a-popover title="选择颜色" trigger="click">
     <template slot="content">
       <chrome-picker :value='val' @input='up2'/>
     </template>
