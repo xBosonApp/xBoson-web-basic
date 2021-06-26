@@ -1,9 +1,9 @@
 <!-- Create By xBoson System -->
 
 <template>
-  <a-input-group compact>
-    <cl-css-number v-model='width' style="width: 50%"/>
-    <a-select v-model='style' style="width: 25%" :dropdownMatchSelectWidth='false'>
+  <div class='main'>
+    <cl-css-number v-model='width'/>
+    <a-select v-model='style' :dropdownMatchSelectWidth='false'>
       <a-select-option value="none">无边框</a-select-option>
       <a-select-option value="hidden">隐藏(table)</a-select-option>
       <a-select-option value="dotted">点状</a-select-option>
@@ -16,8 +16,8 @@
       <a-select-option value="outset">外边</a-select-option>
       <a-select-option value="inherit">继承</a-select-option>
     </a-select>
-    <cl-color-picker v-model='color' style='width:25%'/>
-  </a-input-group>
+    <cl-color-picker v-model='color' class='c'/>
+  </div>
 </template>
 
 <script>
@@ -56,10 +56,17 @@ export default {
       let r = [w, s, c].join(' ');
       this.value = r;
       this.$emit('input', r);
+      this.$emit('change');
     }
   }
 }
 </script>
 
-<style>
+<style scoped>
+.main {
+  display: grid; gap: 2px; grid-template-columns: 3fr 2fr;
+}
+.c {
+  grid-column: 1/3;
+}
 </style>

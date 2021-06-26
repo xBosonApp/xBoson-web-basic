@@ -7,7 +7,7 @@
         <cl-page-design :file='f'/>
       </a-tab-pane>
     </a-tabs>
-    <center v-if='noOpendFile' class='tip'>
+    <center v-if='noOpendFile' class='tip animate__animated animate__jello'>
       请 <span>打开</span> 或 <span>新建</span> 一个文件.
     </center>
   </div>
@@ -43,14 +43,26 @@ export default {
     
     changeFile(key) {
       this.$store.commit('setEditFile', this.editorFiles[key]);
+      this.changeMountdContextStyle(key);
     },
+    
+    changeMountdContextStyle(key) {
+      const bcsa = this.$store.state.bindContextStyle;
+      for (let id in bcsa) {
+        if (key == id) {
+          bcsa[id].mount();
+        } else {
+          bcsa[id].unmount();
+        }
+      }
+    }
   },
 }
 </script>
 
 <style scoped>
 .tip {
-  font-size: 12px; color: #ccc; padding-top: 200px;
+  font-size: 12px; color: #ccc; padding-top: 170px;
 }
 .tip span {
   font-size: 15px; color: #999; display: inline-block; margin: 0 3px;

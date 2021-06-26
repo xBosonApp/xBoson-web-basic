@@ -9,6 +9,11 @@ module.exports = {
   loadPlugins,
   deepCopy,
   makeComponents,
+  regc,
+  loadc : makeComponents,
+  getRoot,
+  getEditFile,
+  delayWorker,
 };
 
 
@@ -80,4 +85,39 @@ function makeComponents(arr) {
     c[n] = require('./'+ n +'.vue', 1, 1);
   });
   return c;
+}
+
+
+function regc(name) {
+  Vue.component(name, require('./'+ name +'.vue', 1,1));
+}
+
+
+function getEditFile() {
+  return store.state.editFile;
+}
+
+
+function getRoot() {
+  let f = getEditFile();
+  if (f) {
+    return f.content.root;
+  }
+}
+
+
+// 创建 fn 的包装函数, 尽可能推迟多个调用合并为一个
+function delayWorker(fn, time) {
+  if (!time) time = 2e3;
+  let wait = 0;
+  
+  return function() {
+    wait++;
+    setTimeout(()=>{
+      --wait;
+      if (wait == 0) {
+        fn();
+      }
+    }, time);
+  };
 }

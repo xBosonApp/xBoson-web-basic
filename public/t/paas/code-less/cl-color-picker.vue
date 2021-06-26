@@ -5,7 +5,10 @@
     <template slot="content">
       <chrome-picker :value='val' @input='up2'/>
     </template>
-    <a-input :value='value' @change="up1" placeholder="color"/>
+    <a-input :value='value' @change="up1" placeholder="color">
+      <div slot="addonAfter" 
+        :style="{ 'background-color': value, 'height':'1.5em', 'width':'80px' }"></div>
+    </a-input>
   </a-popover>
 </template>
 
@@ -24,12 +27,14 @@ export default {
       let v = e.srcElement.value;
       this.value = v;
       this.$emit('input', v);
+      this.$emit('change');
     },
     
     up2(r) {
       let v = r.hex;
       this.value = v;
       this.$emit('input', v);
+      this.$emit('change');
     },
   },
 }

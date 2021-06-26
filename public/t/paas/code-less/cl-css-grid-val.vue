@@ -20,7 +20,7 @@
         </template>
         <a-button type="dashed" size='small'>?</a-button>
       </a-tooltip>
-      <a-button type="" @click='add' icon='plus' size='small'/>
+      <cl-add-button @click='add' title='Insert'/>
       <a-button type="dashed" @click='removeLast' icon='minus' size='small'/>
     </div>
   </div>

@@ -7,6 +7,11 @@ module.exports = new Vuex.Store({
     nestedItemRef: null,
     project: null,
     editFile: null,
+    // 必须对css属性进行逐项复制
+    cssClipboard: null, 
+    // 方便调试的开关
+    test : true,
+    bindContextStyle : {},
   },
   
   mutations: {
@@ -52,5 +57,29 @@ module.exports = new Vuex.Store({
     setProject(s, p) {
       s.project = p;
     },
-  }
+    
+    setCssClipboard(s, data) {
+      s.cssClipboard = data;
+    },
+    
+    setBindContextStyle(s, styledom) {
+      if (!s.editFile) {
+        throw new Error("not file edit context");
+      }
+      s.bindContextStyle[s.editFile._id] = styledom;
+    },
+    
+    clearBindContextStyle(s, fid) {
+      delete s.bindContextStyle[fid];
+    },
+  },
+  
+  getters: {
+    contextStyle(s) {
+      if (!s.editFile) {
+        throw new Error("not file edit context");
+      }
+      return s.bindContextStyle[s.editFile._id];
+    },
+  },
 });

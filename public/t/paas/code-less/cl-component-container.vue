@@ -18,7 +18,7 @@
       :is='getComponentName(e)' 
       :styleProp='e.props && e.props.style'
       :root-config='rootConfig'
-      :class="{ 'draggable-item-active': isHover(e.id) }"
+      :class="getClass(e)"
       @mouseover.native.self="setHover(e.id, true)"
       @mouseout.native.self="setHover(e.id, false)"
       @mouseover.self="setHover(e.id, true)"
@@ -45,6 +45,14 @@ export default {
   },
   
   methods : {
+    getClass(e) {
+      let ret = { 'draggable-item-active': this.isHover(e.id) };
+      for (let id in e.bindStyle) {
+        ret[id] = true;
+      }
+      return ret;
+    },
+    
     isHover(id) {
       if (this.hover[id] === undefined) {
         this.$set(this.hover, id, false);
@@ -118,7 +126,7 @@ export default {
     
     // 必须调用该方法, 否则直接用 component 属性会产生数组错位
     getComponentName(instance) {
-      if (!instance.cid) return 'div'; // 第一次渲染, 元素没有改变
+      if (!instance.isInstance) return 'div'; // 第一次渲染, 元素没有改变
       return instance.helpTag || instance.component;
     }
   }

@@ -26,9 +26,7 @@
 [
   'cl-menu', 
   'cl-adjustment',
-  'cl-adj-advanced',
   'cl-page-design',
-  'cl-style-adj',
   'cl-prj',
   'cl-file-manager',
   'cl-create-file',
@@ -42,6 +40,7 @@
   'cl-color-picker',
   'cl-css-number',
   'cl-input-fmt',
+  'cl-add-button',
   
 ].forEach(function(name) {
   Vue.component(name, require('./'+ name +'.vue', 1,1));
@@ -108,13 +107,8 @@ console.log("上海竹呗信息技术有限公司, 版权所有 http://xboson.ne
   }
 }
 </style>
+
 <style>
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
-}
-.fade-enter, .fade-leave-to, .fade-leave-active /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
-}
 .note {
   color: #ccc; 
 }

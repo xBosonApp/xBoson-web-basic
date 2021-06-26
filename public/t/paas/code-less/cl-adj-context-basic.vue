@@ -6,27 +6,35 @@
       <a-tooltip :title='message[id]' :visible='message[id] != null' placement='left'>
         <a-input v-model='s.name' @change='checkName(id, s)' @blur='setName(id, s)'/>
       </a-tooltip>
-      <a-button type="primary" icon='edit' @click='openEdit(s)'/>
+      <a-button type="primary" icon='edit' @click='openEdit(s, id)'/>
       <a-button type="danger" icon='delete' @click='remove(id)'/>
     </a-input-group>
-    <a-button type="" icon='plus' @click='add' size='small'/>
+    
+    <cl-add-button @click='add' :title='"新建" + pname'></cl-add-button>
     
     <a-drawer
       placement="right"
       :visible="showConfig"
       :width='configWidth'
-      @close='showConfig = false'
+      @close='closeConfig'
+      :destroyOnClose='true'
+      :maskStyle='maskStyle'
     >
-      <slot name='title'>
-        <span>{{configTitle}}</span>
-        <span class='name'>{{name}}</span>
-      </slot>
-      <component :is='configComponent' v-bind='configData'/>
+      <template v-slot:title>
+        <span class='title'>{{configTitle}}</span>
+        <span class='name animate__bounce animate__animated'>{{name}}</span>
+        <div style='margin-top: 10px; text-align:right;'>
+          <slot name='header' :configData='configData'/>
+        </div>
+      </template>
+      <component :is='configComponent' v-bind='configData' @change='onChange'/>
     </a-drawer>
   </div>
 </template>
 
 <script>
+const tool = require("./tool.js");
+
 export default {
   props: {
     'value' : { required:true, type:Object }, 
@@ -39,12 +47,16 @@ export default {
     // 配置页面组件 'cl-style-adj'
     'configComponent' : { required:true, type:String }, 
     // 配置页面宽度
-    'configWidth' : { type:String, default: '400px' }, 
+    'configWidth' : { type:String, default: '300px' }, 
     // 创建新对象函数 Function(opt) name/num属性已经设置
     'initItem' : { required:true, type:Function }, 
     // 创建一个属性对象, 用来初始化 configComponent 组件实例. 
     // Object Function(opt)
     'createConfigData' : { required:true, type:Function },
+  },
+  
+  beforeMount() {
+    tool.regc(this.configComponent);
   },
   
   data() {
@@ -53,6 +65,8 @@ export default {
       showConfig  : false,
       configData  : null,
       name        : '',
+      showAddTip  : false,
+      maskStyle   : { opacity: 0 },
     };
   },
   
@@ -71,8 +85,8 @@ export default {
       this.$delete(this.value, id);
     },
     
-    openEdit(opt) {
-      this.configData = this.createConfigData(opt);
+    openEdit(opt, id) {
+      this.configData = this.createConfigData(opt, id);
       this.name = opt.name,
       this.showConfig = true;
     },
@@ -109,6 +123,15 @@ export default {
       }
       throw new Error("not opend file");
     },
+    
+    closeConfig() {
+      this.showConfig = false;
+      this.$emit('close-config', this.configData);
+    },
+    
+    onChange(d) {
+      this.$emit('change', d);
+    },
   },
 }
 </script>
@@ -123,7 +146,10 @@ export default {
 .ant-input-group-compact {
   display: grid!important; grid-template-columns: 0 1fr auto auto;
 }
+.title {
+  font-size: 18px; margin-right: 8px;
+}
 .name {
-  margin-left: 8px; display: inline-block; text-decoration: underline; font-size: large;
+  display: inline-block; text-decoration: underline; font-size: large; color: blue;
 }
 </style>

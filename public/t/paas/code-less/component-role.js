@@ -36,9 +36,7 @@ function newInstance(root, component) {
   let nestedList = component.isContainer && [];
   // let containerStyle = component.isContainer && component.containerStyle;
   let props = {
-    // 组件实例的样式
     style: component.style || {},
-    // 如果是组件容器, 表示内嵌组建列表
     nestedList,
   };
   
@@ -50,23 +48,16 @@ function newInstance(root, component) {
   return {
     id : genID(root, component),
     note : '',
-    // 标签属性
     props,
     propsConfig,
-    // 平台组件id
     cid : component.id,
-    // 标签文本
     txt : component.removeTxt ?'' :component.txt,
-    // 删除与标签文本相关的数据
     removeTxt : component.removeTxt,
-    // vue 组件名, 可以是 html 标签名, 是最终渲染时的标签.
     component : component.component,
-    // 在设计时使用这个 tag 进行辅助
     helpTag : component.helpTag,
-    // 组件的实例
     isInstance : true,
-    // true 表示一个组件容器, 容器中可拖拽组件
     isContainer : component.isContainer,
+    bindStyle : {},
   }
 }
 

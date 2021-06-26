@@ -71,6 +71,7 @@ export default {
       }
       this.value = r;
       this.$emit('input', r);
+      this.$emit('change');
     },
   }
 }

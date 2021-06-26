@@ -197,7 +197,7 @@ export default {
     },
     
     onChange() {
-      this.$store.commit('setEditFileChanged', true);
+      this.$emit('change');
     },
   }
 }

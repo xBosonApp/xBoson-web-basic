@@ -147,6 +147,10 @@ export default {
     this.monitorKey('o', this.openComponent);
     this.monitorKey('n', this.createComponent);
     this.monitorKey('m', this.managerComponent);
+    
+    if (this.$store.state.test) {
+      this.$nextTick(this.test);
+    }
   },
   
   beforeDestroy() {
@@ -155,6 +159,10 @@ export default {
   },
   
   methods: {
+    test() {
+      this.openFile('BCUHR8CYRh20K48LZBdRww')
+    },
+    
     createComponent() {
       this.showCreate = true;
     },

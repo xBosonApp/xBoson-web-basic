@@ -14,6 +14,43 @@
 <script>
 const tool = require("./tool.js");
 
+
+class Style {
+  constructor() {
+    this.dom = document.createElement('style');
+    this.mounted = false;
+  }
+  
+  render(value) {
+    let x = [];
+    for (let id in value) {
+      this._item(id, value[id], x);
+    }
+    this.dom.innerHTML = x.join('');
+  }
+  
+  _item(id, s, x) {
+    if (Object.keys(s.val) <= 0) return;
+  
+    x.push(s.prefix, id, '{');
+    for (let k in s.val) {
+      x.push(k, ':', s.val[k], ';');
+    }
+    x.push('}\n');
+  }
+  
+  mount() {
+    document.head.append(this.dom);
+    this.mounted = true;
+  }
+  
+  unmount() {
+    this.dom.remove();
+    this.mounted = false;
+  }
+}
+
+
 export default {
   props: ['file'],
   
@@ -22,15 +59,37 @@ export default {
   },
   
   mounted() {
-    let p = this.file.content.root.plugins;
-    if (p) {
-      tool.loadPlugins(p);
-    }
+    this.loadPlugins();
+    this.loadContextStyles();
+  },
+  
+  beforeDestroy() {
+    this.removeContextStyles();
   },
   
   methods : {
     showtip() {
       return this.file.content.list.length == 0 && this.$store.state.showDropTip;
+    },
+    
+    loadPlugins() {
+      let p = this.file.content.root.plugins;
+      if (p) {
+        tool.loadPlugins(p);
+      }
+    },
+    
+    loadContextStyles() {
+      let cs = new Style();
+      cs.render(this.file.content.root.styles);
+      cs.mount();
+      this.$store.commit('setBindContextStyle', cs);
+    },
+    
+    removeContextStyles() {
+      let cs = this.$store.state.bindContextStyle[this.file._id];
+      cs.unmount();
+      this.$store.commit('clearBindContextStyle', this.file._id);
     },
   },
 }

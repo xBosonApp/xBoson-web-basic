@@ -19,6 +19,7 @@ export default {
       }
       this.value = v;
       this.$emit('input', v);
+      this.$emit("change");
     }
   }
 }
