@@ -10,6 +10,7 @@
     configComponent='cl-style-adj'
     :initItem='initItem'
     :createConfigData='createConfigData'
+    :maskStyle="{ 'background-color': 'rgba(0,0,0,0)' }"
     @close-config='configClose'
     @change='onChange'
   >

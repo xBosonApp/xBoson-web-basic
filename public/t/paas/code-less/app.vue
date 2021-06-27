@@ -15,7 +15,7 @@
     <div class='adjustment'>
       <cl-adjustment></cl-adjustment>
     </div>
-    <div class='message'>{{$store.state.message}}</div>
+    <!--<div class='message' v-if='$store.state.message'>{{$store.state.message}}</div>-->
   </div>
   
   <cl-prj v-else @open='openPrject' :key='2'></cl-prj>
@@ -84,7 +84,7 @@ console.log("上海竹呗信息技术有限公司, 版权所有 http://xboson.ne
   height: 100%;
   display: grid;
   grid-template-columns: 300px 1fr 300px;
-  grid-template-rows: 30px calc(100vh - 60px) 30px;
+  grid-template-rows: 30px calc(100vh - 30px);
   
   .main-menu, .message {
     grid-column: 1 / 4;

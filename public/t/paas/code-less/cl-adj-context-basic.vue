@@ -4,10 +4,18 @@
   <div class='row'>
     <a-input-group compact v-for='(s, id) in value'>
       <a-tooltip :title='message[id]' :visible='message[id] != null' placement='left'>
-        <a-input v-model='s.name' @change='checkName(id, s)' @blur='setName(id, s)'/>
+        <a-input v-model='s.name' @change='checkName(id, s)' @blur='setName(id, s)' placeholder='功能性描述'/>
       </a-tooltip>
       <a-button type="primary" icon='edit' @click='openEdit(s, id)'/>
-      <a-button type="danger" icon='delete' @click='remove(id)'/>
+      <a-popconfirm
+        title="所有关联的绑定都会被删除"
+        ok-text="删除"
+        ok-type='danger'
+        cancel-text="取消"
+        @confirm="remove(id)"
+      >
+        <a-button type="danger" icon='delete'/>
+      </a-popconfirm>
     </a-input-group>
     
     <cl-add-button @click='add' :title='"新建" + pname'></cl-add-button>
@@ -53,6 +61,8 @@ export default {
     // 创建一个属性对象, 用来初始化 configComponent 组件实例. 
     // Object Function(opt)
     'createConfigData' : { required:true, type:Function },
+    // 配置面板遮蔽层样式
+    'maskStyle' : { default: {} },
   },
   
   beforeMount() {
@@ -66,7 +76,6 @@ export default {
       configData  : null,
       name        : '',
       showAddTip  : false,
-      maskStyle   : { opacity: 0 },
     };
   },
   
@@ -83,6 +92,7 @@ export default {
     
     remove(id) {
       this.$delete(this.value, id);
+      this.$emit('change');
     },
     
     openEdit(opt, id) {

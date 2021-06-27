@@ -18,7 +18,8 @@
       :is='getComponentName(e)' 
       :styleProp='e.props && e.props.style'
       :root-config='rootConfig'
-      :class="getClass(e)"
+      :class="bindClass[e.id]"
+      :key='idx'
       @mouseover.native.self="setHover(e.id, true)"
       @mouseout.native.self="setHover(e.id, false)"
       @mouseover.self="setHover(e.id, true)"
@@ -40,31 +41,33 @@ export default {
   
   data() {
     return {
-      hover:{},
+      bindclass:{},
     }  
   },
   
+  computed: {
+    bindClass() {
+      for (let i=0; i<this.nestedList.length; ++i) {
+        let item = this.nestedList[i];
+        let cl = this.bindclass[item.id];
+        if (!cl) {
+          cl = { 'draggable-item-active': false };
+          this.$set(this.bindclass, item.id, cl);
+        }
+        for (let n in item.bindStyle) {
+          cl[n] = true;
+        }
+      }
+      return this.bindclass;
+    },
+  },
+  
   methods : {
-    getClass(e) {
-      let ret = { 'draggable-item-active': this.isHover(e.id) };
-      for (let id in e.bindStyle) {
-        ret[id] = true;
-      }
-      return ret;
-    },
-    
-    isHover(id) {
-      if (this.hover[id] === undefined) {
-        this.$set(this.hover, id, false);
-      }
-      return this.hover[id];
-    },
-    
     setHover(id, b) {
-      if (this.hover[id] === undefined) {
-        this.$set(this.hover, id, b);
+      if (this.bindclass[id] === undefined) {
+        this.$set(this.bindclass, id, {'draggable-item-active':b});
       } else {
-        this.hover[id] = b;
+        this.bindclass[id]['draggable-item-active'] = b;
       }
     },
     

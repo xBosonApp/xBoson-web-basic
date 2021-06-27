@@ -106,14 +106,25 @@ function getRoot() {
 }
 
 
+//
 // 创建 fn 的包装函数, 尽可能推迟多个调用合并为一个
+// 函数不能有参数
+//
 function delayWorker(fn, time) {
   if (!time) time = 2e3;
   let wait = 0;
+  let tid;
   
   return function() {
-    wait++;
-    setTimeout(()=>{
+    if (arguments.length > 0) {
+      throw new Error("cannot have any arguments");
+    }
+    if (wait) {
+      clearTimeout(tid);
+    } else {
+      wait++;
+    }
+    tid = setTimeout(()=>{
       --wait;
       if (wait == 0) {
         fn();

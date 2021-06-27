@@ -3,7 +3,10 @@
 <template>
   <div>
     <a-collapse :bordered="false">
-      <a-collapse-panel header="绑定上下文样式">
+      <a-collapse-panel>
+        <template #header>
+          <span class='header'>绑定上下文样式</span>
+        </template>
         <div v-for='(_, id) in config.bindStyle' class='col'>
           <div class='name'>{{ getName(id) }}</div>
           <a-button icon='delete' @click='del(id)' type='danger'></a-button>
@@ -82,5 +85,8 @@ export default {
 }
 .name {
   border-bottom: 1px solid #ccc; padding-top: 8px;
+}
+.header {
+  color: #0000ba;
 }
 </style>
