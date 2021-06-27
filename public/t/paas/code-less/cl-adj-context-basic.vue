@@ -66,7 +66,7 @@ export default {
   },
   
   beforeMount() {
-    tool.regc(this.configComponent);
+    this.loadComponent();
   },
   
   data() {
@@ -80,6 +80,12 @@ export default {
   },
   
   methods: {
+    loadComponent() {
+      // tool.regc(this.configComponent);
+      let name = this.configComponent;
+      this.$options.components[name] = tool.requirec(name);
+    },
+    
     add() {
       let num = this.nextid();
       let opt = {

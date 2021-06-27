@@ -76,8 +76,9 @@ function initProps(c, cfg) {
     let p = c.props[n];
     if (!cfg.propsConfig[n]) {
       cfg.propsConfig[n] = p.propsConfig || {
-        type    : 'attribute',// attribute / design / event
-        varType : 'constant', // constant / variable
+        type    : 'attribute',
+        varType : 'constant', 
+        ref     : null,
       };
     }
     

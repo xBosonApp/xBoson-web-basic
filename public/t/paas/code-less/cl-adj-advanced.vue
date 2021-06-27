@@ -6,17 +6,16 @@
       <cl-adj-context-style :value='getRoot().styles'/>
     </a-collapse-panel>
     <a-collapse-panel key="1" header="变量定义">
-      <!--<cl-adj-vars :value='getRoot().vars'/>-->
+      <cl-adj-vars :value='getRoot().vars'/>
     </a-collapse-panel>
     <a-collapse-panel key="2" header="函数定义">
-      <!--<cl-adj-funcs :value='getRoot().funcs'/>-->
+      <cl-adj-funcs :value='getRoot().funcs'/>
     </a-collapse-panel>
   </a-collapse>
 </template>
 
 <script>
 const tool = require('./tool.js');
-Vue.component('cl-adj-context-basic', require('./cl-adj-context-basic.vue', 1, 1));
 
 export default {
   components : tool.makeComponents([

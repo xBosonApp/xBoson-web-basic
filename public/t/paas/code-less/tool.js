@@ -1,6 +1,7 @@
 /* Create By xBoson System */
 const store = require("./store.js");
 const requirePlugin = {};
+const vuever = parseInt(/([0-9]+)\..+/.exec(Vue.version));
 
 module.exports = {
   api,
@@ -9,11 +10,20 @@ module.exports = {
   loadPlugins,
   deepCopy,
   makeComponents,
-  regc,
-  loadc : makeComponents,
+  vuever,
+  
   getRoot,
   getEditFile,
   delayWorker,
+  
+  // Func(name) 全局引入一个组件
+  regc,
+  // Func(arr) 创建一个对象用于加载多个组件到局部对象
+  loadc : makeComponents,
+  // Func(name) 返回组件异步加载工厂函数
+  requirec,
+  // Func(name) 返回组件的加载路径
+  pathc,
 };
 
 
@@ -82,14 +92,24 @@ function deepCopy(obj) {
 function makeComponents(arr) {
   let c = {};
   arr.forEach(n => {
-    c[n] = require('./'+ n +'.vue', 1, 1);
+    c[n] = requirec(n); 
   });
   return c;
 }
 
 
 function regc(name) {
-  Vue.component(name, require('./'+ name +'.vue', 1,1));
+  Vue.component(name, requirec(name));
+}
+
+
+function requirec(name) {
+  return require(pathc(name), 1, 1);
+}
+
+
+function pathc(name) {
+  return './'+ name +'.vue';
 }
 
 

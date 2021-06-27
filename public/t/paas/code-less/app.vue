@@ -41,6 +41,7 @@
   'cl-css-number',
   'cl-input-fmt',
   'cl-add-button',
+  'cl-adj-context-basic',
   
 ].forEach(function(name) {
   Vue.component(name, require('./'+ name +'.vue', 1,1));
