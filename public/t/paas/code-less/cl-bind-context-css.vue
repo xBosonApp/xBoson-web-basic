@@ -7,9 +7,9 @@
         <template #header>
           <span class='header'>绑定上下文样式</span>
         </template>
-        <div v-for='(_, id) in config.bindStyle' class='col'>
-          <div class='name'>{{ getName(id) }}</div>
-          <a-button icon='delete' @click='del(id)' type='danger'></a-button>
+        <div v-for='(use, id) in config.bindStyle' class='col'>
+          <div v-if='use' class='name'>{{ getName(id) }}</div>
+          <a-button v-if='use' icon='delete' @click='del(id)' type='danger'></a-button>
         </div>
         <cl-add-button title='添加绑定' @click='add'/>
       </a-collapse-panel>
@@ -64,7 +64,10 @@ export default {
     },
     
     del(id) {
-      this.$delete(this.bindStyle, id);
+      this.$set(this.config.bindStyle, id, false);
+      this.$nextTick(()=>{
+        this.$delete(this.config.bindStyle, id);
+      });
     },
     
     choose(id) {

@@ -25,6 +25,7 @@
       :visible="showConfig"
       :width='configWidth'
       @close='closeConfig'
+      :closable='!blocked'
       :destroyOnClose='true'
       :maskStyle='maskStyle'
     >
@@ -35,7 +36,11 @@
           <slot name='header' :configData='configData'/>
         </div>
       </template>
-      <component :is='configComponent' v-bind='configData' @change='onChange'/>
+      <component :is='configComponent' 
+        v-bind='configData' 
+        @change='onChange' 
+        @close='closeConfig' 
+        @blockClose='blockClose'/>
     </a-drawer>
   </div>
 </template>
@@ -76,6 +81,7 @@ export default {
       configData  : null,
       name        : '',
       showAddTip  : false,
+      blocked     : false,
     };
   },
   
@@ -141,12 +147,17 @@ export default {
     },
     
     closeConfig() {
+      if (this.blocked) return;
       this.showConfig = false;
       this.$emit('close-config', this.configData);
     },
     
     onChange(d) {
       this.$emit('change', d);
+    },
+    
+    blockClose(blocked) {
+      this.blocked = blocked;
     },
   },
 }
