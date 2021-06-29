@@ -100,6 +100,7 @@ export default {
       };
       this.initItem(opt);
       this.$set(this.value, this.pid + num, opt);
+      this.$emit('change');
     },
     
     remove(id) {
@@ -136,6 +137,7 @@ export default {
         opt.name = this.pname + opt.num;
       }
       this.message = {};
+      this.$emit('change');
     },
     
     nextid() {

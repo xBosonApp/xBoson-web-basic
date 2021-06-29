@@ -90,6 +90,7 @@ export default {
         this.$emit('blockClose', false);
         this.$emit('close');
       }
+      this.$emit('change');
     },
     
     checkNameRule() {
@@ -185,6 +186,7 @@ export default {
           this.opt.code = c +'\n\n'+ this.opt.code;
         }
       }
+      this.$emit('change');
     },
     
     setInsertHandle(h) {

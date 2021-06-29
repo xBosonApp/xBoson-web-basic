@@ -10,6 +10,7 @@
     configComponent='cl-var-config'
     :initItem='initItem'
     :createConfigData='createConfigData'
+    @change='onChange'
   >
   </cl-adj-context-basic>
 </div>
@@ -27,6 +28,10 @@ export default {
     
     createConfigData(opt, id) {
       return { id, opt };
+    },
+    
+    onChange() {
+      this.$store.commit('setEditFileChanged', true);
     },
   },
 }
