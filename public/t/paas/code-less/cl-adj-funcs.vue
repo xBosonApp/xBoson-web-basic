@@ -8,6 +8,7 @@
     pid='fc$'
     configTitle='函数'
     configComponent='cl-func-config'
+    configWidth='80%'
     :initItem='initItem'
     :createConfigData='createConfigData'
   >
@@ -16,14 +17,17 @@
 </template>
 
 <script>
+const tool = require("./tool.js");
+
 export default {
   props: ['value'],
   
   methods: {
     initItem(opt) {
       opt.innerRef = null;
-      opt.code = null;
       opt.type = 'code';
+      opt.params = [];
+      opt.code = tool.generateFunctionComments(opt) +'\n\n';
     },
     
     createConfigData(opt, id) {

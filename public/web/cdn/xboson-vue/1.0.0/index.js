@@ -11,6 +11,7 @@
 const componentNames = [
   'x-menu2',
   'x-api',
+  'x-ace',
 ];
 
 if (!window.Vue) {

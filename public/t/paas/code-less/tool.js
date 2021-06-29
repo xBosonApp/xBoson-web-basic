@@ -3,7 +3,7 @@ const store = require("./store.js");
 const requirePlugin = {};
 const vuever = parseInt(/([0-9]+)\..+/.exec(Vue.version));
 
-module.exports = {
+module.exports = Object.freeze({
   api,
   apiurl,
   filesort,
@@ -11,6 +11,7 @@ module.exports = {
   deepCopy,
   makeComponents,
   vuever,
+  generateFunctionComments,
   
   getRoot,
   getEditFile,
@@ -24,7 +25,7 @@ module.exports = {
   requirec,
   // Func(name) 返回组件的加载路径
   pathc,
-};
+});
 
 
 function api(mod, name, params, cb) {
@@ -90,10 +91,11 @@ function deepCopy(obj) {
 
 
 function makeComponents(arr) {
+  let a = Array.isArray(arr) ? arr : arguments;
   let c = {};
-  arr.forEach(n => {
-    c[n] = requirec(n); 
-  });
+  for (let i=0; i<a.length; ++i) {
+    c[a[i]] = requirec(a[i]);
+  }
   return c;
 }
 
@@ -151,4 +153,26 @@ function delayWorker(fn, time) {
       }
     }, time);
   };
+}
+
+
+function generateFunctionComments(opt) {
+  let o = [
+    "// XAutoG:::[\n",
+    '// Function ', opt.name,'(',
+  ];
+  
+  if (opt.params.length) {
+    opt.params.forEach(p=>{
+      o.push(p.pn, ', ');
+    });
+    o.pop();
+  }
+  
+  o.push(')\n');
+  opt.params.forEach(p=>{
+    o.push('//   ', p.pn, '\t- ', p.name, '\n');
+  });
+  o.push('// ]:::')
+  return o.join('');
 }

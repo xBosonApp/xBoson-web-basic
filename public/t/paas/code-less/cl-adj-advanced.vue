@@ -2,13 +2,24 @@
 
 <template>
   <a-collapse :bordered="false" v-if='getFile() != null'>
-    <a-collapse-panel key="0" header="上下文样式">
+    <a-collapse-panel key="0">
+      <template v-slot:header><span class='title'>
+        上下文样式
+      </span></template>
       <cl-adj-context-style :value='getRoot().styles'/>
     </a-collapse-panel>
-    <a-collapse-panel key="1" header="变量定义">
+    
+    <a-collapse-panel key="1">
+      <template v-slot:header><span class='title'>
+        变量定义
+      </span></template>
       <cl-adj-vars :value='getRoot().vars'/>
     </a-collapse-panel>
-    <a-collapse-panel key="2" header="函数定义">
+    
+    <a-collapse-panel key="2">
+      <template v-slot:header><span class='title'>
+        函数定义
+      </span></template>
       <cl-adj-funcs :value='getRoot().funcs'/>
     </a-collapse-panel>
   </a-collapse>
@@ -44,4 +55,7 @@ export default {
 </script>
 
 <style scoped>
+.title {
+  color: brown;
+}
 </style>

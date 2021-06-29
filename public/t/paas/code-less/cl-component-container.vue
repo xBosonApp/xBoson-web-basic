@@ -55,7 +55,7 @@ export default {
           this.$set(this.bindclass, item.id, cl);
         }
         for (let n in item.bindStyle) {
-          cl[n] = true;
+          cl[n] = item.bindStyle[n];
         }
       }
       return this.bindclass;
