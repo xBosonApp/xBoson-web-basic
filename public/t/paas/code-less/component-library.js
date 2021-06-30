@@ -4,7 +4,7 @@
 let componentLibrary = [];
 // 扁平存放
 let componentAll = {};
-// 精简存放
+// {分组名: []}
 let componentLite = [];
 
 
@@ -20,8 +20,8 @@ function loadLib(title, list) {
   
   componentLite.push({
     title, 
-    list : toLite(list),
-  })
+    group : toLite(list),
+  });
   
   for (let n in list) {
     if (componentAll[n]) {
@@ -33,14 +33,23 @@ function loadLib(title, list) {
 
 
 function toLite(list) {
-  let lite = [];
+  let group = {};
+  
   for (let i in list) {
-    lite.push({
+    let item = list[i];
+    let gname = item.groupName || '通用';
+    
+    let g = group[gname];
+    if (!g) {
+      g = group[gname] = [];
+    }
+    
+    g.push({
       id : i,
-      txt: list[i].txt,
+      txt: item.txt,
     });
   }
-  return lite;
+  return group;
 }
 
 

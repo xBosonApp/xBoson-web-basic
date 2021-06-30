@@ -3,12 +3,25 @@
 <template>
   <a-collapse class='components' :bordered="false">
     
-    <a-collapse-panel v-for="(c, i) in componentLibrary" :key="i" :header="c.title">
+    <a-collapse-panel v-for="(c, i) in libs" :key="i" :header="c.title">
       
-      <draggable :group="{ name: 'ui-component', pull: 'clone', put: false }" 
-                v-model="c.list" chosenClass="clst-chosen" ghostClass='clst-ghost' @start='start'>
-        <span class='component' v-for="(e, idx) in c.list" :id.prop='e.id'>{{e.txt}}</span>
-      </draggable>
+      <div v-for='(list, gname) in c.group' :key='gname'>
+        <div class='cl-classify'>{{gname}}</div>
+        
+        <draggable 
+          :group="{ name: 'ui-component', pull: 'clone', put: false }" 
+          :value="list"
+          chosenClass="clst-chosen" 
+          ghostClass='clst-ghost' 
+          @start='start'
+        >
+          <span class='component' 
+            v-for="(e, idx) in list" 
+            :key='idx'
+            :id.prop='e.id'
+          >{{e.txt}}</span>
+        </draggable>
+      </div>
       
     </a-collapse-panel>
     
@@ -23,7 +36,7 @@ loadLib('基础组件', './basic.js');
 export default {
   data() {
     let data = { 
-      componentLibrary: clib.getLibrary(),
+      libs: clib.getLibrary(),
     };
     return data;
   },

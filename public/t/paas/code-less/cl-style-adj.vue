@@ -102,10 +102,10 @@ const config = [
   
   { title: '网格布局',
     list: [
-      ['classify','容器', 8],
+      ['cl-classify','容器', 8],
       ['row-gap', '行间隙(容器)', 3, 0],
       ['column-gap', '列间隙', 3, 0],
-      ['classify','元素', 8],
+      ['cl-classify','元素', 8],
       ['grid-row-start', '起始行网格线位置', 2, 'auto', gridAreaVal],
       ['grid-row-end', '结束行网格线位置', 2, 'auto', gridAreaVal],
       ['grid-column-start', '起始列网格线位置', 2, 'auto', gridAreaVal],
@@ -210,11 +210,7 @@ hr {
 .tip {
   font-size: smaller; color: #aaa; float: right;
 }
-.classify {
-  background-color: #837ce5; border-right: 160px solid #e0defd; color: #fff; padding: 3px;
-  word-break: keep-all; margin-top: 5px; display: block;
-}
-.classify .tip {
+.cl-classify .tip {
   display: none;
 }
 </style>

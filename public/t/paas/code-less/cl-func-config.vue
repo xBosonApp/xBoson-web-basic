@@ -65,6 +65,7 @@ export default {
   
   mounted() {
     this.$emit('blockClose', true);
+    this.$emit('change');
   },
   
   data() {
@@ -90,7 +91,7 @@ export default {
         this.$emit('blockClose', false);
         this.$emit('close');
       }
-      this.$emit('change');
+      // this.$emit('change');
     },
     
     checkNameRule() {
@@ -129,7 +130,7 @@ export default {
         //   this.codeErrMsg = err.stack;
         // }
         this.codeErrMsg = '函数语法错误\n'+ err.message;
-        console.log(err);
+        console.error(err);
       }
     },
     
@@ -186,7 +187,7 @@ export default {
           this.opt.code = c +'\n\n'+ this.opt.code;
         }
       }
-      this.$emit('change');
+      // this.$emit('change');
     },
     
     setInsertHandle(h) {

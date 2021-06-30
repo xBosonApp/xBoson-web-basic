@@ -1,12 +1,14 @@
 module.exports = {
   bc001: {
     txt:'文本', 
-    component:'span'
+    component:'span',
+    groupName: '文本',
   },
   
   bc002: {
     txt:'标签', 
     component:'label',
+    groupName: '文本',
     style: {
       'display': 'inline-flex',
       'align-items': 'center',
@@ -16,42 +18,50 @@ module.exports = {
   
   bc003: {
     txt:'段落', 
-    component:'p'
+    component:'p',
+    groupName: '文本',
   },
   
   bc004: {
     txt:'标题1', 
-    component:'h1'
+    component:'h1',
+    groupName: '文本',
   },
   
   bc004h2: {
     txt:'标题2', 
-    component:'h2'
+    component:'h2',
+    groupName: '文本',
   },
   
   bc004h3: {
     txt:'标题3', 
-    component:'h3'
+    component:'h3',
+    groupName: '文本',
   },
   
   bc004h4: {
     txt:'标题4', 
-    component:'h4'
+    component:'h4',
+    groupName: '文本',
   },
   
   bc004h5: {
     txt:'标题5', 
-    component:'h5'
+    component:'h5',
+    groupName: '文本',
   },
   
   bc004h6: {
     txt:'标题6', 
-    component:'h6'
+    component:'h6',
+    groupName: '文本',
   },
   
   bc005: {
     txt:'按钮', 
     component:'a-button',
+    groupName: '表单',
     props: {
       disabled: {
         desc: '按钮失效状态',
@@ -79,6 +89,7 @@ module.exports = {
   bc006: {
     txt:'输入框', 
     component:'a-input',
+    groupName: '表单',
     props: {
       placeholder: {
         desc: '提示',
@@ -92,16 +103,19 @@ module.exports = {
     txt:'分割线',
     component:'hr',
     removeTxt: true,
+    groupName: '布局',
   },
   
   bc008: {
     txt: '格式化文本',
     component: 'pre',
+    groupName: '文本',
   },
   
   bc009: {
     txt: '网格布局',
     component: 'div',
+    groupName: '布局',
     helpTag: 'cl-grid',
     isContainer: true,
     removeTxt: true,
