@@ -72,7 +72,7 @@ export default {
     },
     
     add(ev) {
-      let i = ev.newIndex;
+      const i = ev.newIndex;
       let tplcfg = this.nestedList[i];
       
       if (tplcfg == null) {
@@ -82,35 +82,34 @@ export default {
       
       if (tplcfg.isInstance) {
         // Draggable 有时发送错位的索引: 把对象插入数组位置1上, 返回的索引为2
-        let needInstantiated;
+        // throw new Error("bad index");
+      
         for (let x=0; x<this.nestedList.length; ++x) {
-          if (!this.nestedList[x].isInstance) {
-            needInstantiated = this.nestedList.splice(x, 1);
-            break;
+          let item = this.nestedList[x];
+          if (!item.isInstance) {
+            let instance = this.initComonent(item.id, x);
+            if (x != i) {
+              this.nestedList.splice(x, 1);
+              this.nestedList.splice(i, 0, instance);
+            }
           }
         }
-        
-        if (needInstantiated) {
-          tplcfg = needInstantiated[0];
-        } else {
-          // 如果把一个实例从一个容器移动到另一个容器上, 发生这种情况
-          // console.warn('Draggable bad index', i, 'cannot fix', tplcfg);
-          // this.nestedList.forEach((c, i)=>{
-          //   console.log(i, c.id);
-          // });
-          return;
-        }
+      } else {
+        this.initComonent(tplcfg.id, i);
       }
-      
-      let component = clib.getComponent(tplcfg.id);
+    },
+    
+    initComonent(id, index) {
+      let component = clib.getComponent(id);
       if (component.plugins) {
         tool.loadPlugins(component.plugins);
       }
       
       let instance = crole.createInstance(this.rootConfig, component);
-      this.$set(this.nestedList, i, instance);
+      this.$set(this.nestedList, index, instance);
       this.$store.commit('setEditFileChanged', true);
-      this.setAdjRef(i);
+      this.setAdjRef(index);
+      return instance;
     },
     
     chooseSelf(ev) {
