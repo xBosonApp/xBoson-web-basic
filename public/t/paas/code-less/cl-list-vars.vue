@@ -2,7 +2,7 @@
 
 <template>
   <div style='display: grid; grid-template-columns: 1fr; gap: 2px'>
-    <a-button v-for='(s, id) in getList()' @click='choose(id)'>{{s.name}}</a-button>
+    <a-button v-for='(s, id) in getList()' @click='choose(id, s)'>{{s.name}}</a-button>
   </div>
 </template>
 
@@ -11,8 +11,8 @@ const tool = require("./tool.js");
 
 export default {
   methods: {
-    choose(id) {
-      this.$emit('choose', id);
+    choose(id, cfg) {
+      this.$emit('choose', id, cfg);
     },
     
     getList() {

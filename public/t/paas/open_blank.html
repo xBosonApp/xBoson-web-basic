@@ -2,6 +2,8 @@
   在新页面中打开, 或<a href='#' class='open_blank'>点击打开</a>
   <script>
   (function() {
+    const base = zy.g.host.ui + (zy.debug ? '/t/' : '/ui/');
+    
     open();
     $('.open_blank').click(open);
 
@@ -10,6 +12,13 @@
       var i = location.href.indexOf(find);
       if (i >= 0) {
         var page = location.href.substring(i + find.length);
+        if (page.startsWith('http:') || page.startsWith('https:')) {
+          //.. donothing
+        } else if (page[0] == '/') {
+          //.. donothing
+        } else {
+          page = base + page;
+        }
         window.open(page, "_blank");
       }
     }

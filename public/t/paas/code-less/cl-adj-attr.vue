@@ -32,17 +32,24 @@
     <space/>  
     
     <div v-for='(p, name) in getComponentProps()'>
-      <div>{{p.desc}}</div>
-      <component :is='getComponentName(p)' 
-          v-bind='getOption(name)' 
-          v-model='config.props[name]' 
-          @change='fileChanged'/>
+      <component :is="getGasketName(p)"
+        :name='name'
+        :desc='p.desc'
+        :componentName='getComponentName(p)'
+        :bind='getOption(name)'
+        :props='config.props'
+        :propsConfig='config.propsConfig'
+        @change='fileChanged'
+      />
     </div>
   </div>
 </template>
 
 <script>
 const clib = require("./component-library.js");
+const tool = require("./tool.js");
+
+const components = tool.loadc('cl-icon-select', 'cl-attr-dynamic', 'cl-attr-fixed');
 const compMap = {
   1:'a-input',
   2:'a-input-number',
@@ -54,14 +61,23 @@ const compMap = {
 
 export default {
   props: ['config'],
+  components,
   
   methods: {
     getComponentName(p) {
       if (p.type == 7) {
-        if (!p.component) throw new Error("component attribute null");
+        if (!p.component) throw new Error("component is null");
         return p.component;
       }
       return compMap[p.type];
+    },
+    
+    getGasketName(p) {
+      // 设计时属性一定是常量
+      if (p.propsConfig && p.propsConfig.type == 'design') {
+        return 'cl-attr-fixed';
+      }
+      return p.canDynamic ? 'cl-attr-dynamic' : 'cl-attr-fixed';
     },
     
     getComponentProps() {

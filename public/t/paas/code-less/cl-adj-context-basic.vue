@@ -178,7 +178,4 @@ export default {
 .title {
   font-size: 18px; margin-right: 8px;
 }
-.name {
-  display: inline-block; text-decoration: underline; font-size: large; color: blue;
-}
 </style>

@@ -108,17 +108,3 @@ console.log("上海竹呗信息技术有限公司, 版权所有 http://xboson.ne
   }
 }
 </style>
-
-<style>
-.note {
-  color: #ccc; 
-}
-.ant-collapse-borderless {
-  background-color: #fff!important;
-}
-.cl-classify {
-  background-color: #837ce5; /*border-right: 160px solid #e0defd;*/ color: #fff; padding: 3px 9px;
-  word-break: keep-all; margin-top: 5px; display: block; border-radius: 4px;
-  background-image: linear-gradient(to right,#837ce5, #837ce5, #e0defd ,#fff);
-}
-</style>

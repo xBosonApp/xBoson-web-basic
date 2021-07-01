@@ -95,6 +95,7 @@ module.exports = {
         desc: '提示',
         type: 1,
         def: '输入文本',
+        canDynamic: true,
       },
     }
   },

@@ -8,7 +8,7 @@
           <span class='header'>绑定上下文样式</span>
         </template>
         <div v-for='(use, id) in config.bindStyle' class='col'>
-          <div v-if='use' class='name'>{{ getName(id) }}</div>
+          <div v-if='use' class='sname'>{{ getName(id) }}</div>
           <a-button v-if='use' icon='delete' @click='del(id)' type='danger'></a-button>
         </div>
         <cl-add-button title='添加绑定' @click='add'/>
@@ -86,8 +86,9 @@ export default {
 .col {
   display: grid; grid-template-columns: 1fr 32px; margin: 2px 0;
 }
-.name {
-  border-bottom: 1px solid #ccc; padding-top: 8px;
+.sname {
+  border: 1px solid #ccc; border-width: 1px 0 1px 1px; border-radius: 4px 0 0 4px;
+  padding: 5px 0 0 10px; 
 }
 .header {
   color: #0000ba;

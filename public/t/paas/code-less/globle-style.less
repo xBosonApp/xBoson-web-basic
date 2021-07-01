@@ -1,0 +1,39 @@
+/* Create By xBoson System == http://xboson.net */
+.note {
+  color: #ccc; 
+}
+
+.ant-collapse-borderless {
+  background-color: #fff!important;
+}
+
+// 这是一个标题样式, 用于将不同的功能分类
+.cl-classify {
+  background-color: #837ce5; /*border-right: 160px solid #e0defd;*/ color: #fff; padding: 3px 9px;
+  word-break: keep-all; margin-top: 5px; display: block; border-radius: 4px;
+  background-image: linear-gradient(to right,#837ce5, #837ce5, #e0defd ,#fff);
+}
+
+// 高亮名字, 通常用在标题中突出名字, 同时绑定一个动画, 如: 'animate__animated animate__bounce'
+.name {
+  display: inline-block; text-decoration: underline; font-size: large; color: blue;
+}
+
+// 多个元素组成一行, 合并边框, 默认3列, 边框颜色需额外设置
+.items-group {
+  display: grid; grid-template-columns: 1fr 3fr auto; gap: 1px;
+  
+  @radius: 4px;
+  
+  .i {
+    border-width: 1px 0; border-style: solid;
+  }
+  .i:first-child {
+    border-width: 1px 0 1px 1px; border-radius: @radius 0 0 @radius;
+  }
+  .i:last-child {
+    border-width: 1px 1px 1px 0; border-radius: 0 @radius @radius 0;
+  }
+}
+
+/* 上海竹呗信息技术有限公司 */
