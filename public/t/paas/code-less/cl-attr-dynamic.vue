@@ -4,7 +4,7 @@
   <div class='main'>
     <div>{{desc}}</div>
     
-    <a-switch v-model='isdyn' size="small" @change='onChange'>
+    <a-switch v-model='isdyn' size="small" @change='onChange' v-if='!isEventBind'>
       <span slot="checkedChildren">动态</span>
       <span slot="unCheckedChildren">固定</span>
     </a-switch>
@@ -46,7 +46,8 @@
       
       <a-form-item label="属性类型">
         <a-radio-group v-model="config.varType" @change="onChange">
-          <a-radio-button v-for='(n, key) in nameMap' :value="key" :key='key'>
+          <a-radio-button v-for='(n, key) in nameMap' :value="key" :key='key' 
+            v-if='n.dnotEvent ? (!isEventBind) : true'>
             {{n.name}}
           </a-radio-button>
         </a-radio-group>
@@ -72,18 +73,51 @@
           >
             选择{{ nameMap[config.varType].name }}
           </a-button>
+          
+          <a-button icon="question"
+            @click='showExprHelp = !showExprHelp' v-if='typeConfig.exprHelp'/>
         </a-input-group>
       </a-form-item>
       
-      <a-form-item label='实参列表' v-if='typeConfig.needParams'>
-        <a-input v-for='(cp, i) in config.callParams' v-model='cp.v'>
-          <template v-slot:addonBefore>
-            <span class='cpname'>{{ cp.n }}</span>
-          </template>
-        </a-input>
+      <section v-if='typeConfig.needParams'>
+        <div class='g2'>
+          <label style='color:black'>实参列表</label>
+          <a-button shape="circle" size='small' icon="question" 
+            @click='showExprHelp = !showExprHelp' class='fright'/>
+        </div>
+        
+        <div v-if='funcParams != null' class='paramslist'>
+          <a-input 
+            v-for='(fp, i) in funcParams' 
+            :value='getCallParams(i).v' 
+            @input='setCallParams($event, i)'
+          >
+            <template v-slot:addonBefore>
+              <span class='cpname'>{{ fp.name }}</span>
+            </template>
+          </a-input>
+        </div>
+        <div v-else class='note' style='padding-left: 100px'>
+          无参数
+        </div>
+      </section>
+      
+      <a-form-item>
+        <a-button type='primary' @click='ok'>确定</a-button>
       </a-form-item>
       
-      <a-button type='primary' @click='ok'>确定</a-button>
+<pre v-show='showExprHelp'>
+<h4>JavaScript 表达式:</h4>
+  数字: <code>0</code> <code>99.9</code>
+  字符串(必须有单引号): <code>'abc'</code>
+  上下文变量引用: <code>i</code> <code>v[i].name</code>
+  函数调用: <code>fn()</code> <code>fn(1, "abc")</code>
+  函数引用: <code>fn</code>
+  计算: <code>a+b+1 &gt; 0</code>
+  更多 js 语法可参考 <a :href='wikiurl' target='_blank'>wiki</a>.
+  
+  <a-button @click='showExprHelp = false' size='small'>关闭</a-button>
+</pre>
       
       <a-drawer
         title='选择'
@@ -103,9 +137,11 @@
 
 <script>
 const tool = require("./tool.js");
+const clib = require("./component-library.js");
+const role = require("./component-role.js");
 
 export default {
-  props: ['name', 'desc', 'componentName', 'bind', 'props', 'propsConfig'],
+  props: ['name', 'desc', 'componentName', 'bind', 'props', 'propsConfig', 'isEventBind', 'cid'],
   
   components: tool.loadc('cl-list-vars', 'cl-list-funcs'),
   
@@ -137,15 +173,34 @@ export default {
       }
     },
     
+    funcParams() {
+      let f = tool.getRoot().funcs[this.config.ref];
+      if (f) {
+        return f.params;
+      }
+    },
+    
     config() {
+      if (!this.propsConfig[this.name]) {
+        let comp = clib.getComponent(this.cid);
+        if (comp) {
+          let pc = role.createPropsConfig(this.name, comp);
+          this.$set(this.propsConfig, this.name, pc);
+          this.$set(this.props, this.name, null);
+        } else {
+          throw new Error("component not exits, id:"+ this.cid);
+        }
+      }
       return this.propsConfig[this.name];
     },
     
     isdyn: {
       get() {
+        if (this.isEventBind) return true;
         return this.config.varType != 'constant';
       },
       set(v) {
+        if (this.isEventBind) return;
         if (!v) {
           this.config.varType = 'constant';
         } else {
@@ -157,16 +212,21 @@ export default {
   
   data() {
     return {
+      wikiurl : xv.ctx_prefix + "/face/web/wiki-api/index.html#docs/javascript-doc.htm",
+      showExprHelp : false,
       openEdit : false,
       openSelect : false,
       root : tool.getRoot(),
       nameMap : {
-        'constant'  : { name : '常量', hide:true },
+        'constant'  : { name : '常量', 
+            hide      : true,
+            dnotEvent : true },
         'variable'  : { name : '变量', 
             readonly  : true, 
             component : 'cl-list-vars', 
             choose    : this.selectRef,
-            disp      : this.dispVar },
+            disp      : this.dispVar,
+            dnotEvent : true},
         'function'  : { name : '函数引用', 
             readonly  : true, 
             component : 'cl-list-funcs',
@@ -178,7 +238,8 @@ export default {
             component : 'cl-list-funcs',
             choose    : this.selectCall,
             disp      : this.dispFunc },
-        'expr'      : { name : '表达式' },
+        'expr'      : { name : '表达式', 
+            exprHelp  : true },
       },
     };
   },
@@ -206,26 +267,13 @@ export default {
       
       if (!this.config.callParams) {
         this.$set(this.config, 'callParams', []);
-      } else {
-        this.config.callParams.splice(0);
       }
-        
-      cfg.params.forEach(p=>{
-        this.config.callParams.push({
-          t: 0, v: null, n: p.name,
-        });  
-      });
     },
     
     dispFunc(id) {
       let f = this.root.funcs[id];
       if (f) {
         return f.name;
-      }
-      //TODO: 这里逻辑不通
-      if (this.config.callParams && this.config.callParams.length) {
-        this.config.callParams.splice(0);
-        console.log('1');
       }
       this.config.ref = null;
       return null;
@@ -239,12 +287,23 @@ export default {
       this.config.ref = null;
       return null;
     },
+    
+    setCallParams(e, i) {
+      this.config.callParams[i].v = e.target.value;
+    },
+    
+    getCallParams(i) {
+      if (!this.config.callParams[i]) {
+        this.$set(this.config.callParams, i, {t:0, v:null, n:null});
+      }
+      return this.config.callParams[i];
+    },
   },
 }
 </script>
 
 <style scoped>
-.main {
+.main, .g2 {
   display: grid; grid-template-columns: 1fr auto;
 }
 .full {
@@ -267,5 +326,14 @@ export default {
 }
 .cpname {
   min-width: 100px; display: block;
+}
+.paramslist>* {
+  margin-top: 3px;
+}
+h4 {
+  border-bottom: 1px dashed #eee;
+}
+section {
+  margin-bottom: 24px;
 }
 </style>

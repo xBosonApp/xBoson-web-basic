@@ -2,6 +2,8 @@ const tool = require('./tool.js');
 
 module.exports = {
   createInstance,
+  createPropsConfig,
+  createProps,
 };
 
 
@@ -33,13 +35,8 @@ function marginPlugin(root, comp) {
 // 创建组建实例对象
 //
 function newInstance(root, component) {
-  let nestedList = component.isContainer && [];
   // let containerStyle = component.isContainer && component.containerStyle;
-  let props = {
-    style: component.style || {},
-    nestedList,
-  };
-  
+  let props = createProps(component);
   let propsConfig = {
     style       : { type:'design' },
     nestedList  : { type:'design' },
@@ -62,6 +59,28 @@ function newInstance(root, component) {
 }
 
 
+function createProps(component) {
+  let nestedList = component.isContainer && [];
+  // let containerStyle = component.isContainer && component.containerStyle;
+  let props = {
+    style: component.style || {},
+    nestedList,
+  };
+  return props;
+}
+
+
+function createPropsConfig(name, component) {
+  return tool.exts({
+    type        : 'attribute',
+    varType     : 'constant', 
+    ref         : null,
+    expr        : null,
+    callParams  : [],
+  }, component.props[name].propsConfig);
+}
+
+
 //
 // 用指定的组件初始化属性实例列表
 // 属性:
@@ -75,13 +94,7 @@ function initProps(c, cfg) {
   for (let n in c.props) {
     let p = c.props[n];
     if (!cfg.propsConfig[n]) {
-      cfg.propsConfig[n] = p.propsConfig || {
-        type        : 'attribute',
-        varType     : 'constant', 
-        ref         : null,
-        expr        : null,
-        callParams  : [],
-      };
+      cfg.propsConfig[n] = createPropsConfig(n, c);
     }
     
     if (cfg.props[n] !== undefined) continue; 

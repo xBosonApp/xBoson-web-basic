@@ -32,13 +32,15 @@
     <space/>  
     
     <div v-for='(p, name) in getComponentProps()'>
-      <component :is="getGasketName(p)"
+      <component :is="getGasketName(p, name)"
         :name='name'
         :desc='p.desc'
         :componentName='getComponentName(p)'
         :bind='getOption(name)'
         :props='config.props'
         :propsConfig='config.propsConfig'
+        :cid='config.cid'
+        :isEventBind='isEventBind(p)'
         @change='fileChanged'
       />
     </div>
@@ -72,10 +74,16 @@ export default {
       return compMap[p.type];
     },
     
-    getGasketName(p) {
-      // 设计时属性一定是常量
-      if (p.propsConfig && p.propsConfig.type == 'design') {
-        return 'cl-attr-fixed';
+    getGasketName(p, name) {
+      if (p.propsConfig) {
+        switch (p.propsConfig.type) {
+        // 设计时属性一定是常量
+        case 'design':
+          return 'cl-attr-fixed';
+          
+        case 'event':
+          return 'cl-attr-dynamic';
+        }
       }
       return p.canDynamic ? 'cl-attr-dynamic' : 'cl-attr-fixed';
     },
@@ -103,7 +111,7 @@ export default {
     getOption(name) {
       let p = this.getComponent().props[name];
       // 1:字符串, 2:整数, 3:选项select属性, 4:字符串,并且带有select选项, 
-      // 5:来自变量, 6:图标选择, 7:自定义插件
+      // 5:来自变量, 6:图标选择, 7:自定义插件, 8:事件专用
       switch (p.type) {
         case 1:
           return { maxLength: p.max };
@@ -120,6 +128,8 @@ export default {
           return { style: 'width: 100%' };
         case 7:
           return p.props || {};
+        case 8:
+          return { isEvent : true };
         default:
           throw new Error("无效的值类型"+ p.type);
       }
@@ -132,6 +142,10 @@ export default {
     
     fileChanged() {
       this.$store.commit('setEditFileChanged', true);
+    },
+    
+    isEventBind(p) {
+      return (p.type == 8 || (p.propsConfig && p.propsConfig.type == "event"));
     },
   },
 }

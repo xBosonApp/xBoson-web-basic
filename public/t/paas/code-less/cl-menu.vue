@@ -186,7 +186,7 @@ export default {
       if (fid) {
         this.$notification.warning({
           message: '退出',
-          description: '有文件尚未保存: '+ this.editorFiles[id].name,
+          description: '有文件尚未保存: '+ this.editorFiles[fid].name,
         });
         return;
       }

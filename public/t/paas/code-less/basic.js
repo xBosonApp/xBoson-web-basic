@@ -82,7 +82,12 @@ module.exports = {
         desc: '显示加载中',
         type: 3,
         select:{"加载中":true, '正常':false},
-      }
+      },
+      click: {
+        desc: '左键单击事件',
+        type: 8,
+        propsConfig: {type:'event'},
+      },
     }
   },
   

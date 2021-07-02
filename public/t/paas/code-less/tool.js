@@ -16,6 +16,7 @@ module.exports = Object.freeze({
   getRoot,
   getEditFile,
   delayWorker,
+  exts,
   
   // Func(name) 全局引入一个组件
   regc,
@@ -175,4 +176,14 @@ function generateFunctionComments(opt) {
   });
   o.push('// ]:::')
   return o.join('');
+}
+
+// 抽取 opt 属性覆盖到 def, 返回 def
+function exts(def, opt) {
+  if (opt) {
+    for (let n in opt) {
+      def[n] = opt[n];
+    }
+  }
+  return def;
 }
