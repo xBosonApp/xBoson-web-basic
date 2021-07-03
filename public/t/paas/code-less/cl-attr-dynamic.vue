@@ -105,7 +105,7 @@
         </div>
       </section>
       
-      <a-form-item label='修饰符' v-if='isEventBind'>
+      <a-form-item label='事件修饰符' v-if='isEventBind'>
         <cl-attr-dyn-modifiers
           :modifiers='config.modifiers'/>
       </a-form-item>
@@ -114,18 +114,7 @@
         <a-button type='primary' @click='ok'>确定</a-button>
       </a-form-item>
       
-<pre v-show='showExprHelp'>
-<h4>JavaScript 表达式:</h4>
-  数字: <code>0</code> <code>99.9</code>
-  字符串(必须有单引号): <code>'abc'</code>
-  上下文变量引用: <code>i</code> <code>v[i].name</code>
-  函数调用: <code>fn()</code> <code>fn(1, "abc")</code>
-  函数引用: <code>fn</code>
-  计算: <code>a+b+1 &gt; 0</code>
-  更多 js 语法可参考 <a :href='wikiurl' target='_blank'>wiki</a>.
-  
-  <a-button @click='showExprHelp = false' size='small'>关闭</a-button>
-</pre>
+      <cl-expr-help v-if='showExprHelp' @close='showExprHelp = false'/>
       
       <a-drawer
         title='选择'
@@ -151,7 +140,7 @@ const role = require("./component-role.js");
 export default {
   props: ['name', 'desc', 'componentName', 'bind', 'props', 'propsConfig', 'isEventBind', 'cid'],
   
-  components: tool.loadc('cl-list-vars', 'cl-list-funcs', 'cl-attr-dyn-modifiers'),
+  components: tool.loadc('cl-list-vars', 'cl-list-funcs', 'cl-attr-dyn-modifiers', 'cl-expr-help'),
   
   computed: {
     typeConfig() {
