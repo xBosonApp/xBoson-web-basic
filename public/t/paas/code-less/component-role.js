@@ -35,9 +35,9 @@ function marginPlugin(root, comp) {
 // 创建组建实例对象
 //
 function newInstance(root, component) {
-  // let containerStyle = component.isContainer && component.containerStyle;
   let props = createProps(component);
   let propsConfig = {
+    // 这是核心内置属性
     style       : { type:'design' },
     nestedList  : { type:'design' },
   };

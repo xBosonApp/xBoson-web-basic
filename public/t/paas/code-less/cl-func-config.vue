@@ -147,22 +147,22 @@ export default {
       this.upComments();
     },
     
-    addVar(id) {
-      let n = ' this.'+ id;
-      this.insertHandle(n);
+    addVar(id, v) {
+      let n = ['this.', id, ' /* ', v.name, ' */'];
+      this.insertHandle(n.join(''));
       this.showVarSelect = false;
     },
     
     addFunc(id, f) {
       let len = f.params.length;
-      let n = [' this.', id, '('];
+      let n = ['this.', id, '('];
       if (len) {
         for (let i=0; i<len; ++i) {
           n.push('null', ', ');
         }
         n.pop();
       }
-      n.push(') // ', f.name);
+      n.push(') /* ', f.name);
       
       if (len) {
         n.push('(');
@@ -172,6 +172,7 @@ export default {
         n.pop();
         n.push(')');
       }
+      n.push(' */');
       this.insertHandle(n.join(''));
       this.showFuncSelect = false;
     },

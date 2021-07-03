@@ -1,27 +1,42 @@
 <!-- Create By xBoson System -->
 
 <template>
-  <a-collapse :bordered="false" v-if='getFile() != null'>
+  <a-collapse :bordered="false" v-if='file != null'>
     <a-collapse-panel key="0">
       <template v-slot:header><span class='title'>
         上下文样式
       </span></template>
-      <cl-adj-context-style :value='getRoot().styles'/>
+      <cl-adj-context-style :value='root.styles'/>
     </a-collapse-panel>
     
     <a-collapse-panel key="1">
       <template v-slot:header><span class='title'>
         变量定义
       </span></template>
-      <cl-adj-vars :value='getRoot().vars'/>
+      <cl-adj-vars :value='root.vars'/>
     </a-collapse-panel>
     
     <a-collapse-panel key="2">
       <template v-slot:header><span class='title'>
         函数定义
       </span></template>
-      <cl-adj-funcs :value='getRoot().funcs'/>
+      <cl-adj-funcs :value='root.funcs'/>
     </a-collapse-panel>
+    
+    <a-collapse-panel key="3">
+      <template v-slot:header><span class='title2'>
+        初始化时函数调用列表
+      </span></template>
+      <cl-adv-functions-queue :arr='root.mounted' :funcs='root.funcs' name='mounted'/>
+    </a-collapse-panel>  
+  
+    <a-collapse-panel key="4">
+      <template v-slot:header><span class='title2'>
+        销毁时函数调用列表
+      </span></template>
+      <cl-adv-functions-queue :arr='root.beforeDestroy' :funcs='root.funcs' name='beforeDestroy'/>
+    </a-collapse-panel>  
+    
   </a-collapse>
 </template>
 
@@ -33,7 +48,20 @@ export default {
     'cl-adj-context-style',
     'cl-adj-vars',
     'cl-adj-funcs',
+    'cl-adv-functions-queue',
   ]),
+  
+  computed: {
+    file() {
+      return this.$store.state.editFile;
+    },
+    
+    root() {
+      if (this.file) {
+        return this.file.content.root;
+      }
+    },
+  },
   
   methods: {
     getFile() {
@@ -57,5 +85,8 @@ export default {
 <style scoped>
 .title {
   color: brown;
+}
+.title2 {
+  color: coral;
 }
 </style>

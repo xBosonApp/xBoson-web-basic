@@ -160,7 +160,7 @@ export default {
   
   methods: {
     test() {
-      this.openFile('BCUHR8CYRh20K48LZBdRww')
+      this.openFile(this.$store.state.testOpenFile);
     },
     
     createComponent() {

@@ -32,6 +32,7 @@
       <template v-slot:title>
         <span class='title'>{{configTitle}}</span>
         <span class='name animate__bounce animate__animated'>{{name}}</span>
+        <span class='note sm'>{{hid}}</span>
         <div style='margin-top: 10px; text-align:right;'>
           <slot name='header' :configData='configData'/>
         </div>
@@ -80,6 +81,7 @@ export default {
       showConfig  : false,
       configData  : null,
       name        : '',
+      hid         : '',
       showAddTip  : false,
       blocked     : false,
     };
@@ -111,6 +113,7 @@ export default {
     openEdit(opt, id) {
       this.configData = this.createConfigData(opt, id);
       this.name = opt.name,
+      this.hid = id;
       this.showConfig = true;
     },
     
@@ -177,5 +180,8 @@ export default {
 }
 .title {
   font-size: 18px; margin-right: 8px;
+}
+.sm {
+  margin-left: 10px; font-size: 8px;
 }
 </style>

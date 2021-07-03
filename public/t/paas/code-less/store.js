@@ -9,9 +9,11 @@ module.exports = new Vuex.Store({
     editFile: null,
     // 必须对css属性进行逐项复制
     cssClipboard: null, 
+    bindContextStyle : {},
+    
     // 方便调试的开关
     test : true,
-    bindContextStyle : {},
+    testOpenFile : 'OkYEBLniTHOzCsM_cMYQFA',
   },
   
   mutations: {

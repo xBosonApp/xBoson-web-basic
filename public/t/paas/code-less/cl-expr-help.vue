@@ -5,7 +5,9 @@
     title="JavaScript"
     placement="right"
     :visible="visible"
-    @close="close"
+    :destroyOnClose='true'
+    @close="drawerClose"
+    :afterVisibleChange="afterVisibleChange"
     width='350px'
   >
     
@@ -19,7 +21,7 @@
   计算: <code>a+b+1 &gt; 0</code>
   更多 js 语法可参考 <a :href='wikiurl' target='_blank'>wiki</a>.
   
-  <a-button @click='close' size='small'>关闭</a-button>
+  <a-button @click='drawerClose' size='small'>关闭</a-button>
 </pre>
 
   </a-drawer>
@@ -38,6 +40,16 @@ export default {
     close() {
       this.visible = false;
       this.$emit('close');
+    },
+    
+    drawerClose() {
+      this.visible = false;
+    },
+    
+    afterVisibleChange() {
+      if (!this.visible) {
+        this.$emit('close');
+      }
     },
   },
 }
