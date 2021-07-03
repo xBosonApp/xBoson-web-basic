@@ -12,7 +12,7 @@
   >
     
 <pre>
-<h4>JavaScript 表达式:</h4>
+<h4>表达式:</h4>
   数字: <code>0</code> <code>99.9</code>
   字符串(必须有单引号): <code>'abc'</code>
   上下文变量引用: <code>i</code> <code>v[i].name</code>

@@ -143,13 +143,18 @@
   }
   
   
+  function withFileName(code, filename) {
+    return code +'\n//@ sourceURL='+ filename;
+  }
+  
+  
   function lite_require(s) {
     // let wcode = '(function(module, exports) {'+
     //               syncload(s) +
     //             '})';
     let mod = {exports:{}};
     // eval(wcode)(mod, mod.exports);
-    new Function('module', 'exports', syncload(s))(mod, mod.exports);
+    new Function('module', 'exports', withFileName(syncload(s), s))(mod, mod.exports);
     return mod.exports;
   }
   
@@ -163,7 +168,7 @@
     
     try {
       // return new eval(code);
-      return new Function(code)();
+      return new Function(withFileName(code, path))();
     } catch(e) {
       console.error("Load cdn", path, "fail:", e.stack);
     }
@@ -322,7 +327,8 @@
         let fn;
         try {
           // fn = eval(wcode);
-          fn = new Function('module', 'require', 'exports', '__dirname', '__filename', code);
+          fn = new Function('module', 'require', 'exports', '__dirname', '__filename', 
+              withFileName(code, absPath));
           // fn.name = absPath;
         } catch(err) {
           let msg = ['Load', absPath, 'from', _parent.name, 'fail:', err.message];
