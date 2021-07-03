@@ -27,13 +27,20 @@ export default {
     return {
       tid: 0,
       editor: null,
+      selfChange : false,
+      changeDelay : 300,
     };
   },
   
   watch: {
     value(v) {
+      if (this.selfChange) {
+        this.selfChange = false;
+        return;
+      }
       let pos = this.editor.getCursorPosition();
-      this.editor.setValue(v, pos);
+      this.editor.setValue(v);
+      this.editor.moveCursorToPosition(pos);
     }
   },
   
@@ -48,6 +55,7 @@ export default {
   
   methods: {
     change() {
+      this.selfChange = true;
       this.$emit("input", this.editor.getValue());
     },
     
@@ -62,13 +70,14 @@ export default {
       }
       
       editor.on("change", e=>{
+        // 延迟
         if (this.tid) {
           clearTimeout(this.tid);
         }
         this.tid = setTimeout(()=>{
           this.tid = 0;
           this.change();
-        }, 300);
+        }, this.changeDelay);
       });
       
       editor.setValue(this.value, this.value.length);
