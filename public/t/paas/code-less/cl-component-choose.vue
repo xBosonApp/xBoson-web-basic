@@ -1,7 +1,10 @@
 <!-- Create By xBoson System -->
 
 <template>
-  <a-collapse class='components' :bordered="false">
+  <a-collapse class='components' 
+    :bordered="false" 
+    :defaultActiveKey='acted'
+    @change="onChange">
     
     <a-collapse-panel v-for="(c, i) in libs" :key="i" :header="c.title">
       
@@ -35,16 +38,32 @@ loadLib('基础组件', './basic.js');
 
 export default {
   data() {
-    let data = { 
+    let data = {
+      sname: '$codeless__defaultActiveComponentIndex',
       libs: clib.getLibrary(),
     };
     return data;
   },
   
+  computed: {
+    acted : {
+      get() {
+        return localStorage[this.sname];
+      },
+      set(i) {
+        localStorage[this.sname] = i;
+      },
+    },
+  },
+  
   methods : {
     start() {
       this.$store.commit('closeDropTip');
-    }
+    },
+    
+    onChange(key) {
+      this.acted = key;
+    },
   },
 }
 

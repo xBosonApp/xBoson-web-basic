@@ -33,7 +33,7 @@
     
     <a-drawer
       placement="right"
-      width='450px'
+      width='490px'
       :visible="openEdit"
       :closable='false'
       :destroyOnClose='true'
@@ -51,6 +51,9 @@
             {{n.name}}
           </a-radio-button>
         </a-radio-group>
+        <a-button :key='nullexpr' @click='setNull' style='margin-left: 10px'>
+          空
+        </a-button>
       </a-form-item>
       
       <a-form-item label='值配置'>
@@ -102,6 +105,11 @@
         </div>
       </section>
       
+      <a-form-item label='修饰符' v-if='isEventBind'>
+        <cl-attr-dyn-modifiers
+          :modifiers='config.modifiers'/>
+      </a-form-item>
+      
       <a-form-item>
         <a-button type='primary' @click='ok'>确定</a-button>
       </a-form-item>
@@ -143,7 +151,7 @@ const role = require("./component-role.js");
 export default {
   props: ['name', 'desc', 'componentName', 'bind', 'props', 'propsConfig', 'isEventBind', 'cid'],
   
-  components: tool.loadc('cl-list-vars', 'cl-list-funcs'),
+  components: tool.loadc('cl-list-vars', 'cl-list-funcs', 'cl-attr-dyn-modifiers'),
   
   computed: {
     typeConfig() {
@@ -297,6 +305,11 @@ export default {
         this.$set(this.config.callParams, i, {t:0, v:null, n:null});
       }
       return this.config.callParams[i];
+    },
+    
+    setNull() {
+      this.config.varType = 'expr';
+      this.config.expr = null;
     },
   },
 }

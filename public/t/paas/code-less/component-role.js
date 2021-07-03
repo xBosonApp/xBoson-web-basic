@@ -77,6 +77,7 @@ function createPropsConfig(name, component) {
     ref         : null,
     expr        : null,
     callParams  : [],
+    modifiers   : [],
   }, component.props[name].propsConfig);
 }
 
@@ -113,8 +114,14 @@ function initProps(c, cfg) {
         case 6: // 图标选择, 
         case 7: // 自定义组件
           cfg.props[n] = null; break;
+          
+        case 8: // 事件
+          cfg.propsConfig[n].varType = 'expr';
+          cfg.props[n] = null; 
+          break;
+          
         default:
-          throw new Error("init props invaild type val:"+ n);
+          throw new Error("init props invaild type val:"+ n +', type:'+ p.type);
       }
     }
   }

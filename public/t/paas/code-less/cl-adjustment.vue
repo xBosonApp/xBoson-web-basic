@@ -22,8 +22,8 @@
       <cl-adj-advanced/>
     </a-tab-pane>
     
-    <a-tab-pane key="4" tab="接口" class='panel'>
-    </a-tab-pane>
+    <!--<a-tab-pane key="4" tab="接口" class='panel'>-->
+    <!--</a-tab-pane>-->
   </a-tabs>
 </template>
 
