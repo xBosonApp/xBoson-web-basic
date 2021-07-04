@@ -23,6 +23,18 @@
       <cl-adj-funcs :value='root.funcs'/>
     </a-collapse-panel>
     
+    <a-collapse-panel key="2a">
+      <template v-slot:header><span class='title'>
+        属性定义
+      </span></template>
+    </a-collapse-panel>
+    
+    <a-collapse-panel key="2a">
+      <template v-slot:header><span class='title'>
+        计算属性定义
+      </span></template>
+    </a-collapse-panel>
+    
     <a-collapse-panel key="3">
       <template v-slot:header><span class='title2'>
         初始化时函数调用列表
@@ -37,6 +49,7 @@
       <cl-adv-functions-queue :arr='root.beforeDestroy' :funcs='root.funcs' name='beforeDestroy'/>
     </a-collapse-panel>  
     
+    <div class='note' style='margin: 19px'>* 都是当前文件的属性配置</div>
   </a-collapse>
 </template>
 

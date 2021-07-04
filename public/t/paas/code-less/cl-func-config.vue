@@ -2,7 +2,7 @@
 
 <template>
   <div class='main'>
-    <x-ace v-model='opt.code' language='javascript' @insertHandle='setInsertHandle'></x-ace>
+    <x-ace v-model='opt.code' language='javascript' @editHandle='setEditor'></x-ace>
     <div>
       <h4>函数参数</h4>
       <div class='parmdiv note'>
@@ -76,7 +76,7 @@ export default {
       showVarSelect : false,
       showFuncSelect : false,
       upComments : tool.delayWorker(this.rewriteComments, 500),
-      insertHandle : null,
+      editor : null,
     };
   },
   
@@ -114,21 +114,10 @@ export default {
     
     checkCode() {
       try {
-        new Function(this.opt.code);
+        Function(xv.withFileName(this.opt.code, this.opt.name));
         this.codeErrMsg = null;
         return true;
       } catch(err) {
-        // TODO: 这种方法不能解析行列
-        // let errInf = /(.*Error:.*)[\S\s]+:([0-9]+):([0-9]+)/.exec(err.stack);
-        // if (errInf) {
-        //   console.log(err, errInf)
-        //   let msg = errInf[1];
-        //   let row = errInf[2];
-        //   let col = errInf[3];
-        //   this.codeErrMsg = ['函数语法错误\n', msg, '\n在第', row, '行, 第', col, '列' ].join('');
-        // } else {
-        //   this.codeErrMsg = err.stack;
-        // }
         this.codeErrMsg = '函数语法错误\n'+ err.message;
         console.error(err);
       }
@@ -149,7 +138,7 @@ export default {
     
     addVar(id, v) {
       let n = ['this.', id, ' /* ', v.name, ' */'];
-      this.insertHandle(n.join(''));
+      this.insert(n.join(''));
       this.showVarSelect = false;
     },
     
@@ -173,26 +162,25 @@ export default {
         n.push(')');
       }
       n.push(' */');
-      this.insertHandle(n.join(''));
+      this.insert(n.join(''));
       this.showFuncSelect = false;
     },
     
     rewriteComments() {
       if (this.checkNameRule()) {
         let c = tool.generateFunctionComments(this.opt);
-        let p = /\/\/ XAutoG:::\[[\S\s]*\]:::/;
-        
-        if (p.test(this.opt.code)) {
-          this.opt.code = this.opt.code.replace(p, c);
-        } else {
-          this.opt.code = c +'\n\n'+ this.opt.code;
-        }
+        this.opt.code = tool.generateReplaceHeader(this.opt.code, c);
+        this.editor.setValue(this.opt.code);
       }
       // this.$emit('change');
     },
     
-    setInsertHandle(h) {
-      this.insertHandle = h;
+    insert(v) {
+      this.editor.insert(v);
+    },
+    
+    setEditor(e) {
+      this.editor = e;
     },
   },
 }

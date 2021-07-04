@@ -3,6 +3,18 @@ const store = require("./store.js");
 const requirePlugin = {};
 const vuever = parseInt(/([0-9]+)\..+/.exec(Vue.version));
 
+class Vm extends Function {
+  constructor(...args) {
+    super(...(args.slice(0, -1)));
+    
+    let name = args[args.length-1];
+    Object.defineProperty(object1, 'name', {
+      value: name,
+      writable: false
+    });
+  }
+}
+
 module.exports = Object.freeze({
   api,
   apiurl,
@@ -12,6 +24,9 @@ module.exports = Object.freeze({
   makeComponents,
   vuever,
   generateFunctionComments,
+  generateAutoComments,
+  generateReplaceHeader,
+  Vm,
   
   getRoot,
   getEditFile,
@@ -158,24 +173,44 @@ function delayWorker(fn, time) {
 
 
 function generateFunctionComments(opt) {
+  return generateAutoComments(o=>{
+    o.push('// Function ', opt.name,'(');
+    
+    if (opt.params.length) {
+      opt.params.forEach(p=>{
+        o.push(p.pn, ', ');
+      });
+      o.pop();
+    }
+    
+    o.push(')\n');
+    opt.params.forEach(p=>{
+      o.push('//   ', p.pn, '\t- ', p.name, '\n');
+    });
+    
+  }).join('');
+}
+
+
+// 用特殊字符序列包装 contentFn 的输出, 使之可以用 
+// generateReplaceHeader 进行替换; 输出结尾换行.
+function generateAutoComments(contentFn) {
   let o = [
     "// XAutoG:::[\n",
-    '// Function ', opt.name,'(',
   ];
-  
-  if (opt.params.length) {
-    opt.params.forEach(p=>{
-      o.push(p.pn, ', ');
-    });
-    o.pop();
+  contentFn(o);
+  o.push('// ]:::');
+  return o;
+}
+
+
+function generateReplaceHeader(txt, rtxt) {
+  const p = /\/\/ XAutoG:::\[[\S\s]*\]:::/;
+  if (p.test(txt)) {
+    return txt.replace(p, rtxt);
+  } else {
+    return rtxt +'\n\n'+ txt;
   }
-  
-  o.push(')\n');
-  opt.params.forEach(p=>{
-    o.push('//   ', p.pn, '\t- ', p.name, '\n');
-  });
-  o.push('// ]:::')
-  return o.join('');
 }
 
 // 抽取 opt 属性覆盖到 def, 返回 def

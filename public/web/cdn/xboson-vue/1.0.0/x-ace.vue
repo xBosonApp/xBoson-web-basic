@@ -17,8 +17,8 @@ ace.config.set('basePath', xv.cdn_path +'ace/'+ aceVer +'/');
 //
 // 事件:
 //  input - v-module 绑定
-//  insertHandle - Function(fn) 在组件初始化完成发出该事件, 
-//        参数是一个函数:Function(str), 用来向编辑器光标位置插入字符串
+//  editHandle - Function(fn) 在组件初始化完成发出该事件, 
+//        参数是一个函数:Function(editorObject), 用来向编辑器光标位置插入字符串
 //
 export default {
   props: ['value', 'language', 'theme'],
@@ -46,7 +46,7 @@ export default {
   
   mounted() {
     this.initEditor();
-    this.$emit('insertHandle', this.insertHandle);
+    this.$emit('editHandle', this.editor);
   },
   
   destroyed() {
@@ -83,10 +83,6 @@ export default {
       editor.setValue(this.value, this.value.length);
       editor.setStyle('x-ace-editor');
       this.editor = editor;
-    },
-    
-    insertHandle(x) {
-      this.editor.insert(x);
     },
   },
 }
