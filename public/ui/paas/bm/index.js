@@ -242,7 +242,7 @@ bm_Index = (function(){
   
   //帮助按钮
   $("[name=bm_menu_header]").find('[name=bm_menu_help]').click(function(){
-    zy.net.loadHTML('bm/help/usage.html',bm_modal);
+    zy.net.loadHTML('bm/help/usage.htm',bm_modal);
   });
   
   //测试按钮

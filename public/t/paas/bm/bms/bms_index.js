@@ -1,4 +1,4 @@
- bm_bms_Index = (function(){
+bm_bms_Index = (function(){
    
   var pt = bm_bms_index.prototype;
   var thiz;
@@ -237,7 +237,7 @@
   
   //帮助按钮
   $("[name=bm_bms_menu_header]").find('[name=bm_bms_menu_help]').click(function(){
-    zy.net.loadHTML('bm/help/usage.html',bm_bms_modal);
+    zy.net.loadHTML('bm/help/usage.htm',bm_bms_modal);
   });
   
   //测试按钮

@@ -1,0 +1,186 @@
+<!-- Create By xBoson System -->
+<css:cdn src="prism/prism.css"/>
+<!--业务模型使用方法-->
+<div class="modal fade" name="help-usage-modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">业务模型使用方法</h4>
+      </div>
+      <div class="modal-body">
+        <div id="bm_help_tabs">
+  		    <ul>
+            <li>
+              <a href="#bm_help_tabs-a"> API接口调用 </a>
+            </li>
+            <li>
+              <a href="#bm_help_tabs-b"> 传参说明 </a>
+            </li>
+            <li>
+              <a href="#bm_help_tabs-c"> 返回说明 </a>
+            </li>
+          </ul>
+          <div id="bm_help_tabs-a">
+            <br>
+            <h3>操纵模型：</h3>
+            <h4 name="url-1"></h4>
+            <pre>
+              <code class="language-jsdoc">
+/**
+* @overview 参数说明
+* @param {string}  openid：'当前登录OPENID',或sys参数：'外部服务ID'
+* @param {string}  org：a297dfacd7a84eab9656675f61750078
+* @param {string}  app：c770045becc04c7583f626faacd3b456
+* @param {string}  mod：commapi
+* @param {string}  modolcd：模型ID
+* @param {number}  pagesize：每页条数（分页查询时需要）
+* @param {number}  pagenum：第几页（分页查询时需要）
+* @param {string}  _orderby:升序降序（格式：[['列名1','0'],['列名2','1']] '0'为升序，'1'为降序，类型：JSON字符串）
+* @param {...}  加上模型定义的SQL参数
+*/
+              </code>
+            </pre>
+            <h3>多维模型——数据视图：</h3>
+            <h4 name="url-2"></h4>
+            <pre>
+              <code class="language-jsdoc">
+/**
+* @overview 参数说明
+* @param {string}  openid：'当前登录OPENID',或sys参数：'外部服务ID'
+* @param {string}  org：<i name="bm_help_org"></i>
+* @param {string}  app：c770045becc04c7583f626faacd3b456
+* @param {string}  mod：commapi
+* @param {string}  modolcd：模型ID
+* @param {string}  _source：数据来源（"0"为取SQL语句执行结果，"1"为取模型对应的物理表，默认为"0"）
+* @param {number}  pagesize：每页条数（分页查询时需要）
+* @param {number}  pagenum：第几页（分页查询时需要）
+* @param {string}  _orderby:升序降序（格式：[['列名1','0'],['列名2','1']] '0'为升序，'1'为降序，类型：JSON字符串）
+* @param {...}  加上模型定义的SQL参数
+*/
+              </code>
+            </pre>
+            <h3>多维模型——维度视图：</h3>
+            <h4 name="url-3"></h4>
+            <pre>
+              <code class="language-jsdoc">
+/**
+* @overview 参数说明
+* @param {string}  openid：'当前登录OPENID',或sys参数：'外部服务ID'
+* @param {string}  org：<i name="bm_help_org"></i>
+* @param {string}  app：c770045becc04c7583f626faacd3b456
+* @param {string}  mod：commapi
+* @param {string}  modolcd：模型ID
+* @param {string}  _source：数据来源（"0"为取SQL语句执行结果(<span class="text-info">不提供分页查询及_orderby</span>)，"1"为取模型对应的物理表，默认为"0"）
+* @param {number}  pagesize：每页条数（分页查询时需要）
+* @param {number}  pagenum：第几页（分页查询时需要）
+* @param {string}  _orderby:升序降序（格式：[['列名1','0'],['列名2','1']] '0'为升序，'1'为降序，类型：JSON字符串）
+* @param {...}  加上模型定义的SQL参数
+*/
+              </code>
+            </pre>
+          </div>
+          <div id="bm_help_tabs-b">
+            <p>例子中的URL参数未进行URL编码</p>
+            <ul>
+              <li>
+                <p>SQL条件为<code>=,!=,&lt;&gt;,&gt;,&lt;,&gt;=,&lt;=</code>时</p>
+                <pre>
+      列英文名为参数key，值为字符串
+      eg：URL参数为name=bdd
+                </pre>
+              </li>
+              <li>
+                <p>SQL条件为<code>LIKE,NOT LIKE</code>时</p>
+                <pre>
+      列英文名为参数key，值为字符串（可带%）
+      eg：URL参数为name=%bdd%
+                </pre>
+              </li>
+              <li>
+                <p>SQL条件为<code>IN,NOT IN</code>时</p>
+                <pre>
+      列英文名为参数key，值为字符串（以逗号分隔）
+      eg：URL参数为name=bdd,bcc
+                </pre>
+              </li>
+              <li>
+                <p>SQL条件为<code>BETWEEN,NOT BETWEEN</code>时</p>
+                <pre>
+      列英文名1为参数key1，列英文名2为参数key2，值为字符串
+      eg：URL参数为name1=bdd&amp;name2=bcc
+                </pre>
+              </li>
+              <li>
+                <p>特殊情况：元素标签类型为图表的日期控件(date)时</p>
+                <pre>
+      列英文名为参数key，值为JSON字符串
+        {'dt_type':'','dt_from':'','dt_to':'','flg':''}
+          dt_type:日期类型  1：年，2：月，3：季，4：日  
+          flg:时间点时间段    0：时间点，1：时间段 
+          dt_from:开始时间  yyyy-MM-dd  
+          dt_to:结束时间  yyyy-MM-dd
+                </pre>
+              </li>
+            </ul>
+          </div>
+          <div id="bm_help_tabs-c">
+            <p class="lead">返回数结构据<code>JSON</code></p>
+            <pre class='js_code'>
+              <code class="language-json">
+{
+  "msg": "",
+   "search": [
+       {
+            "en": "pid", // 英文
+            "cn": "个人编号", // 中文
+            "datatype": "CHAR", // 数据类型
+            "numrange": "32", // 长度
+            "format": "", // 显示格式
+            "unit": "", // 单位
+            "dict": "", // 字典编码
+            "elemtype": "", // UI组件类型
+            "condition": "01" // 条件等式类型，如：01(=)
+        },
+  ],
+  "data": [],
+  "type": [
+        {
+            "en": "updatedt", // 英文
+            "cn": "更新时间", // 中文
+            "datatype": "DATETIME", // 数据类型
+            "numrange": "", // 长度
+            "format": "", // 显示格式
+            "unit": "", // 单位
+            "dict": "", // 字典编码
+            "ro": "", // 读/写
+            "search": "0", // 查询条件
+            "chart": "", // 图表类型
+            "view": 1, // 显示/隐藏
+            "must": "1", // 是否必须
+            "elemtype": "text" // UI组件类型
+        },
+  ],
+  "ret": "0"
+}
+              </code>
+            </pre>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script type="text/javascript">
+$('[name="help-usage-modal"]').find('[name=url-1]').html(zy.g.host.api+'api/excuteapi');
+$('[name="help-usage-modal"]').find('[name=url-2]').html(zy.g.host.api+'api/exc_select');
+$('[name="help-usage-modal"]').find('[name=url-3]').html(zy.g.host.api+'api/exc_chart_select');
+$('[name="help-usage-modal"]').find('[name=bm_help_org]').text(zy.g.comm.org);
+$('[name="help-usage-modal"]').modal('show');
+$('#bm_help_tabs').tabs();
+</script>
+<js:cdn src="prism/prism.js"/>
