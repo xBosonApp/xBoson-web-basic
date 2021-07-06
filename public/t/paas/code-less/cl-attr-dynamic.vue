@@ -126,6 +126,7 @@
       >
         <component 
           :is='typeConfig.component'
+          v-bind='typeConfig.props'
           @choose='typeConfig.choose'/>
       </a-drawer>
     </a-drawer>
@@ -223,6 +224,7 @@ export default {
             component : 'cl-list-vars', 
             choose    : this.selectRef,
             disp      : this.dispVar,
+            props     : { allowProps: true, allowComputed: true },
             dnotEvent : true},
         'function'  : { name : '函数引用', 
             readonly  : true, 
@@ -277,10 +279,21 @@ export default {
     },
     
     dispVar(id) {
-      let v = this.root.vars[id];
-      if (v) {
-        return v.name;
+      if (id) {
+        let map;
+        if (id.startsWith('cp$')) {
+          map = this.root.computeProps;
+        } else if (id.startsWith('v$')) {
+          map = this.root.vars;
+        } else {
+          map = this.root.argProps;
+        }
+        
+        if (map && map[id]) {
+          return map[id].name;
+        }
       }
+      
       this.config.ref = null;
       return null;
     },

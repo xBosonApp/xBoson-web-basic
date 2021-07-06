@@ -1,7 +1,9 @@
 <!-- Create By xBoson System -->
 
 <template>
+<div>
   <textarea ref='textarea'></textarea>
+</div>
 </template>
 
 <script>

@@ -4,30 +4,11 @@
   <div class='main'>
     <x-ace v-model='opt.code' language='javascript' @editHandle='setEditor'></x-ace>
     <div>
-      <h4>函数参数</h4>
-      <div class='parmdiv note'>
-        <span></span>
-        <span>描述名</span>
-        <span>形参名</span>
-        <span></span>
-      </div>
-      
-      <a-input-group compact v-for='(p, i) in opt.params' class='parmdiv'>
-        <a-tooltip placement="left" :title='errMsg[i]' :visible='errMsg[i] != null'>
-          <a-input v-model='p.name' @change='onChange'/>
-        </a-tooltip>
-        <a-input v-model='p.pn' @change='onChange'/>
-        <a-popconfirm
-          title="删除形参?"
-          ok-text="删除"
-          okType='danger'
-          cancel-text="取消"
-          @confirm="removep(i)">
-          <a-button icon='delete' type='danger'/>
-        </a-popconfirm>
-      </a-input-group compact>
-      
-      <cl-add-button @click='addp' title='添加函数参数'/>
+      <h3>
+        <span class='note'>侦听: </span> 
+        <span class='gap'>{{ id }}</span> 
+        <span class='note sm'>{{dispId}}</span>
+      </h3>
       <hr/>
       <a-button @click='ok' type='primary'>确定</a-button>
       <a-button @click='showVarSelect = true'>引用变量</a-button>
@@ -68,48 +49,50 @@ export default {
     this.$emit('change');
   },
   
+  computed: {
+    dispId() {
+      let map;
+      let ret = '';
+      let root = tool.getRoot();
+      let id = this.id;
+      
+      if (id.startsWith('cp$')) {
+        map = root.computeProps;
+        ret = '[计算属性]';
+      } else if (id.startsWith('v$')) {
+        map = root.vars;
+        ret = '[变量]';
+      } else {
+        map = root.argProps;
+        ret = '[参数属性]'
+      }
+      
+      if (map && map[id]) {
+        ret = map[id].name + ret;
+      } else {
+        ret = '[未定义]';
+      }
+      return ret;
+    },
+  },
+  
   data() {
     return {
       codeErrMsg: '',
-      checkVar : tool.checkVar,
       errMsg : [],
       showVarSelect : false,
       showFuncSelect : false,
-      upComments : tool.delayWorker(this.rewriteComments, 500),
       editor : null,
     };
   },
   
   methods: {
-    removep(i) {
-      this.opt.params.splice(i, 1);
-      this.rewriteComments();
-    },
-    
     ok() {
-      if (this.checkNameRule() && this.checkCode()) {
+      if (this.checkCode()) {
         this.$emit('blockClose', false);
         this.$emit('close');
       }
       // this.$emit('change');
-    },
-    
-    checkNameRule() {
-      for (let i=0; i<this.opt.params.length; ++i) {
-        let p = this.opt.params[i];
-        if (!p.name) {
-          this.$set(this.errMsg, i, '描述无效');
-          return false;
-        }
-        else if (!this.checkVar.test(p.pn)) {
-          this.$set(this.errMsg, i, '形参名无效');
-          return false;
-        }
-        else {
-          this.$set(this.errMsg, i, null);
-        }
-      }
-      return true;
     },
     
     checkCode() {
@@ -123,19 +106,6 @@ export default {
       }
     },
     
-    addp() {
-      let i = this.opt.params.length;
-      this.opt.params.push({
-        name : '参数'+ i,
-        pn   : 'v'+ i,
-      });
-      this.rewriteComments();
-    },
-    
-    onChange() {
-      this.upComments();
-    },
-    
     addVar(id, v) {
       this.insert(tool.refVar(id, v.name));
       this.showVarSelect = false;
@@ -144,15 +114,6 @@ export default {
     addFunc(id, f) {
       this.insert(tool.refFunc(id, f.name, f.params));
       this.showFuncSelect = false;
-    },
-    
-    rewriteComments() {
-      if (this.checkNameRule()) {
-        let c = tool.generateFunctionComments(this.opt);
-        this.opt.code = tool.generateReplaceHeader(this.opt.code, c);
-        this.editor.setValue(this.opt.code);
-      }
-      // this.$emit('change');
     },
     
     insert(v) {
@@ -179,5 +140,11 @@ hr {
 }
 .errormsg {
   color: red; margin-top: 20px; white-space: pre-wrap;
+}
+.sm {
+  font-size: smaller;
+}
+.gap {
+  margin: 0 8px;
 }
 </style>

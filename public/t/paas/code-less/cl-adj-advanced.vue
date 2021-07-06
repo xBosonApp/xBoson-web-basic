@@ -27,18 +27,21 @@
       <template v-slot:header><span class='title'>
         参数属性定义
       </span></template>
+      <cl-adj-arg-props :value='root.argProps'/>
     </a-collapse-panel>
     
     <a-collapse-panel key="2b">
       <template v-slot:header><span class='title'>
         计算属性定义
       </span></template>
+      <cl-adj-compute-props :value='root.computeProps'/>
     </a-collapse-panel>
     
     <a-collapse-panel key="2c">
       <template v-slot:header><span class='title'>
         侦听器定义
       </span></template>
+      <cl-adj-watchs :value='root.watchs'/>
     </a-collapse-panel>
     
     <a-collapse-panel key="3">
@@ -67,6 +70,9 @@ export default {
     'cl-adj-context-style',
     'cl-adj-vars',
     'cl-adj-funcs',
+    'cl-adj-arg-props',
+    'cl-adj-compute-props',
+    'cl-adj-watchs',
     'cl-adv-functions-queue',
   ]),
   

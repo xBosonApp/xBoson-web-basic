@@ -3,6 +3,7 @@ const store = require("./store.js");
 const requirePlugin = {};
 const vuever = parseInt(/([0-9]+)\..+/.exec(Vue.version));
 
+// Not work !
 class Vm extends Function {
   constructor(...args) {
     super(...(args.slice(0, -1)));
@@ -27,6 +28,8 @@ module.exports = Object.freeze({
   generateAutoComments,
   generateReplaceHeader,
   Vm,
+  refFunc,
+  refVar,
   
   getRoot,
   getEditFile,
@@ -41,6 +44,8 @@ module.exports = Object.freeze({
   requirec,
   // Func(name) 返回组件的加载路径
   pathc,
+  
+  checkVar : /^[_a-zA-z\$]+[_a-zA-z\$0-9]*$/,
 });
 
 
@@ -221,4 +226,37 @@ function exts(def, opt) {
     }
   }
   return def;
+}
+
+
+function refVar(varName, comment) {
+  let r = ['this.', varName];
+  if (comment) {
+    r.push(' /* ', comment, ' */');
+  }
+  return r.join('');
+}
+
+
+function refFunc(id, name, params) {
+  let len = params.length;
+  let n = ['this.', id, '('];
+  if (len) {
+    for (let i=0; i<len; ++i) {
+      n.push('null', ', ');
+    }
+    n.pop();
+  }
+  n.push(') /* ', name);
+  
+  if (len) {
+    n.push('(');
+    params.forEach(p=>{
+      n.push(p.name, ', ');
+    });
+    n.pop();
+    n.push(')');
+  }
+  n.push(' */');
+  return n.join('');
 }

@@ -69,6 +69,8 @@ export default {
     'createConfigData' : { required:true, type:Function },
     // 配置面板遮蔽层样式
     'maskStyle' : { default: {} },
+    // 创建按钮点击时被调用, 返回 Promise:Success({id, num 可选}), 默认用全局id生成
+    'addHook' : { type:Function },
   },
   
   beforeMount() {
@@ -94,15 +96,29 @@ export default {
       this.$options.components[name] = tool.requirec(name);
     },
     
+    defaultAdd() {
+      return new Promise((ok, fail)=>{
+        let num = this.nextid();
+        let id = this.pid + num;
+        ok({id, num});
+      });
+    },
+    
     add() {
-      let num = this.nextid();
-      let opt = {
-        num,
-        name : this.pname + num,
-      };
-      this.initItem(opt);
-      this.$set(this.value, this.pid + num, opt);
-      this.$emit('change');
+      let hook = this.addHook || this.defaultAdd;
+      
+      hook().then(v=>{
+        let num = v.num || this.nextid();
+        let opt = {
+          name : this.pname + num,
+          num,
+        };
+        this.initItem(opt);
+        this.$set(this.value, v.id, opt);
+        this.$emit('change');
+      }).catch(e=>{
+        xv.popError('创建时错误', e);
+      });
     },
     
     remove(id) {

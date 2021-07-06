@@ -44,10 +44,11 @@ export default {
   methods: {
     add(id, cfg) {
       if (cfg.params && cfg.params.length) {
-        throw new Error("不能引用带有参数的函数");
+        antd.message.error("不能引用带有参数的函数");
         return;
       }
       this.arr.push(id);
+      antd.message.success("已经加入");
     },
     
     remove(i) {

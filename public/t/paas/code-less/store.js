@@ -13,7 +13,7 @@ module.exports = new Vuex.Store({
     
     // 方便调试的开关
     test : true,
-    testOpenFile : 'OkYEBLniTHOzCsM_cMYQFA',
+    testOpenFile : '8N-AODgVT8y9uNKDGRSRLA',
   },
   
   mutations: {
