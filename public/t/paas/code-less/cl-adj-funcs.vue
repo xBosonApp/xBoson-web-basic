@@ -7,7 +7,7 @@
     pname='函数'
     pid='fc$'
     configTitle='函数'
-    configComponent='cl-func-config'
+    configComponent='cl-nc-func'
     configWidth='80%'
     :initItem='initItem'
     :createConfigData='createConfigData'

@@ -1,32 +1,26 @@
 <!-- Create By xBoson System -->
 
 <template>
-  <a-form-model :model="opt">
-    <a-form-model-item label="初始值">
-      <a-tooltip placement="bottom" title='无效值' :visible='showFail' @blur='checkValue'>
-        <a-input v-model="opt.def" type="textarea"/>
-      </a-tooltip>
-    </a-form-model-item>
-    
-    <div class='note'>
-      <span>例子:</span>
-      <span>{{ optmap[opt.type].demo }}</span>
-    </div>
-    
-    <a-form-model-item label='值类型'>
-      <a-select 
-        default-value="String" 
-        v-model='opt.type' 
-        :options='options'
-        @change='change'/>
-    </a-form-model-item>
-    <a-button @click='close' type="primary">确定</a-button>
-  </a-form-model>
+<div>
+  <div class='note'>
+    <span>例子:</span>
+    <span>{{ optmap[value].demo }}</span>
+  </div>
+
+  <a-form-model-item :label='label'>
+    <a-select 
+      default-value="String" 
+      v-model='value'
+      :options='options'
+      @change='onChange'
+    />
+  </a-form-model-item>
+</div>
 </template>
 
 <script>
 export default {
-  props: ['id', 'opt'],
+  props: ['label', 'value'],
   
   data() {
     const options = [
@@ -65,34 +59,36 @@ export default {
     });
     
     return {
-      showFail : false,
       optmap,
       options,
     };
   },
   
   mounted() {
-    this.$emit('blockClose', true);
+    this.$emit('getOption', this.opt);
+    this.$emit('check', this.check);
   },
   
   methods: {
-    change(v, e) {
-      if (!e.data.props.fn(this.opt.def)) {
-        this.opt.def = e.data.props.def;
+    onChange(v, e) {
+      this.$emit('change', v, e);
+      this.$emit('input', v);
+    },
+    
+    opt(t) {
+      let s = this.optmap[t];
+      if (!s) {
+        throw new Error("invaild type "+ t);
       }
+      return s;
     },
     
-    checkValue() {
-      let b = this.optmap[this.opt.type].fn( this.opt.def );
-      this.showFail = !b;
-      this.$emit('blockClose', !b);
-      return b;
-    },
-    
-    close() {
-      if (this.checkValue()) {
-        this.$emit('close');
-        this.$emit('change');
+    check(v) {
+      let o = this.opt(this.value);
+      try {
+        return o.fn(v);
+      } catch(e) {
+        return false;
       }
     },
   },

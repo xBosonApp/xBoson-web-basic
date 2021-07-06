@@ -25,13 +25,19 @@
     
     <a-collapse-panel key="2a">
       <template v-slot:header><span class='title'>
-        属性定义
+        参数属性定义
       </span></template>
     </a-collapse-panel>
     
-    <a-collapse-panel key="2a">
+    <a-collapse-panel key="2b">
       <template v-slot:header><span class='title'>
         计算属性定义
+      </span></template>
+    </a-collapse-panel>
+    
+    <a-collapse-panel key="2c">
+      <template v-slot:header><span class='title'>
+        侦听器定义
       </span></template>
     </a-collapse-panel>
     

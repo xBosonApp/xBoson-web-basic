@@ -43,18 +43,18 @@ function newInstance(root, component) {
   };
   
   return {
-    id : genID(root, component),
-    note : '',
+    id    : genID(root, component),
+    note  : '',
     props,
     propsConfig,
-    cid : component.id,
-    txt : component.removeTxt ?'' :component.txt,
-    removeTxt : component.removeTxt,
-    component : component.component,
-    helpTag : component.helpTag,
-    isInstance : true,
+    cid         : component.id,
+    txt         : component.removeTxt ?'' :component.txt,
+    removeTxt   : component.removeTxt,
+    component   : component.component,
+    helpTag     : component.helpTag,
+    isInstance  : true,
     isContainer : component.isContainer,
-    bindStyle : {},
+    bindStyle   : {},
   }
 }
 

@@ -335,7 +335,7 @@ export default {
   padding: 20px; 
 }
 .prjlist section {
-  padding: 0 20px 0 50px; display: grid; gap: 5px;
+  padding: 2px 20px 0 50px; display: grid; gap: 5px;
   grid-template-columns: 1fr 100px; 
 }
 .cp {

@@ -7,7 +7,7 @@
     pname='变量'
     pid='v$'
     configTitle='变量'
-    configComponent='cl-var-config'
+    configComponent='cl-nc-var'
     :initItem='initItem'
     :createConfigData='createConfigData'
     @change='onChange'
