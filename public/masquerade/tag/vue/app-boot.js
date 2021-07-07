@@ -9,6 +9,7 @@
   // 全局模块, 通过 defineModule 定义
   const export_modules = {};
   const xv = window.xv = {};
+  const xuiProtocol = 'xui://';
   // path 模块
   let pathmod;
   let devMode;
@@ -248,6 +249,10 @@
       else if (name[0] == '/') {
         console.debug("absolute require", name);
         absPath = name;
+      }
+      else if (name.startsWith(xuiProtocol)) {
+        console.debug("xui protocol require", name);
+        absPath = pathmod.join(devMode ?'/t' :'/ui', name.substring(xuiProtocol.length));
       }
       else {
         console.debug("direct require", name);

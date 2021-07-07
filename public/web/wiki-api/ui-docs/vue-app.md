@@ -81,6 +81,8 @@ export default {
 4. 以 '/' 结尾的路径自动添加 `index.js` 文件后缀.
 5. 引入文件使用相对路径时, 总是以父模块路径为根路径.
 6. 首页文件调用 require 时, 以首页文件路径作为根路径.
+7. 绝对路径以 uifs 为根目录为起始目录, 必要时需添加 '/t' '/ui' 这个前缀.
+8. 以 'xui://' 为协议时, 自动添加 '/t' '/ui' 前缀, 并且限定范围在该目录下.
 
 如果 `_use_promise` 为 true (或任何布尔为true 的值), 则返回一个 Promise 对象, 并使用异步加载资源.  
 如果 `_use_promise_factory` 为 true, 则 `_use_promise` 被忽略, 总是返回一个 Promise 对象工厂函数,
