@@ -90,6 +90,8 @@ var datadicdD_index = (function(zy, $) {
           cb && cb(msg);
         };
         zy.g.am.app = param.app || 'd2c8511b47714faba5c71506a5029d94';
+        // zy.g.am.app = param.app || '78cf8922c5ea4afa9dae8970215ea796';
+        
         zy.g.am.mod = param.mod;
         zy.net.get("api/"+ param.api, _cb, param.r_param, param.page);
       }
@@ -620,7 +622,7 @@ var datadicdD_index = (function(zy, $) {
   
       function init(treeContariner, dbclick) {
           var option = opt(dbclick);
-          var param = {api: "gettree",mod: "datadict"};
+          var param = {api: "gettree",mod: "dict",app:"78cf8922c5ea4afa9dae8970215ea796"};
           var keywords = query_form.find("[name=keywords]").val();
           var versions = query_form.find("[name=versions]").val();
           var status = query_form.find("[name=status]").val();

@@ -1,0 +1,223 @@
+<!-- Create By xBoson System -->
+<!-- <uiauth pageid='mdms_datadictD_index'/> -->
+
+<link href="/dev/face/ui/paas/lib/js/plugin/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+<!-- Widget ID (each widget will need unique ID)-->
+<div class="jarviswidget" id="mdms_datadictD_index" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+	<!-- widget options:
+	usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+	data-widget-colorbutton="false"
+	data-widget-editbutton="false"
+	data-widget-togglebutton="false"
+	data-widget-deletebutton="false"
+	data-widget-fullscreenbutton="false"
+	data-widget-custombutton="false"
+	data-widget-collapsed="true"
+	data-widget-sortable="false"
+
+	-->
+	<header>
+		<h2>值域代码</h2>
+	</header>
+
+	<!-- widget div-->
+	<div>
+
+		<!-- widget edit box -->
+		<div class="jarviswidget-editbox">
+			<!-- This area used as dropdown edit box -->
+
+		</div>
+		<!-- end widget edit box -->
+
+		<!-- widget content -->
+		<div class="widget-body">
+
+			<div class="tabs">
+				<ul class="nav nav-tabs bordered" id="demo-pill-nav">
+					<li class="active">
+						<a href="#tab-r1" data-toggle="tab">
+						<span class="badge bg-color-blue txt-color-white"></span>
+						最近变更</a>
+					</li>
+					<li>
+						<a href="#tab-r2" data-toggle="tab">
+						<span class="badge bg-color-blueDark txt-color-white"></span>
+						代码一览</a>
+					</li>
+					<li>
+						<a href="#tab-r3" data-toggle="tab">
+						<span class="badge bg-color-blueDark txt-color-white"></span>
+						操作记录
+						</a>
+					</li>
+					<li>
+						<a href="#tab-r4" data-toggle="tab">
+						<span class="badge bg-color-greenLight txt-color-white"></span>
+						API说明</a>
+					</li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane active" id="tab-r1">
+					<fieldset>
+				      <legend style="padding-left:13px;padding-right:13px;margin-bottom:3px;">
+                <i class="fa fa-lightbulb-o">&nbsp;&nbsp;变更记录(月)</i>
+              </legend>
+  			      <table name="logtable_dt" class="table table-bordered table-striped"></table>
+              <div id="logtable_pagination"></div>
+            </fieldset>
+					</div>
+					<div class="tab-pane" id="tab-r2">
+              <div id="nouislider" class="noUiSlider"></div>
+              <fieldset style="padding-top:13px;">
+                <div id="mdms_dataductD_zydm_ztree" class="col-xs-4" style="padding-bottom:13px;">
+                  <div class="well" style="overflow-x:hidden">
+                    <fieldset>
+  							    	<legend>值域代码
+							    	    <i id="tree_filter" class="fa fa-search" style="color:cadetblue" title="筛选"></i>
+							    	    <i id="tree_download"  data='code' class="fa fa-download" style="color:blue" title="值域代码下载"></i>
+							    	    <i id="tree_upload"  data='code' class="fa fa-upload" style="color:yellowgreen" title="值域代码上传"></i>
+							    	    <i id="tree_refresh" class="fa fa-refresh" style="color:green" title="刷新"></i>
+  							    	</legend>
+  							    	<div class="col-md-12">
+    							    	<form class="smart-form" style="display:none" name="mdms_datadictD_zydm_form" onsubmit="return false;">
+              							<div class="input-group">
+              							  <span class="input-group-addon">内容信息</span>
+              								<input class="form-control" type="text" name="keywords" placeholder="代码id,名称,备注">
+              							</div>
+              							<div class="input-group">
+              							  <span class="input-group-addon">版本信息</span>
+              								<input class="form-control" type="text" name="versions" placeholder="1.0?V20XX">
+              							</div>
+              							<div class="input-group">
+              							  <span class="input-group-addon">&nbsp;有效性&nbsp;</span>
+              								<input class="form-control" type="text" name="status" data-type="select2" placeholder="请选择">
+              							</div>
+              							<footer>
+              							  <button type="button" class="btn btn-default" id="filter_qx">取消</button>
+            								  <button type="button" class="btn btn-primary" id="filter_sx">筛选</button>
+              							</footer>
+      							    	</form>
+  							    	</div>
+  							    	<div class="col col-md-12">
+              		      <ul id="mdms_datadictD_zydm_tree" class="ztree"></ul>
+              		    </div>
+                		</fieldset>
+                	</div>
+                </div>
+                <div id="mdms_datadictD_zydm_container_NOTUSE_NOTHIDE" class="col-xs-8">
+                  <div class="row" id="row_form"></div>
+                  <div class="btn-group">
+                    <button id="mdms_datadictD_zydm_add" class="btn btn-info btn-xs" type="submit">&emsp;<i class="fa fa-magic fa-1"></i>&emsp;添 加&emsp;</button>
+                    <button id="mdms_datadictD_zydm_edit" class="btn btn-info btn-xs" type="submit">&emsp;<i class="fa fa-edit fa-1"></i>&emsp;修 改&emsp;</button>
+                    <button id="mdms_datadictD_zydm_delete" class="btn btn-info btn-xs">&emsp;<i class="fa  fa-trash-o "></i>&emsp;注 销&emsp;</button>
+                    <button id="mdms_datadictD_zydm_export" class="btn btn-info btn-xs">&emsp;<i class="glyphicon glyphicon-export  "></i>&emsp;导 出&emsp;</button>
+                  </div>
+                  <div class="pull-right">
+                    <b name="total_count"></b>
+                  </div>
+                  <h1></h1>
+                  <div id="mdms_datadictD_zydm_table"></div>
+                </div>
+              </fieldset>
+					</div>
+					<div class="tab-pane" id="tab-r3" style="padding-top:13px;">
+					  <form class="smart-form" name="mdms_datadictD_czjl_form" onsubmit="return false;" style="z-index:2">
+  				    <section class="col col-xm-4 col-sm-4">
+  							<div class="input-group">
+  							  <span class="input-group-addon">操作类型</span>
+  								<input class="form-control" type="text" name="operation_type" data-type="select2" placeholder="操作类型">
+  							</div>
+  						</section>
+  						<section class="col col-xm-6 col-sm-4">
+  							<div class="input-group">
+  							  <span class="input-group-addon">开始时间</span>
+  								<input class="form-control" type="text" name="dt_from" placeholder="开始时间">
+  							</div>
+  						</section>
+  						
+  						<section class="col col-xm-6 col-sm-4">
+  							<div class="input-group">
+  							  <span class="input-group-addon">结束时间</span>
+  								<input class="form-control" type="text" name="dt_to" placeholder="结束时间">
+  							</div>
+  						</section>
+    				  <section class="col col-xm-4 col-sm-4">
+								<div class="input-group">
+  							  <span class="input-group-addon">用户编码</span>
+  								<input class="form-control" type="text" name="userid" placeholder="用户编码">
+  							</div>
+  						</section>
+  						<section class="col col-xm-4 col-sm-4">
+  							<div class="input-group">
+  							  <span class="input-group-addon">类别编码</span>
+  								<input class="form-control" type="text" name="typecd" placeholder="类别编码">
+  							</div>
+  						</section>
+  						<section class="col col-xm-3 col-sm-2">
+  						  <button type="button" class="btn btn-primary btn-sm " name="modalsearch">查询</button>
+  						</section>
+  			  </form>
+    			  <div class="table-responsive">
+    			    <div class="pull-right" style="margin-top: 35px;margin-right:15px;"><b name="total_count"></b></div>
+            	<table name="mdms_datadict_czjl_table" class="table table-bordered table-striped">
+            	</table>
+            </div>
+            <div id="mdms_datadict_czjl_pagination"></div>
+					</div>
+					<div class="tab-pane" id="tab-r4" style="padding-top:13px;">
+					  <fieldset>
+					  <div class="col-xs-12 col-sm-6">
+					    <pre>
+              <h6>API：</h6>
+              app：d2c8511b47714faba5c71506a5029d94
+              mod：DataDict
+              api：getdatatable
+              </pre>
+					  </div>
+					  <div class="col-xs-12 col-sm-6">
+					    <pre>
+              <h6>参数：</h6>
+              typecd：类别编码
+              数据字典查询参数：
+              version：版本
+              dictcd：字典码
+              dictnm：字典名称
+              shortkey：快捷码
+              status：状态
+              
+              pagenum：分页查询（非必需）
+              pagesize：分页查询（非必需）
+              
+              _is_download：是否下载（非必需）{1,0}
+              type：下载类型（非必需）{1:CSV,2:JSON,3:Excel}
+              charset：字符集（非必需）
+            </pre>
+					  </div>
+					  </fieldset>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<!-- end widget content -->
+
+	</div>
+	<!-- end widget div -->
+
+</div>
+<!-- end widget -->
+<div id="mdms_datadictD_index_mod" data='available'></div>
+<script src="/dev/face/ui/paas/lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script src="/dev/face/ui/paas/lib/js/plugin/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+<script src="/dev/face/ui/paas/lib/js/plugin/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="/dev/face/ui/paas/lib/js/plugin/noUiSlider/jquery.nouislider.min.js"></script>
+<!--<script type="text/javascript" src="md/ex_inport/export.js"></script>-->
+<script type="text/javascript" src="/dev/face/ui/paas/lib/html/zy_dytable.js"></script>
+<script type="text/javascript" src="/dev/face/ui/paas/lib/html/zy_dyform.js"></script>
+<script src="saas/mdm/dict/index.js"></script>
+
+<script>
+  var datadicdD_indexObj = new datadicdD_index();
+</script>
