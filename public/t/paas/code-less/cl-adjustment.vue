@@ -1,7 +1,7 @@
 <!-- Create By xBoson System -->
 
 <template>
-  <a-tabs type="card">
+  <a-tabs>
     
     <a-tab-pane key="1" tab="属性" class='panel'>
       <div v-if='config != null'>
@@ -18,12 +18,11 @@
       <center v-else class='note'>点击一个组件以编辑属性</center>
     </a-tab-pane>
     
-    <a-tab-pane key="3" tab="高级" class='panel'>
+    <a-tab-pane key="3">
+      <div slot='tab' class='adv'>高级</div>
       <cl-adj-advanced/>
     </a-tab-pane>
     
-    <!--<a-tab-pane key="4" tab="接口" class='panel'>-->
-    <!--</a-tab-pane>-->
   </a-tabs>
 </template>
 
@@ -63,5 +62,8 @@ export default {
 }
 center.note {
   margin-top: 50px;
+}
+.adv {
+  color: brown;
 }
 </style>

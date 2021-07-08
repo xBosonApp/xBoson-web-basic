@@ -89,7 +89,7 @@ console.log("上海竹呗信息技术有限公司, 版权所有 http://xboson.ne
   }
   
   .main-menu {
-    background-color: #f6faff; padding: @borderPad;
+    padding: @borderPad; border-bottom: 1px solid #eee;
   }
   
   .message {
