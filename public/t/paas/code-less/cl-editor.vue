@@ -62,9 +62,12 @@ export default {
 
 <style scoped>
 .tip {
-  font-size: 12px; color: #ccc; padding-top: 170px;
+  font-size: 12px; color: #ccc; padding: 170px 0;
 }
 .tip span {
   font-size: 15px; color: #999; display: inline-block; margin: 0 3px;
+}
+.card-container {
+  background-color: #fff;
 }
 </style>

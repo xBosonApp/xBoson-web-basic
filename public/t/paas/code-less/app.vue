@@ -28,9 +28,6 @@
   'cl-adjustment',
   'cl-page-design',
   'cl-prj',
-  'cl-file-manager',
-  'cl-create-file',
-  'cl-open-file',
   
   'cl-editor', 
   'cl-component-container',
@@ -100,7 +97,8 @@ console.log("上海竹呗信息技术有限公司, 版权所有 http://xboson.ne
   }
   
   .editor {
-    border-left: 1px dashed #e8e8e8; border-right: 1px dashed #e8e8e8;
+    border-color: #e8e8e8; border-style: solid; border-width: 0 6px;
+    background-color: #e8e8e8;
   }
   
   .adjustment, .editor, .component-choose {

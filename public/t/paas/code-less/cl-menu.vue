@@ -44,10 +44,10 @@
         </a-menu-item>
         
         <a-menu-divider />
-        <a-menu-item key="1">
+        <a-menu-item key="1" :disabled='true'>
           页面设置
         </a-menu-item>
-        <a-menu-item key="3">
+        <a-menu-item key="3" @click='showRegister = true'>
           组件注册表
         </a-menu-item>
       </a-menu>
@@ -108,6 +108,17 @@
       <component :is='previewComponent' :key='previewComponentKey'/>
     </a-drawer>
     
+    <a-drawer
+      title="组件注册表"
+      placement="top"
+      height='calc(100% - 80px)'
+      :closable="true"
+      :visible="showRegister"
+      destroyOnClose='true'
+      @close="showRegister = false">
+      <cl-component-register @close='showRegister = false'/>
+    </a-drawer>
+    
   </div>
 </template>
 
@@ -117,6 +128,12 @@ const tool = require("./tool.js");
 export default {
   props: ['projectName', 'editorFiles'],
   
+  components : tool.loadc(
+    'cl-component-register',
+    'cl-file-manager',
+    'cl-create-file',
+    'cl-open-file'),
+  
   data() {
     return {
       showCreate : false,
@@ -124,6 +141,7 @@ export default {
       showMgr : false,
       showDelete : false,
       showPreview : false,
+      showRegister : false,
       deleteContent : '',
       keyMap : {},
       previewComponent : null,

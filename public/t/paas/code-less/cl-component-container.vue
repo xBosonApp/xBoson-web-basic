@@ -141,8 +141,7 @@ export default {
   min-height: 30px;
 }
 .root-component-container {
-  border: 1px dashed green; padding: 8px;
-  min-height: 30px;
+  /*border: 1px dashed green;*/ padding: 8px; min-height: 30px;
 }
 .draggable-item-active {
   border: 1px dashed #3e33e9;

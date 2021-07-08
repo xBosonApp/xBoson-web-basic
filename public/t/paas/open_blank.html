@@ -12,11 +12,18 @@
       var i = location.href.indexOf(find);
       if (i >= 0) {
         var page = location.href.substring(i + find.length);
+        
         if (page.startsWith('http:') || page.startsWith('https:')) {
+          // 完整 url 直接跳转
           //.. donothing
-        } else if (page[0] == '/') {
+        } else if (page.startsWith('/web')) { 
+          // web 路径添加前缀
+          page = zy.g.host.ui + page;
+        } else if (page[0] == '/') { 
+          // 斜线开头什么都不做, 当前网站根目录
           //.. donothing
-        } else {
+        } else { 
+          // 相对目录自动映射到开发/发布目录
           page = base + page;
         }
         window.open(page, "_blank");
