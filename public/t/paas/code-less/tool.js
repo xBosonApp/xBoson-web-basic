@@ -107,7 +107,10 @@ function getPluginType(file) {
 
 // 只支持扁平对象
 function deepCopy(obj) {
-  return JSON.parse(JSON.stringify(obj));
+  if (typeof obj == 'object') {
+    return JSON.parse(JSON.stringify(obj));
+  }
+  return obj;
 }
 
 

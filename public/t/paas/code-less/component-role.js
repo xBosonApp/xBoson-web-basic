@@ -78,6 +78,7 @@ function createPropsConfig(name, component) {
     expr        : null,
     callParams  : [],
     modifiers   : [],
+    isExprAttr  : false,
   }, component.props[name].propsConfig);
 }
 

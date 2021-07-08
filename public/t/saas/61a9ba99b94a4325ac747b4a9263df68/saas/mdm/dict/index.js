@@ -115,7 +115,7 @@ var datadicdD_index = (function(zy, $) {
     var query_form = mdms_datadictD_index_tab.find("[name=mdms_datadictD_zydm_form]");
    
     mdms_datadictD_index_tab.find("div.btn-group").css("display", "none");
-    
+
     mdms_datadictD_index_tab.find("#nouislider").noUiSlider({
       range: [0, 100],
       start: 34,
@@ -1004,7 +1004,7 @@ var datadicdD_index = (function(zy, $) {
   function init_t3(){
     var mdms_datadictD_index_tab = $("#mdms_datadictD_index").find("#tab-r3");
     var query_form = mdms_datadictD_index_tab.find("[name=mdms_datadictD_czjl_form]");
-   
+
      //开始时间
     query_form.find("[name=dt_from]").datetimepicker({
         language:"zh-CN",

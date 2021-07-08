@@ -68,6 +68,7 @@ module.exports = {
         type: 3,
         select: {'禁用':true, '启用':false},
         def: false,
+        propsConfig: {isExprAttr:true},
       },
       shape: {
         desc: '按钮形状',
@@ -82,6 +83,7 @@ module.exports = {
         desc: '显示加载中',
         type: 3,
         select:{"加载中":true, '正常':false},
+        propsConfig: {isExprAttr:true},
       },
       click: {
         desc: '左键单击事件',
