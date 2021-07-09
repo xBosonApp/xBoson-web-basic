@@ -67,3 +67,8 @@
 ## `<vue:color>`
 
 引入颜色[选择器 2.8.1](https://github.com/xiaokaike/vue-color)
+
+
+## `<vue:fullcalendar>`
+
+引入[日历组件 5.8.0](https://fullcalendar.io/)

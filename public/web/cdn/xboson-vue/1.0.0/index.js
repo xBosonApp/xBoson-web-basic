@@ -63,8 +63,8 @@ function pluginXapi(url, params) {
       resp.json().then(ret=>{
         if (ret.code) {
           let msg = ret.msg;
-          if (ret.data && xv.debug) {
-            msg += '\n\n'+ ret.data;
+          if (xv.debug && ret.data) {
+            msg += '\n\n[DEBUG] '+ ret.data;
           }
           fail(new Error(msg));
           return;
