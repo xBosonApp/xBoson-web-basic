@@ -2,7 +2,6 @@
 <!-- <uiauth pageid='mdms_datadictD_index'/> -->
 
 <link href="/dev/face/ui/paas/lib/js/plugin/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
-<link rel="stylesheet" href="/dev/face/ui/paas/lib/js/plugin/datatables/examples/resources/bootstrap/3/dataTables.bootstrap.css" type="text/css" media="all" />
 <!-- Widget ID (each widget will need unique ID)-->
 <div class="jarviswidget" id="mdms_datadictD_index" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
 	<!-- widget options:
@@ -105,20 +104,16 @@
   														修改分类
   													</button>
   												</div>
-  												<div class="row">
-  												  <div class="btn-group">
-    													<button id="ver-add" type="button" class="btn btn-default" style="background-color: #e5ffe5!important;">
-    													  <i class="fa fa-tag txt-color-greenDark" title="添加版本"></i>
-    														添加版本
-    													</button>
-    													<button id="ver-edit" type="button" class="btn btn-default" style="background-color: #e5ffe5!important;">
-    													  <i class="fa fa-tags txt-color-greenDark" title="修改版本"></i>
-    														修改版本
-    													</button>
-    												</div>
-    												<div id="ver-select" class="col-md-4"></div>
+  												<div class="btn-group">
+  													<button id="ver-add" type="button" class="btn btn-default" style="background-color: #e5ffe5!important;">
+  													  <i class="fa fa-tag txt-color-greenDark" title="添加版本"></i>
+  														添加版本
+  													</button>
+  													<button id="ver-edit" type="button" class="btn btn-default" style="background-color: #e5ffe5!important;">
+  													  <i class="fa fa-tags txt-color-greenDark" title="修改版本"></i>
+  														修改版本
+  													</button>
   												</div>
-  												
   											</div>
 
   							    	</legend>
@@ -150,29 +145,6 @@
                 </div>
                 <div id="mdms_datadictD_zydm_container_NOTUSE_NOTHIDE" class="col-xs-8">
                   <div class="row" id="row_form"></div>
-            <!--      <div class="row" id="ver_form">-->
-            <!--        <form class="smart-form" name="mdms_datadictD_ver_form" onsubmit="return false;">-->
-        				<!--			<div class="input-group">-->
-        				<!--			  <span class="input-group-addon">版本</span>-->
-        				<!--				<input class="form-control" type="text" name="ver" placeholder="版本">-->
-        								<!--<div name="ver">-->
-        								  
-        								<!--</div>-->
-        				<!--			</div>-->
-        				<!--			<div class="input-group">-->
-        				<!--			  <span class="input-group-addon">标准来源</span>-->
-        				<!--				<input class="form-control" type="text" name="standard" placeholder="">-->
-        				<!--			</div>-->
-        				<!--			<div class="input-group">-->
-        				<!--			  <span class="input-group-addon">说明</span>-->
-        				<!--				<input class="form-control" type="text" name="mark" placeholder="说明">-->
-        				<!--			</div>-->
-        				<!--			<div class="input-group">-->
-        				<!--			  <span class="input-group-addon">&nbsp;有效性&nbsp;</span>-->
-        				<!--				<input class="form-control" type="text" name="status" data-type="select2" placeholder="请选择">-->
-        				<!--			</div>-->
-							    	<!--</form>-->
-            <!--      </div>-->
                   <div class="btn-group">
                     <button id="mdms_datadictD_zydm_add" class="btn btn-primary btn-xs" type="submit">&emsp;<i class="fa fa-magic fa-1"></i>&emsp;添 加&emsp;</button>
                     <button id="mdms_datadictD_zydm_edit" class="btn btn-primary btn-xs" type="submit">&emsp;<i class="fa fa-edit fa-1"></i>&emsp;修 改&emsp;</button>
@@ -184,7 +156,6 @@
                   </div>
                   <h1></h1>
                   <div id="mdms_datadictD_zydm_table"></div>
-                  <table id="mdm_dict_table"  class="table table-bordered table-striped"></table>
                 </div>
               </fieldset>
 					</div>
@@ -282,9 +253,6 @@
 <!--<script type="text/javascript" src="md/ex_inport/export.js"></script>-->
 <script type="text/javascript" src="/dev/face/ui/paas/lib/html/zy_dytable.js"></script>
 <script type="text/javascript" src="/dev/face/ui/paas/lib/html/zy_dyform.js"></script>
-
-<script type="text/javascript" src="/dev/face/ui/paas/lib/js/plugin/datatables/examples/resources/bootstrap/3/dataTables.bootstrap.js"></script>
-
 <script src="saas/mdm/dict/index.js"></script>
 
 <script>
