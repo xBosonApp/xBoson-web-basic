@@ -7,6 +7,7 @@
         <el-menu-item index='boot'>Bootstrap Vue</el-menu-item>
         <el-menu-item index='bigscreen'>大屏演示</el-menu-item>
         <el-menu-item index='echarts'>图表演示</el-menu-item>
+        <el-menu-item index='other'>杂项</el-menu-item>
       </template>
       <template v-slot:sub>
         <component :is="subMenuId"></component>
