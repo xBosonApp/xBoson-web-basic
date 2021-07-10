@@ -97,16 +97,27 @@ var datadicdD_index = (function(zy, $) {
       }
     };
 
-    var _datatable_init = null; //用来存放表格init后返回的对象
+    // var _datatable_init = null; //用来存放表格init后返回的对象
     var nodeClick = null; //用来存放tree点击的node节点对象
     var zTreeObj = null;  //初始化后的ztree对象
     var _tree = tree();
       
-    var _datatable = new dyTable({
-      app: "d2c8511b47714faba5c71506a5029d94",
-      api: "getdatatable",
-      mod: "datadict"
-    });
+    // var _datatable = new dyTable({
+    //   app: "d2c8511b47714faba5c71506a5029d94",
+    //   api: "getdatatable",
+    //   mod: "datadict"
+    // });
+    
+    var verSelect = $("#ver-select"); //版本下拉select2
+    var tableGridObj = tableGrid("mdm_dict_table",function(selected){
+      if(selected){
+        mdms_datadictD_index_tab.find("#mdms_datadictD_zydm_edit").btnDisable(false);
+        mdms_datadictD_index_tab.find("#mdms_datadictD_zydm_delete").btnDisable(false);
+      }else{
+        mdms_datadictD_index_tab.find("#mdms_datadictD_zydm_edit").btnDisable(true);
+        mdms_datadictD_index_tab.find("#mdms_datadictD_zydm_delete").btnDisable(true);
+      } 
+    }) ; //字典表格操作对象
   
     var mdms_datadictD_index_tab = $("#mdms_datadictD_index").find("#tab-r2");
     var container = $("#mdms_datadictD_zydm_container");
@@ -114,7 +125,7 @@ var datadicdD_index = (function(zy, $) {
     
     var query_form = mdms_datadictD_index_tab.find("[name=mdms_datadictD_zydm_form]");
    
-    mdms_datadictD_index_tab.find("div.btn-group").css("display", "none");
+    // mdms_datadictD_index_tab.find("div.btn-group").css("display", "none");
 
     mdms_datadictD_index_tab.find("#nouislider").noUiSlider({
       range: [0, 100],
@@ -500,24 +511,23 @@ var datadicdD_index = (function(zy, $) {
             //如果uri为空，则恢复原页面初始状态
             container.html(mdms_datadictD_zydm_container);
             //权限
-            if(treeNode.optype!="1"){
-              readOnlyBtn();
-            }else{
+            // if(treeNode.optype!="1"){
+            //   readOnlyBtn();
+            // }else{
               _tools(); //Toolbar按钮事件
-            }
-            // 字典版本表单
-            ver_form_init(treeNode);
+            // }
             
-            _tools_rowEvent();  //datatable点击事件
+            
+            // _tools_rowEvent();  //datatable点击事件
             _dbfunc && _dbfunc(treeNode);
           }
         }
         //添加修改删除不可用
-        function readOnlyBtn(){
-          $("#mdms_datadictD_zydm_add").hide();
-          $("#mdms_datadictD_zydm_edit").hide();
-          $("#mdms_datadictD_zydm_delete").hide();
-        }
+        // function readOnlyBtn(){
+        //   $("#mdms_datadictD_zydm_add").hide();
+        //   $("#mdms_datadictD_zydm_edit").hide();
+        //   $("#mdms_datadictD_zydm_delete").hide();
+        // }
         /**/
         function _addHoverDom(_id, _node) {
           //权限：只读，编辑
@@ -627,25 +637,75 @@ var datadicdD_index = (function(zy, $) {
           var option = opt(dbclick);
           var param = {api: "gettree",mod: "dict",app:"78cf8922c5ea4afa9dae8970215ea796"};
           var keywords = query_form.find("[name=keywords]").val();
-          var versions = query_form.find("[name=versions]").val();
-          var status = query_form.find("[name=status]").val();
-          if(keywords.length+versions.length+status.length>0){
-            param.api = "searchtree";
-            param.r_param = {
-              keywords:keywords,
-              versions:versions,
-              status:status,
-            };
+          // var versions = query_form.find("[name=versions]").val();
+          // var status = query_form.find("[name=status]").val();
+          // if(keywords.length+versions.length+status.length>0){
+          //   param.api = "searchtree";
+          //   param.r_param = {
+          //     keywords:keywords,
+          //     versions:versions,
+          //     status:status,
+          //   };
+          // }
+          if(keywords.length>0){
+            
+            searchTree(keywords, function(){
+              mdms_datadictD_index_tab.find("#filter_sx").button("reset");
+            });
+            return;
+            
           }
           tools.api(param, function(msg) {
             mdms_datadictD_index_tab.find("#filter_sx").button("reset");
             zTreeObj = $.fn.zTree.init(treeContariner, option, msg.result);
           })
         }
-        return {
-          init: init
+        
+      function searchTree(keyword, callback){
+        
+        var cb = function(msg){
+          
+          zy.log("msg=",msg);
+          
+          if(!msg.result) return;
+          // 隐藏所有节点
+          var nodes = zTreeObj.transformToArray(zTreeObj.getNodes());
+          
+          // zy.log("searchTree",nodes);
+          
+          nodes.forEach(function(v){
+            zTreeObj.hideNode(zTreeObj.getNodeByTId(v.tId));
+          });
+          
+          // 显示匹配的节点
+          msg.result.forEach(function(v){
+            var treeNode = zTreeObj.getNodeByParam("cd",v._id.cd);
+            
+            
+            var pathNodes = treeNode.getPath();
+            pathNodes.forEach(function(v){
+              zTreeObj.showNode(v);
+            })
+            // zy.log("treeNode = ",treeNode);
+            // zy.log("pathNodes = ",pathNodes);
+          });
+          
+          callback && callback();
         }
+        
+        
+        zy.g.am.app = '78cf8922c5ea4afa9dae8970215ea796';
+        zy.g.am.mod = 'dict';
+        zy.net.get("api/dicts_search", cb, {
+          keyword: keyword
+        });
+        
       }
+        
+      return {
+        init: init
+      }
+    }
     
     //zTree-添加按钮
     function _addModal(_node) {
@@ -674,141 +734,185 @@ var datadicdD_index = (function(zy, $) {
         });
     }
     
+    //zTree toolbar显示隐藏
+    function _tree_toolbar_show(flag){
+      var $toolbar = $("#mdm-dict-tree-toolbar");
+      if(flag){
+        $toolbar.show();  
+      }else{
+        $toolbar.hide();
+      }
+      
+    }
+    
+    // 表格工具栏事件
     function _tools(){
       //注册添加按钮点击事件
       $("#mdms_datadictD_zydm_add").click(function() {
-        //tree
-        if(!nodeClick.datatable){
-          zy.net.loadHTML("mdms/datadict/h2h3.html", index_mod, function() {
-            mdms_h2h3(zTreeObj,nodeClick,"i",updateGrid);
+        
+        zy.net.loadHTMLs("saas/mdm/dict/dict_data.html", index_mod, function() {
+          var param = {
+            typecd: nodeClick.cd,
+            parentcd: nodeClick.parentcd,
+            ver: verSelect.val()
+          };
+          mdms_dict_data(param,"i",function(formData){
+            // 表格添加行
+            tableGridObj.addRow(formData);
           });
-          return;
-        }
-        //字典
-        if(nodeClick.datatable=="sys_mdm002"){
-          zy.net.loadHTML("saas/mdm/datadict/index.htm", index_mod, function() {
-            mdm_datadict_modal(nodeClick,"i",updateGrid);
-          });
-          return;
-        }
-        //else
-        function cb(msg) {
-          zy.net.loadHTML("mdms/datadict/h5h6.html", index_mod, function() {
-            _form.find("[name=typecd]").val(nodeClick.typecd);
-            _form.find("[name=typecd]").attr("readonly", true);
-            index_mod.find("#datadict_h5h6_title").text("添加");
-            _form.find("[name=status]").select2("val","1"); //默认值
-            index_mod.find("#datadict_h5h6").modal("show");
-          });
-          var _dyForm = new dyForm();
-          var _form = _dyForm.modalform(msg.type, function() {
-              zy.g.am.app = 'd2c8511b47714faba5c71506a5029d94';
-              zy.g.am.mod = 'datadict';
-              var api = "adddata";
-              //参数中添加一个typecd
-              var _params=_form.serialize();
-              if(_form.find("[name=typecd]").length===0){
-                _params=_params+'&typecd='+encodeURI(nodeClick.typecd);
-              }
-              zy.net.post("api/"+ api, function(msg) {
-                if (msg) {
-                  $("#datadict_h5h6").modal("hide");
-                  zy.ui.msg("提示","保存成功","s");
-                  _datatable_init = _datatable.init(mdms_datadictD_index_tab.find("#mdms_datadictD_zydm_table"), {
-                    typecd: nodeClick.typecd
-                  });
-                  //编辑按钮、删除按钮变为不可点击
-                  $("#mdms_datadictD_zydm_edit").btnDisable(true);
-                  $("#mdms_datadictD_zydm_delete").btnDisable(true);
-                }
-              },_params);
-              $("#datadict_h5h6_form").formDisable(true);
-            },
-            function() {
-              index_mod.find("#datadict_h5h6").modal("hide");
-            });
-          index_mod.find("div.modal-body.no-padding").append(_form);
-  
-        }
-        zy.g.am.app = 'd2c8511b47714faba5c71506a5029d94';
-        zy.g.am.mod = 'datadict';
-        zy.net.get("api/getcolumninfo", cb, {
-          typecd: nodeClick.typecd,
-          usetype: 1
         });
+        
+        
+        // //tree
+        // if(!nodeClick.datatable){
+        //   zy.net.loadHTML("mdms/datadict/h2h3.html", index_mod, function() {
+        //     mdms_h2h3(zTreeObj,nodeClick,"i",updateGrid);
+        //   });
+        //   return;
+        // }
+        // //字典
+        // if(nodeClick.datatable=="sys_mdm002"){
+        //   zy.net.loadHTML("saas/mdm/datadict/index.htm", index_mod, function() {
+        //     mdm_datadict_modal(nodeClick,"i",updateGrid);
+        //   });
+        //   return;
+        // }
+        //else
+        // function cb(msg) {
+        //   zy.net.loadHTML("mdms/datadict/h5h6.html", index_mod, function() {
+        //     _form.find("[name=typecd]").val(nodeClick.typecd);
+        //     _form.find("[name=typecd]").attr("readonly", true);
+        //     index_mod.find("#datadict_h5h6_title").text("添加");
+        //     _form.find("[name=status]").select2("val","1"); //默认值
+        //     index_mod.find("#datadict_h5h6").modal("show");
+        //   });
+        //   var _dyForm = new dyForm();
+        //   var _form = _dyForm.modalform(msg.type, function() {
+        //       zy.g.am.app = 'd2c8511b47714faba5c71506a5029d94';
+        //       zy.g.am.mod = 'datadict';
+        //       var api = "adddata";
+        //       //参数中添加一个typecd
+        //       var _params=_form.serialize();
+        //       if(_form.find("[name=typecd]").length===0){
+        //         _params=_params+'&typecd='+encodeURI(nodeClick.typecd);
+        //       }
+        //       zy.net.post("api/"+ api, function(msg) {
+        //         if (msg) {
+        //           $("#datadict_h5h6").modal("hide");
+        //           zy.ui.msg("提示","保存成功","s");
+        //           _datatable_init = _datatable.init(mdms_datadictD_index_tab.find("#mdms_datadictD_zydm_table"), {
+        //             typecd: nodeClick.typecd
+        //           });
+        //           //编辑按钮、删除按钮变为不可点击
+        //           $("#mdms_datadictD_zydm_edit").btnDisable(true);
+        //           $("#mdms_datadictD_zydm_delete").btnDisable(true);
+        //         }
+        //       },_params);
+        //       $("#datadict_h5h6_form").formDisable(true);
+        //     },
+        //     function() {
+        //       index_mod.find("#datadict_h5h6").modal("hide");
+        //     });
+        //   index_mod.find("div.modal-body.no-padding").append(_form);
+  
+        // }
+        // zy.g.am.app = 'd2c8511b47714faba5c71506a5029d94';
+        // zy.g.am.mod = 'datadict';
+        // zy.net.get("api/getcolumninfo", cb, {
+        //   typecd: nodeClick.typecd,
+        //   usetype: 1
+        // });
       });
       //注册编辑按钮点击事件
       $("#mdms_datadictD_zydm_edit").click(function() {
-        //选择行数据
-        var _data = _datatable_init.getrow();
-        //tree
-        if(!nodeClick.datatable){
-          zy.net.loadHTML("mdms/datadict/h2h3.html", index_mod, function() {
-            mdms_h2h3(zTreeObj,_data,"u",updateGrid);
+        
+        
+        zy.net.loadHTMLs("saas/mdm/dict/dict_data.html", index_mod, function() {
+          // 选择行数据
+          var rowSelectData = tableGridObj.getSelectedRowData();
+          var param = {
+            typecd: nodeClick.cd,
+            parentcd: nodeClick.parentcd,
+            ver: verSelect.val()
+          };
+          $.extend(param,rowSelectData);
+          
+          mdms_dict_data(param,"u",function(formData){
+            // 表格修改行
+            tableGridObj.editSelectedRow(formData);
           });
-          return;
-        }
-        //字典
-        if(nodeClick.datatable=="sys_mdm002"){
-          zy.net.loadHTML("saas/mdm/datadict/index.htm", index_mod, function() {
-            mdm_datadict_modal(_data,"u",updateGrid);
-          });
-          return;
-        }
-        //获取列信息回调函数
-        function cb(msg) {
-          var oldValue = ""; //用来存放旧的表单值 &key1=&key2=
-          zy.net.loadHTML("mdms/datadict/h5h6.html", index_mod, function() {
-            $("#datadict_h5h6").modal("show");
-            $("#datadict_h5h6_title").text("修改");
-            _form.find("[name=typecd]").attr("readonly", true);
-            _form.find("[name=status]").select2("val","1"); //默认值
-            for (i in _data) {
-              //修改前的表单值
-              oldValue = oldValue + "&_"+ i + "="+ encodeURI(_data[i]);
-            }
-            var callback = function(msg) {
-              if (msg) {
-                _form.json2form(msg.data[0]);
-              }
-            };
-            //调接口，往模态铺数据
-            zy.g.am.app = 'd2c8511b47714faba5c71506a5029d94';
-            zy.g.am.mod = 'datadict';
-            _data.typecd = nodeClick.typecd;
-            zy.net.get("api/getdataupt", callback, _data);
-          });
-          var _dyForm = new dyForm();
-          var _form = _dyForm.modalform(msg.type, function() {
-            zy.g.am.app = 'd2c8511b47714faba5c71506a5029d94';
-            zy.g.am.mod = 'datadict';
-            var api = "updatedata";
-            //参数中添加一个typecd
-            var _params=_form.serialize();
-            if(_form.find("[name=typecd]").length===0){
-              _params=_params+'&typecd='+encodeURI(nodeClick.typecd);
-            }
-            zy.net.post("api/"+ api, function(msg) {
-              if (msg) {
-                zy.ui.msg("提示","保存成功","s");
-                _datatable_init.setrow(_form.form2json());
-                $("#datadict_h5h6").modal("hide");
-              }
-            }, _params + oldValue);
-            $("#datadict_h5h6_form").formDisable(true);
-            //zy.cache.refreshData(msg.type);
-          }, function() {
-            $("#datadict_h5h6").modal("hide");
-          });
-          $("div.modal-body.no-padding").append(_form);
-        }
-          //调接口，获取列信息
-        zy.g.am.app = 'd2c8511b47714faba5c71506a5029d94';
-        zy.g.am.mod = 'datadict';
-        zy.net.get("api/getcolumninfo", cb, {
-          typecd: nodeClick.typecd,
-          usetype: 2
         });
+        
+        // 选择行数据
+        // var _data = _datatable_init.getrow();
+        // //tree
+        // if(!nodeClick.datatable){
+        //   zy.net.loadHTML("mdms/datadict/h2h3.html", index_mod, function() {
+        //     mdms_h2h3(zTreeObj,_data,"u",updateGrid);
+        //   });
+        //   return;
+        // }
+        // //字典
+        // if(nodeClick.datatable=="sys_mdm002"){
+        //   zy.net.loadHTML("saas/mdm/datadict/index.htm", index_mod, function() {
+        //     mdm_datadict_modal(_data,"u",updateGrid);
+        //   });
+        //   return;
+        // }
+        // //获取列信息回调函数
+        // function cb(msg) {
+        //   var oldValue = ""; //用来存放旧的表单值 &key1=&key2=
+        //   zy.net.loadHTML("mdms/datadict/h5h6.html", index_mod, function() {
+        //     $("#datadict_h5h6").modal("show");
+        //     $("#datadict_h5h6_title").text("修改");
+        //     _form.find("[name=typecd]").attr("readonly", true);
+        //     _form.find("[name=status]").select2("val","1"); //默认值
+        //     for (i in _data) {
+        //       //修改前的表单值
+        //       oldValue = oldValue + "&_"+ i + "="+ encodeURI(_data[i]);
+        //     }
+        //     var callback = function(msg) {
+        //       if (msg) {
+        //         _form.json2form(msg.data[0]);
+        //       }
+        //     };
+        //     //调接口，往模态铺数据
+        //     zy.g.am.app = 'd2c8511b47714faba5c71506a5029d94';
+        //     zy.g.am.mod = 'datadict';
+        //     _data.typecd = nodeClick.typecd;
+        //     zy.net.get("api/getdataupt", callback, _data);
+        //   });
+        //   var _dyForm = new dyForm();
+        //   var _form = _dyForm.modalform(msg.type, function() {
+        //     zy.g.am.app = 'd2c8511b47714faba5c71506a5029d94';
+        //     zy.g.am.mod = 'datadict';
+        //     var api = "updatedata";
+        //     //参数中添加一个typecd
+        //     var _params=_form.serialize();
+        //     if(_form.find("[name=typecd]").length===0){
+        //       _params=_params+'&typecd='+encodeURI(nodeClick.typecd);
+        //     }
+        //     zy.net.post("api/"+ api, function(msg) {
+        //       if (msg) {
+        //         zy.ui.msg("提示","保存成功","s");
+        //         _datatable_init.setrow(_form.form2json());
+        //         $("#datadict_h5h6").modal("hide");
+        //       }
+        //     }, _params + oldValue);
+        //     $("#datadict_h5h6_form").formDisable(true);
+        //     //zy.cache.refreshData(msg.type);
+        //   }, function() {
+        //     $("#datadict_h5h6").modal("hide");
+        //   });
+        //   $("div.modal-body.no-padding").append(_form);
+        // }
+        //   //调接口，获取列信息
+        // zy.g.am.app = 'd2c8511b47714faba5c71506a5029d94';
+        // zy.g.am.mod = 'datadict';
+        // zy.net.get("api/getcolumninfo", cb, {
+        //   typecd: nodeClick.typecd,
+        //   usetype: 2
+        // });
       });
       //导出
       $("#mdms_datadictD_zydm_export").click(function() {
@@ -832,63 +936,102 @@ var datadicdD_index = (function(zy, $) {
       $("#mdms_datadictD_zydm_delete").click(function() {
         //确认删除
         zy.ui.mask("删除确认","是否确认删除此条数据", function() {
-          var _data = _datatable_init.getrow();
-          //选择行数据
-          zy.g.am.app = 'd2c8511b47714faba5c71506a5029d94';
-          zy.g.am.mod = 'datadict';
-          //参数中添加一个typecd
-          if(!_data.typecd){
-            _data.typecd=nodeClick.typecd;
-          }
-          zy.net.get("api/deletedata", function(msg) {
-            if (msg) {
-              zy.ui.msg("提示","删除成功","s");
-              _datatable_init = _datatable.init(mdms_datadictD_index_tab.find("#mdms_datadictD_zydm_table"), {
-                typecd: nodeClick.typecd
-              });
-              //编辑按钮、删除按钮变为不可点击
-              $("#mdms_datadictD_zydm_edit").btnDisable(true);
-              $("#mdms_datadictD_zydm_delete").btnDisable(true);
-            }
-          }, _data);
+          
+          // 选择行数据
+          var rowSelectData = tableGridObj.getSelectedRowData();
+          
+          zy.g.am.app = '78cf8922c5ea4afa9dae8970215ea796';
+          zy.g.am.mod = 'dict';
+          
+          zy.net.get("api/dict_data", function(msg) {
+              if (msg) {
+                zy.ui.msg("提示","删除成功","s");
+                
+                // 表格删除行
+                tableGridObj.deleteSelectedRow();
+                //编辑按钮、删除按钮变为不可点击
+                $("#mdms_datadictD_zydm_edit").btnDisable(true);
+                $("#mdms_datadictD_zydm_delete").btnDisable(true);
+              }
+            }, 
+          {
+            op_type:"delete",
+            typecd: nodeClick.cd,
+            parentcd: nodeClick.parentcd,
+            ver: verSelect.val(),
+            cd: rowSelectData.cd
+          });
+          
+          // var _data = _datatable_init.getrow();
+          // //选择行数据
+          // zy.g.am.app = 'd2c8511b47714faba5c71506a5029d94';
+          // zy.g.am.mod = 'datadict';
+          // //参数中添加一个typecd
+          // if(!_data.typecd){
+          //   _data.typecd=nodeClick.typecd;
+          // }
+          // zy.net.get("api/deletedata", function(msg) {
+          //   if (msg) {
+          //     zy.ui.msg("提示","删除成功","s");
+          //     _datatable_init = _datatable.init(mdms_datadictD_index_tab.find("#mdms_datadictD_zydm_table"), {
+          //       typecd: nodeClick.typecd
+          //     });
+          //     //编辑按钮、删除按钮变为不可点击
+          //     $("#mdms_datadictD_zydm_edit").btnDisable(true);
+          //     $("#mdms_datadictD_zydm_delete").btnDisable(true);
+          //   }
+          // }, _data);
         });
       });
       //刷新grid
-      function updateGrid(){
-          var conditions = $("#row_form").find(".smart-form").serialize();
-          _datatable_init = _datatable.init(mdms_datadictD_index_tab.find("#mdms_datadictD_zydm_table"), {
-                    typecd: nodeClick.typecd
-                  });
-          //编辑按钮、删除按钮变为不可点击
-          $("#mdms_datadictD_zydm_edit").btnDisable(true);
-          $("#mdms_datadictD_zydm_delete").btnDisable(true);
-        }
+      // function updateGrid(){
+      //     var conditions = $("#row_form").find(".smart-form").serialize();
+      //     _datatable_init = _datatable.init(mdms_datadictD_index_tab.find("#mdms_datadictD_zydm_table"), {
+      //               typecd: nodeClick.typecd
+      //             });
+      //     //编辑按钮、删除按钮变为不可点击
+      //     $("#mdms_datadictD_zydm_edit").btnDisable(true);
+      //     $("#mdms_datadictD_zydm_delete").btnDisable(true);
+      //   }
       
     }
         
     //注册DataTable行点击事件
-    function _tools_rowEvent() {
-      mdms_datadictD_index_tab.find("#mdms_datadictD_zydm_table").on("click","tr", function(e) {
-        if (_datatable_init.getrow()) {
-          mdms_datadictD_index_tab.find("#mdms_datadictD_zydm_edit").btnDisable(false);
-          mdms_datadictD_index_tab.find("#mdms_datadictD_zydm_delete").btnDisable(false);
-        } else {
-          mdms_datadictD_index_tab.find("#mdms_datadictD_zydm_edit").btnDisable(true);
-          mdms_datadictD_index_tab.find("#mdms_datadictD_zydm_delete").btnDisable(true);
-        }
-      });
-    }
+    // function _tools_rowEvent() {
+    //   mdms_datadictD_index_tab.find("#mdms_datadictD_zydm_table").on("click","tr", function(e) {
+    //     if (_datatable_init.getrow()) {
+    //       mdms_datadictD_index_tab.find("#mdms_datadictD_zydm_edit").btnDisable(false);
+    //       mdms_datadictD_index_tab.find("#mdms_datadictD_zydm_delete").btnDisable(false);
+    //     } else {
+    //       mdms_datadictD_index_tab.find("#mdms_datadictD_zydm_edit").btnDisable(true);
+    //       mdms_datadictD_index_tab.find("#mdms_datadictD_zydm_delete").btnDisable(true);
+    //     }
+    //   });
+    // }
+    
+    // Toolbar显示隐藏
+    // function _tools_show(flag){
+    //   if(flag){
+    //     mdms_datadictD_index_tab.find("[name=datadict_grid_toolbar]").css("display", "inline-block");
+    //   }else{
+    //     mdms_datadictD_index_tab.find("[name=datadict_grid_toolbar]").css("display", "none");
+        
+    //   }
+    // }
+    
+    
+    
   
 
     //widget标题
     function widgetTitle(treenode){
       /**标题****************/
-      var _name = treenode.typenm;
+      var _name = treenode.nm;
       var flg_ = true;
       var _tnode=treenode;
       while(flg_){
         if(_tnode.getParentNode()){
-          _name = _tnode.getParentNode().typenm +">"+ _name;
+          _name = _tnode.getParentNode().nm +">"+ _name;
           _tnode=_tnode.getParentNode();
         }
         else{
@@ -919,11 +1062,16 @@ var datadicdD_index = (function(zy, $) {
       mdms_datadictD_index_tab.find(".title_strong").text("");
       //Tree初始化
       _tree.init($("#mdms_datadictD_zydm_tree"), function(treenode) {
-        container.find("div.btn-group").css("display", "none");
+        // container.find("div.btn-group").css("display", "none");
         //更新标题
         widgetTitle(treenode);
         
-        mdms_datadictD_index_tab.find("div.btn-group").css("display","inline-block");
+        // tree  工具栏显示
+        _tree_toolbar_show(true);
+        
+        // 字典版本下拉select2
+        ver_form_init(treenode);
+            
         // //DataTable初始化
         // _datatable_init = _datatable.init(mdms_datadictD_index_tab.find("#mdms_datadictD_zydm_table"), {typecd: treenode.cd}, function(_msg) {
         //   if (_msg.type.length > 0) {
@@ -1005,18 +1153,99 @@ var datadicdD_index = (function(zy, $) {
     mdms_datadictD_index_tab.find("#tree_refresh").click();
     
     
-    // 字典版本表单
+    
+    function Tree_ToolBar_Event(){
+      //添加分类
+      mdms_datadictD_index_tab.find("#node-add").on("click",function(){
+        zy.net.loadHTMLs("saas/mdm/dict/h2h3.html", index_mod, function() {
+          mdms_h2h3(zTreeObj,nodeClick,"i");
+        });
+      });
+      //修改分类
+      mdms_datadictD_index_tab.find("#node-edit").on("click",function(){
+        zy.net.loadHTMLs("saas/mdm/dict/h2h3.html", index_mod, function() {
+          mdms_h2h3(zTreeObj,nodeClick,"u");
+        });
+      });
+      
+      //添加版本
+      mdms_datadictD_index_tab.find("#ver-add").on("click",function(){
+        zy.net.loadHTMLs("saas/mdm/dict/dict_ver.html", index_mod, function() {
+          mdms_ver(zTreeObj,nodeClick,"i",function(formData){
+            
+            //更新tree节点数据
+            nodeClick.dict.push(formData);
+            
+            //更新版本selec2
+            ver_form_init(nodeClick);
+            
+          });
+        });
+      });
+      
+      //修改版本
+      mdms_datadictD_index_tab.find("#ver-edit").on("click",function(){
+        
+        var verSelect = $("#ver-select");
+        
+        if(!verSelect || !verSelect.val()) return;
+        
+        zy.net.loadHTMLs("saas/mdm/dict/dict_ver.html", index_mod, function() {
+          mdms_ver(zTreeObj,nodeClick,"u",function(formData){
+            //更新tree节点数据
+            nodeClick.dict.forEach(function(v){
+              if(v.ver == formData.ver)
+                Object.assign(v,formData);
+            });
+            
+            //更新版本selec2
+            ver_form_init(nodeClick);
+          }, verSelect.val());
+        });
+      });
+      
+    }
+    
+    Tree_ToolBar_Event();
+    // 版本change事件
+    $("#ver-select").on("change",function(e){
+      zy.log("ver-select change：",e);
+      
+      
+      
+      var selectedVer = e.currentTarget.value;
+      
+      tableGridObj.init(nodeClick, selectedVer);
+      
+      
+    });
+    
+    // 字典版本select2
     function ver_form_init(treeNode){
       
       zy.log(treeNode);
       
       var verSelect = $("#ver-select");
+      var $datadicGrid = $("#datadict-grid"); 
+      
+      // var $index_no_version_msg = $("#index_no_version_msg");
       
       if(!treeNode.dict || !treeNode.dict.length) {
-        verSelect.html("");
+        // verSelect.select2("destroy");
+        verSelect.select2({data:[]});
+        // 表格工具栏隐藏
+        // _tools_show(false);
+        // 表格隐藏
+        $datadicGrid.hide();
+        
+        // 显示消息
+        // $index_no_version_msg.show();
         return;
       }
+      // $index_no_version_msg.hide();
       
+      $datadicGrid.show();
+        
       var val = verSelect.val();
       
       verSelect.select2({
@@ -1036,107 +1265,140 @@ var datadicdD_index = (function(zy, $) {
       
     }
     
-    //添加分类
-    mdms_datadictD_index_tab.find("#node-add").on("click",function(){
-      zy.net.loadHTMLs("saas/mdm/dict/h2h3.html", index_mod, function() {
-        mdms_h2h3(zTreeObj,nodeClick,"i");
-      });
-    });
-    //修改分类
-    mdms_datadictD_index_tab.find("#node-edit").on("click",function(){
-      zy.net.loadHTMLs("saas/mdm/dict/h2h3.html", index_mod, function() {
-        mdms_h2h3(zTreeObj,nodeClick,"u");
-      });
-    });
     
-    //添加版本
-    mdms_datadictD_index_tab.find("#ver-add").on("click",function(){
-      zy.net.loadHTMLs("saas/mdm/dict/dict_ver.html", index_mod, function() {
-        mdms_ver(zTreeObj,nodeClick,"i",function(formData){
+    // 字典明细表格
+    function tableGrid(tableId,rowSelectedCB){
+      
+      var dict_dataTable = $("#"+tableId);
+      
+      var dictDataTableApi;
+      
+      //注册DataTable行点击事件
+      dict_dataTable.on( 'click', 'tr', function () {
+          if ( $(this).hasClass('active') ) {
+              $(this).removeClass('active');
+              rowSelectedCB && rowSelectedCB(false);
+          }
+          else {
+              dictDataTableApi.$('tr.active').removeClass('active');
+              $(this).addClass('active');
+              rowSelectedCB && rowSelectedCB(true);
+          }
+      } );
+      
+      
+      /**
+       * 初始化
+       * nodeClick zTree选择的节点
+       * selectedVer 版本下拉选择的明细版本
+       * rowSelectedCB 表格行选择事件
+       */
+      function init(nodeClick, selectedVer){
+        if(dictDataTableApi) dictDataTableApi.destroy();
+      
+        var cb = function(msg){
+          zy.log("msg=",msg);
           
-          //更新tree节点数据
-          nodeClick.dict.push(formData);
+          var options = {
+            data: msg.result[0].dict[0].data,
+            columns: [
+              {
+                title: "字典编码",
+                data: "cd"
+              },
+              {
+                title: "字典中文名",
+                data: "nm",
+                defaultContent: ""
+              },
+              {
+                title: "快捷拼音码",
+                data: "shortkey",
+                defaultContent: ""
+              },
+              {
+                title: "说明",
+                data: "mark",
+                defaultContent: ""
+              },
+            ],
+            "language": zy.ui.dataTable.language,
+            select: true
+          };
           
-          //更新版本selec2
-          ver_form_init(nodeClick);
-          
+          // 合并初始化参数选项
+          // $.extend(options, zy.ui.dataTable);
+          // 字典表格初始化
+          dictDataTableApi = dict_dataTable.DataTable(options);
+      
+        }
+        
+        
+        
+        zy.g.am.app = '78cf8922c5ea4afa9dae8970215ea796';
+        zy.g.am.mod = 'dict';
+        zy.net.get("api/dict_ver_find", cb, {
+          op_type: "find_data",
+          cd: nodeClick.cd,
+          parentcd: nodeClick.parentcd,
+          ver: selectedVer
         });
-      });
-    });
-    
-    //修改版本
-    mdms_datadictD_index_tab.find("#ver-edit").on("click",function(){
-      
-      var verSelect = $("#ver-select");
-      
-      if(!verSelect || !verSelect.val()) return;
-      
-      zy.net.loadHTMLs("saas/mdm/dict/dict_ver.html", index_mod, function() {
-        mdms_ver(zTreeObj,nodeClick,"u",function(formData){
-          //更新tree节点数据
-          nodeClick.dict.forEach(function(v){
-            if(v.ver == formData.ver)
-              Object.assign(v,formData);
-          });
-          
-          //更新版本selec2
-          ver_form_init(nodeClick);
-        }, verSelect.val());
-      });
-    });
-    
-    // 版本change事件
-    $("#ver-select").on("change",function(e){
-      zy.log("ver-select change：",e);
-      
-      var dict_dataTable = $("#mdm_dict_table");
-      
-      var selectedVer = e.currentTarget.value;
-      
-      var cb = function(msg){
-        zy.log("msg=",msg);
-        
-        var options = {
-          data: msg.result[0].dict[0].data,
-          columns: [
-            {
-              title: "字典编码",
-              data: "cd"
-            },
-            {
-              title: "字典中文名",
-              data: "nm"
-            },
-            {
-              title: "快捷拼音码",
-              data: "shortkey"
-            },
-            {
-              title: "说明",
-              data: "mark"
-            },
-          ],
-          "language": zy.ui.dataTable.language
-        };
-        
-        // 合并初始化参数选项
-        // $.extend(options, zy.ui.dataTable);
-        // 字典表格初始化
-        dict_dataTable.DataTable(options);
       }
       
       
       
-      zy.g.am.app = '78cf8922c5ea4afa9dae8970215ea796';
-      zy.g.am.mod = 'dict';
-      zy.net.get("api/dict_ver_find", cb, {
-        op_type: "find_data",
-        cd: nodeClick.cd,
-        parentcd: nodeClick.parentcd,
-        ver: selectedVer
-      });
+      // destroy表格
+      function destroy(){
+        if(dictDataTableApi) dictDataTableApi.destroy();
+      }
       
-    });
+      
+      
+      // 获取选择行数据
+      function getSelectedRowData(){
+        // 选择行数据
+        var rowSelect = dictDataTableApi.row('tr.active');
+        if(!rowSelect){
+          return;
+        }
+        var rowSelectData = rowSelect.data();
+        return rowSelectData;
+      }
+      
+      // 添加行数据
+      function addRow(rowData){
+        dictDataTableApi.row.add(rowData).draw();
+      }
+      
+      // 修改选中的行
+      function editSelectedRow(rowData){
+        // 选择行
+        var rowSelect = dictDataTableApi.row('tr.active');
+        rowSelect.data(rowData).draw();
+        dictDataTableApi.$('tr.active').removeClass('active');
+      }
+      
+      // 删除选中的行
+      function deleteSelectedRow(){
+        // 选择行
+        var rowSelect = dictDataTableApi.row('tr.active');
+        rowSelect.remove().draw();
+      }
+      
+      
+      return {
+        dictDataTableApi: dictDataTableApi,  //DataTable API对象
+        
+        init: init, //表格初始化
+        getSelectedRowData: getSelectedRowData, // 获取选择行数据
+        destroy: destroy, //destroy表格
+        
+        addRow: addRow, // 添加行数据
+        editSelectedRow: editSelectedRow,// 修改选中的行
+        deleteSelectedRow: deleteSelectedRow // 删除选中的行
+      }
+      
+    }
     
     
   }

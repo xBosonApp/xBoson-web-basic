@@ -3,6 +3,8 @@
 
 <link href="/dev/face/ui/paas/lib/js/plugin/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
 <link rel="stylesheet" href="/dev/face/ui/paas/lib/js/plugin/datatables/examples/resources/bootstrap/3/dataTables.bootstrap.css" type="text/css" media="all" />
+<!--<link rel="stylesheet" type="text/css" href="saas/mdm/dict/buttons.bootstrap.min.css"/>-->
+ 
 <!-- Widget ID (each widget will need unique ID)-->
 <div class="jarviswidget" id="mdms_datadictD_index" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
 	<!-- widget options:
@@ -94,7 +96,7 @@
   													</button>
   												</li>
   											</ul>
-                        <div class="btn-toolbar">
+                        <div class="btn-toolbar" id="mdm-dict-tree-toolbar" style="display:none">
   												<div class="btn-group">
   													<button id="node-add" type="button" class="btn btn-default" style="background-color:#ede7ff!important;">
   													  <i class="fa fa-folder txt-color-purple" title="添加分类"></i>
@@ -128,14 +130,14 @@
               							  <span class="input-group-addon">内容</span>
               								<input class="form-control" type="text" name="keywords" placeholder="代码id,名称,备注">
               							</div>
-              							<div class="input-group">
-              							  <span class="input-group-addon">版本</span>
-              								<input class="form-control" type="text" name="versions" placeholder="1.0?V20XX">
-              							</div>
-              							<div class="input-group">
-              							  <span class="input-group-addon">&nbsp;有效性&nbsp;</span>
-              								<input class="form-control" type="text" name="status" data-type="select2" placeholder="请选择">
-              							</div>
+              							<!--<div class="input-group">-->
+              							<!--  <span class="input-group-addon">版本</span>-->
+              							<!--	<input class="form-control" type="text" name="versions" placeholder="1.0?V20XX">-->
+              							<!--</div>-->
+              							<!--<div class="input-group">-->
+              							<!--  <span class="input-group-addon">&nbsp;有效性&nbsp;</span>-->
+              							<!--	<input class="form-control" type="text" name="status" data-type="select2" placeholder="请选择">-->
+              							<!--</div>-->
               							<footer>
               							  <button type="button" class="btn btn-default" id="filter_qx">取消</button>
             								  <button type="button" class="btn btn-primary" id="filter_sx">筛选</button>
@@ -149,7 +151,7 @@
                 	</div>
                 </div>
                 <div id="mdms_datadictD_zydm_container_NOTUSE_NOTHIDE" class="col-xs-8">
-                  <div class="row" id="row_form"></div>
+                  
             <!--      <div class="row" id="ver_form">-->
             <!--        <form class="smart-form" name="mdms_datadictD_ver_form" onsubmit="return false;">-->
         				<!--			<div class="input-group">-->
@@ -173,18 +175,28 @@
         				<!--			</div>-->
 							    	<!--</form>-->
             <!--      </div>-->
-                  <div class="btn-group">
-                    <button id="mdms_datadictD_zydm_add" class="btn btn-primary btn-xs" type="submit">&emsp;<i class="fa fa-magic fa-1"></i>&emsp;添 加&emsp;</button>
-                    <button id="mdms_datadictD_zydm_edit" class="btn btn-primary btn-xs" type="submit">&emsp;<i class="fa fa-edit fa-1"></i>&emsp;修 改&emsp;</button>
-                    <button id="mdms_datadictD_zydm_delete" class="btn btn-primary btn-xs">&emsp;<i class="fa  fa-trash-o "></i>&emsp;注 销&emsp;</button>
-                    <button id="mdms_datadictD_zydm_export" class="btn btn-primary btn-xs">&emsp;<i class="glyphicon glyphicon-export  "></i>&emsp;导出明细&emsp;</button>
+                  <div id="datadict-grid" style="display:none">
+                    
+                    <div name="datadict_grid_toolbar" class="btn-group">
+                      <button id="mdms_datadictD_zydm_add" class="btn btn-primary btn-xs" type="submit">&emsp;<i class="fa fa-magic fa-1"></i>&emsp;添 加&emsp;</button>
+                      <button id="mdms_datadictD_zydm_edit" class="btn btn-primary btn-xs" type="submit">&emsp;<i class="fa fa-edit fa-1"></i>&emsp;修 改&emsp;</button>
+                      <button id="mdms_datadictD_zydm_delete" class="btn btn-primary btn-xs">&emsp;<i class="fa  fa-trash-o "></i>&emsp;注 销&emsp;</button>
+                      <button id="mdms_datadictD_zydm_export" class="btn btn-primary btn-xs">&emsp;<i class="glyphicon glyphicon-export  "></i>&emsp;导出明细&emsp;</button>
+                    </div>
+                    <div class="pull-right">
+                      <b name="total_count"></b>
+                    </div>
+                    <h1></h1>
+                    <div id="mdms_datadictD_zydm_table"></div>
+                    <table id="mdm_dict_table"  class="table table-bordered table-striped"></table>
+                    
+                    <!--<div class="center-block" style="display:none" id="index_no_version_msg">-->
+                    <!--  <p class="text-warning">请先添加明细版本</p>-->
+                    <!--</div>-->
+                    
                   </div>
-                  <div class="pull-right">
-                    <b name="total_count"></b>
-                  </div>
-                  <h1></h1>
-                  <div id="mdms_datadictD_zydm_table"></div>
-                  <table id="mdm_dict_table"  class="table table-bordered table-striped"></table>
+                  
+                  
                 </div>
               </fieldset>
 					</div>
@@ -284,6 +296,8 @@
 <script type="text/javascript" src="/dev/face/ui/paas/lib/html/zy_dyform.js"></script>
 
 <script type="text/javascript" src="/dev/face/ui/paas/lib/js/plugin/datatables/examples/resources/bootstrap/3/dataTables.bootstrap.js"></script>
+<!--<script type="text/javascript" src="saas/mdm/dict/dataTables.buttons.min.js"></script>-->
+<!--<script type="text/javascript" src="saas/mdm/dict/buttons.bootstrap.min.js"></script>-->
 
 <script src="saas/mdm/dict/index.js"></script>
 
