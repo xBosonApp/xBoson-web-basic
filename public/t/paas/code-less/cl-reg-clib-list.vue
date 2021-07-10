@@ -1,16 +1,12 @@
 <!-- Create By xBoson System -->
 
 <template>
-<div class='main'>
+<div class='items-group main'>
   <div class='first content'>
     <div v-for='(clib, i) in list' class='items-group c'>
       <a-button @click='$emit("change", "openClib", {clib})'>{{ clib.name }}</a-button>
-      <a-tooltip title='编辑组件'>
-        <a-button icon='edit' @click='editCLib(clib)'/>
-      </a-tooltip>
-      <a-tooltip title='删除组件' v-if='showDelete'>
-        <a-button icon='delete' type='danger' @click='delCLib(clib._id)'/>
-      </a-tooltip>
+      <a-button icon='edit' @click='editCLib(clib)' v-if='showEdit'/>
+      <a-button icon='delete' type='danger' @click='delCLib(clib._id)' v-if='showDelete'/>
     </div>
     <div v-if='list.length < 1' class='note'>
       没有可用的组件库
@@ -18,10 +14,13 @@
   </div>
   
   <div class='content'>
-    <a-tooltip title='创建组件' placement='top' @click='$emit("change", "createCLib")'>
+    <a-tooltip title='编辑组件库信息' placement='top'>
+      <a-button icon='edit' @click='showEdit = !showEdit'/>
+    </a-tooltip>
+    <a-tooltip title='创建组件库' placement='top' @click='$emit("change", "createCLib")'>
       <a-button icon='plus'/>
     </a-tooltip>
-    <a-tooltip title='删除组件' placement='top'>
+    <a-tooltip title='删除组件库' placement='top'>
       <a-button icon='minus' @click='showDelete = !showDelete'/>
     </a-tooltip>
   </div>
@@ -42,6 +41,7 @@ export default {
     return {
       list: [],
       showDelete: false,
+      showEdit: false,
     };
   },
   
@@ -71,8 +71,6 @@ export default {
 </script>
 
 <style scoped>
-.main { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; min-height: 50vh; }
-.first { border-right: 1px solid #eee; }
-.content { padding: 20px 30px; }
+.main { grid-template-columns: 1fr 1fr; gap: 5px; min-height: 50vh; }
 .c { grid-template-columns: 1fr auto auto; margin: 2px; }
 </style>

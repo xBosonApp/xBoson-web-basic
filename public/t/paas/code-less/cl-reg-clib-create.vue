@@ -16,51 +16,40 @@
     </a-form-model-item>
     
     <a-form-model-item label='外部依赖项文件'>
-      <div v-for='(r, i) in form.requires' class='clibitem'>
-        <a-input v-model='form.requires[i]'/>
-        <a-button icon='delete' @click='form.requires.splice(i, 1)'/>
-        <a-button icon='question' @click='help = true'/>
+      <div class='ant-col ant-col-10'>
+        <div v-for='(r, i) in form.requires' class='clibitem'>
+          <a-input v-model='form.requires[i]' placeholder='文件路径'/>
+          <a-button icon='delete' @click='form.requires.splice(i, 1)'/>
+          <a-button icon='question' @click='help = true'/>
+        </div>
+        <cl-add-button icon='add' title='增加依赖文件' @click='form.requires.push("")'/>
       </div>
-      <cl-add-button icon='add' title='增加依赖文件' @click='form.requires.push("")'/>
-    </a-form-model-item>
-    
-    <a-form-model-item label='分组'>
-      <div v-for='(r, i) in form.groups' class='clibitem clibitem2'>
-        <a-input v-model='form.groups[i]'/>
-        <a-button icon='delete' @click='form.groups.splice(i, 1)'/>
+      
+      <div class='ant-col ant-col-4 ant-form-item-label'>
+        <label>分组</label>
       </div>
-      <cl-add-button icon='add' title='增加分组' @click='form.groups.push("")'/>
+      
+      <div class='ant-col ant-col-10'>
+        <div v-for='(r, i) in form.groups' class='clibitem clibitem2'>
+          <a-input v-model='form.groups[i]' placeholder='分组名'/>
+          <a-button icon='delete' @click='form.groups.splice(i, 1)'/>
+        </div>
+        <cl-add-button icon='add' title='增加分组' @click='form.groups.push("")'/>
+      </div>
     </a-form-model-item>
-    
+  
     <a-form-model-item :wrapper-col="buttonCol">
       <a-button type='primary' @click='checkForm'>递交</a-button>
       <a-button @click='$emit("change", "default")' style='margin-left: 5px'>返回</a-button>
     </a-form-model-item>
   </a-form-model>
   
-  <a-drawer
-    title="依赖文件说明"
-    placement="top"
-    :visible="help"
-    height='400'
-    @close="help = false"
-  >
-    <p>
-      通常用来加载 vue 组件文件.<br/>
+  <cl-path-rule title='依赖文件说明' v-model='help'>
+    通常用来加载 vue 组件文件.<br/>
       依赖文件在组件被使用前自动加载, 可以加载 .js 结尾的脚本文件,
     或加载 .css 结尾的样式表文件.
-    </p>
-    <p>
-      依赖文件路径规则:
-      <ul>
-        <li>以 'cdn/' 开头的路径, 以 cdn 为根目录加载文件</li>
-        <li>以 'xui://' 为协议时, 自动添加 '/t' '/ui' 前缀, 并且限定范围在该目录下. </li>
-        <li>以 '/' 开头的路径, 在 uifs 范围内寻找文件. </li>
-        <li>以 'http://' 或 'https://' 开始的路径加载外部文件 </li>
-        <li>以 './' 开头的路径加载低代码平台中的文件 </li>
-      </ul>
-    </p>
-  </a-drawer>
+  </cl-path-rule>
+  
 </div>
 </template>
 
@@ -69,6 +58,7 @@ const tool = require("./tool.js");
 
 export default {
   props: ['data', 'next'],
+  components: tool.loadc('cl-path-rule'),
   
   data() {
     return {
@@ -147,10 +137,13 @@ export default {
 </script>
 
 <style scoped>
-.clibitem { 
+.clibitem, .g2 { 
   display: grid; grid-template-columns: 1fr auto auto; gap: 2px; margin-top: 2px;
 }
 .clibitem2 {
   grid-template-columns: 1fr auto;
+}
+.g2 {
+  grid-template-columns: 1fr 1fr;
 }
 </style>

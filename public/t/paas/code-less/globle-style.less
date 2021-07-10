@@ -25,6 +25,7 @@
   
   @radius: 4px;
   
+  // 用于单行表单(或div)合并边框
   .i {
     border-width: 1px 0; border-style: solid;
   }
@@ -34,9 +35,34 @@
   .i:last-child {
     border-width: 1px 1px 1px 0; border-radius: 0 @radius @radius 0;
   }
+  
+  // 用于内容页横向排版, 
+  .content {
+    padding: 20px 30px; border-left: 1px solid #eee;
+  }
+  .content:first-child {
+    border-left-width: 0;
+  }
 }
 
 code {
   color: #000038; background-color: #f3f3f3; display: inline-block; padding: 0 3px; margin:1px;
+}
+
+// 如果按钮被挤在一起, 在富容器上应用这个属性
+.cl-buttons {
+  button {
+    margin-right: 5px;
+  }
+}
+
+// 用于简易表单, form 中直接嵌套 label/input
+.cl-form {
+  label {
+    margin-bottom: 5px;
+  }
+  input {
+    margin-bottom: 10px;
+  }
 }
 /* 上海竹呗信息技术有限公司 */

@@ -2,13 +2,14 @@
 
 <template>
 <div>
-  <a-steps :current="currentState.step" size='small'>
+  <a-steps :current="currentState.step" size='small' style='margin-bottom: 20px;'>
     <a-step v-for="(s, i) in currentState.stepInf" 
       :key="i" 
       :title="s.title"
       :description='s.desc' />
     <a-step key='wait' title='选择下一步操作' />
   </a-steps>
+  
   <a-alert 
     v-if='message' type="error" 
     banner style='margin: 10px 2px;'>
@@ -19,6 +20,7 @@
     :is='processConfig.component' 
     :data='currentState.data'
     :next='nextStep'
+    @previous='previousStep'
     @change='setStage'/>
 </div>
 </template>
@@ -36,7 +38,17 @@ export default {
   
   data() {
     return {
-      currentState : { process: 'default', step: 0, data:{}, stepInf: [] },
+      currentState : { 
+        process: 'default', 
+        step: 0, 
+        data: {
+          clib : null, // 当前选中的组件库
+          ret  : null, // 页面切换返回值
+          bind : null, // 绑定组件对象
+        }, 
+        stepInf: [] 
+      },
+      
       message : null,
       
       processes : {
@@ -49,15 +61,16 @@ export default {
         ],
         
         editCLib : [
-          { title: '编辑组件库', component: 'cl-reg-clib-create' },
+          { title: '编辑组件库', desc:'组件库基础信息', component: 'cl-reg-clib-create' },
         ],
         
-        crtbind : [
-          { title: '绑定组件', component: 'cl-reg-bind-create' },
+        openClib : [
+          { title: '组件库设定', desc:'组件库中的组件列表', component: 'cl-reg-bind-list' },
         ],
         
-        delbind : [
-          { title: '删除绑定组件', component: 'cl-reg-bind-del' },
+        createBind : [
+          { title: '绑定组件', desc:'为组件库绑定组件', component: 'cl-reg-bind-create' },
+          { title: '组件属性', desc:'绑定组件的属性定义', component: 'cl-reg-bind-prop' },
         ],
       },
     };
@@ -72,24 +85,31 @@ export default {
   },
   
   methods: {
+    // onChange(name, merginData)
     setStage(name, data) {
       if (!this.processes[name]) {
         throw new Error("无效的流程 "+ name);
       }
       this.currentState.process = name;
-      this.currentState.data = data || {};
       
       if (name == 'default') {
         this.currentState.step = 0;
         this.currentState.stepInf.splice(0);
+        this.currentState.data = data || {};
       } else {
         this.currentState.step++;
+        this.shallowCopy(this.currentState.data, data);
       }
       
       this.processes[name].forEach(p=>{
         this.currentState.stepInf.push(p);  
       });
-      
+    },
+    
+    shallowCopy(tar, src) {
+      for (let n in src) {
+        tar[n] = src[n];
+      }
     },
     
     defineComponentFromData() {
@@ -123,6 +143,16 @@ export default {
       // 重新回到最初的画面?
       this.returnDefault();
       return false;
+    },
+    
+    previousStep(ret) {
+      if (this.currentState.step-1 >= 0) {
+        this.currentState.stepInf.splice(this.currentState.step);
+        this.currentState.step--;
+        this.currentState.data.ret = ret;
+      } else {
+        this.returnDefault();  
+      }
     },
   },
 }

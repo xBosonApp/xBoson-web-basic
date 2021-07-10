@@ -102,6 +102,7 @@ export default {
     initComonent(id, index) {
       let component = clib.getComponent(id);
       if (component.plugins) {
+        //TODO: 将插件加载到局部组件库
         tool.loadPlugins(component.plugins);
       }
       

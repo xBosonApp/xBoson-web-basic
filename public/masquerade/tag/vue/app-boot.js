@@ -194,8 +194,10 @@
       xhr.addEventListener('load', _check);
       xhr.addEventListener('error', _check);
     }
+
     xhr.open("GET", url, use_async);
     xhr.send(data);
+    
     if (!use_async) {
       console.debug('Sync load', url);
       _check();
