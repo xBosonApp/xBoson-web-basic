@@ -56,7 +56,7 @@
         },
         simpleData: {
           enable: true, //是否用简单数据
-          idKey: 'id', //对应json数据中的ID
+          idKey: 'nid', //对应json数据中的ID
           pIdKey: 'pid', //对应json数据中的父ID
           rootPId: 0 // 用于修正根节点父节点数据，即 pIdKey 指定的属性值
         }

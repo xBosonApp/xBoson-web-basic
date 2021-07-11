@@ -1,5 +1,14 @@
 <!-- Create By xBoson System -->
 <style>
+  /* 补充 bootstrap row 统一高度和底部间距调整 */
+  .widget-body .saas-row {
+    display: flex;
+    margin-bottom: -14px;
+    /*max-height: 600px;*/
+    /*overflow-y: scroll;*/
+    /*overflow-x: hidden;*/
+  }
+  /* ztree节点标注子节点数量 */
   .ws-api-ztree-node-n {
     font-size: 9px !important;
     font-weight: 300 !important;
@@ -18,21 +27,21 @@
       <!-- add: non-hidden - to disable auto hide -->
       <div class="btn-group">
         <button class="btn dropdown-toggle btn-xs btn-success" data-toggle="dropdown" title="状态选择">
-          Status <i class="fa fa-caret-down"></i>
+          状态 <i class="fa fa-caret-down"></i>
         </button>
         <ul class="dropdown-menu pull-right js-status-update">
           <li>
-            <a href="javascript:void(0);"><i class="fa fa-circle txt-color-green"></i> Online</a>
+            <a href="javascript:void(0);"><i class="fa fa-circle txt-color-green"></i> 在线</a>
           </li>
           <li>
-            <a href="javascript:void(0);"><i class="fa fa-circle txt-color-red"></i> Busy</a>
+            <a href="javascript:void(0);"><i class="fa fa-circle txt-color-red"></i> 下线</a>
           </li>
           <li>
-            <a href="javascript:void(0);"><i class="fa fa-circle txt-color-orange"></i> Away</a>
+            <a href="javascript:void(0);"><i class="fa fa-circle txt-color-orange"></i> 停用</a>
           </li>
           <li class="divider"></li>
           <li>
-            <a href="javascript:void(0);"><i class="fa fa-power-off"></i> Log Off</a>
+            <a href="javascript:void(0);"><i class="fa fa-power-off"></i> 无效</a>
           </li>
         </ul>
       </div>
@@ -53,8 +62,8 @@
       <div class="row">
         <div id="ws_api_v_nouislider" class="noUiSlider"></div>
       </div>
-      <div class="row">
-        <div id="ws_api_v_ztree" class="col-xs-3 custom-scroll" style="max-height:600px;overflow-y:scroll;overflow-x:hidden;border-width:0px 1px 0px 0px;border-style:solid;border-color:#CCC!important;">
+      <div class="row saas-row">
+        <div id="ws_api_v_ztree" class="col-xs-3 custom-scroll">
           <ul class="ztree"></ul>
         </div>
         <div id="ws_api_v_innercontent" class="col-xs-9"></div>

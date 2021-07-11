@@ -1,4 +1,5 @@
 /* Create By xBoson System */
+/* Create By xBoson System */
 /**
  * API服务目录信息 
  * @class ws.api.v.index
@@ -19,22 +20,6 @@
       if (msg && msg.result)
         tree(msg.result);
     }, {flg:'0'});
-  }
-
-  // 标题栏：导航信息
-  function bread(n){
-    function Head(node,arr){
-      if(node==n){
-        arr[node.level] = node.name+"【"+node.id+"】 ";
-      }else{
-        arr[node.level] = node.name;
-      }
-      if(node.getParentNode()) Head(node.getParentNode(),arr);
-    }
-    var head = [];
-    Head(n,head);
-    zy.log('->',head.join(' > '));
-    v_header.find('h2').html('【API服务目录】'+head.join(' > '));
   }
 
   // zTree初始化处理
@@ -87,10 +72,9 @@
             // treeObj.updateNode(_node);//并更新节点信息
             $("#"+_node.tId+'_span').append('<sup class="badge bg-color-magenta ws-api-ztree-node-n bounceIn animated">'+msg.value.length+'</sup>');
           }
-        }, {id:_node.id,pid:_node.pid,flg:_node.flg});
+        }, {prjid:_node.prjid,id:_node.id,pid:_node.pid,flg:_node.flg});
         zy.log("_node: flg="+_node.flg +' > id='+_node.id +' > pid='+ _node.pid +' > name='+ _node.name);
       }
-      bread(_node);
     }
     // 节点被点击的事件回调函数
     function click(event, treeId, treeNode){
@@ -107,9 +91,8 @@
 
   // API服务信息加载处理
   function Right(node){
-    bread(node);
-    if(node.flg!=='0'){return;}
-    zy.net.loadHTML("ws/api/v/view.html",v_content,function(){
+    if(node.flg!=='0'){return;} // zy.net.loadHTML：app、mod、api管理画面（如：添加、修改等）
+    zy.net.loadHTML("ws/api/m/view.html",v_content,function(){
       main(node);
     });
   }
@@ -160,16 +143,10 @@
     $this.parent().addClass('active');
 	});
 
-  // 工具栏=icon【设置】
-  if(v_index.data("widget-editbutton")===true){
-    v_header.prepend('<div class="jarviswidget-ctrls"><a href="javascript:void(0);" class="button-icon jarviswidget-edit-btn" rel="tooltip" data-placement="bottom"><i class="fa fa-cog" title="设置"></i></a></div>');
-  }else{
-    v_header.prepend('<div class="jarviswidget-ctrls"></div>');
-  }
-
   v_content.css({'border-width':"0px 0px 1px 1px",'border-style':"solid",
       'border-color':"#ccc",'background':"#f0f6f1"});
 	v_ztree.animate({scrollTop: v_ztree[0].scrollHeight},500);
 
   init();
+
  })();
