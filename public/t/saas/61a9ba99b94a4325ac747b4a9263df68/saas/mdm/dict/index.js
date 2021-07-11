@@ -1123,29 +1123,89 @@ var datadicdD_index = (function(zy, $) {
       //值域代码导出
       mdms_datadictD_index_tab.find("#tree_download").on("click",function(){
         if(nodeClick){
-          if(nodeClick.datatable==""||nodeClick.datatable=="sys_mdm002"){
-            var param={
-              typecd: nodeClick.typecd,
-              isindex:"0",
-              charset:"GBK",
-              type:1
-            };
-            var options={
-              app:"d2c8511b47714faba5c71506a5029d94",
-              mod:"DataDict",
-              api:"getIndexOrCode"
-            }
-            data_export.event(options,index_mod,param);
-            
-          } else{
-            zy.ui.msg("提示","暂不支持值域代码以外数据导出！","w");
+          
+          if(!verSelect.val()){
+            zy.ui.msg("提示","请选择一个字典版本","i");
+            return;
           }
+          
+          zy.g.am.app = '78cf8922c5ea4afa9dae8970215ea796';
+          zy.g.am.mod = 'dict';
+          var api = "api/dict_ver_find";
+          var param = {
+            op_type: "find_data",
+            cd: nodeClick.cd,
+            parentcd: nodeClick.parentcd,
+            ver: verSelect.val(),
+            
+            download: "1"
+          }
+          
+          var link = getLink();  // 下载接口URL
+          
+          function getLink(){
+            
+            var prm = zy.tool.initParams(zy.g.comm, zy.g.am);
+            zy.g.am = {};
+            //设置Url及参数
+            var uri = zy.fix_api_call(api, prm);
+            var link = zy.g.host.api + uri + "?" + zy.net.parseParam(prm)+"&"+zy.net.parseParam(param);
+            return link;
+          }
+          
+          zy.log("link=",link)
+          
+          window.open(link,"ddd");
+          
+          // if(nodeClick.datatable==""||nodeClick.datatable=="sys_mdm002"){
+          //   var param={
+          //     typecd: nodeClick.typecd,
+          //     isindex:"0",
+          //     charset:"GBK",
+          //     type:1
+          //   };
+          //   var options={
+          //     app:"d2c8511b47714faba5c71506a5029d94",
+          //     mod:"DataDict",
+          //     api:"getIndexOrCode"
+          //   }
+          //   data_export.event(options,index_mod,param);
+            
+          // } else{
+          //   zy.ui.msg("提示","暂不支持值域代码以外数据导出！","w");
+          // }
         } else {
           zy.ui.msg("提示","请选择值域代码节点","i");
         }
       });
       //值域代码导入
-      mdms_datadictD_index_tab.find("#tree_upload").on("click",imports);
+      // mdms_datadictD_index_tab.find("#tree_upload").on("click",imports);
+      //值域代码导入
+      mdms_datadictD_index_tab.find("#tree_upload").on("click",function(e){
+        
+        if(!nodeClick){
+          zy.ui.msg("提示","请选择值域代码节点","i");
+          return;
+        }
+        if(!verSelect.val()){
+          zy.ui.msg("提示","请选择一个字典版本","i");
+          return;
+        }
+        
+        
+        zy.net.loadHTMLs("saas/mdm/dict/dict_data_import.html", index_mod, function() {
+          var param = {
+            cd: nodeClick.cd,
+            parentcd: nodeClick.parentcd,
+            ver: verSelect.val()
+          };
+          datadict_data_import(param,function(){
+            tableGridObj.init(nodeClick,verSelect.val());
+          });
+        });
+      });
+      
+      
     } else{
       mdms_datadictD_index_tab.find("#tree_download").remove();
       mdms_datadictD_index_tab.find("#tree_upload").remove();
@@ -1177,7 +1237,7 @@ var datadicdD_index = (function(zy, $) {
             nodeClick.dict.push(formData);
             
             //更新版本selec2
-            ver_form_init(nodeClick);
+            ver_form_init(nodeClick, true);
             
           });
         });
@@ -1199,7 +1259,7 @@ var datadicdD_index = (function(zy, $) {
             });
             
             //更新版本selec2
-            ver_form_init(nodeClick);
+            ver_form_init(nodeClick, true);
           }, verSelect.val());
         });
       });
@@ -1221,7 +1281,7 @@ var datadicdD_index = (function(zy, $) {
     });
     
     // 字典版本select2
-    function ver_form_init(treeNode){
+    function ver_form_init(treeNode, flag){
       
       zy.log(treeNode);
       
@@ -1233,6 +1293,8 @@ var datadicdD_index = (function(zy, $) {
       if(!treeNode.dict || !treeNode.dict.length) {
         // verSelect.select2("destroy");
         verSelect.select2({data:[]});
+        
+        verSelect.val(null);
         // 表格工具栏隐藏
         // _tools_show(false);
         // 表格隐藏
@@ -1246,7 +1308,7 @@ var datadicdD_index = (function(zy, $) {
       
       $datadicGrid.show();
         
-      var val = verSelect.val();
+      // var val = verSelect.val();
       
       verSelect.select2({
         data: $.map(treeNode.dict, function(obj){
@@ -1256,11 +1318,11 @@ var datadicdD_index = (function(zy, $) {
         })
       });
       
-      if(val){
-        verSelect.val(val);
-      }else{
+      // if(val){
+      //   verSelect.val(val);
+      // }else{
         verSelect.val(treeNode.dict[0].ver);
-      }
+      // }
       verSelect.trigger("change");
       
     }
