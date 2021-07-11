@@ -21,7 +21,8 @@
     :data='currentState.data'
     :next='nextStep'
     @previous='previousStep'
-    @change='setStage'/>
+    @change='setStage'
+    @clear='message = null'/>
 </div>
 </template>
 
@@ -72,6 +73,10 @@ export default {
           { title: '绑定组件', desc:'为组件库绑定组件', component: 'cl-reg-bind-create' },
           { title: '组件属性', desc:'绑定组件的属性定义', component: 'cl-reg-bind-prop' },
         ],
+        
+        editProps : [
+          { title: '组件属性', desc:'绑定组件的属性定义', component: 'cl-reg-bind-prop' },
+        ],
       },
     };
   },
@@ -87,6 +92,7 @@ export default {
   methods: {
     // onChange(name, merginData)
     setStage(name, data) {
+      this.message = null;
       if (!this.processes[name]) {
         throw new Error("无效的流程 "+ name);
       }
@@ -146,6 +152,7 @@ export default {
     },
     
     previousStep(ret) {
+      this.message = null;
       if (this.currentState.step-1 >= 0) {
         this.currentState.stepInf.splice(this.currentState.step);
         this.currentState.step--;

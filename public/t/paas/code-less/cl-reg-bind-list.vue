@@ -18,10 +18,21 @@
       <span v-else class='note'>只在当前项目中使用</span>
     </h3>
     <div>
-      <a-button type='primary' @click='createBind'>绑定组件</a-button>
-      <a-button @click='onEdit' :disabled='selectC == null'>编辑组件</a-button>
-      <a-button @click='showDelete = true' :disabled='selectC == null'>删除组件</a-button>
-      <a-button @click='$emit("change", "default")'>返回</a-button>
+      <a-tooltip title='绑定组件'>
+        <a-button type='primary' @click='createBind' icon='plus'/>
+      </a-tooltip>
+      <a-tooltip title='编辑组件'>
+        <a-button @click='onEdit' :disabled='selectC == null' icon='edit'/>
+      </a-tooltip>
+      <a-tooltip title='编辑属性'>
+        <a-button @click='onPropEdit' :disabled='selectC == null' icon='menu-unfold'/>
+      </a-tooltip>
+      <a-tooltip title='删除组件'>
+        <a-button @click='showDelete = true' :disabled='selectC == null' icon='delete'/>
+      </a-tooltip>
+      <a-tooltip title='返回'>
+        <a-button @click='$emit("change", "default")' icon='rollback'/>
+      </a-tooltip>
     </div>
     <h4 v-if='selectC != null' style='margin-top: 10px'>
       <span>选中的组件:</span>
@@ -106,6 +117,10 @@ export default {
     
     onEdit() {
       this.$emit('change', 'createBind', { bind: this.selectC, isModifyBind: true });
+    },
+    
+    onPropEdit() {
+      this.$emit('change', 'editProps', { bind: this.selectC });
     },
   },
 }

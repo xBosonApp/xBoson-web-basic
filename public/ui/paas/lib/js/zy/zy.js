@@ -1,1 +1,4526 @@
-!function(){var t=window.frames[0]?window.frames[0]:window;t.zy||(t.zy={})}();var zy={toString:function(){return"{zy} version: 2.2.1"},debug:!1,log:function(){if(window.console&&zy.debug){for(var t=[],e=0;e<arguments.length;++e)t.push(arguments[e]),arguments[e]instanceof Error&&!0;console.log.apply(console,t)}},g:{host:{api:location.protocol+"//localhost/xboson/",ui:location.protocol+"//localhost/xboson/face"},comm:{app:"",mod:"",org:"",openid:""},am:{},page:{pagesize:"20"},org_list:[],user:{userid:""}}};function dataTableXScrollFix(t,e){var a=$(this),i=a.parents(".dataTables_scroll"),r=i.find(".dataTables_scrollBody");if(!(a.width()-10<i.width()||a.height()<window.innerHeight)){a.data("destroy_table_x_scroll_fix")&&a.data("destroy_table_x_scroll_fix")(),a.data("destroy_table_x_scroll_fix",function(){$(window).off("resize",x),a.off("mouseenter",g).off("mouseleave",h),d.remove(),c.remove()});var o=0,n=0,f=-1e3,s=100,l="0.3",d=$("<div class='fa fa-chevron-left data_table_x_scroll_fix'></div>"),c=$("<div class='fa fa-chevron-right data_table_x_scroll_fix'></div>"),u={position:"absolute","background-color":"#ccc","border-radius":"5px",padding:"50px 5px",opacity:l,cursor:"pointer","font-size":"12px"};i.length<1&&(i=a),d.css(u).appendTo(i),c.css(u).appendTo(i),x(),this.find("th").each(function(){s=(s+1.5*$(this).width())/2}),a.mousemove(function(t){f=t.pageY-50-13,d.offset({left:o,top:f}),c.offset({left:n,top:f})});var p=!1;a.mouseenter(g).mouseleave(h),d.click(function(){r.animate({scrollLeft:r.scrollLeft()-s},100)}).mouseenter(m).mouseleave(y),c.click(function(){r.animate({scrollLeft:r.scrollLeft()+s},100)}).mouseenter(m).mouseleave(y),$(window).resize(x)}function g(){p=!0,d.show(),c.show()}function h(){p=!1,setTimeout(function(){p||(d.hide(),c.hide())},100)}function x(){var t=i.offset();o=t.left,n=o+i.width()-d.outerWidth(),d.offset({left:o,top:f}),c.offset({left:n,top:f})}function m(){p=!0,$(this).animate({opacity:.8,"border-width":1})}function y(){p=!1,$(this).animate({opacity:l,"border-width":0})}}zy.isXBosonSystem=null,zy.setEditorExOptions=function(t){zy.net.loadScript.call(this,"lib/js/ace/1.2.9/ext-language_tools.js",function(){t.setOptions({enableBasicAutocompletion:!1,enableSnippets:!0,enableLiveAutocompletion:!0})})},zy.check_xboson_system=function(){if(0<=location.pathname.indexOf("/ds/"))return zy.isXBosonSystem=!1,zy.g.host.api=zy.net.getHttpUrl("/ds/"),void(zy.g.host.ui=zy.net.getHttpUrl());var t=location.pathname.indexOf("/face/");if(0<=t){zy.isXBosonSystem=!0;var e=location.pathname.substr(0,t);return zy.g.host.api=zy.net.getHttpUrl(e+"/"),zy.g.host.ui=zy.net.getHttpUrl(e+"/face"),void console.log("xBoson System Call API: "+zy.g.host.api+"app/{org-id}/{app-id}/{module-id}/{api-name}?arguments")}zy.ui.msg("错误","无法(通过路径)判断系统类型","e")},zy.fix_xboson_data=function(t){return zy.isXBosonSystem&&(!t.result&&t.data&&(t.result=t.data),isNaN(t.code)||(t.ret=t.code+""),t.datatype&&0<=t.datatype.indexOf("stack_trace_element")&&console.error("Service Error:",t.data)),t},zy.fix_jsonp_parm=function(t){return zy.isXBosonSystem&&(t||(t={}),"string"==typeof t?t+="&$format=jsonp":t.$format="jsonp"),t},zy.fix_ui_type=function(t){return zy.isXBosonSystem?(zy.debug?"/t":"/ui")+t:t},zy.fix_api_call=function(a,i){if(!zy.isXBosonSystem)return a;return["api/","ide/","download/"].forEach(function(t){if(0==a.indexOf(t)){var e=a.substr(t.length);a=["app/",i.org,"/",i.app,"/",i.mod,"/",e].join(""),delete i.org,delete i.app,delete i.mod,zy.log("fix api call::::::::::::::",a,i)}}),a},zy.fix_api_name=function(t){return zy.isXBosonSystem?t+"_x":t},zy.setup_debug=function(){zy.debug=1,zy.g.comm.s="d";var t="开启调试模式, UI 文件从 /t 下获取, API 加调试参数.";console.log(t),zy.ui.msg("开发提示",t,"s")},zy.fix_preview_url=function(t){if(zy.isXBosonSystem&&location.pathname.indexOf("saas")<0){var e=t.split("/");e.splice(1,1),t=e.join("/")}return t},zy.print_screen=function(i){var t=$(".print_screen_container");t.size()<1&&(t=$("<div class='moda_frame print_screen_container'/>")).appendTo(document.body),t.html(""),zy.net.loadHTML("print_screen.htm",t,function(t,e,a){window.do_print_screen(i)})},zy.tool={checkTableName:function(t){return!/\W/.test(t)&&!/^\d/.test(t)},normalize:function(t){for(var e=t.split("/"),a=[],i=0;i<e.length;++i)e[i]&&a.push(e[i]);return a.join("/")},path:function(){if(location.href.indexOf(-1<location.host+"/t"))location.protocol,location.host,zy.g.comm.org;else location.protocol,location.host,zy.g.comm.org;return""},xpath:function(){if(location.href.indexOf(-1<location.host+"/t"))var t=location.protocol+"//"+zy.g.host.ui+"/t/saas/"+zy.g.comm.org+"/";else t=location.protocol+"//"+zy.g.host.ui+"/ui/saas/"+zy.g.comm.org+"/";return t},initParams:function(t,e){return $.extend({},t,e)},random:function(){return(new Date).getTime()+""+Math.round(1e4*Math.random())},hasDot:function(t){return"string"==typeof t&&-1!=t.indexOf(".")},isInteger:function(t){return t==parseInt(t,10)},obj2Empty:function(t){return null==t?"":t},regexp:{domain:/^[\w-]*(\.[\w-]*)+/gi,url:/https?:\/\/[\w-]*(\.[\w-]*)+/gi,ftp:/ftp:\/\/[\w-]*(\.[\w-]*)+/gi,smtp:/smtp:\/\/[\w-]*(\.[\w-]*)+/gi,email:/^[-a-zA-Z0-9_\.]+@([0-9A-Za-z][0-9A-Za-z-]+\.)+[A-Za-z]{2,5}$/,ipv4:/^([01]?\d\d?|2[0-4]\d|25[0-5])(\.([01]?\d\d?|2[0-4]\d|25[0-5])){3}$/,mac:/^[A-F\d]{2}-[A-F\d]{2}-[A-F\d]{2}-[A-F\d]{2}-[A-F\d]{2}-[A-F\d]{2}$/,rang0t65535:/^(\d{1,4}|[1-5]\d{4}|6([0-4]\d{3}|5([0-4]\d{2}|5([0-2]\d|3[0-5]))))$/,phone:/(^[0-9]{1,4}\-[0-9]{3,4}\-[0-9]{3,8}$)|(^[0-9]{3,4}\-[0-9]{3,8}$)|(^[0-9]{3,8}$)/,char_zhcn:/[u4e00-u9fa5]/,byte:/[^x00-xff]/,ascii:/[^\x00-xff]/,blank:/\s/,notBlank:/\S/},age:function(t){var e=t.match(/^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2})$/);if(null===e)return"";var a=new Date(e[1],e[3]-1,e[4]);if(a.getFullYear()==e[1]&&a.getMonth()+1==e[3]&&a.getDate()==e[4]){var i=new Date,r=i.getFullYear()-e[1];if(i.getMonth()>a.getMonth())return r;if(i.getMonth()==a.getMonth())return i.getDate()>=a.getDate()?r:r-1;if(i.getMonth()<a.getMonth())return r-1}return""},isString:function(t){return"string"==typeof t},fromJson:function(t){return"string"==typeof t?JSON.parse(t):t}},zy.tool.string={StringBuffer:function(){this._string=[],this.append=function(t){var e=typeof t;return"string"!==e&&"number"!==e||this._string.push(t),this},this.size=function(){return this._string.length},this.remove=function(t){return"number"==typeof t&&t%1==0&&this._string.splice(t,1),this},this.toString=function(t){var e=typeof t;return"string"!==e&&"number"!==e&&(t=""),this._string.join(t)},this.toArray=function(){return this._string}},buildString:function(){for(var t=[],e=0;e<arguments.length;e++)t[e]=arguments[e];return t.join("")}},zy.tool.array={arrayReduce:function(t,e){if(!e)return t;var a=[],i=e.join("&quot;&quot;");for(var r in t)-1==i.indexOf(t[r])&&a.push(t[r]);return a},arraySort:function(t,e){var a=new Function("a","b","return a."+e+("asc"==t?">":"<")+"b."+e+"?1:-1");for(var i in a){var r=a[i].children;0<$(r).length&&(a[i].children=zy.tool.array.arraySort("asc",r))}return a}},zy.tool.Date={_zeroCompletion:function(t){return t<10?"0"+t:t+""},secs2Time:function(t){t<0&&(t=0),t=parseInt(t,10);var e=Math.floor(t/3600),a=Math.floor(t%3600/60),i=t%3600%60;return this._zeroCompletion(e)+":"+this._zeroCompletion(a)+":"+this._zeroCompletion(i)},dateTime2str:function(dt,fmt){var z={M:dt.getMonth()+1,d:dt.getDate(),h:dt.getHours(),m:dt.getMinutes(),s:dt.getSeconds()};return fmt=fmt.replace(/(M+|d+|h+|m+|s+)/g,function(v){return((1<v.length?"0":"")+eval("z."+v.slice(-1))).slice(-2)}),fmt.replace(/(y+)/g,function(t){return dt.getFullYear().toString().slice(-t.length)})},dateTimeWrapper:function(t){return t&&(t=t),this.dateTime2str(new Date,t)},getDatetime:function(t){return this.dateTimeWrapper(t||"yyyy-MM-dd hh:mm:ss")},getDatetimes:function(t){var e=new Date;return this.dateTime2str(e,t||"yyyy-MM-dd hh:mm:ss")+"."+e.getMilliseconds()},getDate:function(t){return this.dateTimeWrapper(t||"yyyy-MM-dd")},getTime:function(t){return this.dateTimeWrapper(t||"hh:mm:ss")},dateTime2Long:function(t){return t&&"string"==typeof t?new Date(t.replace(/\-/g,"/")).getTime():(new Date).getTime()},initDatePickerRange:function(r,t){var e=$("#"+r+",#"+t),o={};o=e.datepicker({changeMonth:!0,numberOfMonths:1,dateFormat:"yy-mm-dd",onSelect:function(t){var e=this.id==r?"minDate":"maxDate",a=$(this).data("datepicker"),i=$.datepicker.parseDate(a.settings.dateFormat||$.datepicker._defaults.dateFormat,t,a.settings);o.not(this).datepicker("option",e,i)},setDate:new Date}).datepicker("setDate",new Date)},customDateFormat:function(t,e){return t&&0<t.length?$.format.date(t,e):""},defaultDateFormat:function(t){return this.customDateFormat(t,"yyyy-MM-dd")}},zy.net={zyWebSocket:function(t,e){function a(t){var e=[0,1,2,3],a=["连接尚未建立","WebSocket的链接已经建立","连接正在关闭","连接已经关闭或不可用"];for(i in e)e[i]==t&&zy.log(a[i]);return 1==t}if(t){var r;try{r=new WebSocket(t)}catch(t){zy.log(t)}return r.onopen=function(t){if(!a(r.readyState))return r=null},r.onmessage=function(t){a(r.readyState)&&e&&e(t.data)},r.onclose=function(t){},r.sendData=function(t){t?a(r.readyState)&&r.send(t):zy.ui.msg("提示信息","发送内容空","w")},r.quit=function(){return r.close(),r=null,zy.log(t+"已经断开")},r}},get:function(t,e,a,i,r){var o,n=zy.tool.initParams(zy.g.comm,zy.g.am);i&&(zy.g.pages={pagesize:zy.g.am.pagesize||zy.g.page.pagesize,pagenum:i},n=zy.tool.initParams(n,zy.g.pages)),zy.g.am={},t=zy.fix_api_call(t,n),o=-1!=t.indexOf("ETLServer")?zy.g.host.api.substring(0,zy.g.host.api.length-3)+t+"?"+zy.net.parseParam(n):zy.g.host.api+t+"?"+zy.net.parseParam(n),zy.log("zy.net.get.link :"+o),zy.log("zy.net.get.param:"+JSON.stringify(a)),a=zy.fix_jsonp_parm(a);var f={url:o,type:"get",async:!1,timeout:1e4,cache:!1,dataType:"jsonp",jsonp:"cb",jsonpCallback:"cb"+zy.tool.random(),data:a,success:function(t){zy.fix_xboson_data(t),zy.net.errorHandler(t,e,r)},error:function(t,e,a){throw"timeout"==e&&zy.ui.msg("访问超时: ",o+"\r\n"+a,"e"),zy.log("zy.net.get.error:",t,e,a),{XMLHttpRequest:t,textStatus:e,errorThrown:a}}};$.ajax(f)},post:function(t,a,e,i,r,o){var n=!1;!0===zy.g.am.json&&(n=!0,delete zy.g.am.json);var f=zy.tool.initParams(zy.g.comm,zy.g.am);zy.g.am={},i&&(zy.g.pages={pagesize:zy.g.am.pagesize||zy.g.page.pagesize,pagenum:i},f=zy.tool.initParams(f,zy.g.pages)),t=zy.fix_api_call(t,f);var s=zy.g.host.api+t+"?"+zy.net.parseParam(f);if(zy.log("zy.net.post.link: "+s),zy.log("zy.net.post.param: "+JSON.stringify(e)),n){e=zy.fix_jsonp_parm(e);var l={url:s+="&$format=jsonp",type:"POST",async:!1,timeout:1e4,cache:!0,contentType:"application/json; charset=utf-8",dataType:"jsonp",jsonp:"cb",jsonpCallback:"cb"+zy.tool.random(),data:JSON.stringify(e),success:function(t){zy.net.errorHandler(t,a,r)},error:function(t,e,a){throw"timeout"==e&&zy.ui.msg("访问超时: ",s+"\r\n"+a,"e"),zy.log("zy.net.get.error: "+t+"\r\n"+e+"\r\n"+a),{XMLHttpRequest:t,textStatus:e,errorThrown:a}}};$.ajax(l)}else{var d=o||new Error;$.post(s,e,function(t){var e=zy.tool.fromJson(t);zy.net.errorHandler(e,a,r,d)})}},normalGet:function(t,e,a){a=zy.fix_jsonp_parm(a),zy.log("zy.net.normalGet.param: "+JSON.stringify(a)),$.ajax({url:t,type:"get",async:!1,timeout:1e4,cache:!0,dataType:"jsonp",jsonp:"cb",jsonpCallback:"cb"+zy.tool.random(),data:a,success:function(t){return e(t)},error:function(t,e,a){throw"timeout"==e&&zy.ui.msg("访问超时: ",link+"\r\n"+a,"e"),zy.log("zy.net.normalGet.error: "+t+"\r\n"+e+"\r\n"+a),{XMLHttpRequest:t,textStatus:e,errorThrown:a}}})},normalPost:function(t,e,a){zy.log("zy.net.normalPost.param: "+JSON.stringify(a)),$.post(t,a,function(t){return e(t)})},postForm:function(t,e,a,i){var r=zy.tool.initParams(zy.g.comm,zy.g.am);zy.g.am={};var o=zy.g.host.api+t+"?"+zy.net.parseParam(r);zy.log("zy.net.postSubmit.link: "+o),e.ajaxSubmit({url:o,type:"post",async:!1,timeout:1e4,cache:!1,dataType:"json",success:function(t){zy.log("zy.net.get.success: "+JSON.stringify(t)),zy.net.errorHandler(t,a,i)},error:function(t,e,a){throw"timeout"==e&&zy.ui.msg("访问超时: ",o+"\r\n"+a,"e"),zy.log("zy.net.get.error: "+t+"\r\n"+e+"\r\n"+a),{XMLHttpRequest:t,textStatus:e,errorThrown:a}}})},postDownload:function(t,e){if(zy.isXBosonSystem&&0==t.indexOf("download/"))return this.xbosonDownload(t,e);$("#tmpDownloadForm").remove();var a=$("<div>").attr("id","tmpDownloadForm").css("display","none");$("body").append(a);var i=zy.tool.initParams(zy.g.comm,zy.g.am);zy.g.am={};var r=zy.g.host.api+t+"?"+zy.net.parseParam(i),o=$("<form>");for(var n in o.attr("style","display:none"),o.attr("target",""),o.attr("method","post"),o.attr("action",r),a.append(o),e){var f=$("<input>");f.attr("type","hidden"),f.attr("name",n),f.attr("value",e[n]),o.append(f)}o.submit()},xbosonDownload:function(t,f){this.get(t,function(t){if(t.result[0].file_content)return function(t){console.log("makeJsonFile:",f);var e=f.typecd||f.en||f.cn||"Data",a=(new Date).toFormat("yyyy-MM-dd hh.mm.ss"),i=e+"-"+a+".json",r=new Blob([t],{type:"application/octet-binary"}),o=URL.createObjectURL(r,{oneTimeOnly:!0}),n=$('<a class="mhide"></a>');n.attr({href:o,download:i}),n[0].click()}(t.result[0].file_content);t.result[0].name;$("#tmpDownloadForm").remove();var e=$("<form id='tmpDownloadForm' style='display:none'  method='get' target='_blank'>");e.attr("action",zy.g.host.api+"files").appendTo("body"),$("<input type='hidden' name='file_name'>").appendTo(e).attr("value",t.result[0].name),$("<input type='hidden' name='dir_name'>").appendTo(e).attr("value",t.result[0].path),e.submit()},f)},loadIndex:function(){var t,e=zy.cache.get("_zy_user_info","ls").get("user_selected_org_type");t=e&&"v"!==e?zy.g.host.ui+zy.fix_ui_type("/saas/")+zy.g.comm.org+"/main.html":zy.g.host.ui+zy.fix_ui_type("/paas/main.html"),window.location=t},loadLogin:function(){parent.$("body").addClass("animated fadeOutUp"),parent.location=zy.g.host.ui+zy.fix_ui_type("/paas/login.html")},load:function(t,e,a,i){var r=zy.tool.initParams(zy.g.comm,zy.g.am);zy.g.am={};var o=zy.g.host.api+t+"?"+zy.net.parseParam(r);zy.log("zy.net.load.link = "+o);var n=this;return $.ajax({url:o,success:function(t){a&&a.call(n,t)},data:i,async:e,type:"post"}).responseText},loadHTML:function(r,o,n){var e=zy.g.host.ui;e+=zy.debug?"/t":"/ui",e+="/paas/"+r,$.ajax({type:"get",url:e,dataType:"html",cache:!0,async:!1,beforeSend:function(t){o.html('<h1><i class="fa fa-cog fa-spin"></i> 加载中...</h1>')},success:function(t){o.css({opacity:"0.0"}).html(t).delay(50).animate({opacity:"1.0"},300),setTimeout(function(){if(n)try{n(t)}catch(t){console.log("Load page:",e,t)}},300)},error:function(t,e,a){var i=['<h4 style="margin-top:10px; display:block; text-align:left">','<i class="fa fa-warning txt-color-orangeDark"></i>','出错了: <b style="font-size: 50px">',t.status,"</b>",'<span style="">',a&&a.message||"","</span>",'<span style="float: right">',r,"</span></h4>",'<hr style="border-color: #6b2121"/>',t.responseText||""];o.html(i.join("")),n&&n(t,e,a)}})},loadHTMLs:function(i,r,a){var o=!1,n=zy.g.host.ui+(zy.debug?"/t":"/ui");"/"===i.charAt(0)?(o=!0,n=i):n+="/saas/"+zy.g.comm.org+"/"+i,zy.log("loadHTMLs : _u == "+n),$.ajax({type:"get",url:n,dataType:"html",cache:!0,async:!1,beforeSend:function(){r.html('<h1><i class="fa fa-cog fa-spin"></i> 加载中...</h1>')},success:function(t){zy.log("loadHTMLs: success "+n);var e=o?t:zy.net.extractCss(t);r.css({opacity:"0.0"}).html(e).delay(50).animate({opacity:"1.0"},300),setTimeout(function(){if(a)try{a(e)}catch(t){console.log("Load page:",n,t)}},300)},error:function(t,e,a){r.html('<h4 style="margin-top:10px; display:block; text-align:left"><i class="fa fa-warning txt-color-orangeDark"></i> Error 404! 找不到网页。<br>'+i+"</h4>")}})},loadPage:function(i,e){zy.log("loadPage: "+i),$.ajax({type:"get",url:i,dataType:"html",cache:!0,async:!1,success:function(t){if(e)try{e(t),zy.log("loadPage: success "+i)}catch(t){console.log("Load page:",i,t)}},error:function(t,e,a){zy.ui.msg("找不到网页：",'<h4 style="margin-top:10px; display:block; text-align:left"><i class="fa fa-warning txt-color-orangeDark"></i> Error 404! 找不到网页。<br>'+i+"</h4>","e")}})},loadPages:function(i,e){var a=!1,r=zy.g.host.ui+(zy.debug?"/t":"/ui");"/"===i.charAt(0)?(a=!0,r=i):r+="/saas/"+zy.g.comm.org+"/"+i,zy.log("loadPages : _u == "+r),$.ajax({type:"get",url:r,dataType:"html",cache:!0,async:!1,success:function(t){if(e)try{e(a?t:zy.net.extractCss(t)),zy.log("loadPages: success "+r)}catch(t){console.log("Load page:",r,t)}},error:function(t,e,a){zy.ui.msg("找不到网页：",'<h4 style="margin-top:10px; display:block; text-align:left"><i class="fa fa-warning txt-color-orangeDark"></i> Error 404! 找不到网页。<br>'+i+"</h4>","e")}})},jsArray:{},loadScript:function(e,t){if(zy.net.jsArray[e]){if(t){zy.log("zy.net.loadScript().callback(): "+e+" JS 文件已经加载!");try{t()}catch(t){console.log("Load script:",e,t)}}}else{zy.net.jsArray[e]=!0;var a=null,i=(a=window.frames[0]?window.frames[0].document:document).getElementsByTagName("body")[0],r=a.createElement("script");r.type="text/javascript",r.src=e,r.onload=t,i.appendChild(r)}},initStatus:function(url){var status=zy.net.load(url,!1);status&&eval(status)},errorHandler:function(t,e,a,i){try{var r=(t=zy.fix_xboson_data(t)).ret;if(zy.log("Response.msg: "+r+" : "+t.msg),"0"===r)return e(t);if("1000"!==r&&"1006"!==r&&"1005"!==r&&"1009"!==r&&"1012"!==r)return a?a(t):(zy.log("Response.Error: "+t.msg),zy.ui.msg("服务器请求失败",r+" : "+t.msg,"e"),e(null),!1);0===$(".SmallBox ").length&&zy.ui.msg("您需要重新登录：",t.msg,"i"),setTimeout(zy.net.loadLogin,3e3)}catch(t){zy.log("Response.Error: ",t,"\nOutter Stack:",i&&i.stack),zy.debug&&zy.ui.msg("Response.Error.message: ",t.message,"e")}},getOrgUrl:function(t){var e=zy.g.host.ui;return e+=zy.debug?"/t":"/ui",t?"/"===t.charAt(0)?(zy.log("getOrgUrl : == "+t),t):(e+="/saas/"+zy.g.comm.org+"/"+t,zy.log("getOrgUrl : _u == "+e),e):(zy.log("getOrgUrl : _u == "+e),e)},getHttpUrl:function(t){var e=location.protocol+"//"+zy.ui.browser.getHost()+zy.ui.browser.getPort();return t?t=0===t.indexOf("/")?e+t:e+"/"+t:e},parseParam:function(t){if(!t)return"";var e=[];for(var a in t)e.push(a+"="+encodeURIComponent(t[a]));return e.join("&")},extractCss:function(t){var f=t,e=zy.g.host.ui+(zy.debug?"/t":"/ui");function a(t,e,a){for(var i=0;-1<(i=f.indexOf(t,i));){var r=f.indexOf(e,i);if(0<r){r+=e.length;var o=f.substring(i,r),n=new RegExp(o);a&&(changesub=a(o)),f=f.replace(n,changesub),i=r}else i+=t.length}}return zy.log("extractCss : _u == "+e),a("<link",">",function(t){return 0<t.indexOf('href="/')?t:t.replace('href="','href="'+e+"/saas/"+zy.g.comm.org+"/")}),a("<script ",">",function(t){return 0<t.indexOf("src=")?0<t.indexOf('src="/')?t:0<t.indexOf('src="http')?t:t.replace('src="','src="'+e+"/saas/"+zy.g.comm.org+"/"):t}),f}},zyNet=function(){var f={async:!1,timeout:1e4,cache:!0};function t(t){$.extend({},f,t)}return t.prototype.get=function(t,e,a,i,r){var o=zy.tool.initParams(zy.g.comm,zy.g.am);zy.g.am={},i&&(zy.g.pages={pagesize:zy.g.am.pagesize||zy.g.page.pagesize,pagenum:i},o=zy.tool.initParams(o,zy.g.pages)),t=zy.fix_api_call(t,o);var n=zy.g.host.api+t+"?"+zy.net.parseParam(o);zy.log("zyNet.get.link: "+n),zy.log("zyNet.get.param: "+JSON.stringify(a)),a=zy.fix_jsonp_parm(a),$.ajax({url:n,type:"get",async:f.async,timeout:f.timeout,cache:f.cache,dataType:"jsonp",jsonp:"cb",jsonpCallback:"cb"+zy.tool.random(),data:a,success:function(t){zy.log("zyNet.get.success: "+JSON.stringify(t)),function(t,e,a){try{zy.fix_xboson_data(t);var i=t.ret;if(zy.log("Response.msg: "+i+" : "+t.msg),"0"===i)return e(t);if("1000"!==i&&"1006"!==i&&"1005"!==i&&"1009"!==i&&"1012"!==i)return a?a(t):(zy.log("Response.Error: "+t.msg),zy.ui.msg("服务器请求失败",i+" : "+t.msg,"e"),e(null));zy.ui.msg("您需要重新登录：",t.msg,"i"),setTimeout(zy.net.loadLogin,3e3)}catch(t){void 0!==t.stack?(zy.log("Response.json.Error.stack: "+t.stack+"\r\n"+t.message),zy.ui.msg("Response.json.Error: ",t.stack+"\r\n"+t.message,"e")):(zy.log("Response.json.Error.message: "+t.message),zy.ui.msg("Response.json.Error.message: ",t.message,"e"))}}(t,e,r)},error:function(t,e,a){throw"timeout"==e&&zy.ui.msg("访问超时: ",n+"\r\n"+a,"e"),zy.log("zyNet.get.error: "+t+"\r\n"+e+"\r\n"+a),{XMLHttpRequest:t,textStatus:e,errorThrown:a}}})},t}(),zy.ui={authData:function(t,e){var a;if(a="string"==typeof t?$("#"+t).data("auth"):t.data("auth")){if("0"===a.ret)return a.result;zy.ui.msg("权限",a.msg,"e"),e&&("string"==typeof e?$("#"+e).formDisable(!0):e.formDisable(!0))}return null},ellipsis:function(t,e){e&&t.css("width",e+"px"),t.css({"white-space":"nowrap","word-break":"keep-all",overflow:"hidden","text-overflow":"ellipsis"})},colorInverse:function(t){t=t||"";var e="#"+(255-((t=parseInt(t.replace("#","0x")))>>16)<<16|255-(t>>8&255)<<8|255-(255&t)).toString(16);return"#0"==e?"#000000":e},msg:function(t,e,a){var i,r,o="#3276b1",n="提示信息",f="fa fa-thumbs-up bounce animated";switch(a){case"i":o="#305d8c",n="<i class='fa-fw fa fa-info'></i> <i>"+e+"</i>",f="fa fa-bell bounce animated",i=5e3;break;case"s":o="#356635",n="<i class='fa-fw fa fa-check'></i> <i>"+e+"</i>",f="fa fa-smile-o bounce animated",i=4e3;break;case"w":o="#826430",n="<i class='fa-fw fa fa-warning'></i> <i>"+e+"</i>",f="fa fa-shield bounce animated",i=5e4;break;case"e":o="#953b39",n="<i class='fa-fw fa fa-times'></i> <i>"+e+"</i>",f="fa fa-frown-o bounce animated",r="fa-fw fa fa-times",i=5e4}$.smallBox({title:t,content:n,color:o,iconSmall:f,timeout:i,icon:r})},bigBox:function(t,e,a,r){var o=["i","s","w","e"],n=[{color:"#3276B1",icon:"fa fa-bell swing animated"},{color:"#356635",icon:"fa fa-smile-o bounce animated"},{color:"#826430",icon:"fa fa-shield bounce animated"},{color:"#953b39",icon:"fa fa-frown-o bounce animated"}],f={title:t,content:e};for(i in o)if(o[i]==a)var s=$.extend({},f,n[i]);return $.bigBox(s,function(){r&&r()})},mask:function(t,e,a,i,r){var o=$("<div></div>"),n='<p style="text-align:center;color:red;font-size:16px">'+e+"</p>",f=(t='<div class="widget-header"><h4><i class="fa fa-warning"></i> '+t+"</h4></div>",{autoOpen:!0,width:600,resizable:!1,draggable:!1,modal:!0,title:"",buttons:[{html:"<i class='fa fa-trash-o'></i>&nbsp; 确定",class:"btn btn-danger",click:function(){a&&a(),o.dialog("close")}},{html:"<i class='fa fa-times'></i>&nbsp; 取消",class:"btn btn-default",click:function(){i&&i(),o.dialog("close")}}]}),s=zy.tool.initParams(f,r),l=o.dialog(s);l.siblings(".ui-dialog-titlebar").children("span").append(t),l.append(n)},window:function(t,e,a,i){var r=(window.screen.availHeight-30-i)/2,o=(window.screen.availWidth-10-a)/2;window.open(t,e,"height="+i+",,innerHeight="+i+",width="+a+",innerWidth="+a+",top="+r+",left="+o+",toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no")}},zy.ui.form={getRadioValue:function(t,e){return e&&e.find?e.find('input[name="'+t+'"]:checked').val():$('input[name="'+t+'"]:checked').val()},setRadioValue:function(t,e,a){return a&&a.find?a.find('input[name="'+t+'"][value="'+e+'"]').prop("checked",!0):$('input[name="'+t+'"][value="'+e+'"]').prop("checked",!0)},setSelectValue:function(t,e,a){return a&&a.find?a.find("#"+t+' option[value="'+e+'"]').attr("selected",!0):$("#"+t+' option[value="'+e+'"]').attr("selected",!0)},object2Options:function(t){if(!$.isPlainObject(t))return"";var e=[];for(var a in t)e.push('<option value="'+a+'">'+t[a]+"</option>");return e.join("")},selected:function(a,i){return void 0===i&&(i=!0),a.each(function(){var t=a.type;if("checkbox"==t||"radio"==t)a.checked=i;else if("option"==a.tagName.toLowerCase()){var e=$(a).parent("select");i&&e[0]&&"select-one"==e[0].type&&e.find("option").selected(!1),a.selected=i}})},_serializeInputs:function(t){var e={};if(!t)return e;for(var a=t.length-1;0<=a;a--){var i=$(t[a]),r=i.attr("type");r&&(r=r.toLowerCase());var o=i.get(0).tagName,n=i.attr("id"),f=i.attr("name"),s=null;if(!(i.hasClass("_isSerialized")||void 0===n&&void 0===f)){if("INPUT"==o&&r)switch(r){case"checkbox":s=i.is(":checked");break;case"radio":if(!i.is(":checked"))continue;s=i.attr("value");break;default:s=i.val()}else s=i.val();e[f||n]=s,i.removeClass("_isSerialized")}}return e},_deserializeInputs:function(t,a){if(!t||null===a)return this;for(var e=t.length-1;0<=e;e--){var i=$(t[e]);if(!i.hasClass("_isSerialized")){var r=i.attr("type");if(r&&(r=r.toLowerCase()),r)switch(r){case"checkbox":!0!==a&&"true"!==a&&"1"!==a||i.attr("checked","true");break;case"radio":i.each(function(t){var e=$(this);e.attr("value")==a&&e.attr("checked",!0)});break;case"hidden":0<(n=a.trim()).length&&("select2"===i.data("type")?i.select2("val",n):i.val(n));break;default:if(0<(n=a).length&&i.hasClass("datepicker")){var o=i.attr("data-format")||"yyyy-MM-dd";n=$.format.date(n,o.replace(/m/g,"M"))}i.val(n)}else{var n;if(0<(n=a.trim()).length&&i.hasClass("datepicker")){o=i.attr("data-format")||"yyyy-MM-dd";n=$.format.date(n,o.replace(/m/g,"M"))}i.val(n)}i.addClass("_isSerialized")}}return this},_serializeGroups:function(t){var e={};if(!t)return e;for(var a=t.length-1;0<=a;a--){var i=$(t[a]),r=i.attr("fieldset");if(r){var o=i.find("input[type!=button][type!=reset][type!=submit],select,textarea");e[r]=this._serializeInputs(o),o.addClass("_isSerialized")}}return e},serialize:function(t){var e={};if(!(t=t||$("body")))return e;var a=t.find("div[fieldset]"),i=this._serializeGroups(a),r=t.find("input[type!=button][type!=reset][type!=submit][type!=image],select,textarea");for(var o in e=this._serializeInputs(r),i)e[o]=i[o];return e},deserializeSimple:function(t,e){if(!(t=t||$("body"))||!e)return this;var a=this._deserializeInputs;for(var i in e){a(t,i,e[i])}return this},_filterInputs:function(t){return $(t.find("input[type!=button][type!=reset][type!=submit][type!=image][type!=file],select,textarea"))},_findInputs:function(t,e){return $(t.filter("input[name="+e+"],input[id="+e+"],textarea[name="+e+"],textarea[id="+e+"],select[name="+e+"],select[id="+e+"]"))},deserialize:function(t,e){if(!(t=t||$("body"))||!e)return this;var a={},i={};for(var r in e){var o=e[r];$.isPlainObject(o)?i[r]=o:a[r]=o}var n=this._deserializeInputs,f=this._filterInputs,s=this._findInputs;for(var r in i){e=i[r];var l=t.find('div[fieldset="'+r+'"]');if(l.length)if((u=f(l)).length)for(var d in e){var c=e[d];n(s(u,d),c)}}var u=f(t);for(var r in a){o=a[r];n(s(u,r),o)}return u.filter("._isSerialized").removeClass("_isSerialized"),this}},zy.ui.key={keycode:{F11:122,ESC:27,ENTER:13,PAGEUP:33,PAGEDOWN:34,END:35,HOME:36,LEFT:37,UP:38,RIGHT:39,DOWN:40},_bindKey:function(e,a,i){a.keydown(function(t){t.keyCode==e&&"function"==typeof i&&i(a,t)})},bindEnterKey:function(t,e){return this._bindKey(this.keycode.ENTER,t,e),this},bindEscKey:function(t,e){return this._bindKey(this.keycode.ESC,t,e),this},bindF11Key:function(t,e){return this._bindKey(this.keycode.F11,t,e),this},bindPageDownKey:function(t,e){return this._bindKey(this.keycode.PAGEDOWN,t,e),this},bindPageUpKey:function(t,e){return this._bindKey(this.keycode.PAGEUP,t,e),this},bindLeftKey:function(t,e){return this._bindKey(this.keycode.LEFT,t,e),this},bindRightKey:function(t,e){return this._bindKey(this.keycode.RIGHT,t,e),this},bindUpKey:function(t,e){return this._bindKey(this.keycode.UP,t,e),this},bindDownKey:function(t,e){return this._bindKey(this.keycode.DOWN,t,e),this}},zy.ui.layer={add:function(t){0<$("#zy-layer").length&&this.clear();var e="数据处理中...";t||(e=t);var a=$("<div></div>"),i=$(document),r=$(["<span>",e,"</span>"].join(""));a.attr("id","zy-layer").html(r);var o=function(){var t=i.height()/2+i.scrollTop();r.css({top:t,left:(i.width()-r.width())/2,position:"absolute"}),a.css({height:i.height()})};return $("body").append(a),o(),$(window).bind("resize scroll",function(){o()}),this},clear:function(){return $("#zy-layer").remove(),this},clearAll:function(){return $(".zy-mask").remove(),this},addInfo:function(t,e){var a=$("#zy-layer span");return e?a.append(t):a.html(t),this},mask:function(t,e){$("#"+t.attr("masker")).remove();var a="zy-mask-"+zy.tool.random(),i=t.outerHeight(),r=t.outerWidth(),o=t.position(),n=$(["<div>",e||"","</div>"].join("")),f=$(['<div class="zy-mask" id="',a,'"></div>'].join(""));return t.after(f).attr("masker",a),f.append(n).css({position:"absolute",top:o.top,left:o.left,height:i,width:r}),n.css({top:(i-n.height())/2,left:(r-n.width())/2}),f},clearMask:function(t){return t?$("#"+t.attr("masker")).remove():$(".zy-mask").remove(),this},move2Center:function(t,e,a){var i=$(document),r=function(){t.css({"z-index":a||0,position:"absolute",left:(i.width()-t.width())/2,top:i.scrollTop()+(($.browser.msie?i.height():window.innerHeight)-t.height())/2})};return r(),e&&$(window).bind("resize scroll",function(){r()}),t}},zy.ui.browser={name:"",version:"",versions:"",agent:function(){var t,e={},a=navigator.userAgent.toLowerCase();(t=a.match(/msie ([\d.]+)/))?e.ie=t[1]:(t=a.match(/firefox\/([\d.]+)/))?e.firefox=t[1]:(t=a.match(/chrome\/([\d.]+)/))?e.chrome=t[1]:(t=a.match(/opera.([\d.]+)/))?e.opera=t[1]:(t=a.match(/version\/([\d.]+).*safari/))&&(e.safari=t[1]);var i="",r="";return e.ie?(i="msie",r=e.ie):e.firefox?(i="firefox",r=e.firefox):e.chrome?(i="chrome",r=e.chrome):e.opera?(i="opera",r=e.opera):e.safari?(i="safari",r=e.safari):i="unknown",{name:i,version:r.split(".")[0],versions:r}},getHost:function(){return location.host.split(":")[0]},getPort:function(){var t="",e=location.host.split(":")[1];return e&&"80"!==e&&(t=":"+e),t},getLang:function(){var t=window.navigator;return t.language||t.userLanguage},getParameter:function(t,e){var a=e||window.location.search;if(0==a.length)return null;if("?"!=a.charAt(0))return null;if(0==(a=unescape(a).substring(1)).length)return null;for(var i=a.split("&"),r=0;r<i.length;r++){var o=i[r].split("=",2);if(o[0]==t)return o.length<2||void 0===o[1]||"undefined"==o[1]||"null"==o[1]?"":o[1]}return null},updateUrl:function(t){window.history&&window.history.pushState&&window.history.pushState(null,t,t)},goPrevPage:function(){return history.go(-1),this},goNextPage:function(){return history.go(1),this},refreshPage:function(){return history.go(0),this},setHomepage:function(t){if(t=t||location.href,document.all)document.body.style.behavior="url(#default#homepage)",document.body.setHomePage(t);else if(window.sidebar){if(window.netscape)try{window.netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect")}catch(t){zy.ui.msg("此操作被浏览器拒绝！",'请在地址栏输入"about:config"并回车然后将[signed.applets.codebase_principal_support]的值设置为true',"w")}try{Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefBranch).setCharPref("browser.startup.homepage",t)}catch(t){zy.ui.msg("提示信息","设置失败","e")}}else zy.ui.msg("提示信息","请用Ctrl+D将地址添加到收藏夹","i");return this},closeWin:function(){window.opener=null,window.open("","_self"),window.close()},stopBubble:function(t){t&&t.stopPropagation?t.stopPropagation():window.event.cancelBubble=!0},stopDefault:function(t){return t&&t.preventDefault?t.preventDefault():window.event.returnValue=!1,!1},checkPlugin:function(t,e){var a="";return a=void 0===e?t:e,this.hasPluginIE(a)||this.hasPlugin(t)},hasPlugin:function(t){if(!t)return!1;t=t.toLowerCase();for(var e=window.navigator.plugins,a=0;a<e.length;a++)if(e[a]&&-1<e[a].name.toLowerCase().indexOf(t))return!0;return!1},hasPluginIE:function(t){if(!t)return!1;try{return new ActiveXObject(t),!0}catch(t){return!1}},isIframe:function(){return top.location!=self.location},isNotIframe:function(){return!isIframe()}},zy.ui.dataTable={language:{sProcessing:"处理中...",sLengthMenu:"显示 _MENU_ 项结果",sZeroRecords:"没有匹配结果",sInfo:"显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",sInfoEmpty:"显示第 0 至 0 项结果，共 0 项",sInfoFiltered:"(由 _MAX_ 项结果过滤)",sInfoPostFix:"",sSearch:"搜索:",sUrl:"",sEmptyTable:"表中数据为空",sLoadingRecords:"载入中...",sInfoThousands:",",oPaginate:{sFirst:"首页",sPrevious:"上页",sNext:"下页",sLast:"末页"},oAria:{sSortAscending:": 以升序排列此列",sSortDescending:": 以降序排列此列"}},searching:!1,autoWidth:!1,paging:!1,ordering:!1,info:!1,destroy:!0,scrollY:!1,scrollCollapse:!1,scrollX:!0,initComplete:dataTableXScrollFix},zy.ui.Select2={Set:function(t,e,a,i,r){var o,n;(n=e?zy.cache.get("_mdm_dict"+e,"ls"):zy.cache.get("_mdm_dict","ls")).isSet([t])&&!n.isEmpty([t])&&(o=n.get([t])[t]),i&&o&&o.splice(0,0,{id:"",name:"全部",text:"全部(QB)"});var f={placeholder:"查找...",allowClear:!0,formatSelection:function(t){return t.name},formatResult:function(t){return t.name},sortResults:function(t,e,a){return a.term?t.sort(function(t,e){return t.text.indexOf(a.term)>e.text.indexOf(a.term)?1:t.text.indexOf(a.term)<e.text.indexOf(a.term)?-1:0}):t},data:{results:o,text:"text"}},s=$.extend(!0,{},f,r);a.select2(s)},SetCustomData:function(t,e,a,i,r,o){var n=[];$.each(r,function(t,a){$.each(r,function(t,e){a.parentcd==e.id&&(e.children||(e.children=[]),e.children.push(a),a.hasp=1,e.disabled=!o)}),a.hasp||n.push(a)}),a&&n&&n.splice(0,0,{id:"",name:"全部",text:"全部(QB)"});var f={placeholder:"查找...",allowClear:!0,formatSelection:function(t){return t.name},formatResult:function(t){return t.name},sortResults:function(t,e,a){return a.term?t.sort(function(t,e){return t.text.indexOf(a.term)>e.text.indexOf(a.term)?1:t.text.indexOf(a.term)<e.text.indexOf(a.term)?-1:0}):t},data:{results:n,text:"text"}},s=$.extend(!0,{},f,i);e.select2(s)},Icons:function(t,e){var a={placeholder:"查找...",allowClear:!0,formatResult:function(t){return'<i class="fa fa-fw fa-lg '+t.text+'"></i> '+t.text},formatSelection:function(t){return'<i class="fa fa-fw fa-lg '+t.text+'"></i> '+t.text},data:[{text:"【Web应用类图标】",children:[{id:"fa-adjust",text:"fa-adjust"},{id:"fa-anchor",text:"fa-anchor"},{id:"fa-archive",text:"fa-archive"},{id:"fa-arrows",text:"fa-arrows"},{id:"fa-arrows-h",text:"fa-arrows-h"},{id:"fa-arrows-v",text:"fa-arrows-v"},{id:"fa-asterisk",text:"fa-asterisk"},{id:"fa-automobile",text:"fa-automobile"},{id:"fa-ban",text:"fa-ban"},{id:"fa-bank",text:"fa-bank"},{id:"fa-bar-chart-o",text:"fa-bar-chart-o"},{id:"fa-barcode",text:"fa-barcode"},{id:"fa-bars",text:"fa-bars"},{id:"fa-beer",text:"fa-beer"},{id:"fa-bell",text:"fa-bell"},{id:"fa-bell-o",text:"fa-bell-o"},{id:"fa-bolt",text:"fa-bolt"},{id:"fa-bomb",text:"fa-bomb"},{id:"fa-book",text:"fa-book"},{id:"fa-bookmark",text:"fa-bookmark"},{id:"fa-bookmark-o",text:"fa-bookmark-o"},{id:"fa-briefcase",text:"fa-briefcase"},{id:"fa-bug",text:"fa-bug"},{id:"fa-building",text:"fa-building"},{id:"fa-building-o",text:"fa-building-o"},{id:"fa-bullhorn",text:"fa-bullhorn"},{id:"fa-bullseye",text:"fa-bullseye"},{id:"fa-cab",text:"fa-cab"},{id:"fa-calendar",text:"fa-calendar"},{id:"fa-calendar-o",text:"fa-calendar-o"},{id:"fa-camera",text:"fa-camera"},{id:"fa-camera-retro",text:"fa-camera-retro"},{id:"fa-car",text:"fa-car"},{id:"fa-caret-square-o-down",text:"fa-caret-square-o-down"},{id:"fa-caret-square-o-left",text:"fa-caret-square-o-left"},{id:"fa-caret-square-o-right",text:"fa-caret-square-o-right"},{id:"fa-caret-square-o-up",text:"fa-caret-square-o-up"},{id:"fa-certificate",text:"fa-certificate"},{id:"fa-check",text:"fa-check"},{id:"fa-check-circle",text:"fa-check-circle"},{id:"fa-check-circle-o",text:"fa-check-circle-o"},{id:"fa-check-square",text:"fa-check-square"},{id:"fa-check-square-o",text:"fa-check-square-o"},{id:"fa-child",text:"fa-child"},{id:"fa-circle",text:"fa-circle"},{id:"fa-circle-o",text:"fa-circle-o"},{id:"fa-circle-o-notch",text:"fa-circle-o-notch"},{id:"fa-circle-thin",text:"fa-circle-thin"},{id:"fa-clock-o",text:"fa-clock-o"},{id:"fa-cloud",text:"fa-cloud"},{id:"fa-cloud-download",text:"fa-cloud-download"},{id:"fa-cloud-upload",text:"fa-cloud-upload"},{id:"fa-code",text:"fa-code"},{id:"fa-code-fork",text:"fa-code-fork"},{id:"fa-coffee",text:"fa-coffee"},{id:"fa-cog",text:"fa-cog"},{id:"fa-cogs",text:"fa-cogs"},{id:"fa-comment",text:"fa-comment"},{id:"fa-comment-o",text:"fa-comment-o"},{id:"fa-comments",text:"fa-comments"},{id:"fa-comments-o",text:"fa-comments-o"},{id:"fa-compass",text:"fa-compass"},{id:"fa-credit-card",text:"fa-credit-card"},{id:"fa-crop",text:"fa-crop"},{id:"fa-crosshairs",text:"fa-crosshairs"},{id:"fa-cube",text:"fa-cube"},{id:"fa-cubes",text:"fa-cubes"},{id:"fa-cutlery",text:"fa-cutlery"},{id:"fa-dashboard",text:"fa-dashboard"},{id:"fa-database",text:"fa-database"},{id:"fa-desktop",text:"fa-desktop"},{id:"fa-dot-circle-o",text:"fa-dot-circle-o"},{id:"fa-download",text:"fa-download"},{id:"fa-edit",text:"fa-edit"},{id:"fa-ellipsis-h",text:"fa-ellipsis-h"},{id:"fa-ellipsis-v",text:"fa-ellipsis-v"},{id:"fa-envelope",text:"fa-envelope"},{id:"fa-envelope-o",text:"fa-envelope-o"},{id:"fa-envelope-square",text:"fa-envelope-square"},{id:"fa-eraser",text:"fa-eraser"},{id:"fa-exchange",text:"fa-exchange"},{id:"fa-exclamation",text:"fa-exclamation"},{id:"fa-exclamation-circle",text:"fa-exclamation-circle"},{id:"fa-exclamation-triangle",text:"fa-exclamation-triangle"},{id:"fa-external-link",text:"fa-external-link"},{id:"fa-external-link-square",text:"fa-external-link-square"},{id:"fa-eye",text:"fa-eye"},{id:"fa-eye-slash",text:"fa-eye-slash"},{id:"fa-fax",text:"fa-fax"},{id:"fa-female",text:"fa-female"},{id:"fa-fighter-jet",text:"fa-fighter-jet"},{id:"fa-file-archive-o",text:"fa-file-archive-o"},{id:"fa-file-audio-o",text:"fa-file-audio-o"},{id:"fa-file-code-o",text:"fa-file-code-o"},{id:"fa-file-excel-o",text:"fa-file-excel-o"},{id:"fa-file-image-o",text:"fa-file-image-o"},{id:"fa-file-movie-o",text:"fa-file-movie-o"},{id:"fa-file-pdf-o",text:"fa-file-pdf-o"},{id:"fa-file-photo-o",text:"fa-file-photo-o"},{id:"fa-file-picture-o",text:"fa-file-picture-o"},{id:"fa-file-powerpoint-o",text:"fa-file-powerpoint-o"},{id:"fa-file-sound-o",text:"fa-file-sound-o"},{id:"fa-file-video-o",text:"fa-file-video-o"},{id:"fa-file-word-o",text:"fa-file-word-o"},{id:"fa-file-zip-o",text:"fa-file-zip-o"},{id:"fa-film",text:"fa-film"},{id:"fa-filter",text:"fa-filter"},{id:"fa-fire",text:"fa-fire"},{id:"fa-fire-extinguisher",text:"fa-fire-extinguisher"},{id:"fa-flag",text:"fa-flag"},{id:"fa-flag-checkered",text:"fa-flag-checkered"},{id:"fa-flag-o",text:"fa-flag-o"},{id:"fa-flash",text:"fa-flash"},{id:"fa-flask",text:"fa-flask"},{id:"fa-folder",text:"fa-folder"},{id:"fa-folder-o",text:"fa-folder-o"},{id:"fa-folder-open",text:"fa-folder-open"},{id:"fa-folder-open-o",text:"fa-folder-open-o"},{id:"fa-frown-o",text:"fa-frown-o"},{id:"fa-gamepad",text:"fa-gamepad"},{id:"fa-gavel",text:"fa-gavel"},{id:"fa-gear",text:"fa-gear"},{id:"fa-gears",text:"fa-gears"},{id:"fa-gift",text:"fa-gift"},{id:"fa-glass",text:"fa-glass"},{id:"fa-globe",text:"fa-globe"},{id:"fa-graduation-cap",text:"fa-graduation-cap"},{id:"fa-group",text:"fa-group"},{id:"fa-hdd-o",text:"fa-hdd-o"},{id:"fa-headphones",text:"fa-headphones"},{id:"fa-heart",text:"fa-heart"},{id:"fa-heart-o",text:"fa-heart-o"},{id:"fa-history",text:"fa-history"},{id:"fa-home",text:"fa-home"},{id:"fa-image",text:"fa-image"},{id:"fa-inbox",text:"fa-inbox"},{id:"fa-info",text:"fa-info"},{id:"fa-info-circle",text:"fa-info-circle"},{id:"fa-institution",text:"fa-institution"},{id:"fa-key",text:"fa-key"},{id:"fa-keyboard-o",text:"fa-keyboard-o"},{id:"fa-language",text:"fa-language"},{id:"fa-laptop",text:"fa-laptop"},{id:"fa-leaf",text:"fa-leaf"},{id:"fa-legal",text:"fa-legal"},{id:"fa-lemon-o",text:"fa-lemon-o"},{id:"fa-level-down",text:"fa-level-down"},{id:"fa-level-up",text:"fa-level-up"},{id:"fa-life-bouy",text:"fa-life-bouy"},{id:"fa-life-ring",text:"fa-life-ring"},{id:"fa-life-saver",text:"fa-life-saver"},{id:"fa-lightbulb-o",text:"fa-lightbulb-o"},{id:"fa-location-arrow",text:"fa-location-arrow"},{id:"fa-lock",text:"fa-lock"},{id:"fa-magic",text:"fa-magic"},{id:"fa-magnet",text:"fa-magnet"},{id:"fa-mail-forward",text:"fa-mail-forward"},{id:"fa-mail-reply",text:"fa-mail-reply"},{id:"fa-mail-reply-all",text:"fa-mail-reply-all"},{id:"fa-male",text:"fa-male"},{id:"fa-map-marker",text:"fa-map-marker"},{id:"fa-meh-o",text:"fa-meh-o"},{id:"fa-microphone",text:"fa-microphone"},{id:"fa-microphone-slash",text:"fa-microphone-slash"},{id:"fa-minus",text:"fa-minus"},{id:"fa-minus-circle",text:"fa-minus-circle"},{id:"fa-minus-square",text:"fa-minus-square"},{id:"fa-minus-square-o",text:"fa-minus-square-o"},{id:"fa-mobile",text:"fa-mobile"},{id:"fa-mobile-phone",text:"fa-mobile-phone"},{id:"fa-money",text:"fa-money"},{id:"fa-moon-o",text:"fa-moon-o"},{id:"fa-mortar-board",text:"fa-mortar-board"},{id:"fa-music",text:"fa-music"},{id:"fa-navicon",text:"fa-navicon"},{id:"fa-paper-plane",text:"fa-paper-plane"},{id:"fa-paper-plane-o",text:"fa-paper-plane-o"},{id:"fa-paw",text:"fa-paw"},{id:"fa-pencil",text:"fa-pencil"},{id:"fa-pencil-square",text:"fa-pencil-square"},{id:"fa-pencil-square-o",text:"fa-pencil-square-o"},{id:"fa-phone",text:"fa-phone"},{id:"fa-phone-square",text:"fa-phone-square"},{id:"fa-photo",text:"fa-photo"},{id:"fa-picture-o",text:"fa-picture-o"},{id:"fa-plane",text:"fa-plane"},{id:"fa-plus",text:"fa-plus"},{id:"fa-plus-circle",text:"fa-plus-circle"},{id:"fa-plus-square",text:"fa-plus-square"},{id:"fa-plus-square-o",text:"fa-plus-square-o"},{id:"fa-power-off",text:"fa-power-off"},{id:"fa-print",text:"fa-print"},{id:"fa-puzzle-piece",text:"fa-puzzle-piece"},{id:"fa-qrcode",text:"fa-qrcode"},{id:"fa-question",text:"fa-question"},{id:"fa-question-circle",text:"fa-question-circle"},{id:"fa-quote-left",text:"fa-quote-left"},{id:"fa-quote-right",text:"fa-quote-right"},{id:"fa-random",text:"fa-random"},{id:"fa-recycle",text:"fa-recycle"},{id:"fa-refresh",text:"fa-refresh"},{id:"fa-reorder",text:"fa-reorder"},{id:"fa-reply",text:"fa-reply"},{id:"fa-reply-all",text:"fa-reply-all"},{id:"fa-retweet",text:"fa-retweet"},{id:"fa-road",text:"fa-road"},{id:"fa-rocket",text:"fa-rocket"},{id:"fa-rss",text:"fa-rss"},{id:"fa-rss-square",text:"fa-rss-square"},{id:"fa-search",text:"fa-search"},{id:"fa-search-minus",text:"fa-search-minus"},{id:"fa-search-plus",text:"fa-search-plus"},{id:"fa-send",text:"fa-send"},{id:"fa-send-o",text:"fa-send-o"},{id:"fa-share",text:"fa-share"},{id:"fa-share-alt",text:"fa-share-alt"},{id:"fa-share-alt-square",text:"fa-share-alt-square"},{id:"fa-share-square",text:"fa-share-square"},{id:"fa-share-square-o",text:"fa-share-square-o"},{id:"fa-shield",text:"fa-shield"},{id:"fa-shopping-cart",text:"fa-shopping-cart"},{id:"fa-sign-in",text:"fa-sign-in"},{id:"fa-sign-out",text:"fa-sign-out"},{id:"fa-signal",text:"fa-signal"},{id:"fa-sitemap",text:"fa-sitemap"},{id:"fa-sliders",text:"fa-sliders"},{id:"fa-smile-o",text:"fa-smile-o"},{id:"fa-sort",text:"fa-sort"},{id:"fa-sort-alpha-asc",text:"fa-sort-alpha-asc"},{id:"fa-sort-alpha-desc",text:"fa-sort-alpha-desc"},{id:"fa-sort-amount-asc",text:"fa-sort-amount-asc"},{id:"fa-sort-amount-desc",text:"fa-sort-amount-desc"},{id:"fa-sort-asc",text:"fa-sort-asc"},{id:"fa-sort-desc",text:"fa-sort-desc"},{id:"fa-sort-down",text:"fa-sort-down"},{id:"fa-sort-numeric-asc",text:"fa-sort-numeric-asc"},{id:"fa-sort-numeric-desc",text:"fa-sort-numeric-desc"},{id:"fa-sort-up",text:"fa-sort-up"},{id:"fa-space-shuttle",text:"fa-space-shuttle"},{id:"fa-spinner",text:"fa-spinner"},{id:"fa-spoon",text:"fa-spoon"},{id:"fa-square",text:"fa-square"},{id:"fa-square-o",text:"fa-square-o"},{id:"fa-star",text:"fa-star"},{id:"fa-star-half",text:"fa-star-half"},{id:"fa-star-half-empty",text:"fa-star-half-empty"},{id:"fa-star-half-full",text:"fa-star-half-full"},{id:"fa-star-half-o",text:"fa-star-half-o"},{id:"fa-star-o",text:"fa-star-o"},{id:"fa-suitcase",text:"fa-suitcase"},{id:"fa-sun-o",text:"fa-sun-o"},{id:"fa-support",text:"fa-support"},{id:"fa-tablet",text:"fa-tablet"},{id:"fa-tachometer",text:"fa-tachometer"},{id:"fa-tag",text:"fa-tag"},{id:"fa-tags",text:"fa-tags"},{id:"fa-tasks",text:"fa-tasks"},{id:"fa-taxi",text:"fa-taxi"},{id:"fa-terminal",text:"fa-terminal"},{id:"fa-thumb-tack",text:"fa-thumb-tack"},{id:"fa-thumbs-down",text:"fa-thumbs-down"},{id:"fa-thumbs-o-down",text:"fa-thumbs-o-down"},{id:"fa-thumbs-o-up",text:"fa-thumbs-o-up"},{id:"fa-thumbs-up",text:"fa-thumbs-up"},{id:"fa-ticket",text:"fa-ticket"},{id:"fa-times",text:"fa-times"},{id:"fa-times-circle",text:"fa-times-circle"},{id:"fa-times-circle-o",text:"fa-times-circle-o"},{id:"fa-tint",text:"fa-tint"},{id:"fa-toggle-down",text:"fa-toggle-down"},{id:"fa-toggle-left",text:"fa-toggle-left"},{id:"fa-toggle-right",text:"fa-toggle-right"},{id:"fa-toggle-up",text:"fa-toggle-up"},{id:"fa-trash-o",text:"fa-trash-o"},{id:"fa-tree",text:"fa-tree"},{id:"fa-trophy",text:"fa-trophy"},{id:"fa-truck",text:"fa-truck"},{id:"fa-umbrella",text:"fa-umbrella"},{id:"fa-university",text:"fa-university"},{id:"fa-unlock",text:"fa-unlock"},{id:"fa-unlock-alt",text:"fa-unlock-alt"},{id:"fa-unsorted",text:"fa-unsorted"},{id:"fa-upload",text:"fa-upload"},{id:"fa-user",text:"fa-user"},{id:"fa-users",text:"fa-users"},{id:"fa-video-camera",text:"fa-video-camera"},{id:"fa-volume-down",text:"fa-volume-down"},{id:"fa-volume-off",text:"fa-volume-off"},{id:"fa-volume-up",text:"fa-volume-up"},{id:"fa-warning",text:"fa-warning"},{id:"fa-wheelchair",text:"fa-wheelchair"},{id:"fa-wrench",text:"fa-wrench"}]},{text:"【文件类型图标】",children:[{id:"fa-file",text:"fa-file"},{id:"fa-file-archive-o",text:"fa-file-archive-o"},{id:"fa-file-audio-o",text:"fa-file-audio-o"},{id:"fa-file-code-o",text:"fa-file-code-o"},{id:"fa-file-excel-o",text:"fa-file-excel-o"},{id:"fa-file-image-o",text:"fa-file-image-o"},{id:"fa-file-movie-o",text:"fa-file-movie-o"},{id:"fa-file-o",text:"fa-file-o"},{id:"fa-file-pdf-o",text:"fa-file-pdf-o"},{id:"fa-file-photo-o",text:"fa-file-photo-o"},{id:"fa-file-picture-o",text:"fa-file-picture-o"},{id:"fa-file-powerpoint-o",text:"fa-file-powerpoint-o"},{id:"fa-file-sound-o",text:"fa-file-sound-o"},{id:"fa-file-text",text:"fa-file-text"},{id:"fa-file-text-o",text:"fa-file-text-o"},{id:"fa-file-video-o",text:"fa-file-video-o"},{id:"fa-file-word-o",text:"fa-file-word-o"},{id:"fa-file-zip-o",text:"fa-file-zip-o"}]},{text:"【旋转动画类图标】",children:[{id:"fa-circle-o-notch fa-spin",text:"fa-circle-o-notch fa-spin"},{id:"fa-cog fa-spin",text:"fa-cog fa-spin"},{id:"fa-gear fa-spin",text:"fa-gear fa-spin"},{id:"fa-refresh fa-spin",text:"fa-refresh fa-spin"},{id:"fa-spinner fa-spin",text:"fa-spinner fa-spin"}]},{text:"【表单控件图标】",children:[{id:"fa-check-square",text:"fa-check-square"},{id:"fa-check-square-o",text:"fa-check-square-o"},{id:"fa-circle",text:"fa-circle"},{id:"fa-circle-o",text:"fa-circle-o"},{id:"fa-dot-circle-o",text:"fa-dot-circle-o"},{id:"fa-minus-square",text:"fa-minus-square"},{id:"fa-minus-square-o",text:"fa-minus-square-o"},{id:"fa-plus-square",text:"fa-plus-square"},{id:"fa-plus-square-o",text:"fa-plus-square-o"},{id:"fa-square",text:"fa-square"},{id:"fa-square-o",text:"fa-square-o"}]},{text:"【货币种类图标】",children:[{id:"fa-bitcoin",text:"fa-bitcoin"},{id:"fa-btc",text:"fa-btc"},{id:"fa-cny",text:"fa-cny"},{id:"fa-dollar",text:"fa-dollar"},{id:"fa-eur",text:"fa-eur"},{id:"fa-euro",text:"fa-euro"},{id:"fa-gbp",text:"fa-gbp"},{id:"fa-inr",text:"fa-inr"},{id:"fa-jpy",text:"fa-jpy"},{id:"fa-krw",text:"fa-krw"},{id:"fa-money",text:"fa-money"},{id:"fa-rmb",text:"fa-rmb"},{id:"fa-rouble",text:"fa-rouble"},{id:"fa-rub",text:"fa-rub"},{id:"fa-ruble",text:"fa-ruble"},{id:"fa-rupee",text:"fa-rupee"},{id:"fa-try",text:"fa-try"},{id:"fa-turkish-lira",text:"fa-turkish-lira"},{id:"fa-usd",text:"fa-usd"},{id:"fa-won",text:"fa-won"},{id:"fa-yen",text:"fa-yen"}]},{text:"【文本编辑类图标】",children:[{id:"fa-align-center",text:"fa-align-center"},{id:"fa-align-justify",text:"fa-align-justify"},{id:"fa-align-left",text:"fa-align-left"},{id:"fa-align-right",text:"fa-align-right"},{id:"fa-bold",text:"fa-bold"},{id:"fa-chain",text:"fa-chain"},{id:"fa-chain-broken",text:"fa-chain-broken"},{id:"fa-clipboard",text:"fa-clipboard"},{id:"fa-columns",text:"fa-columns"},{id:"fa-copy",text:"fa-copy"},{id:"fa-cut",text:"fa-cut"},{id:"fa-dedent",text:"fa-dedent"},{id:"fa-eraser",text:"fa-eraser"},{id:"fa-file",text:"fa-file"},{id:"fa-file-o",text:"fa-file-o"},{id:"fa-file-text",text:"fa-file-text"},{id:"fa-file-text-o",text:"fa-file-text-o"},{id:"fa-files-o",text:"fa-files-o"},{id:"fa-floppy-o",text:"fa-floppy-o"},{id:"fa-font",text:"fa-font"},{id:"fa-header",text:"fa-header"},{id:"fa-indent",text:"fa-indent"},{id:"fa-italic",text:"fa-italic"},{id:"fa-link",text:"fa-link"},{id:"fa-list",text:"fa-list"},{id:"fa-list-alt",text:"fa-list-alt"},{id:"fa-list-ol",text:"fa-list-ol"},{id:"fa-list-ul",text:"fa-list-ul"},{id:"fa-outdent",text:"fa-outdent"},{id:"fa-paperclip",text:"fa-paperclip"},{id:"fa-paragraph",text:"fa-paragraph"},{id:"fa-paste",text:"fa-paste"},{id:"fa-repeat",text:"fa-repeat"},{id:"fa-rotate-left",text:"fa-rotate-left"},{id:"fa-rotate-right",text:"fa-rotate-right"},{id:"fa-save",text:"fa-save"},{id:"fa-scissors",text:"fa-scissors"},{id:"fa-strikethrough",text:"fa-strikethrough"},{id:"fa-subscript",text:"fa-subscript"},{id:"fa-superscript",text:"fa-superscript"},{id:"fa-table",text:"fa-table"},{id:"fa-text-height",text:"fa-text-height"},{id:"fa-text-width",text:"fa-text-width"},{id:"fa-th",text:"fa-th"},{id:"fa-th-large",text:"fa-th-large"},{id:"fa-th-list",text:"fa-th-list"},{id:"fa-underline",text:"fa-underline"},{id:"fa-undo",text:"fa-undo"},{id:"fa-unlink",text:"fa-unlink"}]},{text:"【方向类图标】",children:[{id:"fa-angle-double-down",text:"fa-angle-double-down"},{id:"fa-angle-double-left",text:"fa-angle-double-left"},{id:"fa-angle-double-right",text:"fa-angle-double-right"},{id:"fa-angle-double-up",text:"fa-angle-double-up"},{id:"fa-angle-down",text:"fa-angle-down"},{id:"fa-angle-left",text:"fa-angle-left"},{id:"fa-angle-right",text:"fa-angle-right"},{id:"fa-angle-up",text:"fa-angle-up"},{id:"fa-arrow-circle-down",text:"fa-arrow-circle-down"},{id:"fa-arrow-circle-left",text:"fa-arrow-circle-left"},{id:"fa-arrow-circle-o-down",text:"fa-arrow-circle-o-down"},{id:"fa-arrow-circle-o-left",text:"fa-arrow-circle-o-left"},{id:"fa-arrow-circle-o-right",text:"fa-arrow-circle-o-right"},{id:"fa-arrow-circle-o-up",text:"fa-arrow-circle-o-up"},{id:"fa-arrow-circle-right",text:"fa-arrow-circle-right"},{id:"fa-arrow-circle-up",text:"fa-arrow-circle-up"},{id:"fa-arrow-down",text:"fa-arrow-down"},{id:"fa-arrow-left",text:"fa-arrow-left"},{id:"fa-arrow-right",text:"fa-arrow-right"},{id:"fa-arrow-up",text:"fa-arrow-up"},{id:"fa-arrows",text:"fa-arrows"},{id:"fa-arrows-alt",text:"fa-arrows-alt"},{id:"fa-arrows-h",text:"fa-arrows-h"},{id:"fa-arrows-v",text:"fa-arrows-v"},{id:"fa-caret-down",text:"fa-caret-down"},{id:"fa-caret-left",text:"fa-caret-left"},{id:"fa-caret-right",text:"fa-caret-right"},{id:"fa-caret-square-o-down",text:"fa-caret-square-o-down"},{id:"fa-caret-square-o-left",text:"fa-caret-square-o-left"},{id:"fa-caret-square-o-right",text:"fa-caret-square-o-right"},{id:"fa-caret-square-o-up",text:"fa-caret-square-o-up"},{id:"fa-caret-up",text:"fa-caret-up"},{id:"fa-chevron-circle-down",text:"fa-chevron-circle-down"},{id:"fa-chevron-circle-left",text:"fa-chevron-circle-left"},{id:"fa-chevron-circle-right",text:"fa-chevron-circle-right"},{id:"fa-chevron-circle-up",text:"fa-chevron-circle-up"},{id:"fa-chevron-down",text:"fa-chevron-down"},{id:"fa-chevron-left",text:"fa-chevron-left"},{id:"fa-chevron-right",text:"fa-chevron-right"},{id:"fa-chevron-up",text:"fa-chevron-up"},{id:"fa-hand-o-down",text:"fa-hand-o-down"},{id:"fa-hand-o-left",text:"fa-hand-o-left"},{id:"fa-hand-o-right",text:"fa-hand-o-right"},{id:"fa-hand-o-up",text:"fa-hand-o-up"},{id:"fa-long-arrow-down",text:"fa-long-arrow-down"},{id:"fa-long-arrow-left",text:"fa-long-arrow-left"},{id:"fa-long-arrow-right",text:"fa-long-arrow-right"},{id:"fa-long-arrow-up",text:"fa-long-arrow-up"},{id:"fa-toggle-down",text:"fa-toggle-down"},{id:"fa-toggle-left",text:"fa-toggle-left"},{id:"fa-toggle-right",text:"fa-toggle-right"},{id:"fa-toggle-up",text:"fa-toggle-up"}]},{text:"【视频播放类图标】",children:[{id:"fa-arrows-alt",text:"fa-arrows-alt"},{id:"fa-backward",text:"fa-backward"},{id:"fa-compress",text:"fa-compress"},{id:"fa-eject",text:"fa-eject"},{id:"fa-expand",text:"fa-expand"},{id:"fa-fast-backward",text:"fa-fast-backward"},{id:"fa-fast-forward",text:"fa-fast-forward"},{id:"fa-forward",text:"fa-forward"},{id:"fa-pause",text:"fa-pause"},{id:"fa-play",text:"fa-play"},{id:"fa-play-circle",text:"fa-play-circle"},{id:"fa-play-circle-o",text:"fa-play-circle-o"},{id:"fa-step-backward",text:"fa-step-backward"},{id:"fa-step-forward",text:"fa-step-forward"},{id:"fa-stop",text:"fa-stop"},{id:"fa-youtube-play",text:"fa-youtube-play"}]},{text:"【商标类图标】",children:[{id:"fa-adn",text:"fa-adn"},{id:"fa-android",text:"fa-android"},{id:"fa-apple",text:"fa-apple"},{id:"fa-behance",text:"fa-behance"},{id:"fa-behance-square",text:"fa-behance-square"},{id:"fa-bitbucket",text:"fa-bitbucket"},{id:"fa-bitbucket-square",text:"fa-bitbucket-square"},{id:"fa-bitcoin",text:"fa-bitcoin"},{id:"fa-btc",text:"fa-btc"},{id:"fa-codepen",text:"fa-codepen"},{id:"fa-css3",text:"fa-css3"},{id:"fa-delicious",text:"fa-delicious"},{id:"fa-deviantart",text:"fa-deviantart"},{id:"fa-digg",text:"fa-digg"},{id:"fa-dribbble",text:"fa-dribbble"},{id:"fa-dropbox",text:"fa-dropbox"},{id:"fa-drupal",text:"fa-drupal"},{id:"fa-empire",text:"fa-empire"},{id:"fa-facebook",text:"fa-facebook"},{id:"fa-facebook-square",text:"fa-facebook-square"},{id:"fa-flickr",text:"fa-flickr"},{id:"fa-foursquare",text:"fa-foursquare"},{id:"fa-ge",text:"fa-ge"},{id:"fa-git",text:"fa-git"},{id:"fa-git-square",text:"fa-git-square"},{id:"fa-github",text:"fa-github"},{id:"fa-github-alt",text:"fa-github-alt"},{id:"fa-github-square",text:"fa-github-square"},{id:"fa-gittip",text:"fa-gittip"},{id:"fa-google",text:"fa-google"},{id:"fa-google-plus",text:"fa-google-plus"},{id:"fa-google-plus-square",text:"fa-google-plus-square"},{id:"fa-hacker-news",text:"fa-hacker-news"},{id:"fa-html5",text:"fa-html5"},{id:"fa-instagram",text:"fa-instagram"},{id:"fa-joomla",text:"fa-joomla"},{id:"fa-jsfiddle",text:"fa-jsfiddle"},{id:"fa-linkedin",text:"fa-linkedin"},{id:"fa-linkedin-square",text:"fa-linkedin-square"},{id:"fa-linux",text:"fa-linux"},{id:"fa-maxcdn",text:"fa-maxcdn"},{id:"fa-openid",text:"fa-openid"},{id:"fa-pagelines",text:"fa-pagelines"},{id:"fa-pied-piper",text:"fa-pied-piper"},{id:"fa-pied-piper-alt",text:"fa-pied-piper-alt"},{id:"fa-pied-piper-square",text:"fa-pied-piper-square"},{id:"fa-pinterest",text:"fa-pinterest"},{id:"fa-pinterest-square",text:"fa-pinterest-square"},{id:"fa-qq",text:"fa-qq"},{id:"fa-ra",text:"fa-ra"},{id:"fa-rebel",text:"fa-rebel"},{id:"fa-reddit",text:"fa-reddit"},{id:"fa-reddit-square",text:"fa-reddit-square"},{id:"fa-renren",text:"fa-renren"},{id:"fa-share-alt",text:"fa-share-alt"},{id:"fa-share-alt-square",text:"fa-share-alt-square"},{id:"fa-skype",text:"fa-skype"},{id:"fa-slack",text:"fa-slack"},{id:"fa-soundcloud",text:"fa-soundcloud"},{id:"fa-spotify",text:"fa-spotify"},{id:"fa-stack-exchange",text:"fa-stack-exchange"},{id:"fa-stack-overflow",text:"fa-stack-overflow"},{id:"fa-steam",text:"fa-steam"},{id:"fa-steam-square",text:"fa-steam-square"},{id:"fa-stumbleupon",text:"fa-stumbleupon"},{id:"fa-stumbleupon-circle",text:"fa-stumbleupon-circle"},{id:"fa-tencent-weibo",text:"fa-tencent-weibo"},{id:"fa-trello",text:"fa-trello"},{id:"fa-tumblr",text:"fa-tumblr"},{id:"fa-tumblr-square",text:"fa-tumblr-square"},{id:"fa-twitter",text:"fa-twitter"},{id:"fa-twitter-square",text:"fa-twitter-square"},{id:"fa-vimeo-square",text:"fa-vimeo-square"},{id:"fa-vine",text:"fa-vine"},{id:"fa-vk",text:"fa-vk"},{id:"fa-wechat",text:"fa-wechat"},{id:"fa-weibo",text:"fa-weibo"},{id:"fa-weixin",text:"fa-weixin"},{id:"fa-windows",text:"fa-windows"},{id:"fa-wordpress",text:"fa-wordpress"},{id:"fa-xing",text:"fa-xing"},{id:"fa-xing-square",text:"fa-xing-square"},{id:"fa-yahoo",text:"fa-yahoo"},{id:"fa-youtube",text:"fa-youtube"},{id:"fa-youtube-play",text:"fa-youtube-play"},{id:"fa-youtube-square",text:"fa-youtube-square"}]},{text:"【医疗类图标】",children:[{id:"fa-ambulance",text:"fa-ambulance"},{id:"fa-h-square",text:"fa-h-square"},{id:"fa-hospital-o",text:"fa-hospital-o"},{id:"fa-medkit",text:"fa-medkit"},{id:"fa-plus-square",text:"fa-plus-square"},{id:"fa-stethoscope",text:"fa-stethoscope"},{id:"fa-user-md",text:"fa-user-md"},{id:"fa-wheelchair",text:"fa-wheelchair"}]}]},i=$.extend(!0,{},a,e);t.select2(i)}},zy.cache={get:function(t,e){var a=$.initNamespaceStorage(zy.ui.browser.getHost()+t);switch(e){case"ls":return a.localStorage;case"ss":return a.sessionStorage;case"cs":return a.cookieStorage}},initDicts:function(t,a){var e=t.split(","),i="",r=zy.cache.get("_mdm_dict","ls");for(var o in e){var n=e[o];r.isSet([n])&&!r.isEmpty([n])||(i+=n+",")}if(""===(i=i.trimCom()))return a();zy.g.am.app="ZYAPP_LOGIN",zy.g.am.mod="ZYMODULE_LOGIN",(new zyNet).get("api/getdict",function(t){if(t&&t.result&&0<t.result.length){var e=t.result;return $.each(e,function(t,e){$.each(e,function(t,e){var a={};a[t]=e,r.set(a)})}),a()}return a()},{typecd:i},null,null)},refreshData:function(t,a){var e=t.trimCom(),i=zy.cache.get("_mdm_dict","ls");zy.g.am.app="ZYAPP_LOGIN",zy.g.am.mod="ZYMODULE_LOGIN",(new zyNet).get("api/getdict",function(t){if(t&&t.result&&0<t.result.length){var e=t.result;$.each(e,function(t,e){$.each(e,function(t,e){var a={};a[t]=e,i.set(a)})})}return a()},{typecd:e},null,null)},cd2name:function(t,e){var a=zy.cache.get("_mdm_dict","ls");if(a.isSet([t])&&!a.isEmpty([t])){var i=a.get([t])[t];for(var r in i)if(i[r].id===e)return i[r].name}return""},name2cd:function(t,e){var a=zy.cache.get("_mdm_dict","ls");if(a.isSet([t])&&!a.isEmpty([t])){var i=a.get([t])[t];for(var r in i)if(i[r].name===e)return i[r].id}return""},getDict:function(t){var e=zy.cache.get("_mdm_dict","ls");return!e.isSet([t])||e.isEmpty([t])?[]:e.get([t])[t]}},zy.org={cache:{get:function(t,e){var a=$.initNamespaceStorage(zy.ui.browser.getHost()+t);switch(e){case"ls":return a.localStorage;case"ss":return a.sessionStorage;case"cs":return a.cookieStorage}},initDicts:function(t,e,a){var i=t.split(","),r="",o=zy.org.cache.get("_mdm_dict"+e,"ls");for(var n in i){var f=i[n];o.isSet([f])&&!o.isEmpty([f])||(r+=f+",")}if(""===(r=r.trimCom()))return a();zy.g.am.app="ZYAPP_LOGIN",zy.g.am.mod="ZYMODULE_LOGIN",(new zyNet).get("api/getdict",function(t){if(t&&t.result&&0<t.result.length){var e=t.result;return $.each(e,function(t,e){$.each(e,function(t,e){var a={};a[t]=e,o.set(a)})}),a()}return a()},{typecd:r,orgid:e},null,null)},refreshData:function(t,e,a){var i=t.trimCom(),r=zy.org.cache.get("_mdm_dict"+e,"ls");zy.g.am.app="ZYAPP_LOGIN",zy.g.am.mod="ZYMODULE_LOGIN",(new zyNet).get("api/getdict",function(t){if(t&&t.result&&0<t.result.length){var e=t.result;$.each(e,function(t,e){$.each(e,function(t,e){var a={};a[t]=e,r.set(a)})})}return a()},{typecd:i,orgid:e},null,null)},cd2name:function(t,e,a){var i=zy.org.cache.get("_mdm_dict"+a,"ls");if(i.isSet([t])&&!i.isEmpty([t])){var r=i.get([t])[t];for(var o in r)if(r[o].id===e)return r[o].name}return""},name2cd:function(t,e,a){var i=zy.org.cache.get("_mdm_dict"+a,"ls");if(i.isSet([t])&&!i.isEmpty([t])){var r=i.get([t])[t];r=i.get(t);for(var o in r)if(r[o].name===e)return r[o].id}return""},getDict:function(t,e){var a=zy.org.cache.get("_mdm_dict"+e,"ls");return!a.isSet([t])||a.isEmpty([t])?[]:a.get([t])[t]}}},String.prototype.trim=function(){return this.replace(/(^\s*)|(\s*$)/g,"")},String.prototype.trimBlanks=function(){return this.replace(/(\s*)/g,"")},String.prototype.trimPreBlank=function(){return this.replace(/(^\s*)/g,"")},String.prototype.trimSufBlank=function(){return this.replace(/(\s*$)/g,"")},String.prototype.trimChars=function(t,e){""===t&&(t=" ");var a="i";return e&&(a=""),this.replace(new RegExp("("+t+")",a+"g"),"")},String.prototype.trimCom=function(){return this.replace(/(\,$)/g,"")},String.prototype.trimPreZero=function(){return this.replace(/(^0*)/g,"")},String.prototype.sizeUTF8=function(){return this.replace(/[^\x00-\xff]/g,"aaa").length},String.prototype.sizeDW=function(){return this.replace(/[^\x00-\xff]/g,"aa").length},String.prototype.trimLines=function(){return this.replace(/(^\n+)|(\n+$)/g,"")},String.prototype.rowSpan=function(){return this.replace(/(\n+)/g,"\n")},String.prototype.lf2crlf=function(){return this.replace(/(\n+)/g,"\r\n")},String.prototype.formatArgs=function(){for(var t=this,e=0;e<arguments.length;e++){var a="{"+e+"}";t=t.replace(a,arguments[e])}return t},String.prototype.toDate=function(){if(this&&"string"==typeof this)return new Date(this.replace(/\-/g,"/"))},Date.prototype.toFormat=function(t){if(t){var e={"M+":this.getMonth()+1,"d+":this.getDate(),"h+":this.getHours(),"m+":this.getMinutes(),"s+":this.getSeconds(),"q+":Math.floor((this.getMonth()+3)/3),S:this.getMilliseconds()};for(var a in/(y+)/.test(t)&&(t=t.replace(RegExp.$1,(this.getFullYear()+"").substr(4-RegExp.$1.length))),e)new RegExp("("+a+")").test(t)&&(t=t.replace(RegExp.$1,1==RegExp.$1.length?e[a]:("00"+e[a]).substr((""+e[a]).length)));return t}},Date.prototype.format=function(t){var e={"M+":this.getMonth()+1,"d+":this.getDate(),"h+":this.getHours()%12==0?12:this.getHours()%12,"H+":this.getHours(),"m+":this.getMinutes(),"s+":this.getSeconds(),"q+":Math.floor((this.getMonth()+3)/3),S:this.getMilliseconds()};for(var a in/(y+)/.test(t)&&(t=t.replace(RegExp.$1,(this.getFullYear()+"").substr(4-RegExp.$1.length))),/(E+)/.test(t)&&(t=t.replace(RegExp.$1,(1<RegExp.$1.length?2<RegExp.$1.length?"/u661f/u671f":"/u5468":"")+{0:"/u65e5",1:"/u4e00",2:"/u4e8c",3:"/u4e09",4:"/u56db",5:"/u4e94",6:"/u516d"}[this.getDay()+""])),e)new RegExp("("+a+")").test(t)&&(t=t.replace(RegExp.$1,1==RegExp.$1.length?e[a]:("00"+e[a]).substr((""+e[a]).length)));return t},Array.prototype.indexOf=function(t){for(var e=0,a=this.length;e<a;e++)if(this[e]===t)return e;return-1},Array.prototype.indexOf||(Array.prototype.indexOf=function(t){var e=this.length>>>0,a=Number(arguments[1])||0;for((a=a<0?Math.ceil(a):Math.floor(a))<0&&(a+=e);a<e;a++)if(a in this&&this[a]===t)return a;return-1}),$.fn.json2form=function(t){return zy.ui.form.deserialize($(this),t)},$.fn.jsons2form=function(t){return zy.ui.form.deserialize($(this),t)},$.fn.form2json=function(){return zy.ui.form.serialize($(this))},$.fn.zySelect=function(t,e,a){return zy.ui.Select2.Set(t,null,$(this),e,a)},$.fn.orgSelect=function(t,e,a,i){return zy.ui.Select2.Set(t,e,$(this),a,i)},$.fn.zySelectCustomData=function(t,e,a,i,r){return zy.ui.Select2.SetCustomData(t,$(this),e,a,i,r)},$.fn.zySelectIcons=function(t){return zy.ui.Select2.Icons($(this),t)},$.fn.zyAuto=function(t){var e=zy.cache.get("_mdm_dict","ls");zy.log(JSON.stringify("auto-complete = "+e.get(t)));var r;$(this).typeahead({hint:!0,highlight:!0,minLength:1},{name:t,displayKey:"value",source:(r=e.get(t),function(t,e){var a=[],i=new RegExp(t,"i");$.each(r,function(t,e){i.test(e.text)&&a.push({value:e.name})}),e(a)})})},$.fn.formDisable=function(t,e){if(e){var a=e.split(",");for(var i in a){var r=a[i];t?this.find('input[name="'+r+'"],select[name="'+r+'"],textarea[name="'+r+'"],button[name="'+r+'"],submit[name="'+r+'"]').attr("disabled",t).parent().addClass("state-disabled"):this.find('input[name="'+r+'"],select[name="'+r+'"],textarea[name="'+r+'"],button[name="'+r+'"],submit[name="'+r+'"]').attr("disabled",t).parent().removeClass("state-disabled")}}else t?this.find("input,select,textarea,button,submit").attr("disabled",t).parent().addClass("state-disabled"):this.find("input,select,textarea,button,submit").attr("disabled",t).parent().removeClass("state-disabled");return this},$.fn.btnDisable=function(t){return t?$(this).attr("disabled",t).parent().addClass("state-disabled"):$(this).attr("disabled",t).parent().removeClass("state-disabled"),this},$.fn.i_coffee=function(t){for(var e in t)for(var a in t[e])$(this).on(e,a,t[e][a])},window.console=window.console||{},console.log||(console.log="undefined"!=typeof opera?opera.postError:function(t){}),ConsoleUtils=function(){var e=!1;function t(t){e=t}return t.prototype.toggle=function(){e=!e},t.prototype.open=function(){e=!0},t.prototype.close=function(){e=!1},t.prototype.log=function(t){e&&console.log(t)},t}();var Console=new ConsoleUtils(!1);
+/**
+ * zy (JS库) 当前库依赖第三方库:
+ * 1).jQuery（v1.10.x）： http://jquery.com/
+ * 2).json2.js ： 如果浏览器支持JSON.stringify和JSON.parse接口就不需要此库，详细了解：http://www.json.org/
+ *
+ * 基本功能:
+ * zy: 基础库
+ *
+ * zy.tool: 共通方法
+ * zy.tool.regexp:  常用正则表达式
+ * zy.tool.String:  字符串操作
+ * zy.tool.Date:    日期时间操作
+ *
+ * zy.net:  ajax异步数据请求等封装
+ *
+ * zy.ui: 画面处理
+ * zy.ui.msg:     提示信息
+ * zy.ui.form:    表单操作
+ * zy.ui.key:     键盘操作
+ * zy.ui.layer:   页面遮罩层
+ * zy.ui.browser: 浏览器操作及信息
+ *
+ * 扩展功能:
+ * String:  字符串操作
+ * Array:   数组的基本操作
+ * Date:    日期的基本操作
+ *
+ * @method ()
+ */
+(function () {
+  var _win = window.frames[0] ? window.frames[0] : window;
+  if (!_win.zy) {
+    _win.zy = {};
+  }
+})();
+
+/** 入口对象 */
+var zy = {
+  /**
+   * 显示当前对象名称及版本
+   * @method toString
+   * @return {String}
+   */
+  toString: function () {
+    return '{zy} version: 2.2.1';
+  },
+  /** 控制台log输出 */
+  debug: false,
+  /** 控制台log输出函数封装 */
+  log: function () {
+    if (window.console && zy.debug) {
+      // http://stackoverflow.com/questions/8785624/how-to-safely-wrap-console-log
+      // Function.apply.call(console.log, console, arguments);
+      var args = [];
+      var hasErr = false;
+      for (var i=0; i<arguments.length; ++i) {
+        args.push(arguments[i]);
+        if (arguments[i] instanceof Error) {
+          hasErr = true;
+        }
+      }
+      // if (hasErr) {
+      //   args.push('\n['+ new Error("stack").stack +']');
+      // }
+      console.log.apply(console, args);
+    }
+  },
+  /** 全局参数 */
+  //共通传参用
+  g: {
+    //主机IP地址
+    host: {
+      api: location.protocol +'//localhost/'+location.pathname.split('/')[1]+'/',//'//localhost/xboson/',
+      ui: location.protocol +'//localhost/'+location.pathname.split('/')[1]+'/face'
+    },
+    //共通传参用
+    comm: {
+      app: '',
+      mod: '',
+      org: '',
+      openid: ''
+    },
+    // 请求参数 app/mod
+    am:{},
+    // 分页用，默认每页显示20条数据
+    page: {pagesize: '20'},
+    //机构列表
+    org_list: [],
+    //用户信息
+    user:{
+      userid: ''
+    }
+  }
+};
+
+//
+// xboson 系统兼容层
+//
+zy.isXBosonSystem = null;
+
+// 编辑器扩展功能
+zy.setEditorExOptions = function(editor) {
+  zy.net.loadScript.call(this,"lib/js/ace/1.2.9/ext-language_tools.js", function () {
+    editor.setOptions({
+      enableBasicAutocompletion: false,
+      enableSnippets: true,
+      enableLiveAutocompletion: true,
+    });
+  });
+}
+
+// 路径中有 '/ds/' 认为是老系统, 路径中有 '/face/' 认为是新系统.
+zy.check_xboson_system = function() {
+  if (location.pathname.indexOf('/ds/') >= 0) {
+    zy.isXBosonSystem = false;
+    zy.g.host.api     = zy.net.getHttpUrl("/ds/");
+    zy.g.host.ui      = zy.net.getHttpUrl();
+    return;
+  }
+
+  var p = location.pathname.indexOf('/face/');
+  if (p >= 0) {
+    zy.isXBosonSystem = true;
+    var prefix        = location.pathname.substr(0, p);
+    zy.g.host.api     = zy.net.getHttpUrl(prefix +"/");
+    zy.g.host.ui      = zy.net.getHttpUrl(prefix +"/face");
+    console.log("xBoson System Call API: "+ zy.g.host.api +"app/{org-id}/{app-id}/{module-id}/{api-name}?arguments");
+    return;
+  }
+
+  zy.ui.msg('错误', '无法(通过路径)判断系统类型', 'e');
+};
+
+// 对 http 返回值做兼容
+zy.fix_xboson_data = function(msg) {
+  if (! zy.isXBosonSystem) 
+    return msg;
+
+  if ((!msg.result) && (msg.data)) {
+    msg.result = msg.data;
+  }
+  if (!isNaN(msg.code)) {
+    msg.ret = msg.code+'';
+  }
+  if (msg.datatype && msg.datatype.indexOf("stack_trace_element")>=0) {
+    console.error("Service Error:", msg.data);
+  }
+  return msg;
+};
+
+// 对请求类型是 jsonp 的请求参数做兼容
+zy.fix_jsonp_parm = function(parm) {
+  if (! zy.isXBosonSystem) 
+    return parm;
+
+  if (!parm) parm = {};
+  if (typeof parm == 'string') {
+    parm = parm + '&$format=jsonp';
+  } else {
+    parm['$format'] = 'jsonp';
+  }
+  return parm;
+};
+
+zy.fix_ui_type = function(uri) {
+  if (! zy.isXBosonSystem) 
+    return uri;
+
+  return (zy.debug ? "/t" : "/ui") + uri;
+};
+
+// 将参数式转换为路径式
+zy.fix_api_call = function(uri, prm) {
+  if (! zy.isXBosonSystem) 
+    return uri;
+
+  var api_prefixs = [ "api/", "ide/", "download/", "upload/" ];
+
+  api_prefixs.forEach(function(api_prefix) {
+    if (uri.indexOf(api_prefix) == 0) {
+      var apiname = uri.substr(api_prefix.length);
+      uri = ['app/', prm.org, '/', prm.app, '/', prm.mod, '/', apiname ].join('');
+      delete prm.org;
+      delete prm.app;
+      delete prm.mod;
+      zy.log("fix api call::::::::::::::", uri, prm);
+    }
+  });
+  return uri;
+};
+
+// 给 api 名称打补丁, 因为新的 api 改动在老平台上无法运行
+// 让老平台运行原先的脚本, 新平台运行新的脚本.
+zy.fix_api_name = function(apiname) {
+  if (! zy.isXBosonSystem) 
+    return apiname;
+  
+  return apiname + '_x';
+};
+
+// 调用吧少年
+zy.setup_debug = function() {
+  zy.debug = 1;
+  zy.g.comm.s = 'd';
+  var debug_msg = "开启调试模式, UI 文件从 /t 下获取, API 加调试参数.";
+  console.log(debug_msg);
+  zy.ui.msg("开发提示", debug_msg, 's');
+};
+
+// 修正预览画面 url 不正确
+zy.fix_preview_url = function(url) {
+  if (zy.isXBosonSystem && location.pathname.indexOf("saas") < 0) {
+    var sp = url.split('/');
+    // 删除多余的路径 by J.ym
+    sp.splice(1, 1); 
+    url = sp.join('/');
+  }
+  return url;
+};
+
+
+// 截屏功能
+zy.print_screen = function(selector) {
+  var frame = $('.print_screen_container');
+  if (frame.size() < 1) {
+    frame = $("<div class='moda_frame print_screen_container'/>");
+    frame.appendTo(document.body);
+  }
+  frame.html('');
+  
+  zy.net.loadHTML('print_screen.htm', frame, function(d, e, t) {
+    window.do_print_screen(selector);
+  });
+};
+
+
+(function() {
+  //
+  // 刷新后还原 debug 模式
+  // jym: NONONONONONONONONONONO
+  //
+  // $(window).on("unload", function() {
+  //   sessionStorage['zy.debug'] = zy.debug ? '1' : null;
+  // });
+  // setTimeout(function() {
+  //   zy.debug =  sessionStorage['zy.debug'] == '1'
+  // }, 1);
+})();
+
+/** =====================共通方法 */
+zy.tool = {
+  checkTableName:function(str){
+    var check1 = /\W/;  //非单词字符
+    var check2 = /^\d/; //以数字开头
+    // var check3 = /[A-Z]/; //包含大写字母
+    // return !check1.test(str) && !check2.test(str) && !check3.test(str);
+    return !check1.test(str) && !check2.test(str);
+  },
+  normalize: function(str) {
+    var tmp = str.split('/');
+    var out = [];
+    for (var i=0; i<tmp.length; ++i) {
+      if (tmp[i]) out.push(tmp[i]);
+    }
+    return out.join('/');
+  },
+  path:function(){
+    if(location.href.indexOf(location.host + '/t'>-1))
+      var u = location.protocol +'//'+ location.host+ '/t/saas/'+zy.g.comm.org+'/';
+    else
+      var u = location.protocol +'//'+ location.host+'/ui/saas/'+zy.g.comm.org+'/';
+    // return u;
+    return '';
+  },
+  xpath:function(){
+    if(location.href.indexOf(location.host + '/t'>-1))
+      var u = location.protocol +'//'+ zy.g.host.ui + '/t/saas/'+zy.g.comm.org+'/';
+    else
+      var u = location.protocol +'//'+ zy.g.host.ui +'/ui/saas/'+zy.g.comm.org+'/';
+    return u;
+  },
+  /**
+   * 初始化参数：JSON对象合并 defaults、options 的成员属性
+   * @method initParams
+   * @example zy.tool.initParams.call({aa:1,bb:2,cc:3}, {aa:10,dd:4}); return {aa:10,bb:2,cc:3,dd:4};
+   * @params {Object} defaults JSON类型数据（默认）
+   * @params {Object} options JSON类型数据（可选）
+   * @return {Object} 返回合并后的JSON对象
+   */
+  initParams: function (defaults, options) {
+    return $.extend({}, defaults, options);
+  },
+  /**
+   * 生成唯一CID编号:时间+4位随机数
+   *
+   * @method random
+   * @return {String} 随机数
+   */
+  random: function () {
+    return new Date().getTime() + '' + Math.round(Math.random() * 10000);
+  },
+  /**
+   * 判断是否含有'.'号
+   *
+   * @method hasDot
+   * @param {String} str 输入字符串
+   * @return {Boolean}
+   */
+  hasDot: function (str) {
+    if (typeof str != 'string') {
+      return false;
+    }
+    if (str.indexOf('.') != -1) {
+      return true;
+    }
+    return false;
+  },
+  /**
+   * 判断对象是否为纯整形数字或整形数字字符串 011=9(011 表示8进制)
+   *
+   * @method isInteger
+   * @param {Number/String} obj 输入数字或字符串
+   * @return {Boolean}
+   */
+  isInteger: function (obj) {
+    if (obj != parseInt(obj, 10)) {
+      return false;
+    }
+    return true;
+  },
+  /**
+   * 将"undefined"和null转换为空串
+   *
+   * @method obj2Empty
+   * @param {Object} obj 输入对象
+   * @return {Object}
+   */
+  obj2Empty: function (obj) {
+    if (typeof obj === "undefined" || obj === null) {
+      return '';
+    }
+    return obj;
+  },
+  /** 常用正则表达式 */
+  regexp: {
+    domain: /^[\w-]*(\.[\w-]*)+/ig,
+    url: /https?:\/\/[\w-]*(\.[\w-]*)+/ig,
+    ftp: /ftp:\/\/[\w-]*(\.[\w-]*)+/ig,
+    smtp: /smtp:\/\/[\w-]*(\.[\w-]*)+/ig,
+    email: /^[-a-zA-Z0-9_\.]+@([0-9A-Za-z][0-9A-Za-z-]+\.)+[A-Za-z]{2,5}$/,
+    ipv4: /^([01]?\d\d?|2[0-4]\d|25[0-5])(\.([01]?\d\d?|2[0-4]\d|25[0-5])){3}$/,
+    mac: /^[A-F\d]{2}-[A-F\d]{2}-[A-F\d]{2}-[A-F\d]{2}-[A-F\d]{2}-[A-F\d]{2}$/,
+    rang0t65535: /^(\d{1,4}|[1-5]\d{4}|6([0-4]\d{3}|5([0-4]\d{2}|5([0-2]\d|3[0-5]))))$/,
+    phone: /(^[0-9]{1,4}\-[0-9]{3,4}\-[0-9]{3,8}$)|(^[0-9]{3,4}\-[0-9]{3,8}$)|(^[0-9]{3,8}$)/, // 9999-9999-99999999可包含国际码
+    char_zhcn: /[u4e00-u9fa5]/, //中文字符
+    byte: /[^x00-xff]/,
+    ascii: /[^\x00-xff]/, //ASCII字符
+    blank: /\s/,
+    notBlank: /\S/
+  },
+  /**
+   * 计算周岁
+   * @method age
+   * @example zy.tool.age('2000-01-01'); return 16;
+   * @params {String} birthday 出生年月日字符串
+   * @return {int} 返回周岁数字
+   */
+    age: function (birthday) {
+        var r = birthday.match(/^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2})$/);
+        if (r === null) return '';
+        var birth = new Date(r[1], r[3] - 1, r[4]);
+        if (birth.getFullYear() == r[1] && (birth.getMonth() + 1) == r[3] && birth.getDate() == r[4]) {
+            var today = new Date();
+            var age = today.getFullYear() - r[1];
+            if (today.getMonth() > birth.getMonth()) {
+                return age;
+            }
+            if (today.getMonth() == birth.getMonth()) {
+                if (today.getDate() >= birth.getDate()) {
+                    return age;
+                } else {
+                    return age - 1;
+                }
+            }
+            if (today.getMonth() < birth.getMonth()) {
+                return age - 1;
+            }
+        }
+        return '';
+    },
+  /**
+   * @name isString
+   *
+   * @description
+   * Determines if a reference is a `String`.
+   *
+   * @param {*} value Reference to check.
+   * @returns {boolean} True if `value` is a `String`.
+   */
+  isString: function (value) {
+    return typeof value === 'string';
+  },
+  /**
+   * @name fromJson
+   *
+   * @description
+   * Deserializes a JSON string.
+   *
+   * @param {string} json JSON string to deserialize.
+   * @returns {Object|Array|string|number} Deserialized JSON string.
+   */
+  fromJson: function (json) {
+    return typeof json === 'string' ? JSON.parse(json) : json;
+  }
+};
+/** =====================字符串操作 */
+zy.tool.string = {
+  /**
+   * 字符串容器类
+   *
+   * @Class StringBuffer
+   * @constructor
+   */
+  StringBuffer: function () {
+    this._string = [];
+    /**
+     * 向容器内追加数据。
+     *
+     * @method append
+     * @param {String/Number} str 追加字符串或数字
+     * @return {Object} zy.tool.string.StringBuffer
+     */
+    this.append = function (str) {
+      var t = typeof str;
+      if (t === 'string' || t === 'number') {
+        this._string.push(str);
+      }
+      return this;
+    };
+        /**
+     * 向容器大小。
+     *
+     * @method size
+     * @return {Number} size
+     */
+    this.size = function () {
+      return this._string.length;
+    };
+    /**
+     * 向容器内删除数据。
+     *
+     * @method remove
+     * @param {Number} index 删除的指定位置
+     * @return {Object} zy.tool.string.StringBuffer
+     */
+    this.remove = function (index) {
+      if (typeof index === 'number' && index%1 === 0) {
+        this._string.splice(index, 1);
+      }
+      return this;
+    };
+    /**
+     * 以字符串形式显示容器内数据
+     *
+     * @method toString
+     * @param {String/Number} spliter [optional,default=''] 字符串分隔符。
+     * @return {String} 容器内所有字符串行集合
+     */
+    this.toString = function (spliter) {
+      var t = typeof spliter;
+      if (t !== 'string' && t !== 'number') {
+        spliter = '';
+      }
+      return this._string.join(spliter);
+    };
+    /**
+     * 以数组形式显示容器内数据
+     *
+     * @method toArray
+     * @return {Array} 容器数组
+     */
+    this.toArray = function () {
+      return this._string;
+    };
+  },
+  /**
+   * 利用数组的join构造字符串，提高字符串拼接效率
+   * @method buildString
+   * @param arguments {String|Number}
+   * @return {String} 拼接后的字符串
+   */
+  buildString: function () {
+    var str = [];
+    for (var i = 0; i < arguments.length; i++) {
+      str[i] = arguments[i];
+    }
+    return str.join("");
+  }
+
+};
+/** =====================数组基本操作 */
+zy.tool.array = {
+  /**
+   * 数据相减:mArr-sArr,得到的数组是mArr的子集
+   *
+   * @method arrayReduce
+   * @param {Array} mArr 被减数组
+   * @param {Array} sArr 减数据
+   * @return {Array} 两数组之差
+   */
+  arrayReduce: function (mArr, sArr) {
+    if (!sArr) {
+      return mArr;
+    }
+    var subArr = [],
+      str = sArr.join("&quot;&quot;");
+    for (var i in mArr) {
+      if (str.indexOf(mArr[i]) == -1) {
+        subArr.push(mArr[i]);
+      }
+    }
+    return subArr;
+  },
+  /**
+   * json对象数组按对象属性排序
+   *
+   * @method arraySort
+   * @param {String} order 排序规则 asc/desc
+   * @param {String} sortBy 对象属性
+   */
+  arraySort: function (order, sortBy) {
+    var ordAlpah = (order == 'asc') ? '>' : '<';
+    var sortFun = new Function('a', 'b', 'return a.' + sortBy + ordAlpah + 'b.' + sortBy + '?1:-1');
+    for (var i in sortFun) {
+      var children = sortFun[i].children;
+      if ($(children).length > 0) {
+        sortFun[i].children = zy.tool.array.arraySort('asc', children);
+      }
+    }
+    return sortFun;
+  }
+};
+/** =====================日期时间操作 */
+zy.tool.Date = {
+  /**
+   * 将小于10数字前加0
+   *
+   * @method _zeroCompletion
+   * @param {Number} time 时间
+   * @return {String}
+   */
+  _zeroCompletion: function (time) {
+    if (time < 10) {
+      return '0' + time;
+    }
+    return time + '';
+  },
+  /**
+   * 将秒转换为时间hh:mm:ss格式
+   *
+   * @method secs2Time
+   * @param {Number} secs 秒
+   * @return {String} 格式化时间字符串'00:00:00'
+   */
+  secs2Time: function (secs) {
+    if (secs < 0) {
+      secs = 0;
+    }
+    secs = parseInt(secs, 10);
+    var hours = Math.floor(secs / 3600),
+      mins = Math
+      .floor((secs % 3600) / 60),
+      sec = secs % 3600 % 60;
+    return this._zeroCompletion(hours) + ':' + this._zeroCompletion(mins) + ':' + this._zeroCompletion(sec);
+  },
+  /**
+   * 格式化日期时间字符串
+   *
+   * @method dateTime2str
+   * @param {Date} dt 日期对象
+   * @param {String} fmt 格式化字符串，如：'yyyy-MM-dd hh:mm:ss'
+   * @return {String} 格式化后的日期时间字符串
+   */
+  dateTime2str: function (dt, fmt) {
+    var z = {
+      M: dt.getMonth() + 1,
+      d: dt.getDate(),
+      h: dt.getHours(),
+      m: dt.getMinutes(),
+      s: dt.getSeconds()
+    };
+    fmt = fmt.replace(/(M+|d+|h+|m+|s+)/g, function (v) {
+      return ((v.length > 1 ? "0" : "") + eval('z.' + v.slice(-1)))
+        .slice(-2);
+    });
+    return fmt.replace(/(y+)/g, function (v) {
+      return dt.getFullYear().toString().slice(-v.length);
+    });
+  },
+  /**
+   * 根据日期时间格式获取获取当前日期时间
+   *
+   * @method dateTimeWrapper
+   * @param {String} fmt 日期时间格式，如："yyyy-MM-dd hh:mm:ss";
+   * @return {String} 格式化后的日期时间字符串
+   */
+  dateTimeWrapper: function (fmt) {
+    if (arguments[0])
+      fmt = arguments[0];
+    return this.dateTime2str(new Date(), fmt);
+  },
+  /**
+   * 获取当前日期时间
+   *
+   * @method getDatetime
+   * @param {String} fmt [optional,default='yyyy-MM-dd hh:mm:ss'] 日期时间格式。
+   * @return {String} 格式化后的日期时间字符串
+   */
+  getDatetime: function (fmt) {
+    return this.dateTimeWrapper(fmt || 'yyyy-MM-dd hh:mm:ss');
+  },
+  /**
+   * 获取当前日期时间+毫秒
+   *
+   * @method getDatetimes
+   * @param {String} fmt [optional,default='yyyy-MM-dd hh:mm:ss'] 日期时间格式。
+   * @return {String} 格式化后的日期时间字符串
+   */
+  getDatetimes: function (fmt) {
+    var dt = new Date();
+    return this.dateTime2str(dt, fmt || 'yyyy-MM-dd hh:mm:ss') + '.' + dt.getMilliseconds();
+  },
+  /**
+   * 获取当前日期（年-月-日）
+   *
+   * @method getDate
+   * @param {String} fmt [optional,default='yyyy-MM-dd'] 日期格式。
+   * @return {String} 格式化后的日期字符串
+   */
+  getDate: function (fmt) {
+    return this.dateTimeWrapper(fmt || 'yyyy-MM-dd');
+  },
+  /**
+   * 获取当前时间（时:分:秒）
+   *
+   * @method getTime
+   * @param {String} fmt [optional,default='hh:mm:ss'] 日期格式。
+   * @return {String} 格式化后的时间字符串
+   */
+  getTime: function (fmt) {
+    return this.dateTimeWrapper(fmt || 'hh:mm:ss');
+  },
+  /**
+   * 将标准日期时间格式转换为长整形格式
+   * @param {String} datetime 为空或 yyyy-MM-dd hh:mm:ss 格式时间
+   * @returns {number}
+   */
+  dateTime2Long: function (datetime) {
+    if (datetime && typeof datetime === "string") {
+      return new Date(datetime.replace(/\-/g, '/')).getTime();
+    }
+    return new Date().getTime();
+  },
+  /**
+   * 初始化日期段选择器，依赖于jQueryUI的日期控件
+   *
+   * @method initDatePickerRange
+   * @param {String} datefrom 开始日期id
+   * @param {String} dateto 结束日期id
+   */
+  initDatePickerRange: function (datefrom, dateto) {
+    var picker = $('#' + datefrom + ',' + '#' + dateto),
+      dates = {};
+    dates = picker.datepicker({
+      changeMonth: true,
+      numberOfMonths: 1,
+      dateFormat: 'yy-mm-dd',
+      onSelect: function (selectedDate) {
+        var option = this.id == datefrom ? "minDate" : "maxDate",
+          instance = $(this).data(
+            "datepicker"),
+          date = $.datepicker.parseDate(
+            instance.settings.dateFormat || $.datepicker._defaults.dateFormat,
+            selectedDate, instance.settings);
+        dates.not(this).datepicker("option", option, date);
+      },
+      setDate: new Date()
+    }).datepicker('setDate', new Date());
+  },
+  /**
+   * 自定义格式化日期字符串，依赖于jQuery
+   *
+   * @method customDateFormat
+   * @param {String} dateString 日期字符串
+   * @param {String} patten 目标日期格式
+   */
+  customDateFormat: function(dateString, patten) {
+    if (dateString && dateString.length > 0) {
+      return $.format.date(dateString, patten);
+    } else {
+      return '';
+    }
+  },
+  /**
+   * 默认格式化日期字符串，依赖于jQuery
+   *
+   * @method defaultDateFormat
+   * @param {String} dateString 日期字符串
+   */
+  defaultDateFormat: function(dateString) {
+    return this.customDateFormat(dateString, 'yyyy-MM-dd');
+  }
+};
+/** =====================ajax异步数据请求等封装 */
+zy.net = {
+  /**
+   * websocket
+   * @param {String} uri 请求链接地址 测试:"ws://echo.websocket.org/"
+   * @param {function} 接收信息的回调函数
+   * @return {object} websocket对象
+   */
+
+  zyWebSocket : function(host,cb) {
+    //检查状态并输出
+    function MsgAndCheck(readyState){
+      var arr = [0, 1, 2, 3];
+      var match = ['连接尚未建立','WebSocket的链接已经建立','连接正在关闭','连接已经关闭或不可用'];
+      for (i in arr){
+        if(arr[i] == readyState)
+          zy.log(match[i]);
+      }
+      return readyState == 1;
+    }
+
+    if (!host)
+      return;
+    var socket;
+    try {
+      socket = new WebSocket(host);
+    } catch(e) {
+      zy.log(e);
+    }
+
+    socket.onopen = function(msg) {
+      if(!MsgAndCheck(socket.readyState))
+       return socket = null;
+    };
+
+    socket.onmessage = function(msg) {
+      if(!MsgAndCheck(socket.readyState))
+        return;
+      cb && cb(msg.data);
+    };
+    socket.onclose = function(msg) {
+    };
+
+    socket.sendData = function(data) {
+      if (data){
+        if(MsgAndCheck(socket.readyState)){
+          socket.send(data);
+        }
+      } else {
+        zy.ui.msg('提示信息', '发送内容空', 'w');
+      }
+    };
+
+    socket.quit = function() {
+      socket.close();
+      socket = null;
+      return zy.log(host + '已经断开');
+    };
+    return socket;
+  },
+
+  /**
+   * GET 方式调用API服务（支持跨域提交）
+   * @method get
+   * @param {String} uri 请求链接地址
+   * @param {Function} callback 回调函数
+   * @param {Object} param 发送请求参数json对象或表单对象：$('#formid').serialize();
+   * @param {Number} pagenum 页码;
+   * @param {Function} error 服务器端传来错误信息时使用 error 回调函数处理错误，将返回出错 JSON 数据
+   */
+  get: function (uri, callback, param, pagenum, error) {
+    //关闭AJAX的缓存(全局属性)
+    //$.ajaxSetup({cache: false});
+    var prm = zy.tool.initParams(zy.g.comm, zy.g.am);
+    if (pagenum) {
+      zy.g.pages = {
+        pagesize: zy.g.am.pagesize || zy.g.page.pagesize,
+        pagenum:pagenum
+      };
+      prm = zy.tool.initParams(prm, zy.g.pages);
+    }
+    zy.g.am = {};
+    //设置Url及参数
+    uri = zy.fix_api_call(uri, prm);
+    var link;
+    if (uri.indexOf('ETLServer') != -1) {
+      link = zy.g.host.api.substring(0, zy.g.host.api.length - 3) + uri + "?" + zy.net.parseParam(prm);
+    } else {
+      link = zy.g.host.api + uri + "?" + zy.net.parseParam(prm);
+    }
+    zy.log("zy.net.get.link :" + link);
+    zy.log("zy.net.get.param:" + JSON.stringify(param));
+    
+    param = zy.fix_jsonp_parm(param); // add by J.ym
+
+    var setting = {
+      url: link,
+      type: "get",
+      async: false,
+      timeout: 10000,
+      cache: false,
+      dataType: "jsonp",
+      jsonp: "cb",
+      jsonpCallback: "cb" + zy.tool.random(),
+      data: param,
+      success: function (msg) {
+        // zy.log("zy.net.get.success: " + JSON.stringify(msg));
+        zy.fix_xboson_data(msg);
+        zy.net.errorHandler(msg, callback, error);
+      },
+      error: function (XMLHttpRequest, textStatus, errorThrown) {
+        if (textStatus == "timeout") {
+          zy.ui.msg("访问超时: ", link + "\r\n" + errorThrown, "e");
+        }
+        zy.log("zy.net.get.error:", XMLHttpRequest, textStatus, errorThrown);
+        throw {
+          XMLHttpRequest: XMLHttpRequest,
+          textStatus: textStatus,
+          errorThrown: errorThrown
+        };
+      }
+    };
+    $.ajax(setting);
+  },
+
+  /**
+   * POST 方式调用API服务
+   * @method post
+   * @param {String} uri 请求链接地址
+   * @param {Function} callback 回调函数
+   * @param {Object} param 发送请求参数json对象
+   * @param {Number} pagenum 页码;
+   * @param {Function} error 服务器端传来错误信息时使用 error 回调函数处理错误，将返回出错 JSON 数据
+   */
+  post: function (uri, callback, param, pagenum, error, _outError) {
+    var isJsonSubmit = false;
+    if (zy.g.am.json===true) {
+      isJsonSubmit = true;
+      delete zy.g.am.json;
+    }
+    var prm = zy.tool.initParams(zy.g.comm, zy.g.am);
+    zy.g.am = {};
+    if (pagenum) {
+      zy.g.pages = {
+        pagesize: zy.g.am.pagesize || zy.g.page.pagesize,
+        pagenum:pagenum
+      };
+      prm = zy.tool.initParams(prm, zy.g.pages);
+    }
+    //设置Url及参数
+    uri = zy.fix_api_call(uri, prm);
+    var link = zy.g.host.api + uri + "?" + zy.net.parseParam(prm);
+    zy.log("zy.net.post.link: " + link);
+    zy.log("zy.net.post.param: " + JSON.stringify(param));
+
+    if (isJsonSubmit) {
+      param = zy.fix_jsonp_parm(param)// add by J.ym
+      link += "&$format=jsonp";
+      var settingJson = {
+        url: link,
+        type: 'POST',
+        async: false,
+        timeout: 10000,
+        cache: true,
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'jsonp',
+        jsonp: 'cb',
+        jsonpCallback: 'cb' + zy.tool.random(),
+        data: JSON.stringify(param),
+        success: function (msg) {
+          //zy.log("zy.net.get.success: " + JSON.stringify(msg));
+          zy.net.errorHandler(msg, callback, error);
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+          if (textStatus == "timeout") {
+            zy.ui.msg("访问超时: ", link + "\r\n" + errorThrown, "e");
+          }
+          zy.log("zy.net.get.error: " + XMLHttpRequest + "\r\n" + textStatus + "\r\n" + errorThrown);
+          throw {
+            XMLHttpRequest: XMLHttpRequest,
+            textStatus: textStatus,
+            errorThrown: errorThrown
+          };
+        }
+      };
+      $.ajax(settingJson);
+    } else {
+      var out = _outError || new Error();
+      $.post(link, param, function (msg) {
+        var _msg = zy.tool.fromJson(msg);
+        zy.net.errorHandler(_msg, callback, error, out);
+      });
+    }
+  },
+  /**
+   * GET 方式调用服务（支持跨域提交）
+   * @method normalGet
+   * @param {String} uri 请求链接地址
+   * @param {Function} callback 回调函数
+   * @param {Object} param 发送请求参数json对象或表单对象：$('#formid').serialize();
+   */
+  normalGet: function (uri, callback, param) {
+    param = zy.fix_jsonp_parm(param)// add by J.ym
+
+    //设置Url及参数
+    zy.log("zy.net.normalGet.param: " + JSON.stringify(param));
+    $.ajax({
+      url: uri,
+      type: "get",
+      async: false,
+      timeout: 10000,
+      cache: true,
+      dataType: "jsonp",
+      jsonp: "cb",
+      jsonpCallback: "cb" + zy.tool.random(),
+      data: param,
+      success: function (msg) {
+        return callback(msg);
+      },
+      error: function (XMLHttpRequest, textStatus, errorThrown) {
+          if (textStatus == "timeout") {
+            zy.ui.msg("访问超时: ", link + "\r\n" + errorThrown, "e");
+          }
+          zy.log("zy.net.normalGet.error: " + XMLHttpRequest + "\r\n" + textStatus + "\r\n" + errorThrown);
+          throw {
+            XMLHttpRequest: XMLHttpRequest,
+            textStatus: textStatus,
+            errorThrown: errorThrown
+          };
+        }
+    });
+  },
+  /**
+   * POST 方式调用服务
+   * @method normalPost
+   * @param {String} uri 请求链接地址
+   * @param {Function} callback 回调函数
+   * @param {Object} param 发送请求参数json对象
+   */
+  normalPost: function (uri, callback, param) {
+    zy.log("zy.net.normalPost.param: " + JSON.stringify(param));
+    $.post(uri, param, function (msg) {
+      return callback(msg);
+    });
+  },
+  /**
+   * ajaxSubmit 方式调用API服务
+   * @method postForm
+   * @param {String} uri 请求链接地址
+   * @param {Object} form 请求 Form 对象
+   * @param {Function} callback 回调函数
+   * @param {Function} error 服务器端传来错误信息时使用 error 回调函数处理错误，将返回出错 JSON 数据
+   */
+  postForm: function (uri, form, callback, error) {
+    var prm = zy.tool.initParams(zy.g.comm, zy.g.am);
+    //prm = zy.fix_jsonp_parm(prm)// add by J.ym; not jsonp
+    zy.g.am = {};
+    //设置Url及参数
+    // uri = zy.fix_api_call(uri, prm);
+    var link = zy.g.host.api + uri + "?" + zy.net.parseParam(prm);
+    // 添加form参数到url中
+    // if(link.endsWith("?")){
+    //   link += form.serialize();
+    // }else{
+    //   link += "&" + form.serialize();
+    // }
+    zy.log("zy.net.postSubmit.link: " + link);
+    form.ajaxSubmit({
+      url: link,
+      type: "post",
+      async: false,
+      timeout: 10000,
+      cache: false,
+      dataType: "json",
+      success: function (msg) {
+        zy.log("zy.net.get.success: " + JSON.stringify(msg));
+        zy.net.errorHandler(msg, callback, error);
+      },
+      error: function (XMLHttpRequest, textStatus, errorThrown) {
+        if (textStatus == "timeout") {
+          zy.ui.msg("访问超时: ", link + "\r\n" + errorThrown, "e");
+        }
+        zy.log("zy.net.get.error: " + XMLHttpRequest + "\r\n" + textStatus + "\r\n" + errorThrown);
+        throw {
+          XMLHttpRequest: XMLHttpRequest,
+          textStatus: textStatus,
+          errorThrown: errorThrown
+        };
+      }
+    });
+  },
+
+  /**
+   * 用js生成一个form，并用这个form提交参数，实现无刷新返回“流”类型数据
+   * @method postDownload
+   * @param {String} uri 请求链接地址
+   * @param {Object} container 包含动态生成 Form 的容器
+   * @param {String} file_name 下载文件名
+   * @param {String} file_type 下载文件类型
+   * @param {String} category 知识库分类
+   * @param {String} down_type 下载类型
+   */
+  postDownload: function (uri, param) {
+    if (zy.isXBosonSystem && uri.indexOf('download/') == 0) 
+      return this.xbosonDownload(uri, param);
+
+    $('#tmpDownloadForm').remove();
+    var container = $("<div>").attr('id','tmpDownloadForm').css('display','none');
+    $('body').append(container);
+    var prm = zy.tool.initParams(zy.g.comm, zy.g.am);
+    zy.g.am = {};
+    //设置Url及参数
+    var link = zy.g.host.api + uri + "?" + zy.net.parseParam(prm);
+    var tmpDownloadForm = $("<form>");  // 定义一个form表单
+    tmpDownloadForm.attr("style", "display:none");
+    tmpDownloadForm.attr("target", "");
+    tmpDownloadForm.attr("method", "post");
+    tmpDownloadForm.attr("action", link);
+    container.append(tmpDownloadForm);  // 将表单放置在web中
+		for(var key in param){
+			var input = $("<input>");
+			input.attr("type", "hidden");
+      input.attr("name", key);
+      input.attr("value", param[key]);
+			tmpDownloadForm.append(input);
+		}
+    tmpDownloadForm.submit();           // 表单提交
+  },
+
+  /**
+   * 下载文件, 和 post 没有关系.
+   */
+  xbosonDownload: function(uri, param) {
+    this.get(uri, function(ret) {
+      if (ret.result[0].file_content) {
+        return makeJsonFile(ret.result[0].file_content);
+      }
+      var filename = ret.result[0].name;
+      $('#tmpDownloadForm').remove();
+
+      var form = $("<form id='tmpDownloadForm' style='display:none' "
+          +" method='get' target='_blank'>");
+      form.attr('action', zy.g.host.api + "files").appendTo("body");
+
+      var parm_file = $("<input type='hidden' name='file_name'>").appendTo(form);
+      parm_file.attr("value", ret.result[0].name);
+
+      var parm_dir = $("<input type='hidden' name='dir_name'>").appendTo(form);
+      parm_dir.attr("value", ret.result[0].path);
+
+      form.submit();
+    }, param);
+
+    function makeJsonFile(_content) {
+      console.log("makeJsonFile:", param);
+      var mainname = param.typecd || param.en || param.cn || 'Data';
+      var timestr  = new Date().toFormat("yyyy-MM-dd hh.mm.ss");
+      var filename = mainname + '-' + timestr + '.json';
+      var data = new Blob([ _content ], {type: "application/octet-binary"});
+      var url  = URL.createObjectURL(data, {oneTimeOnly: true});
+      var a    = $('<a class="mhide"></a>');
+      a.attr({ href: url, download: filename });
+      a[0].click();
+    }
+  },
+
+  loadIndex : function() {
+    var _path;
+    //本地缓存获取orgtype
+    var ls_zy_user_info = zy.cache.get('_zy_user_info', 'ls');
+    var orgtype = ls_zy_user_info.get('user_selected_org_type');
+    if(orgtype && orgtype !== 'v') {
+      _path =  zy.g.host.ui + zy.fix_ui_type('/saas/') + zy.g.comm.org + '/main.html';
+    } else {
+      _path =  zy.g.host.ui + zy.fix_ui_type('/paas/main.html');
+    }
+    window.location = _path;
+  },
+
+  loadLogin : function() {
+    parent.$('body').addClass('animated fadeOutUp');
+    parent.location =  zy.g.host.ui + zy.fix_ui_type('/paas/login.html');
+  },
+
+  /**
+   * 采用同步或异步方式调用API服务
+   * @method load
+   * @param {String} uri 请求链接地址
+   * @param {Boolean} async 是否采用异步方式加载数据，true或undefined时为异步方式，false为同步方式
+   * @param {Function} callback 采用异步方式的回调函数
+   * @param {Object} param 发送请求时附带参数数据
+   * @return {String} responseText 采用同步方式时直接返回结果，采用异步方式时将返回 undefined
+   */
+  load: function (uri, async, callback, param) {
+    var prm = zy.tool.initParams(zy.g.comm, zy.g.am);
+    zy.g.am = {};
+    var link = zy.g.host.api + uri + "?" + zy.net.parseParam(prm);
+    zy.log("zy.net.load.link = " + link);
+    var cur = this;
+    return $.ajax({
+      url: link,
+      success: function (msg) {
+        if (callback)
+          callback.call(cur, msg);
+      },
+      data: param,
+      async: async,
+      type: "post"
+    }).responseText;
+  },
+
+  /**
+   * AJAX LOAD HTML PAGES 适用于平台 paas
+   * @method loadHTML
+   * @param {String} url 请求页面链接地址
+   * @param {Object} container 父容器
+   * @param {Function} callback 回调函数
+   */
+  loadHTML: function (url, container, callback) {
+    var _u = zy.g.host.ui; // 绝对路径
+    _u += zy.debug ? '/t': '/ui'; // 调试用路径切换
+    _u += '/paas/' + url; // paas路径
+    // if ('@' === url.charAt(0)) {
+    //   flg = true;
+    //   _u += '/paas/' + url.substring(1,url.length);
+    // } else {
+    //   _u += '/saas/' + zy.g.comm.org + '/' + url;
+    // }
+    // zy.log('loadHTML : _u == '+_u);
+
+    $.ajax({
+      type: "get",
+      url: _u,
+      dataType: 'html',
+      cache: true,
+      async: false,
+      beforeSend: function (request) {
+        // cog placed
+        container.html('<h1><i class="fa fa-cog fa-spin"></i> 加载中...</h1>');
+      },
+      /*complete: function(){
+            // zy.log("complete");
+		},*/
+      success: function (data) {
+        // cog replaced here...
+        // zy.log("loadHTML: success！");
+        container.css({
+          opacity : '0.0'
+        }).html(data).delay(50).animate({
+          opacity : '1.0'
+        }, 300);
+        setTimeout(function() {
+          if (callback) {
+            try {
+              callback(data);
+            } catch(e) {
+              console.log('Load page:', _u, e);
+            }
+          }
+        }, 300);
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+        var buf = ['<h4 style="margin-top:10px; display:block; text-align:left">',
+            '<i class="fa fa-warning txt-color-orangeDark"></i>',
+            '出错了: <b style="font-size: 50px">', xhr.status, '</b>', 
+            '<span style="">',  (thrownError && thrownError.message) || '', '</span>',
+            '<span style="float: right">', url, '</span></h4>',
+            '<hr style="border-color: #6b2121"/>',
+            xhr.responseText || '',
+          ];
+        container.html(buf.join(''));
+        callback && callback(xhr, ajaxOptions, thrownError)
+      }
+    });
+  },
+
+  /**
+   * AJAX LOAD HTML PAGES 适用于开发商 saas/org
+   * @method loadHTMLs
+   * @param {String} url 请求页面链接地址
+   * @param {Object} container 父容器
+   * @param {Function} callback 回调函数
+   */
+  loadHTMLs: function (url, container, callback) {
+    var flg = false;
+    // var _u = 'http://'+location.host; // 绝对路径
+    var _u = zy.g.host.ui + (zy.debug? '/t':'/ui'); // 调试用路径切换
+
+    if ('/' === url.charAt(0)) {
+      flg = true;
+      _u = url;
+    } else {
+      _u += '/saas/' + zy.g.comm.org + '/' + url;
+    }
+    zy.log('loadHTMLs : _u == '+_u);
+
+    $.ajax({
+      type: "get",
+      url: _u,
+      dataType: 'html',
+      cache: true,
+      async: false,
+      beforeSend: function () {
+        // cog placed
+        container.html('<h1><i class="fa fa-cog fa-spin"></i> 加载中...</h1>');
+      },
+      /*complete: function(){
+            // zy.log("complete");
+		},*/
+      success: function (data) {
+        // cog replaced here...
+        zy.log("loadHTMLs: success "+_u);
+        var htm = flg?data:zy.net.extractCss(data);
+        container.css({
+          opacity : '0.0'
+        }).html(htm).delay(50).animate({
+          opacity : '1.0'
+        }, 300);
+        setTimeout(function() {
+          if (callback) {
+            try {
+              callback(htm);
+            } catch(e) {
+              console.log('Load page:', _u, e);
+            }
+          }
+        }, 300);
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+        container.html('<h4 style="margin-top:10px; display:block; text-align:left"><i class="fa fa-warning txt-color-orangeDark"></i> Error 404! 找不到网页。<br>' + url + '</h4>');
+      }
+    });
+  },
+
+  /**
+   * AJAX LOAD PAGES
+   * @method loadPage
+   * @param {String} url 请求页面链接地址
+   * @param {Function} callback 回调函数
+   */
+  loadPage: function (url, callback) {
+    zy.log("loadPage: " + url);
+    $.ajax({
+      type: "get",
+      url: url,
+      dataType: 'html',
+      cache: true,
+      async: false,
+      success: function (data) {
+        // cog replaced here...
+        if (callback) {
+          try {
+              callback(data);
+              zy.log("loadPage: success " + url);
+          } catch(e) {
+            console.log('Load page:', url, e);
+          }
+        }
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+        zy.ui.msg('找不到网页：', '<h4 style="margin-top:10px; display:block; text-align:left"><i class="fa fa-warning txt-color-orangeDark"></i> Error 404! 找不到网页。<br>' + url + '</h4>', 'e');
+      }
+    });
+  },
+
+  /**
+   * AJAX LOAD PAGES 适用于开发商 saas/org
+   * @method loadPage
+   * @param {String} url 请求页面链接地址
+   * @param {Function} callback 回调函数
+   */
+  loadPages: function (url, callback) {
+    var flg = false;
+    // var _u = 'http://'+location.host; // 绝对路径
+    var _u = zy.g.host.ui + (zy.debug? '/t':'/ui'); // 调试用路径切换
+
+    if ('/' === url.charAt(0)) {
+      flg = true;
+      _u = url;
+    } else {
+      _u += '/saas/' + zy.g.comm.org + '/' + url;
+    }
+    zy.log('loadPages : _u == '+_u);
+    $.ajax({
+      type: "get",
+      url: _u,
+      dataType: 'html',
+      cache: true,
+      async: false,
+      success: function (data) {
+        // cog replaced here...
+        if (callback) {
+          try {
+            callback(flg?data:zy.net.extractCss(data));
+            zy.log("loadPages: success " + _u);
+          } catch(e) {
+            console.log("Load page:", _u, e);
+          }
+        }
+      },
+      error: function (xhr, ajaxOptions, thrownError) {
+        zy.ui.msg('找不到网页：', '<h4 style="margin-top:10px; display:block; text-align:left"><i class="fa fa-warning txt-color-orangeDark"></i> Error 404! 找不到网页。<br>' + url + '</h4>', 'e');
+      }
+    });
+  },
+
+  //LOAD JAVA SCRIPTS 数组
+  jsArray: {},
+  /**
+   * LOAD JAVA SCRIPTS
+   * @method loadScript
+   * Usage:Define function = myPrettyCode ()...
+   * loadScript("lib/js/my_script.js", myPrettyCode);
+   * @param {String} url 脚本链接地址
+   * @param {Function} callback 回调函数
+   */
+  loadScript: function (url, callback) {
+    if (!zy.net.jsArray[url]) {
+      zy.net.jsArray[url] = true;
+      var _d = null;
+      // adding the script tag to the head as suggested before
+      window.frames[0] ? _d = window.frames[0].document : _d = document;
+      
+      var body = _d.getElementsByTagName('body')[0];
+      var script = _d.createElement('script');
+      script.type = 'text/javascript';
+      script.src = url;
+
+      // then bind the event to the callback function
+      // there are several events for cross browser compatibility
+      //script.onreadystatechange = callback;
+      script.onload = callback;
+
+      // fire the loading
+      body.appendChild(script);
+
+    } else if (callback) { // changed else to else if(callback)
+      zy.log("zy.net.loadScript().callback(): " + url + " JS 文件已经加载!");
+      //execute function
+      try {
+        callback();
+      } catch(e) {
+        console.log("Load script:", url, e);
+      }
+    }
+  },
+  /**
+   * 初始状态信息，该方法用来从服务器端加载一段js，用eval执行来初始化全局变量
+   * @method initStatus
+   * @param {String} url 请求链接地址
+   */
+  initStatus: function (url) {
+    var status = zy.net.load(url, false);
+    if (status)
+      eval(status);
+  },
+
+  /**
+   * 处理服务器端返回的JSON类型数据结果，判断是否为出错信息，并提供两种方式处理错误
+   * @method errorHandler
+   * @param {String} msg 服务器传来待处理的 JSON 格式字符串
+   * @param {Function} success 无错误时的回调函数，该回调将获得处理过后的 JSON 数据
+   * @param {Boolean} error 服务器端传来错误信息时使用 error 回调函数处理错误，将返回出错 JSON 数据，
+   *                      undefined为使用系统弹窗显示错误，然后再调用error回调处理
+   * @param outterError 提供一个 Error 对象用于提取堆栈, 解决异步中找不到源文件的问题
+   */
+  errorHandler: function (msg, success, error, outterError) {
+    try {
+      msg = zy.fix_xboson_data(msg);
+      var ret = msg.ret;
+      zy.log("Response.msg: " + ret + " : " + msg.msg);
+      if ("0" === ret) {
+        // 正常返回
+        return success(msg);
+      } else if ("1000" === ret || "1006" === ret || "1005" === ret || "1009" === ret || "1012" === ret) {
+        // 用户没有登录状态 1000 登录超时 1006 用户已在其他设备登录 1005 用户登录异常 1009 OpenID 不合法 1012
+        if($('.SmallBox ').length === 0) zy.ui.msg("您需要重新登录：", msg.msg, "i");
+        setTimeout(zy.net.loadLogin, 3000);
+      } else {
+        if (error) {
+          return error(msg);
+        } else {
+          zy.log("Response.Error: " + msg.msg);
+          zy.ui.msg("服务器请求失败", ret + " : " + msg.msg, "e");
+          success(null);
+          return false;
+        }
+      }
+    } catch (e) {
+      zy.log("Response.Error: ", e, "\nOutter Stack:", outterError && outterError.stack);
+      if(zy.debug){
+        zy.ui.msg("Response.Error.message: ", e.message, "e");
+      }
+    }
+  },
+
+  /**
+   * 获得绝对路径以“http://”开头的链接地址，并加上当前域的HOST名称,
+   * 例: zy.net.getOrgUrl("bi/img/a.png")将返回"http://ip/ui/saas/orgid/bi/img/a.png"
+   * @method getOrgUrl
+   * @return {String} url 返回处理好的链接地址
+   */
+  getOrgUrl: function (url) {
+    var _u = zy.g.host.ui; //'http://'+location.host; // 绝对路径
+    _u += zy.debug? '/t':'/ui'; // 调试用路径切换
+
+    if (!url) {
+      zy.log('getOrgUrl : _u == '+_u);
+      return _u;
+    }
+    if ('/' === url.charAt(0)) {
+      zy.log('getOrgUrl : == '+url);
+      return url;
+    } else {
+      _u += '/saas/' + zy.g.comm.org + '/' + url;
+    }
+    zy.log('getOrgUrl : _u == '+_u);
+    return _u;
+  },
+  /**
+   * 获得以“http://”开头的链接地址，并加上当前域的HOST名称,例如 zy.net.getHttpUrl("/ds/api")将返回"http://ip/ds/api"
+   * @method getHttpUrl
+   * @return {String} url 返回处理好的链接地址
+   */
+  getHttpUrl: function (url) {
+    var host = location.protocol +'//'+ zy.ui.browser.getHost() + zy.ui.browser.getPort();
+    if (!url)
+      return host;
+    if (url.indexOf("/") === 0) {
+      url = host + url;
+    } else {
+      url = host + "/" + url;
+    }
+    return url;
+  },
+  /**
+   * JSON对象转url参数字符串,例如返回"name=tom&className=class1"
+   * @method parseParam
+   * @params {Object} params JSON类型数据
+   * @return {String} 返回处理好的字符串
+   * //调用：
+   * var obj={name:'tom','class':{className:'class1'},classMates:[{name:'lily'}]};
+   * parseParam(obj); 结果："name=tom&class.className=class1&classMates[0].name=lily"
+   * parseParam(obj,'stu'); 结果："stu.name=tom&stu.class.className=class1&stu.classMates[0].name=lily"
+   */
+  parseParam: function (param) {
+    if (!param) {
+      return '';
+    }
+    var tmps = [];
+    for (var key in param) {
+      tmps.push(key + '=' + encodeURIComponent(param[key]));
+    }
+    return tmps.join('&');
+  },
+
+  // html页面内引用的js、css文件路径处理（临时用）
+  // str - 输入 html 的字符串, 标签名字必须小写
+  extractCss: function (str) {
+    var html = str;
+    // var _u = 'http://'+location.host; // 绝对路径
+    var _u = zy.g.host.ui + (zy.debug? '/t':'/ui'); // 调试用路径切换
+    zy.log('extractCss : _u == '+_u);
+
+    function findjs() {
+      find("<script ", '>', function(tag) {
+        if (tag.indexOf('src=') > 0) {
+          if (tag.indexOf('src="/') > 0) {
+            return tag;
+          } else if (tag.indexOf('src="http') > 0) {
+            return tag;
+          } else {
+            return tag.replace('src="','src="'+_u+'/saas/'+zy.g.comm.org+'/');
+          }
+        }else{
+          return tag;
+        }
+      });
+    }
+  
+    function findcss() {
+      find("<link", ">",function(tag){
+        if (tag.indexOf('href="/') > 0) {
+          return tag;
+        } else {
+          return tag.replace('href="','href="'+_u+'/saas/'+zy.g.comm.org+'/');
+        }
+      });
+    }
+  
+    function find(st_tag, ed_tag, filter) {
+      var st = 0;
+      for (;;) {
+        st = html.indexOf(st_tag, st);
+        if (st > -1) {
+          var ed = html.indexOf(ed_tag, st);
+          if (ed > 0) {
+            ed += ed_tag.length;
+            var sub = html.substring(st, ed);
+            var reg = new RegExp(sub);
+            filter && (changesub = filter(sub));
+            html = html.replace(reg,changesub);
+            st = ed;
+          } else {
+            st += st_tag.length;
+          }
+        } else {
+          break;
+        }
+      }
+    }
+    findcss();
+    findjs();
+    return html;
+    }
+};
+/**
+ * var zn = new zyNet();
+ * zn.get("api/" + obj.api, _cb);
+ */
+zyNet = (function () {
+  var PT = zyNet.prototype;
+
+  /**
+   * 默认参数
+   * @attribute defaults
+   * @private
+   */
+  var opts = {
+    async: false,
+    timeout: 10000,
+    cache: true
+  };
+
+  function zyNet(options) {
+    // 合并初始化参数选项
+    $.extend({}, opts, options);
+  }
+
+  /**
+   * GET 方式调用API服务（支持跨域提交）
+   * @method get
+   * @param {String} uri 请求链接地址
+   * @param {Function} callback 回调函数
+   * @param {Object} param 发送请求参数json对象或表单对象：$('#formid').serialize();
+   * @param {Number} pagenum 页码;
+   * @param {Function} error 服务器端传来错误信息时使用 error 回调函数处理错误，将返回出错 JSON 数据
+   */
+  PT.get = function (uri, callback, param, pagenum, error) {
+    //关闭AJAX的缓存(全局属性)
+    //$.ajaxSetup({cache: false});
+    var prm = zy.tool.initParams(zy.g.comm, zy.g.am);
+    zy.g.am = {};
+    if (pagenum) {
+      zy.g.pages = {
+      pagesize: zy.g.am.pagesize || zy.g.page.pagesize,
+      pagenum:pagenum
+      };
+      prm = zy.tool.initParams(prm, zy.g.pages);
+    }
+    uri = zy.fix_api_call(uri, prm);
+    //设置Url及参数
+    var link = zy.g.host.api + uri + "?" + zy.net.parseParam(prm);
+    zy.log("zyNet.get.link: " + link);
+    zy.log("zyNet.get.param: " + JSON.stringify(param));
+    param = zy.fix_jsonp_parm(param)// add by J.ym
+    $.ajax({
+      url: link,
+      type: "get",
+      async: opts.async,
+      timeout: opts.timeout,
+      cache: opts.cache,
+      dataType: "jsonp",
+      jsonp: "cb",
+      jsonpCallback: "cb" + zy.tool.random(),
+      data: param,
+      success: function (msg) {
+        zy.log("zyNet.get.success: " + JSON.stringify(msg));
+        errorHandler(msg, callback, error);
+      },
+      error: function (XMLHttpRequest, textStatus, errorThrown) {
+        if (textStatus == "timeout") {
+          zy.ui.msg("访问超时: ", link + "\r\n" + errorThrown, "e");
+        }
+        zy.log("zyNet.get.error: " + XMLHttpRequest + "\r\n" + textStatus + "\r\n" + errorThrown);
+        throw {
+          XMLHttpRequest: XMLHttpRequest,
+          textStatus: textStatus,
+          errorThrown: errorThrown
+        };
+      }
+    });
+  };
+  /**
+   * 处理服务器端返回的JSON类型数据结果，判断是否为出错信息，并提供两种方式处理错误
+   * @method errorHandler
+   * @param {String} msg 服务器传来待处理的 JSON 格式字符串
+   * @param {Function} success 无错误时的回调函数，该回调将获得处理过后的 JSON 数据
+   * @param {Boolean} error 服务器端传来错误信息时使用 error 回调函数处理错误，将返回出错 JSON 数据，
+   *                      undefined为使用系统弹窗显示错误，然后再调用error回调处理
+   */
+  function errorHandler(msg, success, error) {
+    try {
+      zy.fix_xboson_data(msg);
+      var ret = msg.ret;
+      zy.log("Response.msg: " + ret + " : " + msg.msg);
+      if ("0" === ret) {
+        // 正常返回
+        return success(msg);
+      } else if ("1000" === ret || "1006" === ret || "1005" === ret || "1009" === ret || "1012" === ret) {
+        // 用户没有登录状态 1000 登录超时 1006 用户已在其他设备登录 1005 用户登录异常 1009 OpenID 不合法 1012
+        zy.ui.msg("您需要重新登录：", msg.msg, "i");
+        setTimeout(zy.net.loadLogin, 3000);
+      } else {
+        if (error) {
+          return error(msg);
+        } else {
+          zy.log("Response.Error: " + msg.msg);
+          zy.ui.msg("服务器请求失败", ret + " : " + msg.msg, "e");
+          success(null);
+          return false;
+        }
+      }
+    } catch (e) {
+      if (typeof e.stack != 'undefined') {
+        zy.log("Response.json.Error.stack: " + e.stack + "\r\n" + e.message);
+        zy.ui.msg("Response.json.Error: ", e.stack + "\r\n" + e.message, "e");
+      } else {
+        zy.log("Response.json.Error.message: " + e.message);
+        zy.ui.msg("Response.json.Error.message: ", e.message, "e");
+      }
+    }
+  }
+  return zyNet;
+})();
+/** =====================画面处理 */
+zy.ui = {
+  /**
+   * 处理并返回页面权限数据
+   *
+   * @method authData
+   * @param {element} authDataElement 保持页面权限数据的标签ID或对象
+   * @param {element} pageElement 页面的ID或对象
+   * @return {Object} 权限数据，例{页面元素ID: 元素状态1/2/3, 页面元素ID: 元素状态1/2/3}
+   */
+  authData: function(authDataElement, pageElement) {
+    var authData;
+    if (typeof authDataElement === 'string') {
+      authData = $('#' + authDataElement).data('auth');
+    } else {
+      authData = authDataElement.data('auth');
+    }
+    if (authData) {
+      if (authData.ret === '0') {
+        return authData.result;
+      } else {
+        zy.ui.msg('权限', authData.msg, 'e');
+        if (pageElement) {
+          if (typeof pageElement === 'string') {
+            $('#' + pageElement).formDisable(true);
+          } else {
+            pageElement.formDisable(true);
+          }
+        }
+      }
+    }
+    return null;
+  },
+
+  /**
+   * CSS式样处理字符串超出部分用省略号替代
+   *
+   * @method ellipsis
+   * @param {element} obj 目标元素对象
+   * @param {Number} px 指定元素宽度的像素值，不指定默认为元素原有宽度
+   */
+  ellipsis: function (obj, i) {
+    if (i) {
+      obj.css("width", i + "px");
+    }
+    obj.css({
+      "white-space": "nowrap",
+      "word-break": "keep-all",
+      "overflow": "hidden",
+      "text-overflow": "ellipsis"
+    });
+  },
+  /**
+   * 颜色取反，如将白色'#ffffff'转换为黑色'#000000'
+   *
+   * @method colorInverse
+   * @param {String} color 颜色16进制字符表示形式，如：'#ff0000'，表示红色。
+   * @return {String} 取反后的颜色
+   */
+  colorInverse: function (color) {
+    color = !color ? '' : color;
+    color = parseInt(color.replace('#', '0x'));
+    var r = color >> 16,
+      g = color >> 8 & 0x0000ff,
+      b = color & 0x0000ff,
+      _r = 255 - r,
+      _g = 255 - g,
+      _b = 255 - b,
+      clr = '#' + (_r << 16 | _g << 8 | _b).toString(16);
+    return clr == '#0' ? '#000000' : clr;
+  },
+  /**
+   * 信息提示
+   * @method msg
+   * @param {String} title 标题
+   * @param {String} msg 内容
+   * @param {String} type 提示类型：i=Info/s=Success/w=Warning/e=Error
+   */
+  msg: function (title, msg, type) {
+    var color = "#3276b1";
+    var content = "提示信息";
+    var iconSmall = "fa fa-thumbs-up bounce animated";
+    var timeout;
+    var icon;
+
+    switch (type) {
+    case "i":
+      color = "#305d8c";
+      content = "<i class='fa-fw fa fa-info'></i> <i>" + msg + "</i>";
+      iconSmall = "fa fa-bell bounce animated";
+      timeout = 5000;
+      break;
+    case "s":
+      color = "#356635";
+      content = "<i class='fa-fw fa fa-check'></i> <i>" + msg + "</i>";
+      iconSmall = "fa fa-smile-o bounce animated";
+      timeout = 4000;
+      break;
+    case "w":
+      color = "#826430";
+      content = "<i class='fa-fw fa fa-warning'></i> <i>" + msg + "</i>";
+      iconSmall = "fa fa-shield bounce animated";
+      timeout = 50000;
+      break;
+    case "e":
+      color = "#953b39";
+      content = "<i class='fa-fw fa fa-times'></i> <i>" + msg + "</i>";
+      iconSmall = "fa fa-frown-o bounce animated";
+      icon = "fa-fw fa fa-times";
+      timeout = 50000;
+    }
+    $.smallBox({
+      title: title,
+      content: content,
+      color: color,
+      iconSmall: iconSmall,
+      timeout: timeout,
+      icon: icon
+    });
+  },
+
+  /**
+   * 信息提示
+   * @method msg
+   * @param {String} title 标题
+   * @param {String} msg 内容
+   * @param {String} type 提示类型：i=Info/s=Success/w=Warning/e=Error
+   * @param {function} 关闭时回调
+   */
+  bigBox : function (title, msg, type,cb){
+    var typeCode = ['i','s','w','e'];
+    var typeObj = [{
+      color: "#3276B1",
+      icon: "fa fa-bell swing animated"
+    },{
+      color: "#356635",
+      icon: "fa fa-smile-o bounce animated"
+    },{
+      color: "#826430",
+      icon: "fa fa-shield bounce animated"
+    },{
+      color: "#953b39",
+      icon: "fa fa-frown-o bounce animated"
+    }];
+
+    var bigBoxOption = {
+      title : title,
+      content : msg
+    };
+
+    for (i in typeCode){
+      if(typeCode[i] == type)
+        var opt = $.extend({},bigBoxOption,typeObj[i]);
+    }
+
+     return $.bigBox(opt,function(){
+      cb && cb();
+    });
+},
+
+/**
+   * 弹出dialog
+   * @method dig
+   * @param {String} title 为dialog标题
+   * @param {String} content 为dialog内容
+   * @param {Function} cb1 为确认按钮事件
+   * @param {Function} cb2 为取消按钮事件
+   * @param {Object} options jquery ui dialog 选项
+   */
+ mask :  function (title,content,cb1,cb2,options) {
+    var div = $('<div></div>');
+    var cont = '<p style="text-align:center;color:red;font-size:16px">'+content+'</p>';
+    var title ='<div class="widget-header"><h4><i class="fa fa-warning"></i> '+ title+'</h4></div>';
+    // 默认选项
+    var default_opts = {
+      autoOpen: true,
+      width: 600,
+      resizable: false,
+      draggable : false,
+      modal: true,
+      title: '',
+      buttons: [
+        {
+          html: "<i class='fa fa-trash-o'></i>&nbsp; 确定",
+        "class": "btn btn-danger",
+          click: function(){
+            cb1 && cb1();
+            div.dialog('close');
+          }
+        },
+        {
+          html: "<i class='fa fa-times'></i>&nbsp; 取消",
+        "class": "btn btn-default",
+          click: function(){
+            cb2 && cb2();
+            div.dialog('close');
+          }
+        }
+      ]
+    };
+    var curr_options = zy.tool.initParams(default_opts,options);
+    var dialog = div.dialog(curr_options);
+    dialog.siblings('.ui-dialog-titlebar').children('span').append(title);
+    dialog.append(cont);
+  },
+  /**
+   * 以 window.open 方式打开弹窗
+   * @method window
+   * @param {String} url      转向网页的地址
+   * @param {String} name     网页名称，可为空
+   * @param {Number} iWidth   弹出窗口的宽度
+   * @param {Number} iHeight  弹出窗口的高度
+   */
+  window: function (url, name, iWidth, iHeight) {
+    var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
+    // 获得窗口的垂直位置;
+    var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
+    // 获得窗口的水平位置;
+    window.open(url, name, 'height=' + iHeight + ',,innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',toolbar=no,menubar=no,scrollbars=auto,resizeable=no,location=no,status=no');
+  }
+};
+/** =====================表单操作 */
+zy.ui.form = {
+  /**
+   * 获取单选框值,如果有表单就在表单内查询,否则在全文查询
+   *
+   * @method getRadioValue
+   * @param {String}name radio名称
+   * @param {Object} frm [optional,default=document] jQuery表单（或其它容器对象）对象
+   * @return {Object} radio jQuery对象
+   */
+  getRadioValue: function (name, frm) {
+    if (frm && frm.find)
+      return frm.find('input[name="' + name + '"]:checked').val();
+    return $('input[name="' + name + '"]:checked').val();
+  },
+  /**
+   * 设置单选框值,如果有表单就在表单内查询,否则在全文查询。
+   *
+   * @method setRadioValue
+   * @param {String} name radio名称
+   * @param {String} value radio表单value值
+   * @param {Object} frm [optional,default=document] jQuery表单（或其它容器对象）对象
+   * @return {Object} radio jQuery对象
+   */
+  setRadioValue: function (name, value, frm) {
+    if (frm && frm.find)
+      return frm
+        .find('input[name="' + name + '"][value="' + value + '"]')
+        .prop('checked', true);
+    return $('input[name="' + name + '"][value="' + value + '"]').prop(
+      'checked', true);
+  },
+  /**
+   * 设置select下拉框的值
+   *
+   * @method setRadioValue
+   * @param {String} selectId 下拉框id号
+   * @param {String/Number} value select表单value值
+   * @param {Object} frm [optional,default=document] jQuery表单（或其它容器对象）对象
+   * @return {Object} select jQuery对象
+   */
+  setSelectValue: function (selectId, value, frm) {
+    if (frm && frm.find)
+      return frm.find('#' + selectId + ' option[value="' + value + '"]').attr('selected', true);
+    return $('#' + selectId + ' option[value="' + value + '"]').attr('selected', true);
+  },
+  /**
+   * 将object转换为select的列表模式，key为option的value，值为option的文本。
+   *
+   * @method object2Options
+   * @param {Object}objects key-map对象
+   * @return {String} html
+   */
+  object2Options: function (objects) {
+    if (!$.isPlainObject(objects)) {
+      return '';
+    }
+    var html = [];
+    for (var i in objects) {
+      html.push('<option value="' + i + '">' + objects[i] + '</option>');
+    }
+    return html.join('');
+  },
+  /**
+   * checkboxes、radio、selects 元素对象的选择或取消选择处理
+   * @param {Object} obj 对象(checkboxes、radio、selects)
+   * @method selected
+   * @param {Boolean} select 参数，true 选择（默认值），false 取消选择
+   */
+  selected: function (obj, select) {
+    if (select === undefined) {
+      select = true;
+    }
+    return obj.each(function () {
+      var t = obj.type;
+      if (t == 'checkbox' || t == 'radio') {
+        obj.checked = select;
+      } else if (obj.tagName.toLowerCase() == 'option') {
+        var $sel = $(obj).parent('select');
+        if (select && $sel[0] && $sel[0].type == 'select-one') {
+          // deselect all other options
+          $sel.find('option').selected(false);
+        }
+        obj.selected = select;
+      }
+    });
+  },
+  /**
+   * 将输入控件集合序列化成对象， 名称或编号作为键，value属性作为值。
+   *
+   * @method _serializeInputs
+   * @param {Array} inputs input/select/textarea的对象集合
+   * @return {Object} json 对象 {key:value,...}
+   */
+  _serializeInputs: function (inputs) {
+    var json = {};
+    if (!inputs) {
+      return json;
+    }
+    for (var i = inputs.length - 1; i >= 0; i--) {
+      var input = $(inputs[i]),
+        type = input.attr('type');
+      if (type) {
+        type = type.toLowerCase();
+      }
+      var tagName = input.get(0).tagName,
+        id = input.attr('id'),
+        name = input.attr('name'),
+        value = null;
+
+      // 判断输入框是否已经序列化过
+      if (input.hasClass('_isSerialized') || (typeof id == 'undefined' && typeof name == 'undefined')) {
+        continue;
+      }
+
+      // input输入标签
+      if (tagName == 'INPUT' && type) {
+        switch (type) {
+        case 'checkbox':
+          {
+            value = input.is(':checked');
+          }
+          break;
+        case 'radio':
+          {
+            if (input.is(':checked')) {
+              value = input.attr('value');
+            } else {
+              continue;
+            }
+          }
+          break;
+        default:
+          {
+            value = input.val();
+          }
+        }
+      } else {
+        // 非input输入标签，如：select,textarea
+        value = input.val();
+      }
+
+      json[name || id] = value;
+      // 清除序列化标记
+      input.removeClass('_isSerialized');
+    }
+    return json;
+  },
+  /**
+   * 将值填充到输入标签里面。
+   *
+   * @method _deserializeInputs
+   * @param {Array} inputs 输入标签集合
+   * @param {String/Number} value 值
+   * @return {Object} zy.ui.form
+   */
+  _deserializeInputs: function (inputs, value) {
+    if (!inputs || value === null) {
+      return this;
+    }
+
+    for (var i = inputs.length - 1; i >= 0; i--) {
+      var input = $(inputs[i]);
+      // 判断输入框是否已经序列化过
+      if (input.hasClass('_isSerialized')) {
+        continue;
+      }
+      var type = input.attr('type');
+      if (type) {
+        type = type.toLowerCase();
+      }
+      if (type) {
+        switch (type) {
+        case 'checkbox':
+          {
+            if (value === true || value === 'true' || value === '1') {
+              input.attr('checked', 'true');
+            }
+          }
+          break;
+        case 'radio':
+          {
+            input.each(function (i) {
+              var thiz = $(this);
+              if (thiz.attr('value') == value) {
+                thiz.attr('checked', true);
+              }
+            });
+          }
+          break;
+          case 'hidden':
+          {
+            var str = value.trim();
+            if (str.length > 0) {
+              // 预留判断select2，并赋值
+              if ('select2' === input.data("type")) {
+                input.select2("val", str);
+              } else {
+                // 其它直接赋值
+                input.val(str);
+              }
+            }
+          }
+          break;
+        default:
+          {
+            // var str = value.trim();
+            var str = value;
+            if (str.length > 0 && input.hasClass("datepicker")) {
+              var dataDateFormat = input.attr('data-format') || 'yyyy-MM-dd';
+              str = $.format.date(str, dataDateFormat.replace(/m/g, "M"));
+            }
+            input.val(str);
+          }
+        }
+      } else {
+        var str = value.trim();
+        if (str.length > 0 && input.hasClass("datepicker")) {
+          var dataDateFormat = input.attr('data-format') || 'yyyy-MM-dd';
+          str = $.format.date(str, dataDateFormat.replace(/m/g, "M"));
+        }
+        input.val(str);
+      }
+      input.addClass('_isSerialized');
+    }
+    return this;
+  },
+  /**
+   * 在分组中查找 fieldset (如：fieldset="user")开头的数据域。
+   *
+   * @method _serializeGroups
+   * @param {Array} groups 输入框分组容器集合
+   * @return {Object} json 对象 {key:value,...}
+   */
+  _serializeGroups: function (groups) {
+    var json = {};
+    if (!groups) {
+      return json;
+    }
+    for (var i = groups.length - 1; i >= 0; i--) {
+      var group = $(groups[i]),
+        key = group.attr('fieldset');
+      if (!key) {
+        continue;
+      }
+      var inputs = group
+        .find('input[type!=button][type!=reset][type!=submit],select,textarea');
+      json[key] = this._serializeInputs(inputs);
+      // 添加序列化标记
+      inputs.addClass('_isSerialized');
+    }
+    return json;
+  },
+  /**
+   * 序列化表单值,结果以key/value形式返回key为表单对象名称(name||id),value为其值。<br>
+   * HTML格式：<br>
+   * 1).表单容器：通常是一个form表单（如果不存在就以body为父容器），里面包含输入标签和子容器;<br>
+   * 2).子容器（也可以没有）：必须包括属性fieldset="XXXX" div标签，里面包含输入标签和子容器。<br>
+   * 序列化后将生成以XXX为主键的json对象.如果子容器存在嵌套则以fieldset为主键生成不同分组的json对象。<br>
+   * 3).输入标签：输入标签为input类型标签（包括：'checkbox','color','date','datetime','datetime-local',<br>
+   * 'email','file','hidden','month','number','password','radio','range
+   * ','reset','search','submit',<br>
+   * 'tel','text','time ','url','week'）。
+   * 而'button','reset','submit','image'会被过虑掉。
+   *
+   * @method serialize
+   * @param {Object} frm jQuery表单对象
+   * @return {Object} json对象，最多包含两层结构
+   */
+  serialize: function (frm) {
+    var json = {};
+    frm = frm || $('body');
+    if (!frm) {
+      return json;
+    }
+    var groups = frm.find('div[fieldset]');
+    var jsonGroup = this._serializeGroups(groups);
+    var inputs = frm.find('input[type!=button][type!=reset][type!=submit][type!=image],select,textarea');
+    json = this._serializeInputs(inputs);
+    for (var key in jsonGroup) {
+      json[key] = jsonGroup[key];
+    }
+    return json;
+  },
+  /**
+   * 填充表单内容：将json数据形式数据填充到表单内，只解析单层json结构。
+   *
+   * @method deserializeSimple
+   * @param {Object} frm jQuery表单对象（或其它容器标签对象，如：div）
+   * @param {Object} json 序列化好的json数据对象，最多只包含两层嵌套
+   * @return {Object} zy.ui.form
+   */
+  deserializeSimple: function (frm, json) {
+    frm = frm || $('body');
+    if (!frm || !json) {
+      return this;
+    }
+
+    var _deserializeInputs = this._deserializeInputs;
+    for (var key in json) {
+      var value = json[key];
+      _deserializeInputs(frm, key, value);
+    }
+    return this;
+  },
+  /**
+   * 获取合法的输入标签。
+   *
+   * @method _filterInputs
+   * @param {Object} container jQuery对象，标签容器
+   * @return {Array} inputs jQuery对象数组
+   */
+  _filterInputs: function (container) {
+    return $(container
+      .find('input[type!=button][type!=reset][type!=submit][type!=image][type!=file],select,textarea'));
+  },
+  /**
+   * 查找符合条件的输入标签。
+   *
+   * @method _findInputs
+   * @param {Array} inputs jQueery输入标签数组
+   * @param {String} key 查询关键字
+   * @return {Array} inputs jQuery对象数组
+   */
+  _findInputs: function (inputs, key) {
+    return $(inputs.filter('input[name=' + key + '],input[id=' + key + '],textarea[name=' + key + '],textarea[id=' + key + '],select[name=' + key + '],select[id=' + key + ']'));
+  },
+  /**
+   * 填充表单内容：将json数据形式数据填充到表单内，最多解析两层json结构。
+   *
+   * @method deserialize
+   * @param {Object} frm jQuery表单对象（或其它容器标签对象，如：div）
+   * @param {Object} json 序列化好的json数据对象，最多只包含两层嵌套
+   * @return {Object} zy.ui.form
+   */
+  deserialize: function (frm, json) {
+    frm = frm || $('body');
+    if (!frm || !json) {
+      return this;
+    }
+
+    // objects缓存json第一层数据对象;
+    // groups缓存json嵌套层数据（第二层），将首先被赋值，以避免覆盖
+    var objects = {},
+      groups = {};
+
+    // 数据分组
+    for (var key in json) {
+      var value = json[key];
+      if ($.isPlainObject(value)) {
+        groups[key] = value;
+      } else {
+        objects[key] = value;
+      }
+    }
+
+    var _deserializeInputs = this._deserializeInputs,
+      _filterInputs = this._filterInputs,
+      _findInputs = this._findInputs;
+
+    // 填充嵌套层数据
+    for (var key in groups) {
+      var json = groups[key], div = frm.find('div[fieldset="' + key + '"]');
+      if (!div.length) {
+        continue;
+      }
+      var inputs = _filterInputs(div);
+      if (!inputs.length) {
+        continue;
+      }
+      for (var k in json) {
+        var val = json[k],
+          input = _findInputs(inputs, k);
+        _deserializeInputs(input, val);
+      }
+    }
+
+    // 填充第一层数据
+    var inputs = _filterInputs(frm);
+    for (var key in objects) {
+      var value = objects[key],
+        input = _findInputs(inputs, key);
+      _deserializeInputs(input, value);
+    }
+
+    inputs.filter('._isSerialized').removeClass('_isSerialized');
+    return this;
+  }
+};
+/** =====================键盘操作 */
+zy.ui.key = {
+  /** 常用键盘码对象。 */
+  keycode: {
+    /**
+     * 全屏F11(122)
+     *
+     * @type {Number}
+     * @property F11
+     */
+    F11: 122,
+    /**
+     * 退出Esc(27)
+     *
+     * @type {Number}
+     * @property ESC
+     */
+    ESC: 27,
+    /**
+     * 回车Enter(13)
+     *
+     * @type {Number}
+     * @property ENTER
+     */
+    ENTER: 13,
+    /**
+     * 上一页Page Up(33)
+     *
+     * @type {Number}
+     * @property PAGEUP
+     */
+    PAGEUP: 33,
+    /**
+     * 下一页Page Down(34)
+     *
+     * @type {Number}
+     * @property PAGEDOWN
+     */
+    PAGEDOWN: 34,
+    /**
+     * 页尾end(35)
+     *
+     * @type {Number}
+     * @property END
+     */
+    END: 35,
+    /**
+     * 页首home(36)
+     *
+     * @type {Number}
+     * @property HOME
+     */
+    HOME: 36,
+    /**
+     * 左箭头left(37)
+     *
+     * @type {Number}
+     * @property LEFT
+     */
+    LEFT: 37,
+    /**
+     * 向上箭头up(38)
+     *
+     * @type {Number}
+     * @property UP
+     */
+    UP: 38,
+    /**
+     * 右前头(39)
+     *
+     * @type {Number}
+     * @property RIGHT
+     */
+    RIGHT: 39,
+    /**
+     * 向下箭头down(40)
+     *
+     * @type {Number}
+     * @property DOWN
+     */
+    DOWN: 40
+  },
+  /**
+   * 绑定键盘事件到元素，当焦点在元素上并触发键盘事件时响应该函数。
+   *
+   * @method _bindKey
+   * @param {Number} zy.ui.keycode 键盘码
+   * @param {Object} element 被绑定元素的jQuery对象
+   * @param {Function} callback 回调函数，参数为绑定的元素对象element和事件e
+   */
+  _bindKey: function (keycode, element, callback) {
+    element.keydown(function (e) {
+      if (e.keyCode == keycode) {
+        if (typeof callback == 'function')
+          callback(element, e);
+      }
+    });
+  },
+  /**
+   * 在element区域内响应Enter键盘事件。<br>
+   * 实际处理中应该将提交按键(type="submit")放在element区域外,避免重复提交。
+   *
+   * @method bindEnterKey
+   * @param {Object} element 被绑定元素的jQuery对象
+   * @param {Function} callback 回调函数，参数为绑定的元素对象element和事件e
+   * @return {Object} zy.ui.key
+   */
+  bindEnterKey: function (element, callback) {
+    this._bindKey(this.keycode.ENTER, element, callback);
+    return this;
+  },
+  /**
+   * 在element区域内响应Esc键盘事件。
+   *
+   * @method bindEscKey
+   * @param {Object} element 被绑定元素的jQuery对象
+   * @param {Function} callback 回调函数，参数为绑定的元素对象element和事件e
+   * @return {Object} zy.ui.key
+   */
+  bindEscKey: function (element, callback) {
+    this._bindKey(this.keycode.ESC, element, callback);
+    return this;
+  },
+  /**
+   * 在element区域内响应F11键盘事件。
+   *
+   * @method bindF11Key
+   * @param {Object} element 被绑定元素的jQuery对象
+   * @param {Function} callback 回调函数，参数为绑定的元素对象element和事件e
+   * @return {Object} zy.ui.key
+   */
+  bindF11Key: function (element, callback) {
+    this._bindKey(this.keycode.F11, element, callback);
+    return this;
+  },
+  /**
+   * 在element区域内响应Page Down键盘事件。
+   *
+   * @method bindPageDownKey
+   * @param {Object} element 被绑定元素的jQuery对象
+   * @param {Function} callback 回调函数，参数为绑定的元素对象element和事件e
+   * @return {Object} zy.ui.key
+   */
+  bindPageDownKey: function (element, callback) {
+    this._bindKey(this.keycode.PAGEDOWN, element, callback);
+    return this;
+  },
+  /**
+   * 在element区域内响应Page Up键盘事件。
+   *
+   * @method bindPageUpKey
+   * @param {Object} element 被绑定元素的jQuery对象
+   * @param {Function} callback 回调函数，参数为绑定的元素对象element和事件e
+   * @return {Object} zy.ui.key
+   */
+  bindPageUpKey: function (element, callback) {
+    this._bindKey(this.keycode.PAGEUP, element, callback);
+    return this;
+  },
+  /**
+   * 在element区域内响应Left键盘事件。
+   *
+   * @method bindLeftKey
+   * @param {Object} element 被绑定元素的jQuery对象
+   * @param {Function} callback 回调函数，参数为绑定的元素对象element和事件e
+   * @return {Object} zy.ui.key
+   */
+  bindLeftKey: function (element, callback) {
+    this._bindKey(this.keycode.LEFT, element, callback);
+    return this;
+  },
+  /**
+   * 在element区域内响应Right键盘事件。
+   *
+   * @method bindRightKey
+   * @param {Object} element 被绑定元素的jQuery对象
+   * @param {Function} callback 回调函数，参数为绑定的元素对象element和事件e
+   * @return {Object} zy.ui.key
+   */
+  bindRightKey: function (element, callback) {
+    this._bindKey(this.keycode.RIGHT, element, callback);
+    return this;
+  },
+  /**
+   * 在element区域内响应Up键盘事件。
+   *
+   * @method bindUpKey
+   * @param {Object} element 被绑定元素的jQuery对象
+   * @param {Function} callback 回调函数，参数为绑定的元素对象element和事件e
+   * @return {Object} zy.ui.key
+   */
+  bindUpKey: function (element, callback) {
+    this._bindKey(this.keycode.UP, element, callback);
+    return this;
+  },
+  /**
+   * 在element区域内响应Down键盘事件。
+   *
+   * @method bindDownKey
+   * @param {Object} element 被绑定元素的jQuery对象
+   * @param {Function} callback 回调函数，参数为绑定的元素对象element和事件e
+   * @return {Object} zy.ui.key
+   */
+  bindDownKey: function (element, callback) {
+    this._bindKey(this.keycode.DOWN, element, callback);
+    return this;
+  }
+};
+/** =====================遮盖层工具，包括页面遮盖和元素遮盖 */
+zy.ui.layer = {
+  /**
+   * 创建遮盖层(如果已经存在遮蔽层就先清除)。
+   *
+   * @method add
+   * @param {String} content 显示信息
+   * @return {Object} zy.ui.layer
+   */
+  add: function (content) {
+    if ($('#zy-layer').length > 0) {
+      this.clear();
+    }
+    var tip = "数据处理中...";
+    if (!content) {
+      tip = content;
+    }
+    var div = $('<div></div>'),
+      doc = $(document),
+      txt = $(['<span>', tip, '</span>'].join(''));
+    div.attr('id', 'zy-layer').html(txt);
+
+    var _resetPos = function () {
+      var offset = doc.height() / 2 + doc.scrollTop();
+      txt.css({
+        top: offset,
+        left: (doc.width() - txt.width()) / 2,
+        position: 'absolute'
+      });
+      div.css({
+        height: doc.height()
+      });
+    };
+    $('body').append(div);
+    _resetPos();
+    $(window).bind('resize scroll', function () {
+      _resetPos();
+    });
+    return this;
+  },
+  /**
+   * 清除遮盖层。
+   *
+   * @method clear
+   * @return {Object} zy.ui.layer
+   */
+  clear: function () {
+    $('#zy-layer').remove();
+    return this;
+  },
+  /**
+   * 清除所有遮盖层
+   * @return {Object} zy.ui.layer
+   */
+  clearAll: function () {
+    $('.zy-mask').remove();
+    return this;
+  },
+  /**
+   * 添加遮盖层信息。
+   *
+   * @method addInfo
+   * @param {String} info 显示信息
+   * @param {Boolean} isAppend 追加或重写信息。true-追加信息到之前内容;false-替换已有信息
+   * @return {Object} zy.ui.layer
+   */
+  addInfo: function (info, isAppend) {
+    var span = $('#zy-layer span');
+    isAppend ? span.append(info) : span.html(info);
+    return this;
+  },
+  /**
+   * 为对象添加遮盖层。
+   *
+   * @method mask
+   * @param {Object} obj jQuery对象
+   * @param {String} info 显示信息
+   * @return {Object} mask jQuery对象
+   */
+  mask: function (obj, info) {
+    $('#' + obj.attr('masker')).remove();
+    var id = 'zy-mask-' + zy.tool.random(),
+      o_h = obj.outerHeight(),
+      o_w = obj.outerWidth(),
+      pos = obj.position(),
+      txt = $(['<div>', (info ? info : ''), '</div>'].join('')),
+      mask = $(['<div class="zy-mask" id="', id, '"></div>'].join(''));
+    obj.after(mask).attr('masker', id);
+    mask.append(txt).css({
+      position: 'absolute',
+      top: pos.top,
+      left: pos.left,
+      height: o_h,
+      width: o_w
+    });
+    txt.css({
+      top: (o_h - txt.height()) / 2,
+      left: (o_w - txt.width()) / 2
+    });
+    return mask;
+  },
+  /**
+   * 清除对象mask。
+   *
+   * @method clearMask
+   * @param {Object} obj jQuery对象 被屏蔽的对象,如果没有就清除所有对象mask
+   * @return {Object} zy.ui.layer
+   */
+  clearMask: function (obj) {
+    if (obj) {
+      $('#' + obj.attr('masker')).remove();
+    } else {
+      $('.zy-mask').remove();
+    }
+    return this;
+  },
+  /**
+   * 将元素移动到文档中间。
+   *
+   * @method move2Center
+   * @param {Object} obj jQuery对象
+   * @param {Boolean} adaptive 自动适应文档可视区大小同时改变对象位置
+   * @param {Number} zIndex 层叠顺序
+   * @return {Object} obj jQuery对象
+   */
+  move2Center: function (obj, adaptive, zIndex) {
+    var doc = $(document),
+      _resetPos = function () {
+        obj.css({
+          'z-index': zIndex ? zIndex : 0,
+          position: 'absolute',
+          left: (doc.width() - obj.width()) / 2,
+          top: doc.scrollTop() + (($.browser.msie ? doc.height() : window.innerHeight) - obj.height()) / 2
+        });
+      };
+    _resetPos();
+    if (adaptive) {
+      $(window).bind('resize scroll', function () {
+        _resetPos();
+      });
+    }
+    return obj;
+  }
+};
+/** =====================浏览器操作及信息 */
+zy.ui.browser = {
+  /**
+   * 浏览器名称
+   *
+   * @type {String}
+   * @property name
+   */
+  name: '',
+  /**
+   * 浏览器主版本号,如：8
+   *
+   * @type {String}
+   * @property version
+   */
+  version: '',
+  /**
+   * 浏览器详细版本号,如：8.2.11
+   *
+   * @type {String}
+   * @property versions
+   */
+  versions: '',
+  /**
+   * 获取浏览器Agent信息,并返回包含name/version/versioins键的对象
+   *
+   * @method agent
+   * @return {Object} {name : '浏览器名称', version : '浏览器主版本号', versions :
+   *                  '浏览器详细版本号' }
+   */
+  agent: function () {
+    var browser = {},
+      userAgent = navigator.userAgent.toLowerCase(),
+      s;
+    (s = userAgent.match(/msie ([\d.]+)/)) ? browser.ie = s[1] : (s = userAgent.match(/firefox\/([\d.]+)/)) ? browser.firefox = s[1] : (s = userAgent.match(/chrome\/([\d.]+)/)) ? browser.chrome = s[1] : (s = userAgent.match(/opera.([\d.]+)/)) ? browser.opera = s[1] : (s = userAgent
+      .match(/version\/([\d.]+).*safari/)) ? browser.safari = s[1] : 0;
+
+    var name = '',
+      version = '';
+    if (browser.ie) {
+      name = 'msie';
+      version = browser.ie;
+    } else if (browser.firefox) {
+      name = 'firefox';
+      version = browser.firefox;
+    } else if (browser.chrome) {
+      name = 'chrome';
+      version = browser.chrome;
+    } else if (browser.opera) {
+      name = 'opera';
+      version = browser.opera;
+    } else if (browser.safari) {
+      name = 'safari';
+      version = browser.safari;
+    } else {
+      name = 'unknown';
+    }
+    return {
+      name: name,
+      version: version.split('.')[0],
+      versions: version
+    };
+  },
+  /**
+   * 获取域名或主机IP
+   *
+   * @method getHost
+   * @return {String}
+   */
+  getHost: function () {
+    return location.host.split(':')[0];
+  },
+  /**
+   * 获取主机端口号，如果是 80 则返回空字符串
+   *
+   * @method getPort
+   * @return {String}
+   */
+  getPort: function () {
+    var ret = '';
+    var port = location.host.split(':')[1];
+    if (port && port !== '80') {
+      ret = ':' + port;
+    }
+    return ret;
+  },
+  /**
+   * 获取浏览器语言代码,如:'zh-CN'
+   *
+   * @method getLang
+   * @return {String} 语言代码
+   */
+  getLang: function () {
+    var nav = window.navigator;
+    return (nav.language || nav.userLanguage);
+  },
+  /**
+   * 获取URL地址栏参数值
+   *
+   * @method getParameter
+   * @param {String} name 参数名
+   * @param {String} url [optional,default=当前URL]URL地址
+   * @return {String} 参数值
+   */
+  getParameter: function (name, url) {
+    var paramStr = url || window.location.search;
+    if (paramStr.length == 0) {
+      return null;
+    }
+    if (paramStr.charAt(0) != "?") {
+      return null;
+    }
+    paramStr = unescape(paramStr).substring(1);
+    if (paramStr.length == 0) {
+      return null;
+    }
+    var params = paramStr.split('&');
+    for (var i = 0; i < params.length; i++) {
+      var parts = params[i].split('=', 2);
+      if (parts[0] == name) {
+        if (parts.length < 2 || typeof (parts[1]) === "undefined" || parts[1] == "undefined" || parts[1] == "null")
+          return '';
+        return parts[1];
+      }
+    }
+    return null;
+  },
+  /**
+   * 更新浏览器地址栏链接地址
+   * @method updateUrl
+   * @param {String} url
+   */
+  updateUrl: function (url) {
+    if (window.history && window.history.pushState) {
+      window.history.pushState(null, url, url);
+    }
+  },
+
+  /**
+   * 转到上一页（缓存页）
+   *
+   * @method goPrevPage
+   * @return zy.ui.browser
+   */
+  goPrevPage: function () {
+    history.go(-1);
+    return this;
+  },
+  /**
+   * 转到下一页
+   *
+   * @method goNextPage
+   * @return zy.ui.browser
+   */
+  goNextPage: function () {
+    history.go(1);
+    return this;
+  },
+  /**
+   * 转到当前页(刷新页面)
+   *
+   * @method refreshPage
+   * @return zy.ui.browser
+   */
+  refreshPage: function () {
+    history.go(0);
+    return this;
+  },
+  /**
+   * 设置主页
+   *
+   * @method setHomepage
+   * @param {String} url 设置的URL
+   * @return zy.ui.browser
+   */
+  setHomepage: function (url) {
+    url = (url ? url : location.href);
+    if (document.all) {
+      document.body.style.behavior = 'url(#default#homepage)';
+      document.body.setHomePage(url);
+    } else if (window.sidebar) {
+      if (window.netscape) {
+        try {
+          window.netscape.security.PrivilegeManager
+            .enablePrivilege("UniversalXPConnect");
+        } catch (e) {
+          zy.ui.msg('此操作被浏览器拒绝！', '请在地址栏输入"about:config"并回车然后将[signed.applets.codebase_principal_support]的值设置为true', 'w');
+        }
+      }
+      try {
+        var prefs = Components.classes['@mozilla.org/preferences-service;1']
+          .getService(Components.interfaces.nsIPrefBranch);
+        prefs.setCharPref('browser.startup.homepage', url);
+      } catch (e) {
+        zy.ui.msg('提示信息', '设置失败', 'e');
+      }
+    } else {
+      zy.ui.msg('提示信息', '请用Ctrl+D将地址添加到收藏夹', 'i');
+    }
+    return this;
+  },
+  /**
+   * Firefox需要手动开启dom.allow_scripts_to_close_windows<br>
+   * about:config -> dom.allow_scripts_to_close_windows = true。
+   *
+   * @method closeWin
+   */
+  closeWin: function () {
+    window.opener = null;
+    window.open('', '_self');
+    window.close();
+  },
+
+  /**
+   * 取消事件冒泡
+   *
+   * @method stopBubble
+   * @param {Object} e 事件对象
+   */
+  stopBubble: function (e) {
+    if (e && e.stopPropagation) {
+      e.stopPropagation();
+    } else {
+      // ie
+      window.event.cancelBubble = true;
+    }
+  },
+  /**
+   * 阻止浏览器默认行为
+   *
+   * @method stopDefault
+   * @param {Object} e 事件对象
+   * @return {Boolean}
+   */
+  stopDefault: function (e) {
+    if (e && e.preventDefault) {
+      e.preventDefault();
+    } else {
+      // ie
+      window.event.returnValue = false;
+    }
+    return false;
+  },
+
+  /**
+   * 检测插件是否存在,如:'Quicktime'/'Quicktime.Quicktime'<br>
+   * IE浏览器控件的名称通道和其它浏览器插件名称不一致
+   *
+   * @method checkPlugin
+   * @param {String} name 插件名称
+   * @param {String} nameIE [optional,default=name] IE浏览器ActiveX插件名称
+   * @return {Boolean} true-插件已经安装;false-未安装
+   */
+  checkPlugin: function (name, nameIE) {
+    var ie = '';
+    if (typeof nameIE === 'undefined') {
+      ie = name;
+    } else {
+      ie = nameIE;
+    }
+    return this.hasPluginIE(ie) || this.hasPlugin(name);
+  },
+  /**
+   * 检测非IE浏览器插件是否存在
+   *
+   * @method hasPlugin
+   * @param {String} name 插件名称
+   * @return {Boolean} true-插件已经安装;false-未安装
+   */
+  hasPlugin: function (name) {
+    if (!name)
+      return false;
+    name = name.toLowerCase();
+    var plugins = window.navigator.plugins;
+    for (var i = 0; i < plugins.length; i++) {
+      if (plugins[i] && plugins[i].name.toLowerCase().indexOf(name) > -1) {
+        return true;
+      }
+    }
+    return false;
+  },
+  /**
+   * 检测IE浏览器插件是否存在
+   *
+   * @method hasPluginIE
+   * @param {String} name IE浏览器ActiveX插件名称
+   * @return {Boolean} true-插件已经安装;false-未安装
+   */
+  hasPluginIE: function (name) {
+    if (!name)
+      return false;
+    try {
+      new ActiveXObject(name);
+      return true;
+    } catch (ex) {
+      return false;
+    }
+  },
+
+  /**
+   * 判断当前是否处在iframe中
+   * @method isIframe
+   * @return {Boolean}
+   */
+  isIframe: function () {
+    return top.location != self.location;
+  },
+  /**
+   * 判断当前不处在iframe中
+   * @method isIframe
+   * @return {Boolean}
+   */
+  isNotIframe: function () {
+    return !isIframe();
+  }
+};
+/** =====================dataTable初始化参数 */
+zy.ui.dataTable = {
+  "language": {
+      "sProcessing": "处理中...",
+      "sLengthMenu": "显示 _MENU_ 项结果",
+      "sZeroRecords": "没有匹配结果",
+      "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+      "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+      "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+      "sInfoPostFix": "",
+      "sSearch": "搜索:",
+      "sUrl": "",
+      "sEmptyTable": "表中数据为空",
+      "sLoadingRecords": "载入中...",
+      "sInfoThousands": ",",
+      "oPaginate": {
+        "sFirst": "首页",
+        "sPrevious": "上页",
+        "sNext": "下页",
+        "sLast": "末页"
+      },
+      "oAria": {
+        "sSortAscending": ": 以升序排列此列",
+        "sSortDescending": ": 以降序排列此列"
+      }
+  },
+  "searching": false,
+  "autoWidth": false,
+  "paging": false,
+  "ordering": false,
+  "info": false,
+  "destroy": true,
+  "scrollY": false,
+  "scrollCollapse": false,
+  "scrollX": true,
+  "initComplete": dataTableXScrollFix
+};
+
+//
+// by JYM. 当水平滚动过长, 显示左右移动把手
+//
+function dataTableXScrollFix(settings, json) {
+  var thiz       = $(this);
+  var scrollDiv  = thiz.parents(".dataTables_scroll");
+  var scrollBody = scrollDiv.find('.dataTables_scrollBody');
+  
+  if (thiz.width()-10 < scrollDiv.width())
+    return;
+  if (thiz.height() < window.innerHeight)
+    return;
+  if (thiz.data("destroy_table_x_scroll_fix")) {
+    thiz.data("destroy_table_x_scroll_fix")();
+  }
+  thiz.data('destroy_table_x_scroll_fix', destroy);
+  
+  var x1=0, x2=0, y=-1000;
+  var moveScrollStep = 100;
+  var opacityOnTable = '0.3';
+  var left  = $("<div class='fa fa-chevron-left data_table_x_scroll_fix'></div>");
+  var right = $("<div class='fa fa-chevron-right data_table_x_scroll_fix'></div>");
+  var style = { "position": "absolute",
+    "background-color": "#ccc", 'border-radius': '5px',
+    "padding": "50px 5px", 'opacity': opacityOnTable, 'cursor': 'pointer',
+    'font-size': '12px'};
+    
+  if (scrollDiv.length < 1) scrollDiv = thiz;
+  left.css(style).appendTo(scrollDiv);
+  right.css(style).appendTo(scrollDiv);
+  
+  onresize();
+  
+  this.find("th").each(function() {
+    // 取所有列宽度的 1.5 倍的平均值作为滑动步长
+    moveScrollStep = (moveScrollStep + $(this).width() * 1.5) / 2;
+  });
+  
+  thiz.mousemove(function(e) {
+    y = e.pageY - 50 - 13;
+    left.offset({left: x1, top: y});
+    right.offset({left: x2, top: y});
+  });
+  
+  var inButton = false;
+  thiz.mouseenter(_show).mouseleave(_hide);
+  
+  left.click(function() {
+    scrollBody.animate({scrollLeft: 
+        scrollBody.scrollLeft() - moveScrollStep}, 100);
+  }).mouseenter(getFocus).mouseleave(lostFocus);
+  
+  right.click(function() {
+    scrollBody.animate({scrollLeft: 
+        scrollBody.scrollLeft() + moveScrollStep}, 100);
+  }).mouseenter(getFocus).mouseleave(lostFocus);
+  
+  $(window).resize(onresize);
+  
+  function _show() {
+    inButton = true;
+    left.show();
+    right.show();
+  }
+  
+  function _hide() {
+    inButton = false;
+    setTimeout(function() {
+      if (inButton) return;
+      left.hide();
+      right.hide();
+    }, 100);
+  }
+  
+  function onresize() {
+    var pos = scrollDiv.offset();
+    x1 = pos.left;
+    x2 = x1 + scrollDiv.width() - left.outerWidth();
+    left.offset({left: x1, top: y});
+    right.offset({left: x2, top: y});
+  }
+  
+  function getFocus() {
+    inButton = true;
+    $(this).animate({ 'opacity':  0.8, 'border-width': 1 });
+  }
+  
+  function lostFocus() {
+    inButton = false;
+    $(this).animate({ 'opacity': opacityOnTable, 'border-width': 0 });
+  }
+  
+  function destroy() {
+    $(window).off('resize', onresize);
+    thiz.off('mouseenter', _show).off('mouseleave',_hide);
+    left.remove();
+    right.remove();
+  }
+}
+/** =====================Select2 */
+zy.ui.Select2 = {
+  /**
+   * Select2 扩展
+   *
+   * @method Set 目标元素：<input type="hidden" name="el" id="el" style="width:300px" placeholder="类别名称"/>
+   * @param {String} type 数据字典类别
+   * @param {String} org 机构ID
+   * @param {String} el 元素对象
+   * @param {Boolean} flg 默认不追加全部选项，值为空
+   * @param {Object} options 参数
+   */
+  Set: function (type, org, el, flg, options) {
+    var all = {id: '', name: '全部', text: '全部(QB)'};
+    // 调用共通方法：通过类别请求缓存数据，当此类别缓存数据不存在调用ajax
+    var data;
+    var ls;
+    if (org) {
+      ls = zy.cache.get('_mdm_dict' + org, 'ls');
+    } else {
+      ls = zy.cache.get('_mdm_dict', 'ls');
+    }
+    if (ls.isSet([type]) && !ls.isEmpty([type])) {
+    // if (ls.isSet(type) && !ls.isEmpty(type)) {
+      data = ls.get([type])[type];
+      // data = ls.get(type);
+    }
+    //zy.log("data = " + JSON.stringify(data));
+    if (flg && data)
+      data.splice(0,0,all);
+    var defaults = {
+      placeholder: "查找...", //默认显示的文本
+      allowClear: true, //选择后出现清除按钮图标
+      formatSelection: function(item){return item.name;},
+      formatResult: function(item){return item.name;},
+      sortResults: function (results, container, query) {
+        //排序
+        if (query.term) {   //query.term为输入的内容
+          // use the built in javascript sort function
+          return results.sort(function (a, b) {
+            if (a.text.indexOf(query.term) > b.text.indexOf(query.term)) {
+              return 1;
+            } else if (a.text.indexOf(query.term) < b.text.indexOf(query.term)) {
+              return -1;
+            } else {
+              return 0;
+            }
+          });
+        }
+        return results;
+      },
+      data: {results: data, text: 'text'} //指定数据源
+    };
+    var opt = $.extend(true, {}, defaults, options);
+    el.select2(opt);
+  },
+  /**
+   * Select2 扩展
+   *
+   * @method SetCustomData 目标元素：<input type="hidden" name="el" id="el" style="width:300px" placeholder="类别名称"/>
+   * @param {String} type 数据字典类别
+   * @param {String} el 元素对象
+   * @param {Boolean} flg 默认不追加全部选项，值为空
+   * @param {Object} options 参数
+   * @param {Object} customData 自定义绑定数据
+   */
+  SetCustomData: function (type, el, flg, options, customData, pabled) {
+    var all = {id: '', name: '全部', text: '全部(QB)'};
+    // 调用共通方法：通过类别请求缓存数据，当此类别缓存数据不存在调用ajax
+    var data = [];
+    $.each(customData,function(index,el){
+      $.each(customData,function(pindex,il){
+        if (el.parentcd == il.id) {
+          if (il.children) {
+            il.children.push(el);
+          } else {
+            il.children = [];
+            il.children.push(el); 
+          }
+          el.hasp = 1;
+          if(!pabled) {
+            il.disabled = true;
+          } else {
+            il.disabled = false;
+          }
+        }
+      });
+      if(!el.hasp) {
+        data.push(el);
+      }
+    });
+    //zy.log("data = " + JSON.stringify(data));
+    if (flg && data)
+      data.splice(0,0,all);
+    var defaults = {
+      placeholder: "查找...", //默认显示的文本
+      allowClear: true, //选择后出现清除按钮图标
+      formatSelection: function(item){return item.name;},
+      formatResult: function(item){return item.name;},
+      sortResults: function (results, container, query) {
+        //排序
+        if (query.term) {   //query.term为输入的内容
+          // use the built in javascript sort function
+          return results.sort(function (a, b) {
+            if (a.text.indexOf(query.term) > b.text.indexOf(query.term)) {
+              return 1;
+            } else if (a.text.indexOf(query.term) < b.text.indexOf(query.term)) {
+              return -1;
+            } else {
+              return 0;
+            }
+          });
+        }
+        return results;
+      },
+      data: {results: data, text: 'text'} //指定数据源
+    };
+    var opt = $.extend(true, {}, defaults, options);
+    el.select2(opt);
+  },
+  /**
+   * Select2 扩展 图标选择
+   *
+   * @method Icons 目标元素：<input type="hidden" name="icons" placeholder="图标" style="width:300px"/>
+   * @param {String} el 元素对象
+   * @param {Object} options 参数
+   */
+  Icons: function (el, options) {
+    var icons = [
+      { text: "【Web应用类图标】", children: [
+        { id: "fa-adjust", text: "fa-adjust" },
+        { id: "fa-anchor", text: "fa-anchor" },
+        { id: "fa-archive", text: "fa-archive" },
+        { id: "fa-arrows", text: "fa-arrows" },
+        { id: "fa-arrows-h", text: "fa-arrows-h" },
+        { id: "fa-arrows-v", text: "fa-arrows-v" },
+        { id: "fa-asterisk", text: "fa-asterisk" },
+        { id: "fa-automobile", text: "fa-automobile" },
+        { id: "fa-ban", text: "fa-ban" },
+        { id: "fa-bank", text: "fa-bank" },
+        { id: "fa-bar-chart-o", text: "fa-bar-chart-o" },
+        { id: "fa-barcode", text: "fa-barcode" },
+        { id: "fa-bars", text: "fa-bars" },
+        { id: "fa-beer", text: "fa-beer" },
+        { id: "fa-bell", text: "fa-bell" },
+        { id: "fa-bell-o", text: "fa-bell-o" },
+        { id: "fa-bolt", text: "fa-bolt" },
+        { id: "fa-bomb", text: "fa-bomb" },
+        { id: "fa-book", text: "fa-book" },
+        { id: "fa-bookmark", text: "fa-bookmark" },
+        { id: "fa-bookmark-o", text: "fa-bookmark-o" },
+        { id: "fa-briefcase", text: "fa-briefcase" },
+        { id: "fa-bug", text: "fa-bug" },
+        { id: "fa-building", text: "fa-building" },
+        { id: "fa-building-o", text: "fa-building-o" },
+        { id: "fa-bullhorn", text: "fa-bullhorn" },
+        { id: "fa-bullseye", text: "fa-bullseye" },
+        { id: "fa-cab", text: "fa-cab" },
+        { id: "fa-calendar", text: "fa-calendar" },
+        { id: "fa-calendar-o", text: "fa-calendar-o" },
+        { id: "fa-camera", text: "fa-camera" },
+        { id: "fa-camera-retro", text: "fa-camera-retro" },
+        { id: "fa-car", text: "fa-car" },
+        { id: "fa-caret-square-o-down", text: "fa-caret-square-o-down" },
+        { id: "fa-caret-square-o-left", text: "fa-caret-square-o-left" },
+        { id: "fa-caret-square-o-right", text: "fa-caret-square-o-right" },
+        { id: "fa-caret-square-o-up", text: "fa-caret-square-o-up" },
+        { id: "fa-certificate", text: "fa-certificate" },
+        { id: "fa-check", text: "fa-check" },
+        { id: "fa-check-circle", text: "fa-check-circle" },
+        { id: "fa-check-circle-o", text: "fa-check-circle-o" },
+        { id: "fa-check-square", text: "fa-check-square" },
+        { id: "fa-check-square-o", text: "fa-check-square-o" },
+        { id: "fa-child", text: "fa-child" },
+        { id: "fa-circle", text: "fa-circle" },
+        { id: "fa-circle-o", text: "fa-circle-o" },
+        { id: "fa-circle-o-notch", text: "fa-circle-o-notch" },
+        { id: "fa-circle-thin", text: "fa-circle-thin" },
+        { id: "fa-clock-o", text: "fa-clock-o" },
+        { id: "fa-cloud", text: "fa-cloud" },
+        { id: "fa-cloud-download", text: "fa-cloud-download" },
+        { id: "fa-cloud-upload", text: "fa-cloud-upload" },
+        { id: "fa-code", text: "fa-code" },
+        { id: "fa-code-fork", text: "fa-code-fork" },
+        { id: "fa-coffee", text: "fa-coffee" },
+        { id: "fa-cog", text: "fa-cog" },
+        { id: "fa-cogs", text: "fa-cogs" },
+        { id: "fa-comment", text: "fa-comment" },
+        { id: "fa-comment-o", text: "fa-comment-o" },
+        { id: "fa-comments", text: "fa-comments" },
+        { id: "fa-comments-o", text: "fa-comments-o" },
+        { id: "fa-compass", text: "fa-compass" },
+        { id: "fa-credit-card", text: "fa-credit-card" },
+        { id: "fa-crop", text: "fa-crop" },
+        { id: "fa-crosshairs", text: "fa-crosshairs" },
+        { id: "fa-cube", text: "fa-cube" },
+        { id: "fa-cubes", text: "fa-cubes" },
+        { id: "fa-cutlery", text: "fa-cutlery" },
+        { id: "fa-dashboard", text: "fa-dashboard" },
+        { id: "fa-database", text: "fa-database" },
+        { id: "fa-desktop", text: "fa-desktop" },
+        { id: "fa-dot-circle-o", text: "fa-dot-circle-o" },
+        { id: "fa-download", text: "fa-download" },
+        { id: "fa-edit", text: "fa-edit" },
+        { id: "fa-ellipsis-h", text: "fa-ellipsis-h" },
+        { id: "fa-ellipsis-v", text: "fa-ellipsis-v" },
+        { id: "fa-envelope", text: "fa-envelope" },
+        { id: "fa-envelope-o", text: "fa-envelope-o" },
+        { id: "fa-envelope-square", text: "fa-envelope-square" },
+        { id: "fa-eraser", text: "fa-eraser" },
+        { id: "fa-exchange", text: "fa-exchange" },
+        { id: "fa-exclamation", text: "fa-exclamation" },
+        { id: "fa-exclamation-circle", text: "fa-exclamation-circle" },
+        { id: "fa-exclamation-triangle", text: "fa-exclamation-triangle" },
+        { id: "fa-external-link", text: "fa-external-link" },
+        { id: "fa-external-link-square", text: "fa-external-link-square" },
+        { id: "fa-eye", text: "fa-eye" },
+        { id: "fa-eye-slash", text: "fa-eye-slash" },
+        { id: "fa-fax", text: "fa-fax" },
+        { id: "fa-female", text: "fa-female" },
+        { id: "fa-fighter-jet", text: "fa-fighter-jet" },
+        { id: "fa-file-archive-o", text: "fa-file-archive-o" },
+        { id: "fa-file-audio-o", text: "fa-file-audio-o" },
+        { id: "fa-file-code-o", text: "fa-file-code-o" },
+        { id: "fa-file-excel-o", text: "fa-file-excel-o" },
+        { id: "fa-file-image-o", text: "fa-file-image-o" },
+        { id: "fa-file-movie-o", text: "fa-file-movie-o" },
+        { id: "fa-file-pdf-o", text: "fa-file-pdf-o" },
+        { id: "fa-file-photo-o", text: "fa-file-photo-o" },
+        { id: "fa-file-picture-o", text: "fa-file-picture-o" },
+        { id: "fa-file-powerpoint-o", text: "fa-file-powerpoint-o" },
+        { id: "fa-file-sound-o", text: "fa-file-sound-o" },
+        { id: "fa-file-video-o", text: "fa-file-video-o" },
+        { id: "fa-file-word-o", text: "fa-file-word-o" },
+        { id: "fa-file-zip-o", text: "fa-file-zip-o" },
+        { id: "fa-film", text: "fa-film" },
+        { id: "fa-filter", text: "fa-filter" },
+        { id: "fa-fire", text: "fa-fire" },
+        { id: "fa-fire-extinguisher", text: "fa-fire-extinguisher" },
+        { id: "fa-flag", text: "fa-flag" },
+        { id: "fa-flag-checkered", text: "fa-flag-checkered" },
+        { id: "fa-flag-o", text: "fa-flag-o" },
+        { id: "fa-flash", text: "fa-flash" },
+        { id: "fa-flask", text: "fa-flask" },
+        { id: "fa-folder", text: "fa-folder" },
+        { id: "fa-folder-o", text: "fa-folder-o" },
+        { id: "fa-folder-open", text: "fa-folder-open" },
+        { id: "fa-folder-open-o", text: "fa-folder-open-o" },
+        { id: "fa-frown-o", text: "fa-frown-o" },
+        { id: "fa-gamepad", text: "fa-gamepad" },
+        { id: "fa-gavel", text: "fa-gavel" },
+        { id: "fa-gear", text: "fa-gear" },
+        { id: "fa-gears", text: "fa-gears" },
+        { id: "fa-gift", text: "fa-gift" },
+        { id: "fa-glass", text: "fa-glass" },
+        { id: "fa-globe", text: "fa-globe" },
+        { id: "fa-graduation-cap", text: "fa-graduation-cap" },
+        { id: "fa-group", text: "fa-group" },
+        { id: "fa-hdd-o", text: "fa-hdd-o" },
+        { id: "fa-headphones", text: "fa-headphones" },
+        { id: "fa-heart", text: "fa-heart" },
+        { id: "fa-heart-o", text: "fa-heart-o" },
+        { id: "fa-history", text: "fa-history" },
+        { id: "fa-home", text: "fa-home" },
+        { id: "fa-image", text: "fa-image" },
+        { id: "fa-inbox", text: "fa-inbox" },
+        { id: "fa-info", text: "fa-info" },
+        { id: "fa-info-circle", text: "fa-info-circle" },
+        { id: "fa-institution", text: "fa-institution" },
+        { id: "fa-key", text: "fa-key" },
+        { id: "fa-keyboard-o", text: "fa-keyboard-o" },
+        { id: "fa-language", text: "fa-language" },
+        { id: "fa-laptop", text: "fa-laptop" },
+        { id: "fa-leaf", text: "fa-leaf" },
+        { id: "fa-legal", text: "fa-legal" },
+        { id: "fa-lemon-o", text: "fa-lemon-o" },
+        { id: "fa-level-down", text: "fa-level-down" },
+        { id: "fa-level-up", text: "fa-level-up" },
+        { id: "fa-life-bouy", text: "fa-life-bouy" },
+        { id: "fa-life-ring", text: "fa-life-ring" },
+        { id: "fa-life-saver", text: "fa-life-saver" },
+        { id: "fa-lightbulb-o", text: "fa-lightbulb-o" },
+        { id: "fa-location-arrow", text: "fa-location-arrow" },
+        { id: "fa-lock", text: "fa-lock" },
+        { id: "fa-magic", text: "fa-magic" },
+        { id: "fa-magnet", text: "fa-magnet" },
+        { id: "fa-mail-forward", text: "fa-mail-forward" },
+        { id: "fa-mail-reply", text: "fa-mail-reply" },
+        { id: "fa-mail-reply-all", text: "fa-mail-reply-all" },
+        { id: "fa-male", text: "fa-male" },
+        { id: "fa-map-marker", text: "fa-map-marker" },
+        { id: "fa-meh-o", text: "fa-meh-o" },
+        { id: "fa-microphone", text: "fa-microphone" },
+        { id: "fa-microphone-slash", text: "fa-microphone-slash" },
+        { id: "fa-minus", text: "fa-minus" },
+        { id: "fa-minus-circle", text: "fa-minus-circle" },
+        { id: "fa-minus-square", text: "fa-minus-square" },
+        { id: "fa-minus-square-o", text: "fa-minus-square-o" },
+        { id: "fa-mobile", text: "fa-mobile" },
+        { id: "fa-mobile-phone", text: "fa-mobile-phone" },
+        { id: "fa-money", text: "fa-money" },
+        { id: "fa-moon-o", text: "fa-moon-o" },
+        { id: "fa-mortar-board", text: "fa-mortar-board" },
+        { id: "fa-music", text: "fa-music" },
+        { id: "fa-navicon", text: "fa-navicon" },
+        { id: "fa-paper-plane", text: "fa-paper-plane" },
+        { id: "fa-paper-plane-o", text: "fa-paper-plane-o" },
+        { id: "fa-paw", text: "fa-paw" },
+        { id: "fa-pencil", text: "fa-pencil" },
+        { id: "fa-pencil-square", text: "fa-pencil-square" },
+        { id: "fa-pencil-square-o", text: "fa-pencil-square-o" },
+        { id: "fa-phone", text: "fa-phone" },
+        { id: "fa-phone-square", text: "fa-phone-square" },
+        { id: "fa-photo", text: "fa-photo" },
+        { id: "fa-picture-o", text: "fa-picture-o" },
+        { id: "fa-plane", text: "fa-plane" },
+        { id: "fa-plus", text: "fa-plus" },
+        { id: "fa-plus-circle", text: "fa-plus-circle" },
+        { id: "fa-plus-square", text: "fa-plus-square" },
+        { id: "fa-plus-square-o", text: "fa-plus-square-o" },
+        { id: "fa-power-off", text: "fa-power-off" },
+        { id: "fa-print", text: "fa-print" },
+        { id: "fa-puzzle-piece", text: "fa-puzzle-piece" },
+        { id: "fa-qrcode", text: "fa-qrcode" },
+        { id: "fa-question", text: "fa-question" },
+        { id: "fa-question-circle", text: "fa-question-circle" },
+        { id: "fa-quote-left", text: "fa-quote-left" },
+        { id: "fa-quote-right", text: "fa-quote-right" },
+        { id: "fa-random", text: "fa-random" },
+        { id: "fa-recycle", text: "fa-recycle" },
+        { id: "fa-refresh", text: "fa-refresh" },
+        { id: "fa-reorder", text: "fa-reorder" },
+        { id: "fa-reply", text: "fa-reply" },
+        { id: "fa-reply-all", text: "fa-reply-all" },
+        { id: "fa-retweet", text: "fa-retweet" },
+        { id: "fa-road", text: "fa-road" },
+        { id: "fa-rocket", text: "fa-rocket" },
+        { id: "fa-rss", text: "fa-rss" },
+        { id: "fa-rss-square", text: "fa-rss-square" },
+        { id: "fa-search", text: "fa-search" },
+        { id: "fa-search-minus", text: "fa-search-minus" },
+        { id: "fa-search-plus", text: "fa-search-plus" },
+        { id: "fa-send", text: "fa-send" },
+        { id: "fa-send-o", text: "fa-send-o" },
+        { id: "fa-share", text: "fa-share" },
+        { id: "fa-share-alt", text: "fa-share-alt" },
+        { id: "fa-share-alt-square", text: "fa-share-alt-square" },
+        { id: "fa-share-square", text: "fa-share-square" },
+        { id: "fa-share-square-o", text: "fa-share-square-o" },
+        { id: "fa-shield", text: "fa-shield" },
+        { id: "fa-shopping-cart", text: "fa-shopping-cart" },
+        { id: "fa-sign-in", text: "fa-sign-in" },
+        { id: "fa-sign-out", text: "fa-sign-out" },
+        { id: "fa-signal", text: "fa-signal" },
+        { id: "fa-sitemap", text: "fa-sitemap" },
+        { id: "fa-sliders", text: "fa-sliders" },
+        { id: "fa-smile-o", text: "fa-smile-o" },
+        { id: "fa-sort", text: "fa-sort" },
+        { id: "fa-sort-alpha-asc", text: "fa-sort-alpha-asc" },
+        { id: "fa-sort-alpha-desc", text: "fa-sort-alpha-desc" },
+        { id: "fa-sort-amount-asc", text: "fa-sort-amount-asc" },
+        { id: "fa-sort-amount-desc", text: "fa-sort-amount-desc" },
+        { id: "fa-sort-asc", text: "fa-sort-asc" },
+        { id: "fa-sort-desc", text: "fa-sort-desc" },
+        { id: "fa-sort-down", text: "fa-sort-down" },
+        { id: "fa-sort-numeric-asc", text: "fa-sort-numeric-asc" },
+        { id: "fa-sort-numeric-desc", text: "fa-sort-numeric-desc" },
+        { id: "fa-sort-up", text: "fa-sort-up" },
+        { id: "fa-space-shuttle", text: "fa-space-shuttle" },
+        { id: "fa-spinner", text: "fa-spinner" },
+        { id: "fa-spoon", text: "fa-spoon" },
+        { id: "fa-square", text: "fa-square" },
+        { id: "fa-square-o", text: "fa-square-o" },
+        { id: "fa-star", text: "fa-star" },
+        { id: "fa-star-half", text: "fa-star-half" },
+        { id: "fa-star-half-empty", text: "fa-star-half-empty" },
+        { id: "fa-star-half-full", text: "fa-star-half-full" },
+        { id: "fa-star-half-o", text: "fa-star-half-o" },
+        { id: "fa-star-o", text: "fa-star-o" },
+        { id: "fa-suitcase", text: "fa-suitcase" },
+        { id: "fa-sun-o", text: "fa-sun-o" },
+        { id: "fa-support", text: "fa-support" },
+        { id: "fa-tablet", text: "fa-tablet" },
+        { id: "fa-tachometer", text: "fa-tachometer" },
+        { id: "fa-tag", text: "fa-tag" },
+        { id: "fa-tags", text: "fa-tags" },
+        { id: "fa-tasks", text: "fa-tasks" },
+        { id: "fa-taxi", text: "fa-taxi" },
+        { id: "fa-terminal", text: "fa-terminal" },
+        { id: "fa-thumb-tack", text: "fa-thumb-tack" },
+        { id: "fa-thumbs-down", text: "fa-thumbs-down" },
+        { id: "fa-thumbs-o-down", text: "fa-thumbs-o-down" },
+        { id: "fa-thumbs-o-up", text: "fa-thumbs-o-up" },
+        { id: "fa-thumbs-up", text: "fa-thumbs-up" },
+        { id: "fa-ticket", text: "fa-ticket" },
+        { id: "fa-times", text: "fa-times" },
+        { id: "fa-times-circle", text: "fa-times-circle" },
+        { id: "fa-times-circle-o", text: "fa-times-circle-o" },
+        { id: "fa-tint", text: "fa-tint" },
+        { id: "fa-toggle-down", text: "fa-toggle-down" },
+        { id: "fa-toggle-left", text: "fa-toggle-left" },
+        { id: "fa-toggle-right", text: "fa-toggle-right" },
+        { id: "fa-toggle-up", text: "fa-toggle-up" },
+        { id: "fa-trash-o", text: "fa-trash-o" },
+        { id: "fa-tree", text: "fa-tree" },
+        { id: "fa-trophy", text: "fa-trophy" },
+        { id: "fa-truck", text: "fa-truck" },
+        { id: "fa-umbrella", text: "fa-umbrella" },
+        { id: "fa-university", text: "fa-university" },
+        { id: "fa-unlock", text: "fa-unlock" },
+        { id: "fa-unlock-alt", text: "fa-unlock-alt" },
+        { id: "fa-unsorted", text: "fa-unsorted" },
+        { id: "fa-upload", text: "fa-upload" },
+        { id: "fa-user", text: "fa-user" },
+        { id: "fa-users", text: "fa-users" },
+        { id: "fa-video-camera", text: "fa-video-camera" },
+        { id: "fa-volume-down", text: "fa-volume-down" },
+        { id: "fa-volume-off", text: "fa-volume-off" },
+        { id: "fa-volume-up", text: "fa-volume-up" },
+        { id: "fa-warning", text: "fa-warning" },
+        { id: "fa-wheelchair", text: "fa-wheelchair" },
+        { id: "fa-wrench", text: "fa-wrench" }
+      ] },
+      { text: "【文件类型图标】", children: [
+        { id: "fa-file", text: "fa-file" },
+        { id: "fa-file-archive-o", text: "fa-file-archive-o" },
+        { id: "fa-file-audio-o", text: "fa-file-audio-o" },
+        { id: "fa-file-code-o", text: "fa-file-code-o" },
+        { id: "fa-file-excel-o", text: "fa-file-excel-o" },
+        { id: "fa-file-image-o", text: "fa-file-image-o" },
+        { id: "fa-file-movie-o", text: "fa-file-movie-o" },
+        { id: "fa-file-o", text: "fa-file-o" },
+        { id: "fa-file-pdf-o", text: "fa-file-pdf-o" },
+        { id: "fa-file-photo-o", text: "fa-file-photo-o" },
+        { id: "fa-file-picture-o", text: "fa-file-picture-o" },
+        { id: "fa-file-powerpoint-o", text: "fa-file-powerpoint-o" },
+        { id: "fa-file-sound-o", text: "fa-file-sound-o" },
+        { id: "fa-file-text", text: "fa-file-text" },
+        { id: "fa-file-text-o", text: "fa-file-text-o" },
+        { id: "fa-file-video-o", text: "fa-file-video-o" },
+        { id: "fa-file-word-o", text: "fa-file-word-o" },
+        { id: "fa-file-zip-o", text: "fa-file-zip-o" }
+      ] },
+      { text: "【旋转动画类图标】", children: [
+        { id: "fa-circle-o-notch fa-spin", text: "fa-circle-o-notch fa-spin" },
+        { id: "fa-cog fa-spin", text: "fa-cog fa-spin" },
+        { id: "fa-gear fa-spin", text: "fa-gear fa-spin" },
+        { id: "fa-refresh fa-spin", text: "fa-refresh fa-spin" },
+        { id: "fa-spinner fa-spin", text: "fa-spinner fa-spin" }
+      ] },
+      { text: "【表单控件图标】", children: [
+        { id: "fa-check-square", text: "fa-check-square" },
+        { id: "fa-check-square-o", text: "fa-check-square-o" },
+        { id: "fa-circle", text: "fa-circle" },
+        { id: "fa-circle-o", text: "fa-circle-o" },
+        { id: "fa-dot-circle-o", text: "fa-dot-circle-o" },
+        { id: "fa-minus-square", text: "fa-minus-square" },
+        { id: "fa-minus-square-o", text: "fa-minus-square-o" },
+        { id: "fa-plus-square", text: "fa-plus-square" },
+        { id: "fa-plus-square-o", text: "fa-plus-square-o" },
+        { id: "fa-square", text: "fa-square" },
+        { id: "fa-square-o", text: "fa-square-o" }
+      ] },
+      { text: "【货币种类图标】", children: [
+        { id: "fa-bitcoin", text: "fa-bitcoin" },
+        { id: "fa-btc", text: "fa-btc" },
+        { id: "fa-cny", text: "fa-cny" },
+        { id: "fa-dollar", text: "fa-dollar" },
+        { id: "fa-eur", text: "fa-eur" },
+        { id: "fa-euro", text: "fa-euro" },
+        { id: "fa-gbp", text: "fa-gbp" },
+        { id: "fa-inr", text: "fa-inr" },
+        { id: "fa-jpy", text: "fa-jpy" },
+        { id: "fa-krw", text: "fa-krw" },
+        { id: "fa-money", text: "fa-money" },
+        { id: "fa-rmb", text: "fa-rmb" },
+        { id: "fa-rouble", text: "fa-rouble" },
+        { id: "fa-rub", text: "fa-rub" },
+        { id: "fa-ruble", text: "fa-ruble" },
+        { id: "fa-rupee", text: "fa-rupee" },
+        { id: "fa-try", text: "fa-try" },
+        { id: "fa-turkish-lira", text: "fa-turkish-lira" },
+        { id: "fa-usd", text: "fa-usd" },
+        { id: "fa-won", text: "fa-won" },
+        { id: "fa-yen", text: "fa-yen" }
+      ] },
+      { text: "【文本编辑类图标】", children: [
+        { id: "fa-align-center", text: "fa-align-center" },
+        { id: "fa-align-justify", text: "fa-align-justify" },
+        { id: "fa-align-left", text: "fa-align-left" },
+        { id: "fa-align-right", text: "fa-align-right" },
+        { id: "fa-bold", text: "fa-bold" },
+        { id: "fa-chain", text: "fa-chain" },
+        { id: "fa-chain-broken", text: "fa-chain-broken" },
+        { id: "fa-clipboard", text: "fa-clipboard" },
+        { id: "fa-columns", text: "fa-columns" },
+        { id: "fa-copy", text: "fa-copy" },
+        { id: "fa-cut", text: "fa-cut" },
+        { id: "fa-dedent", text: "fa-dedent" },
+        { id: "fa-eraser", text: "fa-eraser" },
+        { id: "fa-file", text: "fa-file" },
+        { id: "fa-file-o", text: "fa-file-o" },
+        { id: "fa-file-text", text: "fa-file-text" },
+        { id: "fa-file-text-o", text: "fa-file-text-o" },
+        { id: "fa-files-o", text: "fa-files-o" },
+        { id: "fa-floppy-o", text: "fa-floppy-o" },
+        { id: "fa-font", text: "fa-font" },
+        { id: "fa-header", text: "fa-header" },
+        { id: "fa-indent", text: "fa-indent" },
+        { id: "fa-italic", text: "fa-italic" },
+        { id: "fa-link", text: "fa-link" },
+        { id: "fa-list", text: "fa-list" },
+        { id: "fa-list-alt", text: "fa-list-alt" },
+        { id: "fa-list-ol", text: "fa-list-ol" },
+        { id: "fa-list-ul", text: "fa-list-ul" },
+        { id: "fa-outdent", text: "fa-outdent" },
+        { id: "fa-paperclip", text: "fa-paperclip" },
+        { id: "fa-paragraph", text: "fa-paragraph" },
+        { id: "fa-paste", text: "fa-paste" },
+        { id: "fa-repeat", text: "fa-repeat" },
+        { id: "fa-rotate-left", text: "fa-rotate-left" },
+        { id: "fa-rotate-right", text: "fa-rotate-right" },
+        { id: "fa-save", text: "fa-save" },
+        { id: "fa-scissors", text: "fa-scissors" },
+        { id: "fa-strikethrough", text: "fa-strikethrough" },
+        { id: "fa-subscript", text: "fa-subscript" },
+        { id: "fa-superscript", text: "fa-superscript" },
+        { id: "fa-table", text: "fa-table" },
+        { id: "fa-text-height", text: "fa-text-height" },
+        { id: "fa-text-width", text: "fa-text-width" },
+        { id: "fa-th", text: "fa-th" },
+        { id: "fa-th-large", text: "fa-th-large" },
+        { id: "fa-th-list", text: "fa-th-list" },
+        { id: "fa-underline", text: "fa-underline" },
+        { id: "fa-undo", text: "fa-undo" },
+        { id: "fa-unlink", text: "fa-unlink" }
+      ] },
+      { text: "【方向类图标】", children: [
+        { id: "fa-angle-double-down", text: "fa-angle-double-down" },
+        { id: "fa-angle-double-left", text: "fa-angle-double-left" },
+        { id: "fa-angle-double-right", text: "fa-angle-double-right" },
+        { id: "fa-angle-double-up", text: "fa-angle-double-up" },
+        { id: "fa-angle-down", text: "fa-angle-down" },
+        { id: "fa-angle-left", text: "fa-angle-left" },
+        { id: "fa-angle-right", text: "fa-angle-right" },
+        { id: "fa-angle-up", text: "fa-angle-up" },
+        { id: "fa-arrow-circle-down", text: "fa-arrow-circle-down" },
+        { id: "fa-arrow-circle-left", text: "fa-arrow-circle-left" },
+        { id: "fa-arrow-circle-o-down", text: "fa-arrow-circle-o-down" },
+        { id: "fa-arrow-circle-o-left", text: "fa-arrow-circle-o-left" },
+        { id: "fa-arrow-circle-o-right", text: "fa-arrow-circle-o-right" },
+        { id: "fa-arrow-circle-o-up", text: "fa-arrow-circle-o-up" },
+        { id: "fa-arrow-circle-right", text: "fa-arrow-circle-right" },
+        { id: "fa-arrow-circle-up", text: "fa-arrow-circle-up" },
+        { id: "fa-arrow-down", text: "fa-arrow-down" },
+        { id: "fa-arrow-left", text: "fa-arrow-left" },
+        { id: "fa-arrow-right", text: "fa-arrow-right" },
+        { id: "fa-arrow-up", text: "fa-arrow-up" },
+        { id: "fa-arrows", text: "fa-arrows" },
+        { id: "fa-arrows-alt", text: "fa-arrows-alt" },
+        { id: "fa-arrows-h", text: "fa-arrows-h" },
+        { id: "fa-arrows-v", text: "fa-arrows-v" },
+        { id: "fa-caret-down", text: "fa-caret-down" },
+        { id: "fa-caret-left", text: "fa-caret-left" },
+        { id: "fa-caret-right", text: "fa-caret-right" },
+        { id: "fa-caret-square-o-down", text: "fa-caret-square-o-down" },
+        { id: "fa-caret-square-o-left", text: "fa-caret-square-o-left" },
+        { id: "fa-caret-square-o-right", text: "fa-caret-square-o-right" },
+        { id: "fa-caret-square-o-up", text: "fa-caret-square-o-up" },
+        { id: "fa-caret-up", text: "fa-caret-up" },
+        { id: "fa-chevron-circle-down", text: "fa-chevron-circle-down" },
+        { id: "fa-chevron-circle-left", text: "fa-chevron-circle-left" },
+        { id: "fa-chevron-circle-right", text: "fa-chevron-circle-right" },
+        { id: "fa-chevron-circle-up", text: "fa-chevron-circle-up" },
+        { id: "fa-chevron-down", text: "fa-chevron-down" },
+        { id: "fa-chevron-left", text: "fa-chevron-left" },
+        { id: "fa-chevron-right", text: "fa-chevron-right" },
+        { id: "fa-chevron-up", text: "fa-chevron-up" },
+        { id: "fa-hand-o-down", text: "fa-hand-o-down" },
+        { id: "fa-hand-o-left", text: "fa-hand-o-left" },
+        { id: "fa-hand-o-right", text: "fa-hand-o-right" },
+        { id: "fa-hand-o-up", text: "fa-hand-o-up" },
+        { id: "fa-long-arrow-down", text: "fa-long-arrow-down" },
+        { id: "fa-long-arrow-left", text: "fa-long-arrow-left" },
+        { id: "fa-long-arrow-right", text: "fa-long-arrow-right" },
+        { id: "fa-long-arrow-up", text: "fa-long-arrow-up" },
+        { id: "fa-toggle-down", text: "fa-toggle-down" },
+        { id: "fa-toggle-left", text: "fa-toggle-left" },
+        { id: "fa-toggle-right", text: "fa-toggle-right" },
+        { id: "fa-toggle-up", text: "fa-toggle-up" }
+      ] },
+      { text: "【视频播放类图标】", children: [
+        { id: "fa-arrows-alt", text: "fa-arrows-alt" },
+        { id: "fa-backward", text: "fa-backward" },
+        { id: "fa-compress", text: "fa-compress" },
+        { id: "fa-eject", text: "fa-eject" },
+        { id: "fa-expand", text: "fa-expand" },
+        { id: "fa-fast-backward", text: "fa-fast-backward" },
+        { id: "fa-fast-forward", text: "fa-fast-forward" },
+        { id: "fa-forward", text: "fa-forward" },
+        { id: "fa-pause", text: "fa-pause" },
+        { id: "fa-play", text: "fa-play" },
+        { id: "fa-play-circle", text: "fa-play-circle" },
+        { id: "fa-play-circle-o", text: "fa-play-circle-o" },
+        { id: "fa-step-backward", text: "fa-step-backward" },
+        { id: "fa-step-forward", text: "fa-step-forward" },
+        { id: "fa-stop", text: "fa-stop" },
+        { id: "fa-youtube-play", text: "fa-youtube-play" }
+      ] },
+      { text: "【商标类图标】", children: [
+        { id: "fa-adn", text: "fa-adn" },
+        { id: "fa-android", text: "fa-android" },
+        { id: "fa-apple", text: "fa-apple" },
+        { id: "fa-behance", text: "fa-behance" },
+        { id: "fa-behance-square", text: "fa-behance-square" },
+        { id: "fa-bitbucket", text: "fa-bitbucket" },
+        { id: "fa-bitbucket-square", text: "fa-bitbucket-square" },
+        { id: "fa-bitcoin", text: "fa-bitcoin" },
+        { id: "fa-btc", text: "fa-btc" },
+        { id: "fa-codepen", text: "fa-codepen" },
+        { id: "fa-css3", text: "fa-css3" },
+        { id: "fa-delicious", text: "fa-delicious" },
+        { id: "fa-deviantart", text: "fa-deviantart" },
+        { id: "fa-digg", text: "fa-digg" },
+        { id: "fa-dribbble", text: "fa-dribbble" },
+        { id: "fa-dropbox", text: "fa-dropbox" },
+        { id: "fa-drupal", text: "fa-drupal" },
+        { id: "fa-empire", text: "fa-empire" },
+        { id: "fa-facebook", text: "fa-facebook" },
+        { id: "fa-facebook-square", text: "fa-facebook-square" },
+        { id: "fa-flickr", text: "fa-flickr" },
+        { id: "fa-foursquare", text: "fa-foursquare" },
+        { id: "fa-ge", text: "fa-ge" },
+        { id: "fa-git", text: "fa-git" },
+        { id: "fa-git-square", text: "fa-git-square" },
+        { id: "fa-github", text: "fa-github" },
+        { id: "fa-github-alt", text: "fa-github-alt" },
+        { id: "fa-github-square", text: "fa-github-square" },
+        { id: "fa-gittip", text: "fa-gittip" },
+        { id: "fa-google", text: "fa-google" },
+        { id: "fa-google-plus", text: "fa-google-plus" },
+        { id: "fa-google-plus-square", text: "fa-google-plus-square" },
+        { id: "fa-hacker-news", text: "fa-hacker-news" },
+        { id: "fa-html5", text: "fa-html5" },
+        { id: "fa-instagram", text: "fa-instagram" },
+        { id: "fa-joomla", text: "fa-joomla" },
+        { id: "fa-jsfiddle", text: "fa-jsfiddle" },
+        { id: "fa-linkedin", text: "fa-linkedin" },
+        { id: "fa-linkedin-square", text: "fa-linkedin-square" },
+        { id: "fa-linux", text: "fa-linux" },
+        { id: "fa-maxcdn", text: "fa-maxcdn" },
+        { id: "fa-openid", text: "fa-openid" },
+        { id: "fa-pagelines", text: "fa-pagelines" },
+        { id: "fa-pied-piper", text: "fa-pied-piper" },
+        { id: "fa-pied-piper-alt", text: "fa-pied-piper-alt" },
+        { id: "fa-pied-piper-square", text: "fa-pied-piper-square" },
+        { id: "fa-pinterest", text: "fa-pinterest" },
+        { id: "fa-pinterest-square", text: "fa-pinterest-square" },
+        { id: "fa-qq", text: "fa-qq" },
+        { id: "fa-ra", text: "fa-ra" },
+        { id: "fa-rebel", text: "fa-rebel" },
+        { id: "fa-reddit", text: "fa-reddit" },
+        { id: "fa-reddit-square", text: "fa-reddit-square" },
+        { id: "fa-renren", text: "fa-renren" },
+        { id: "fa-share-alt", text: "fa-share-alt" },
+        { id: "fa-share-alt-square", text: "fa-share-alt-square" },
+        { id: "fa-skype", text: "fa-skype" },
+        { id: "fa-slack", text: "fa-slack" },
+        { id: "fa-soundcloud", text: "fa-soundcloud" },
+        { id: "fa-spotify", text: "fa-spotify" },
+        { id: "fa-stack-exchange", text: "fa-stack-exchange" },
+        { id: "fa-stack-overflow", text: "fa-stack-overflow" },
+        { id: "fa-steam", text: "fa-steam" },
+        { id: "fa-steam-square", text: "fa-steam-square" },
+        { id: "fa-stumbleupon", text: "fa-stumbleupon" },
+        { id: "fa-stumbleupon-circle", text: "fa-stumbleupon-circle" },
+        { id: "fa-tencent-weibo", text: "fa-tencent-weibo" },
+        { id: "fa-trello", text: "fa-trello" },
+        { id: "fa-tumblr", text: "fa-tumblr" },
+        { id: "fa-tumblr-square", text: "fa-tumblr-square" },
+        { id: "fa-twitter", text: "fa-twitter" },
+        { id: "fa-twitter-square", text: "fa-twitter-square" },
+        { id: "fa-vimeo-square", text: "fa-vimeo-square" },
+        { id: "fa-vine", text: "fa-vine" },
+        { id: "fa-vk", text: "fa-vk" },
+        { id: "fa-wechat", text: "fa-wechat" },
+        { id: "fa-weibo", text: "fa-weibo" },
+        { id: "fa-weixin", text: "fa-weixin" },
+        { id: "fa-windows", text: "fa-windows" },
+        { id: "fa-wordpress", text: "fa-wordpress" },
+        { id: "fa-xing", text: "fa-xing" },
+        { id: "fa-xing-square", text: "fa-xing-square" },
+        { id: "fa-yahoo", text: "fa-yahoo" },
+        { id: "fa-youtube", text: "fa-youtube" },
+        { id: "fa-youtube-play", text: "fa-youtube-play" },
+        { id: "fa-youtube-square", text: "fa-youtube-square" }
+      ] },
+      { text: "【医疗类图标】", children: [
+        { id: "fa-ambulance", text: "fa-ambulance" },
+        { id: "fa-h-square", text: "fa-h-square" },
+        { id: "fa-hospital-o", text: "fa-hospital-o" },
+        { id: "fa-medkit", text: "fa-medkit" },
+        { id: "fa-plus-square", text: "fa-plus-square" },
+        { id: "fa-stethoscope", text: "fa-stethoscope" },
+        { id: "fa-user-md", text: "fa-user-md" },
+        { id: "fa-wheelchair", text: "fa-wheelchair" }
+      ] }
+    ];
+    var defaults = {
+      placeholder: "查找...", //默认显示的文本
+      allowClear: true, //选择后出现清除按钮图标
+      formatResult: function(item){return '<i class=\"fa fa-fw fa-lg ' + item.text + '\"></i> ' + item.text;},
+      formatSelection: function(item){return '<i class=\"fa fa-fw fa-lg ' + item.text + '\"></i> ' + item.text;},
+      data: icons //指定数据源
+    };
+    var opt = $.extend(true, {}, defaults, options);
+    el.select2(opt);
+  }
+};
+/** =====================storage 本地存储 */
+zy.cache = {
+  /**
+   * get 获取存储对象
+   *     zy.cache.get('_mdm_dict', 'ls');
+   * @param {String} name 缓存的名字空间
+   * @param {String} type 缓存类型(ls:localStorage, ss:sessionStorage, cs:cookieStorage)
+   * @return {Object} 缓存对象
+   */
+  get: function (name, type) {
+    /**
+     * Set an item in a storage.
+     * zy.cache.ls.set('foo','value') // Set storage.foo to "value"
+     * zy.cache.ls.set('foo.foo2.foo3...','value') // Set storage.foo.foo2.foo3... to "value"
+     * zy.cache.ls.set('foo','foo2','foo3'...,'value') // Set storage.foo.foo2.foo3... to "value"
+     * zy.cache.ls.set({'foo':'value,'foo2':'value2'}) // Set storage.foo to "value" and storage.foo2 to "value2" 使用此set方法(参数为对象)可避免'.'引起的问题
+     *
+     * If argument is an object, set() set value on storage for each property of this object.
+     */
+    /**
+     * Get an item from a zy.cache.
+     * zy.cache.ls.get('foo') // Return storage.foo
+     * zy.cache.ls.get('foo.foo2.foo3...') // Return storage.foo.foo2.foo3...
+     * zy.cache.ls.get('foo','foo2','foo3'...) // Return storage.foo.foo2.foo3...
+     * zy.cache.ls.get(['foo','foo2']) // Return {foo:storage.foo,foo2:storage.foo2}
+     *
+     * @return {Object} return an object with value for each item of this array.
+     */
+    // 构建此HOST名字空间的存储对象
+    var ns = $.initNamespaceStorage(zy.ui.browser.getHost() + name);
+    switch (type) {
+      case 'ls':
+        return ns.localStorage;   // Namespace in localStorage
+        break;
+      case 'ss':
+        return ns.sessionStorage; // Namespace in sessionStorage
+        break;
+      case 'cs':
+        return ns.cookieStorage;  // Namespace in cookieStorage (only if jquery.cookie added)
+    }
+  },
+
+  /**
+   * initDicts 调用共通方法：通过类别查找缓存数据是否存在，当此类别缓存数据不存在调用ajax获取并存储到缓存中。
+   * @param {String} keys 数据字典类别(含TableName):多项以 , 分割字符串，如：'typeA,typeB,typeC'
+   * @param {Function} cb 回调函数
+   * @return {Function} 回调函数
+   */
+  initDicts: function (keys, cb) {
+    var arr = keys.split(',');
+    var str = '';
+    var ls = zy.cache.get('_mdm_dict', 'ls');
+    for (var i in arr) {
+      var tmpArr = arr[i];
+      // 参数为数组
+      if (!ls.isSet([tmpArr]) || ls.isEmpty([tmpArr])) {
+      // if (!ls.isSet(tmpArr) || ls.isEmpty(tmpArr)) {
+        str += tmpArr + ',';
+      }
+    }
+    str = str.trimCom();
+    if (str !== '') {
+      zy.g.am.app = 'ZYAPP_LOGIN';
+      zy.g.am.mod = 'ZYMODULE_LOGIN';
+      var getDict = new zyNet();
+      getDict.get("api/getdict", function (msg) {
+        if (msg && msg.result && msg.result.length > 0) {
+          var result = msg.result;
+          $.each(result, function (i, v) {
+            $.each(v, function (ii, vv) {
+              // 参数用对象，解决.问题
+              var tmp = {};
+              tmp[ii] = vv;
+              ls.set(tmp);
+              // ls.set(ii, vv);
+            })
+          });
+          return cb();
+        } else {
+          return cb();
+        }
+      }, {typecd: str}, null, null);
+    } else {
+      return cb();
+    }
+  },
+  refreshData: function (keys, cb) {
+    var str = keys.trimCom();
+    var ls = zy.cache.get('_mdm_dict', 'ls');
+    //ls.removeall();
+    var callback = function (msg) {
+      if (msg && msg.result && msg.result.length > 0) {
+        var result = msg.result;
+        $.each(result, function (i, v) {
+          $.each(v, function (ii, vv) {
+            // 参数用对象
+            var tmp = {};
+            tmp[ii] = vv;
+            ls.set(tmp);
+            // ls.set(ii, vv);
+          })
+        });
+      }
+      return cb();
+    };
+    zy.g.am.app = 'ZYAPP_LOGIN';
+    zy.g.am.mod = 'ZYMODULE_LOGIN';
+    var getDict = new zyNet();
+    getDict.get("api/getdict", callback, {typecd: str}, null, null);
+  },
+  /**
+   * 字典翻转
+   *
+   * @method cd2name
+   * @param {String} type 数据字典类别
+   * @param {String} cd 字典Code
+   * @return {String} 字典名称
+   */
+  cd2name: function (type, cd) {
+    var ls = zy.cache.get('_mdm_dict', 'ls');
+    if (ls.isSet([type]) && !ls.isEmpty([type])) {
+    // if (ls.isSet(type) && !ls.isEmpty(type)) {
+      var list = ls.get([type])[type];
+      // var list = ls.get(type);
+      for (var i in list) {
+        if (list[i].id === cd)
+          return list[i].name;
+      }
+    }
+    return '';
+  },
+  name2cd: function (type, name) {
+    var ls = zy.cache.get('_mdm_dict', 'ls');
+    if (ls.isSet([type]) && !ls.isEmpty([type])) {
+    // if (ls.isSet(type) && !ls.isEmpty(type)) {
+      var list = ls.get([type])[type];
+      // var list = ls.get(type);
+      for (var i in list) {
+        if (list[i].name === name)
+          return list[i].id;
+      }
+    }
+    return '';
+  },
+  getDict: function (type) {
+    var ls = zy.cache.get('_mdm_dict', 'ls');
+    if (ls.isSet([type]) && !ls.isEmpty([type])) {
+      var list = ls.get([type])[type];
+      return list;
+    }
+    return [];
+  }
+};
+// 专为平台以外机构提供的方法
+zy.org = {
+  cache: {
+    /**
+     * get 获取存储对象
+     *     zy.cache.get('_mdm_dict', 'ls');
+     * @param {String} name 缓存的名字空间
+     * @param {String} type 缓存类型(ls:localStorage, ss:sessionStorage, cs:cookieStorage)
+     * @return {Object} 缓存对象
+     */
+    get: function (name, type) {
+      /**
+       * Set an item in a storage.
+       * zy.cache.ls.set('foo','value') // Set storage.foo to "value"
+       * zy.cache.ls.set('foo.foo2.foo3...','value') // Set storage.foo.foo2.foo3... to "value"
+       * zy.cache.ls.set('foo','foo2','foo3'...,'value') // Set storage.foo.foo2.foo3... to "value"
+       * zy.cache.ls.set({'foo':'value,'foo2':'value2'}) // Set storage.foo to "value" and storage.foo2 to "value2"
+       *
+       * If argument is an object, set() set value on storage for each property of this object.
+       */
+      /**
+       * Get an item from a zy.cache.
+       * zy.cache.ls.get('foo') // Return storage.foo
+       * zy.cache.ls.get('foo.foo2.foo3...') // Return storage.foo.foo2.foo3...
+       * zy.cache.ls.get('foo','foo2','foo3'...) // Return storage.foo.foo2.foo3...
+       * zy.cache.ls.get(['foo','foo2']) // Return {foo:storage.foo,foo2:storage.foo2}
+       *
+       * @return {Object} return an object with value for each item of this array.
+       */
+      // 构建此HOST名字空间的存储对象
+      var ns = $.initNamespaceStorage(zy.ui.browser.getHost() + name);
+      switch (type) {
+        case 'ls':
+          return ns.localStorage;   // Namespace in localStorage
+          break;
+        case 'ss':
+          return ns.sessionStorage; // Namespace in sessionStorage
+          break;
+        case 'cs':
+          return ns.cookieStorage;  // Namespace in cookieStorage (only if jquery.cookie added)
+      }
+    },
+    /**
+     * initDicts 调用共通方法：通过类别查找缓存数据是否存在，当此类别缓存数据不存在调用ajax获取并存储到缓存中。
+     * @param {String} keys 数据字典类别(含TableName):多项以 , 分割字符串，如：'typeA,typeB,typeC'
+     * @param {String} org 字典所属机构ID
+     * @param {Function} cb 回调函数
+     * @return {Function} 回调函数
+     */
+    initDicts: function (keys, org, cb) {
+      var arr = keys.split(',');
+      var str = '';
+      var ls = zy.org.cache.get('_mdm_dict' + org, 'ls');
+      for (var i in arr) {
+        var tmpArr = arr[i];
+        if (!ls.isSet([tmpArr]) || ls.isEmpty([tmpArr])) {
+        // if (!ls.isSet(tmpArr) || ls.isEmpty(tmpArr)) {
+          str += tmpArr + ',';
+        }
+      }
+      str = str.trimCom();
+
+      if (str !== '') {
+        zy.g.am.app = 'ZYAPP_LOGIN';
+        zy.g.am.mod = 'ZYMODULE_LOGIN';
+        var getDict = new zyNet();
+        
+        getDict.get("api/getdict", function (msg) {
+          if (msg && msg.result && msg.result.length > 0) {
+            var result = msg.result;
+            $.each(result, function (i, v) {
+              $.each(v, function (ii, vv) {
+                // ls.set(ii, vv);
+                var tmp = {};
+                tmp[ii] = vv;
+                ls.set(tmp);
+              })
+            });
+            return cb();
+          } else {
+            return cb();
+          }
+        }, {typecd: str, orgid: org}, null, null);
+      } else {
+        return cb();
+      }
+    },
+    refreshData: function (keys, org, cb) {
+      var str = keys.trimCom();
+      var ls = zy.org.cache.get('_mdm_dict' + org, 'ls');
+      //ls.removeall();
+      var callback = function (msg) {
+        if (msg && msg.result && msg.result.length > 0) {
+          var result = msg.result;
+          $.each(result, function (i, v) {
+            $.each(v, function (ii, vv) {
+              // ls.set(ii, vv);
+              var tmp = {};
+              tmp[ii] = vv;
+              ls.set(tmp);
+            })
+          });
+        }
+        return cb();
+      };
+      zy.g.am.app = 'ZYAPP_LOGIN';
+      zy.g.am.mod = 'ZYMODULE_LOGIN';
+      var getDict = new zyNet();
+      getDict.get("api/getdict", callback, {typecd: str, orgid: org}, null, null);
+    },
+    /**
+     * 字典翻转
+     *
+     * @method cd2name
+     * @param {String} type 数据字典类别
+     * @param {String} cd 字典Code
+     * @param {String} org 字典所属机构ID
+     * @return {String} 字典名称
+     */
+    cd2name: function (type, cd, org) {
+      var ls = zy.org.cache.get('_mdm_dict' + org, 'ls');
+      if (ls.isSet([type]) && !ls.isEmpty([type])) {
+      // if (ls.isSet(type) && !ls.isEmpty(type)) {
+        var list = ls.get([type])[type];
+        // var list = ls.get(type);
+        for (var i in list) {
+          if (list[i].id === cd)
+            return list[i].name;
+        }
+      }
+      return '';
+    },
+    name2cd: function (type, name, org) {
+      var ls = zy.org.cache.get('_mdm_dict' + org, 'ls');
+      if (ls.isSet([type]) && !ls.isEmpty([type])) {
+      // if (ls.isSet(type) && !ls.isEmpty(type)) {
+        var list = ls.get([type])[type];
+        var list = ls.get(type);
+        for (var i in list) {
+          if (list[i].name === name)
+            return list[i].id;
+        }
+      }
+      return '';
+    },
+    getDict: function (type, org) {
+      var ls = zy.org.cache.get('_mdm_dict' + org, 'ls');
+      if (ls.isSet([type]) && !ls.isEmpty([type])) {
+        var list = ls.get([type])[type];
+        return list;
+      }
+      return [];
+    }
+  }
+};
+
+/** =====================扩展功能 */
+/** 在原生String对象基础上添加自定义函数，如：字符串处理工具常用API,包括空白处理、字符统计、字符容器等. */
+(function() {
+/**
+ * 去掉字符串前面和最后的空格
+ *
+ * @method trim
+ * @return {String}
+ */
+String.prototype.trim = function () {
+  return this.replace(/(^\s*)|(\s*$)/g, "");
+};
+/**
+ * 去掉字符串中所有的空格
+ *
+ * @method trimBlanks
+ * @return {String}
+ */
+String.prototype.trimBlanks = function () {
+  return this.replace(/(\s*)/g, "");
+};
+/**
+ * 去掉字符串前面(prefix)的空格blank
+ *
+ * @method trimPreBlank
+ * @return {String}
+ */
+String.prototype.trimPreBlank = function () {
+  return this.replace(/(^\s*)/g, "");
+};
+/**
+ * 去掉字符串后面(suffix)的空格blank
+ *
+ * @method trimSufBlank
+ * @return {String}
+ */
+String.prototype.trimSufBlank = function () {
+  return this.replace(/(\s*$)/g, "");
+};
+/**
+ * 去掉字符串中所有的character
+ *
+ * @method trimChars
+ * @param {String/Number} character 字符
+ * @param {Boolean} caseSensitive [optional,default=false] 是否区分大小写
+ * @return {String}
+ */
+String.prototype.trimChars = function (character, caseSensitive) {
+  if (character === '') {
+    character = ' ';
+  }
+  var i = 'i';
+  if (caseSensitive) {
+    i = '';
+  }
+  return this.replace(new RegExp("(" + character + ")", i + "g"), "");
+};
+/**
+ * 去掉字符串最后面的','end//[逗号Comma]
+ *
+ * @method trimCom
+ * @return {String}
+ */
+String.prototype.trimCom = function () {
+  return this.replace(/(\,$)/g, "");
+};
+/**
+ * 去掉字符串中前面的'0'
+ *
+ * @method trimZero
+ * @return {String}
+ */
+String.prototype.trimPreZero = function () {
+  return this.replace(/(^0*)/g, "");
+};
+/**
+ * 计算字符串的长度（一个双字节字符按UTF-8长度计3(aaa)，ASCII字符计1）
+ *
+ * @method sizeUTF8
+ * @return {String}
+ */
+String.prototype.sizeUTF8 = function () {
+  return this.replace(/[^\x00-\xff]/g, "aaa").length;
+};
+/**
+ * 计算字符串的长度（一个双字节字符按DWORD长度计2(aa)，ASCII字符计1）
+ *
+ * @method sizeDW
+ * @return {String}
+ */
+String.prototype.sizeDW = function () {
+  return this.replace(/[^\x00-\xff]/g, "aa").length;
+};
+/**
+ * 清除前面和后面的换行符
+ *
+ * @method trimLines
+ * @return {String}
+ */
+String.prototype.trimLines = function () {
+  return this.replace(/(^\n+)|(\n+$)/g, "");
+};
+/**
+ * 将多个换行替换为一个
+ *
+ * @method rowSpan
+ * @return {String}
+ */
+String.prototype.rowSpan = function () {
+  return this.replace(/(\n+)/g, "\n");
+};
+/**
+ * 将\n替换为\r\n<br>
+ * 在windows系统下，回车换行符号是"\r\n".但是在Linux等系统下是"\n"符号
+ *
+ * @method lr2crlf
+ * @return {String}
+ */
+String.prototype.lf2crlf = function () {
+  return this.replace(/(\n+)/g, "\r\n");
+};
+/**
+ * 格式化字符串,将{n},替换为对应的参数，如：'I {0}&{1} China.'.formatArgs('love','like'); 输出："I
+ * love&like China."
+ *
+ * @method formatArgs
+ * @param {String/Number} arguments
+ * @return {String}
+ */
+String.prototype.formatArgs = function () {
+  var thiz = this;
+  for (var i = 0; i < arguments.length; i++) {
+    var param = "\{" + i + "\}";
+    thiz = thiz.replace(param, arguments[i]);
+  }
+  return thiz;
+};
+/**
+ * 日期格式化函数
+ * @method String.toDate
+ * 日期格式字符串，如："2012-9-20 19:46:18"
+ * @return {Date} 返回日期类型数据
+ */
+String.prototype.toDate = function () {
+  if (this && typeof this === "string") {
+    return new Date(this.replace(/\-/g, '/'));
+  }
+  //  return eval('new Date(' + this.replace(/\d+(?=-[^-]+$)/, function (a) {
+  //    return parseInt(a, 10) - 1;
+  //  }).match(/\d+/g) + ')');
+};
+})();
+
+(function() {
+/**
+ * 日期格式化函数
+ * @method Date.toFormat
+ * @param arguments {String} str 格式字符串
+      YYYY|yyyy|YY|yy 表示年份
+      q 表示季度
+      M|M 月份
+      W|w 星期
+      dd|DD|d|D 日期
+      hh|HH|h|H 时间
+      mm|m 分钟
+      ss|SS|s|S 秒
+ * @return {String} 格式化后的日期字符串
+ */
+Date.prototype.toFormat = function (str) {
+  if (!str)
+    return;
+  var o = {
+    "M+": this.getMonth() + 1, //月份
+    "d+": this.getDate(), //日
+    "h+": this.getHours(), //小时
+    "m+": this.getMinutes(), //分
+    "s+": this.getSeconds(), //秒
+    "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+    "S": this.getMilliseconds() //毫秒
+  };
+  if (/(y+)/.test(str))
+    str = str.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+  for (var k in o)
+    if (new RegExp("(" + k + ")").test(str))
+      str = str.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+  return str;
+};
+/**
+ * 对Date的扩展，将 Date 转化为指定格式的String * 月(M)、日(d)、12小时(h)、24小时(H)、分(m)、秒(s)、周(E)、季度(q)
+    可以用 1-2 个占位符 * 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字) * eg: * (new
+    Date()).pattern("yyyy-MM-dd hh:mm:ss.S")==> 2006-07-02 08:09:04.423
+ * (new Date()).pattern("yyyy-MM-dd E HH:mm:ss") ==> 2009-03-10 二 20:09:04
+ * (new Date()).pattern("yyyy-MM-dd EE hh:mm:ss") ==> 2009-03-10 周二 08:09:04
+ * (new Date()).pattern("yyyy-MM-dd EEE hh:mm:ss") ==> 2009-03-10 星期二 08:09:04
+ * (new Date()).pattern("yyyy-M-d h:m:s.S") ==> 2006-7-2 8:9:4.18
+ */
+Date.prototype.format = function (str) {
+  var o = {
+    "M+": this.getMonth() + 1,
+    //月份
+    "d+": this.getDate(),
+    //日
+    "h+": this.getHours() % 12 == 0 ? 12 : this.getHours() % 12,
+    //小时
+    "H+": this.getHours(),
+    //小时
+    "m+": this.getMinutes(),
+    //分
+    "s+": this.getSeconds(),
+    //秒
+    "q+": Math.floor((this.getMonth() + 3) / 3),
+    //季度
+    "S": this.getMilliseconds() //毫秒
+  };
+  var week = {
+    "0": "/u65e5",
+    "1": "/u4e00",
+    "2": "/u4e8c",
+    "3": "/u4e09",
+    "4": "/u56db",
+    "5": "/u4e94",
+    "6": "/u516d"
+  };
+  if (/(y+)/.test(str)) {
+    str = str.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+  }
+  if (/(E+)/.test(str)) {
+    str = str.replace(RegExp.$1, ((RegExp.$1.length > 1) ? (RegExp.$1.length > 2 ? "/u661f/u671f" : "/u5468") : "") + week[this.getDay() + ""]);
+  }
+  for (var k in o) {
+    if (new RegExp("(" + k + ")").test(str)) {
+      str = str.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    }
+  }
+  return str;
+};
+/**
+ * 判断数据中是否存在cell值，并返回第一个存在的位置
+ *
+ * @method indexOf
+ * @param {String/Number} cell 数组元素值
+ * @returns {Number} 查询成功返回0-n的索引号，失败返回-1
+ */
+Array.prototype.indexOf = function (cell) {
+  for (var i = 0, len = this.length; i < len; i++) {
+    if (this[i] === cell)
+      return i;
+  }
+  return -1;
+};
+/*---IE Extend---*/
+if (!Array.prototype.indexOf) {
+  Array.prototype.indexOf = function (elt /* , from */ ) {
+    var len = this.length >>> 0;
+
+    var from = Number(arguments[1]) || 0;
+    from = (from < 0) ? Math.ceil(from) : Math.floor(from);
+    if (from < 0)
+      from += len;
+
+    for (; from < len; from++) {
+      if (from in this && this[from] === elt)
+        return from;
+    }
+    return -1;
+  };
+}
+})();
+/** =====================FORM 表单对象功能扩展 */
+/**
+ * json对象绑定到form表单中
+ * @method json2form 将函数注册到jQuery对象
+ * @param {Object} json 对象
+ */
+$.fn.json2form = function (json) {
+  //  return zy.ui.form.deserializeSimple($(this), json);
+  return zy.ui.form.deserialize($(this), json);
+};
+$.fn.jsons2form = function (json) {
+  return zy.ui.form.deserialize($(this), json);
+};
+$.fn.form2json = function () {
+  return zy.ui.form.serialize($(this));
+};
+/* {String} type 数据字典类别, {Boolean} flg 追加全部选项, {Object} options 参数 */
+$.fn.zySelect = function (type, flg, options) {
+  return zy.ui.Select2.Set(type, null, $(this), flg, options);
+};
+$.fn.orgSelect = function (type, org, flg, options) {
+  return zy.ui.Select2.Set(type, org, $(this), flg, options);
+};
+/* {String} type 数据字典类别, {Boolean} flg 追加全部选项, {Object} options 参数, {Object} customData 自定义绑定数据 */
+$.fn.zySelectCustomData = function (type, flg, options, customData, pabled) {
+  return zy.ui.Select2.SetCustomData(type, $(this), flg, options, customData, pabled);
+};
+/* 图标选择 {Object} options 参数 */
+$.fn.zySelectIcons = function (options) {
+  return zy.ui.Select2.Icons($(this), options);
+};
+
+/**
+ * 输入框添加智能auto-complete功能
+ * {String} type 数据字典类别
+ */
+$.fn.zyAuto = function (type) {
+  var ls = zy.cache.get('_mdm_dict', 'ls');
+  // zy.log(JSON.stringify('auto-complete = ' + ls.get([type])[type]));
+  zy.log(JSON.stringify('auto-complete = ' + ls.get(type)));
+  var substringMatcher = function(strs) {
+    return function findMatches(q, cb) {
+      // an array that will be populated with substring matches
+      var matches = [];
+      // regex used to determine if a string contains the substring `q`
+      var substrRegex = new RegExp(q, 'i');
+      // iterate through the pool of strings and for any string that
+      // contains the substring `q`, add it to the `matches` array
+      $.each(strs, function(i, str) {
+        if (substrRegex.test(str.text)) {
+          // the typeahead jQuery plugin expects suggestions to a
+          // JavaScript object, refer to typeahead docs for more info
+          matches.push({ value: str.name });
+        }
+      });
+      cb(matches);
+    };
+  };
+  $(this).typeahead({
+      hint: true,
+      highlight: true,
+      minLength: 1
+    },
+    {
+      name: type,
+      displayKey: 'value',
+      // source: substringMatcher(ls.get([type])[type])
+      source: substringMatcher(ls.get(type))
+    });
+
+};
+
+/* jquery.form 扩展说明 */
+/**
+ * checkboxes、radio、selects 元素对象的选择或取消选择处理
+ * @param {Boolean} select 参数，true 为选择（默认值），false 为取消选择
+ */
+//$.fn.selected = function(select);
+/* Resets the form data. Causes all form elements to be reset to their original value. */
+//$.fn.resetForm = function();
+/**
+ * Clears the form(input,select,checkbox) data.
+ * - submit, button, reset, and hidden will *not* be effected
+ * @param {Boolean} includeHidden 是否包含隐藏对象，true 含，false 不含
+ */
+//$.fn.clearForm = function (includeHidden);
+/**
+ * Clears the selected form elements.
+ * @param {Boolean} includeHidden 是否包含隐藏对象，true 含，false 不含
+ */
+//$.fn.clearInputs = function (includeHidden);
+/**
+ * 禁用/启用输入控件。
+ *
+ * @method formDisable
+ * @param {Boolean} disabled true 禁用，false 启用
+ * @param {String} names 可选参数, 元素：name1, name2, name3,...
+ */
+$.fn.formDisable = function (disabled, names) {
+  if (names) {
+    var nArr = names.split(',');
+    for (var i in nArr) {
+      var element = nArr[i];
+      if (disabled) {
+         this.find('input[name="' + element + '"],select[name="' + element + '"],textarea[name="' + element + '"],button[name="' + element + '"],submit[name="' + element + '"]').attr('disabled', disabled).parent().addClass('state-disabled');
+      } else {
+         this.find('input[name="' + element + '"],select[name="' + element + '"],textarea[name="' + element + '"],button[name="' + element + '"],submit[name="' + element + '"]').attr('disabled', disabled).parent().removeClass('state-disabled');
+      }
+    }
+  } else {
+    if (disabled) {
+      this.find('input,select,textarea,button,submit').attr('disabled', disabled).parent().addClass('state-disabled');
+    } else {
+      this.find('input,select,textarea,button,submit').attr('disabled', disabled).parent().removeClass('state-disabled');
+    }
+  }
+  return this;
+};
+/**
+ * 禁用/启用按钮。
+ *
+ * @method btnDisable
+ * @param {Boolean} disabled true 禁用，false 启用
+ */
+$.fn.btnDisable = function (disabled) {
+    if (disabled) {
+      $(this).attr('disabled', disabled).parent().addClass('state-disabled');
+    } else {
+      $(this).attr('disabled', disabled).parent().removeClass('state-disabled');
+    }
+  return this;
+};
+
+/** =====================其他功能扩展 */
+/**
+ * 利用语法糖进行事件绑定
+ * @method i_coffee 将函数注册到jQuery对象
+ * @param {Object} obj params对象
+ */
+$.fn.i_coffee = function (obj) {
+  for (var eName in obj)
+    for (var selector in obj[eName])
+      $(this).on(eName, selector, obj[eName][selector]);
+};
+window.console = window.console || {};
+console.log || (console.log = typeof opera != "undefined" ? opera.postError : function (msg) {});
+ConsoleUtils = (function () {
+  var open = false;
+  function ConsoleUtils(op) {
+    open = op;
+  }
+  ConsoleUtils.prototype.toggle = function () {
+    open = !open;
+  };
+  ConsoleUtils.prototype.open = function () {
+    open = true;
+  };
+  ConsoleUtils.prototype.close = function () {
+    open = false;
+  };
+  ConsoleUtils.prototype.log = function (msg) {
+    if (open)
+      console.log(msg);
+  };
+  return ConsoleUtils;
+})();
+var Console = new ConsoleUtils(false);

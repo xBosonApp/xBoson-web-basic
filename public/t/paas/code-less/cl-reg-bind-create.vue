@@ -39,13 +39,15 @@
     </a-form-model-item>
     
     <a-form-model-item label="组件加载器 (插件)">
-      <div class='items-group plugins' v-for='(path, name) in form.plugins'>
-        <span class='p'>{{ name }}</span>
-        <span class='p'>:</span>
-        <span class='p'>{{ path }}</span>
-        <a-button icon='delete' size='small' @click='$delete(form.plugins, name)'/>
-      </div>
-      <cl-add-button @click='showInsertPlug = true' title='添加插件'/>
+      <cl-array-input title='添加插件' 
+        v-model='form.plugins'
+        varPlaceholder='完整的文件路径, 以 .vue 结尾的文件扩展名'
+        keyLabel='Vue 插件名'
+        varLabel='加载路径'
+        :verify='verifyPath'
+      >
+        <a-button slot='valueAddtion' icon='question' @click='showPathHelp = true'/>
+      </cl-array-input>
     </a-form-model-item>
     
     <a-form-model-item :wrapper-col="buttonCol" class='cl-buttons'>
@@ -66,24 +68,6 @@
     <cl-style-adj :styleVal='form.style'/>
   </a-drawer>
   
-  <a-modal
-    title="添加插件"
-    :visible="showInsertPlug"
-    :confirm-loading="confirmLoading"
-    @ok="insertPlugin"
-    @cancel="showInsertPlug = false"
-  >
-    <form class='cl-form'>
-      <label>Vue 插件名</label>
-      <a-input v-model='insert.name'/>
-      <label>加载路径</label>
-      <div class='items-group ppath'>
-        <a-input v-model='insert.path' placeholder='完整的文件路径, 以 .vue 结尾的文件扩展名'/>
-        <a-button icon='question' @click='showPathHelp = true'/>
-      </div>
-    </form>
-  </a-modal>
-  
   <cl-path-rule title='插件加载路径' v-model='showPathHelp'>
     完整的文件路径, 以 .vue 结尾的文件扩展名. 
     插件用于加载编辑器辅助标签, 和属性编辑辅助标签.
@@ -99,7 +83,7 @@ const tool = require("./tool.js");
 export default {
   props: ['next', 'data'],
   
-  components: tool.loadc('cl-style-adj', 'cl-path-rule'),
+  components: tool.loadc('cl-style-adj', 'cl-path-rule', 'cl-array-input'),
   
   mounted() {
     if (this.data.isModifyBind) {
@@ -113,10 +97,7 @@ export default {
       wrapperCol: { span: 14 },
       buttonCol: { span: 14, offset: 4 },
       showStyleEditor: false,
-      showInsertPlug: false,
       showPathHelp: false,
-      
-      insert: { name:'', path:'' },
       
       form : {
         txt: '',
@@ -180,24 +161,13 @@ export default {
         this.next(null, ret);
       });
     },
-    
-    insertPlugin() {
-      if (!this.insert.name) {
-        return antd.message.error("插件名不能为空");
+
+    verifyPath(obj) {
+      let path = obj.v;
+      if (! path.endsWith('.vue')) {
+        throw new Error("不是 .vue 组件文件");
       }
-      if (!this.insert.path) {
-        return antd.message.error("插件路径不能为空");
-      }
-      
-      if (this.form.plugins[this.insert.name]) {
-        return antd.message.error("插件已经设置 "+ this.insert.name);
-      }
-      
-      this.form.plugins[this.insert.name] = this.insert.path;
-      this.insert.name = '';
-      this.insert.path = '';
-      antd.message.success("插件已添加");
-      this.showInsertPlug = false;
+      return tool.uiFileExists(path);
     },
   },
 }

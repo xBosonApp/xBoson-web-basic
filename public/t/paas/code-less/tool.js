@@ -1,5 +1,6 @@
 /* Create By xBoson System */
 const store = require("./store.js");
+const plib = require("path");
 const requirePlugin = {};
 const vuever = parseInt(/([0-9]+)\..+/.exec(Vue.version));
 
@@ -30,6 +31,7 @@ module.exports = Object.freeze({
   Vm,
   refFunc,
   refVar,
+  uiFileExists,
   
   getRoot,
   getEditFile,
@@ -262,4 +264,24 @@ function refFunc(id, name, params) {
   }
   n.push(' */');
   return n.join('');
+}
+
+
+function uiFileExists(path) {
+  let full = xv.getFullPath(path);
+  if (full.startsWith('http://') || full.startsWith('https://')) {
+    // do nothing.
+  }
+  else if (full[0] == '/') {
+    full = xv.url_prefix + full;
+  } 
+  else {
+    full = xv.url_prefix +'/'+ full;
+  }
+  
+  return new Promise((ok, fail)=>{
+    Vue.http.head(full).then(ok).catch(e=>{
+      fail(new Error("找不到文件 "+ e.url));
+    });
+  });
 }

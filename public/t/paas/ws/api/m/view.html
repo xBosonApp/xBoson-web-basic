@@ -1,5 +1,5 @@
 <!-- Create By xBoson System -->
-<link rel="stylesheet" type="text/css" media="screen" href="/xboson/face/web/cdn/jsoneditor/9.1.2/jsoneditor.green.min.css">
+<link rel="stylesheet" type="text/css" media="screen" href="../../web/cdn/jsoneditor/9.1.2/jsoneditor.green.min.css">
 <style>
   hr.simple {
     margin-top: 3px;
@@ -57,11 +57,14 @@
   .btn-c-green.active,.btn-c-green:active,.open .dropdown-toggle.btn-c-green {
     background-image: none
   }
-  .nav-tabs>li>a {
-    border-radius: 0;
-    color: #356635
+  .c-green {
+    color: #356635;
   }
-  .nav-tabs>li.active>a {
+  #ws_api_m_view_tab>li>a {
+    border-radius: 0;
+    color: #356635!important;
+  }
+  #ws_api_m_view_tab>li.active>a {
     -webkit-box-shadow: 0 -2px 0 #468847;
     box-shadow: 0 -2px 0 #468847;
     border-top-width: 0!important;
@@ -70,25 +73,35 @@
     background: #cde0c4;
     color: #356635;
   }
-  .jarviswidget-color-green .nav-tabs li a:hover {
+  #ws_api_m_view_tab li a:hover {
     color: #356635!important;
     background: #cde0c4;
+    -webkit-box-shadow: 0 -2px 0 #468847;
+    box-shadow: 0 -2px 0 #468847;
   }
-  .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+  #ws_api_m_view_tab li:not(.active) a {
+    color: #356635!important;
+  }
+  #ws_api_m_view_tab>li.active>a, #ws_api_m_view_tab>li.active>a:focus, #ws_api_m_view_tab>li.active>a:hover {
       background-color: #cde0c4;
       border-bottom-color: transparent;
       cursor: default;
   }
-  .nav-tabs.bordered {
-    background: #fff;
+  #ws_api_m_view_tab.bordered {
+    margin-top: 6px;
+    background: #e1ede2!important;
     border: 1px solid #ddd
   }
-  .nav-tabs.bordered>:first-child a {
-    border-left-width: 0!important
+  #ws_api_m_view_tab.bordered>:first-child a {
+    border-left-width: 0!important;
   }
-  .nav-tabs.bordered+.tab-content {
+  #ws_api_m_view_tab.bordered+.tab-content {
     border: 1px solid #ddd;
     border-top: 0
+  }
+  #ws_api_m_view_tab .open>a, #ws_api_m_view_tab .open>a:focus, #ws_api_m_view_tab .open>a:hover {
+    background-color: #cde0c4;
+    border-color: #356635;
   }
 </style>
 <!--<hr class="simple">-->
@@ -109,16 +122,16 @@
       <fieldset class="smart-form" novalidate="novalidate">
         <section style="width:154px;float:right;">
           <div class="rating txt-color-green">综合评分
-            <input type="radio" name="overall" id="overall-5">
-            <label for="overall-5"><i class="fa fa-star"></i></label>
-            <input type="radio" name="overall" id="overall-4">
-            <label for="overall-4"><i class="fa fa-star"></i></label>
-            <input type="radio" name="overall" id="overall-3">
-            <label for="overall-3"><i class="fa fa-star"></i></label>
-            <input type="radio" name="overall" id="overall-2">
-            <label for="overall-2"><i class="fa fa-star"></i></label>
-            <input type="radio" name="overall" id="overall-1">
-            <label for="overall-1"><i class="fa fa-star"></i></label>
+            <input type="radio" name="score" id="score-5" value="5">
+            <label for="score-5"><i class="fa fa-star"></i></label>
+            <input type="radio" name="score" id="score-4" value="4">
+            <label for="score-4"><i class="fa fa-star"></i></label>
+            <input type="radio" name="score" id="score-3" value="3">
+            <label for="score-3"><i class="fa fa-star"></i></label>
+            <input type="radio" name="score" id="score-2" value="2">
+            <label for="score-2"><i class="fa fa-star"></i></label>
+            <input type="radio" name="score" id="score-1" value="1">
+            <label for="score-1"><i class="fa fa-star"></i></label>
           </div>
         </section>
       </fieldset>
@@ -150,85 +163,57 @@
       </div>
     </div>
     <div class="col-md-12">
-      <span class="help-block" style="margin-top:0px;margin-bottom:0px;" id="ws_api_v_view_ps">备注：<code>[/app/]</code><i class="fa fa-eye"></i>认证，<code>[/openapp/]</code><i class="fa fa-eye-slash"></i>匿名，<code>cb=</code>[可选]回调函数名，<code>s=d/r</code>[可选]返回调试信息，<code>ems=ems</code>[可选]返回服务端处理耗时（毫秒），<code>format=x</code>[可选]输出格式<code>XML</code>默认<code>JSON</code></span>
+      <span class="help-block" style="margin-top:0px;margin-bottom:0px;" id="ws_api_v_view_ps">备注：<code>[/app/]</code><i class="fa fa-eye"></i>认证，<code>[/openapp/]</code><i class="fa fa-eye-slash"></i>匿名，<code>cb=</code>[可选]回调函数名，<code>s=d/r</code>[可选]返回调试信息，<code>ems=ems</code>[可选]返回服务端处理耗时（毫秒），<code>$format=xml</code>[可选]返回数据<code>XML</code>格式，默认<code>JSON</code>或指定<code>JSONP</code>（测试用）</span>
     </div>
   </div>
 </div>
 
 
-
-
-<!--<div class="widget-body">-->
-
-						<ul id="myTab1" class="nav nav-tabs bordered">
-							<li class="active">
-								<a href="#s1" data-toggle="tab">Header 请求头</a>
-							</li>
-							<li>
-								<a href="#s2" data-toggle="tab"><i class="fa fa-fw fa-lg fa-gear"></i> 请求参数</a>
-							</li>
-							<li class="dropdown">
-								<a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-								<ul class="dropdown-menu">
-									<li>
-										<a href="#s3" data-toggle="tab">@fat</a>
-									</li>
-									<li>
-										<a href="#s4" data-toggle="tab">@mdo</a>
-									</li>
-								</ul>
-							</li>
-							<li class="pull-right">
-							</li>
-						</ul>
-
-						<div id="myTabContent1" class="tab-content padding-10">
-							<div class="tab-pane fade in active" id="s1">
-								<p>Header 请求头</p>
-							</div>
-							<div class="tab-pane fade" id="s2">
-								<p>请求参数</p>
-							</div>
-							<div class="tab-pane fade" id="s3">
-								<p>
-									fat.
-								</p>
-							</div>
-							<div class="tab-pane fade" id="s4">
-								<p>
-									mdo.
-								</p>
-							</div>
-						</div>
-
-<!--</div>-->
-
-
-
-
-
-
-					<div class="widget-body" style="min-height:0px;padding-bottom:0px;">
-						<div class="panel-group smart-accordion-default" id="accordion">
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h4 class="panel-title btn-green"><a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" style="padding: 6px 15px;"> <i class="fa fa-lg fa-angle-down pull-right"></i> <i class="fa fa-lg fa-angle-up pull-right"></i> Header 请求头设置 </a></h4>
-								</div>
-								<div id="collapseOne" class="panel-collapse collapse">
-									<div class="panel-body no-padding">
-                    <div id="ws_api_v_view_jsoneditor_header"></div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-
-
+<ul id="ws_api_m_view_tab" class="nav nav-tabs bordered">
+  <li>
+    <a href="#view_tab_s1" data-toggle="tab">Header 请求头</a>
+  </li>
+  <li class="active">
+    <a href="#view_tab_s2" data-toggle="tab"><i class="fa fa-fw fa-lg fa-gear"></i> 请求参数</a>
+  </li>
+  <li class="dropdown hidden">
+    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown">raw <b class="caret"></b></a>
+    <ul class="dropdown-menu">
+      <li><a href="#view_tab_s3" data-toggle="tab">@</a></li>
+      <li><a href="#view_tab_s4" data-toggle="tab">@</a></li>
+    </ul>
+  </li>
+  <li class="pull-right"></li>
+</ul>
+<div id="myTabContent1" class="tab-content padding-10">
+  <div class="tab-pane fade" id="view_tab_s1">
+    <div id="ws_api_v_view_jsoneditor_header"></div>
+  </div>
+  <div class="tab-pane fade in active" id="view_tab_s2">
+    <div class="btn-group hidden">
+      <button type="button" class="btn btn-success btn-sm">application/x-www-form-urlencoded</button>
+      <button type="button" class="btn btn-info btn-sm">application/json</button>
+    </div>
+    <fieldset class="ws_api_m_api_contentType_group input-group">
+      <label class="label c-green">Content-Type：</label>
+      <input class="" type="text" name="contentType" data-type="select2" placeholder="请选择">
+    </fieldset>
+    <fieldset class="ws_api_m_api_json_group">
+      <hr class="simple">
+      <div id="ws_api_v_view_jsoneditor_json"></div>
+    </fieldset>
+    <fieldset class="hidden">
+      <textarea rows="5" class="custom-scroll" style="width:100%;"></textarea>
+    </fieldset>
+    <fieldset class="ws_api_m_api_param_group">
+      <legend style="margin-bottom:6px;padding-top:22px;">请求参数：<i class="fa fa-fw fa-plus-circle txt-color-green" id="ws_api_m_api_param_addkey" style="cursor:pointer"></i></legend>
+      <div id="ws_api_m_api_param"></div>
+    </fieldset>
+  </div>
+  <div class="tab-pane fade" id="view_tab_s3"></div>
+  <div class="tab-pane fade" id="view_tab_s4"></div>
+</div>
 <div class="widget-body">
-  <fieldset>
-    <legend style="margin-bottom:6px;padding-top:22px;">请求参数：<i class="fa fa-fw fa-plus-circle txt-color-green" id="ws_api_m_api_param_addkey" style="cursor:pointer"></i></legend>
-    <div id="ws_api_m_api_param"></div>
-  </fieldset>
   <form class="form-horizontal">
     <fieldset>
       <legend style="margin-bottom:6px;padding-top:22px;">返回数据参考：【JSON】</legend>
@@ -242,7 +227,7 @@
 </div>
 <div id="ws_api_v_pagination"></div>
 <div id="ws_api_v_test_modal"></div>
-<script src="/xboson/face/web/cdn/jsoneditor/9.1.2/jsoneditor.min.js"></script>
+<script src="../../web/cdn/jsoneditor/9.1.2/jsoneditor.min.js"></script>
 <!--<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>-->
 <script src="ws/api/m/view.js"></script>
 <script>

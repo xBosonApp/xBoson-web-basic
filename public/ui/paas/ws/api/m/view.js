@@ -7,7 +7,8 @@ api_view = (function(){
   // 画面元素对象
   var $run_param = $('#ws_api_m_api_param'),
       v_requests = $('#ws_api_v_view_requests'),
-      v_url = $('#ws_api_v_view_url');
+      v_url = $('#ws_api_v_view_url'),
+      v_s2 = $('#view_tab_s2');
   
   // 构造方法
   // 参数 node tree节点数据
@@ -38,6 +39,7 @@ api_view = (function(){
       methodid: "01",
       methodnm: "GET",
       api_classify: "api",
+      contenttype: "1",
       ver: "1.0",
       api_desc: '',
     };
@@ -56,19 +58,24 @@ api_view = (function(){
 
   // 初始化 UI
   function Init(){
-    zy.cache.initDicts("ZR.0052,ZR.0053", ParamInit);
+    $('.ws_api_m_api_json_group').hide();
+    zy.cache.initDicts("ZR.0052,ZR.0053,ZB.0010", ParamInit);
   }
   
   // 画面 init
   function ViewInit(){
     $('#ws_api_v_view_apinm').html(' '+_m.apinm+'【'+_m.apiid+'】');
-zy.log('_m.help_info.var111==='+_m.help_info.ver);
     $('#ws_api_v_view_ver').html('v'+_m.help_info.ver);
     $('#ws_api_v_view_sta').html(_m.sta);
     v_url.val(pt.FullUrl(null));
     $('#ws_api_v_view_cdt').html(pt.node.createdt);
     $('#ws_api_v_view_udt').html(pt.node.updatedt);
     $('#ws_api_v_view_classify').html(zy.cache.cd2name("ZR.0053", _m.help_info.api_classify));
+    v_s2.find("[name=contentType]").zySelect("ZB.0010", false, {
+      width: "60%",
+      allowClear: false
+    });
+    v_s2.find("[name=contentType]").select2("val","1");
 
     // 获取API帮助信息
     zy.extend.get({
@@ -86,13 +93,20 @@ zy.log('_m.help_info.var111==='+_m.help_info.ver);
         if(_h.api_classify) _m.help_info.api_classify=_h.api_classify;
         if(_h.ver) _m.help_info.ver=_h.ver;
         if(_h.api_desc) _m.help_info.api_desc=_h.api_desc;
+        if(_h.contenttype) _m.help_info.contenttype=_h.contenttype;
         if(_h.result) _m.help_info.result=_h.result;
+        if(_h.header) _m.help_info.header=_h.header;
+        if(_h.json) _m.help_info.json=_h.json;
+        if(_h.score) _m.help_info.score=_h.score;
 
+        $("#score-"+_h.score).attr('checked','true');
         $('#ws_api_v_view_classify').html(zy.cache.cd2name("ZR.0053", _m.help_info.api_classify));
         $('#ws_api_v_view_ver').html('v'+_m.help_info.ver);
         $('#ws_api_v_view_desc').append(_m.help_info.api_desc);
         // API返回数据JSON内容
-        jsoneditorInit(_m.help_info.result);
+        _m.jsonEditor=jsoneditorInit('param',_m.help_info.result);
+        _m.jsonEditorHeader = jsoneditorInit('header',_m.help_info.header);
+        _m.jsonEditorJson = jsoneditorInit('json',_m.help_info.json);
          // 参数列表项
         if(_h.param) {
           _m.pam = _h.param;
@@ -101,15 +115,14 @@ zy.log('_m.help_info.var111==='+_m.help_info.ver);
           v_url.val(pt.FullUrl(_m.pam));
         }
         MethodInit({id:_m.help_info.methodid,name:_m.help_info.methodnm});
+        v_s2.find("[name=contentType]").select2("val",_m.help_info.contenttype);
       } else {
-        jsoneditorInit(null);
+        _m.jsonEditor=jsoneditorInit('param',null);
+        _m.jsonEditorHeader = jsoneditorInit('header',null);
+        _m.jsonEditorJson = jsoneditorInit('json',null);
       }
       //事件绑定
-      pt.Events.descBtn();
-      pt.Events.methodBtn();
-      pt.Events.authBtn();
-      pt.Events.testBtn();
-      pt.Events.saveBtn();
+      pt.Events.init();
     },{appid:_m.appid,moduleid:_m.moduleid,apiid:_m.apiid});
   }
 
@@ -157,17 +170,26 @@ zy.log('_m.help_info.var111==='+_m.help_info.ver);
         else
           $('.request-method-update').append('<li><a href="javascript:void(0);" data-id="'+list[i].id+'"><i class="fa fa-circle '+txtColor[list[i].id]+'"></i> '+list[i].name+'</a></li>');
       }
+      $(".ws_api_m_api_contentType_group").hide();
     } else {
-        _m.help_info.methodid = _method.id;
-        _m.help_info.methodnm = _method.name;
-        v_requests.data("id",_m.help_info.methodid);
-        v_requests.html(_m.help_info.methodnm + ' <span class="caret"></span>');
-        if("01"===_m.help_info.methodid){ // GET
-          UpPm();
-        }else{
-          v_url.val(pt.FullUrl(null));
+      _m.help_info.methodid = _method.id;
+      _m.help_info.methodnm = _method.name;
+      v_requests.data("id",_m.help_info.methodid);
+      v_requests.html(_m.help_info.methodnm + ' <span class="caret"></span>');
+      if("01"===_m.help_info.methodid){ // GET
+        UpPm();
+        $(".ws_api_m_api_contentType_group").hide();
+        $('.ws_api_m_api_param_group').show();
+        $('.ws_api_m_api_json_group').hide();
+      }else{
+        v_url.val(pt.FullUrl(null));
+        $(".ws_api_m_api_contentType_group").show();
+        if('2'===_m.help_info.contenttype) {
+          $('.ws_api_m_api_param_group').hide();
+          $('.ws_api_m_api_json_group').show();
         }
-        $('request-method-update').find('li').removeClass('active');
+      }
+      $('request-method-update').find('li').removeClass('active');
     }
   }
 
@@ -272,17 +294,64 @@ zy.log('_m.help_info.var111==='+_m.help_info.ver);
     });
   }
 
-  //JsonEditor初始化,可以两种只读模式切换
-  function jsoneditorInit(_json){
-    var container = document.getElementById('ws_api_v_view_jsoneditor');
-    var options = {
-      mode: 'tree',
-      modes: ['code','tree','preview'], //['code', 'form', 'text', 'tree', 'view', 'preview'], // allowed modes
-      onError: function (err) {
-        alert(err.toString());
+  /**
+    * JsonEditor初始化,可以多种模式切换
+    * @property {String} _id 元素id
+    * @property {Object} _json 对象 
+    */
+  function jsoneditorInit(_id,_json){
+    var eid=_id;
+    var options={};
+    var json=_json;
+    if('header'===eid) {
+      eid='ws_api_v_view_jsoneditor_header';
+      var schema = {
+        "title": "headers",
+        "description": "请求头 headers 对象信息",
+        "type": "object",
+        "properties": {
+          "Content-Type": {
+            "title": "Content-Type 请求方的http报头结构",
+            "description": "默认：application/x-www-form-urlencoded",
+            "enum": ["application/x-www-form-urlencoded; charset=utf-8","application/json; charset=utf-8", "multipart/form-data","application/octet-stream"]
+          },
+          "Authorization": {
+            "title": "Authorization：认证用token",
+            "type": "string"
+          },
+        },
+      };
+      json = {
+        "Authorization": null,
+        // "Content-Type": null,
+      };
+      options = {
+        schema: schema,
+        mode: 'tree',
+        modes: ['code','tree','preview'],
       }
+    } else if('json'===eid) {
+      eid='ws_api_v_view_jsoneditor_json';
+      options = {
+        mode: 'code',
+        modes: ['code','tree','preview'],
+      }
+    } else if('param'===eid) {
+      eid='ws_api_v_view_jsoneditor';
+      options = {
+        mode: 'tree',
+        modes: ['code','tree','preview'],
+      }
+    }
+    var defaults = {
+      //modes: ['code', 'form', 'text', 'tree', 'view', 'preview'], // allowed modes
+      onError: function (err) {
+        zy.ui.msg('错误', err.toString(), 'e');
+      },
     };
-    _m.jsonEditor = new JSONEditor(container, options, _json); 
+    var container = document.getElementById(eid);
+    var opt = $.extend(true, {}, defaults, options);
+    return new JSONEditor(container, opt, json); 
   }
 
   /**
@@ -290,6 +359,16 @@ zy.log('_m.help_info.var111==='+_m.help_info.ver);
     * @property Events
     */
   pt.Events = {
+    /** 事件绑定初始化 */
+    init: function () {
+      pt.Events.descBtn();
+      pt.Events.classifyBtn();
+      pt.Events.methodBtn();
+      pt.Events.authBtn();
+      pt.Events.contentTypeBtn;
+      pt.Events.testBtn();
+      pt.Events.saveBtn();
+    },
     // API功能描述
     descBtn: function(){
       $('#ws_api_v_view_desc').click(function () {
@@ -301,6 +380,14 @@ zy.log('_m.help_info.var111==='+_m.help_info.ver);
           });
         });
       });
+    },
+    // 服务分类选择：API、download、upload
+    classifyBtn: function(){
+      $('.alert-heading').on('click','#ws_api_v_view_classify_btn',function(e){
+        _m.help_info.api_classify=$("input[name='ws_api_v_view_classify']:checked").val();
+        $('#ws_api_v_view_classify').html(zy.cache.cd2name("ZR.0053", _m.help_info.api_classify));
+        $('.popover-classify').popover('toggle');
+    	});
     },
     //请求方式选择
     methodBtn: function(){
@@ -330,6 +417,19 @@ zy.log('_m.help_info.var111==='+_m.help_info.ver);
         $this.parent().addClass('active');
     	});
     },
+    // Content-Type
+    contentTypeBtn: v_s2.find("[name=contentType]").on('change',function () {
+      _m.help_info.contenttype=$(this).val();
+      // _m.help_info.contenttype=$(this).select2('data').name;
+      if (_m.help_info.contenttype === '2') {
+        $('.ws_api_m_api_param_group').hide();
+        $('.ws_api_m_api_json_group').show();
+      } else if(_m.help_info.contenttype === '1') {
+        $('.ws_api_m_api_param_group').show();
+        $('.ws_api_m_api_json_group').hide();
+      }
+    }),
+    // 测试API
     testBtn: function(){
       $('#ws_api_v_view_test').click(function () {
         var url = v_url.val();
@@ -339,12 +439,26 @@ zy.log('_m.help_info.var111==='+_m.help_info.ver);
             param[v.key] = v.value;
           });
         }
+        _m.jsonEditor.set(null);
         Ajax(url,param);
       });
     },
     //保存API信息
     saveBtn: function(){
       $('button[name=ws_api_m_api_info_save]').click(function () {
+    		$.smallBox({
+    			title : "保存确认!",
+    			content : "是否确认保存? <p class='text-align-right'><a href='javascript:void(0);' onclick='api_viewObj.YesAnswer();' class='btn btn-primary btn-sm'>　是　</a> <a href='javascript:void(0);' class='btn btn-danger btn-sm'>　否　</a></p>",
+    			color : "#296191",
+    			//timeout: 8000,
+    			icon : "fa fa-bell swing animated"
+    		});
+      });
+    },
+  };
+
+  // 确认保存
+  pt.YesAnswer = function(){
         var _tools = {
           // 调api
           _api : function(_param, _success, _nodata_cb) {
@@ -378,18 +492,19 @@ zy.log('_m.help_info.var111==='+_m.help_info.ver);
         });
         _pm.help_info=_m.help_info;
         _pm.help_info.requests=_m.help_info.methodid;
+        _pm.help_info.header=_m.jsonEditorHeader.get()?_m.jsonEditorHeader.get():{};
+        _pm.help_info.json=_m.jsonEditorJson.get()?_m.jsonEditorJson.get():{};
         _pm.help_info.result=_m.jsonEditor.get()?_m.jsonEditor.get():{};
         _pm.help_info.param=_prm;
+        _pm.help_info.score=$("input[name='score']:checked").val();
         delete _pm.help_info.url;//废弃
         _pm.help_info=JSON.stringify(_pm.help_info);
+
  zy.log('saveBtn._pm===='+JSON.stringify(_pm));
         _tools._api(_pm, function(msg) {
           zy.ui.msg('提示信息', '成功', 's');
         });
-      });
-    },
-  };
-
+  }
   /**
    * 运行API
    * @method Ajax
@@ -415,15 +530,37 @@ zy.log('_m.help_info.var111==='+_m.help_info.ver);
       zy.ui.msg('提示信息', 'API请求成功', 's');
       _m.jsonEditor.set(msg);
     }
+
+    var options={};
     if('01'===_m.help_info.methodid){
-      $.get(url,param,function(msg){
-        showResult(msg);
-      });
+      options={
+         type: "GET",
+      };
     }else{
-      $.post(url,param,function(msg) {
-        showResult(msg);
-      });
+      options={
+         type: "POST",
+        // contentType: "application/json; charset=utf-8",
+      };
+      if('2'===_m.help_info.contenttype){
+        options.contentType=v_s2.find("[name=contentType]").select2('data').name;
+        param=_m.jsonEditorJson.get()?_m.jsonEditorJson.getText():"{}";
+      }
     }
+    var defaults = {
+      url: url,
+      async: false,
+      timeout: 10000,
+      cache: false,
+      dataType: "jsonp",
+      jsonp: "cb",
+      jsonpCallback: "cb" + zy.tool.random(),
+      data: param,
+      success: function (msg) {
+        showResult(msg);
+      },
+    };
+    var setting = $.extend(true, {}, defaults, options);
+    $.ajax(setting);
   }
 
   // 更新请求参数
@@ -461,7 +598,7 @@ zy.log("pt.FullUrl(pam)==="+JSON.stringify(pam));
     }else{ //post等
       _m.fullurl = _m.url+_m.path.api+_m.path.sys;
     }
-    return _m.fullurl;
+    return _m.fullurl + "&$format=jsonp";
   };
   // 随机数，用于设置画面动态元素ID
   function Random(){

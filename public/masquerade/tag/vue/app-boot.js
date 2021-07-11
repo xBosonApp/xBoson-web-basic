@@ -22,6 +22,7 @@
     xAppState,
     cdn_path,
     withFileName,
+    getFullPath,
   };
   
   const init_state = checkEnv();
@@ -238,35 +239,6 @@
       require,
     };
     
-    function getFullPath(name) {
-      let absPath;
-      if (name.startsWith(cdnpre)) {
-        console.debug("require from cdn", name);
-        absPath = '/web/' + name;
-      }
-      else if (name.startsWith("./") || name.startsWith('../')) {
-        console.debug("relatively require", mod._base, '>',name);
-        absPath = pathmod.join(mod._base, name);
-      }
-      else if (name[0] == '/') {
-        console.debug("absolute require", name);
-        absPath = name;
-      }
-      else if (name.startsWith(xuiProtocol)) {
-        console.debug("xui protocol require", name);
-        absPath = pathmod.join(devMode ?'/t' :'/ui', name.substring(xuiProtocol.length));
-      }
-      else {
-        console.debug("direct require", name);
-        absPath = name;
-      }
-      
-      if (absPath[absPath.length-1] == '/') {
-        absPath += 'index.js';
-      }
-      return absPath;
-    }
-    
     //
     // 全能 require, 规则:
     // 1. 如果以 'cdn/' 开头, 则使用 cjs 同步加载模块, 返回模块的导出
@@ -276,7 +248,7 @@
     //
     function require(name, _use_promise, _use_promise_factory, _donot_default) {
       let rmod;
-      let absPath = getFullPath(name);
+      let absPath = getFullPath(name, mod._base);
       
       function process(ok, fail) {
         rmod = export_modules[name];
@@ -354,7 +326,40 @@
         ok(module);
       });
     }
-    
     return mod;
   }
+  
+  
+  function getFullPath(name, _base) {
+    let absPath;
+    if (name.startsWith(cdnpre)) {
+      console.debug("require from cdn", name);
+      absPath = '/web/' + name;
+    }
+    else if (name.startsWith("./") || name.startsWith('../')) {
+      if (!_base) {
+        throw new Error('相对路径必须设置 _base 参数');
+      }
+      console.debug("relatively require", _base, '>',name);
+      absPath = pathmod.join(_base, name);
+    }
+    else if (name[0] == '/') {
+      console.debug("absolute require", name);
+      absPath = name;
+    }
+    else if (name.startsWith(xuiProtocol)) {
+      console.debug("xui protocol require", name);
+      absPath = pathmod.join(devMode ?'/t' :'/ui', name.substring(xuiProtocol.length));
+    }
+    else {
+      console.debug("direct require", name);
+      absPath = name;
+    }
+    
+    if (absPath[absPath.length-1] == '/') {
+      absPath += 'index.js';
+    }
+    return absPath;
+  }
+  
 })();

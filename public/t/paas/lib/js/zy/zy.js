@@ -70,8 +70,8 @@ var zy = {
   g: {
     //主机IP地址
     host: {
-      api: location.protocol +'//localhost/xboson/',
-      ui: location.protocol +'//localhost/xboson/face'
+      api: location.protocol +'//localhost/'+location.pathname.split('/')[1]+'/',//'//localhost/xboson/',
+      ui: location.protocol +'//localhost/'+location.pathname.split('/')[1]+'/face'
     },
     //共通传参用
     comm: {

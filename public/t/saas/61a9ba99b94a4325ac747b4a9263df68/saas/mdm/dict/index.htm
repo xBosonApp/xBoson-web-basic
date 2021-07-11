@@ -106,6 +106,12 @@
   													  <i class="fa fa-folder-open txt-color-purple" title="修改分类"></i>
   														修改分类
   													</button>
+  													
+  													<button id="node-delete" type="button" class="btn btn-default" style="background-color:#ede7ff!important;">
+  													  <i class="fa fa-folder-open txt-color-purple" title="修改分类"></i>
+  														删除分类
+  													</button>
+  													
   												</div>
   												<div class="row">
   												  <div class="btn-group">
@@ -116,6 +122,10 @@
     													<button id="ver-edit" type="button" class="btn btn-default" style="background-color: #e5ffe5!important;">
     													  <i class="fa fa-tags txt-color-greenDark" title="修改版本"></i>
     														修改版本
+    													</button>
+    													<button id="ver-delete" type="button" class="btn btn-default" style="background-color: #e5ffe5!important; display:none" >
+    													  <i class="fa fa-tags txt-color-greenDark" title="删除版本"></i>
+    														删除版本
     													</button>
     												</div>
     												<div id="ver-select" class="col-md-4"></div>
@@ -179,8 +189,8 @@
                     
                     <div name="datadict_grid_toolbar" class="btn-group">
                       <button id="mdms_datadictD_zydm_add" class="btn btn-primary btn-xs" type="submit">&emsp;<i class="fa fa-magic fa-1"></i>&emsp;添 加&emsp;</button>
-                      <button id="mdms_datadictD_zydm_edit" class="btn btn-primary btn-xs" type="submit">&emsp;<i class="fa fa-edit fa-1"></i>&emsp;修 改&emsp;</button>
-                      <button id="mdms_datadictD_zydm_delete" class="btn btn-primary btn-xs">&emsp;<i class="fa  fa-trash-o "></i>&emsp;注 销&emsp;</button>
+                      <button id="mdms_datadictD_zydm_edit" class="btn btn-primary btn-xs" type="submit" disabled="disabled">&emsp;<i class="fa fa-edit fa-1"></i>&emsp;修 改&emsp;</button>
+                      <button id="mdms_datadictD_zydm_delete" class="btn btn-primary btn-xs" disabled="disabled">&emsp;<i class="fa  fa-trash-o "></i>&emsp;注 销&emsp;</button>
                       <button id="mdms_datadictD_zydm_export" class="btn btn-primary btn-xs">&emsp;<i class="glyphicon glyphicon-export  "></i>&emsp;导出明细&emsp;</button>
                     </div>
                     <div class="pull-right">

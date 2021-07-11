@@ -1,6 +1,6 @@
 <!-- Create By xBoson System -->
 
-
+<!--字典分类 添加修改-->
 <div class="modal fade" id="datadict_h2h3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
   data-backdrop="static">
   <div class="modal-dialog">
@@ -76,7 +76,7 @@
                 <label class="label">执行版本</label>
                 <label class="input">
                   <!--<input type="hidden" name="version" data-type="select2" placeholder="版本" />-->
-                  <input type="text" name="ver" placeholder="版本">
+                  <input type="hidden" name="ver" data-type="select2" placeholder="执行版本">
                 </label>
               </section>
               <section class="col col-6">
@@ -122,9 +122,25 @@
     // $('#datadict_h2h3_form input[name=standard]').zySelect("ZR.0039", false, {
     //   width: '100%'
     // });
+    
+    var $form = $('#datadict_h2h3_form');
+    
     $("#datadict_h2h3_form input[name=status]").zySelect('ZR.0001', false, {
       width: '100%'
     });
+    
+    // 字典版本下拉
+    var data = $.map(node.dict, function (obj) {
+      obj.id = obj.ver;
+      obj.text = obj.ver;
+      return obj;
+    })
+    $form.find("[name=ver]").select2({
+      data: data,
+      placeholder: "请选择执行版本",
+      width: '100%'
+    });
+    
 
     if (flag == 'i') {
       $("#datadict_h2h3_title").text('添加');
@@ -158,6 +174,8 @@
       $('#datadict_h2h3_form').json2form(node);
 
       $('#datadict_h2h3_form input[name=cd]').attr('readonly', true);
+      
+      $form.find("[name=ver]").select2("val",node.ver);
       // $('#datadict_h2h3_form input[name=parentcd]').attr('readonly', true);
       $('#datadict_h2h3_typecd').remove();
     }
@@ -205,7 +223,7 @@
               zy.ui.msg("提示信息：", "保存成功！", "s");
               // if(node.children){
               var data = $('#datadict_h2h3_form').form2json();
-              data.optype = '1';
+              // data.optype = '1';
               ztreeObj.addNodes(node, data);
               // }else{
               //   zy.log('!node.children');

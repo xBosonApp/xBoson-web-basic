@@ -125,7 +125,11 @@
       //状态默认值
       $("#datadict_ver_form input[name=status]").select2("val", '1');
       
-      $('#datadict_ver_form').json2form(node);
+      $('#datadict_ver_form').json2form({
+        cd: node.cd,
+        nm: node.nm,
+        parentcd: node.parentcd
+      });
       
     } else if (flag == 'u') {
       $("#datadict_ver_title").text('修改');
