@@ -1073,12 +1073,6 @@ var datadicdD_index = (function (zy, $) {
 
         // tree  工具栏显示
         _tree_toolbar_show(true);
-
-        // 字典版本下拉select2
-        verSelect.select2({
-          data: verSelectDataArr,
-          placeholder: "请添加版本"
-        });
         
         ver_form_init(treenode);
 
@@ -1338,7 +1332,7 @@ var datadicdD_index = (function (zy, $) {
               
   
               //更新版本selec2
-              ver_form_init(nodeClick);
+              ver_form_init(nodeClick,null,true);
             
             }
           },
@@ -1353,6 +1347,14 @@ var datadicdD_index = (function (zy, $) {
         });
       });
 
+      
+      // 字典版本下拉select2 初始化
+      verSelect.select2({
+        data: verSelectDataArr,
+        placeholder: "请添加版本"
+      });
+      
+      
     }
 
     
@@ -1373,19 +1375,24 @@ var datadicdD_index = (function (zy, $) {
 
 
     // 字典版本select2
-    function ver_form_init(treeNode, ver) {
+    function ver_form_init(treeNode, ver, flag) {
 
       zy.log(treeNode);
 
       var verSelect = $("#ver-select");
       var $datadicGrid = $("#datadict-grid");
+      
+      
+      var dataArr = verSelectDataArr;
+      // 清空select2 下拉数据源 dataArr 
+      dataArr.splice(0,dataArr.length);
 
       // var $index_no_version_msg = $("#index_no_version_msg");
 
       if (!treeNode || !treeNode.dict || !treeNode.dict.length) {
         // verSelect.select2("destroy");
 
-        verSelect.val(null);
+        verSelect.select2("val",null);
         // 表格工具栏隐藏
         // _tools_show(false);
         // 表格隐藏
@@ -1414,10 +1421,7 @@ var datadicdD_index = (function (zy, $) {
         return obj;
       })
       
-      var dataArr = verSelectDataArr;
       
-      // 清空dataArr
-      dataArr.splice(0,dataArr.length);
 
       // 往dataArr添加数据
       Array.prototype.push.apply(dataArr, data);
@@ -1429,7 +1433,7 @@ var datadicdD_index = (function (zy, $) {
         verSelect.select2("val",ver);
       }else{
         
-        if(treeNode.ver)
+        if(treeNode.ver && !flag)
           verSelect.select2("val", treeNode.ver);
         else
           verSelect.select2("val", treeNode.dict[0].ver);

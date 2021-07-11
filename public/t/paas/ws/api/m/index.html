@@ -1,5 +1,14 @@
 <!-- Create By xBoson System -->
 <style>
+  /* 补充 bootstrap row 统一高度和底部间距调整 */
+  .widget-body .saas-row {
+    display: flex;
+    margin-bottom: -14px;
+    /*max-height: 600px;*/
+    /*overflow-y: scroll;*/
+    /*overflow-x: hidden;*/
+  }
+  /* ztree节点标注子节点数量 */
   .ws-api-ztree-node-n {
     font-size: 9px !important;
     font-weight: 300 !important;
@@ -53,8 +62,8 @@
       <div class="row">
         <div id="ws_api_v_nouislider" class="noUiSlider"></div>
       </div>
-      <div class="row">
-        <div id="ws_api_v_ztree" class="col-xs-3 custom-scroll" style="max-height:600px;overflow-y:scroll;overflow-x:hidden;border-width:0px 1px 0px 0px;border-style:solid;border-color:#CCC!important;">
+      <div class="row saas-row">
+        <div id="ws_api_v_ztree" class="col-xs-3 custom-scroll">
           <ul class="ztree"></ul>
         </div>
         <div id="ws_api_v_innercontent" class="col-xs-9"></div>
