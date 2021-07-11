@@ -74,9 +74,9 @@ export default {
     let checkreq = (rule, value, cb)=>{
       let i = -1;
       let _next = ()=>{
-        let _i = i;
         if (++i < value.length) {
           if (this.pathChanged[i]) {
+            let _i = i;
             tool.uiFileExists(value[i]).catch(cb).then(_next).then(()=>{
               this.pathChanged[_i] = 0;  
             });

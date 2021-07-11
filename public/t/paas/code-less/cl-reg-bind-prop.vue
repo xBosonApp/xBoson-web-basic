@@ -21,6 +21,7 @@
     <a-tooltip title='新建属性'>
       <a-button icon='plus' @click='onCreate'/>
     </a-tooltip>
+    <a-button icon='home' @click='$emit("change", "default")'/>
     <a-button icon='rollback' @click='$emit("previous")'/>
   </div>
   

@@ -12,6 +12,9 @@
           @click='selectC = c; showDelete = false;'>{{ c.txt }}</span>
       </div>
     </div>
+    <div v-if='groupCnt < 1' class='note'>
+      没有数据
+    </div>
   </div>
   
   <div class='content'>
@@ -65,12 +68,15 @@ export default {
   
   data() {
     let group = {};
+    let groupCnt = 0;
     this.data.clib.groups.forEach(n=>{
       group[n] = this.createGroup(n);
+      groupCnt++;
     });
     
     return {
       group,
+      groupCnt,
       showDelete: false,
       selectC: null,
       selectedItem: ['componentItem', 'selectedItem'],
@@ -144,7 +150,7 @@ export default {
 .main { grid-template-columns: 340px 1fr; min-height: 300px; }
 .list { grid-template-columns: 1fr 1fr; gap: 5px; margin: 4px; }
 .cname { margin-right: 10px; }
-.componentItem { display: inline-block; border: 1px dashed #ddd; padding: 2px 5px; }
+.componentItem { display: inline-block; border: 1px dashed #ddd; padding: 2px 5px; cursor: pointer;}
 .selectedItem { border-color: blue; }
 .delete-dialog {
   margin-top: 39px; padding: 30px 65px; border: 1px dashed #eee; 

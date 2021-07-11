@@ -16,13 +16,20 @@
     <pre slot='message'>{{ message }}</pre>
   </a-alert>
   
-  <component 
-    :is='processConfig.component' 
-    :data='currentState.data'
-    :next='nextStep'
-    @previous='previousStep'
-    @change='setStage'
-    @clear='message = null'/>
+  <transition
+    :enter-class='enterClass'
+    :enter-to-class='enterClass'
+    :leave-to-class='leaveClass'
+  >
+    <component 
+      class='anim'
+      :is='processConfig.component' 
+      :data='currentState.data'
+      :next='nextStep'
+      @previous='previousStep'
+      @change='setStage'
+      @clear='message = null'/>
+  </transition>
 </div>
 </template>
 
@@ -34,6 +41,22 @@ export default {
     processConfig() {
       // let p = this.processes[this.currentState.process];
       return this.currentState.stepInf[this.currentState.step] || {};
+    },
+    
+    enterClass() {
+      if (this.directReverse) return 'animate__animated animate__fadeInLeft';
+      return 'animate__animated animate__fadeInRight';
+    },
+    
+    leaveClass() {
+      if (this.directReverse) return 'animate__animated animate__fadeOutRight';
+      return 'animate__animated animate__fadeOutLeft';
+    },
+  },
+  
+  watch: {
+    'currentState.step': function(n, o) {
+      this.directReverse = n < o;
     },
   },
   
@@ -50,11 +73,12 @@ export default {
         stepInf: [] 
       },
       
+      directReverse: false,
       message : null,
       
       processes : {
         'default': [
-          { title: '组件库列表', component: 'cl-reg-clib-list' },
+          { title: '组件库', desc:'列出项目可用组件库', component: 'cl-reg-clib-list' },
         ],
         
         createCLib : [
@@ -166,4 +190,6 @@ export default {
 </script>
 
 <style scoped>
+.anim { --animate-duration: 0.5s; position: absolute; width: 100%;
+}
 </style>
