@@ -6,7 +6,7 @@
     <div class='items-group arr' v-for='(e, i) in value'>
       <span class='p k'>{{ e[keyName] }}</span>
       <span class='p'>:</span>
-      <span class='p'>{{ e[varName] }}</span>
+      <span class='p'>{{ varInputTransfer(e[varName]) }}</span>
       <a-button icon='edit' size='small' @click='openEdit(i, e)'/>
       <a-popconfirm placement="right" title='立即删除?'
           ok-text="删除" cancel-text="取消" @confirm="value.splice(i, 1)">
@@ -18,7 +18,7 @@
     <div class='items-group arr' v-for='(v, k) in value'>
       <span class='p k'>{{ k }}</span>
       <span class='p note'>:</span>
-      <span class='p'>{{ v }}</span>
+      <span class='p'>{{ varInputTransfer(v) }}</span>
       <a-button icon='edit' size='small' @click='openEdit(k, v)'/>
       <a-popconfirm placement="right" title='立即删除?'
           ok-text="删除" cancel-text="取消" @confirm="$delete(value, k)">
@@ -72,6 +72,8 @@ export default {
     notRepeated: { type: Boolean, default: true },
     // 用于验证参数有效性, 返回一个 Promise, Functoin(key, value) 
     verify: { type: Function, default: null },
+    // 不同的 var 值类型在显示到表单时进行的转换
+    varInputTransfer: { type: Function, default: function(v) { return v; }, },
     
     keyLabel: { type: String, default: '键' },
     varLabel: { type: String, default: '值' },
@@ -84,6 +86,7 @@ export default {
       isArray : Array.isArray(this.value),
       showAdd : false,
       insert  : { k:'', v:'' },
+      recover : null,
       waiting : false,
       mode    : null,
     };
@@ -91,6 +94,7 @@ export default {
   
   methods: {
     openAdd() {
+      this.insert.i = null;
       this.showAdd = true; 
       this.mode = this.isArray ? this.insertArray : this.insertObject;
     },
@@ -99,13 +103,24 @@ export default {
       if (this.isArray) {
         this.insert.i = x;
         this.insert.k = y[this.keyName];
-        this.insert.v = y[this.varName];
+        this.insert.v = this.varInputTransfer(y[this.varName]);
+        this.value.splite(x, 1);
+        
+        this.recover = ()=>{
+          this.value.splite(x, 0, y);  
+        };
       } else {
         this.insert.k = x;
-        this.insert.v = y;
+        this.insert.v = this.varInputTransfer(y);
+        this.$delete(this.value, x);
+        // this.value[x] = null;
+        
+        this.recover = ()=>{
+          this.value[x] = y;
+        };
       }
       this.showAdd = true;
-      this.mode = this.isArray ? this.editArray : this.editMap;
+      this.mode = this.isArray ? this.insertArray : this.insertObject;
     },
     
     onOk() {
@@ -116,9 +131,13 @@ export default {
         return antd.message.error(this.varLabel +" 不能为空");
       }
       
+      let insert = Object.assign({}, this.insert);
       let ok = ()=>{
-        if (this.mode()) {
+        this.waiting = false;
+        if (this.mode(insert)) {
           this.showAdd = false;
+          this.insert.k = this.insert.v = null;
+          this.recover = null;
           antd.message.success(this.title +" 成功");
         }
       };
@@ -126,9 +145,7 @@ export default {
       if (this.verify) {
         try {
           this.waiting = true;
-          this.verify(this.insert).then(ok).catch(this._error).then(()=>{
-            this.waiting = false;
-          });
+          this.verify(insert).then(ok).catch(this._error);
         } catch(e) {
           this._error(e);
         }
@@ -137,61 +154,61 @@ export default {
       }
     },
     
-    editArray() {
-      //..
-    },
-    
-    editMap() {
-      //..
-    },
-    
     _error(e) {
       this.waiting = false;
       let msg = (e ? (e.message || e) : '未知错误');
       antd.message.error("验证失败: "+ msg);
     },
     
-    hasArrRep() {
+    hasArrRep(insert) {
       let i = this.value.findIndex(e=>{
-        return e[this.keyName] == this.insert.k;
+        return e[this.keyName] == insert.k;
       });
       if (i >= 0) {
-        antd.message.error("重复, "+ this.insert.k +' 已经设置');
+        antd.message.error("重复, "+ insert.k +' 已经设置');
         return true;
       }
     },
     
-    insertArray() {
-      if (this.notRepeated && this.hasArrRep()) {
+    insertArray(insert) {
+      if (this.notRepeated && this.hasArrRep(insert)) {
         return;
       }
       
       let a = {};
-      a[this.keyName] = this.insert.k;
-      a[this.varName] = this.insert.v;
-      this.value.push(a);
+      a[this.keyName] = insert.k;
+      a[this.varName] = insert.v;
+      if (isNaN(insert.i)) {
+        this.value.push(a);
+      } else {
+        this.value.splice(insert.i, 0, a);
+      }
       return true;
     },
     
-    hasMapRep() {
-      if (this.value[this.insert.k]) {
-        antd.message.error("重复, "+ this.insert.k +' 已经设置');
+    hasMapRep(insert) {
+      if (this.value[insert.k]) {
+        antd.message.error("重复, "+ insert.k +' 已经设置');
         return true;
       }
     },
     
-    insertObject() {
-      if (this.notRepeated && this.hasMapRep()) {
+    insertObject(insert) {
+      if (this.notRepeated && this.hasMapRep(insert)) {
         return;
       }
       
-      this.value[this.insert.k] = this.insert.v;
+      this.value[insert.k] = insert.v;
       return true;
     },
     
     cancel() {
       if (! this.waiting) {
         this.showAdd = false;
+      }
+      if (this.recover) {
+        this.recover();
+        this.recover = null;
       }
     }
   },

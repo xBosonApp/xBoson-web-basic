@@ -64,6 +64,7 @@
           keyLabel='参数名'
           varLabel='参数值'
           :verify='evalVar'
+          :varInputTransfer='toInput'
         />
       </a-form-model-item>
       
@@ -75,6 +76,7 @@
           keyLabel='选项名'
           varLabel='选项值'
           :verify='evalVar'
+          :varInputTransfer='toInput'
         />
       </a-form-model-item>
       
@@ -186,6 +188,13 @@ export default {
       }
     },
     
+    toInput(v) {
+      if (typeof v == 'string' || typeof v == 'object') {
+        return JSON.stringify(v);
+      }
+      return v;
+    },
+    
     onOpen(p, n) {
       this.mode = 'edit';
       this.showEditForm = true;
@@ -203,6 +212,7 @@ export default {
     },
     
     onDelete(p, n) {
+      this.showEditForm = false;
       let parm = this.parmHead();
       parm.name = n;
       
