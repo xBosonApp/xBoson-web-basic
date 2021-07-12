@@ -242,7 +242,14 @@
     const fileLoaders = {
       '.vue'  : javascriptLoader,
       '.js'   : javascriptLoader,
-      '.css'  : null,
+      '.ts'   : javascriptLoader,
+      '.css'  : styleLoader,
+      '.less' : styleLoader,
+      '.sass' : styleLoader,
+      '.styl' : styleLoader,
+      '.html' : htmlLoader,
+      '.htm'  : htmlLoader,
+      '.pug'  : htmlLoader,
     };
     
     //
@@ -268,10 +275,11 @@
       else {
         let loader = fileLoaders[ext];
         if (! loader) {
-          throw new Error("No loader can load files: "+ ext);
+          throw new Error("No loader can load files: "+ absPath);
         }
         console.debug("require from", ext, 'loader');
-        process = loader(name, absPath, _use_promise, _use_promise_factory, _donot_default);
+        let use_async = _use_promise || _use_promise_factory;
+        process = loader(name, absPath, use_async, _donot_default);
       }
       
       if (_use_promise_factory) {
@@ -290,7 +298,7 @@
     }
     
     
-    function check_es_module_exports(name, mod, _donot_default) {
+    function check_es_module_exports(mod, _donot_default) {
       if ((!_donot_default) && mod.exports && mod.exports.__esModule) {
         return mod.exports.default;
       }
@@ -298,22 +306,26 @@
     }
     
     
-    function cacheLoader(mod, _donot_default) {
-      return (ok, fail)=>{
-        ok(check_es_module_exports(name, mod, _donot_default))
+    function wrap_return_exports(ok, _donot_default) {
+      return function wrap_ok(mod) {
+        ok(check_es_module_exports(mod, _donot_default));
       }
     }
     
     
-    function javascriptLoader(name, absPath, _use_promise, _use_promise_factory, _donot_default) {
+    function cacheLoader(mod, _donot_default) {
       return (ok, fail)=>{
-        loadModule(absPath, _pf_ok, fail, _use_promise || _use_promise_factory, _create_module);
+        ok(check_es_module_exports(mod, _donot_default))
+      }
+    }
+    
+    
+    function javascriptLoader(name, absPath, _async, _donot_default) {
+      return (ok, fail)=>{
+        let wok = wrap_return_exports(ok, _donot_default);
+        loadModule(absPath, wok, fail, _async, _create_module);
         
-        function _pf_ok(mod) {
-          ok(check_es_module_exports(name, mod, _donot_default))
-        }
-        
-        function _create_module(name, code, module) {
+        function _create_module(code, module) {
           // let wcode = '(function(module, require, exports, __dirname, __filename) {'+
           //               code +
           //             '\n})';
@@ -323,7 +335,7 @@
             fn = new Function('module', 'require', 'exports', '__dirname', '__filename', 
                 withFileName(code, absPath));
             // fn.name = absPath;
-            fn(module, module.require, module.exports, module._base, name);
+            fn(module, module.require, module.exports, module._base, module.name);
           } catch(err) {
             let msg = ['Load', absPath, 'from', _parent.name, 'fail:', err.message];
             throw new Error(msg.join(' '));
@@ -333,10 +345,84 @@
     }
     
     
+    function styleLoader(name, absPath, _async, _dd) {
+      return (ok, fail)=>{
+        let wok = wrap_return_exports(ok, _dd);
+        loadModule(absPath, wok, fail, _async, (code, module)=>{
+          let el = makeCodeElement('style', code, 'style', absPath);
+          document.head.append(el);
+          
+          module.exports = {
+            el,
+            mount,
+            unmount,
+          };
+          
+          function mount() {
+            document.head.append(el);
+          }
+          
+          function unmount() {
+            el.remove();
+          }
+        });
+      }
+    }
+    
+    
+    function htmlLoader(name, absPath, _async, _dd) {
+      return (ok, fail)=>{
+        let wok = wrap_return_exports(ok, _dd);
+        
+        loadModule(absPath, wok, fail, _async, (code, module)=>{
+          let el = makeCodeElement('div', code, 'html', absPath);
+          let elements = toArray(el);
+          
+          module.exports = {
+            el,
+            elements,
+            mount,
+            unmount,
+          };
+          
+          function mount(to) {
+            if (!to.append) {
+              throw new Error("Cannot mount to non-HTMLElement objects"); 
+            }
+            elements.forEach(e => to.append(e));
+          }
+          
+          function unmount() {
+            el.innerHTML = '';
+            mount(el);
+          }
+          
+          function toArray(el) {
+            let elements = [];
+            let next = el.firstChild;
+            do {
+              elements.push(next);
+              next = next.nextSibling;
+            } while(next);
+            return elements;
+          }
+        });
+      };
+    }
+    
+    
+    function makeCodeElement(tagName, code, loaderType, fullpath) {
+      let el = document.createElement(tagName);
+      el.innerHTML = code;
+      el.className = 'vue-app-'+ loaderType +'-loader';
+      el.setAttribute('path', fullpath);
+      return el;
+    }
+    
+    
     //
-    // Function _module_creator(name, code, module)
-    //  name - 只有文件名
-    //  code - 加载的代码
+    // Function _module_creator(code, module)
+    //  code   - 加载的代码
     //  module - 要初始化的模块
     //
     function loadModule(absPath, ok, fail, use_async, _module_creator) {
@@ -345,16 +431,15 @@
         
         let module = createModule(urlprefix, mod);
         module._base = pathmod.dirname(absPath);
-        let name = pathmod.basename(absPath);
+        module.name = pathmod.basename(absPath);
         
         try {
-          _module_creator(name, code, module);
+          _module_creator(code, module);
         } catch(err) {
           return fail(err);
         }
         
         mod._cache[absPath] = module;
-        mod.name = name;
         ok(module);
       });
     }

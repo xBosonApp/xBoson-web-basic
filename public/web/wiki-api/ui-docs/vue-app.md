@@ -97,6 +97,34 @@ path.dirname('/a/b/c.js'); // return string: '/a/b'
 // 异步延迟加载 Vue 组件, 只有在组件被使用时才加载.
 Vue.component('doc', require("./doc.vue", 1, 1));
 ```
+
+加载 css 文件时, 该样式表加载后挂接到 document.head 节点上, 返回如下结构:
+
+```js
+{
+  // style dom 节点实例
+  el : HTMLStyleElement, 
+  // 如果节点已经卸载, 则重新挂载到页面
+  mount : Function(),   
+  // 从页面上卸载
+  unmount : Function(), 
+}
+```
+
+加载 html 文件时, 创建的 dom 节点实例不会自动挂载, 需要调用 mount() 指定挂载点, 返回如下结构:
+
+```js
+{
+  // 文件加载后, 所有 dom 节点默认挂载到该 dom 节点中; 直到这些节点被重新挂载到别处后, el 可能无任何节点.
+  el : HTMLElement,       
+  // html 文件中的所有顶层 dom 节点数组, 按顺序排列.
+  elements : Array, 
+  // 将所有 dom 元素挂载到 targetDom 元素内.
+  mount : Function(targetDom),
+  // 将所有 dom 元素返回到 el 中.
+  unmount : Function(),
+}
+```
  
 
 #### `defineModule(module_name: String, module: {exports:{}})`
@@ -105,6 +133,8 @@ Vue.component('doc', require("./doc.vue", 1, 1));
 
 ```js
 defineModule('vue', { exports: Vue });
+//.... 在其他文件处引用:
+let vue = require('vue');
 ```
 
 
@@ -126,6 +156,16 @@ loadCdn('element/2.15.1/index.js');
 #### `Promise xAppState()`
 
 该方法可以等待直到 app 引导成功/失败, then/cache 会被回调, 以通知监听器.
+
+
+#### `String getFullPath(path)`
+
+依照文件路径规则返回 path 路径的完整路径.
+
+
+#### `String withFileName(jsCode, filename)`
+
+为动态加载的代码设置文件名, 使代码抛出异常时可以正确的设置堆栈中的文件名.
 
 
 #### `debug`
