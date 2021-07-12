@@ -92,7 +92,7 @@
   // API服务信息加载处理
   function Right(node){
     if(node.flg!=='0'){return;} // zy.net.loadHTML：app、mod、api管理画面（如：添加、修改等）
-    zy.net.loadHTML("ws/api/m/view.html",v_content,function(){
+    zy.net.loadHTMLs("saas/om/tenant/view.html",v_content,function(){
       main(node);
     });
   }

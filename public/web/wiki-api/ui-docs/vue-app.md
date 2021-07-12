@@ -167,7 +167,8 @@ loadCdn('element/2.15.1/index.js');
 
 ## `String withFileName(jsCode, filename)`
 
-为动态加载的代码设置文件名, 使代码抛出异常时可以正确的设置堆栈中的文件名.
+为动态加载的代码设置文件名, 返回打过补丁的代码, 
+使程序抛出异常时可以正确的设置堆栈中的文件名.
 
 
 ## `debug`

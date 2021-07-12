@@ -2,7 +2,15 @@
 <style>
   .jarviswidget-color-green .nav-tabs li:not(.active) a {
     color: #4c4f53!important;
-  }  
+  }
+  .fc-border-separate thead tr, .table thead tr {
+      color: #fff;
+      background-color: #356E35;
+      background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#356E35), to(#009688));
+      background-image: -webkit-linear-gradient(top, #356E35 0, #009688 100%);
+      background-image: -linear-gradient(top, #356E35 0, #009688 100%);
+      font-size: 12px;
+  }
 </style>
 <link href="../../paas/lib/js/plugin/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
 <link rel="stylesheet" href="../../paas/lib/js/plugin/datatables/examples/resources/bootstrap/3/dataTables.bootstrap.css" type="text/css" media="all" />
@@ -27,12 +35,12 @@
 				<ul class="nav nav-tabs bordered" id="demo-pill-nav">
 					<li>
 						<a href="#tab-r1" data-toggle="tab">
-						<span class="badge bg-color-blue txt-color-white"></span>
+						<span class="badge bg-color-blueDark txt-color-white"></span>
 						最近变更</a>
 					</li>
 					<li class="active">
 						<a href="#tab-r2" data-toggle="tab">
-						<span class="badge bg-color-blueDark txt-color-white"></span>
+						<span class="badge bg-color-blue txt-color-white"></span>
 						代码管理</a>
 					</li>
 					<li>
@@ -48,8 +56,8 @@
 					</li>
 				</ul>
 				<div class="tab-content">
-					<div class="tab-pane active" id="tab-r1">
-					<fieldset>
+					<div class="tab-pane" id="tab-r1">
+					  <fieldset>
 				      <legend style="padding-left:13px;padding-right:13px;margin-bottom:3px;">
                 <i class="fa fa-lightbulb-o">&nbsp;&nbsp;变更记录(月)</i>
               </legend>
@@ -57,7 +65,7 @@
               <div id="logtable_pagination"></div>
             </fieldset>
 					</div>
-					<div class="tab-pane" id="tab-r2">
+					<div class="tab-pane active" id="tab-r2">
               <div id="nouislider" class="noUiSlider"></div>
               <fieldset style="padding-top:13px;">
                 <div id="mdms_dataductD_zydm_ztree" class="col-xs-4" style="padding-bottom:13px;">

@@ -348,6 +348,7 @@
     function styleLoader(name, absPath, _async, _dd) {
       return (ok, fail)=>{
         let wok = wrap_return_exports(ok, _dd);
+        
         loadModule(absPath, wok, fail, _async, (code, module)=>{
           let el = makeCodeElement('style', code, 'style', absPath);
           document.head.append(el);

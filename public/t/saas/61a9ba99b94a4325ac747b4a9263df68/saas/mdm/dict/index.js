@@ -867,16 +867,11 @@ var datadicdD_index = (function (zy, $) {
             "language": zy.ui.dataTable.language,
             select: true
           };
-
           // 合并初始化参数选项
           // $.extend(options, zy.ui.dataTable);
           // 字典表格初始化
           dictDataTableApi = dict_dataTable.DataTable(options);
-
         }
-
-
-
         zy.g.am.app = '78cf8922c5ea4afa9dae8970215ea796';
         zy.g.am.mod = 'dict';
         zy.net.get("api/dict_ver_find", cb, {
