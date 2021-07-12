@@ -3,6 +3,7 @@
 <template>
 <div class='items-group main'>
   <div class='group content'>
+    <!--<h4 class='listtitle'>组件列表</h4>-->
     <div v-for='(g, n) in group' :key='n'>
       <div class='cl-classify'>{{ g.name }} <span v-if='g.hangUp'>!</span></div>
       <div class='items-group list'>
@@ -155,4 +156,5 @@ export default {
 .delete-dialog {
   margin-top: 39px; padding: 30px 65px; border: 1px dashed #eee; 
 }
+.listtitle { background-color: antiquewhite; padding: 5px; border-radius: 3px; }
 </style>

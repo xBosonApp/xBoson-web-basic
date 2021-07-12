@@ -52,10 +52,25 @@ module.exports = {
     groupName: '文本',
   },
   
-  bc004h6: {
-    txt:'标题6', 
-    component:'h6',
+  bc004iframe: {
+    txt: '内嵌框架',
+    component:'iframe',
     groupName: '文本',
+    helpTag: 'div',
+    props: {
+      src: {
+        desc: '引用页面 URL',
+        type: 1,
+        def: 'http://',
+      },
+    },
+    style: {
+      'border': 0,
+      'margin': 0,
+      'padding': 0,
+      'width': '100%',
+      'height': '150px',
+    },
   },
   
   bc005: {

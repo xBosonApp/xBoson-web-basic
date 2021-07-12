@@ -1,50 +1,36 @@
 <!-- Create By xBoson System -->
-<!-- <uiauth pageid='mdms_datadictD_index'/> -->
+<style>
+  .jarviswidget-color-green .nav-tabs li:not(.active) a {
+    color: #4c4f53!important;
+  }  
+</style>
+<link href="../../paas/lib/js/plugin/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+<link rel="stylesheet" href="../../paas/lib/js/plugin/datatables/examples/resources/bootstrap/3/dataTables.bootstrap.css" type="text/css" media="all" />
+<section id="widget-grid">
 
-<link href="/dev/face/ui/paas/lib/js/plugin/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
-<link rel="stylesheet" href="/dev/face/ui/paas/lib/js/plugin/datatables/examples/resources/bootstrap/3/dataTables.bootstrap.css" type="text/css" media="all" />
-<!--<link rel="stylesheet" type="text/css" href="saas/mdm/dict/buttons.bootstrap.min.css"/>-->
- 
 <!-- Widget ID (each widget will need unique ID)-->
-<div class="jarviswidget" id="mdms_datadictD_index" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
-	<!-- widget options:
-	usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
-
-	data-widget-colorbutton="false"
-	data-widget-editbutton="false"
-	data-widget-togglebutton="false"
-	data-widget-deletebutton="false"
-	data-widget-fullscreenbutton="false"
-	data-widget-custombutton="false"
-	data-widget-collapsed="true"
-	data-widget-sortable="false"
-
-	-->
+<div id="mdms_datadictD_index" class="jarviswidget jarviswidget-color-green" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-custombutton="false" data-widget-sortable="false">
 	<header>
 		<h2>值域代码管理</h2>
+    <div class="widget-toolbar"></div>
 	</header>
-
 	<!-- widget div-->
 	<div>
-
 		<!-- widget edit box -->
 		<div class="jarviswidget-editbox">
 			<!-- This area used as dropdown edit box -->
-
 		</div>
 		<!-- end widget edit box -->
-
 		<!-- widget content -->
 		<div class="widget-body">
-
 			<div class="tabs">
 				<ul class="nav nav-tabs bordered" id="demo-pill-nav">
-					<li class="active">
+					<li>
 						<a href="#tab-r1" data-toggle="tab">
 						<span class="badge bg-color-blue txt-color-white"></span>
 						最近变更</a>
 					</li>
-					<li>
+					<li class="active">
 						<a href="#tab-r2" data-toggle="tab">
 						<span class="badge bg-color-blueDark txt-color-white"></span>
 						代码管理</a>
@@ -296,16 +282,16 @@
 
 </div>
 <!-- end widget -->
+</section>
 <div id="mdms_datadictD_index_mod" data='available'></div>
-<script src="/dev/face/ui/paas/lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
-<script src="/dev/face/ui/paas/lib/js/plugin/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
-<script src="/dev/face/ui/paas/lib/js/plugin/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
-<script src="/dev/face/ui/paas/lib/js/plugin/noUiSlider/jquery.nouislider.min.js"></script>
-<!--<script type="text/javascript" src="md/ex_inport/export.js"></script>-->
-<script type="text/javascript" src="/dev/face/ui/paas/lib/html/zy_dytable.js"></script>
-<script type="text/javascript" src="/dev/face/ui/paas/lib/html/zy_dyform.js"></script>
+<script src="../../paas/lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<script src="../../paas/lib/js/plugin/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+<script src="../../paas/lib/js/plugin/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="../../paas/lib/js/plugin/noUiSlider/jquery.nouislider.min.js"></script>
+<script type="text/javascript" src="../../paas/lib/html/zy_dytable.js"></script>
+<script type="text/javascript" src="../../paas/lib/html/zy_dyform.js"></script>
 
-<script type="text/javascript" src="/dev/face/ui/paas/lib/js/plugin/datatables/examples/resources/bootstrap/3/dataTables.bootstrap.js"></script>
+<script type="text/javascript" src="../../paas/lib/js/plugin/datatables/examples/resources/bootstrap/3/dataTables.bootstrap.js"></script>
 <!--<script type="text/javascript" src="saas/mdm/dict/dataTables.buttons.min.js"></script>-->
 <!--<script type="text/javascript" src="saas/mdm/dict/buttons.bootstrap.min.js"></script>-->
 
@@ -313,4 +299,6 @@
 
 <script>
   var datadicdD_indexObj = new datadicdD_index();
+  // 页面初始化设置
+  pageSetUp();
 </script>
