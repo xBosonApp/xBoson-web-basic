@@ -62,14 +62,14 @@ export default {
 > 这里: [打开完整的 UI 前端演示](../../t/paas/modern-ui/index.htm)
 
 
-### 全局函数/属性
+# 全局函数/属性
 
 可直接在浏览器上下文中使用; 或者使用 xv 这个前缀.  
 如果需要异步导入, 可以使用浏览器自带的 `import(..)` 函数,   
 此时在引入 `.vue` 文件时需要带上 es6 参数: `..path/file.vue?es6`.
 
 
-#### `require(name: String [, _use_promise: Boolean, _use_promise_factory: Boolean, _donot_default: Boolean])`
+## `require(name: String [, _use_promise: Boolean, _use_promise_factory: Boolean, _donot_default: Boolean])`
 
 返回 cjs 导出模块, 模块如果是 ES6 导出, 在编译为 ES5 后返回模块的 `.default` 属性,  
 同步的 require(name) 方法模拟了 nodejs 中的加载器, 有以下规则:
@@ -127,7 +127,7 @@ Vue.component('doc', require("./doc.vue", 1, 1));
 ```
  
 
-#### `defineModule(module_name: String, module: {exports:{}})`
+## `defineModule(module_name: String, module: {exports:{}})`
 
 定义全局模块, 然后可以通过 require 方法导入.
 
@@ -138,7 +138,7 @@ let vue = require('vue');
 ```
 
 
-#### `loadCdn(path, _do_not_run)`
+## `loadCdn(path, _do_not_run)`
 
 从 CDN 中加载并运行全局js库, 通常没有任何返回, 程序库会挂载到 window 全局变量中.  
 如果 `_do_not_run` 为 true 则返回文件内容.
@@ -147,37 +147,39 @@ let vue = require('vue');
 loadCdn('element/2.15.1/index.js');
 ```
 
+> 除特殊情况, 应该使用 `require("cdn/...")` 来加载 CDN 中的资源.
 
-#### `popError(title: String, err: Error)`
+
+## `popError(title: String, err: Error)`
 
 尽可能在页面上弹出一个错误提示.
 
 
-#### `Promise xAppState()`
+## `Promise xAppState()`
 
 该方法可以等待直到 app 引导成功/失败, then/cache 会被回调, 以通知监听器.
 
 
-#### `String getFullPath(path)`
+## `String getFullPath(path)`
 
 依照文件路径规则返回 path 路径的完整路径.
 
 
-#### `String withFileName(jsCode, filename)`
+## `String withFileName(jsCode, filename)`
 
 为动态加载的代码设置文件名, 使代码抛出异常时可以正确的设置堆栈中的文件名.
 
 
-#### `debug`
+## `debug`
 
 如果处于调试模式则为 true.
 
 
-#### `url_prefix`
+## `url_prefix`
 
 通常为: `http://host[:port]/xboson/face`
 
 
-#### `ctx_prefix`
+## `ctx_prefix`
 
 通常为: `http://host[:port]/xboson`
