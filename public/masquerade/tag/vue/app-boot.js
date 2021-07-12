@@ -230,13 +230,19 @@
   
   
   function createModule(urlprefix, _parent) {
-    let mod = { 
+    const mod = { 
       name      : '[unknow]',
       exports   : {},
       _cache    : _parent._cache,
       _base     : _parent._base,
       _cdn_path : _parent._cdn_path,
       require,
+    };
+    
+    const fileLoaders = {
+      '.vue'  : javascriptLoader,
+      '.js'   : javascriptLoader,
+      '.css'  : null,
     };
     
     //
@@ -247,30 +253,25 @@
     // 4. 以 '/' 结尾的路径自动添加 `index.js` 文件后缀.
     //
     function require(name, _use_promise, _use_promise_factory, _donot_default) {
-      let rmod;
       let absPath = getFullPath(name, mod._base);
+      let ext = pathmod.extname(absPath);
+      let process = null;
       
-      function process(ok, fail) {
-        rmod = export_modules[name];
-        if (rmod) {
-          console.debug("require from export_modules", name);
-          _pf_ok(rmod);
-          return;
+      if (export_modules[name]) {
+        console.debug("require from export_modules", name);
+        process = cacheLoader(export_modules[name]);
+      }
+      else if (mod._cache[absPath]) {
+        console.debug("require from cache", name);
+        process = cacheLoader(mod._cache[absPath]);
+      }
+      else {
+        let loader = fileLoaders[ext];
+        if (! loader) {
+          throw new Error("No loader can load files: "+ ext);
         }
-        
-        rmod = mod._cache[absPath];
-        if (rmod) {
-          console.debug("require from cache", name);
-          _pf_ok(rmod);
-          return;
-        }
-        
-        loadModule(absPath, _pf_ok, fail, _use_promise || _use_promise_factory);
-        return;
-        
-        function _pf_ok(mod) {
-          ok(_return(name, mod, _donot_default))
-        }
+        console.debug("require from", ext, 'loader');
+        process = loader(name, absPath, _use_promise, _use_promise_factory, _donot_default);
       }
       
       if (_use_promise_factory) {
@@ -289,7 +290,7 @@
     }
     
     
-    function _return(name, mod, _donot_default) {
+    function check_es_module_exports(name, mod, _donot_default) {
       if ((!_donot_default) && mod.exports && mod.exports.__esModule) {
         return mod.exports.default;
       }
@@ -297,29 +298,60 @@
     }
     
     
-    function loadModule(absPath, ok, fail, use_async) {
+    function cacheLoader(mod, _donot_default) {
+      return (ok, fail)=>{
+        ok(check_es_module_exports(name, mod, _donot_default))
+      }
+    }
+    
+    
+    function javascriptLoader(name, absPath, _use_promise, _use_promise_factory, _donot_default) {
+      return (ok, fail)=>{
+        loadModule(absPath, _pf_ok, fail, _use_promise || _use_promise_factory, _create_module);
+        
+        function _pf_ok(mod) {
+          ok(check_es_module_exports(name, mod, _donot_default))
+        }
+        
+        function _create_module(name, code, module) {
+          // let wcode = '(function(module, require, exports, __dirname, __filename) {'+
+          //               code +
+          //             '\n})';
+          let fn;
+          try {
+            // fn = eval(wcode);
+            fn = new Function('module', 'require', 'exports', '__dirname', '__filename', 
+                withFileName(code, absPath));
+            // fn.name = absPath;
+            fn(module, module.require, module.exports, module._base, name);
+          } catch(err) {
+            let msg = ['Load', absPath, 'from', _parent.name, 'fail:', err.message];
+            throw new Error(msg.join(' '));
+          }
+        }
+      }
+    }
+    
+    
+    //
+    // Function _module_creator(name, code, module)
+    //  name - 只有文件名
+    //  code - 加载的代码
+    //  module - 要初始化的模块
+    //
+    function loadModule(absPath, ok, fail, use_async, _module_creator) {
       _load_resource(urlprefix + absPath, null, use_async, function(err, code) {
         if (err) return fail(err);
         
-        // let wcode = '(function(module, require, exports, __dirname, __filename) {'+
-        //               code +
-        //             '\n})';
-        let fn;
-        try {
-          // fn = eval(wcode);
-          fn = new Function('module', 'require', 'exports', '__dirname', '__filename', 
-              withFileName(code, absPath));
-          // fn.name = absPath;
-        } catch(err) {
-          let msg = ['Load', absPath, 'from', _parent.name, 'fail:', err.message];
-          fail(new Error(msg.join(' ')));
-          return;
-        }
         let module = createModule(urlprefix, mod);
         module._base = pathmod.dirname(absPath);
         let name = pathmod.basename(absPath);
         
-        fn(module, module.require, module.exports, module._base, name);
+        try {
+          _module_creator(name, code, module);
+        } catch(err) {
+          return fail(err);
+        }
         
         mod._cache[absPath] = module;
         mod.name = name;
