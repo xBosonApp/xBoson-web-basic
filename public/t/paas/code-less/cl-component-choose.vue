@@ -14,8 +14,8 @@
         <draggable 
           :group="{ name: 'ui-component', pull: 'clone', put: false }" 
           :value="list"
-          chosenClass="clst-chosen" 
-          ghostClass='clst-ghost' 
+          chosenClass="cl-drag-drop-component-chosen" 
+          ghostClass='cl-drag-drop-component-ghost' 
           @start='start'
         >
           <span class='component' 
@@ -82,11 +82,5 @@ function loadLib(name, path) {
 }
 .component:hover {
   border-color: blue;
-}
-.clst-chosen {
-  border: 1px solid #13bc13 !important; background-color: antiquewhite;
-}
-.clst-ghost {
-  color: #fff; background-color: #000;
 }
 </style>

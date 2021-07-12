@@ -8,8 +8,8 @@
     :root-config='rootConfig'
     :class="{'component-container':!isRoot, 'root-component-container': isRoot}"
     animation='100' 
-    chosenClass="clst-chosen" 
-    ghostClass='clst-ghost' 
+    chosenClass="cl-drag-drop-component-chosen" 
+    ghostClass='cl-drag-drop-component-ghost' 
     @add='add' 
     @choose='chooseSelf'
     @update='onUpdate'>
@@ -138,19 +138,12 @@ export default {
 
 <style scoped>
 .component-container {
-  border: 1px dashed #ccc; padding: 8px; margin: 10px 2px;
-  min-height: 30px;
+  border: 1px dashed #ccc; padding: 8px; margin: 10px 2px; min-height: 30px;
 }
 .root-component-container {
   /*border: 1px dashed green;*/ padding: 8px; min-height: 30px;
 }
 .draggable-item-active {
-  border: 1px dashed #3e33e9;
-}
-.clst-chosen {
-  border: 1px solid #13bc13 !important; background-color: antiquewhite;
-}
-.clst-ghost {
-  color: #fff; background-color: #000;
+  border: 1px dashed #3e33e9 !important;
 }
 </style>
