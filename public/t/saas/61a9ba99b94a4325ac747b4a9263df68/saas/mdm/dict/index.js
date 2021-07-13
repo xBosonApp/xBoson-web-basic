@@ -1053,10 +1053,22 @@ var datadicdD_index = (function (zy, $) {
   }
 
   function Init() {
-    init_t1();
-    init_t2();
-    init_t3();
+    $('#tab_container').tabs({
+      active: 1,
+      activate: function (event, ui) {
+        var newIndex = ui.newTab.parent().children().index(ui.newTab);
+        if (newIndex === 0) {
+          init_t1();
+        }
+        else if (newIndex === 1) {
+          // init_t2();
+        }
+        else if (newIndex === 2) {
+          init_t3();
+        }
+      }
+    });
   }
-
+  init_t2();
   return datadicdD_index;
 })(zy, jQuery);

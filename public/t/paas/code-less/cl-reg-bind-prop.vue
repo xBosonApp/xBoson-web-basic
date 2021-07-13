@@ -29,6 +29,10 @@
     <a-form-model ref='ruleForm' :model="form" :label-col="labelCol"
       :wrapper-col="wrapperCol" :rules="rules">
       
+      <a-form-model-item label='属性描述' prop='desc'>
+        <a-input v-model='form.desc' placeholder='配置该属性时的描述文字'/>
+      </a-form-model-item>
+      
       <a-form-model-item label="属性名" prop="name">
         <a-input v-model="form.name" placeholder='必须是英文字母或数字'/>
       </a-form-model-item>
@@ -126,7 +130,7 @@ export default {
       
       rules: {
         name: { required: true, message: '属性名字不能为空', trigger: 'blur' },
-        // desc: { required: true, message: '描述不能为空', trigger: 'blur' },
+        desc: { required: true, message: '描述不能为空', trigger: 'blur' },
         type: { required: true, message: '必须选择一个类型', trigger: 'blur' },
         component: { required: true, message: '必须为属性设置一个配置组件', trigger: 'blur' },
         pctype: { required: true, message: '必须选择一个用途', trigger: 'blur' },
@@ -168,6 +172,7 @@ export default {
     
     defaultForm() {
       return {
+        desc      : '',
         name      : '',
         type      : 1,
         select    : {},
@@ -177,6 +182,23 @@ export default {
         cprops    : {},
         pctype    : 'attribute',
         isExprAttr: null,
+      };
+    },
+    
+    onOpen(p, n) {
+      this.mode = 'edit';
+      this.showEditForm = true;
+      this.form = {
+        name      : n,
+        desc      : p.desc,
+        type      : p.type,
+        select    : p.select,
+        def       : p.def,
+        canDynamic: p.canDynamic,
+        component : p.component,
+        cprops    : p.props,
+        pctype    : p.propsConfig.type,
+        isExprAttr: p.propsConfig.isExprAttr,
       };
     },
     
@@ -194,22 +216,6 @@ export default {
         return JSON.stringify(v);
       }
       return v;
-    },
-    
-    onOpen(p, n) {
-      this.mode = 'edit';
-      this.showEditForm = true;
-      this.form = {
-        name      : n,
-        type      : p.type,
-        select    : p.select,
-        def       : p.def,
-        canDynamic: p.canDynamic,
-        component : p.component,
-        cprops    : p.props,
-        pctype    : p.propsConfig.type,
-        isExprAttr: p.propsConfig.isExprAttr,
-      };
     },
     
     onDelete(p, n) {

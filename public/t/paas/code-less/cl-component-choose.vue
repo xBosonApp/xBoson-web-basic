@@ -6,7 +6,8 @@
     :defaultActiveKey='acted'
     @change="onChange">
     
-    <a-collapse-panel v-for="(c, i) in libs" :key="i" :header="c.title">
+    <a-collapse-panel v-for="(c, i) in libs" :key="i" :header="c.title" 
+        @click.native='onLibClick(c)'>
       
       <div v-for='(list, gname) in c.group' :key='gname'>
         <div class='cl-classify'>{{gname}}</div>
@@ -33,14 +34,13 @@
 
 <script>
 const clib = require("./component-library.js");
-
-loadLib('基础组件', './basic.js');
+const tool = require("./tool.js");
 
 export default {
   data() {
     let data = {
-      sname: '$codeless__defaultActiveComponentIndex',
-      libs: clib.getLibrary(),
+      sname : '$codeless__defaultActiveComponentIndex',
+      libs  : clib.getLibrary(),
     };
     return data;
   },
@@ -56,6 +56,13 @@ export default {
     },
   },
   
+  mounted() {
+    clib.loadStaticLib('基础组件', './basic.js');  
+    clib.loadClassify().catch(this.error).then(()=>{
+      this.libs = clib.getLibrary();
+    });
+  },
+  
   methods : {
     start() {
       this.$store.commit('closeDropTip');
@@ -64,14 +71,19 @@ export default {
     onChange(key) {
       this.acted = key;
     },
+    
+    onLibClick(lib) {
+      if (! this.$store.state.isComponentLoaded[ lib.id ]) {
+        lib.contentLoader().catch(this.error).then(()=>{
+          this.$store.commit('theComponentLoaded', lib.id);
+        });
+      }
+    },
+    
+    error(err) {
+      xv.popError('组件加载', err);
+    },
   },
-}
-
-
-function loadLib(name, path) {
-  require(path, 1).then(function(list) {
-    clib.loadLib(name, list);
-  });
 }
 </script>
 

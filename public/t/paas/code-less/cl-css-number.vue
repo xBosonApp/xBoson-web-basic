@@ -64,7 +64,9 @@ export default {
     },
     send(v, u) {
       let r;
-      if (!v) {
+      if (v === 0) {
+        r = '0px';
+      } else if (!v) {
         r = this.default || 'auto';
       } else {
         r = v + u;

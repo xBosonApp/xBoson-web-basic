@@ -10,6 +10,8 @@ module.exports = new Vuex.Store({
     // 必须对css属性进行逐项复制
     cssClipboard: null, 
     bindContextStyle : {},
+    // { id: boolean }
+    isComponentLoaded : {},
     
     // 方便调试的开关
     test : true,
@@ -73,6 +75,10 @@ module.exports = new Vuex.Store({
     
     clearBindContextStyle(s, fid) {
       delete s.bindContextStyle[fid];
+    },
+    
+    theComponentLoaded(s, id) {
+      s.isComponentLoaded[id] = true;
     },
   },
   
