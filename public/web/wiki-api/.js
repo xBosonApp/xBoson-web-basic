@@ -19,20 +19,59 @@ var menu = $("#menu");
 var content = $('#content');
 var current_select;
 var default_page;
+var contextUrl;
+var faceUrl;
 
-if (Math.random() * 100 <= 1) {
+if (Math.random() * 1000 <= 1) {
   menu.addClass("black_menu");
 }
-load_menu();
+
+get_context_path((ctx, face)=>{
+  contextUrl = ctx;
+  faceUrl = face;
+  load_menu();
+});
+
+//
+// 得到当前上下文 URL 前缀
+// cb - Function(contextUrlPrefix, uiUrlPrefix)
+//
+function get_context_path(cb) {
+  var file = location.href;
+  $.ajax(file, {
+    type : 'head',
+    success(msg, text, x) {
+      let path = x.getResponseHeader('Full-Path');
+      let i = file.indexOf(path);
+      let faceUrl = file.substring(0, i);
+      let j = faceUrl.indexOf('/face');
+      let contextUrl = faceUrl.substring(0, j);
+      cb && cb(contextUrl, faceUrl);
+    },
+  });
+}
+
+
+function load_cdn_list(cb) {
+  let path = '/app/a297dfacd7a84eab9656675f61750078/ZYAPP_IDE/ZYMODULE_UI_IDE/cdnlist';
+  $.get(contextUrl +path, (ret)=>{
+    cb(ret);
+  });
+}
 
 
 function load_menu() {
   var open_page = jump_url_hash() || setPage();
+  console.debug("OPEN", open_page);
 
   $.get('menu.json', function(menu_data) {
     console.debug('load', menu_data)
     menu.html("");
-    menu_data.forEach(function(d) { build_menu(d, null, 0, d.basepath) });
+    menu_data.forEach(function(d) { 
+      build_menu(d, null, 0, d.basepath) ;
+    });
+    
+    load_cdn_list(build_cdn);
   });
   
   //
@@ -43,11 +82,75 @@ function load_menu() {
     if (h) {
       h = h.substr(1);
       let i = h.lastIndexOf('.');
-      if (i <= 0) {
-        h += '.md';
-      }
+      // 不自动添加后缀: 可能导致文件加载失败?
+      // if (i <= 0) {
+      //   h += '.md';
+      // }
       // menu.find('a[file="'+ h +'"]').click();
       return h;
+    }
+  }
+  
+  function build_cdn(ret) {
+    var data = {
+      name : 'CDN',
+      file : 'cdn.md',
+      sub  : [],
+    };
+    ret.data.forEach(f=>{
+      data.sub.push({
+        name : f.name,
+        file : f.path,
+        open : makeCdnPage(f),
+      });
+    });
+    data.sub.sort((a, b)=>{
+      return a.name < b.name ? -1 : (a.name > b.name ? 1 : 0);
+    });
+    
+    build_menu(data, null, 0, 'ui-docs');
+    
+    function makeCdnPage(file) {
+      function render(buf) {
+        var html = markdownit({highlight:highlight}).render(buf.join(''));
+        content.html(html);
+      }
+      
+      function makeVersions(buf, files) {
+        files.forEach(v=>{
+          if (v.isdir) {
+            buf.push('## ver: ', v.name, '\n');
+            buf.push('文件列表\n');
+            v.files.forEach(n=>{
+              buf.push('* ', n, '\n');
+            });
+          }
+        });
+      }
+      
+      function makeReadme(file, buf, cb) {
+        $.get(faceUrl + file, (txt)=>{
+          buf.push('\n', txt);
+          cb(buf);
+        });
+      }
+      
+      return ()=>{
+        console.debug('open', file);
+        var buf = [];
+        if (file.readme) {
+          makeVersions(buf, file.files);
+          makeReadme(file.readme, buf, ()=>{
+            render(buf);
+          });
+        } else {
+          buf.push('# ', file.name, ' on CDN\n');
+          makeVersions(buf, file.files);
+          render(buf);
+        }
+        location.href = '#ui-docs'+ file.path;
+        return false;
+      };
     }
   }
 
@@ -58,7 +161,11 @@ function load_menu() {
       if (ext['absolute']) {
         console.debug("Absolute path", data);
       } else {
-        data.file = basepath +'/'+ data.file;
+        if (data.file[0] == '/') {
+          data.file = basepath + data.file;  
+        } else {
+          data.file = basepath +'/'+ data.file;
+        }
       }
     }
     
@@ -71,7 +178,11 @@ function load_menu() {
     m.attr("file", data.file);
     m.html(data.name);
 
-    if (data.file) {
+    if (typeof data.open == 'function') {
+      m.attr('href', '#'+ data.file);
+      m.click(data.open);
+    }
+    else if (data.file) {
       if (ext['_blank']) {
         m.attr('href', data.file);
         m.attr('target', '_blank');
@@ -89,6 +200,7 @@ function load_menu() {
         });
       }
     }
+    
     m.appendTo(menu);
 
     if (data.sub && data.sub.length > 0) {
