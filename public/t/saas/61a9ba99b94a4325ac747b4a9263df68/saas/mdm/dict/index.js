@@ -252,7 +252,7 @@ var datadicdD_index = (function (zy, $) {
           data: {
             key: {
               name: "nm",
-              title: "nm",
+              title: "cd",
               url: "xUrl" //节点链接的目标 URL 的属性名称
             },
             simpleData: {
@@ -463,7 +463,7 @@ var datadicdD_index = (function (zy, $) {
       var _tnode = treenode;
       while (flg_) {
         if (_tnode.getParentNode()) {
-          _name = _tnode.getParentNode().nm + ">" + _name;
+          _name = _tnode.getParentNode().nm + "->" + _name;
           _tnode = _tnode.getParentNode();
         }
         else {
@@ -471,7 +471,7 @@ var datadicdD_index = (function (zy, $) {
           break;
         }
       }
-      mdms_datadictD_index_tab.find(".title_strong").text(_name + "(" + treenode.cd + ")");
+      $("#mdms_datadictD_index_title").text(_name + "（" + treenode.cd + "）");
     }
 
     //筛选查询
@@ -501,6 +501,10 @@ var datadicdD_index = (function (zy, $) {
         // tree  工具栏显示
         _tree_toolbar_show(true);
         
+        // 字典版本工具栏显示
+        $("#datadict-ver-toolbar").show();
+        
+        // 字典版本下拉select2赋值
         ver_form_init(treenode);
 
       });
@@ -640,6 +644,7 @@ var datadicdD_index = (function (zy, $) {
           mdms_ver(zTreeObj, nodeClick, "i", function (formData) {
 
             //更新tree节点数据
+            if(!nodeClick.dict) nodeClick.dict = [];
             nodeClick.dict.push(formData);
 
             //更新版本selec2
@@ -716,7 +721,8 @@ var datadicdD_index = (function (zy, $) {
       // 字典版本下拉select2 初始化
       verSelect.select2({
         data: verSelectDataArr,
-        placeholder: "请添加版本"
+        placeholder: "请添加版本",
+        width: '100%'
       });
       
       
@@ -764,7 +770,8 @@ var datadicdD_index = (function (zy, $) {
         $datadicGrid.hide();
         
         // 显示删除版本按钮
-        mdms_datadictD_index_tab.find("#ver-delete").hide();
+        mdms_datadictD_index_tab.find("#ver-edit").btnDisable(true);
+        mdms_datadictD_index_tab.find("#ver-delete").btnDisable(true);
 
         // 显示消息
         // $index_no_version_msg.show();
@@ -775,7 +782,8 @@ var datadicdD_index = (function (zy, $) {
       $datadicGrid.show();
       
       // 显示删除版本按钮
-      mdms_datadictD_index_tab.find("#ver-delete").show();
+      mdms_datadictD_index_tab.find("#ver-edit").btnDisable(false);
+      mdms_datadictD_index_tab.find("#ver-delete").btnDisable(false);
 
       // var val = verSelect.val();
 

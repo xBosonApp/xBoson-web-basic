@@ -1,32 +1,32 @@
 <!-- Create By xBoson System -->
 
-<!--字典分类 添加修改-->
-<div class="modal fade" id="datadict_h2h3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+
+<div class="modal fade" id="datadict_ver" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
   data-backdrop="static">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
         </button>
-        <h4 class="modal-title"><span id="datadict_h2h3_title"></span></h4>
+        <h4 class="modal-title"><span id="datadict_ver_title"></span></h4>
       </div>
       <div class="modal-body no-padding">
         <!-- FORM Start -->
-        <form id="datadict_h2h3_form" method="post" onsubmit="return false;" class="smart-form">
+        <form id="datadict_ver_form" method="post" onsubmit="return false;" class="smart-form">
           <fieldset>
             <div class="row">
               <section class="col col-6">
                 <label class="label">类别编码</label>
                 <label class="input has-warning">
-                  <input type="text" name="cd" placeholder="类别编码">
-                  <b id="datadict_h2h3_typecd" class="tooltip tooltip-bottom-right">类别编码为必填项目</b>
+                  <input type="text" name="cd" placeholder="类别编码" readonly>
+                  <b id="datadict_ver_typecd" class="tooltip tooltip-bottom-right">类别编码为必填项目</b>
                 </label>
               </section>
 
               <section class="col col-6">
                 <label class="label">类别名称</label>
                 <label class="input has-warning">
-                  <input type="text" name="nm" placeholder="类别名称">
+                  <input type="text" name="nm" placeholder="类别名称" readonly>
                   <b class="tooltip tooltip-bottom-right">类别名称为必填项目</b>
                 </label>
               </section>
@@ -35,7 +35,7 @@
               <section class="col col-6">
                 <label class="label">父类别编码</label>
                 <label class="input has-warning">
-                  <input type="text" name="parentcd" placeholder="父类别编码" />
+                  <input type="text" name="parentcd" placeholder="父类别编码" readonly/>
                   <b class="tooltip tooltip-bottom-right">父类别编码为必填项目</b>
                 </label>
               </section>
@@ -47,12 +47,6 @@
               <!--</section>-->
             </div>
             <div class="row">
-              <section class="col col-6">
-                <label class="label">快捷码</label>
-                <label class="input">
-                  <input type="text" name="shortkey" placeholder="快捷码">
-                </label>
-              </section>
               <!--<section class="col col-6">-->
               <!--  <label class="label">标准</label>-->
               <!--  <label class="input">-->
@@ -63,20 +57,20 @@
               <!--  </label>-->
               <!--</section>-->
             </div>
-            <div>
-              <section>
-                <label class="label">URL</label>
+            <div class="row">
+              <section class="col col-6">
+                <label class="label">版本</label>
                 <label class="input">
-                  <input type="text" name="url" placeholder="URL" />
+                  <input type="text" name="ver" placeholder="版本" />
                 </label>
               </section>
             </div>
             <div class="row">
               <section class="col col-6">
-                <label class="label">执行版本</label>
+                <label class="label">标准</label>
                 <label class="input">
                   <!--<input type="hidden" name="version" data-type="select2" placeholder="版本" />-->
-                  <input type="hidden" name="ver" data-type="select2" placeholder="执行版本">
+                  <input type="text" name="standard" placeholder="标准">
                 </label>
               </section>
               <section class="col col-6">
@@ -116,58 +110,35 @@
    * flag:i,u
    * submitCB:提交回调函数
    * */
-  function mdms_h2h3(ztreeObj, node, flag, submitCB) {
+  function mdms_ver(ztreeObj, node, flag, submitCB, verSelectVal) {
     var oldData = {}; //修改之前的表单数据
     // zy.cache.initDicts("ZR.0039", function(){
-    // $('#datadict_h2h3_form input[name=standard]').zySelect("ZR.0039", false, {
+    // $('#datadict_ver_form input[name=standard]').zySelect("ZR.0039", false, {
     //   width: '100%'
     // });
-    
-    var $form = $('#datadict_h2h3_form');
-    
-    $("#datadict_h2h3_form input[name=status]").zySelect('ZR.0001', false, {
+    $("#datadict_ver_form input[name=status]").zySelect('ZR.0001', false, {
       width: '100%'
     });
-    
-    // 字典版本下拉
-    var data = [];
-    if(node.dict){
-      data = $.map(node.dict, function (obj) {
-        obj.id = obj.ver;
-        obj.text = obj.ver;
-        return obj;
-      })
-      
-    }
-    $form.find("[name=ver]").select2({
-      data: data,
-      placeholder: "请选择执行版本",
-      width: '100%'
-    });
-    
-    
 
     if (flag == 'i') {
-      $("#datadict_h2h3_title").text('添加');
+      $("#datadict_ver_title").text('添加');
       //状态默认值
-      $("#datadict_h2h3_form input[name=status]").select2("val", '1');
-      //父类别编码默认值
-      $("#datadict_h2h3_form input[name=parentcd]").val(node.cd);
-      $('#datadict_h2h3_form input[name=parentcd]').attr('readonly', true);
-      //数据库表默认值
-      // $("#datadict_h2h3_form input[name=datatable]").val('sys_mdm002');
-      //默认国际版本为1.0
-      $("#datadict_h2h3_form input[name=version]").val('1.0');
-      //默认标准选项为平台
-      // $("#datadict_h2h3_form input[name=standard]").select2("val", '02');
+      $("#datadict_ver_form input[name=status]").select2("val", '1');
+      
+      $('#datadict_ver_form').json2form({
+        cd: node.cd,
+        nm: node.nm,
+        parentcd: node.parentcd
+      });
+      
     } else if (flag == 'u') {
-      $("#datadict_h2h3_title").text('修改');
-      $('#datadict_h2h3_form').formDisable(true);
+      $("#datadict_ver_title").text('修改');
+      $('#datadict_ver_form').formDisable(true);
       // 铺数据
       // var callback = function(msg) {
-      //   $('#datadict_h2h3_form').formDisable(false);
+      //   $('#datadict_ver_form').formDisable(false);
       //   if (msg) {
-      //     $('#datadict_h2h3_form').json2form(msg.result[0]);
+      //     $('#datadict_ver_form').json2form(msg.result[0]);
       //     oldData=msg.result[0];
       //   }
       // };
@@ -175,18 +146,27 @@
       // zy.g.am.mod = 'datadict';
       // zy.net.get("api/gettypeupt", callback, {typecd:node.typecd});
       
-      $('#datadict_h2h3_form').formDisable(false);
-      $('#datadict_h2h3_form').json2form(node);
-
-      $('#datadict_h2h3_form input[name=cd]').attr('readonly', true);
+      $('#datadict_ver_form').formDisable(false);
+      $('#datadict_ver_form').json2form(node);
       
-      $form.find("[name=ver]").select2("val",node.ver);
-      // $('#datadict_h2h3_form input[name=parentcd]').attr('readonly', true);
-      $('#datadict_h2h3_typecd').remove();
-    }
-    $('#datadict_h2h3').modal('show');
+      var vers = $.map(node.dict,function(v){
+        if(v.ver == verSelectVal) return v;
+      })
+      
+      if(vers.length == 0){
+        zy.log("请选择要修改的版本",node.dict, verSelectVal);
+        return;
+      }
+      
+      $('#datadict_ver_form').json2form(vers[0]);
 
-    $("#datadict_h2h3_form").validate({
+      $('#datadict_ver_form input[name=ver]').attr('readonly', true);
+      // $('#datadict_ver_form input[name=parentcd]').attr('readonly', true);
+      $('#datadict_ver_typecd').remove();
+    }
+    $('#datadict_ver').modal('show');
+
+    $("#datadict_ver_form").validate({
       // Rules for form validation
       rules: {
         cd: {
@@ -213,60 +193,53 @@
       },
       // 验证成功后保存
       submitHandler: function (form) {
+        
+        var data = $('#datadict_ver_form').form2json();
+        
         //添加
         if (flag == 'i') {
           //增加类别编码验证
-          // var _typecd_chk=$("#datadict_h2h3_form input[name=typecd]").val();
+          // var _typecd_chk=$("#datadict_ver_form input[name=typecd]").val();
           // if(_typecd_chk.indexOf('.')!=(-1)){
           //   zy.ui.msg('提示信息：','类别编码不可包含\'.\'','w');
           //   return;
           // }
           var callback = function (msg) {
-            $('#datadict_h2h3_form').formDisable(false);
+            $('#datadict_ver_form').formDisable(false);
             if (msg) {
-              $('#datadict_h2h3').modal('hide');
+              $('#datadict_ver').modal('hide');
               zy.ui.msg("提示信息：", "保存成功！", "s");
               // if(node.children){
-              var data = $('#datadict_h2h3_form').form2json();
-              // data.optype = '1';
-              ztreeObj.addNodes(node, data);
+              
+              
               // }else{
               //   zy.log('!node.children');
               //   node.isParent = true;
               //   //异步展开树节点
               //   ztreeObj.expandNode(node, true, false, true, true);
               // }
-              submitCB && submitCB(); //回调
+              submitCB && submitCB(data); //回调
             }
           };
           zy.g.am.app = '78cf8922c5ea4afa9dae8970215ea796';
           zy.g.am.mod = 'dict';
-          zy.net.post("api/dicts", callback, $('#datadict_h2h3_form').serialize() + '&op_type=add');
-          $('#datadict_h2h3_form').formDisable(true);
+          zy.net.post("api/dict_ver", callback, $('#datadict_ver_form').serialize() + '&op_type=add');
+          $('#datadict_ver_form').formDisable(true);
         }
         //修改
         else if (flag == 'u') {
           var callback = function (msg) {
-            $('#datadict_h2h3_form').formDisable(false);
+            $('#datadict_ver_form').formDisable(false);
             if (msg) {
-              $('#datadict_h2h3').modal('hide');
-              //更新节点
-              var tmpNode = ztreeObj.getNodeByParam('cd', node.cd);
-              Object.assign(tmpNode, $('#datadict_h2h3_form').form2json());
-              // tmpNode.typenm = msg.data.typenm;
-              // tmpNode.version = msg.data.version;
-              // tmpNode.nodenm = msg.data.typecd+' '+msg.data.typenm+' '+msg.data.version;
-              // tmpNode.shownm = msg.data.shownm;
-              // tmpNode.datatable = msg.data.datatable;
-              // tmpNode.uri = msg.data.uri;
-              ztreeObj.updateNode(tmpNode);
-              submitCB && submitCB(); //回调
+              $('#datadict_ver').modal('hide');
+              
+              submitCB && submitCB(data); //回调
               zy.ui.msg("提示信息：", "保存成功！", "s");
             }
           };
           zy.g.am.app = '78cf8922c5ea4afa9dae8970215ea796';
           zy.g.am.mod = 'dict';
-          zy.net.post("api/dicts", callback, $('#datadict_h2h3_form').serialize() + "&op_type=edit");
+          zy.net.post("api/dict_ver", callback, $('#datadict_ver_form').serialize() + "&op_type=edit");
         }
       },
       // Do not change code below

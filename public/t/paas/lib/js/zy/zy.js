@@ -131,6 +131,25 @@ zy.check_xboson_system = function() {
   zy.ui.msg('错误', '无法(通过路径)判断系统类型', 'e');
 };
 
+//
+// 得到当前上下文 URL 前缀
+// cb - Function(contextUrlPrefix, uiUrlPrefix)
+//
+zy.get_context_path = function(cb) {
+  var file = location.href;
+  $.ajax(file, {
+    type : 'head',
+    success(msg, text, x) {
+      let path = x.getResponseHeader('Full-Path');
+      let i = file.indexOf(path);
+      let faceUrl = file.substring(0, i);
+      let j = faceUrl.indexOf('/face');
+      let contextUrl = faceUrl.substring(0, j);
+      cb && cb(contextUrl, faceUrl);
+    },
+  });
+};
+
 // 对 http 返回值做兼容
 zy.fix_xboson_data = function(msg) {
   if (! zy.isXBosonSystem) 

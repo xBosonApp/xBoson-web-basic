@@ -304,6 +304,7 @@ function aliasName(name) {
 }
 
 
+// 扩展参数用逗号分隔
 function extAttribute(a) {
   if (!a) return {};
   var ext = a.split(',');

@@ -11,6 +11,12 @@
       background-image: -linear-gradient(top, #356E35 0, #607d8b 100%);
       font-size: 12px;
   }
+  div.dataTables_filter{
+    position: static;
+  }
+  div.dataTables_length{
+    position: static;
+  }
 </style>
 <link href="../../paas/lib/js/plugin/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
 <link rel="stylesheet" href="../../paas/lib/js/plugin/datatables/examples/resources/bootstrap/3/dataTables.bootstrap.css" type="text/css" media="all" />
@@ -19,7 +25,7 @@
 <!-- Widget ID (each widget will need unique ID)-->
 <div id="mdms_datadictD_index" class="jarviswidget jarviswidget-color-green" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-custombutton="false" data-widget-sortable="false">
 	<header>
-		<h2>值域代码管理</h2>
+		<h2 id="mdms_datadictD_index_title">值域代码管理</h2>
     <div class="widget-toolbar"></div>
 	</header>
 	<!-- widget div-->
@@ -121,29 +127,38 @@
                 	</div>
                 </div>
                 <div id="mdms_datadictD_zydm_container_NOTUSE_NOTHIDE" class="col-xs-8">
-                  <div id="datadict-grid" class="well" style="display:none">
+                  <div class="well">
                     <fieldset>
   							    	<legend style="font-size:12px;">
-                        <ul class="btn-toolbar" style="padding-inline-start: 0px;">
-  												<li class="btn-group">
-                            <button id="ver-add" type="button" class="btn btn-success btn-xs">&emsp;<i class="fa fa-magic"></i>添加版本</button>
-                            <button id="ver-edit" type="button" class="btn btn-success btn-xs" disabled="disabled">&emsp;<i class="fa fa-edit"></i>修改版本</button>
-                            <button id="ver-delete" type="button" class="btn btn-success btn-xs" disabled="disabled">&emsp;<i class="fa fa-trash-o"></i>删除版本</button>
-  												</li>
-  												<li class="btn-group">
-                            <div id="ver-select"></div>
-  												</li>
-  											</ul>
-                        <div name="datadict_grid_toolbar" class="btn-group">
-                          <button id="mdms_datadictD_zydm_add" class="btn btn-success btn-xs" type="submit">&emsp;<i class="fa fa-magic"></i>&emsp;添 加&emsp;</button>
-                          <button id="mdms_datadictD_zydm_edit" class="btn btn-success btn-xs" type="submit" disabled="disabled">&emsp;<i class="fa fa-edit"></i>&emsp;修 改&emsp;</button>
-                          <button id="mdms_datadictD_zydm_delete" class="btn btn-success btn-xs" disabled="disabled">&emsp;<i class="fa  fa-trash-o "></i>&emsp;注 销&emsp;</button>
-                          <button id="mdms_datadictD_zydm_export" class="btn btn-success btn-xs">&emsp;<i class="glyphicon glyphicon-export  "></i>&emsp;导出明细&emsp;</button>
+  							    	  <div id="datadict-ver-toolbar"  style="display:none">
+  							    	    <ul class="btn-toolbar " style="padding-inline-start: 0px;">
+    												<li class="btn-group">
+                              <button id="ver-add" type="button" class="btn btn-success btn-xs">&emsp;<i class="fa fa-magic"></i>添加版本</button>
+                              <button id="ver-edit" type="button" class="btn btn-success btn-xs" disabled="disabled">&emsp;<i class="fa fa-edit"></i>修改版本</button>
+                              <button id="ver-delete" type="button" class="btn btn-success btn-xs" disabled="disabled">&emsp;<i class="fa fa-trash-o"></i>删除版本</button>
+    												</li>
+    												<li class="btn-group">
+    												  版本：
+    												</li>
+    												<li class="btn-group" style="width: 15%;">
+                              <div id="ver-select"></div>
+    												</li>
+    											</ul>
+  							    	  </div>
+                        
+                        <div id="datadict-grid"  style="display:none">
+                          <div name="datadict_grid_toolbar" class="btn-group">
+                            <button id="mdms_datadictD_zydm_add" class="btn btn-success btn-xs" type="submit">&emsp;<i class="fa fa-magic"></i>&emsp;添 加&emsp;</button>
+                            <button id="mdms_datadictD_zydm_edit" class="btn btn-success btn-xs" type="submit" disabled="disabled">&emsp;<i class="fa fa-edit"></i>&emsp;修 改&emsp;</button>
+                            <button id="mdms_datadictD_zydm_delete" class="btn btn-success btn-xs" disabled="disabled">&emsp;<i class="fa  fa-trash-o "></i>&emsp;注 销&emsp;</button>
+                            <button id="mdms_datadictD_zydm_export" class="btn btn-success btn-xs">&emsp;<i class="glyphicon glyphicon-export  "></i>&emsp;导出明细&emsp;</button>
+                          </div>
+                          <div class="pull-right"><b name="total_count"></b></div>
+                          <h1></h1>
+                          <div id="mdms_datadictD_zydm_table"></div>
+                          <table id="mdm_dict_table" class="table table-bordered table-striped"></table>
                         </div>
-                        <div class="pull-right"><b name="total_count"></b></div>
-                        <h1></h1>
-                        <div id="mdms_datadictD_zydm_table"></div>
-                        <table id="mdm_dict_table" class="table table-bordered table-striped"></table>
+                        
                       </legend>
                     </fieldset>
 

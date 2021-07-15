@@ -551,9 +551,9 @@ api_view = (function(){
       async: false,
       timeout: 10000,
       cache: false,
-      dataType: "jsonp",
-      jsonp: "cb",
-      jsonpCallback: "cb" + zy.tool.random(),
+      // dataType: "jsonp",
+      // jsonp: "cb",
+      // jsonpCallback: "cb" + zy.tool.random(),
       data: param,
       success: function (msg) {
         showResult(msg);

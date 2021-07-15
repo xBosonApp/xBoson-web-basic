@@ -57,7 +57,7 @@
         </ul>
       </div>
     </div>
-    <div name="ws_api_v_tree" class="widget-toolbar button-icon jarviswidget-custom-btn" data-placement="bottom" role="menu" title="显示/隐藏服务列表">
+    <div name="ws_api_v_tree" class="widget-toolbar button-icon jarviswidget-custom-btn" data-placement="bottom" role="menu" title="显示/隐藏租户列表">
       <i class="glyphicon glyphicon-folder-open"></i>
     </div>
   </header>
@@ -78,22 +78,36 @@
           <legend>
             <ul class="btn-toolbar" style="padding-inline-start: 0px;">
               <li class="btn-group">
-                <button id="tree_filter" type="button" class="btn btn-default" title="筛选所有代码">
+                <button id="tree_filter" type="button" class="btn btn-default" title="筛选所有租户">
                   <i class="fa fa-search" style="color:#03a9f4"></i>
                 </button>
-                <button id="tree_download" type="button" class="btn btn-default" title="代码导出">
-                  <i data="code" class="fa fa-download" style="color:#ea8c01"></i>
-                </button>
-                <button id="tree_upload" type="button" class="btn btn-default" title="代码导入">
-                  <i data="code" class="fa fa-upload" style="color:#2196f3"></i>
-                </button>
+                <button id="node-add" type="button" class="btn btn-default" title="添加租户">
+								  &emsp;<i class="fa fa-plus-circle txt-color-teal"></i>&emsp;
+								</button>
+								<button id="node-edit" type="button" class="btn btn-default" title="修改租户">
+								  &emsp;<i class="fa fa-edit txt-color-purple"></i>&emsp;
+								</button>
+								<button id="node-delete" type="button" class="btn btn-default" title="删除租户">
+								  &emsp;<i class="fa fa-trash-o txt-color-red"></i>&emsp;
+								</button>
               </li>
-              <li class="btn-group">
-                <button id="tree_refresh" type="button" class="btn btn-default" title="刷新目录">
-                  <i class="fa fa-refresh" style="color:#4caf50"></i>
-                </button>
-              </li>
+              <!--<li class="btn-group">-->
+              <!--  <button id="tree_refresh" type="button" class="btn btn-default" title="刷新目录">-->
+              <!--    <i class="fa fa-refresh" style="color:#4caf50"></i>-->
+              <!--  </button>-->
+              <!--</li>-->
             </ul>
+            
+            <form class="smart-form" style="display:none" name="tenant-filter-form" onsubmit="return false;">
+  						<div class="input-group">
+  							 <span class="input-group-addon">内容</span>
+  						  <input class="form-control" type="text" name="keywords" placeholder="名称,昵称,地址,管理员ID,说明">
+  						</div>
+  						<footer>
+  							 <button type="button" class="btn btn-default" id="filter_qx">取消</button>
+								<button type="button" class="btn btn-primary" id="filter_sx">筛选</button>
+  						</footer>
+				    </form>
           </legend>
           <ul class="ztree"></ul>
         </div>

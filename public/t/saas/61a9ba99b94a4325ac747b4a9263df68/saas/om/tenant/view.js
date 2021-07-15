@@ -128,15 +128,15 @@ api_view = (function(){
 
   //param 画面元素初始化（请求参数画面元素）
   function ParamInit(){
-    loadScript("lib/js/plugin/x-editable/moment.min.js", loadMockJax);
+    loadScript("../../paas/lib/js/plugin/x-editable/moment.min.js", loadMockJax);
     function loadMockJax() {
-      loadScript("lib/js/plugin/x-editable/jquery.mockjax.min.js", loadXeditable);
+      loadScript("../../paas/lib/js/plugin/x-editable/jquery.mockjax.min.js", loadXeditable);
     }
     function loadXeditable() {
-      loadScript("lib/js/plugin/x-editable/x-editable-new.min-n.js", loadTypeHead);
+      loadScript("../../paas/lib/js/plugin/x-editable/x-editable-new.min-n.js", loadTypeHead);
     }
     function loadTypeHead() {
-      loadScript("lib/js/plugin/typeahead/typeahead.bundle.min.js", function(){
+      loadScript("../../paas/lib/js/plugin/typeahead/typeahead.bundle.min.js", function(){
         $('#ws_api_m_api_param_addkey').click(function () {
           newlabel();
         });
@@ -514,6 +514,7 @@ api_view = (function(){
   function Ajax(url,param){
     function showResult(msg){
       if (typeof msg == 'string') {
+        zy.log(msg);
         msg = JSON.parse(msg);
       }
       msg = zy.fix_xboson_data(msg);
@@ -551,9 +552,9 @@ api_view = (function(){
       async: false,
       timeout: 10000,
       cache: false,
-      dataType: "jsonp",
-      jsonp: "cb",
-      jsonpCallback: "cb" + zy.tool.random(),
+      // dataType: "jsonp",
+      // jsonp: "cb",
+      // jsonpCallback: "cb" + zy.tool.random(),
       data: param,
       success: function (msg) {
         showResult(msg);
