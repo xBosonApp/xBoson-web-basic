@@ -48,6 +48,7 @@ function newInstance(root, component) {
     props,
     propsConfig,
     cid         : component.id,
+    clid        : component.clid,
     txt         : component.removeTxt ?'' :component.txt,
     removeTxt   : component.removeTxt,
     component   : component.component,

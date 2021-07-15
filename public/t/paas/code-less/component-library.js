@@ -16,6 +16,8 @@ module.exports = {
   findGroups,
   loadStaticLib,
   loadClassify,
+  loadComponent : _load_component,
+  makeComponentPluginLoader,
 };
 
 
@@ -70,14 +72,20 @@ function fixId(list) {
 }
 
 
-//
-// list - { id: { id, txt, component, ...} }
-//
-function loadLib(id, list, _replace_exists) {
+function _find_lib(id) {
   let lib = componentLite.find((lib)=> lib.id == id);
   if (!lib) {
     throw new Error("组件库未设置 ID:"+ id);
   }
+  return lib;
+}
+
+
+//
+// list - { id: { id, txt, component, ...} }
+//
+function loadLib(id, list, _replace_exists) {
+  let lib = _find_lib(id);
   
   for (let n in list) {
     let g = lib.group[ list[n].groupName ];
@@ -93,6 +101,7 @@ function loadLib(id, list, _replace_exists) {
       throw new Error("组件 "+ n +'冲突, 在 '+ lib.title);
     }
     componentAll[n] = list[n];
+    componentAll[n].clid = id;
   }
 }
 
@@ -108,11 +117,6 @@ function findGroups(list) {
     if (!g) {
       g = group[gname] = [];
     }
-    
-    // g.push({
-    //   id : i,
-    //   txt: item.txt,
-    // });
   }
   return group;
 }
@@ -129,6 +133,16 @@ function getComponent(id) {
     throw new Error("component not found "+ id);
   }
   return c;
+}
+
+
+function makeComponentPluginLoader(id, targer) {
+  let c = getComponent(id);
+  let p = targer || {};
+  for (let n in c.plugins) {
+    Vue.set(p, n, require(c.plugins[n], 1, 1));
+  }
+  return p;
 }
 
 
@@ -161,6 +175,28 @@ function loadClassify() {
 }
 
 
+function _load_component(clid) {
+  return _find_lib(clid).contentLoader();
+}
+
+
+function _load_requires(clid) {
+  return new Promise((ok, fail)=>{
+    let lib = _find_lib(clid);
+    let i = -1;
+    next();
+    
+    function next() {
+      if (++i < lib.requires.length) {
+        require(lib.requires[i], 1).catch(fail).then(next);
+      } else {
+        ok();
+      }
+    }
+  });
+}
+
+
 function loadComponent(ok, fail, clid) {
   tool.api('register', 'list_c_bind', {clid}, (err, ret)=>{
     if (err) return fail(err);
@@ -172,6 +208,6 @@ function loadComponent(ok, fail, clid) {
     });
     loadLib(clid, cs);
     
-    ok();
+    _load_requires(clid).then(ok).catch(fail);
   });
 }

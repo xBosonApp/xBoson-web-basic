@@ -65,6 +65,12 @@ export default {
   props: ['config'],
   components,
   
+  computed: {
+    componentCfg() {
+      return clib.getComponent(this.config.cid);
+    },
+  },
+  
   methods: {
     getComponentName(p) {
       if (p.type == 7) {
@@ -89,11 +95,7 @@ export default {
     },
     
     getComponentProps() {
-      return this.getComponent().props;
-    },
-    
-    getComponent() {
-      return clib.getComponent(this.config.cid);
+      return this.componentCfg.props;
     },
     
     _getSelectOpt(select) {
@@ -109,7 +111,7 @@ export default {
     
     // 返回的所有属性绑定到创建的组件上, 来自组件定义数据
     getOption(name) {
-      let p = this.getComponent().props[name];
+      let p = this.componentCfg.props[name];
       // 1:字符串, 2:整数, 3:选项select属性, 4:字符串,并且带有select选项, 
       // 5:来自变量, 6:图标选择, 7:自定义插件, 8:事件专用
       switch (p.type) {

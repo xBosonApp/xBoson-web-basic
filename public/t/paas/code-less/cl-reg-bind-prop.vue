@@ -49,11 +49,11 @@
         <a-input v-model="form.def" placeholder='根据值类型的不同设置正确的默认值'/>
       </a-form-model-item>
       
-      <a-form-model-item label='可以为动态属性'>
+      <a-form-model-item label='可以为动态属性' v-if='form.type != 7'>
         <a-switch checked-children="动态属性" un-checked-children="总是常量" v-model='form.canDynamic'/>
       </a-form-model-item>
       
-      <a-form-model-item label='常量值类型解析方式'>
+      <a-form-model-item label='常量值类型解析方式' v-if='form.type != 7 && !form.canDynamic'>
         <a-switch checked-children="表达式方式" un-checked-children="总是字符串" v-model='form.isExprAttr'/>
       </a-form-model-item>
       
@@ -258,6 +258,7 @@ export default {
     },
     
     parmHead() {
+      this.$store.commit('theComponentChanged', this.data.clib._id);
       return {
         clid : this.data.clib._id,
         _id  : this.data.bind._id,

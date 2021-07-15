@@ -26,24 +26,42 @@
           :labelCol='{ span: 0 }' 
           :wrapperCol='{ span: 24 }'>
         
-        <div v-for='(r, i) in form.groups' class='clibitem clibitem2'>
-          <a-input v-model='form.groups[i]' placeholder='分组名'/>
-          <a-button icon='delete' @click='form.groups.splice(i, 1)'/>
-        </div>
+        <draggable 
+          :group="{name:'reg-clib-groups'}" 
+          :list="form.groups"
+          animation='100' 
+          handle=".handle"
+        >
+          <div v-for='(r, i) in form.groups' class='clibitem'>
+            <a-input v-model='form.groups[i]' placeholder='分组名'/>
+            <a-button icon='delete' @click='form.groups.splice(i, 1)'/>
+            <a-button icon='drag' class='handle'/>
+          </div>
+        </draggable>
+        
         <cl-add-button icon='add' title='增加分组' @click='form.groups.push("")'/>
       </a-form-model-item>
       
       <a-form-model-item 
-          label='外部依赖项文件' 
+          label='外部依赖文件' 
           prop='requires'
           :labelCol='{ span: 6 }' 
           :wrapperCol='{ span: 18 }'>
         
-        <div v-for='(r, i) in form.requires' class='clibitem'>
-          <a-input v-model='form.requires[i]' @input='pathChanged[i] = 1' placeholder='文件路径'/>
-          <a-button icon='delete' @click='form.requires.splice(i, 1)'/>
-          <a-button icon='question' @click='help = true'/>
-        </div>
+        <draggable 
+          :group="{name:'reg-clib-requires'}" 
+          :list="form.requires"
+          animation='100' 
+          handle=".handle"
+        >
+          <div v-for='(r, i) in form.requires' class='clibitem clibitem4'>
+            <a-input v-model='form.requires[i]' @input='pathChanged[i] = 1' placeholder='文件路径'/>
+            <a-button icon='delete' @click='form.requires.splice(i, 1)'/>
+            <a-button icon='question' @click='help = true'/>
+            <a-button icon='drag' class='handle'/>
+          </div>
+        </draggable>
+        
         <cl-add-button icon='add' title='增加依赖文件' @click='form.requires.push("")'/>
       </a-form-model-item>
     </div>
@@ -170,6 +188,8 @@ export default {
 <style scoped>
 .clibitem, .g2 { display: grid; grid-template-columns: 1fr auto auto; gap: 2px; margin-top: 2px; }
 .clibitem2 { grid-template-columns: 1fr auto; }
+.clibitem4 { grid-template-columns: 1fr auto auto auto; }
 .g2 { grid-template-columns: 1fr 1fr; }
-.gi { grid-template-columns: 4fr 6fr 8fr 6fr; }
+.gi { grid-template-columns: 4fr 4fr 10fr 6fr; }
+.handle { cursor: grab; }
 </style>

@@ -10,8 +10,8 @@
     </a-form-model-item>
     
     <a-form-model-item label="是否渲染组件名">
-      <a-switch checked-children="渲染" 
-        un-checked-children="不渲染" 
+      <a-switch checked-children="不渲染" 
+        un-checked-children="渲染" 
         v-model='form.removeTxt' />
     </a-form-model-item>
     
@@ -101,7 +101,7 @@ export default {
       
       form : {
         txt: '',
-        removeTxt: true,
+        removeTxt: false,
         component: '',
         helpTag: '',
         style: {},
@@ -149,16 +149,15 @@ export default {
     submitCreate() {
       tool.api('register', 'bind_component', this.getApiParm(), (err, ret)=>{
         if (err) return this.next(err);
-        // this.$emit('previous', ret);
-        this.next(null, ret);
+        ret.txt = this.form.txt;
+        this.next(null, ret, {bind:ret});
       });
     },
     
     submitEdit() {
       tool.api('register', 'bind_edit', this.getApiParm(), (err, ret)=>{
         if (err) return this.next(err);
-        // this.$emit('previous', ret);
-        this.next(null, ret);
+        this.next(null, ret, {bind:ret});
       });
     },
 

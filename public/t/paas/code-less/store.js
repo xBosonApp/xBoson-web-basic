@@ -15,7 +15,7 @@ module.exports = new Vuex.Store({
     
     // 方便调试的开关
     test : true,
-    testOpenFile : '8N-AODgVT8y9uNKDGRSRLA',
+    testOpenFile : 'HoL5yZAFT7ao6XRuvbPFwQ',
   },
   
   mutations: {
@@ -77,8 +77,42 @@ module.exports = new Vuex.Store({
       delete s.bindContextStyle[fid];
     },
     
-    theComponentLoaded(s, id) {
-      s.isComponentLoaded[id] = true;
+    theComponentLoaded(s, clid) {
+      s.isComponentLoaded[clid] = true;
+    },
+    
+    theComponentChanged(s, clid) {
+      s.isComponentLoaded[clid] = false;
+    },
+    
+    // parm[clid, cb]
+    loadComponentsFromLibrary(s, parm) {
+      let clid = Array.isArray(parm) ? parm[0] : parm;
+      let cb   = Array.isArray(parm) ? parm[1] : null;
+      
+      if (!s.isComponentLoaded[clid]) {
+        s.isComponentLoaded[clid] = true;
+        this.commit('forceLoadComponentsFromLibrary', parm);
+      } else {
+        console.debug("component library", clid, 'in cache');
+        cb && cb();
+      }
+    },
+    
+    // parm[clid, cb]
+    forceLoadComponentsFromLibrary(s, parm) {
+      let clid = Array.isArray(parm) ? parm[0] : parm;
+      let cb   = Array.isArray(parm) ? parm[1] : null;
+      let lib  = require("./component-library.js");
+      
+      lib.loadComponent(clid).catch(err=>{
+        s.isComponentLoaded[clid] = false;
+        xv.popError('组件加载失败', err);
+        cb && cb(err);
+      }).then(()=>{
+        s.isComponentLoaded[clid] = true;
+        cb && cb(null);
+      });
     },
   },
   

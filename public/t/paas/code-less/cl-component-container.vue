@@ -45,6 +45,10 @@ export default {
     }
   },
   
+  mounted() {
+    this.loadDepsComponentLib();
+  },
+  
   computed: {
     bindClass() {
       for (let i=0; i<this.nestedList.length; ++i) {
@@ -102,8 +106,7 @@ export default {
     initComonent(id, index) {
       let component = clib.getComponent(id);
       if (component.plugins) {
-        //TODO: 将插件加载到局部组件库
-        tool.loadPlugins(component.plugins);
+        this.load_plugin(id)();
       }
       
       let instance = crole.createInstance(this.rootConfig, component);
@@ -131,7 +134,29 @@ export default {
     getComponentName(instance) {
       if (!instance.isInstance) return 'div'; // 第一次渲染, 元素没有改变
       return instance.helpTag || instance.component;
-    }
+    },
+    
+    loadDepsComponentLib() {
+      for (let i=0; i<this.nestedList.length; ++i) {
+        let item = this.nestedList[i];
+        let loader = this.load_plugin(item.cid);
+        
+        if (item.clid) {
+          this.$store.commit('loadComponentsFromLibrary', [item.clid, loader]);
+        } else {
+          console.warn("Component not has libraryID attribute");
+          loader();
+        }
+      }
+    },
+    
+    // 加载设计时插件, 返回一个加载器函数.
+    load_plugin(cid) {
+      return ()=>{
+        clib.makeComponentPluginLoader(cid, this.$options.components);
+        this.$forceUpdate();
+      };
+    },
   }
 }
 </script>

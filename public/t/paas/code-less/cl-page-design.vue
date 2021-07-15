@@ -59,7 +59,8 @@ export default {
   },
   
   mounted() {
-    this.loadPlugins();
+    //注释掉: TODO:将插件加载到局部
+    // this.loadPlugins(); 
     this.loadContextStyles();
   },
   
@@ -72,6 +73,7 @@ export default {
       return this.file.content.list.length == 0 && this.$store.state.showDropTip;
     },
     
+    //TODO: 删除
     loadPlugins() {
       let p = this.file.content.root.plugins;
       if (p) {

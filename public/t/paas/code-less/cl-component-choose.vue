@@ -7,7 +7,7 @@
     @change="onChange">
     
     <a-collapse-panel v-for="(c, i) in libs" :key="i" :header="c.title" 
-        @click.native='onLibClick(c)'>
+        @click.native.once='onLibClick(c)'>
       
       <div v-for='(list, gname) in c.group' :key='gname'>
         <div class='cl-classify'>{{gname}}</div>
@@ -59,7 +59,7 @@ export default {
   mounted() {
     clib.loadStaticLib('基础组件', './basic.js');  
     clib.loadClassify().catch(this.error).then(()=>{
-      this.libs = clib.getLibrary();
+      this.libs = clib.getLibrary(); // 更新
     });
   },
   
@@ -73,11 +73,7 @@ export default {
     },
     
     onLibClick(lib) {
-      if (! this.$store.state.isComponentLoaded[ lib.id ]) {
-        lib.contentLoader().catch(this.error).then(()=>{
-          this.$store.commit('theComponentLoaded', lib.id);
-        });
-      }
+      this.$store.commit('loadComponentsFromLibrary', lib.id);
     },
     
     error(err) {

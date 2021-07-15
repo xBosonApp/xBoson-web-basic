@@ -12,12 +12,23 @@
 </template>
 
 <script>
+const clib = require("./component-library.js");
+
 export default {
-  props: ['name', 'desc', 'componentName', 'bind', 'props', 'propsConfig'],
+  props: ['name', 'desc', 'componentName', 'bind', 'props', 'propsConfig', 'cid'],
+  
+  mounted() {
+    this.mountPlugin();
+  },
   
   methods: {
     onChange() {
       this.$emit('change');
+    },
+    
+    mountPlugin() {
+      clib.makeComponentPluginLoader(this.cid, this.$options.components);
+      this.$forceUpdate();
     },
   },
 }

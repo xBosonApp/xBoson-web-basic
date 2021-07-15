@@ -4,7 +4,7 @@
   <a-form-model :model="opt">
     <a-form-model-item label="初始值">
       <a-tooltip placement="bottom" title='无效值' :visible='showFail' @blur='checkValue'>
-        <a-input v-model="opt.def" type="textarea"/>
+        <a-input v-model="opt.def" type="textarea" style='height: 35vh'/>
       </a-tooltip>
     </a-form-model-item>
     

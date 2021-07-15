@@ -156,9 +156,11 @@ export default {
       this.setStage('default');
     },
     
-    nextStep(err, ret) {
+    // onChange(name, retData, merginData)
+    nextStep(err, ret, margin) {
       if (err) {
         this.message = err.message;
+        console.error(err);
         return;
       } else {
         this.message = null;
@@ -168,6 +170,9 @@ export default {
       if (this.currentState.step+1 < this.currentState.stepInf.length) {
         this.currentState.step++;
         this.currentState.data.ret = ret;
+        if (margin) {
+          this.shallowCopy(this.currentState.data, margin);
+        }
         return true;
       }
       // 重新回到最初的画面?

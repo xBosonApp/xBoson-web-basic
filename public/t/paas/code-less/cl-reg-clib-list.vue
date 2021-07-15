@@ -57,6 +57,7 @@ export default {
       this.$emit("change", "editCLib", {
         isModify : true,
         clib,
+        ret : null,
       });
     },
     
