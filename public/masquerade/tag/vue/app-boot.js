@@ -51,8 +51,8 @@
   
   function defineModule(name, module) {
     if (!name) throw new Error("must have name");
-    if (!module) throw new Error("must have module");
-    if (!module.exports) throw new Error("must have module.exports");
+    if (!module) throw new Error("must have module on ["+ name +']');
+    if (!module.exports) throw new Error("must have module.exports on ["+ name +']');
     if (!module.name) module.name = name;
     export_modules[name] = module;
   }
@@ -95,6 +95,7 @@
     
     let basePath = pathmod.dirname(fullPath);
     let rootModule = createRootModule(prefix, basePath, cdn_path);
+    let vuever = parseInt(/([0-9]+)\..+/.exec(Vue.version));
       
     defineModule('path', {exports: pathmod});
     window._xboson_debug = devMode = basePath.startsWith("/t");
@@ -104,6 +105,7 @@
       debug       : devMode,
       url_prefix  : prefix,
       ctx_prefix  : prefix.substr(0, prefix.lastIndexOf('/face')),
+      vuever,
     });
   }
   
