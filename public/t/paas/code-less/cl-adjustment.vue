@@ -12,6 +12,10 @@
     
     <a-tab-pane key="2" tab="样式" class=''>
       <div v-if='config != null'>
+        <div style='padding: 8px 20px; border-bottom: 1px solid #eee;'>
+          <div><span class='note'>组件</span> {{ config.id }}</div>
+          <div class='note'>{{ config.note }}</div>
+        </div>
         <cl-bind-context-css :config='config'/>
         <cl-style-adj :styleVal='config.props.style' @change='onChange'></cl-style-adj>
       </div>
@@ -57,13 +61,7 @@ export default {
 </script>
 
 <style scoped>
-.panel {
-  padding: 2px 5px;
-}
-center.note {
-  margin-top: 50px;
-}
-.adv {
-  color: brown;
-}
+.panel { padding: 2px 5px; }
+center.note { margin-top: 50px; }
+.adv { color: brown; }
 </style>

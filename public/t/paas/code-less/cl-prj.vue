@@ -34,7 +34,7 @@
       <h3 v-if='stage == 2'>项目属性</h3>
       
       <a-form-model :model="createParams" :label-col="{ span: 4 }" ref='ruleForm'
-          :wrapper-col="{ span: 14 }" @submit='submit' :rules="rules">
+          :wrapper-col="{ span: 14 }" :rules="rules">
         
         <x-api org='a297dfacd7a84eab9656675f61750078'
           app='19cb7c3b79e949b88a9c76396854c2b1'
@@ -98,16 +98,16 @@
         </a-form-model-item>
         
         <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
-          <a-button type="primary" html-type="submit" v-if='stage == 1'>
+          <a-button type="primary" @click="submit" v-if='stage == 1'>
             创建
           </a-button>
-          <a-button type="primary" html-type="submit" v-if='stage == 2'>
+          <a-button type="primary" @click="submit" v-if='stage == 2'>
             修改
           </a-button>
           <a-button @click='close' style="margin-left: 10px;">
             关闭
           </a-button>
-          <a-button type='danger' html-type="submit" v-if='stage == 2' 
+          <a-button type='danger' v-if='stage == 2' 
             style="margin-left: 30px;" @click='preDelete'>
             删除
           </a-button>
@@ -303,6 +303,7 @@ export default {
           return false;
         }
       });
+      return false;
     },
     
     close() {

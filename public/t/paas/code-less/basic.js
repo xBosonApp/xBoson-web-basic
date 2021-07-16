@@ -127,6 +127,7 @@ module.exports = {
     component:'hr',
     removeTxt: true,
     groupName: '布局',
+    helpTag: 'div',
   },
   
   bc008: {

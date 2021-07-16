@@ -108,6 +108,7 @@ export default {
       if (component.plugins) {
         this.load_plugin(id)();
       }
+      this.save_requires(component.clid);
       
       let instance = crole.createInstance(this.rootConfig, component);
       this.$set(this.nestedList, index, instance);
@@ -156,6 +157,10 @@ export default {
         clib.makeComponentPluginLoader(cid, this.$options.components);
         this.$forceUpdate();
       };
+    },
+    
+    save_requires(clid) {
+      clib.saveLibRequires(clid, this.rootConfig.requires);
     },
   }
 }

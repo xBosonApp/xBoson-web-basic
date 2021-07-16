@@ -3,7 +3,7 @@ const tool = require("./tool.js");
 
 // 扁平存放
 const componentAll = {};
-// {分组名: []}
+// [ {title分组名: [], id:'' ...} ]
 const componentLite = [];
 
 
@@ -18,6 +18,7 @@ module.exports = {
   loadClassify,
   loadComponent : _load_component,
   makeComponentPluginLoader,
+  saveLibRequires,
 };
 
 
@@ -28,7 +29,7 @@ module.exports = {
 // requires   - Array[String: 文件列表]
 //
 function setClassify(id, title, groupNames, requires, _contentLoader) {
-  let i = componentLite.findIndex((t)=> t == title);
+  let i = componentLite.findIndex((c)=> c.id == id);
   let group = {};
   
   if (Array.isArray(groupNames)) {
@@ -55,6 +56,21 @@ function setClassify(id, title, groupNames, requires, _contentLoader) {
   } else {
     componentLite[i] = lite;
   }
+  
+  componentLite.sort((a, b)=>{
+    return a.title<b.title ? -1 : a.title>b.title ? 1 : 0;
+  });
+}
+
+
+function saveLibRequires(clid, targetMap) {
+  let lib = _find_lib(clid);
+  if (lib.requires) {
+    for (let i=0; i<lib.requires.length; ++i) {
+      targetMap[ lib.requires[i] ] = 1;
+    }
+  }
+  return targetMap;
 }
 
 

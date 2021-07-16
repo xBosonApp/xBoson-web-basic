@@ -64,7 +64,7 @@ function createProps(component) {
   let nestedList = component.isContainer && [];
   // let containerStyle = component.isContainer && component.containerStyle;
   let props = {
-    style: component.style || {},
+    style: Object.assign({}, component.style),
     nestedList,
   };
   return props;

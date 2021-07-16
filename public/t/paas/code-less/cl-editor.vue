@@ -8,7 +8,8 @@
       </a-tab-pane>
     </a-tabs>
     <center v-if='noOpendFile' class='tip animate__animated animate__jello'>
-      请 <span>打开</span> 或 <span>新建</span> 一个文件.
+      <div>1. 在 <span>文件管理</span> 中创建目录</div>
+      <div>2. <span>新建</span> 或 <span>打开</span> 一个文件进行编辑.</div>
     </center>
   </div>
 </template>

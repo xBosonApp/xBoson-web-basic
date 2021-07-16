@@ -52,7 +52,7 @@ export default {
           { required: true, message: '请输入有效文件名' }
         ],
         parentid: [
-          { required: true, message: '必须选择目录' }
+          { required: true, message: '必须选择目录 (不能是根目录, 请在"文件管理"中创建目录)' }
         ],
       },
     };

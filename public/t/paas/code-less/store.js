@@ -14,7 +14,7 @@ module.exports = new Vuex.Store({
     isComponentLoaded : {},
     
     // 方便调试的开关
-    test : true,
+    test : false,
     testOpenFile : 'HoL5yZAFT7ao6XRuvbPFwQ',
   },
   
@@ -95,7 +95,7 @@ module.exports = new Vuex.Store({
         this.commit('forceLoadComponentsFromLibrary', parm);
       } else {
         console.debug("component library", clid, 'in cache');
-        cb && cb();
+        cb && setTimeout(cb, 0);
       }
     },
     
