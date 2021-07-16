@@ -128,6 +128,9 @@ module.exports = {
     removeTxt: true,
     groupName: '布局',
     helpTag: 'div',
+    style: {
+      height: '10px',
+    }
   },
   
   bc008: {

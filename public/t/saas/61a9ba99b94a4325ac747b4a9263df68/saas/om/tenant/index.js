@@ -116,9 +116,13 @@
   
   // API服务信息加载处理
   function Right(node){
-    if(node.flg!=='0'){return;} // zy.net.loadHTML：app、mod、api管理画面（如：添加、修改等）
+    // if(node.flg!=='0'){return;} // zy.net.loadHTML：app、mod、api管理画面（如：添加、修改等）
+    // // 非管理员不可查看编辑
+    // if(zy.g.user.userid != node.pid) return ;
+    
     zy.net.loadHTMLs("saas/om/tenant/view.html",v_content,function(){
-      main(node);
+      // main(node);
+      tenant_member_view(node._id);
     });
   }
 
@@ -210,6 +214,9 @@
             ztreeObj.removeNode(nodeClick);
             
             nodeClick = null;
+            
+            // 右侧内容置空
+            v_content.html("");
           
           }
         },

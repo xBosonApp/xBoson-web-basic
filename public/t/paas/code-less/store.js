@@ -14,7 +14,7 @@ module.exports = new Vuex.Store({
     isComponentLoaded : {},
     
     // 方便调试的开关
-    test : false,
+    test : true,
     testOpenFile : 'HoL5yZAFT7ao6XRuvbPFwQ',
   },
   

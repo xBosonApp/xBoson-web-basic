@@ -6,7 +6,7 @@
     :list="nestedList"
     :style='style'
     :root-config='rootConfig'
-    :class="{'component-container':!isRoot, 'root-component-container': isRoot}"
+    :class="{ 'component-container':!isRoot, 'root-component-container': isRoot }"
     animation='100' 
     chosenClass="cl-drag-drop-component-chosen" 
     ghostClass='cl-drag-drop-component-ghost' 
@@ -20,10 +20,10 @@
       :root-config='rootConfig'
       :class="bindClass[e.id]"
       :key='idx'
-      @mouseover.native.self="setHover(e.id, true)"
-      @mouseout.native.self="setHover(e.id, false)"
-      @mouseover.self="setHover(e.id, true)"
-      @mouseout.self="setHover(e.id, false)"
+      @mouseover.native.self="setHover(e.id, true, e.isContainer)"
+      @mouseout.native.self="setHover(e.id, false, e.isContainer)"
+      @mouseover.self="setHover(e.id, true, e.isContainer)"
+      @mouseout.self="setHover(e.id, false, e.isContainer)"
       v-for="(e, idx) in nestedList" 
       v-bind='e.props'
       v-on='e.on'>{{e.txt}}</component>
@@ -32,9 +32,9 @@
 </template>
 
 <script>
-const clib = require("./component-library.js");
+const clib  = require("./component-library.js");
 const crole = require("./component-role.js");
-const tool = require("./tool.js");
+const tool  = require("./tool.js");
 
 export default {
   props: ['nestedList', 'style', 'rootConfig', 'isRoot'],
@@ -55,7 +55,7 @@ export default {
         let item = this.nestedList[i];
         let cl = this.bindclass[item.id];
         if (!cl) {
-          cl = { 'draggable-item-active': false };
+          cl = this.newDragClass(false, item.isContainer);
           this.$set(this.bindclass, item.id, cl);
         }
         for (let n in item.bindStyle) {
@@ -67,12 +67,19 @@ export default {
   },
   
   methods : {
-    setHover(id, b) {
+    setHover(id, b, isContainer) {
       if (this.bindclass[id] === undefined) {
-        this.$set(this.bindclass, id, {'draggable-item-active':b});
+        this.$set(this.bindclass, id, this.newDragClass(b, isContainer));
       } else {
         this.bindclass[id]['draggable-item-active'] = b;
       }
+    },
+    
+    newDragClass(active, isContainer) {
+      return { 
+        'draggable-item': !isContainer, 
+        'draggable-item-active': active,
+      };
     },
     
     add(ev) {
@@ -172,6 +179,9 @@ export default {
 }
 .root-component-container {
   /*border: 1px dashed green;*/ padding: 8px; min-height: 30px;
+}
+.draggable-item {
+  border: 1px dashed #f1f1f1; min-height: 5px;
 }
 .draggable-item-active {
   border: 1px dashed #3e33e9 !important;
