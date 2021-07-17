@@ -1,7 +1,9 @@
 /* Create By xBoson System */
 
 
-function tenant_member_view(tenantID){
+function tenant_member_view(){
+  
+  var tenantID = window.tenantID; //租户ID参数
   
   $member_manage = $("#member-manage");
   $modal_container = $("#member-manage-modal");
@@ -12,10 +14,24 @@ function tenant_member_view(tenantID){
   
   var memberDataTableApi; //表格DataTable API对象
   
-  Init();
+  
+  if(!tenantID){
+    // 获取当前登录用户是哪个租户管理员
+    zy.g.am.app = '78cf8922c5ea4afa9dae8970215ea796';
+    zy.g.am.mod = 'tenant';
+    zy.net.get("api/getLoginUserTenant", function(msg){
+      if(msg && msg.result && msg.result[0]){
+        tenantID = msg.result[0]._id;
+        Init();
+      }else{
+        zy.ui.msg("提示", "非租户管理员！", "w");
+      }
+    });
+  }else{
+    Init();
+  }
   
   function Init(){
-    
     
     //表格工具栏事件
     Grid_Toolbar_Event();
@@ -112,12 +128,21 @@ function tenant_member_view(tenantID){
     var options = {
       columns: [
         {
+          title: "成员姓名",
+          data: "name"
+        },
+        {
           title: "成员手机号",
           data: "tel"
         },
         {
           title: "成员职位",
           data: "post",
+          defaultContent: ""
+        },
+        {
+          title: "成员备注",
+          data: "mark",
           defaultContent: ""
         }
       ],

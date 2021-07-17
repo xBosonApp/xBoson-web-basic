@@ -32,7 +32,7 @@
                 </label>
               </section>
             </div>
-            <div>
+            <div class="row">
               <section class="col col-6">
                 <label class="label">成员职称</label>
                 <label class="input">
@@ -178,6 +178,9 @@
     $form.validate({
       // Rules for form validation
       rules: {
+        name: {
+          required: true
+        },
         tel: {
           required: true,
           isPhone: true

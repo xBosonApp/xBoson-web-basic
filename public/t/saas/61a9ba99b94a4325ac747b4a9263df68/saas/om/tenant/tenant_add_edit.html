@@ -67,9 +67,9 @@
             <!--</div>-->
             <div class="row">
               <section class="col col-6">
-                <label class="label">管理员ID（平台pid）</label>
+                <label class="label">管理员ID</label>
                 <label class="input">
-                  <input type="hidden" name="userid" placeholder="管理员ID（平台pid）">
+                  <input type="hidden" name="pid" placeholder="管理员ID">
                 </label>
               </section>
               <section class="col col-6">
@@ -139,26 +139,28 @@
     $form.find("input[name=status]").zySelect('ZR.0001', false, {
       width: '100%'
     });
+    
+    var pidSelect2Options = {
+      width : '100%',
+      placeholder : "请输入",
+      minimumInputLength : 1,
+      maximumSelectionSize : 5, // 限制数量
+      query : function(option) {
+      	zy.g.am.app = 'c9e98ea6fc7148d186289e8c33776f8a';
+      	zy.g.am.mod = 'user_manager',
+      	zy.net.get.call(option,"api/getusersel2", function(_m){
+      		var _d = {results : _m.result}
+      		option.callback(_d);
+      	}, {mailAtel : option.term});
+      }
+    };
 
     if (flag == 'i') {
       $title.text('添加');
       //状态默认值
       $form.find("input[name=status]").select2("val", '1');
       
-      $form.find('input[name=userid]').select2({
-        width : '100%',
-        placeholder : "请输入",
-        minimumInputLength : 1,
-        maximumSelectionSize : 5, // 限制数量
-        query : function(option) {
-        	zy.g.am.app = 'c9e98ea6fc7148d186289e8c33776f8a';
-        	zy.g.am.mod = 'user_manager',
-        	zy.net.get.call(option,"api/getusersel2", function(_m){
-        		var _d = {results : _m.result}
-        		option.callback(_d);
-        	}, {mailAtel : option.term});
-        }
-      });
+      $form.find('input[name=pid]').select2(pidSelect2Options);
       
       // $form.json2form(param);
       
@@ -169,14 +171,21 @@
       $title.text('修改');
       
       var cborg=function(msg){
-        $form.find('input[name=userid]').zySelectCustomData('', false, {
-          width : '100%'
-        }, msg.result);
-        $form.find('input[name=userid]').select2('val', param.userid);
+        
+        // 赋初始值
+        $.extend(pidSelect2Options, {
+          initSelection: function(element,callback){
+            callback(msg.result[0])
+          }
+        });
+        
+        $form.find('input[name=pid]').select2(pidSelect2Options);
+        
+        $form.find('input[name=pid]').select2('val', param.pid);
       };
-    	zy.g.am.app = 'd2c8511b47714faba5c71506a5029d94';
-    	zy.g.am.mod = 'orginfo';
-    	zy.net.post("api/orgselect2", cborg, {mailAtel: param.userid});
+    	zy.g.am.app = 'c9e98ea6fc7148d186289e8c33776f8a';
+    	zy.g.am.mod = 'user_manager';
+    	zy.net.get("api/getusersel2", cborg, {mailAtel: param.pid});
       
       // $form.formDisable(true);
       
