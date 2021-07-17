@@ -53,6 +53,17 @@
       </a-menu>
     </a-dropdown>
     
+    <a-dropdown>
+      <a class="ant-dropdown-link" @click="e => e.preventDefault()">
+        应用 <a-icon type="down" />
+      </a>
+      <a-menu slot="overlay">
+        <a-menu-item key="1" @click='showAppManager = true'>
+          应用管理
+        </a-menu-item>
+      </a-menu>
+    </a-dropdown>
+    
     <a-drawer
       title="打开文件"
       placement="top"
@@ -119,6 +130,17 @@
       <cl-component-register @close='showRegister = false'/>
     </a-drawer>
     
+    <a-drawer
+      title="应用管理"
+      placement="top"
+      height='calc(100% - 80px)'
+      :closable="true"
+      :visible="showAppManager"
+      destroyOnClose='true'
+      @close="showAppManager = false">
+      <cl-app-manager @close='showAppManager = false'/>
+    </a-drawer>
+    
   </div>
 </template>
 
@@ -132,7 +154,8 @@ export default {
     'cl-component-register',
     'cl-file-manager',
     'cl-create-file',
-    'cl-open-file'),
+    'cl-open-file',
+    'cl-app-manager'),
   
   data() {
     return {
@@ -142,6 +165,7 @@ export default {
       showDelete : false,
       showPreview : false,
       showRegister : false,
+      showAppManager : false,
       deleteContent : '',
       keyMap : {},
       previewComponent : null,

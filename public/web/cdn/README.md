@@ -12,6 +12,9 @@
    - css 文件
 ```
 
+> 停止更新模块说明, 由模块目录中 README.md 文件代替.
+
+
 ## axios
 
 https://github.com/axios/axios
@@ -172,4 +175,3 @@ Vuex是Vue.js应用程序的状态管理模式+库。它充当应用程序中所
 https://www.antdv.com/docs/vue/introduce-cn/
 
 这里是 Ant Design 的 Vue 实现，开发和服务于企业级后台产品。
-

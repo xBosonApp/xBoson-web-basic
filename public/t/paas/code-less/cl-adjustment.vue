@@ -13,7 +13,10 @@
     <a-tab-pane key="2" tab="样式" class=''>
       <div v-if='config != null'>
         <div style='padding: 8px 20px; border-bottom: 1px solid #eee;'>
-          <div><span class='note'>组件</span> {{ config.id }}</div>
+          <div>
+            <span class='note cid'>组件 ID</span> 
+            <cl-anim-text :value='config.id'/>
+          </div>
           <div class='note'>{{ config.note }}</div>
         </div>
         <cl-bind-context-css :config='config'/>
@@ -39,6 +42,7 @@ export default {
     'cl-adj-advanced',
     'cl-style-adj',
     'cl-bind-context-css',
+    'cl-anim-text',
     ]),
   
   data() {
@@ -64,4 +68,5 @@ export default {
 .panel { padding: 2px 5px; }
 center.note { margin-top: 50px; }
 .adv { color: brown; }
+.cid { margin-right: 10px; }
 </style>

@@ -8,8 +8,12 @@
       </a-tab-pane>
     </a-tabs>
     <center v-if='noOpendFile' class='tip animate__animated animate__jello'>
-      <div>1. 在 <span>文件管理</span> 中创建目录</div>
-      <div>2. <span>新建</span> 或 <span>打开</span> 一个文件进行编辑.</div>
+      <ol class='tipcontent'>
+        <li>在必要时用 <span>文件管理</span> 创建(模块)目录.</li>
+        <li><span>新建</span> 或 <span>打开</span> 一个文件(页面)进行编辑.</li>
+        <li>在必要时用 <span>应用管理</span> 创建新应用.</li>
+        <li>在 <span>应用管理</span> 中将做好的文件(页面)绑定到应用的菜单.</li>
+      </ol>
     </center>
   </div>
 </template>
@@ -63,12 +67,15 @@ export default {
 
 <style scoped>
 .tip {
-  font-size: 12px; color: #ccc; padding: 170px 0;
+  font-size: 12px; color: #ccc; padding: 120px 0;
 }
 .tip span {
   font-size: 15px; color: #999; display: inline-block; margin: 0 3px;
 }
 .card-container {
   background-color: #fff;
+}
+.tipcontent {
+  display: inline-block; text-align: left;
 }
 </style>

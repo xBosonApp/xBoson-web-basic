@@ -11,6 +11,7 @@
     :initItem='initItem'
     :createConfigData='createConfigData'
     :maskStyle="{ 'background-color': 'rgba(0,0,0,0)' }"
+    :bodyNoPadding='true'
     @close-config='configClose'
     @change='onChange'
   >

@@ -28,6 +28,7 @@
       :closable='!blocked'
       :destroyOnClose='true'
       :maskStyle='maskStyle'
+      :bodyStyle='bodyStyle'
     >
       <template v-slot:title>
         <span class='title'>{{configTitle}}</span>
@@ -71,10 +72,21 @@ export default {
     'maskStyle' : { default: {} },
     // 创建按钮点击时被调用, 返回 Promise:Success({id, num 可选}), 默认用全局id生成
     'addHook' : { type:Function },
+    // 内容无边距
+    'bodyNoPadding' : { type:Boolean, default: false },
   },
   
   beforeMount() {
     this.loadComponent();
+  },
+  
+  computed: {
+    bodyStyle() {
+      if (this.bodyNoPadding) {
+        return { 'padding': 0 };
+      }
+      return;
+    },
   },
   
   data() {
