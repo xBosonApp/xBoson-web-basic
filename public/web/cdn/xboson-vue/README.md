@@ -47,5 +47,12 @@ require("cdn/xboson-vue/1.0.0/loader/elementui.js")
 ## Animate.CSS 4.1.1 
 
 ```js
-require("cdn/animate.css/4.1.1/animate.min.css");
+require("cdn/animate.css/4.1.1/animate.min.css")
+```
+
+
+## Vux 2.9.6
+
+```js
+require("cdn/xboson-vue/1.0.0/loader/vux.js")
 ```

@@ -1,0 +1,1 @@
+.vux-sticky-box{z-index:500}.vux-sticky{width:100%;position:-webkit-sticky;position:sticky;top:0}.vux-fixed{width:100%;position:fixed;top:0;-webkit-transform:translateZ(0);transform:translateZ(0)}.vux-sticky-fill{display:none}.vux-fixed+.vux-sticky-fill{display:block}

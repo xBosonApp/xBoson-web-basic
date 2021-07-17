@@ -1,0 +1,1 @@
+.vux-close{position:relative;display:inline-block;vertical-align:middle;color:#999;width:24px;height:24px}.vux-close:before,.vux-close:after{content:'';position:absolute;left:0;top:11px;width:24px;height:1px;background-color:currentColor;-webkit-transform:rotate(-45deg);transform:rotate(-45deg)}.vux-close:after{-webkit-transform:rotate(45deg);transform:rotate(45deg)}

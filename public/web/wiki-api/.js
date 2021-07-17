@@ -55,6 +55,10 @@ function get_context_path(cb) {
 function load_cdn_list(cb) {
   let path = '/app/a297dfacd7a84eab9656675f61750078/ZYAPP_IDE/ZYMODULE_UI_IDE/cdnlist';
   $.get(contextUrl +path, (ret)=>{
+    if (ret.code) {
+      console.error('加载CDN文档失败', ret.msg);
+      return;
+    }
     cb(ret);
   });
 }
