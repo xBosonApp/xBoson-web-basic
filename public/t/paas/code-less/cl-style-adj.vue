@@ -4,7 +4,7 @@
   <a-collapse :bordered="false">
     <a-collapse-panel v-for="(c, i) in config" :key="i" :header="c.title">
       <div v-for='item in c.list'>
-        <label :class='item[0]'>{{item[1]}} <span class='tip'>{{item[0]}}</span></label>
+        <label :class='[item[0], "item-title"]'>{{item[1]}} <span class='tip'>{{item[0]}}</span></label>
         
         <component 
           :is='tagMap[item[2]]'
@@ -212,5 +212,8 @@ hr {
 }
 .cl-classify .tip {
   display: none;
+}
+.item-title {
+  display: block; width: 100%; margin-top: 6px; margin-bottom: 1px;
 }
 </style>

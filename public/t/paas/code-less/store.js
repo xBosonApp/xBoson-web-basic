@@ -1,4 +1,5 @@
 /* Create By xBoson System */
+
 module.exports = new Vuex.Store({
   state: {
     showDropTip: true,
@@ -11,7 +12,8 @@ module.exports = new Vuex.Store({
     cssClipboard: null, 
     bindContextStyle : {},
     // { id: boolean }
-    isComponentLoaded : {},
+    // isComponentLoaded : {},
+    componentLoadState : {},
     
     // 方便调试的开关
     test : true,
@@ -77,40 +79,37 @@ module.exports = new Vuex.Store({
       delete s.bindContextStyle[fid];
     },
     
-    theComponentLoaded(s, clid) {
-      s.isComponentLoaded[clid] = true;
-    },
-    
     theComponentChanged(s, clid) {
-      s.isComponentLoaded[clid] = false;
+      s.componentLoadState[clid] = null;
     },
     
-    // parm[clid, cb]
+    // parm[clid, cb:Function(error)]
     loadComponentsFromLibrary(s, parm) {
       let clid = Array.isArray(parm) ? parm[0] : parm;
       let cb   = Array.isArray(parm) ? parm[1] : null;
       
-      if (!s.isComponentLoaded[clid]) {
-        s.isComponentLoaded[clid] = true;
-        this.commit('forceLoadComponentsFromLibrary', parm);
+      if (!s.componentLoadState[clid]) {
+        s.componentLoadState[clid] = new Promise((ok, fail)=>{
+          this.commit('forceLoadComponentsFromLibrary', [clid, err=>{
+            if (err) fail(err);
+            else ok();
+          }]);
+        }).then(cb, cb);
       } else {
-        console.debug("component library", clid, 'in cache');
-        cb && setTimeout(cb, 0);
+        s.componentLoadState[clid].then(cb, cb);
       }
     },
     
-    // parm[clid, cb]
+    // parm[clid, cb:Function(error)]
     forceLoadComponentsFromLibrary(s, parm) {
       let clid = Array.isArray(parm) ? parm[0] : parm;
       let cb   = Array.isArray(parm) ? parm[1] : null;
       let lib  = require("./component-library.js");
       
       lib.loadComponent(clid).catch(err=>{
-        s.isComponentLoaded[clid] = false;
         xv.popError('组件加载失败', err);
         cb && cb(err);
       }).then(()=>{
-        s.isComponentLoaded[clid] = true;
         cb && cb(null);
       });
     },

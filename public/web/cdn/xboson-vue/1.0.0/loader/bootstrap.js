@@ -12,6 +12,8 @@ let portal = require("cdn/portal-vue/2.1.7/portal-vue.umd.min.js");
 let boot   = require("cdn/bootstrap/4.6.0/bootstrap.min.js");
 let bootv  = require("cdn/bootstrap-vue/2.21.2/bootstrap-vue.min.js");
 
+// Vue.use(bootv);
+
 require("cdn/bootstrap/4.6.0/bootstrap.min.css");
 require("cdn/bootstrap-vue/2.21.2/bootstrap-vue.min.css");
 
