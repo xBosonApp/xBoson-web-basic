@@ -21,6 +21,7 @@ var current_select;
 var default_page;
 var contextUrl;
 var faceUrl;
+var savedScorlls = {};
 
 if (Math.random() * 1000 <= 1) {
   menu.addClass("black_menu");
@@ -31,6 +32,17 @@ get_context_path((ctx, face)=>{
   faceUrl = face;
   load_menu();
 });
+
+
+function restoreScroll(name) {
+  content.scrollTop(savedScorlls[name] || 0);
+}
+
+function saveScroll(name) {
+  if (!name) name = location.hash;
+  savedScorlls[name] = content.scrollTop();
+}
+
 
 //
 // 得到当前上下文 URL 前缀
@@ -146,18 +158,20 @@ function load_menu() {
       
       return ()=>{
         console.debug('open', file);
+        let hash = location.href = '#ui-docs'+ file.path;
         var buf = [];
         if (file.readme) {
           makeVersions(buf, file.files);
           makeReadme(file.readme, buf, ()=>{
             render(buf);
+            restoreScroll(hash);
           });
         } else {
           buf.push('# ', file.name, ' on CDN\n');
           makeVersions(buf, file.files);
           render(buf);
+          restoreScroll(hash);
         }
-        location.href = '#ui-docs'+ file.path;
         return false;
       };
     }
@@ -186,25 +200,36 @@ function load_menu() {
     }
     m.attr("file", data.file);
     m.html(data.name);
+    
+    let hash = "#"+ data.file;
 
     if (typeof data.open == 'function') {
-      m.attr('href', '#'+ data.file);
-      m.click(data.open);
+      m.attr('href', hash);
+      m.click(()=>{
+        saveScroll();
+        data.open();
+        return false;
+      });
     }
     else if (data.file) {
       if (ext['_blank']) {
         m.attr('href', data.file);
         m.attr('target', '_blank');
       } else {
-        m.attr("href", "#"+ data.file);
+        m.attr("href", hash);
+        
         m.click(function() {
-          open_doc(data);
+          saveScroll();
+          open_doc(data, ()=>{
+            restoreScroll(hash)
+          });
+          
           if (current_select) {
             current_select.removeClass("selected_menu");
           }
           m.addClass('selected_menu');
           current_select = m;
-          location.href = '#'+ data.file;
+          location.href = hash;
           return false;
         });
       }
@@ -257,7 +282,7 @@ function highlight(str, lang) {
 }
 
 
-function open_doc(data) {
+function open_doc(data, _success) {
   $.get(data.file, function(txt) {
     var html;
     if (isMD(data.file)) {
@@ -294,6 +319,7 @@ function open_doc(data) {
     
     // hljs.initHighlighting.called = null;
     // hljs.initHighlighting();
+    _success && _success();
   });
   console.debug("Open", data.file);
 } 
