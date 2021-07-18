@@ -11,6 +11,8 @@
 </vue:app>
 ```
 
+除非必要, UI 组件推荐使用 require() 方法引入 `cdn/xboson-vue/1.0.0/loader/` 目录中对应的组件加载器.
+
 
 ## `<vue:vue>`
 

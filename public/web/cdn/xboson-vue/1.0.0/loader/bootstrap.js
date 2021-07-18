@@ -14,9 +14,11 @@ let bootv  = require("cdn/bootstrap-vue/2.21.2/bootstrap-vue.min.js");
 
 // Vue.use(bootv);
 
-require("cdn/bootstrap/4.6.0/bootstrap.min.css");
-require("cdn/bootstrap-vue/2.21.2/bootstrap-vue.min.css");
+let css = [
+  require("cdn/bootstrap/4.6.0/bootstrap.min.css"),
+  require("cdn/bootstrap-vue/2.21.2/bootstrap-vue.min.css"),
+]
 
 module.exports = {
-  jquery, boot, bootv, portal, popper
+  jquery, boot, bootv, portal, popper, css,
 };

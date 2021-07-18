@@ -2,7 +2,7 @@
 const store = require("./store.js");
 const plib = require("path");
 const requirePlugin = {};
-const vuever = parseInt(/([0-9]+)\..+/.exec(Vue.version));
+const vuever = xv.vuever;
 
 // Not work !
 class Vm extends Function {

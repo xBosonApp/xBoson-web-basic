@@ -121,11 +121,16 @@ function load_menu() {
       }
       
       function makeVersions(buf, files) {
+        const prefix = '/web/';
         files.forEach(v=>{
           if (v.isdir) {
             buf.push('## ver: ', v.name, '\n');
             buf.push('文件列表\n');
+            
             v.files.forEach(n=>{
+              if (n.startsWith(prefix)) {
+                n = n.substr(prefix.length);
+              }
               buf.push('* ', n, '\n');
             });
           }
