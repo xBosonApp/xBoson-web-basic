@@ -13,11 +13,27 @@ export default {
   data() {
     return {
       value: {
+        // 创建/修改应用
+        app : null,
+        createMode : null,
       },
       
       processes: {
         'default': [
           { title: '应用', desc:'列出可用应用列表', component: 'cl-app-list' },
+        ],
+        
+        'createApp': [
+          { title: '创建应用', desc: '应用创建于项目目录内', component: 'cl-app-create' },
+          { title: '应用菜单', desc: '制作应用菜单', component: 'cl-app-bind-menu' },
+        ],
+        
+        'editApp': [
+          { title: '修改应用', desc: '当前应用状态', component: 'cl-app-create' },
+        ],
+        
+        'appMenu': [
+          { title: '应用菜单', desc: '制作应用菜单', component: 'cl-app-bind-menu' },
         ],
       },
     };

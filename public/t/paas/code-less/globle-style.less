@@ -21,7 +21,7 @@
 
 // 多个元素组成一行, 合并边框, 默认3列, 边框颜色需额外设置
 .items-group {
-  display: grid; grid-template-columns: 1fr 3fr auto; gap: 1px;
+  display: grid; grid-template-columns: 1fr 3fr auto; gap: 2px;
   
   @radius: 4px;
   
@@ -73,5 +73,28 @@ code {
 .cl-drag-drop-component-ghost {
   color: blue; background-color: blue; overflow: hidden!important;
   height: 0!important; width: 100%!important; display: block!important;
+}
+
+// 高度为半屏, 通常用于列表项目
+.cl-helf-h-screen {
+  min-height: 50vh;
+}
+
+// grid 多列样式
+.cl-column-2 {
+  grid-template-columns: 1fr 1fr;
+}
+.cl-column-3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.cl-column-4 {
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.ant-form-item-children {
+  // 表单中的按钮间距
+  .ant-btn {
+    margin-right: 10px;
+  }
 }
 /* 上海竹呗信息技术有限公司 */

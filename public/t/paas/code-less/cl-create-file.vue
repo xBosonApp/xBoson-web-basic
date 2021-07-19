@@ -10,11 +10,10 @@
       </a-form-model-item>
       
       <a-form-model-item label="保存目录" prop='parentid'>
-        <a-tree-select
-          v-model="form.parentid"
-          :tree-data="dirData"
+        <cl-file-selector
           placeholder="请选择目录"
-          :load-data="onLoadDirData"
+          v-model="form.parentid"
+          :fileCanSelect='false'
         />
       </a-form-model-item>
       
@@ -34,18 +33,14 @@
 const tool = require("./tool.js");
 
 export default {
+  components: tool.loadc('cl-file-selector'),
+  
   data() {
-    let title = this.$store.state.project.name;
-    
     return {
       form:{
         name:'',
         parentid:'',
       },
-      
-      dirData:[
-        { title, key:'/', readOnly: true, isDir: true, selectable: false, },
-      ],
       
       rules : {
         name : [
@@ -82,44 +77,6 @@ export default {
           return false;
         }
       });
-    },
-    
-    dir(parentid, cb) {
-      let parm = {
-        parentid,
-      };
-      
-      tool.api('file', 'dir', parm, (err, ret)=>{
-        if (err) {
-          cb(err);
-        } else {
-          ret.data.forEach(function(d) {
-            d.title = d.name;
-            d.key = d._id;
-            d.value = d._id;
-            if (!d.isDir) {
-              d.isLeaf = true;
-              d.selectable = false;
-              d.disabled = true;
-            }
-          });
-          cb(null, ret.data);
-        }
-      });
-    },
-    
-    onLoadDirData(n) {
-      return new Promise((resolve,reject) => {
-        this.dir(n.dataRef.key, (err, data)=>{
-          n.dataRef.children = data.sort(tool.filesort);
-          this.updateTree();
-          resolve();
-        });
-      });
-    },
-    
-    updateTree() {
-      this.dirData.sort();
     },
   },
 }

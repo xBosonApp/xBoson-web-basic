@@ -132,7 +132,7 @@ export default {
       this.setStage('default');
     },
     
-    // onChange(name, retData, merginData)
+    // next(error, retData, merginData)
     nextStep(err, ret, margin) {
       if (err) {
         this.message = err.message;

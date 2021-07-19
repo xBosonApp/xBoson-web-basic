@@ -7,6 +7,7 @@
     :style='style'
     :root-config='rootConfig'
     :class="{ 'component-container':!isRoot, 'root-component-container': isRoot }"
+    :swapThreshold='10'
     animation='100' 
     chosenClass="cl-drag-drop-component-chosen" 
     ghostClass='cl-drag-drop-component-ghost' 

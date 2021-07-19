@@ -333,8 +333,12 @@ function aliasName(name) {
       return 'bash';
     case 'vue':
       return 'html';
+    case 'scss':
+      return 'css';
+    case 'url':
+      return 'text';
     default:
-      return name;
+      return name || 'text';
   }
 }
 
