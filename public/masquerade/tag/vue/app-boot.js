@@ -351,11 +351,26 @@
       return (ok, fail)=>{
         let wok = wrap_return_exports(ok, _dd);
         
+        // 异步模式用 <link> 加载, 不下载代码
+        if (_async) {
+          let el = document.createElement('link');
+          el.setAttribute('rel', 'stylesheet');
+          el.setAttribute('href', urlprefix + absPath);
+          
+          let module = createModule(urlprefix, mod);
+          module._base = pathmod.dirname(absPath);
+          module.name = pathmod.basename(absPath);
+          _c_module(el, module).mount();
+          return wok(module);
+        }
+        
         loadModule(absPath, wok, fail, _async, (code, module)=>{
           let el = makeCodeElement('style', code, 'style', absPath);
-          document.head.append(el);
-          
-          module.exports = {
+          _c_module(el, module).mount();
+        });
+        
+        function _c_module(el, module) {
+          return module.exports = {
             el,
             mount,
             unmount,
@@ -368,7 +383,7 @@
           function unmount() {
             el.remove();
           }
-        });
+        }
       }
     }
     

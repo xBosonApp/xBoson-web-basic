@@ -82,19 +82,7 @@
         </a-form-model-item>
         
         <a-form-model-item label='可访问角色'>
-          <x-api org='a297dfacd7a84eab9656675f61750078'
-            app='19cb7c3b79e949b88a9c76396854c2b1'
-            mod='prjmgr' api='roleslist' 
-            @success='setRolesList' />
-            
-          <a-select
-            mode="multiple"
-            v-model='createParams.roles'
-            placeholder="角色列表">
-            <a-select-option v-for="(p, i) in rolelist" :key="p.id">
-              {{p.name}}
-            </a-select-option>
-          </a-select>
+          <cl-select-roles v-model='createParams.roles'/>
         </a-form-model-item>
         
         <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
@@ -138,11 +126,12 @@ const defdb = 'code-less-prj';
 const tool = require('./tool.js');
 
 export default {
+  components: tool.loadc('cl-select-roles'),
+  
   data() {
     this.getOpenID();
     return {
       f1:0, f2:0,
-      rolelist:[],
       prjlist:[],
       listParams:{},
       stage:0,
@@ -259,10 +248,6 @@ export default {
     
     setPrjList(v) {
       this.prjlist = v.data;
-    },
-    
-    setRolesList(v) {
-      this.rolelist = v.roles;
     },
     
     setEdit(prj) {

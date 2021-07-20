@@ -171,6 +171,6 @@ export default {
 </script>
 
 <style scoped>
-.anim { --animate-duration: 0.5s; position: absolute; width: 100%;
+.anim { --animate-duration: 0.5s; position: absolute; width: calc(100% - 50px);
 }
 </style>

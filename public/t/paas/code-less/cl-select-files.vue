@@ -38,6 +38,16 @@ export default {
     };
   },
   
+  watch: {
+    value(v) {
+      this.file(v);
+    },
+  },
+  
+  mounted() {
+    this.file(this.value);
+  },
+  
   methods: {
     onChange(v) {
       this.$emit('input', v);
@@ -46,24 +56,46 @@ export default {
     dir(parentid, cb) {
       tool.api('file', 'dir', { parentid }, (err, ret)=>{
         if (err) return cb(err);
-        
-        ret.data.forEach((d)=>{
-          d.title = d.name;
-          d.key = d._id;
-          d.value = d._id;
-          
-          if (d.isDir) {
-            d.selectable = this.dirCanSelect;
-            d.disabled = !this.dirCanSelect;
-          } else {
-            d.isLeaf = true;
-            d.selectable = this.fileCanSelect;
-            d.disabled = !this.fileCanSelect;
-          }
-        });
-        
+
+        this.conversion(ret.data);
         cb(null, ret.data);
       });
+    },
+    
+    file(_id) {
+      if (_id && (typeof _id == 'string')) {
+        if (this.dirData.find(d=>d._id == _id)) {
+          return;
+        }
+      } else {
+        return;
+      }
+      
+      tool.api('file', 'dir', {_id}, (err, ret)=>{
+        if (err) return xb.popError('文件信息', err);
+        this.conversion(ret.data);
+        //TODO: 隐藏这些临时补位项
+        ret.data[0].disabled = true; 
+        this.dirData.push(ret.data[0]);
+      });
+    },
+    
+    conversion(arr) {
+      arr.forEach((d)=>{
+        d.title = d.name;
+        d.key = d._id;
+        d.value = d._id;
+        
+        if (d.isDir) {
+          d.selectable = this.dirCanSelect;
+          d.disabled = !this.dirCanSelect;
+        } else {
+          d.isLeaf = true;
+          d.selectable = this.fileCanSelect;
+          d.disabled = !this.fileCanSelect;
+        }
+      });
+      return arr;
     },
     
     onLoadDirData(n) {

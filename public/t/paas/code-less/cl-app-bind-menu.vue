@@ -6,13 +6,15 @@
       <h4>菜单映射列表</h4>
       
       <draggable 
-          :group="{ name: 'app-bind-menu', pull: 'clone', put: false }" 
-          :value="nomenuArray"
-          chosenClass="cl-drag-drop-component-chosen" 
-          ghostClass='cl-drag-drop-component-ghost' 
+        :group="{ name: 'app-bind-menu', pull: 'clone', put: false }" 
+        :value="nomenuArray"
+        chosenClass="cl-drag-drop-component-chosen" 
+        ghostClass='cl-drag-drop-component-ghost' 
+        dragClass='cl-drag-drop-component-drag'
+        @start.once='showHelpBar = false'
       >
         <div v-for='(m, i) in nomenuArray' class='items-group bs' :key='m.id' :data-id.prop='m.id'>
-          <a-button>{{ m.title }}</a-button>
+          <a-button><i :class='[m.icon, "bic"]'></i>{{ m.title }}</a-button>
           <a-button icon='edit' @click='editNom(m.id, m)'/>
           <a-popconfirm
             title="删除当前菜单映射, 并删除关联菜单?"
@@ -20,7 +22,7 @@
             cancel-text="取消"
             @confirm="delNom(m.id)"
           >
-            <a-button icon='delete'/>
+            <a-button icon='delete' type='dashed'/>
           </a-popconfirm>
         </div>
       </draggable>
@@ -33,53 +35,40 @@
       </div>
     </div>
     
-    <div class='max'>
+    <div class='content max'>
       <h4>菜单</h4>
-      
-      <div class='note h' v-if='nomenuArray.length < 1'>
-        首先创建 ‘菜单映射’
-      </div>
-      <div style='display: inline-block' v-else>
+      <div class='nomenu' v-if='nomenuArray.length > 0'>
         <cl-add-button @click='prepareMenu' title='菜单组' style='width: 100%'/>
-      
-        <cl-app-bind-menu-set :menu='menu' :nomenu='nomenu' :deep='1' />
-        
-        <div class='note h' v-if='menu.length < 1'>
-          请点击 ‘添加菜单组’
-        </div>
-        <div class='note h' v-else> 
-          拖拽 ‘菜单映射’ 中的项目到 ‘菜单组’ 中
-        </div>
-        
+        <cl-app-bind-menu-set :menu='menu' :nomenu='nomenu' :newMenu='newMenu' :deep='1' />
         <cl-add-button @click='appendMenu' title='菜单组' style='width: 100%'/>
       </div>
     </div>
     
-    <a-modal
-      title="菜单信息"
-      :visible="showEditDialog"
-      @ok="setNomenu"
-      @cancel="showEditDialog = false"
+    <transition
+      enter-to-class='animate__animated animate__bounceIn'
+      leave-to-class='animate__animated animate__bounceOut'
     >
-      <a-form-model :model="currnomenu" :rules="rules" ref='itemForm'
-          :label-col="{ span: 4 }" :wrapper-col="{ span: 14 }">
-        <a-form-model-item label="菜单标题" prop='title'>
-          <a-input v-model='currnomenu.title' placeholder='中文名'/>  
-        </a-form-model-item>
-        
-        <a-form-model-item label="虚拟路径" prop='path'>
-          <a-input v-model='currnomenu.path' placeholder='/a/b/c'/>
-        </a-form-model-item>
-        
-        <a-form-model-item label="关联文件" prop='fid'>
-          <cl-file-selector
-            style='width: 100%'
-            placeholder="请选择文件"
-            v-model='currnomenu.fid'
-            :dirCanSelect='false'/>
-        </a-form-model-item>
-      </a-form-model>
-    </a-modal>
+    <a-card title="操作帮助" class='help' v-if='showHelpBar'>
+      <div class='h' v-if='nomenuArray.length < 1'>
+        首先创建 ‘菜单映射’
+      </div>
+      <div style='display: inline-block' v-else>
+        <div class='h' v-if='menu.length < 1'>
+          请点击 ‘添加菜单组’
+        </div>
+        <div class='h' v-else> 
+          拖拽 ‘菜单映射’ 中的项目到 ‘菜单组’ 中
+        </div>
+      </div>
+    </a-card>
+    </transition>
+    
+    <cl-app-menu-item-edit 
+      :visible.sync='showEditDialog' 
+      v-model='currnomenu'
+      @ok='setNomenu'
+    />
+    
   </div>
 </template>
 
@@ -89,7 +78,7 @@ const tool = require("./tool.js");
 export default {
   props : ['data', 'next'],
   
-  components: tool.loadc('cl-file-selector', 'cl-app-bind-menu-set'),
+  components: tool.loadc('cl-app-bind-menu-set', 'cl-app-menu-item-edit'),
   
   computed : {
     nextid() {
@@ -115,23 +104,17 @@ export default {
   },
   
   data() {
+    let currnomenu = this.newNoMenu();
     return {
       id : 1,
       menu : [],
       nomenu : {},
       
+      showHelpBar : true,
       showEditDialog : false,
       editOnAdd : false,
       editId : null,
-      currnomenu : {
-        title:'', fid:'', path:'',
-      },
-      
-      rules: {
-        title : { required: true, message: '必须输入标题' },
-        path  : { required: true, message: '必须输入路径' },
-        fid   : { required: true, message: '必须选择文件' },
-      },
+      currnomenu,
     };
   },
   
@@ -142,7 +125,6 @@ export default {
         
         this.merginArr(this.menu, ret.data[0].menu);
         this.marginObj(this.nomenu, ret.data[0].nomenu);
-        // this.$forceUpdate();
       });
     },
     
@@ -157,13 +139,22 @@ export default {
       }
     },
     
-    newMenu() {
+    newMenu(title) {
+      if (!title) {
+        title = '标题'+ (1+this.menu.length);
+      }
       return {
-        title: '标题'+ (1+this.menu.length),
+        title,
         isContainer: true,
         child: [],
         isShow: true,
+        roles: [], 
+        icon: null,
       };
+    },
+    
+    newNoMenu() {
+      return { title:'', fid:'', path:'', roles: [], icon:null };
     },
     
     appendMenu() {
@@ -188,7 +179,7 @@ export default {
     },
     
     addNom() {
-      this.currnomenu = { title:'', fid:'', path:'', };
+      this.currnomenu = this.newNoMenu();
       this.editOnAdd = true;
       this.editId = null;
       this.showEditDialog = true;
@@ -202,24 +193,18 @@ export default {
     },
     
     setNomenu() {
-      this.$refs.itemForm.validate(valid => {
-        if (valid) {
-          if (this.findNameRepeat(this.currnomenu.title)) {
-            antd.message.error("菜单标题重复");
-            return false;
-          }
-          
-          let newMenu = Object.assign({}, this.currnomenu);
-          if (this.editOnAdd) {
-            this.$set(this.nomenu, this.nextid, newMenu);
-          } else {
-            this.$set(this.nomenu, this.editId, newMenu);
-          }
-          this.showEditDialog = false;
-          return true;
-        }  
+      if (this.findNameRepeat(this.currnomenu.title)) {
+        antd.message.error("菜单标题重复");
         return false;
-      });
+      }
+      
+      let newMenu = Object.assign({}, this.currnomenu);
+      if (this.editOnAdd) {
+        this.$set(this.nomenu, this.nextid, newMenu);
+      } else {
+        this.$set(this.nomenu, this.editId, newMenu);
+      }
+      this.showEditDialog = false;
     },
     
     findNameRepeat(name) {
@@ -254,12 +239,21 @@ export default {
 
 <style scoped>
 .m {
-  grid-template-columns: 2fr 5fr 
+  grid-template-columns: 350px auto;
 }
 .bs {
   grid-template-columns: 1fr auto auto; margin-bottom: 2px;
 }
 .max {
   max-height: calc(100vh - 80px - 150px); overflow-y: auto; 
+}
+.help {
+  position: fixed; right: 50px; top: 150px; min-width: 300px;
+}
+.nomenu {
+  min-width: 200px; display: inline-block;
+}
+.bic {
+  float: left; padding-top: 3px;
 }
 </style>

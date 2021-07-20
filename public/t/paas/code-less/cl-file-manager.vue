@@ -263,8 +263,8 @@ export default {
 .main > * {
   padding: 20px; 
 }
-.main > *:first-of-type {
-  border-right: 1px solid #ccc;
+.edit {
+  border-left: 1px solid #ccc;
 }
 section {
   margin-top: 50px;

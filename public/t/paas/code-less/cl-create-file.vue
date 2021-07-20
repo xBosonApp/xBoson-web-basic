@@ -10,7 +10,7 @@
       </a-form-model-item>
       
       <a-form-model-item label="保存目录" prop='parentid'>
-        <cl-file-selector
+        <cl-select-files
           placeholder="请选择目录"
           v-model="form.parentid"
           :fileCanSelect='false'
@@ -33,7 +33,7 @@
 const tool = require("./tool.js");
 
 export default {
-  components: tool.loadc('cl-file-selector'),
+  components: tool.loadc('cl-select-files'),
   
   data() {
     return {
