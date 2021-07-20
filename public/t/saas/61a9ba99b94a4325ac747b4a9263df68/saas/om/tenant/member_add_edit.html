@@ -164,7 +164,9 @@
       };
       zy.g.am.app = '78cf8922c5ea4afa9dae8970215ea796';
       zy.g.am.mod = 'tenant';
-      zy.net.get("api/memberGet", callback, {_id: param._id, tel:param.tel});
+      zy.net.get("api/memberGet", callback, {
+        tenantId: param.tenantId, personid: param.personid
+      });
       
       
       
@@ -190,7 +192,8 @@
       submitHandler: function (form) {
         
         var data = $form.form2json();
-        data._id = param._id;
+        data.tenantId = param.tenantId;
+        data.personid = param.personid;
         
         //添加
         if (flag == 'i') {
@@ -223,6 +226,7 @@
               //   //异步展开树节点
               //   ztreeObj.expandNode(node, true, false, true, true);
               // }
+              data.personid = msg.personid;
               submitCB && submitCB(data); //回调
             }
           };

@@ -51,7 +51,7 @@ function tenant_member_view(){
     
     $add.on("click",function(){
       zy.net.loadHTMLs("saas/om/tenant/member_add_edit.html",$modal_container,function(){
-        member_add_edit({_id:tenantID},"i",function(formData){
+        member_add_edit({tenantId:tenantID},"i",function(formData){
           // 添加表格行数据
           memberDataTableApi.row.add(formData).draw();
         })
@@ -62,7 +62,7 @@ function tenant_member_view(){
       zy.net.loadHTMLs("saas/om/tenant/member_add_edit.html",$modal_container,function(){
         //获取当前选择表格行数据
         var data = memberDataTableApi.row('tr.active').data();
-        data._id = tenantID;
+        data.tenantId = tenantID;
         
         member_add_edit(data,"u",function(formData){
           // 修改表格行数据
@@ -96,7 +96,8 @@ function tenant_member_view(){
           }
         },
           {
-            _id: tenantID,
+            tenantId: tenantID,
+            personid: data.personid,
             tel: data.tel
           });
 
@@ -160,7 +161,7 @@ function tenant_member_view(){
     zy.g.am.app = '78cf8922c5ea4afa9dae8970215ea796';
     zy.g.am.mod = 'tenant';
     zy.net.get("api/memberGet", cb, {
-      _id: tenantID
+      tenantId: tenantID
     });
     // 合并初始化参数选项
     // $.extend(options, zy.ui.dataTable);
