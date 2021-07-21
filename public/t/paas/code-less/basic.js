@@ -46,12 +46,6 @@ module.exports = {
     groupName: '文本',
   },
   
-  bc004h5: {
-    txt:'标题5', 
-    component:'h5',
-    groupName: '文本',
-  },
-  
   bc004iframe: {
     txt: '内嵌框架',
     component:'iframe',
@@ -186,5 +180,18 @@ module.exports = {
       'grid-template-rows': 'auto',
       'grid-template-columns': 'auto auto',
     },
-  }
+  },
+  
+  bc010: {
+    txt: '虚拟跳转', 
+    component: 'router-link',
+    helpTag: 'a',
+    groupName: '文本',
+    props: {
+      to: {
+        desc: '跳转到虚拟路径',
+        type: 1,
+      },
+    },
+  },
 }

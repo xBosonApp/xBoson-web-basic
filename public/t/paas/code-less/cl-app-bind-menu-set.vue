@@ -8,11 +8,19 @@
   chosenClass="cl-drag-drop-component-chosen" 
   ghostClass='cl-drag-drop-component-ghost' 
   dragClass='cl-drag-drop-component-drag'
-  @add='add' 
+  @add='add'
 >
   <div v-for='(m, i) in menu' :key='i'>
-    <div v-if='m.isContainer' class='c'>
-      <div class='items-group bs1'>
+    <div v-if='m.isContainer' 
+      class='c'
+      @mouseover.self="setHover(i, true)"
+      @mouseout="setHover(i, false)"
+      :class='hover[i]'
+    >
+      <div class='items-group bs1' 
+        @mouseover="setHover(i, true)"
+        @mouseout.self="setHover(i, false)"
+      >
         <i :class='[m.icon, "ti", "ic"]'></i>
         <input v-model='m.title' class='ti'/> 
         
@@ -37,7 +45,8 @@
         :deep='deep+1' 
         :newMenu='newMenu'
         class='p h' 
-        v-if='m.isShow'/>
+        v-if='m.isShow'
+        />
     </div>
      
     <div v-else class='items-group bs2 p'>
@@ -71,6 +80,7 @@ export default {
       tempitem: {},
       showEdit: false,
       index   : null,
+      hover   : {},
     };
   },
   
@@ -102,6 +112,10 @@ export default {
         });
       }
     },
+    
+    setHover(i, b) {
+      this.$set(this.hover, i, b ? 'hover': '');
+    },
   },
 }
 </script>
@@ -130,5 +144,8 @@ export default {
 }
 .bic {
   float: left; padding-top: 3px;
+}
+.hover {
+  border-color: blue;
 }
 </style>

@@ -44,11 +44,12 @@
   Vue.component(name, require('./'+ name +'.vue', 1,1));
 });
 
-
+const router = new VueRouter({});
 const store = require("./store.js");
 
 export default {
   store,
+  router,
   
   data() {
     return {

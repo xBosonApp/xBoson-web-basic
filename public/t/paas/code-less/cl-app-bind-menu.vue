@@ -31,6 +31,7 @@
       
       <div style='margin-top: 10px'>
         <a-button @click='doUpdate' type='primary'>递交</a-button>
+        <a-button @click='doTable' icon='table'>一览</a-button>
         <a-button @click='$emit("previous")' icon='rollback'>返回</a-button>
       </div>
     </div>
@@ -69,6 +70,16 @@
       @ok='setNomenu'
     />
     
+    <a-drawer
+      title="菜单数据一览"
+      placement="right"
+      width='80%'
+      :visible="showTable"
+      @close="showTable = false"
+    >
+      <cl-app-menu-list :menu='menu' :nomenu='nomenu'/>
+    </a-drawer>
+    
   </div>
 </template>
 
@@ -78,7 +89,10 @@ const tool = require("./tool.js");
 export default {
   props : ['data', 'next'],
   
-  components: tool.loadc('cl-app-bind-menu-set', 'cl-app-menu-item-edit'),
+  components: tool.loadc(
+    'cl-app-bind-menu-set', 
+    'cl-app-menu-item-edit',
+    'cl-app-menu-list'),
   
   computed : {
     nextid() {
@@ -112,6 +126,7 @@ export default {
       
       showHelpBar : true,
       showEditDialog : false,
+      showTable : false,
       editOnAdd : false,
       editId : null,
       currnomenu,
@@ -144,17 +159,13 @@ export default {
         title = '标题'+ (1+this.menu.length);
       }
       return {
-        title,
-        isContainer: true,
-        child: [],
-        isShow: true,
-        roles: [], 
-        icon: null,
+        title, isContainer: true, child: [], isShow: true,
+        roles: [], icon: null,
       };
     },
     
     newNoMenu() {
-      return { title:'', fid:'', path:'', roles: [], icon:null };
+      return { title:'', fid:'', path:'', roles: [], icon: null };
     },
     
     appendMenu() {
@@ -232,6 +243,10 @@ export default {
           this.removeMenuRef(m[i].child, id);
         }
       }
+    },
+    
+    doTable() {
+      this.showTable = true;
     },
   },
 }
