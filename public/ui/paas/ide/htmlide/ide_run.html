@@ -32,7 +32,22 @@
                 </label>
               </section>
             </div>
-            
+            <div id="content-type-div" class="row" style="display:none;">
+              <section class="col col-6">
+                <!--<label class="label"></label>-->
+                <!--<lable class="input has-warning">-->
+                <!--</lable>-->
+              </section>
+              <section class="col col-6">
+                <label class="label">Content-Type</label>
+                <label class="input has-warning">
+                  <input type="text" name="Content-Type" placeholder="Content-Type">
+                  <!--<select name="Content-Type">-->
+                    
+                  <!--</select>-->
+                </label>
+              </section>
+            </div>
           </fieldset>
          
         </form>
@@ -127,6 +142,9 @@
     var apitype = modal.find('[name=apitype]'),
         ajaxtype = modal.find('[name=ajaxtype]'),
         url = modal.find('[name=url]');
+        
+    var contentType = modal.find('[name=Content-Type]');
+    var contentTypeDiv = modal.find('#content-type-div');
         
     var help = null;
     var rowList = {};
@@ -268,6 +286,11 @@
       
       ajaxtype.change(function(e){
         ajtype = e.val;
+        if(ajtype == '02'){
+          contentTypeDiv.show();
+        }else{
+          contentTypeDiv.hide();
+        }
         url.trigger('_change');
       });
       
@@ -484,6 +507,16 @@
         
         cb&&cb();
       });
+      
+      var contentTypeArr = [
+        {id:"json", name:"application/json"},
+        {id:"urlencoded", name:"application/x-www-form-urlencoded"}
+      ]
+      contentType.zySelectCustomData(null,null,{
+        width: '100%'
+      },contentTypeArr);
+      
+      contentType.select2('val','urlencoded');
     }
     
     loadScript("lib/js/plugin/x-editable/moment.min.js", loadMockJax);
@@ -554,9 +587,19 @@
       }
       
       if(type == '02'){
-        $.post(url, param, function (msg) {
-          showResult(msg);
-        })
+        var cType = contentType.select2('val');
+        
+        if(cType == 'json'){
+          zy.g.am.app = appid;
+          zy.g.am.mod = modid;
+          zy.g.am.json = true;
+          zy.net.post('api/'+apiid, showResult,param,null,showResult);
+          
+        }else if(cType == 'urlencoded'){
+          $.post(url, param, function (msg) {
+            showResult(msg);
+          })
+        }
       }
     }
   }
