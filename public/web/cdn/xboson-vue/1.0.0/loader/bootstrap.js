@@ -15,8 +15,8 @@ let bootv  = require("cdn/bootstrap-vue/2.21.2/bootstrap-vue.min.js");
 // Vue.use(bootv);
 
 let css = [
-  require("cdn/bootstrap/4.6.0/bootstrap.min.css"),
-  require("cdn/bootstrap-vue/2.21.2/bootstrap-vue.min.css"),
+  require("cdn/bootstrap/4.6.0/bootstrap.min.css", 1),
+  require("cdn/bootstrap-vue/2.21.2/bootstrap-vue.min.css", 1),
 ]
 
 module.exports = {

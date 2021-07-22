@@ -18,7 +18,7 @@
     <div v-if='isRename' class='items-group as'>
       <label>首页</label>
       <div>
-        <a :href='path'>{{ path }}</a>  
+        <a :href='path' target='_blank'>{{ path }}</a>  
       </div>
       
       <label>菜单类型</label>

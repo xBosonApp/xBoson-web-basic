@@ -69,7 +69,7 @@ module.exports = {
   
   bc005: {
     txt:'按钮', 
-    component:'a-button',
+    component:'button',
     groupName: '表单',
     props: {
       disabled: {
@@ -104,7 +104,7 @@ module.exports = {
   
   bc006: {
     txt:'输入框', 
-    component:'a-input',
+    component:'input',
     groupName: '表单',
     props: {
       placeholder: {
