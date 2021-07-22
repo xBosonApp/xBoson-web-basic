@@ -194,4 +194,11 @@ module.exports = {
       },
     },
   },
+  
+  bc011: {
+    txt:'登陆表单', 
+    component:'x-login-form',
+    groupName: '表单',
+    helpTag: 'div',
+  },
 }

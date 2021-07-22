@@ -12,6 +12,8 @@ const componentNames = [
   'x-menu2',
   'x-api',
   'x-ace',
+  'x-agreement',
+  'x-login-form',
 ];
 
 if (!window.Vue) {
@@ -66,7 +68,7 @@ function pluginXapi(url, params) {
           if (xv.debug && ret.data) {
             msg += '\n\n[DEBUG] '+ ret.data;
           }
-          fail(new Error(msg));
+          fail(Object.assign(new Error(msg), ret));
           return;
         }  
         
