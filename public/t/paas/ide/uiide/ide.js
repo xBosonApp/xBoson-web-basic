@@ -1856,6 +1856,13 @@
                                 _savebtn.show();
                                 $fixsize();
                                 editor.root.resize();
+                                
+                                editor.root.on('change', function() {
+                                  _pre.setModify(true);
+                                });
+                                editor.root.saved = function() {
+                                  _pre.setModify(false);
+                                };
                             }, _pre.pre, _m.result.filetype);
                             
                             if (enableFileType[_m.result.filetype]) {
@@ -1863,13 +1870,6 @@
                             } else {
                                 _previewbtn.hide();
                             }
-                            
-                            editor.root.on('change', function() {
-                              _pre.setModify(true);
-                            });
-                            editor.root.saved = function() {
-                              _pre.setModify(false);
-                            };
                         } else
                             zy.ui.msg('提示', '接口执行失败:' + _m.msg, 'e');
                     }, $.extend(true, _tgt, zy.g.comm));

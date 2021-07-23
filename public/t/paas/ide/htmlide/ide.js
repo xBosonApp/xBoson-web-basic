@@ -1465,14 +1465,14 @@ function NewIDE(roleid) {
             _hisbtn.hide();
             _runbtn.parent().hide();
             _apistatusbtn.hide();
+            
+            editor.root.on('change', function() {
+              _pre.setModify(true);
+            });
+            editor.root.saved = function() {
+              _pre.setModify(false);
+            };
           }, _pre.pre);
-          
-          editor.root.on('change', function() {
-            _pre.setModify(true);
-          });
-          editor.root.saved = function() {
-            _pre.setModify(false);
-          };
         });
       if (_node.contentid)
         _code({
@@ -1493,14 +1493,14 @@ function NewIDE(roleid) {
               _runbtn.trigger('_init',[_node,_m['help_info']]);
               $fixsize(true);
               editor.initSize();
+              
+              editor.root.on('change', function() {
+                _pre.setModify(true);
+              });
+              editor.root.saved = function() {
+                _pre.setModify(false);
+              };
             }, _pre.pre);
-            
-            editor.root.on('change', function() {
-              _pre.setModify(true);
-            });
-            editor.root.saved = function() {
-              _pre.setModify(false);
-            };
           } catch(e) {
             console.log("ide/htmlide/ide.js", e);
             zy.ui.msg('IDE 打开错误', 'ID 使用了中文可能出错, 检查 app/module/api 的 id 是否正确.', 'e');
