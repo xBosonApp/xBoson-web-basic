@@ -582,6 +582,7 @@
                             $(this).btnDisable(false);
                             zy.ui.msg('保存文件', msg.msg, parseInt(msg.ret)!=0 ? 'e': 's');
                             $('.modal').modal('hide');
+                            _editor.saved();
                           }, $.extend(true, _t, zy.g.comm));
                         }
                         
@@ -1137,6 +1138,7 @@
                         } else {
                             zy.ui.msg('提示', '接口执行失败:' + msg.msg, 'e');
                         }
+                        editor.root.saved();
                     })
                 }
             }
@@ -1861,6 +1863,13 @@
                             } else {
                                 _previewbtn.hide();
                             }
+                            
+                            editor.root.on('change', function() {
+                              _pre.setModify(true);
+                            });
+                            editor.root.saved = function() {
+                              _pre.setModify(false);
+                            };
                         } else
                             zy.ui.msg('提示', '接口执行失败:' + _m.msg, 'e');
                     }, $.extend(true, _tgt, zy.g.comm));
@@ -2128,18 +2137,29 @@
             if (_contentid)
                 _div.attr('name', _contentid);
             var _num = _tab.AddTab(_id, _name, true, _div);
+            
+            var label = $('#'+ _div.parents('.ui-tabs-panel').attr('aria-labelledby'));
+            function setModify(b) {
+              if (b) {
+                label.addClass('modify');
+              } else {
+                label.removeClass('modify');
+              }
+            }
 
             if (_num) {
                 _tab.active(_num);
                 return {
                     pre: _tab.el.find('[aria-hidden=false]').find('pre'),
-                    inputc: _input
+                    inputc: _input,
+                    setModify : setModify,
                 }
             } else {
                 _delBtnEvent(_tab.el.find('li[aria-selected=true]').find('.hover-transparent:has(i)'));
                 return {
                     pre: _pre,
-                    inputc: _input
+                    inputc: _input,
+                    setModify : setModify,
                 }
             }
         }

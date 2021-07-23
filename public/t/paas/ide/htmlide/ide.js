@@ -435,6 +435,7 @@ function NewIDE(roleid) {
                 zy.ui.msg('提示信息', msg.msg || 'API保存成功', 's');
                 $('.modal').modal('hide');
                 _apistatusbtn.trigger('show', '00');
+                _editor.saved();
               }
             })
           }
@@ -934,6 +935,7 @@ function NewIDE(roleid) {
             if (msg) {
               _btn.btnDisable(false);
               zy.ui.msg('提示信息', msg.msg || 'API保存成功', 's');
+              editor.root.saved();
             }
           })
         }
@@ -1191,7 +1193,8 @@ function NewIDE(roleid) {
     return {
       initSize:_initsize,
       get : _getValue,
-      set : _setValue
+      set : _setValue,
+      root: editor,
     };
   }
 
@@ -1463,6 +1466,13 @@ function NewIDE(roleid) {
             _runbtn.parent().hide();
             _apistatusbtn.hide();
           }, _pre.pre);
+          
+          editor.root.on('change', function() {
+            _pre.setModify(true);
+          });
+          editor.root.saved = function() {
+            _pre.setModify(false);
+          };
         });
       if (_node.contentid)
         _code({
@@ -1473,7 +1483,7 @@ function NewIDE(roleid) {
             var _pre = _tab.add(_node.apiid, _node.contentid, _m.stability, _id);
             _pre.inputc.val(_m.updatecmt);
             _pre.pre.attr('help_info',_m['help_info']);
-            
+          
             _initIde(function() {
               _apistatusbtn.trigger('show', [_m.stability]);
               editor.set(_m.content, false, _node.apiid);
@@ -1484,6 +1494,13 @@ function NewIDE(roleid) {
               $fixsize(true);
               editor.initSize();
             }, _pre.pre);
+            
+            editor.root.on('change', function() {
+              _pre.setModify(true);
+            });
+            editor.root.saved = function() {
+              _pre.setModify(false);
+            };
           } catch(e) {
             console.log("ide/htmlide/ide.js", e);
             zy.ui.msg('IDE 打开错误', 'ID 使用了中文可能出错, 检查 app/module/api 的 id 是否正确.', 'e');
@@ -1714,18 +1731,30 @@ function NewIDE(roleid) {
       if (_stability)
         _div.attr('stability', _stability);
       var _num = _tab.AddTab(_id, _nm, true, _div);
+      
+      var label = $('#'+ _div.parents('.ui-tabs-panel').attr('aria-labelledby'));
+      function setModify(b) {
+        if (b) {
+          label.addClass('modify');
+        } else {
+          label.removeClass('modify');
+        }
+      }
+    
       // zy.log('a'+_id);
       if (_num) {
         _tab.active(_num);
         return {
           pre : _tab.el.find('[aria-hidden=false]').find('pre'),
-          inputc : _input
+          inputc : _input,
+          setModify : setModify,
         }
       } else {
         _delBtnEvent(_tab.el.find('li[aria-selected=true]').find('.hover-transparent:has(i)'));
         return {
           pre : _pre,
-          inputc : _input
+          inputc : _input,
+          setModify : setModify,
         }
       }
     }
