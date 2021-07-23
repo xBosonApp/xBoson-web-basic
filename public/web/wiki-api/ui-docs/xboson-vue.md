@@ -67,3 +67,62 @@
 事件:
 * success(retData{msg, code, ...}) 接口成功返回 
 * error(Error) 接口调用失败
+
+
+## `<x-agreement>`
+
+显示用户协议
+
+参数:
+* visible 是否显示
+
+事件:
+* ok 点击 ‘理解并接受’ 按钮后触发
+
+
+## `<x-login-form>`
+
+登陆表单
+
+事件:
+* loginSuccess 登陆成功后发出.
+
+
+## `<x-login-page>`
+
+默认登陆页面, 与框架配合使用, 在需要登陆时自动显示.
+
+
+## `<x-ace>`
+
+显示一个代码编辑器
+
+参数:
+* v-model 绑定数据 
+* language 代码的解析语言, 'javascript' 等, 默认 'text'
+* theme 样式
+
+事件:
+* editHandle : (editor) 在组件加载后立即发出, 传递一个 ace.editor 实例.
+
+
+## `<x-null>`
+
+空组件, 什么也不做.
+
+
+# Vue 插件 
+
+绑定到 Vue 实例上的方法 / 属性
+
+
+## Promise $xapi(url, params)
+
+调用平台接口, url 需自行补全路径, 对返回按平台约定进行格式化.
+在必要时发出登陆请求.
+
+
+## $globalBus
+
+全局消息对象, 除非特别约定, 组件不应该依赖任何全局事件来传递参数.
+滥用全局事件会导致组件不可复用.

@@ -80,8 +80,8 @@ window.xAppState().then(function() {
   componentNames.forEach(reg);
 });
 
-const xbosonPlugin = { install };
-Vue.use(xbosonPlugin, {});
+
+Vue.use({ install }, {});
 
 
 function install(vue, opt) {
