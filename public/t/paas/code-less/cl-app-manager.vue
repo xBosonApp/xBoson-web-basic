@@ -38,6 +38,11 @@ export default {
       },
     };
   },
+
+  beforeDestroy() {
+    this.$store.commit('setMenuClipboard', null);
+    // console.log("clear menu clipboard");
+  },
 }
 </script>
 

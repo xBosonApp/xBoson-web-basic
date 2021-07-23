@@ -10,6 +10,8 @@ module.exports = new Vuex.Store({
     editFile: null,
     // 必须对css属性进行逐项复制
     cssClipboard: null, 
+    // 存储 json 字符串
+    menuClipboard: null,
     bindContextStyle : {},
     // { id: boolean }
     // isComponentLoaded : {},
@@ -17,7 +19,7 @@ module.exports = new Vuex.Store({
     
     // 方便调试的开关
     test : false,
-    testOpenFile : 'HoL5yZAFT7ao6XRuvbPFwQ',
+    testOpenFile : '-iw7PvgkRoG6BmMykggYgQ',
   },
   
   mutations: {
@@ -66,6 +68,10 @@ module.exports = new Vuex.Store({
     
     setCssClipboard(s, data) {
       s.cssClipboard = data;
+    },
+    
+    setMenuClipboard(s, data) {
+      s.menuClipboard = data ? JSON.stringify(data) : null;
     },
     
     setBindContextStyle(s, styledom) {

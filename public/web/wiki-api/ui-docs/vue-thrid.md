@@ -14,6 +14,9 @@
 除非必要, UI 组件推荐使用 require() 方法引入 `cdn/xboson-vue/1.0.0/loader/` 目录中对应的组件加载器.
 
 
+# mas 模版加载组件
+
+
 ## `<vue:vue>`
 
 引入 [Vue 2.6.11 基础库](https://cn.vuejs.org/v2/guide/index.html)

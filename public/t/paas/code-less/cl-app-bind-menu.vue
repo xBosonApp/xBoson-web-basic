@@ -30,9 +30,13 @@
       <cl-add-button @click='addNom' title='菜单映射' style='margin-top: 2px;'/>
       
       <div style='margin-top: 10px'>
+        <a-button-group>
         <a-button @click='doUpdate' type='primary'>递交</a-button>
         <a-button @click='doTable' icon='table'>一览</a-button>
         <a-button @click='$emit("previous")' icon='rollback'>返回</a-button>
+        <a-button @click='doCopy' icon='copy' />
+        <a-button @click='doPaste' icon='highlight' :disabled='cannotPaste' />
+        </a-button-group>
       </div>
     </div>
     
@@ -111,6 +115,10 @@ export default {
         arr.push(Object.assign({id}, this.nomenu[id]));
       }
       return arr;
+    },
+    
+    cannotPaste() {
+      return !this.$store.state.menuClipboard;
     },
   },
   
@@ -249,13 +257,26 @@ export default {
     doTable() {
       this.showTable = true;
     },
+    
+    doCopy() {
+      this.$store.commit('setMenuClipboard', {
+        menu   : this.menu,
+        nomenu : this.nomenu,
+      });
+    },
+    
+    doPaste() {
+      let d = JSON.parse(this.$store.state.menuClipboard);
+      this.menu = d.menu;
+      this.nomenu = d.nomenu;
+    },
   },
 }
 </script>
 
 <style scoped>
 .m {
-  grid-template-columns: 350px auto;
+  grid-template-columns: 390px auto;
 }
 .bs {
   grid-template-columns: 1fr auto auto; margin-bottom: 2px;
@@ -267,7 +288,7 @@ export default {
   position: fixed; right: 50px; top: 150px; min-width: 300px;
 }
 .nomenu {
-  min-width: 200px; display: inline-block;
+  min-width: 260px; display: inline-block;
 }
 .bic {
   float: left; padding-top: 3px;

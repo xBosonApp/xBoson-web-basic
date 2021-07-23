@@ -127,6 +127,20 @@ export default {
     
     chooseSelf(ev) {
       this.setAdjRef(ev.oldIndex);
+      // let [x, y] = this.getOffset(ev.srcElement);
+      // console.log(x, y, ev)
+    },
+    
+    getOffset(el) {
+      let x = el.offsetLeft, y = el.offsetTop;
+      let p = el.offsetParent;
+      while (p) {
+        x += p.offsetLeft;
+        y += p.offsetTop;
+        if (p == el.offsetParent) break;
+        p = el.offsetParent;
+      }
+      return [x, y];
     },
     
     onUpdate() {
