@@ -7,15 +7,19 @@
       v-bind='bind' 
       v-model='props[name]' 
       @change='onChange'
+      class='full'
     />
   </div>
 </template>
 
 <script>
+const tool = require("./tool.js");
 const clib = require("./component-library.js");
 
 export default {
   props: ['name', 'desc', 'componentName', 'bind', 'props', 'propsConfig', 'cid'],
+  
+  components: tool.loadc('cl-select-fa-icon'),
   
   mounted() {
     this.mountPlugin();
@@ -35,4 +39,5 @@ export default {
 </script>
 
 <style scoped>
+.full { width: 100%; }
 </style>

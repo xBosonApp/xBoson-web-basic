@@ -1,7 +1,7 @@
 <!-- Create By xBoson System -->
 
 <template>
-  <a-select :value="value" @change="up" :showSearch='true'>
+  <a-select :value="value" @change="up" :showSearch='true' :allowClear='true'>
     <a-select-opt-group v-for='g in group'>
       <span slot="label">{{g.name}}</span>
       <a-select-option v-for='icon in g.list' :value="icon">
@@ -44,8 +44,7 @@ export default {
   
   methods: {
     up(v) {
-      this.value = v;
-      this.$emit('input', v);
+      this.$emit('input', v || '');
     }
   }
 }

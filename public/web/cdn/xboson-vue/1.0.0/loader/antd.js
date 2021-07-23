@@ -1,5 +1,14 @@
 /* Create By xBoson System */
 
+// 全局加载过则使用全局对象, 低代码在重复加载时会重置组件状态
+if (window.antd) {
+  module.exports = {
+    antd   : window.antd,
+    moment : window.moment,
+    css    : null,
+  };
+  return;
+}
 //
 // 装载 Ant design 组件
 //

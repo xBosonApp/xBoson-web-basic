@@ -3,14 +3,12 @@
 <template>
   <a-collapse class='components' 
     :bordered="false" 
-    :defaultActiveKey='acted'
     @change="onChange">
     
-    <a-collapse-panel v-for="(c, i) in libs" :key="i" :header="c.title" 
-        @click.native.once='onLibClick(c)'>
+    <a-collapse-panel v-for="(c, i) in libs" :key="i" :header="c.title">
       
       <div v-for='(list, gname) in c.group' :key='gname'>
-        <div class='cl-classify'>{{gname}}</div>
+        <div class='cl-classify'>{{ gname }}</div>
         
         <draggable 
           :group="{ name: 'ui-component', pull: 'clone', put: false }" 
@@ -45,22 +43,9 @@ export default {
     return data;
   },
   
-  computed: {
-    acted : {
-      get() {
-        return localStorage[this.sname];
-      },
-      set(i) {
-        localStorage[this.sname] = i;
-      },
-    },
-  },
-  
   mounted() {
     clib.loadStaticLib('基础组件', './basic.js');  
-    clib.loadClassify().catch(this.error).then(()=>{
-      this.libs = clib.getLibrary(); // 更新
-    });
+    clib.loadClassify().catch(this.error);
   },
   
   methods : {
@@ -69,11 +54,19 @@ export default {
     },
     
     onChange(key) {
-      this.acted = key;
+      if (Array.isArray(key)) {
+        key.forEach(k=> this.onLibClick(k) );
+      } else {
+        this.onLibClick(key);
+      }
     },
     
-    onLibClick(lib) {
-      this.$store.commit('loadComponentsFromLibrary', lib.id);
+    onLibClick(index) {
+      let lib = this.libs[index];
+      if (lib) {
+        // console.log('!!!', lib)
+        this.$store.commit('loadComponentsFromLibrary', lib.id);
+      }
     },
     
     error(err) {

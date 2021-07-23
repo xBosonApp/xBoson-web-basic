@@ -79,21 +79,6 @@ module.exports = {
         def: false,
         propsConfig: {isExprAttr:true},
       },
-      shape: {
-        desc: '按钮形状',
-        type: 3,
-        select:{ '方形':'round', '圆形':'circle' },
-      },
-      icon: {
-        desc: '图标类型',
-        type: 6,
-      },
-      loading: {
-        desc: '显示加载中',
-        type: 3,
-        select:{"加载中":true, '正常':false},
-        propsConfig: {isExprAttr:true},
-      },
       click: {
         desc: '左键单击事件',
         type: 8,

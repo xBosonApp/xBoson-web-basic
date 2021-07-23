@@ -100,7 +100,7 @@ function _find_lib(id) {
 //
 // list - { id: { id, txt, component, ...} }
 //
-function loadLib(id, list, _replace_exists) {
+function loadLib(id, list) {
   let lib = _find_lib(id);
   
   for (let n in list) {
@@ -113,8 +113,8 @@ function loadLib(id, list, _replace_exists) {
       g.push(list[n]);
     }
     
-    if (_replace_exists == null && componentAll[n]) {
-      throw new Error("组件 "+ n +'冲突, 在 '+ lib.title);
+    if (componentAll[n]) {
+      console.debug("Replease", n, 'in', lib.title);
     }
     componentAll[n] = list[n];
     componentAll[n].clid = id;

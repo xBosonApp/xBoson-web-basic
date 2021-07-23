@@ -121,7 +121,7 @@ export default {
           return { min: p.min, max: p.max, };
         case 3:
           let options = this._getSelectOpt(p.select);
-          return { 'default-value': p.def, options, style: 'width: 100%' };
+          return { 'default-value': p.def, options, style: 'width: 100%', 'allowClear': true };
         case 4:
           return {};
         case 5:

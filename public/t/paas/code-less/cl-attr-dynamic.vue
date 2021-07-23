@@ -141,7 +141,8 @@ const role = require("./component-role.js");
 export default {
   props: ['name', 'desc', 'componentName', 'bind', 'props', 'propsConfig', 'isEventBind', 'cid'],
   
-  components: tool.loadc('cl-list-vars', 'cl-list-funcs', 'cl-attr-dyn-modifiers', 'cl-expr-help'),
+  components: tool.loadc('cl-list-vars', 'cl-list-funcs', 
+    'cl-attr-dyn-modifiers', 'cl-expr-help', 'cl-select-fa-icon'),
   
   computed: {
     typeConfig() {
@@ -206,6 +207,10 @@ export default {
         }
       },
     },
+  },
+  
+  mounted() {
+    this.mountPlugin();
   },
   
   data() {
@@ -312,6 +317,11 @@ export default {
     setNull() {
       this.config.varType = 'expr';
       this.config.expr = null;
+    },
+    
+    mountPlugin() {
+      clib.makeComponentPluginLoader(this.cid, this.$options.components);
+      this.$forceUpdate();
     },
   },
 }

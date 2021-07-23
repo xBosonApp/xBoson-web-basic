@@ -33,7 +33,6 @@
   'cl-component-container',
   'cl-component-choose',
   
-  'cl-icon-select',
   'cl-color-picker',
   'cl-css-number',
   'cl-input-fmt',
