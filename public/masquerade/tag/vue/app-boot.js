@@ -136,14 +136,18 @@
       });
     } 
     // Antd
-    else if (antd && antd.notification) {
+    else if (window.antd && antd.notification) {
       antd.notification.error({
         message : title,
         description : err.message,
         style: {'word-break': 'break-all', 'white-space':'pre-wrap'},
       });
-    } else {
-      alert(title +'\n'+ err.message);
+    } 
+    else {
+      makeDialog([
+        "<div style='color:red; font-size:larger;'>", title, "</div>",
+        "<div>", err.message, "</div>",
+      ]);
     }
   }
   
@@ -462,6 +466,46 @@
       });
     }
     return mod;
+  }
+  
+  
+  function makeDialog(content, waitTime) {
+    let el = document.createElement("dialog");
+    el.setAttribute('open', true);
+    el.style.setProperty('--animate-duration', '.5s');
+    el.className = 'animate__animated animate__fadeInDown';
+    el.innerHTML = Array.isArray(content) ? content.join('') : content;
+    Object.assign(el.style, {
+      position      : 'absolute'  , top       : '20px',
+      padding       : '20px 50px' , border    : 0,
+      broderRadius  : '5px'       , boxShadow : '0 0 5px #777',
+      minWidth      : '200px'     , 
+    });
+    
+    let close = document.createElement("a");
+    close.setAttribute('href', '#');
+    close.innerHTML = "关闭";
+    Object.assign(close.style, {
+      color : 'blue', fontSize : 'smaller',
+    });
+    
+    let doClose = ()=>{
+      el.className = 'animate__animated animate__fadeOutUp';
+      el.addEventListener('animationend', ()=>el.remove());
+    };
+    close.addEventListener('click', doClose);
+    if (waitTime === undefined) setTimeout(doClose, 3000);
+    else if (waitTime > 0) setTimeout(doClose, waitTime);
+    
+    let ct = document.createElement("div");
+    Object.assign(ct.style, {
+      textAlign : 'right', marginTop: '5px', borderTop: '1px solid #eee',
+    });
+    ct.append(close);
+    
+    el.append(ct);
+    document.body.appendChild(el);
+    return el;
   }
   
   

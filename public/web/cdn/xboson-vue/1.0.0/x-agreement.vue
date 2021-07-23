@@ -188,10 +188,29 @@ h3 {
   font-size: 22px; padding: 12px 60px; 
 }
 .d {
-  z-index: 999; position: absolute; top: 20px; left: 20px; width: calc(100% - 40px);
-  margin: 0; padding: 30px 150px;
+  z-index: 999; position: absolute; top: 20px;
+  margin: 0; padding: 30px 150px; height: calc(100vh - 60px - 40px); overflow-y: scroll;
 }
 .d p {
-  padding: 0 100px 0 30px;
+  padding: 0 100px 0 30px; 
+}
+
+@media screen and (max-width: 900px) {
+  h1 {
+    margin: 10px;
+  }
+  h3 {
+    margin-top: 10px;
+  }
+  .ok {
+    font-size: 15px; padding: 2px 10px; 
+  }
+  .d p {
+    padding: 0 10px 0 10px;
+  }
+  .d {
+    top: 0; left: 0;
+    padding: 3px 8px; height: calc(100vh - 6px - 4px);
+  }
 }
 </style>

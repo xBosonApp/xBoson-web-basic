@@ -21,8 +21,10 @@
       <div class='foot'>
         <span class='errmsg'>{{ errmsg }}</span>
         <span class='infmsg'>{{ infmsg }}</span>
-        <button @click='showAgree = true' class='norm'>用户协议</button>
-        <button @click='login' :disabled='blockok' v-if='showButton'>登陆</button>
+        <div>
+          <button @click='showAgree = true' class='norm'>用户协议</button>
+          <button @click='login' :disabled='blockok' v-if='showButton'>登陆</button>
+        </div>
       </div>
     </div>
     
@@ -117,6 +119,8 @@ export default {
         this.blockok = false;
         this.showButton = false;
         this.info(null, ret.msg);
+        this.$globalBus.emit('x-login-success', ret);
+        this.$emit('loginSuccess', ret);
       });
     },
     
@@ -130,6 +134,7 @@ export default {
       this.blockok = true;
       this.$xapi(xv.ctx_prefix +'/user/login', q).then(ok).catch((err)=>{
         this.blockok = false;
+        
         if (err.code == 10) {
           this.changeCapt();
         }
@@ -151,6 +156,7 @@ export default {
 
 .x-power {
   color: #ccc; text-decoration: none; position: fixed; right: 5px; bottom: 5px;
+  font-size: 10px; z-index: 999;
 }
 
 .x-login-form-frame {
@@ -164,10 +170,10 @@ export default {
     padding: 50px 0 20px 0; border: 1px solid #ddd; border-width: 1px 0;
   }
   .foot {
-    text-align: right;
+    display: flex; flex-direction : row; flex-wrap: wrap; justify-content: flex-end;
   }
   .input-item {
-    display: grid; grid-template-columns: @labelWidth auto; margin-bottom: 10px;
+    display: grid; grid-template-columns: @labelWidth auto; margin-bottom: 10px; gap: 1px 6px;
   }
 }
 
@@ -194,7 +200,7 @@ button {
 button:hover {
   opacity: 1;
 }
-button:active{
+button:active {
   transform: scale(0.9);
 }
 button[disabled=disabled] {
@@ -202,9 +208,31 @@ button[disabled=disabled] {
 }
 label {
   width: @labelWidth; text-align: right; display: inline-flex; margin-right: 10px;
-  align-items: center; justify-content: flex-end; padding: 4px 10px; 
+  align-items: center; justify-content: flex-end; padding: 4px 0px; 
 }
 input {
-  width: 300px; border-radius: 3px; 
+  width: 300px; border-radius: 3px; border: 1px solid #acacac;
+}
+
+@media screen and (max-width: 900px) {
+  .x-login-form-frame {
+    margin: 0; border: 0; width: 100%;
+    
+    .input-item {
+      grid-template-columns: 1fr;
+    }
+    .body {
+      padding: 15px;
+    }
+    .foot {
+      justify-content: flex-start;
+    }
+  }
+  label { display: block; text-align: left; }
+  .tip, .capt { grid-column: auto; } 
+  input { line-height: 2em; }
+  .errmsg, .infmsg {
+    display: block;
+  }
 }
 </style>

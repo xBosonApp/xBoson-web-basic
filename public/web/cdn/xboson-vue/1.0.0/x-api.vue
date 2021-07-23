@@ -1,7 +1,5 @@
 <!-- Create By xBoson System -->
 
-<template></template>
-
 <script>
 // @success(data) - 接口返回成功的数据
 // @error(Error) - 借口返回异常的数据

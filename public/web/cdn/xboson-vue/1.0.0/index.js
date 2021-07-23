@@ -14,6 +14,8 @@ const componentNames = [
   'x-ace',
   'x-agreement',
   'x-login-form',
+  'x-login-page',
+  'x-null',
 ];
 
 if (!window.Vue) {
@@ -29,6 +31,45 @@ if (!window.xAppState) {
 }
 
 
+class EventBus {
+  constructor() {
+    this._bus = new Vue();
+  }
+  
+  emit(name, ...parm) {
+    this._bus.$emit(name, ...parm);
+  }
+  
+  send(...parm) {
+    this._bus.$emit(name, ...parm);
+  }
+  
+  on(name, listener) {
+    this._bus.$on(name, listener);
+    return this._makeremove(name, listener);
+  }
+  
+  off(name, listener) {
+    this._bus.$off(name, listener);
+  }
+  
+  once(name, listener) {
+    this._bus.$once(name, listener);
+    return this._makeremove(name, listener);
+  }
+  
+  _makeremove(n, l) {
+    let remove = ()=>{
+      this._bus.$off(n, l);
+    }
+    return {
+      remove,
+    }
+  }
+}
+
+
+const globalBus = new EventBus();
 const base = '/web/cdn/xboson-vue/1.0.0/';
 
 function reg(name) {
@@ -45,6 +86,7 @@ Vue.use(xbosonPlugin, {});
 
 function install(vue, opt) {
   Vue.xapi = Vue.prototype.$xapi = pluginXapi;
+  Vue.prototype.$globalBus = globalBus;
 }
 
 
@@ -65,9 +107,15 @@ function pluginXapi(url, params) {
       resp.json().then(ret=>{
         if (ret.code) {
           let msg = ret.msg;
-          if (xv.debug && ret.data) {
+          
+          if (ret.code == 1000) {
+            globalBus.emit('x-login', ret.code, ret.msg);
+            return; // 不调用任何应答
+          }
+          else if (xv.debug && ret.data) {
             msg += '\n\n[DEBUG] '+ ret.data;
           }
+          
           fail(Object.assign(new Error(msg), ret));
           return;
         }  

@@ -48,7 +48,7 @@
       <div class='note'>修改应用名称不会改变物理目录</div>
     </div>
     
-    <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
+    <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }" class='cl-button-split'>
       <a-button type="primary" @click="onSubmit">
         <span v-if='isCreate'>
           创建应用

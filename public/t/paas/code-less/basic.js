@@ -199,6 +199,6 @@ module.exports = {
     txt:'登陆表单', 
     component:'x-login-form',
     groupName: '表单',
-    helpTag: 'div',
+    // helpTag: 'div',
   },
 }
