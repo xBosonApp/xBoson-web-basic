@@ -6,6 +6,7 @@
     :tree-data="dirData"
     :placeholder="placeholder"
     :load-data="onLoadDirData"
+    :allowClear='allowClear'
     @change='onChange'
   />
 </template>
@@ -26,6 +27,10 @@ export default {
     dirCanSelect: {
       type: Boolean,
       default: true,
+    },
+    allowClear: {
+      type: Boolean,
+      default: false,
     },
   },
   
@@ -50,7 +55,7 @@ export default {
   
   methods: {
     onChange(v) {
-      this.$emit('input', v);
+      this.$emit('input', v || '');
     },
     
     dir(parentid, cb) {
@@ -72,7 +77,7 @@ export default {
       }
       
       tool.api('file', 'dir', {_id}, (err, ret)=>{
-        if (err) return xb.popError('文件信息', err);
+        if (err) return xv.popError('文件信息', err);
         this.conversion(ret.data);
         //TODO: 隐藏这些临时补位项
         ret.data[0].disabled = true; 

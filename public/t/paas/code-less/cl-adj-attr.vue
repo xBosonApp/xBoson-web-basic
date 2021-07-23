@@ -51,14 +51,14 @@
 const clib = require("./component-library.js");
 const tool = require("./tool.js");
 
-const components = tool.loadc('cl-icon-select', 'cl-attr-dynamic', 'cl-attr-fixed');
+const components = tool.loadc('cl-select-fa-icon', 'cl-attr-dynamic', 'cl-attr-fixed');
 const compMap = {
   1:'a-input',
   2:'a-input-number',
   3:'a-select',
   4:'a-input',
   5:'a-input',
-  6:'cl-icon-select',
+  6:'cl-select-fa-icon',
 };
 
 export default {

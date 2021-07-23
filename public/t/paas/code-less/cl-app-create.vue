@@ -15,6 +15,21 @@
       </a-radio-group>
     </a-form-model-item>
     
+    <a-form-model-item label='登陆页'>
+      <a-tooltip placement="top">
+        <template slot="title">更改后需要重新递交菜单方可生效</template>
+        <cl-select-files v-model='form.loginid' placeholder='不填写则使用默认登陆页' :allowClear='true'/>
+      </a-tooltip>
+      <div class='note'>登陆页中应该有 ‘登陆表单’, 否则无法登陆</div>
+    </a-form-model-item>
+    
+    <a-form-model-item label='页眉'>
+      <a-tooltip placement="top">
+        <template slot="title">更改后需要重新递交菜单方可生效</template>
+        <cl-select-files v-model='form.headid' placeholder='不设置则没有页眉' :allowClear='true'/>
+      </a-tooltip>
+    </a-form-model-item>
+    
     <div v-if='isRename' class='items-group as'>
       <label>首页</label>
       <div>
@@ -70,6 +85,8 @@ const tool = require("./tool.js");
 export default {
   props: ['data', 'next'],
   
+  components: tool.loadc('cl-select-files'),
+  
   computed : {
     isCreate() {
       return this.data.createMode == 'create';
@@ -91,15 +108,15 @@ export default {
   },
   
   data() {
-    let name = (this.data.createMode == 'create') ? '' : this.data.app.name;
+    let form = { mode: 'pc' };
+    if (this.data.createMode == 'rename') {
+      Object.assign(form, this.data.app);
+    }
+    
     return {
+      form,
       labelCol : { span: 4 },
       wrapperCol : { span: 14 },
-      
-      form : {
-        name,
-        mode : 'pc',
-      },
       
       modeMap: {
         'pc'     : '计算机应用',

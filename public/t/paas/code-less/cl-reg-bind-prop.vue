@@ -149,7 +149,7 @@ export default {
         { value: 3, label:'选项列表' },
         // { value: 4, label:'字符串/选项列表' },
         // { value: 5, label:'废弃' },
-        { value: 6, label:'图标选择(Antd依赖)' },
+        { value: 6, label:'图标选择 (fontawesome)' },
         { value: 7, label:'自定义插件' },
         { value: 8, label:'事件' },
       ],
