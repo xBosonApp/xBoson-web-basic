@@ -13,6 +13,7 @@
   // path 模块
   let pathmod;
   let devMode;
+  let es6support = true;
   
   // 导出到全局变量
   const export_global = {
@@ -203,6 +204,8 @@
     }
 
     xhr.open("GET", url, use_async);
+    if (es6support) xhr.setRequestHeader('x-es6-support', 'true');
+    if (devMode) xhr.setRequestHeader('x-development-mode', 'debug');
     xhr.send(data);
     
     if (!use_async) {
