@@ -3,9 +3,19 @@
 <template>
 <div class='items-group m'>
   <div class='content'>
-    <a-radio-group v-model="sel_type" button-style="solid">
-      <a-radio-button :value="t" v-for='t in types' @click='sel_relu = 0'>{{ t }}</a-radio-button>
-    </a-radio-group>
+    <div class='it'>
+      <a-radio-group v-model="sel_type" button-style="solid">
+        <a-radio-button :value="t" v-for='t in types' @click='sel_relu = 0'>{{ t }}</a-radio-button>
+      </a-radio-group>
+      
+      <div v-if='hasBorder'>
+        <a-radio-group v-model='sel_bord' button-style="solid">
+          <a-radio-button :value="i" v-for='(b, i) in MobileBorder'>
+            {{ b.name }}
+          </a-radio-button>
+        </a-radio-group>
+      </div>
+    </div>
     
     <div class='sp'>
       <b>分辨率</b>
@@ -29,13 +39,9 @@
   
   <div class='content'>
     <div v-if='hasBorder'>
-      <a-radio-group v-model='sel_bord' button-style="solid">
-        <a-radio-button :value="i" v-for='(b, i) in MobileBorder'>
-          {{ b.name }}
-        </a-radio-button>
-      </a-radio-group>
-      
-      <cl-device-emu :setting='deviceSetting' class='sp'>xxx</cl-device-emu>
+      <cl-device-emu :setting='deviceSetting' class='sp'>
+        <cl-anim-demo :width='resolution.w' :height='resolution.h' />
+      </cl-device-emu>
     </div>
   </div>
 </div>
@@ -48,7 +54,7 @@ export default {
   // value: v-model
   props: ['value'],
   
-  components: tool.loadc('cl-device-emu'),
+  components: tool.loadc('cl-device-emu', 'cl-anim-demo'),
   
   data() {
     return {
@@ -83,23 +89,22 @@ export default {
         
         Pad: [
           { name:'iPad 1/2/3/4',w:1024, h:768  },
-            { name:'iPad pro',    w:1366, h:1024 },
-            { name:'Surface Duo', w: 540, h:720  },
+          { name:'iPad pro',    w:1366, h:1024 },
+          { name:'Surface Duo', w: 540, h:720  },
         ],
         
         Mobile : [
           // sh 状态栏高度, nh 导航栏高度
           { name:'华为Mate 20 Pro', w:360, h:780, },
-          { name:'华为Mate X2', w:733, h:872, },
           { name:'魅族 16th',   w:360, h:720, },
           { name:'Redmi 8',     w:360, h:732, },
           { name:'OPPO A5',     w:360, h:760, },
           { name:'Vivo S9',     w:360, h:800, },
+          { name:'华为Mate X2', w:733, h:872, },
           { name:'iPhone 4',    w:320, h:480, sh:20, nh:44 },
           { name:'iPhone 5',    w:320, h:568, sh:20, nh:44 },
-          { name:'iPhone 6',    w:375, h:667, sh:20, nh:44 },
+          { name:'iPhone 6/8',  w:375, h:667, sh:20, nh:44 },
           { name:'iPhone 7',    w:414, h:736, sh:20, nh:44 },
-          { name:'iPhone 8',    w:375, h:667, sh:20, nh:44 },
           { name:'iPhone X',    w:375, h:812, sh:44, nh:44 },
           { name:'iPhone 11',   w:414, h:896, sh:44, nh:44 },
           { name:'iPhone 12',   w:390, h:844, },
@@ -111,7 +116,7 @@ export default {
       
       MobileBorder: [
         // [x 内容起点左偏移, y 内容起点上偏移, w 内容宽度, h 内容高度]
-        { name:'样式1', file:'device/m1m.svg', p:[ 12,  39, 214, 385] },
+        { name:'样式1', file:'device/m1m.svg', p:[ 12,  39, 215, 370] },
         { name:'样式2', file:'device/m2m.svg', p:[ 23, 141, 657, 997] },
       ],
     };
@@ -145,7 +150,7 @@ export default {
   
   methods : {
     ok() {
-      console.log(this.resolution);
+      console.log(this.resolution, '!!!!!!!!!!!!!!!');
       this.$emit('input', this.deviceSetting);
       antd.message.success("页面已更改");
       this.$emit('close');
