@@ -10,6 +10,7 @@
   const export_modules = {};
   const xv = window.xv = {};
   const xuiProtocol = 'xui://';
+  const ajaxTimeout = 8000;
   // path 模块
   let pathmod;
   let devMode;
@@ -126,12 +127,14 @@
   
   function popError(title, err) {
     console.error(title, err);
+    const msg = err.message;
+    const width = msg.length > 500 ? '500px' : 'auto';
     
     // ElementUI 提供
     if (Vue.prototype.$notify) {
       Vue.prototype.$notify.error({
         title,
-        message: err.message,
+        message: msg,
         dangerouslyUseHTMLString: true,
         customClass: 'vue-app-big-notify',
       });
@@ -140,14 +143,18 @@
     else if (window.antd && antd.notification) {
       antd.notification.error({
         message : title,
-        description : err.message,
-        style: {'word-break': 'break-all', 'white-space':'pre-wrap'},
+        style: {'word-break': 'break-all', 'white-space':'pre-wrap' },
+        description : (h)=>{
+          return h({
+            template: "<div>"+ msg +"</div>",
+          });
+        },
       });
     } 
     else {
       makeDialog([
         "<div style='color:red; font-size:larger;'>", title, "</div>",
-        "<div>", err.message, "</div>",
+        "<div>", msg, "</div>",
       ]);
     }
   }
@@ -200,13 +207,19 @@
     if (use_async) {
       console.debug('Async load', url);
       xhr.addEventListener('load', _check);
-      xhr.addEventListener('error', _check);
+      xhr.addEventListener('error', _error);
+      xhr.timeout = ajaxTimeout;
     }
 
     xhr.open("GET", url, use_async);
     if (es6support) xhr.setRequestHeader('x-es6-support', 'true');
     if (devMode) xhr.setRequestHeader('x-development-mode', 'debug');
-    xhr.send(data);
+    
+    try {
+      xhr.send(data);
+    } catch(err) {
+      return _error(err);
+    }
     
     if (!use_async) {
       console.debug('Sync load', url);
@@ -215,14 +228,23 @@
     
     function _check() {
       try {
-        if (xhr.status === 200) {
-          cb(null, xhr.responseText);
-        } else {
-          cb(new Error(xhr.status +':'+ xhr.responseText));
+        switch (xhr.status) {
+          case 200:
+            cb(null, xhr.responseText);
+            return;
+            
+          default:
+            _error(new Error(xhr.responseText || xhr.statusText));
+            return;
         }
       } catch(err) {
-        popError('Load resource '+ url +' fail', err);
+        _error(err);
       }
+    }
+    
+    function _error(err) {
+      popError('Load resource '+ url +' fail', err);
+      cb(err);
     }
   }
   
