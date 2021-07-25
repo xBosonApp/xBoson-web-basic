@@ -44,7 +44,7 @@
         </a-menu-item>
         
         <a-menu-divider />
-        <a-menu-item key="1" :disabled='true'>
+        <a-menu-item key="1" @click='showPageSetting = true'>
           页面设置
         </a-menu-item>
         <a-menu-item key="3" @click='showRegister = true'>
@@ -141,6 +141,17 @@
       <cl-app-manager @close='showAppManager = false'/>
     </a-drawer>
     
+    <a-drawer
+      title="页面设置"
+      placement="top"
+      height='calc(100% - 80px)'
+      :closable="true"
+      :visible="showPageSetting"
+      destroyOnClose='true'
+      @close="showPageSetting = false">
+      <cl-page-setting @close="showPageSetting = false"/>
+    </a-drawer>
+    
   </div>
 </template>
 
@@ -151,11 +162,9 @@ export default {
   props: ['projectName', 'editorFiles'],
   
   components : tool.loadc(
-    'cl-component-register',
-    'cl-file-manager',
-    'cl-create-file',
-    'cl-open-file',
-    'cl-app-manager'),
+    'cl-component-register',  'cl-file-manager',
+    'cl-create-file',         'cl-open-file',
+    'cl-app-manager',         'cl-page-setting'),
   
   data() {
     return {
@@ -166,6 +175,7 @@ export default {
       showPreview : false,
       showRegister : false,
       showAppManager : false,
+      showPageSetting : false,
       deleteContent : '',
       keyMap : {},
       previewComponent : null,

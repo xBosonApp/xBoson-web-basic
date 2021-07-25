@@ -1,0 +1,13 @@
+<!-- Create By xBoson System -->
+<script src='../../../web/cdn/jquery/jquery-3.3.1.min.js'></script>
+<h1>屏幕逻辑分辨率</h1>
+<h2>逻辑宽度: <b id='logicScreenWidth'></b></h2>
+<h2>逻辑高度: <b id='logicScreenHeight'></b></h2>
+<h2>物理/逻辑比率: <b id='devicePixelRatio'></b></h2>
+<script>
+jQuery($=>{
+  $('#logicScreenWidth').html(window.screen.width);
+  $("#logicScreenHeight").html(window.screen.height);
+  $("#devicePixelRatio").html(window.devicePixelRatio);
+});
+</script>

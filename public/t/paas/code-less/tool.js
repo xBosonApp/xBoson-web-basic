@@ -32,6 +32,7 @@ module.exports = Object.freeze({
   refFunc,
   refVar,
   uiFileExists,
+  pageOffset,
   
   getRoot,
   getEditFile,
@@ -284,4 +285,20 @@ function uiFileExists(path) {
       fail(new Error("找不到文件 "+ e.url));
     });
   });
+}
+
+
+// 返回 dom 在页面中的偏移
+function pageOffset(dom) {
+  let d = dom;
+  let x=0, y=0;
+  
+  while (d) {
+    x += d.offsetLeft;
+    y += d.offsetTop;
+    let t = d.offsetParent;
+    if (t == d) break;
+    d = t;
+  };
+  return {x, y};
 }
