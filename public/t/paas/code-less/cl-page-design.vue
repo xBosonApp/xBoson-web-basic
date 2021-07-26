@@ -93,8 +93,8 @@ export default {
       let rel = ps.resolution;
       if (rel.h == 'auto' || rel.w == 'auto') return size;
       
-      size.w = rel.w +'px';
-      size.h = rel.h +'px';
+      size.w  = rel.w +'px';
+      size.h  = rel.h +'px';
       return size;
     },
     
@@ -103,11 +103,14 @@ export default {
       let sc = ps.index.sel_scale / 100;
       if (sc > 0) {
         let size = this.previewSize;
+        let mb = (size.h == 'auto') ? 0 : (-ps.resolution.h + ps.resolution.h*sc);
+        
         return {
           'transform-origin'  : 'left top',
           'transform'         : 'scale('+ sc +')',
           'width'             : size.w,
           'height'            : size.h,
+          'margin-bottom'     : mb +'px',
         };
       } else {
         return {};
