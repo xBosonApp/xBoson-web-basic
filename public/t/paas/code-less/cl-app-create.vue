@@ -63,7 +63,8 @@
       <div class='note'>修改应用名称不会改变物理目录</div>
     </div>
     
-    <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }" class='cl-button-split'>
+    <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
+      <a-button-group>
       <a-button type="primary" @click="onSubmit">
         <span v-if='isCreate'>
           创建应用
@@ -73,7 +74,12 @@
         </span>
       </a-button>
       
+      <a-button @click='onVuex' v-if='isRename'>
+        状态管理
+      </a-button>
+      
       <a-button @click='$emit("previous")'>返回</a-button>
+      </a-button-group>
     </a-form-model-item>
   </a-form-model>
 </div>
@@ -152,6 +158,10 @@ export default {
       tool.api('appdev', 'apprename', this.form, (err, ret)=>{
         this.next(err, ret, {app:ret});
       });
+    },
+    
+    onVuex() {
+      this.$emit('change', 'editVuex');
     },
   },
 }

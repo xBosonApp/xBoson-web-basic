@@ -140,7 +140,7 @@ export default {
         return;
       } else {
         this.message = null;
-        antd.message.success(ret.msg);
+        ret && antd.message.success(ret.msg);
       }
       
       if (this.currentState.step+1 < this.currentState.stepInf.length) {

@@ -35,6 +35,10 @@ export default {
         'appMenu': [
           { title: '应用菜单', desc: '制作应用菜单', component: 'cl-app-bind-menu' },
         ],
+        
+        'editVuex': [
+          { title: '状态管理', desc: '编辑 Vuex 配置文件', component: 'cl-app-vuex-edit' },
+        ],
       },
     };
   },
