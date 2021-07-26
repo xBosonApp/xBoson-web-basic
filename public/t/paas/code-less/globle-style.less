@@ -100,4 +100,29 @@ code {
     margin-right: 10px;
   }
 }
+
+// 斜方向方框背景
+.cl-background-flanel-lines {
+  background-color:#fff;
+  background-image: 
+    repeating-linear-gradient(
+      45deg,
+      rgba(0,0,0,0.1),
+      rgba(0,0,0,0.1) 100px,
+      transparent 0px,
+      transparent 200px
+    ),
+    repeating-linear-gradient(
+      -45deg,
+      rgba(0,0,0,0.2),
+      rgba(0,0,0,0.2) 100px,
+      transparent 0px,
+      transparent 200px
+    );
+}
+
+// 设置到父容器, 使子节点上下左右居中
+.cl-vertical-center {
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+}
 /* 上海竹呗信息技术有限公司 */

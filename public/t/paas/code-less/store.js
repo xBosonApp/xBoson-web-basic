@@ -1,4 +1,18 @@
 /* Create By xBoson System */
+const KEY_PREFIX = "code_less$store$";
+
+function loads(name, _throw_error) {
+  try {
+    return JSON.parse(localStorage.getItem(KEY_PREFIX + name));
+  } catch(e) {
+    if (_throw_error) throw e;
+  }
+}
+
+function saves(name, v) {
+  localStorage.setItem(KEY_PREFIX + name, JSON.stringify(v));
+}
+
 
 module.exports = new Vuex.Store({
   state: {
@@ -16,10 +30,12 @@ module.exports = new Vuex.Store({
     // { id: boolean }
     // isComponentLoaded : {},
     componentLoadState : {},
+    // 默认页面配置
+    defaultPageSetting : loads('defaultPageSetting'),
     
     // 方便调试的开关
-    test : false,
-    testOpenFile : '-iw7PvgkRoG6BmMykggYgQ',
+    test : true,
+    testOpenFile : 'FGNWoFDNSByeThW_k2sxmQ',
   },
   
   mutations: {
@@ -44,6 +60,18 @@ module.exports = new Vuex.Store({
       if (s.editFile) {
         s.editFile.changed = changed;
       }
+    },
+    
+    setEditFilePageSetting(s, ps) {
+      if (s.editFile) {
+        s.editFile.content.root.pageSetting = ps; 
+        this.commit('setEditFileChanged', true);
+      }
+    },
+    
+    setDefaultPageSetting(s, ps) {
+      s.defaultPageSetting = ps || null;
+      saves('defaultPageSetting', ps);
     },
     
     setMessage(s, msg) {

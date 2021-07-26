@@ -200,12 +200,6 @@ function demo5(a, b, c, ref) {
   	K = "#",
   	Z = window;
   
-  function u(v) {
-  	return function() {
-  		eval(v)
-  	}
-  };
-  
   function l(p, q, e, f) {
   	for (i = p; i--;) {
   		e();
@@ -236,8 +230,16 @@ function demo5(a, b, c, ref) {
   	a.moveTo((i + A) * s, j * s);
   	a.lineTo((i + 1 - A) * s, s + j * s)
   };
-  e = u("");
-  J = u('x=f((c.width-S)/s),y=f((c.height-S)/s);l(x,y,u("m[i]=[]"),u("m[i][j]=f(r()*2)"));l(x+1,y+1,u("Q[i]=[]"),u("Q[i][j]=0"));l(x+1,y+1,e,u("if(Q[i][j]==0){P++;for(var z=3,G=K;z--;)G=G+f(r()*15).toString(16);I[P]=G;W(i,j)}"));a.lineWidth=s/2;a.lineCap="round";l(x,y,e,u("a.beginPath();k(T(i,j));a.stroke()"));');
+  e = ()=>{};
+  J = function() {
+    x=f((c.width-S)/s),y=f((c.height-S)/s);
+    l(x,y,()=>{m[i]=[]}, ()=>{m[i][j]=f(r()*2)} );
+    l(x+1,y+1,()=>{Q[i]=[]}, ()=>{Q[i][j]=0});
+    l(x+1,y+1,e,()=>{if(Q[i][j]==0){P++;for(var z=3,G=K;z--;)G=G+f(r()*15).toString(16);I[P]=G;W(i,j)}});
+    a.lineWidth=s/2;
+    a.lineCap="round";
+    l(x,y,e,()=>{a.beginPath();k(T(i,j));a.stroke()});
+  }
   
   b.style.textAlign = "center";
   J();
@@ -332,7 +334,7 @@ export default {
       tid : null,
       demo: [ demo1, demo2, demo3, demo4, demo5 ],
       ref : { update: null },
-      callUp : tool.delayWorker(this._callUp, 500),
+      callUp : tool.delayWorker(this._callUp, 100),
     };
   },
   
@@ -340,6 +342,7 @@ export default {
     this.$nextTick(()=>{
       let canvas = this.$refs.c;
       let d = this.getDemo();
+      // let d = demo5;
       this.tid = d(canvas.getContext("2d"), this.$refs.x, canvas, this.ref);
     });
   },

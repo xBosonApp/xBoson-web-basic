@@ -1,16 +1,11 @@
 <!-- Create By xBoson System -->
 
 <template>
-  <div ref='main' class='main'>
+  <div ref='main' class='main' :style='{ height: contenth  +"px" }'>
     <img class='im' :src='setting.border.file' :style='imgStyle' ref='img' @load='onImgLoad'/>
     <div class='ct' :style='contentStyle'>
-      <div class='state'>
-        <div>{{ time }}</div>
-        <i class='fas fa-signal'></i>
-        <i class='fas fa-wifi'></i>
-        <i :class='battery[bidx]'></i>
-      </div>
-      <div class='cc'>
+      <cl-device-state />
+      <div class='body' :style="{ height: bodyh +'px' }">
         <slot></slot>
       </div>
     </div>
@@ -18,15 +13,18 @@
 </template>
 
 <script>
-const fa = require("cdn/fontawesome/5.15.3/css/all.min.css", 1);
+const tool = require('./tool.js');
 
 export default {
   // setting: {
   //   border: { name, file, p:[x, y, w, h] }
   //   resolution: { name, w, h }
   //   unit
+  //   index: { sel_scale }
   // }
   props: ['setting'],
+  
+  components: tool.loadc('cl-device-state'),
   
   watch: {
     'setting': function() {
@@ -36,14 +34,11 @@ export default {
   
   data() {
     return {
-      tid  : null,
-      btid : null,
-      bidx : 0,
-      time : '',
       contentStyle : {},
       imgStyle : {},
       iw : 0,
       ih : 0,
+      contenth : 0,
       
       battery: [
         'fas fa-battery-full', 
@@ -55,26 +50,17 @@ export default {
     };
   },
   
-  mounted() {
-    this.btid = setInterval(this.upbatt, 30 * 60 * 1000);
-    this.tid = setInterval(this.uptime, 10 * 1000);
-    this.uptime();
-  },
-  
-  beforeDestroy() {
-    clearInterval(this.tid);
-    clearInterval(this.btid);
-  },
-  
   methods: {
     onImgLoad() {
       this.imgStyle = { width: 'auto', height: 'auto' };
       this.$nextTick(()=>{
+        if (!this.$refs.img) return;
         this.iw = this.$refs.img.width;
         this.ih = this.$refs.img.height;
         this.upContentStyle();
       });
     },
+    
     // 必须在渲染完成后调用
     upContentStyle() {
       const st = this.setting;
@@ -83,31 +69,28 @@ export default {
       let rh = st.resolution.h;
       let ratex = rw / w;
       let ratey = rh / h;
+      let scaleSty = { 'transform-origin' : 'left top' };
+      let scale = st.index.sel_scale / 100;
+      
+      if (scale > 0) {
+        scaleSty.transform = 'scale('+ scale +')';
+      }
       
       Object.assign(this.imgStyle, {
         width  : this.iw * ratex +'px',
         height : this.ih * ratey +'px',
-      });
+        opacity: '0.3',
+      }, scaleSty);
       
       Object.assign(this.contentStyle, {
-        left   : x*ratex + 'px',
-        top    : y*ratey + 'px',
+        left   : x*ratex*scale + 'px',
+        top    : y*ratey*scale + 'px',
         width  : rw + 'px',
         height : rh + 'px',
-      });
-    },
-    
-    uptime() {
-      let d = new Date();
-      let m = 1+d.getMinutes();
-      if (m < 10) m = '0'+ m;
-      this.time = d.getHours() +':'+ m;
-    },
-    
-    upbatt() {
-      if (++this.bidx >= this.battery.length-1) {
-        clearInterval(this.btid);
-      }
+      }, scaleSty);
+      
+      this.contenth = Math.round(this.ih * ratey * scale) + 3;
+      this.bodyh = rh;
     },
   },
 }
@@ -120,14 +103,7 @@ export default {
 .im, .ct {
   position: absolute; /*border: 1px dashed #ccc;*/
 }
-.state {
-  display: grid; grid-template-columns: 1fr auto auto auto; gap: 0 8px; font-size: 18px; font-weight: bold;
-  background-color: #f5f5f5; padding: 0 5px;
-}
-.state i {
-  line-height: inherit; 
-}
-.cc {
-  background-color: white;
+.body {
+  background-color: white; overflow: auto;
 }
 </style>

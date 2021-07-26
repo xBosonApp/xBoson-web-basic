@@ -147,7 +147,7 @@ function getEditFile() {
 }
 
 
-function getRoot() {
+function getRoot() { 
   let f = getEditFile();
   if (f) {
     return f.content.root;

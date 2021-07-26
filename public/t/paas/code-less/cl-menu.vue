@@ -44,7 +44,7 @@
         </a-menu-item>
         
         <a-menu-divider />
-        <a-menu-item key="1" @click='showPageSetting = true'>
+        <a-menu-item key="1" @click='showPageSetting = true' :disabled='!hasFile'>
           页面设置
         </a-menu-item>
         <a-menu-item key="3" @click='showRegister = true'>
@@ -116,7 +116,10 @@
       :visible="showPreview"
       height='99%'
       @close="showPreview = false">
-      <component :is='previewComponent' :key='previewComponentKey'/>
+      <div :style='previewStyle' v-if='showPreview'>
+        <cl-device-state v-if='pageSetting.hasBorder' />
+        <component :is='previewComponent' :key='previewComponentKey'/>
+      </div>
     </a-drawer>
     
     <a-drawer
@@ -148,8 +151,12 @@
       :closable="true"
       :visible="showPageSetting"
       destroyOnClose='true'
-      @close="showPageSetting = false">
-      <cl-page-setting @close="showPageSetting = false"/>
+      @close="showPageSetting = false"
+      v-if='hasFile'>
+      <cl-page-setting 
+        :value='getEditFile().content.root.pageSetting'
+        @input='setPageSetting'
+        @close="showPageSetting = false"/>
     </a-drawer>
     
   </div>
@@ -164,7 +171,8 @@ export default {
   components : tool.loadc(
     'cl-component-register',  'cl-file-manager',
     'cl-create-file',         'cl-open-file',
-    'cl-app-manager',         'cl-page-setting'),
+    'cl-app-manager',         'cl-page-setting',
+    'cl-device-state'),
   
   data() {
     return {
@@ -186,6 +194,29 @@ export default {
   computed: {
     hasFile() {
       return this.getEditFile() != null;
+    },
+    
+    pageSetting() {
+      let f = this.getEditFile();
+      if (!f) return;
+      return f.content.root.pageSetting;
+    },
+    
+    previewStyle() {
+      let st = {};
+      do {
+        let ps = this.pageSetting;
+        if (!ps) break;
+        
+        let rel = ps.resolution;
+        if (rel.h == 'auto' || rel.w == 'auto') break;
+        
+        st['border'] = '1px dashed #aaa';
+        st['width' ] = rel.w +'px';
+        st['height'] = rel.h +'px';
+        st['overflow'] = 'auto';
+      } while(0);
+      return st;
     },
   },
   
@@ -315,6 +346,9 @@ export default {
         let file = ret.data;
         file.changed = false;
         file.content = JSON.parse(file.content);
+        if (!file.content.root.pageSetting) {
+          file.content.root.pageSetting = this.$store.state.defaultPageSetting;
+        }
         this.$set(this.editorFiles, file._id, file);
         this.focusFile(fileid);
       });
@@ -371,6 +405,10 @@ export default {
       if (cfg.needOpenedFile && (!this.hasFile)) return;
       cfg.fn();
       return false;
+    },
+    
+    setPageSetting(ps) {
+      this.$store.commit('setEditFilePageSetting', ps);
     },
   },
 }

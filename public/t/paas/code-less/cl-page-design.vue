@@ -2,12 +2,27 @@
 
 <template>
   <div class='page-design'>
-    <div class='dd-footer' v-if='showtip()'>拖拽组件到这里</div>
-    <cl-component-container 
-      :nested-list='file.content.list' 
-      :root-config='file.content.root'
-      :is-root='true'
-    />
+    <cl-device-emu v-if='pageSet.hasBorder' :setting='pageSet' style='margin-left: 20px;'>
+      <div class='dd-footer cl-background-flanel-lines cl-vertical-center' v-if='showtip()'>
+        <b>拖拽组件到这里</b>
+      </div>
+      <cl-component-container 
+        :nested-list='file.content.list' 
+        :root-config='file.content.root'
+        :is-root='true'
+      />
+    </cl-device-emu>
+    
+    <div v-else>
+      <div class='dd-footer cl-background-flanel-lines cl-vertical-center' v-if='showtip()'>
+        <b>拖拽组件到这里</b>
+      </div>
+      <cl-component-container 
+        :nested-list='file.content.list' 
+        :root-config='file.content.root'
+        :is-root='true'
+      />
+    </div>
   </div>
 </template>
 
@@ -54,8 +69,16 @@ class Style {
 export default {
   props: ['file'],
   
+  components: tool.loadc('cl-device-emu'),
+  
   data() {
     return {};
+  },
+  
+  computed: {
+    pageSet() {
+      return this.file.content.root.pageSetting || {index:{}};
+    },
   },
   
   mounted() {
@@ -73,7 +96,7 @@ export default {
       return this.file.content.list.length == 0 && this.$store.state.showDropTip;
     },
     
-    //TODO: 删除
+    //TODO: 已经禁用, 即将删除
     loadPlugins() {
       let p = this.file.content.root.plugins;
       if (p) {
@@ -99,7 +122,9 @@ export default {
 
 <style scoped>
 .dd-footer {
-  text-align: center; color: #999; padding: 0px 0; background-color: #eee; 
-  width: calc(100% - 22px); font-size: 1.3em; position: absolute; margin:1px;
+  margin: 10px; width: calc(100% - 20px); font-size: 1.3em; position: absolute; height: 180px; 
+}
+.dd-footer b {
+  display: inline-block; padding: 10px 30px; background: #fff; border: 1px dashed #eee; color: #2f66af;
 }
 </style>

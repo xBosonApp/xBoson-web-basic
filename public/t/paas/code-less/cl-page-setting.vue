@@ -3,18 +3,16 @@
 <template>
 <div class='items-group m'>
   <div class='content'>
-    <div class='it'>
+    <div class='it' style='width: calc(100% - 25px);'>
       <a-radio-group v-model="sel_type" button-style="solid">
         <a-radio-button :value="t" v-for='t in types' @click='sel_relu = 0'>{{ t }}</a-radio-button>
       </a-radio-group>
       
-      <div v-if='hasBorder'>
-        <a-radio-group v-model='sel_bord' button-style="solid">
-          <a-radio-button :value="i" v-for='(b, i) in MobileBorder'>
-            {{ b.name }}
-          </a-radio-button>
-        </a-radio-group>
-      </div>
+      <a-radio-group v-model='sel_bord' button-style="solid" v-if='hasBorder'>
+        <a-radio-button :value="i" v-for='(b, i) in MobileBorder'>
+          {{ b.name }}
+        </a-radio-button>
+      </a-radio-group>
     </div>
     
     <div class='sp'>
@@ -31,17 +29,44 @@
       </a-radio>
     </a-radio-group>
     
+    <a-slider v-model='sel_scale' :min='10' :max='300' 
+      :step='5' style='flex-grow:1'
+      :tip-formatter="formatterScale"/>
+    
     <a-button-group class='sp'>
       <a-button type="primary" @click='ok'>确定</a-button>
       <a-button @click='cancel'>取消</a-button>
     </a-button-group>
+    
+    <a-checkbox v-model='setToDefault' style='margin-left: 30px'>
+      <span v-if='setToDefault'>同时设置为全局默认页面配置</span>
+      <span v-else>当前文件页面配置</span>
+    </a-checkbox>
   </div>
   
-  <div class='content'>
+  <div class='content' style='padding-top: 0'>
     <div v-if='hasBorder'>
       <cl-device-emu :setting='deviceSetting' class='sp'>
         <cl-anim-demo :width='resolution.w' :height='resolution.h' />
       </cl-device-emu>
+    </div>
+    
+    <div v-else class='items-group' style='grid-template-columns: 1fr auto'>
+      <div>
+        <span>{{ resolution.w }} {{ units[sel_type] }}</span>
+        <span class='note' v-if='!isNaN(resolution.w)'>
+          {{ resolution.w * sel_scale / 100 }} {{ units[sel_type] }}
+        </span>
+      </div>
+      <div></div>
+      <div :style='borderStyle' class='cl-background-flanel-lines' ref='vscreen'></div>
+      <div style='min-width: 10em;'>
+        <div>{{ resolution.h }} {{ units[sel_type] }}</div>
+        <div class='note' v-if='!isNaN(resolution.h)'>
+          {{ resolution.h * sel_scale / 100 }} {{ units[sel_type] }}
+        </div>
+      </div>
+      <div class='note'>{{ sel_scale }}%</div>
     </div>
   </div>
 </div>
@@ -60,9 +85,12 @@ export default {
     return {
       types: [ 'Destop', 'Mobile', 'Pad' ],
       units: { Destop:'px', Mobile:'pt', Pad:'pt' },
+      setToDefault: false,
+      
       sel_type: 'Destop',
       sel_relu: 0,
       sel_bord: 0,
+      sel_scale: 100,
         
       r : {
         Destop: [
@@ -82,15 +110,15 @@ export default {
           { name: '480P',       w: 640, h:480,  },
           { name: '720P',       w:1280, h:720,  },
           { name: '1080P',      w:1920, h:1080, },
-          { name: '2K',         w:1152, h:2048, },
-          { name: '4K',         w:2304, h:4096, },
+          { name: '2K',         w:2048, h:1152, },
+          { name: '4K',         w:4096, h:2304, },
           { name: '8K',         w:7680, h:4320, },
         ],
         
         Pad: [
-          { name:'iPad 1/2/3/4',w:1024, h:768  },
-          { name:'iPad pro',    w:1366, h:1024 },
-          { name:'Surface Duo', w: 540, h:720  },
+          { name:'iPad 1/2/3/4',w: 768, h:1024  },
+          { name:'iPad pro',    w:1024, h:1366  },
+          { name:'Surface Duo', w: 540, h:720   },
         ],
         
         Mobile : [
@@ -116,7 +144,7 @@ export default {
       
       MobileBorder: [
         // [x 内容起点左偏移, y 内容起点上偏移, w 内容宽度, h 内容高度]
-        { name:'样式1', file:'device/m1m.svg', p:[ 12,  39, 215, 370] },
+        { name:'样式1', file:'device/m1m.svg', p:[ 12,  38, 215, 373] },
         { name:'样式2', file:'device/m2m.svg', p:[ 23, 141, 657, 997] },
       ],
     };
@@ -144,13 +172,49 @@ export default {
         hasBorder  : this.hasBorder,
         border     : this.border,
         unit       : this.units[this.sel_type],
+        index : { // 设置恢复时的查询条件
+          sel_type : this.sel_type,
+          sel_relu : this.sel_relu,
+          sel_bord : this.sel_bord,
+          sel_scale: this.sel_scale,
+        },
+      }
+    },
+    
+    borderStyle() {
+      let vs = this.$refs.vscreen;
+      let width = vs ? (vs.clientWidth) : 500;
+      let height = width * ((this.resolution.h / this.resolution.w) || 0.63);
+      return {
+        border : '1px dashed #999',
+        // width  : width +'px',
+        height : height +"px",
       }
     },
   },
   
+  mounted() {
+    this.initIndex();
+  },
+  
   methods : {
+    initIndex() {
+      let index = this.value && this.value.index;
+      if (!index) {
+        let dps = this.$store.state.defaultPageSetting;
+        index = dps && dps.index;
+      }
+      if (index) {
+        for (let n in index) {
+          this[n] = index[n];
+        }
+      }
+    },
+    
     ok() {
-      console.log(this.resolution, '!!!!!!!!!!!!!!!');
+      if (this.setToDefault) {
+        this.$store.commit('setDefaultPageSetting', this.deviceSetting);
+      }
       this.$emit('input', this.deviceSetting);
       antd.message.success("页面已更改");
       this.$emit('close');
@@ -158,6 +222,10 @@ export default {
     
     cancel() {
       this.$emit('close');
+    },
+    
+    formatterScale(v) {
+      return '缩放比率 '+ v +"%";
     },
   },
 }
