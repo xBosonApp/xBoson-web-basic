@@ -22,16 +22,28 @@
     
     <a-radio-group v-model='sel_relu' class='rp'>
       <a-radio :value="i" class='rit' v-for='(item, i) in r[sel_type]'>
-        <div class='it'>
+        <div class='it' v-if='!item.userdef'>
           <span>{{ item.name }}</span> 
           <span class='note'>{{ item.w }} x {{ item.h }}</span>
+        </div>
+        
+        <div class='it' v-else>
+          <span>{{ item.name }}</span> 
+          <span class='note'>
+            <a-input v-model='item.w' placeholder="宽" size="small" class='riti'/> x 
+            <a-input v-model='item.h' placeholder="高" size="small" class='riti'/>
+          </span>
         </div>
       </a-radio>
     </a-radio-group>
     
-    <a-slider v-model='sel_scale' :min='10' :max='300' 
-      :step='5' style='flex-grow:1'
-      :tip-formatter="formatterScale"/>
+    <div class='items-group' style='grid-template-columns: 1fr auto;'>
+      <a-slider v-model='sel_scale' :min='10' :max='300' 
+        :step='5' style='flex-grow:1'
+        :tip-formatter="formatterScale"/>
+      <a-button @click='sel_scale = 100' size='small'
+        icon='undo' style='margin-top: 8px' type='link'></a-button>
+    </div>
     
     <a-button-group class='sp'>
       <a-button type="primary" @click='ok'>确定</a-button>
@@ -113,6 +125,7 @@ export default {
           { name: '2K',         w:2048, h:1152, },
           { name: '4K',         w:4096, h:2304, },
           { name: '8K',         w:7680, h:4320, },
+          { name: '自定义',     w: 300, h: 185, userdef:true },
         ],
         
         Pad: [
@@ -168,7 +181,7 @@ export default {
     
     deviceSetting() {
       return {
-        resolution : this.resolution,
+        resolution : Object.assign({}, this.resolution),
         hasBorder  : this.hasBorder,
         border     : this.border,
         unit       : this.units[this.sel_type],
@@ -208,6 +221,9 @@ export default {
         for (let n in index) {
           this[n] = index[n];
         }
+        if (this.value.resolution.userdef) {
+          Object.assign(this.r[index.sel_type][index.sel_relu], this.value.resolution);
+        }
       }
     },
     
@@ -246,4 +262,5 @@ export default {
 .sp {
   margin-top: 20px;
 }
+.riti { width: 5em }
 </style>

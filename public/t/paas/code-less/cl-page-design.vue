@@ -13,7 +13,7 @@
       />
     </cl-device-emu>
     
-    <div v-else>
+    <div v-else :style='frameStyle'>
       <div class='dd-footer cl-background-flanel-lines cl-vertical-center' v-if='showtip()'>
         <b>拖拽组件到这里</b>
       </div>
@@ -72,12 +72,46 @@ export default {
   components: tool.loadc('cl-device-emu'),
   
   data() {
-    return {};
+    return {
+      nullSet : {
+        index : {},
+        resolution : { h:'auto', w:'auto' },
+      },
+    };
   },
   
   computed: {
     pageSet() {
-      return this.file.content.root.pageSetting || {index:{}};
+      return this.file.content.root.pageSetting || this.nullSet;
+    },
+    
+    previewSize() {
+      let size = { w : 'auto', h : 'auto' };
+      let ps = this.pageSet;
+      if (!ps) return size;
+      
+      let rel = ps.resolution;
+      if (rel.h == 'auto' || rel.w == 'auto') return size;
+      
+      size.w = rel.w +'px';
+      size.h = rel.h +'px';
+      return size;
+    },
+    
+    frameStyle() {
+      let ps = this.pageSet;
+      let sc = ps.index.sel_scale / 100;
+      if (sc > 0) {
+        let size = this.previewSize;
+        return {
+          'transform-origin'  : 'left top',
+          'transform'         : 'scale('+ sc +')',
+          'width'             : size.w,
+          'height'            : size.h,
+        };
+      } else {
+        return {};
+      }
     },
   },
   
@@ -126,5 +160,8 @@ export default {
 }
 .dd-footer b {
   display: inline-block; padding: 10px 30px; background: #fff; border: 1px dashed #eee; color: #2f66af;
+}
+.page-design {
+  background-color: #fff; overflow: auto;
 }
 </style>

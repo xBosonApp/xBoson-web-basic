@@ -12,6 +12,12 @@
 
 <script>
 const tool = require("./tool.js");
+const defaultVuexCode = `// TODO: 默认配置文件
+module.exports = {
+  state: {},
+  mutations: {},
+};
+`;
 
 export default {
   props: ['data', 'next'],
@@ -30,7 +36,10 @@ export default {
     loadCode() {
       let parm = { _id : this.data.app._id, file: 'store.js' };
       tool.api('appdev', 'fileload', parm, (err, ret)=>{
-        if (err) return this.next(err);
+        if (err) {
+          this.code = '/*\n'+ err.message +'\n*/\n' + defaultVuexCode;
+          return;
+        }
         this.code = ret.content;
       });
     },

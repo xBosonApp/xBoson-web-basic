@@ -116,9 +116,12 @@
       :visible="showPreview"
       height='99%'
       @close="showPreview = false">
-      <div :style='previewStyle' v-if='showPreview'>
+      <div v-if='showPreview' 
+        style='border: 1px dashed #aaa;' 
+        :style="{ width: previewSize.w }"
+      >
         <cl-device-state v-if='pageSetting.hasBorder' />
-        <component :is='previewComponent' :key='previewComponentKey'/>
+        <component :is='previewComponent' :key='previewComponentKey' :style='previewStyle' />
       </div>
     </a-drawer>
     
@@ -202,21 +205,25 @@ export default {
       return f.content.root.pageSetting;
     },
     
+    previewSize() {
+      let size = { w : 'auto', h : 'auto' };
+      let ps = this.pageSetting;
+      if (!ps) return size;
+      
+      let rel = ps.resolution;
+      if (rel.h == 'auto' || rel.w == 'auto') return size;
+      
+      size.w = rel.w +'px';
+      size.h = rel.h +'px';
+      return size;
+    },
+    
     previewStyle() {
-      let st = {};
-      do {
-        let ps = this.pageSetting;
-        if (!ps) break;
-        
-        let rel = ps.resolution;
-        if (rel.h == 'auto' || rel.w == 'auto') break;
-        
-        st['border'] = '1px dashed #aaa';
-        st['width' ] = rel.w +'px';
-        st['height'] = rel.h +'px';
-        st['overflow'] = 'auto';
-      } while(0);
-      return st;
+      return { 
+        'overflow' : 'auto',
+        'width'    : this.previewSize.w,
+        'height'   : this.previewSize.h,
+      };
     },
   },
   

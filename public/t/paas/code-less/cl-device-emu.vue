@@ -79,7 +79,7 @@ export default {
       Object.assign(this.imgStyle, {
         width  : this.iw * ratex +'px',
         height : this.ih * ratey +'px',
-        opacity: '0.3',
+        // opacity: '0.3',
       }, scaleSty);
       
       Object.assign(this.contentStyle, {
