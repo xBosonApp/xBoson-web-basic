@@ -18,9 +18,8 @@
     "daffy": "^1.0.3",
     "difflib": "^0.2.4",
     "fastscan": "^1.0.6",
+    "mixer-lib": "^0.2.12",
     "uglify-js": "^3.14.0"
   },
-  "devDependencies": {
-    "uglify-js-min": "*"
-  }
+  "devDependencies": {}
 }
