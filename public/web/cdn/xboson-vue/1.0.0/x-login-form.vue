@@ -193,7 +193,7 @@ input { width: 300px; border-radius: 3px; border: 1px solid #acacac; }
   }
   label { display: block; text-align: left; }
   .tip, .capt { grid-column: auto; } 
-  input { line-height: 2em; }
+  input { line-height: 2em; width: auto; }
   .errmsg, .infmsg { display: block; }
 }
 </style>

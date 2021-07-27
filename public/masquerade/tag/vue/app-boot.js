@@ -495,40 +495,26 @@
   
   
   function makeDialog(content, waitTime) {
-    let el = document.createElement("dialog");
+    let contentstr = Array.isArray(content) ? content.join('') : content;
+    let tpl = document.querySelector('#x-vue-app-norm-dialog');
+    if (!tpl) {
+      return alert(contentstr);
+    }
+    
+    let el = document.importNode(tpl.content.querySelector('dialog'), true);
+    el.querySelector('.content').innerHTML = contentstr;
     el.setAttribute('open', true);
-    el.style.setProperty('--animate-duration', '.5s');
-    el.className = 'animate__animated animate__fadeInDown';
-    el.innerHTML = Array.isArray(content) ? content.join('') : content;
-    Object.assign(el.style, {
-      position      : 'absolute'  , top       : '20px',
-      padding       : '20px 50px' , border    : 0,
-      broderRadius  : '5px'       , boxShadow : '0 0 5px #777',
-      minWidth      : '200px'     , 
-    });
+    el.classList.add('animate__fadeInDown');
     
-    let close = document.createElement("a");
-    close.setAttribute('href', '#');
-    close.innerHTML = "关闭";
-    Object.assign(close.style, {
-      color : 'blue', fontSize : 'smaller',
-    });
-    
+    let close = el.querySelector(".close");
     let doClose = ()=>{
-      el.className = 'animate__animated animate__fadeOutUp';
+      el.classList.remove('animate__fadeInDown');
+      el.classList.add('animate__fadeOutUp');
       el.addEventListener('animationend', ()=>el.remove());
     };
     close.addEventListener('click', doClose);
-    if (waitTime === undefined) setTimeout(doClose, 3000);
-    else if (waitTime > 0) setTimeout(doClose, waitTime);
-    
-    let ct = document.createElement("div");
-    Object.assign(ct.style, {
-      textAlign : 'right', marginTop: '5px', borderTop: '1px solid #eee',
-    });
-    ct.append(close);
-    
-    el.append(ct);
+    if (waitTime !== 0) setTimeout(doClose, waitTime > 0 ? waitTime : 3000)
+  
     document.body.appendChild(el);
     return el;
   }

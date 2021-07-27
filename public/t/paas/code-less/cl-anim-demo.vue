@@ -28,10 +28,10 @@ function demo1(a, b, c) {
    function e(e) {
    	a.fillStyle = a.shadowColor = e
    }
-   e("#fff");
+   e("#002c00");
    a.fillRect(0, 0, c.width, c.height);
    M = M.map(function(t, n) {
-   	e(t > 1 ? (M[n] = t = 1) && "#777" : "#ccc");
+   	e(t > 1 ? (M[n] = t = 1) && "#00e900" : "#007a00");
    	t && a.fillText(String.fromCharCode(0x10280 + Math.random() * 96), n % L * T, T * (n - n % L) / L);
    	var s = 0;
    	Z.map(function(e) {

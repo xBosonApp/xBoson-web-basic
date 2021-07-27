@@ -2,9 +2,11 @@
 
 <template>
 <div class='fr'>
-  <div class='hd'><span class='tt'>xBoson 开放式PaaS平台, 低代码开发平台</span></div>
+  <div class='hd'><a href='http://xboson.net' target='_blank' class='tt'>
+    xBoson 开放式PaaS平台, 低代码开发平台</a></div>
   
   <div class='bd'>
+    <h1 class='an'>{{ title }}</h1>
     <img :src='phone' width='210' class='ph'/>
   </div>
   
@@ -31,6 +33,8 @@
 
 <script>
 export default {
+  props: ['title'],
+  
   data() {
     return {
       y : new Date().getFullYear(),
@@ -47,8 +51,9 @@ export default {
 .hd, .fo { grid-column: 1 / 3; }
 .hd { background-color: #eee; padding: 20px; }
 .fo { background-color: #eee; padding: 40px; }
-.tt { line-height:33px;width:328px;color:#04888D;text-shadow: 0 1px #021B1B;font-weight:bold;font-size:24px; }
-.bd { text-align: right; }
+.tt { line-height:33px;width:328px;color:#04888D;text-shadow: 0 1px #021B1B;font-weight:bold;
+  font-size:24px; text-decoration: none; }
+.bd { text-align: right; display: grid; grid-template-columns: 1fr auto; }
 .ph { position: relative; top: -20px; }
 .cp { padding-top: 50px; opacity: 0.3; }
 .cp p { color: #aaa; display: block; }
@@ -56,6 +61,7 @@ export default {
 .ar { text-align: right; }
 .h3 { font-size: 30px; color: #000; }
 .h5 { font-size: 15px; line-height: 42px; }
+.an { padding: 20px; color: #656565; text-shadow: 3px 3px #eee; }
 
 @media screen and (max-width: 900px) {
   .ph, .cp { display: none; }
@@ -63,5 +69,7 @@ export default {
   .lg { width: 100%; }
   .hd { background-color: #fff; }
   .tt { font-size: 18px; }
+  .bd { text-align: left; }
+  .tt { color: #aaa; text-shadow: 0 0; font-size: 10pt; border-bottom: 1px dashed #eee; }
 }
 </style>

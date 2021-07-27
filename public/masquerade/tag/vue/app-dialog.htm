@@ -1,0 +1,22 @@
+<!-- Create By xBoson System -->
+<style>
+.x-vue-app-norm-dialog {
+  position: absolute; top: 20px; padding: 20px 50px; border: 0; broder-radius: 5px; 
+  box-shadow: 0 0 5px #777; min-width: 200px; --animate-duration: .5s;
+}
+.x-vue-app-norm-dialog .button {
+  color: blue; font-size: smaller;
+}
+.x-vue-app-norm-dialog .foot {
+  text-align : right; margin-top: 5px; border-top: 1px solid #eee;
+}
+</style>
+
+<template id='x-vue-app-norm-dialog'>
+  <dialog class='x-vue-app-norm-dialog animate__animated'>
+    <div class='content'></div>
+    <div class='foot'>
+      <a class='button close' href='#'>关闭</a>
+    </div>
+  </dialog>
+</template>
