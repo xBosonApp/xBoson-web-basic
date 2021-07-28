@@ -953,7 +953,7 @@
                         sunit(f.size), "</div>"].join(''));
                         
                       var ext = f.name.substr(f.name.lastIndexOf('.'));
-                      if (!allow_file_ext[ext]) {
+                      if ((!allow_file_ext[ext]) && (f.name != "LICENSE")) {
                         throw new Error("该文件的类型("+ ext +")不被服务器接受: "+ f.name);
                       }
                     }
