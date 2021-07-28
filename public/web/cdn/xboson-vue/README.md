@@ -185,6 +185,8 @@ require("cdn/animate.css/4.1.1/animate.min.css")
 
 [打开文档](https://doc.vux.li/zh-CN/)
 
+组件名加 `vux-` 前缀
+
 ```js
 require("cdn/xboson-vue/1.0.0/loader/vux.js")
 ```

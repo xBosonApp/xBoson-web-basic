@@ -24,7 +24,7 @@ for (let cname in map) {
       module.exports.css[cname] = ex;
     });
     return require(cfg.js, 1).then(ex=>{
-      module.exports.js[cname] = ex;
+      return module.exports.js[cname] = ex;
     });
   });
 })();

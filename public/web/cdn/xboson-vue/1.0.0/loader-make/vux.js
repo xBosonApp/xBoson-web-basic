@@ -13,12 +13,12 @@ let dir = fs.readdirSync(tool.localFromCdn(components));
 let map = {};
   
 dir.forEach((n, i)=>{
-  let name = tool.formatName1(n);
   let path = 'cdn/'+ components + n;
   
-  map['vue'+ name] = {
-    css : path +'/index.min.css',
-    js  : path +'/index.min.js',
+  map['vux-'+ n] = {
+    css   : path +'/index.min.css',
+    js    : path +'/index.min.js',
+    // vname : tool.formatName1(n),
   };
 });
 
