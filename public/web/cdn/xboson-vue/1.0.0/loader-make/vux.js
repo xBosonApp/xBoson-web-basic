@@ -13,6 +13,7 @@ let dir = fs.readdirSync(tool.localFromCdn(components));
 let map = {};
   
 dir.forEach((n, i)=>{
+  console.log("Component", n);
   let path = 'cdn/'+ components + n;
   
   map['vux-'+ n] = {
@@ -31,6 +32,7 @@ let skip_plugin = {'docs':1, ' wechat':1, 'ajax':1};
 
 plugin.forEach(n=>{
   if (skip_plugin[n]) return;
+  console.log("Plugin", n);
   let path = 'cdn/'+ plugins + n;
   
   pmap.push({
