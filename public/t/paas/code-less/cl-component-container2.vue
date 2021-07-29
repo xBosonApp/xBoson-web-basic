@@ -1,65 +1,51 @@
 <!-- Create By xBoson System -->
 
 <template>
-  <draggable 
-    :group="{ name: 'ui-component' }" 
-    :list="nestedList"
-    :style='styleProp'
-    :rootConfig='rootConfig'
+  <Container
     :class="{ 'component-container':!isRoot, 'root-component-container': isRoot }"
-    :swapThreshold='0.2'
     :tag='tag'
-    :componentData='componentData'
+    group-name='ui-component'
     v-components-loader='$options.components'
-    animation='100' 
-    chosenClass="cl-drag-drop-component-chosen" 
-    ghostClass='cl-drag-drop-component-ghost' 
-    @add='add' 
-    @choose='onChoose'
-    @update='onUpdate'
   >
-    
-    <component 
+    <Draggable
       v-for="(e, idx) in nestedList" 
       v-if='e.isInstance'
-      v-bind='e.props'
-      v-on='e.on'
-      :is='getComponentName(e)' 
-      :styleProp='e.props && e.props.style'
-      :rootConfig='rootConfig'
+      :tag='getTag(e)'
       :class="bindClass[e.id]"
       :key='e.id'
-      :clComponentInstance='e'
-      @mouseover.native.self="setHover(e.id, true, e.isContainer)"
-      @mouseout.native.self="setHover(e.id, false, e.isContainer)"
-      @mouseover.self="setHover(e.id, true, e.isContainer)"
-      @mouseout.self="setHover(e.id, false, e.isContainer)"
+      v-components-loader='$options.components'
     >
       <span v-if='!(e.isContainer || e.removeTxt)' v-frag>
         {{ e.txt }}
       </span>
-    </component>
-    
-  </draggable>
+    </Draggable>
+  </Container>
 </template>
 
 <script>
 const clib  = require("./component-library.js");
 const crole = require("./component-role.js");
 const tool  = require("./tool.js");
+const dnd   = require("cdn/xboson-vue/1.0.0/loader/smooth-dnd.js");
 
 export default {
   props: ['nestedList', 'styleProp', 'rootConfig', 'isRoot', 'clComponentInstance'],
   
+  components: {
+    Container : dnd.Container, 
+    Draggable : dnd.Draggable,
+  },
+  
   data() {
     return {
-      tag : 'div',
+      tag : { value: 'div' },
       bindclass:{},
       componentData:{},
-    }
+    };
   },
   
   mounted() {
+    console.log('!1!!', this.nestedList, this.styleProp, this.isRoot)
     this.loadDepsComponentLib();
     this.initContainerInstanceTag();
   },
@@ -81,30 +67,17 @@ export default {
     },
   },
   
-  methods : {
+  methods: {
     initContainerInstanceTag() {
       let clci = this.clComponentInstance;
       if (!clci) return;
   console.log(clci.id)
       
-      this.tag = this.getComponentRealName(clci); // BUG: 内部组件不可拖拽
+      this.tag.value = this.getComponentRealName(clci); // BUG: 内部组件不可拖拽
       this.load_plugin(clci.cid)();
       
-      Object.defineProperty(clci.props, 'styleProp', {
-        get() {
-          return this.style;
-        }
-      });
-      
-      let _this = this;
-      Object.defineProperty(clci.props, 'rootConfig', {
-        get() {
-          return _this.rootConfig;
-        }
-      });
-      
       this.componentData.on = clci.on;
-      this.componentData.props = clci.props;
+      this.componentData.props = thia.makeProps(clci);
     },
     
     setHover(id, b, isContainer) {
@@ -192,15 +165,49 @@ export default {
       this.$store.commit('setNestedItemRef', { list: this.nestedList, index });
     },
     
-    // 必须调用该方法, 否则直接用 component 属性会产生数组错位
-    getComponentName(instance) {
+    getTag(instance) {
       if (!instance.isInstance) {
-        return 'div'; // 第一次渲染, 元素没有改变
+        return { value: 'div' }; // 第一次渲染, 元素没有改变
       }
       if (instance.isContainer) {
-        return 'cl-component-container';
+        console.log(instance.id, instance.props, "?????")
+        return { 
+          value: 'cl-component-container2',
+          props: {
+            on : instance.on,
+            props : this.makeProps(instance),
+            style : instance.props.style,
+          },
+        };
       }
-      return this.getComponentRealName(instance);
+      return { 
+        value : this.getComponentRealName(instance),
+        props : {
+          on : instance.on,
+          props : this.makeProps(instance),
+          style : instance.props.style,
+        },
+      };
+    },
+    
+    makeProps(instance) {
+      if (!instance.props.styleProp) {
+        Object.defineProperty(instance.props, 'styleProp', {
+          get() {
+            return this.style;
+          }
+        });
+      }
+      
+      if (!instance.props.rootConfig) {
+        let _this = this;
+        Object.defineProperty(instance.props, 'rootConfig', {
+          get() {
+            return _this.rootConfig;
+          }
+        });
+      }
+      return instance.props;
     },
     
     getComponentRealName(i) {
@@ -232,7 +239,7 @@ export default {
     save_requires(clid) {
       clib.saveLibRequires(clid, this.rootConfig.requires);
     },
-  }
+  },
 }
 </script>
 

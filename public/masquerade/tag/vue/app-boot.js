@@ -309,11 +309,11 @@
       
       if (export_modules[name]) {
         console.debug("require from export_modules", name);
-        process = cacheLoader(export_modules[name]);
+        process = cacheLoader(export_modules[name], _donot_default);
       }
       else if (mod._cache[absPath]) {
         console.debug("require from cache", name);
-        process = cacheLoader(mod._cache[absPath]);
+        process = cacheLoader(mod._cache[absPath], _donot_default);
       }
       else {
         let loader = fileLoaders[ext];

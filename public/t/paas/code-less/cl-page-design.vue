@@ -6,7 +6,7 @@
       <div class='dd-footer cl-background-flanel-lines cl-vertical-center' v-if='showtip()'>
         <b>拖拽组件到这里</b>
       </div>
-      <cl-component-container 
+      <cl-component-container2
         :nested-list='file.content.list' 
         :root-config='file.content.root'
         :is-root='true'
@@ -17,7 +17,7 @@
       <div class='dd-footer cl-background-flanel-lines cl-vertical-center' v-if='showtip()'>
         <b>拖拽组件到这里</b>
       </div>
-      <cl-component-container 
+      <cl-component-container2
         :nested-list='file.content.list' 
         :root-config='file.content.root'
         :is-root='true'

@@ -31,6 +31,7 @@
   
   'cl-editor', 
   'cl-component-container',
+  'cl-component-container2',
   'cl-component-choose',
   
   'cl-color-picker',

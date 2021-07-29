@@ -157,6 +157,7 @@ function makeComponentPluginLoader(id, targer) {
   let p = targer || {};
   for (let n in c.plugins) {
     Vue.set(p, n, require(c.plugins[n], 1, 1));
+    console.debug("Load component plugin", id, n, ':', c.plugins[n])
   }
   return p;
 }
