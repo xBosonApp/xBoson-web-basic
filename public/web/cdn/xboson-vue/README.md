@@ -125,6 +125,17 @@ require("cdn/xboson-vue/1.0.0/index.js");
 滥用全局事件会导致组件不可复用.
 
 
+# Vue2 指令
+
+## `v-components-loader`
+
+给子组件设置组件加载器
+
+```vue
+<some-tag v-components-loader="{'tagName': require('./path.vue')}" />
+```
+
+
 # Vue2 组件库加载器
 
 用 require 函数引入加载器脚本, 这些加载器会加载所有依赖文件, 并挂载到 Vue 中.
@@ -197,9 +208,17 @@ require("cdn/xboson-vue/1.0.0/loader/vux.js")
 [打开文档](https://vuetifyjs.com/zh-Hans/getting-started/installation/)
 
 ```js
-require("cdn/xboson-vue/1.0.0/loader/vuetify.js");
+require("cdn/xboson-vue/1.0.0/loader/vuetify.js")
 ```
 
+
+## Vue Smooth DnD 0.8.1
+
+[打开文档](https://github.com/kutlugsahin/vue-smooth-dnd)
+
+```js
+require("cdn/xboson-vue/1.0.0/loader/smooth-dnd.js")
+```
 
 
 # Vue3 组件库加载器

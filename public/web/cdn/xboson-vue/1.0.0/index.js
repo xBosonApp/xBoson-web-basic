@@ -87,6 +87,13 @@ Vue.use({ install }, {});
 function install(vue, opt) {
   Vue.xapi = Vue.prototype.$xapi = pluginXapi;
   Vue.prototype.$globalBus = globalBus;
+  Vue.directive('components-loader', { bind: dirComponentsLoader });
+}
+
+
+function dirComponentsLoader(el, binding, vnode) {
+  // console.log("do components-loader", binding.value, vnode);
+  Object.assign(vnode.componentOptions.Ctor.options.components, binding.value);
 }
 
 
