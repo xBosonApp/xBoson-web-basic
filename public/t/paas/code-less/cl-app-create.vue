@@ -125,7 +125,7 @@ export default {
       wrapperCol : { span: 14 },
       
       modeMap: {
-        'pc'     : '计算机应用',
+        'pc'     : '桌面应用',
         'mobile' : '移动应用',
       },
       

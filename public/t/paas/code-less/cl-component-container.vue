@@ -4,7 +4,7 @@
   <draggable 
     :group="{ name: 'ui-component' }" 
     :list="nestedList"
-    :style='style'
+    :style='styleProp'
     :root-config='rootConfig'
     :class="{ 'component-container':!isRoot, 'root-component-container': isRoot }"
     :swapThreshold='10'
@@ -16,18 +16,30 @@
     @update='onUpdate'>
     
     <component 
+      v-for="(e, idx) in nestedList" 
+      v-if='e.isInstance'
+      v-bind='e.props'
+      v-on='e.on'
       :is='getComponentName(e)' 
       :styleProp='e.props && e.props.style'
-      :root-config='rootConfig'
+      :rootConfig='rootConfig'
       :class="bindClass[e.id]"
       :key='idx'
       @mouseover.native.self="setHover(e.id, true, e.isContainer)"
       @mouseout.native.self="setHover(e.id, false, e.isContainer)"
       @mouseover.self="setHover(e.id, true, e.isContainer)"
       @mouseout.self="setHover(e.id, false, e.isContainer)"
-      v-for="(e, idx) in nestedList" 
-      v-bind='e.props'
-      v-on='e.on'>{{e.txt}}</component>
+    >
+      <cl-component-container 
+        v-if='e.isContainer'
+        :styleProp='e.props && e.props.style'
+        :nestedList='e.props.nestedList'
+        :rootConfig='rootConfig'
+      />
+      <span v-else-if='!e.removeTxt' v-frag>
+        {{ e.txt }}
+      </span>
+    </component>
     
   </draggable>
 </template>
@@ -38,7 +50,7 @@ const crole = require("./component-role.js");
 const tool  = require("./tool.js");
 
 export default {
-  props: ['nestedList', 'style', 'rootConfig', 'isRoot'],
+  props: ['nestedList', 'styleProp', 'rootConfig', 'isRoot'],
   
   data() {
     return {

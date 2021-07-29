@@ -184,3 +184,18 @@ loadCdn('element/2.15.1/index.js');
 ## `ctx_prefix`
 
 通常为: `http://host[:port]/xboson`
+
+
+# Vue 指令
+
+## `v-frag`
+
+不渲染根节点
+
+```html
+<div v-frag><a>href</a></div>
+
+渲染输出:
+
+<a>href</a>
+```

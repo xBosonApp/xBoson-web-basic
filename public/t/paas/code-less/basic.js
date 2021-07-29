@@ -90,6 +90,7 @@ module.exports = {
   bc006: {
     txt:'输入框', 
     component:'input',
+    removeTxt: true,
     groupName: '表单',
     props: {
       placeholder: {

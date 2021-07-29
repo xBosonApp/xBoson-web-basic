@@ -49,7 +49,7 @@ function newInstance(root, component) {
     propsConfig,
     cid         : component.id,
     clid        : component.clid,
-    txt         : component.removeTxt ?'' :component.txt,
+    txt         : component.txt,
     removeTxt   : component.removeTxt,
     component   : component.component,
     helpTag     : component.helpTag,
@@ -61,11 +61,10 @@ function newInstance(root, component) {
 
 
 function createProps(component) {
-  let nestedList = component.isContainer && [];
   // let containerStyle = component.isContainer && component.containerStyle;
   let props = {
-    style: Object.assign({}, component.style),
-    nestedList,
+    style      : Object.assign({}, component.style),
+    nestedList : component.isContainer && [],
   };
   return props;
 }

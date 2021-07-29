@@ -79,6 +79,7 @@
       if (window.require) return fail(new Error("require 全局冲突"));
       
       Vue.http.head(location.href).then((res)=>{
+        // 都是同步方法
         let fullPath = res.headers.get('Full-Path');
         boot(fullPath);
         boot_vue();
@@ -112,7 +113,18 @@
   }
   
   
+  // 同步方法
   function boot_vue() {
+    let directives = {
+      'frag' : 'cdn/vue-frag/1.1.5/frag.js',
+    };
+    
+    for (let n in directives) {
+      let d = require(directives[n]);
+      Vue.directive(n, d);
+      console.debug("Load vue directive", directives[n]);
+    }
+    
     new Vue({
       el : '#xboson_vue_app_root_dom',
       components : {
@@ -422,7 +434,7 @@
         let wok = wrap_return_exports(ok, _dd);
         
         loadModule(absPath, wok, fail, _async, (code, module)=>{
-          let el = makeCodeElement('div', code, 'html', absPath);
+          let el = makeCodeElement(null, code, 'html', absPath);
           let elements = toArray(el);
           
           module.exports = {
@@ -459,7 +471,7 @@
     
     
     function makeCodeElement(tagName, code, loaderType, fullpath) {
-      let el = document.createElement(tagName);
+      let el = tagName ? document.createElement(tagName) : document.createDocumentFragment();
       el.innerHTML = code;
       el.className = 'vue-app-'+ loaderType +'-loader';
       el.setAttribute('path', fullpath);
@@ -513,7 +525,7 @@
       el.addEventListener('animationend', ()=>el.remove());
     };
     close.addEventListener('click', doClose);
-    if (waitTime !== 0) setTimeout(doClose, waitTime > 0 ? waitTime : 3000)
+    if (waitTime !== 0) setTimeout(doClose, waitTime > 0 ? waitTime : 5000)
   
     document.body.appendChild(el);
     return el;

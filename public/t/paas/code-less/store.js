@@ -1,18 +1,6 @@
 /* Create By xBoson System */
 const KEY_PREFIX = "code_less$store$";
 
-function loads(name, _throw_error) {
-  try {
-    return JSON.parse(localStorage.getItem(KEY_PREFIX + name));
-  } catch(e) {
-    if (_throw_error) throw e;
-  }
-}
-
-function saves(name, v) {
-  localStorage.setItem(KEY_PREFIX + name, JSON.stringify(v));
-}
-
 
 module.exports = new Vuex.Store({
   state: {
@@ -35,7 +23,7 @@ module.exports = new Vuex.Store({
     
     // 方便调试的开关
     test : true,
-    testOpenFile : 'FGNWoFDNSByeThW_k2sxmQ',
+    testOpenFile : '1dVDqLKCQxK9ghnvi1U1pw',
   },
   
   mutations: {
@@ -158,3 +146,17 @@ module.exports = new Vuex.Store({
     },
   },
 });
+
+
+function loads(name, _throw_error) {
+  try {
+    return JSON.parse(localStorage.getItem(KEY_PREFIX + name));
+  } catch(e) {
+    if (_throw_error) throw e;
+  }
+}
+
+
+function saves(name, v) {
+  localStorage.setItem(KEY_PREFIX + name, JSON.stringify(v));
+}

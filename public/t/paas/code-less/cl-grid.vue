@@ -1,11 +1,14 @@
 <!-- Create By xBoson System -->
 
 <template>
-  <cl-component-container 
-    :style='styleProp'
-    :nestedList='nestedList'
-    :rootConfig='rootConfig'>
-  </cl-component-container>
+  <!--<cl-component-container -->
+  <!--  :style='styleProp'-->
+  <!--  :nestedList='nestedList'-->
+  <!--  :rootConfig='rootConfig'>-->
+  <!--</cl-component-container>-->
+  <div>
+    <slot></slot>
+  </div>
 </template>
 
 <script>
