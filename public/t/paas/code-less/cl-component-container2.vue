@@ -107,7 +107,7 @@ export default {
       
       // console.log(clci.id, clci)
       this.load_plugin(clci.cid)();
-      this.tag.name = this.getComponentRealName(clci);
+      this.tag.name = this.getComponentRealName(clci);// 导致子组件无法拖拽
       this.tag.props = clci.props;
       this.tag.id = clci.id;
       // console.log("cc", this.$options.components, this.tag)

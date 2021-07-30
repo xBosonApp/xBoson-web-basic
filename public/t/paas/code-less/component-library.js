@@ -6,8 +6,11 @@ const componentAll = {};
 // [ {title分组名: [], id:'' ...} ]
 const componentLite = [];
 
+let waitInit;
+
 
 module.exports = {
+  init,
   loadLib,
   getLibrary,
   getComponent,
@@ -20,6 +23,17 @@ module.exports = {
   makeComponentPluginLoader,
   saveLibRequires,
 };
+
+
+function init() {
+  if (waitInit) {
+    return waitInit;
+  }
+  return waitInit = Promise.all([
+    loadStaticLib('基础组件', './basic.js'),
+    loadClassify(),
+  ]);
+}
 
 
 //
@@ -164,7 +178,7 @@ function makeComponentPluginLoader(id, targer) {
 
 
 function loadStaticLib(name, path) {
-  require(path, 1).then(function(list) {
+  return require(path, 1).then(function(list) {
     fixId(list);
     let gp = findGroups(list);
     let id = path;

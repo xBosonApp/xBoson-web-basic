@@ -43,9 +43,8 @@ export default {
     return data;
   },
   
-  mounted() {
-    clib.loadStaticLib('基础组件', './basic.js');  
-    clib.loadClassify().catch(this.error);
+  created() {
+    clib.init().catch(this.error);
   },
   
   methods : {

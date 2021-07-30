@@ -22,12 +22,11 @@
     @choose='onChoose'
     @update='onUpdate'
   >
-    
     <component 
-      v-for="(e, idx) in nestedList" 
-      v-if='e.isInstance'
       v-bind='e.props'
       v-on='e.on'
+      v-for="(e, idx) in nestedList" 
+      v-if='e.isInstance'
       
       :is='getComponentName(e)' 
       :styleProp='e.props && e.props.style'
@@ -60,21 +59,18 @@ export default {
   
   data() {
     return {
-      tag : 'div',
+      tag  : 'div',
       pkey : key++,
-      bindclass:{},
-      componentData:{},
+      bindclass     : {},
+      componentData : {},
     }
   },
   
-  mounted() {
-    // this.loadDepsComponentLib();
-    // this.initContainerInstanceTag();
-  },
-  
   created() {
-    this.loadDepsComponentLib();
-    this.initContainerInstanceTag();
+    clib.init().then(()=>{
+      this.loadDepsComponentLib();
+      this.initContainerInstanceTag();  
+    });
   },
   
   computed: {
@@ -99,25 +95,28 @@ export default {
       let clci = this.clComponentInstance;
       if (!clci) return;
       
-      this.tag = this.getComponentRealName(clci); // BUG: 内部组件不可拖拽
+      // this.tag = this.getComponentRealName(clci); // BUG: 内部组件不可拖拽
       this.pkey = clci.id;
-      this.load_plugin(clci.cid)();
-      
-      Object.defineProperty(clci.props, 'styleProp', {
-        get() {
-          return this.style;
-        }
-      });
-      
-      let _this = this;
-      Object.defineProperty(clci.props, 'rootConfig', {
-        get() {
-          return _this.rootConfig;
-        }
-      });
+      this.load_plugin(clci.clid, clci.cid)();
       
       this.componentData.on = clci.on;
-      this.componentData.props = clci.props;
+      this.componentData.props = this.makeVirtualProps(clci);
+    },
+    
+    makeVirtualProps(clci) {
+      if (!clci.props.styleProp) {
+        Object.defineProperty(clci.props, 'styleProp', {
+          get() { return this.style; }
+        });
+      }
+      
+      if (!clci.props.rootConfig) {
+        let _this = this;
+        Object.defineProperty(clci.props, 'rootConfig', {
+          get() { return _this.rootConfig; }
+        });
+      }
+      return clci.props;
     },
     
     setHover(id, b, isContainer) {
@@ -140,7 +139,7 @@ export default {
       let tplcfg = this.nestedList[i];
       
       if (tplcfg == null) {
-        console.error("why is null?");
+        console.error("why is null?", i, ev);
         return;
       }
       
@@ -166,7 +165,7 @@ export default {
     initComonent(id, index) {
       let component = clib.getComponent(id);
       if (component.plugins) {
-        this.load_plugin(id)();
+        this.load_plugin(component.clid, id)();
       }
       this.save_requires(component.clid);
       
@@ -223,7 +222,7 @@ export default {
     loadDepsComponentLib() {
       for (let i=0; i<this.nestedList.length; ++i) {
         let item = this.nestedList[i];
-        let loader = this.load_plugin(item.cid);
+        let loader = this.load_plugin(item.clid, item.cid);
         
         if (item.clid) {
           this.$store.commit('loadComponentsFromLibrary', [item.clid, loader]);
@@ -235,10 +234,13 @@ export default {
     },
     
     // 加载设计时插件, 返回一个加载器函数.
-    load_plugin(cid) {
+    load_plugin(clid, cid) {
       return ()=>{
-        clib.makeComponentPluginLoader(cid, this.$options.components);
-        this.$forceUpdate();
+        let _next = ()=>{
+          clib.makeComponentPluginLoader(cid, this.$options.components);
+          this.$forceUpdate();
+        };
+        this.$store.commit('loadComponentsFromLibrary', [clid, _next]);
       };
     },
     
