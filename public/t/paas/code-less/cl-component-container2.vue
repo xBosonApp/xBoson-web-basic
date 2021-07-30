@@ -2,23 +2,30 @@
 
 <template>
   <Container
-    :class="{ 'component-container':!isRoot, 'root-component-container': isRoot }"
     :tag='tag'
+    :class="{ 'component-container':!isRoot, 'root-component-container': isRoot }"
     group-name='ui-component'
     v-components-loader='$options.components'
   >
+    <!-- 
+      :class="bindClass[e.id]" 
+      @mouseover.native.self="setHover(e.id, true, e.isContainer)"
+      @mouseout.native.self="setHover(e.id, false, e.isContainer)"
+      @mouseover.self="setHover(e.id, true, e.isContainer)"
+      @mouseout.self="setHover(e.id, false, e.isContainer)"
+     -->
     <Draggable
       v-for="(e, idx) in nestedList" 
       v-if='e.isInstance'
-      :tag='getTag(e)'
-      :class="bindClass[e.id]"
-      :key='e.id'
       v-components-loader='$options.components'
+      :tag='getTag(e)'
+      :key='e.id'
     >
       <span v-if='!(e.isContainer || e.removeTxt)' v-frag>
         {{ e.txt }}
       </span>
     </Draggable>
+    <div v-else class='hide'></div>
   </Container>
 </template>
 
@@ -38,14 +45,13 @@ export default {
   
   data() {
     return {
-      tag : { value: 'div' },
+      tag : { value: 'div', props: null },
       bindclass:{},
       componentData:{},
     };
   },
   
   mounted() {
-    console.log('!1!!', this.nestedList, this.styleProp, this.isRoot)
     this.loadDepsComponentLib();
     this.initContainerInstanceTag();
   },
@@ -71,13 +77,15 @@ export default {
     initContainerInstanceTag() {
       let clci = this.clComponentInstance;
       if (!clci) return;
-  console.log(clci.id)
+  console.log('initContainerInstanceTag', clci.id, clci.props.nestedList == this.nestedList)
       
-      this.tag.value = this.getComponentRealName(clci); // BUG: 内部组件不可拖拽
+      this.tag.value = this.getComponentRealName(clci);
       this.load_plugin(clci.cid)();
       
-      this.componentData.on = clci.on;
-      this.componentData.props = thia.makeProps(clci);
+      this.tag.props = {
+        on    : clci.on,
+        props : this.makeProps(clci),
+      };
     },
     
     setHover(id, b, isContainer) {
@@ -169,24 +177,23 @@ export default {
       if (!instance.isInstance) {
         return { value: 'div' }; // 第一次渲染, 元素没有改变
       }
+      
+      let props = {
+        on    : instance.on,
+        props : this.makeProps(instance),
+        style : instance.props.style,
+      };
+      
       if (instance.isContainer) {
-        console.log(instance.id, instance.props, "?????")
         return { 
           value: 'cl-component-container2',
-          props: {
-            on : instance.on,
-            props : this.makeProps(instance),
-            style : instance.props.style,
-          },
+          props,
         };
       }
+      
       return { 
         value : this.getComponentRealName(instance),
-        props : {
-          on : instance.on,
-          props : this.makeProps(instance),
-          style : instance.props.style,
-        },
+        props,
       };
     },
     
@@ -204,6 +211,14 @@ export default {
         Object.defineProperty(instance.props, 'rootConfig', {
           get() {
             return _this.rootConfig;
+          }
+        });
+      }
+      
+      if (!instance.props.clComponentInstance) {
+        Object.defineProperty(instance.props, 'clComponentInstance', {
+          get() {
+            return instance;
           }
         });
       }
@@ -232,7 +247,7 @@ export default {
     load_plugin(cid) {
       return ()=>{
         clib.makeComponentPluginLoader(cid, this.$options.components);
-        this.$forceUpdate();
+        // this.$forceUpdate();
       };
     },
     

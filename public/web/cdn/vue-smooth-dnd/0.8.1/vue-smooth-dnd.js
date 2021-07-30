@@ -125,7 +125,9 @@
           this.container.dispose();
         }
         this.containerElement = this.$refs.container || this.$el;
-        this.container = smoothDnd.smoothDnD(this.containerElement, mapOptions(this));
+        if (this.containerElement instanceof Element) {
+          this.container = smoothDnd.smoothDnD(this.containerElement, mapOptions(this));
+        }
         return;
       }
 
