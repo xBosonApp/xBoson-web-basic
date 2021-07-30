@@ -6,14 +6,18 @@
     :list="nestedList"
     :style='styleProp'
     :rootConfig='rootConfig'
-    :class="{ 'component-container':!isRoot, 'root-component-container': isRoot }"
+    :class="{ 'component-container':!isRoot, 'root-component-container': isRoot, 'draggable-item':true }"
     :swapThreshold='0.2'
     :tag='tag'
     :componentData='componentData'
+    :key='pkey'
+    
     v-components-loader='$options.components'
     animation='100' 
     chosenClass="cl-drag-drop-component-chosen" 
     ghostClass='cl-drag-drop-component-ghost' 
+    draggable='.draggable-item'
+    
     @add='add' 
     @choose='onChoose'
     @update='onUpdate'
@@ -24,12 +28,14 @@
       v-if='e.isInstance'
       v-bind='e.props'
       v-on='e.on'
+      
       :is='getComponentName(e)' 
       :styleProp='e.props && e.props.style'
       :rootConfig='rootConfig'
       :class="bindClass[e.id]"
       :key='e.id'
       :clComponentInstance='e'
+      
       @mouseover.native.self="setHover(e.id, true, e.isContainer)"
       @mouseout.native.self="setHover(e.id, false, e.isContainer)"
       @mouseover.self="setHover(e.id, true, e.isContainer)"
@@ -47,6 +53,7 @@
 const clib  = require("./component-library.js");
 const crole = require("./component-role.js");
 const tool  = require("./tool.js");
+let key = 1;
 
 export default {
   props: ['nestedList', 'styleProp', 'rootConfig', 'isRoot', 'clComponentInstance'],
@@ -54,12 +61,18 @@ export default {
   data() {
     return {
       tag : 'div',
+      pkey : key++,
       bindclass:{},
       componentData:{},
     }
   },
   
   mounted() {
+    // this.loadDepsComponentLib();
+    // this.initContainerInstanceTag();
+  },
+  
+  created() {
     this.loadDepsComponentLib();
     this.initContainerInstanceTag();
   },
@@ -85,9 +98,9 @@ export default {
     initContainerInstanceTag() {
       let clci = this.clComponentInstance;
       if (!clci) return;
-  console.log(clci.id)
       
       this.tag = this.getComponentRealName(clci); // BUG: 内部组件不可拖拽
+      this.pkey = clci.id;
       this.load_plugin(clci.cid)();
       
       Object.defineProperty(clci.props, 'styleProp', {
@@ -238,7 +251,7 @@ export default {
 
 <style scoped>
 .component-container {
-  border: 1px dashed #ccc; padding: 8px; margin: 10px 2px; min-height: 30px;
+  border: 1px dashed #ccc; padding: 20px 8px; margin: 10px 2px; min-height: 30px;
 }
 .root-component-container {
   /*border: 1px dashed green;*/ padding: 8px; min-height: 200px;

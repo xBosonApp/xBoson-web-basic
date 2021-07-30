@@ -92,8 +92,14 @@ function install(vue, opt) {
 
 
 function dirComponentsLoader(el, binding, vnode) {
-  // console.log("do components-loader", binding.value, vnode);
-  Object.assign(vnode.componentOptions.Ctor.options.components, binding.value);
+  // console.log(el, binding.value, '?', vnode)
+  if (vnode.componentInstance) {
+    // Object.assign(vnode.componentOptions.Ctor.options.components, binding.value);
+    vnode.componentInstance.$options.components = 
+        Object.assign(vnode.componentInstance.$options.components, binding.value);
+  } else {
+    console.warn("Fail components-loader", binding.value, vnode);
+  }
 }
 
 

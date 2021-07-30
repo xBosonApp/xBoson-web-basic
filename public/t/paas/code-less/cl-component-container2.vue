@@ -1,57 +1,84 @@
 <!-- Create By xBoson System -->
 
 <template>
-  <Container
-    :tag='tag'
-    :class="{ 'component-container':!isRoot, 'root-component-container': isRoot }"
+  <DropList
+    :tag='tag.name'
+    :items='nestedList'
+    :style='styleProp'
+    :class="{ 'cl-component-container':!isRoot, 'cl-root-component-container': isRoot }"
+    :row='true'
+    :key='tag.id'
+    
+    :rootConfig='rootConfig'
+    :nestedList='nestedList'
+    :styleProp='styleProp'
+    
+    mode="cut"
     group-name='ui-component'
+    --no-animations
+    v-bind='tag.props'
     v-components-loader='$options.components'
-  >
-    <!-- 
-      :class="bindClass[e.id]" 
-      @mouseover.native.self="setHover(e.id, true, e.isContainer)"
-      @mouseout.native.self="setHover(e.id, false, e.isContainer)"
-      @mouseover.self="setHover(e.id, true, e.isContainer)"
-      @mouseout.self="setHover(e.id, false, e.isContainer)"
-     -->
-    <Draggable
-      v-for="(e, idx) in nestedList" 
-      v-if='e.isInstance'
-      v-components-loader='$options.components'
-      :tag='getTag(e)'
-      :key='e.id'
-    >
-      <span v-if='!(e.isContainer || e.removeTxt)' v-frag>
-        {{ e.txt }}
-      </span>
-    </Draggable>
-    <div v-else class='hide'></div>
-  </Container>
+    
+    @insert="onInsert"
+    @reorder="onReorder"
+  > 
+    <template v-slot:item="{item, reorder}">
+      <Drag
+        v-if='item.isInstance'
+        v-components-loader='$options.components'
+        v-bind='item.props'
+        v-on='item.on'
+        
+        :tag='getTag(item)'
+        :styleProp='item.props && item.props.style'
+        :rootConfig='rootConfig'
+        :class="bindClass[item.id]"
+        :key='item.id'
+        :clComponentInstance='item'
+        :data='item'
+        
+        @cut="onRemove"
+        @mouseover.native.self="setHover(item.id, true, item.isContainer)"
+        @mouseout.native.self="setHover(item.id, false, item.isContainer)"
+        @mouseover.self="setHover(item.id, true, item.isContainer)"
+        @mouseout.self="setHover(item.id, false, item.isContainer)"
+      >
+        <span v-if='!(item.isContainer || item.removeTxt)' v-frag>
+          {{ item.txt }}
+        </span>
+      </Drag>
+      <div v-else></div>
+    </template>
+    
+    <template v-slot:feedback>
+      <div style='height: 10px' class='cl-drag-drop-component-ghost'></div>
+    </template>
+  </DropList>
 </template>
 
 <script>
 const clib  = require("./component-library.js");
 const crole = require("./component-role.js");
 const tool  = require("./tool.js");
-const dnd   = require("cdn/xboson-vue/1.0.0/loader/smooth-dnd.js");
+const dnd   = require("cdn/easy-dnd/0.1.0/loader.js");
 
 export default {
   props: ['nestedList', 'styleProp', 'rootConfig', 'isRoot', 'clComponentInstance'],
   
   components: {
-    Container : dnd.Container, 
-    Draggable : dnd.Draggable,
+    Drag      : dnd.Drag,
+    Drop      : dnd.Drop,
+    DropList  : dnd.DropList,
   },
   
   data() {
     return {
-      tag : { value: 'div', props: null },
+      tag : { name:'div', props:{}, id:0 },
       bindclass:{},
-      componentData:{},
     };
   },
   
-  mounted() {
+  created() {
     this.loadDepsComponentLib();
     this.initContainerInstanceTag();
   },
@@ -77,30 +104,45 @@ export default {
     initContainerInstanceTag() {
       let clci = this.clComponentInstance;
       if (!clci) return;
-  console.log('initContainerInstanceTag', clci.id, clci.props.nestedList == this.nestedList)
       
-      this.tag.value = this.getComponentRealName(clci);
+      // console.log(clci.id, clci)
       this.load_plugin(clci.cid)();
-      
-      this.tag.props = {
-        on    : clci.on,
-        props : this.makeProps(clci),
-      };
+      this.tag.name = this.getComponentRealName(clci);
+      this.tag.props = clci.props;
+      this.tag.id = clci.id;
+      // console.log("cc", this.$options.components, this.tag)
     },
     
     setHover(id, b, isContainer) {
       if (this.bindclass[id] === undefined) {
         this.$set(this.bindclass, id, this.newDragClass(b, isContainer));
       } else {
-        this.bindclass[id]['draggable-item-active'] = b;
+        this.bindclass[id]['cl-draggable-item-active'] = b;
       }
     },
     
     newDragClass(active, isContainer) {
       return { 
-        'draggable-item': !isContainer, 
-        'draggable-item-active': active,
+        'cl-draggable-item': !isContainer, 
+        'cl-draggable-item-active': active,
       };
+    },
+    
+    onInsert(ev) {
+      if (ev.data.isInstance) {
+        this.nestedList.splice(ev.index, 0, ev.data);
+      } else {
+        console.log("init instance", ev, "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      }
+    },
+    
+    onRemove(ev) {
+      let i = this.nestedList.indexOf(ev.data);
+      this.nestedList.splice(i, 1);
+    },
+    
+    onReorder(ev) {
+      ev.apply(this.nestedList);
     },
     
     add(ev) {
@@ -175,54 +217,14 @@ export default {
     
     getTag(instance) {
       if (!instance.isInstance) {
-        return { value: 'div' }; // 第一次渲染, 元素没有改变
+        return 'div'; // 第一次渲染, 元素没有改变
       }
-      
-      let props = {
-        on    : instance.on,
-        props : this.makeProps(instance),
-        style : instance.props.style,
-      };
       
       if (instance.isContainer) {
-        return { 
-          value: 'cl-component-container2',
-          props,
-        };
+        return 'cl-component-container2';
       }
       
-      return { 
-        value : this.getComponentRealName(instance),
-        props,
-      };
-    },
-    
-    makeProps(instance) {
-      if (!instance.props.styleProp) {
-        Object.defineProperty(instance.props, 'styleProp', {
-          get() {
-            return this.style;
-          }
-        });
-      }
-      
-      if (!instance.props.rootConfig) {
-        let _this = this;
-        Object.defineProperty(instance.props, 'rootConfig', {
-          get() {
-            return _this.rootConfig;
-          }
-        });
-      }
-      
-      if (!instance.props.clComponentInstance) {
-        Object.defineProperty(instance.props, 'clComponentInstance', {
-          get() {
-            return instance;
-          }
-        });
-      }
-      return instance.props;
+      return this.getComponentRealName(instance);
     },
     
     getComponentRealName(i) {
@@ -258,17 +260,17 @@ export default {
 }
 </script>
 
-<style scoped>
-.component-container {
+<style>
+.cl-component-container {
   border: 1px dashed #ccc; padding: 8px; margin: 10px 2px; min-height: 30px;
 }
-.root-component-container {
-  /*border: 1px dashed green;*/ padding: 8px; min-height: 200px;
+.cl-root-component-container {
+  /*border: 1px dashed green;*/ padding: 20px 8px; min-height: 200px;
 }
-.draggable-item {
+.cl-draggable-item {
   border: 1px dashed #f1f1f1; min-height: 5px;
 }
-.draggable-item-active {
+.cl-draggable-item-active {
   border: 1px dashed #3e33e9 !important;
 }
 </style>

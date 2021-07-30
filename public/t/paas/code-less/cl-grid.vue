@@ -1,8 +1,8 @@
 <!-- Create By xBoson System -->
 
 <template>
-  <div>
-    <slot></slot>
+  <div class='grid-root'>
+    <slot/>
   </div>
 </template>
 
@@ -31,14 +31,14 @@ export default {
   },
   
   mounted() {
-    return;
-    setTimeout(()=>{
       console.log("cl-grid init");
+      // throw new Error('test')
+    // setTimeout(()=>{
       let a = ['nestedList', 'styleProp', 'rows', 'columns', 'rootConfig', 'rowGap', 'columnGap'];
       a.forEach(n=>{
         console.log('\t', n, this[n]);
       });
-    }, 2000);
+    // }, 100);
   },
 }
 </script>
