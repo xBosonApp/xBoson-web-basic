@@ -32,6 +32,7 @@
   'cl-editor', 
   'cl-component-container',
   'cl-component-container2',
+  'cl-component-container3',
   'cl-component-choose',
   
   'cl-color-picker',
@@ -43,6 +44,7 @@
 ].forEach(function(name) {
   Vue.component(name, require('./'+ name +'.vue', 1,1));
 });
+
 
 const router = new VueRouter({});
 const store = require("./store.js");

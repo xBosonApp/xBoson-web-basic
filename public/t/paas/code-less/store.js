@@ -105,34 +105,39 @@ module.exports = new Vuex.Store({
       s.componentLoadState[clid] = null;
     },
     
-    // parm[clid, cb:Function(error)]
+    // parm[ clid, ok:Function(state), fail:Function(err) ]
     loadComponentsFromLibrary(s, parm) {
       let clid = Array.isArray(parm) ? parm[0] : parm;
-      let cb   = Array.isArray(parm) ? parm[1] : null;
+      let ok   = Array.isArray(parm) ? parm[1] : null;
+      let fail = Array.isArray(parm) ? parm[2] : null;
       
-      if (!s.componentLoadState[clid]) {
-        s.componentLoadState[clid] = new Promise((ok, fail)=>{
-          this.commit('forceLoadComponentsFromLibrary', [clid, err=>{
-            if (err) fail(err);
-            else ok();
-          }]);
-        }).then(cb, cb);
+      let state;
+      let p = s.componentLoadState[clid];
+      if (!p) {
+        state = 'load';
+        p = s.componentLoadState[clid] = new Promise((ok, fail)=>{
+          this.commit('forceLoadComponentsFromLibrary', [clid, ok, fail]);
+        });
       } else {
-        s.componentLoadState[clid].then(cb, cb);
+        state = 'cache';
       }
+      
+      ok   && p.then(()=>ok(state));
+      fail && p.catch(fail);
     },
     
-    // parm[clid, cb:Function(error)]
+    // parm[ clid, ok:Function(), fail:Function(err) ]
     forceLoadComponentsFromLibrary(s, parm) {
       let clid = Array.isArray(parm) ? parm[0] : parm;
-      let cb   = Array.isArray(parm) ? parm[1] : null;
+      let ok   = Array.isArray(parm) ? parm[1] : null;
+      let fail = Array.isArray(parm) ? parm[2] : null;
       let lib  = require("./component-library.js");
       
       lib.loadComponent(clid).catch(err=>{
         xv.popError('组件加载失败', err);
-        cb && cb(err);
+        fail(err);
       }).then(()=>{
-        cb && cb(null);
+        ok();
       });
     },
   },

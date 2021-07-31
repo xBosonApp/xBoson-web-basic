@@ -1,50 +1,4 @@
-<!-- Create By xBoson System -->
-
-<template>
-  <component 
-    :nestedList="nestedList"
-    :styleProp="styleProp"
-    :style='styleProp'
-    :rootConfig='rootConfig'
-    :class="{ 'cl-component-container':!isRoot, 'cl-root-component-container': isRoot, 'cl-draggable-item':true }"
-    :is='tag.name'
-    :key='tag.id'
-    
-    v-components-loader='$options.components'
-    v-bind='tag.props'
-    v-on='tag.on'
-    
-    @add='add' 
-    @update='onUpdate'
-  >
-    <component 
-      v-bind='e.props'
-      v-on='e.on'
-      v-for="(e, idx) in nestedList" 
-      v-if='e.isInstance'
-      
-      :is='getComponentName(e)' 
-      :styleProp='e.props && e.props.style'
-      :rootConfig='rootConfig'
-      :class="bindClass[e.id]"
-      :key='e.id'
-      :containerTagInfo='e.isContainer && e'
-      
-      @click='setAdjRef(idx)'
-      @click.native.self='setAdjRef(idx)'
-      @mouseover.native.self="setHover(e.id, true, e.isContainer)"
-      @mouseout.native.self="setHover(e.id, false, e.isContainer)"
-      @mouseover.self="setHover(e.id, true, e.isContainer)"
-      @mouseout.self="setHover(e.id, false, e.isContainer)"
-    >
-      <span v-if='!(e.isContainer || e.removeTxt)' v-frag>
-        {{ e.txt }}
-      </span>
-    </component>
-    
-  </component>
-</template>
-
+<template></template>
 <script>
 const clib  = require("./component-library.js");
 const crole = require("./component-role.js");
@@ -52,27 +6,92 @@ const tool  = require("./tool.js");
 let pkey = 1;
 
 export default {
-  props: ['nestedList', 'styleProp', 'rootConfig', 'isRoot', 'containerTagInfo'],
+  props: ['nestedList', 'rootConfig', 'containerTag'],
   
-  components: {
+  //TODO: 可以预览但是更新效率低
+  render(c) {
+    const rootConfig = this.rootConfig;
+    const _vm = this;
+    
+    const _children = (list)=>{
+      return list.map((e, i)=>{
+        if (!e.isInstance) return '';
+        
+        let tagName = this.getComponentRealName(e);
+        let content = [];
+        let config  = makeConfig(e, list, i);
+        
+        if (e.isContainer) {
+          config.class['cl-component-container'] = true;
+          this.loadDepsComponentLib(e.props.nestedList);
+          content = _children(e.props.nestedList);
+        } else {
+          config.class['cl-draggable-item'] = true;
+          if (!e.removeTxt) {
+            content.push(e.txt);
+          }
+        }
+        let cc = c(tagName, config, content); 
+        return cc;
+      });
+    };
+    
+    function makeConfig(e, list, index) {
+      let config  = {
+        style     : e.props.style,
+        props     : e.props,
+        key       : e.id,
+        'class'   : { 'cl-draggable-item-active': false }, 
+        on        : { click }, // e.on ??
+        nativeOn  : { click, mouseover, mouseout },
+      };
+      
+      _vm.makeVirtualProp(config.props, 'styleProp', e.props.style);
+      _vm.makeVirtualProp(config.props, 'rootConfig', rootConfig);
+      config.on.click = click;
+      
+      function click(event) {
+        if (event.target !== event.currentTarget) return;
+        if (index >= 0) {
+          _vm.setAdjComponent(list, index);
+        }
+      }
+      
+      function mouseover() {
+        if (event.target !== event.currentTarget) return;
+        config.class['cl-draggable-item-active'] = true;
+      }
+      
+      function mouseout() {
+        if (event.target !== event.currentTarget) return;
+        config.class['cl-draggable-item-active'] = false;
+      }
+      return config;
+    }
+    
+    if (this.containerTag) {
+      let tagName = this.getComponentRealName(this.containerTag);
+      let config = makeConfig(this.containerTag, this.nestedList, -1);
+      return c(tagName, config, _children(this.nestedList));
+    } 
+    else {
+      return c("div", {
+        'class' : ['cl-root-component-container', 'cl-draggable-item'],
+        key     : pkey++,
+      }, _children(this.nestedList));
+    }
   },
   
   data() {
     return {
-      tag : { name:'div', props:{}, id:pkey++, on:null },
       bindclass:{},
     };
   },
   
   created() {
     clib.init().then(()=>{
-      this.loadDepsComponentLib();
-      this.initContainerInstanceTag();  
+      this.loadDepsComponentLib(this.nestedList);
     });
-  },
-  
-  mounted() {
-    this.transmissionParent();
   },
   
   computed: {
@@ -93,18 +112,12 @@ export default {
   },
   
   methods: {
-    transmissionParent() {
-      if (!(this.containerTagInfo && this.containerTagInfo.isContainer)) {
-        return;
+    makeVirtualProp(obj, name, val) {
+      if (!obj[name]) {
+        Object.defineProperty(obj, name, {
+          get() { return val; }
+        });
       }
-      let p = this.$parent;
-      this.$children.forEach(c=>{
-        c.$parent = p;
-        p.$children.push(c);
-      });
-      let i = p.$children.findIndex(x=>x == this);
-      p.$children.splice(i, 1);
-      console.log('transmissionParent', i, this.containerTagInfo.id);
     },
     
     initContainerInstanceTag() {
@@ -200,9 +213,13 @@ export default {
     },
     
     setAdjRef(index) {
-      let cfg = this.nestedList[index];
+      this.setAdjComponent(this.nestedList, index);
+    },
+    
+    setAdjComponent(list, index) {
+      let cfg = list[index];
       this.$store.commit('setAdjustmentComponent', cfg);
-      this.$store.commit('setNestedItemRef', { list: this.nestedList, index });
+      this.$store.commit('setNestedItemRef', { list, index });
     },
     
     // 必须调用该方法, 否则直接用 component 属性会产生数组错位
@@ -220,17 +237,18 @@ export default {
       return i.helpTag || i.component;
     },
     
-    loadDepsComponentLib() {
-      for (let i=0; i<this.nestedList.length; ++i) {
-        let item = this.nestedList[i];
-        let loader = this.load_plugin(item.clid, item.cid);
+    loadDepsComponentLib(list) {
+      for (let i=0; i<list.length; ++i) {
+        let item = list[i];
+        // let loader = 
+        this.load_plugin(item.clid, item.cid)();
         
-        if (item.clid) {
-          this.$store.commit('loadComponentsFromLibrary', [item.clid, loader]);
-        } else {
-          console.warn("Component not has libraryID attribute");
-          loader();
-        }
+        // if (item.clid) {
+        //   this.$store.commit('loadComponentsFromLibrary', [item.clid, loader]);
+        // } else {
+        //   console.warn("Component not has libraryID attribute");
+        //   loader();
+        // }
       }
     },
     
@@ -238,9 +256,9 @@ export default {
     load_plugin(clid, cid) {
       return ()=>{
         return new Promise((ok, fail)=>{
-          let _next = ()=>{
+          let _next = (state)=>{
             clib.makeComponentPluginLoader(cid, this.$options.components);
-            this.$forceUpdate();
+            if (state == 'load') this.$nextTick(()=>this.$forceUpdate());
             ok();
           };
           this.$store.commit('loadComponentsFromLibrary', [clid, _next]);
@@ -252,10 +270,10 @@ export default {
       clib.saveLibRequires(clid, this.rootConfig.requires);
     },
   },
-}
+};
 </script>
 
-<style>
+<style scoped>
 .cl-component-container {
   border: 1px dashed #ccc; padding: 20px 8px; margin: 20px 2px; min-height: 30px;
 }

@@ -111,6 +111,7 @@ export default {
           'width'             : size.w,
           'height'            : size.h,
           'margin-bottom'     : mb +'px',
+          'min-height'        : '200px',
         };
       } else {
         return {};

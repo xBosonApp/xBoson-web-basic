@@ -95,7 +95,9 @@ export default {
       let clci = this.clComponentInstance;
       if (!clci) return;
       
-      // this.tag = this.getComponentRealName(clci); // BUG: 内部组件不可拖拽
+      // BUG: 导致内部组件不可拖拽, 并抛出异常
+      // this.tag = this.getComponentRealName(clci); 
+      
       this.pkey = clci.id;
       this.load_plugin(clci.clid, clci.cid)();
       
