@@ -130,15 +130,10 @@ export default {
       ev.target.classList.add('cl-draging');
       ev.target.style.border = '3px dotted green';
       
-      let onerror = (err)=>{
-        console.error(err.message);
-      };
-      
       let key = tool.saveData({
         node, index, 
         list : this.nestedList, 
         el   : ev.target, 
-        run  : tool.delayQueue(50, 20, onerror).run,
         stop : false,
       }, DPRE);
       
@@ -159,11 +154,11 @@ export default {
       ev.preventDefault();
       
       let d = this.loadData(ev.dataTransfer);
-      if ((d.node == node) || d.stop) {
+      if ((d.node == node) || (d.stop > Date.now())) {
         return;
       }
       
-      // console.log('over', node.id, index);
+      // console.log('over', node.id, index, d.stop, Date.now());
       let onContainer = false;
       if (node.isContainer) {
         if (d.onContainerId == node.id) {
@@ -178,25 +173,26 @@ export default {
         let y = ev.offsetY / ev.target.clientHeight;
         if (y < 0.2 || y > 0.8) {
           if (!this.isTargetParent(ev.target, d.el)) {
-            ev.target.insertAdjacentElement(y < 0.5 ?'afterbegin' :'beforeend', d.el);
-            d.stop = true;
-            let list = node.isRoot ?this.nestedList :node.props.nestedList;
-            d.moveTo = { list, index };
+            moveTo(y < 0.5 ?'afterbegin' :'beforeend',
+              node.isRoot ?this.nestedList :node.props.nestedList, index);
           }
         }
       } else {
         let x = ev.offsetX / ev.target.clientWidth;
         if (x > 0.1 && x < 0.9) {
           if (!this.isTargetParent(ev.target, d.el)) {
-            ev.target.insertAdjacentElement(x >= 0.5 ?'beforebegin' :'afterend', d.el);
-            d.stop = true;
-            let i = index;
-            if (this.nestedList != d.list) ++i;
-            d.moveTo = { list: this.nestedList, index: i };
+            moveTo(x >= 0.5 ?'beforebegin' :'afterend', 
+              this.nestedList, this.nestedList == d.list ?index :index+1);
           }
         }
       }
       
+      function moveTo(pos_str, list, index) {
+        ev.target.insertAdjacentElement(pos_str, d.el);
+        d.stop = Date.now() + 2000;
+        d.moveTo = { list, index };
+        d.el.animate([{ opacity: '0' }, { opacity: '1' }], { duration: 200 });
+      }
       return false;
     },
     
@@ -209,19 +205,23 @@ export default {
       }
       
       let d = this.loadData(ev.dataTransfer);
-      d.stop = false;
+      d.stop = 0;
     },
     
     onDragLeave(ev, node, index) {
       // console.log("leave", node.id, index);
+      let d = this.loadData(ev.dataTransfer);
+      d.moveTo = {};
     },
     
     onDrop(ev, node, index) {
       let d = this.loadData(ev.dataTransfer);
-      console.log('drop', d.node.id);
+      // console.log('drop', d.node.id);
       
-      d.list.splice(d.index, 1);
-      d.moveTo.list.splice(d.moveTo.index, 0, d.node);
+      if (d.moveTo && d.moveTo.list) {
+        d.list.splice(d.index, 1);
+        d.moveTo.list.splice(d.moveTo.index, 0, d.node);
+      }
     },
     
     // 如果 parent 是 target 的父容器, 返回 true
