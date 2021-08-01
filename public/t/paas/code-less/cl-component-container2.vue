@@ -68,6 +68,7 @@
 </template>
 
 <script>
+const NoConflictID = '_3iofdEEnwa0jfdsaFESAldfdsa__'+ Math.random().toString(16).substr(2);
 const DKEY  = 'key/drag/component-data';
 const DPRE  = 'component-container-drag-data';
 const clib  = require("./component-library.js");
@@ -131,7 +132,7 @@ export default {
       ev.target.style.border = '3px dotted green';
       
       let key = tool.saveData({
-        node, index, 
+        node, index, pagex:0, pagey:0,
         list : this.nestedList, 
         el   : ev.target, 
         stop : false,
@@ -154,11 +155,13 @@ export default {
       ev.preventDefault();
       
       let d = this.loadData(ev.dataTransfer);
+      if (ev.pageX == d.pagex && ev.pageY == d.pagey) return;
+      d.pagex = ev.pageX;
+      d.pagey = ev.pageY;
       if ((d.node == node) || (d.stop > Date.now())) {
         return;
       }
       
-      // console.log('over', node.id, index, d.stop, Date.now());
       let onContainer = false;
       if (node.isContainer) {
         if (d.onContainerId == node.id) {
@@ -175,21 +178,24 @@ export default {
           if (!this.isTargetParent(ev.target, d.el)) {
             moveTo(y < 0.5 ?'afterbegin' :'beforeend',
               node.isRoot ?this.nestedList :node.props.nestedList, index);
+            // console.log('move y', y<0.5, y)
           }
         }
       } else {
         let x = ev.offsetX / ev.target.clientWidth;
         if (x > 0.1 && x < 0.9) {
           if (!this.isTargetParent(ev.target, d.el)) {
-            moveTo(x >= 0.5 ?'beforebegin' :'afterend', 
-              this.nestedList, this.nestedList == d.list ?index :index+1);
+            moveTo(x <= 0.5 ?'beforebegin' :'afterend', 
+              this.nestedList, this.nestedList == d.list ?index :(x<=0.5 ?index :index+1));
+            // console.log('move x', x<=0.5)
           }
         }
       }
       
       function moveTo(pos_str, list, index) {
+        // console.log('over', node.id, index, d.stop, Date.now());
         ev.target.insertAdjacentElement(pos_str, d.el);
-        d.stop = Date.now() + 2000;
+        d.stop = Date.now() + 500;
         d.moveTo = { list, index };
         d.el.animate([{ opacity: '0' }, { opacity: '1' }], { duration: 200 });
       }
@@ -205,32 +211,33 @@ export default {
       }
       
       let d = this.loadData(ev.dataTransfer);
-      d.stop = 0;
+      if (d) {
+        ev.preventDefault();
+        d.stop = 0;
+      }
     },
     
     onDragLeave(ev, node, index) {
       // console.log("leave", node.id, index);
-      let d = this.loadData(ev.dataTransfer);
-      d.moveTo = {};
+      // let d = this.loadData(ev.dataTransfer);
     },
     
     onDrop(ev, node, index) {
       let d = this.loadData(ev.dataTransfer);
-      // console.log('drop', d.node.id);
       
       if (d.moveTo && d.moveTo.list) {
         d.list.splice(d.index, 1);
         d.moveTo.list.splice(d.moveTo.index, 0, d.node);
+        // console.log('drop', d.node.id);
       }
     },
     
     // 如果 parent 是 target 的父容器, 返回 true
     isTargetParent(target, parent) {
-      const id = '_3iofdEEnwa0jfdsaFESAldfdsa';
       const oid = target.id;
       try {
-        target.id = id;
-        return parent.querySelector('#'+ id) != null;
+        target.id = NoConflictID;
+        return parent.querySelector('#'+ NoConflictID) != null;
       } finally {
         target.id = oid;
       }
