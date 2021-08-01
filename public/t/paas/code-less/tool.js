@@ -4,6 +4,9 @@ const plib = require("path");
 const requirePlugin = {};
 const vuever = xv.vuever;
 
+let dataContext = {};
+let dataKeyNum = 1;
+
 // Not work !
 class Vm extends Function {
   constructor(...args) {
@@ -33,10 +36,14 @@ module.exports = Object.freeze({
   refVar,
   uiFileExists,
   pageOffset,
+  saveData,
+  loadData,
+  clearData,
   
   getRoot,
   getEditFile,
   delayWorker,
+  delayQueue,
   exts,
   
   // Func(name) 全局引入一个组件
@@ -159,7 +166,7 @@ function getRoot() {
 // 创建 fn 的包装函数, 尽可能推迟多个调用合并为一个
 // 函数不能有参数
 //
-function delayWorker(fn, time) {
+function delayWorker(fn, time, catcherror) {
   if (!time) time = 2e3;
   let wait = 0;
   let tid;
@@ -176,10 +183,46 @@ function delayWorker(fn, time) {
     tid = setTimeout(()=>{
       --wait;
       if (wait == 0) {
-        fn();
+        if (catcherror) {
+          try {
+            fn();
+          } catch(err) {
+            catcherror(err);
+          }
+        } else {
+          fn();
+        }
       }
     }, time);
   };
+}
+
+
+//
+// 一个延迟任务队列, 只执行最后压入的函数
+// return { run(fn), push(fn) }
+//
+function delayQueue(time, maxwait, catcherror) {
+  let waitcount = 0;
+  let workfn;
+  let realwork = ()=>{
+    if (workfn) {
+      workfn();
+      workfn = null;
+    }
+  };
+  let dwork = delayWorker(realwork, time, catcherror);
+  let run = (fn)=>{
+    workfn = fn;
+    if (waitcount < maxwait) {
+      ++waitcount;
+      dwork();
+    } else {
+      waitcount= 0;
+      realwork();
+    }
+  };
+  return { run, push:run };
 }
 
 
@@ -301,4 +344,35 @@ function pageOffset(dom) {
     d = t;
   };
   return {x, y};
+}
+
+
+// 保存任意数据, 返回数据的钥匙字符串
+function saveData(obj, prefix) {
+  let key = prefix +':d:'+ (dataKeyNum++);
+  dataContext[key] = obj;
+  return key;
+}
+
+
+// 用钥匙索取数据, 在必要时删除数据. 数据不存在返回 null
+function loadData(key, remove) {
+  let data = dataContext[key];
+  if (remove) {
+    delete dataContext[key];
+  }
+  return data;
+}
+
+
+function clearData(prefix) {
+  if (prefix) {
+    for (let n in dataContext) {
+      if (n.startsWith(prefix)) {
+        delete dataContext[n];
+      }
+    }
+  } else {
+    dataContext = {};
+  }
 }

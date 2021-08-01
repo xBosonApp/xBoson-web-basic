@@ -4,18 +4,24 @@
   <component 
     :nestedList="nestedList"
     :styleProp="styleProp"
-    :style='styleProp'
     :rootConfig='rootConfig'
-    :class="{ 'cl-component-container':!isRoot, 'cl-root-component-container': isRoot, 'cl-draggable-item':true }"
+    
+    :style='styleProp'
+    :class="{ 'cl-component-container': !isRoot, 
+              'cl-root-component-container': isRoot, 
+              'cl-draggable-item': !isRoot }"
     :is='tag.name'
     :key='tag.id'
     
-    v-components-loader='$options.components'
     v-bind='tag.props'
     v-on='tag.on'
     
     @add='add' 
     @update='onUpdate'
+    @dragenter.self='isRoot && onDragEnter($event, rootNode, 0)'
+    @dragleave.self='isRoot && onDragLeave($event, rootNode, 0)'
+    @dragover.self='isRoot && onDragOver($event, rootNode, 0)'
+    @drop.self='isRoot && onDrop($event, rootNode, 0)'
   >
     <component 
       v-bind='e.props'
@@ -24,11 +30,27 @@
       v-if='e.isInstance'
       
       :is='getComponentName(e)' 
-      :styleProp='e.props && e.props.style'
-      :rootConfig='rootConfig'
       :class="bindClass[e.id]"
       :key='e.id'
+      :styleProp='e.props && e.props.style'
+      :rootConfig='rootConfig'
       :containerTagInfo='e.isContainer && e'
+      :isRoot='false'
+      
+      :draggable.prop="true"
+      @dragstart.stop='onDragStart($event, e, idx)'
+      @dragend.stop='onDragEnd($event, e, idx)'
+      @dragover.stop='onDragOver($event, e, idx)'
+      @dragenter.stop='onDragEnter($event, e, idx)'
+      @dragleave.stop='onDragLeave($event, e, idx)'
+      @drop.stop='onDrop($event, e, idx)'
+      
+      @dragstart.native.self='onDragStart($event, e, idx)'
+      @dragend.native.self='onDragEnd($event, e, idx)'
+      @dragover.native.self='onDragOver($event, e, idx)'
+      @dragenter.native.self='onDragEnter($event, e, idx)'
+      @dragleave.native.self='onDragLeave($event, e, idx)'
+      @drop.native.self='onDrop($event, e, idx)'
       
       @click='setAdjRef(idx)'
       @click.native.self='setAdjRef(idx)'
@@ -46,6 +68,8 @@
 </template>
 
 <script>
+const DKEY  = 'key/drag/component-data';
+const DPRE  = 'component-container-drag-data';
 const clib  = require("./component-library.js");
 const crole = require("./component-role.js");
 const tool  = require("./tool.js");
@@ -60,7 +84,9 @@ export default {
   data() {
     return {
       tag : { name:'div', props:{}, id:pkey++, on:null },
-      bindclass:{},
+      rootNode : { id:"root", isContainer:true, isRoot:this.isRoot },
+      bindclass : {},
+      draging : false,
     };
   },
   
@@ -72,7 +98,13 @@ export default {
   },
   
   mounted() {
-    this.transmissionParent();
+  },
+    
+  errorCaptured(err, vm, info) {
+    // console.warn(info, err, vm, vm.$vnode.context );
+    xv.popError("组件错误: "+ vm.$vnode.data.key, err);
+    vm.$vnode.context.tag.name = 'div';
+    return false;
   },
   
   computed: {
@@ -93,18 +125,124 @@ export default {
   },
   
   methods: {
-    transmissionParent() {
-      if (!(this.containerTagInfo && this.containerTagInfo.isContainer)) {
+    onDragStart(ev, node, index) {
+      this.draging = true;
+      ev.target.classList.add('cl-draging');
+      ev.target.style.border = '3px dotted green';
+      
+      let onerror = (err)=>{
+        console.error(err.message);
+      };
+      
+      let key = tool.saveData({
+        node, index, 
+        list : this.nestedList, 
+        el   : ev.target, 
+        run  : tool.delayQueue(50, 20, onerror).run,
+        stop : false,
+      }, DPRE);
+      
+      ev.dataTransfer.effectAllowed = 'copyMove';
+      ev.dataTransfer.setData(key, 'true');
+      // console.log('start', node.id, index, key);
+    },
+    
+    onDragEnd(ev, node, index) {
+      this.draging = false;
+      ev.target.classList.remove('cl-draging');
+      ev.target.style.border = '';
+      tool.clearData(DPRE);
+      // console.log('end', node.id, ev);
+    },
+    
+    onDragOver(ev, node, index) {
+      ev.preventDefault();
+      
+      let d = this.loadData(ev.dataTransfer);
+      if ((d.node == node) || d.stop) {
         return;
       }
-      let p = this.$parent;
-      this.$children.forEach(c=>{
-        c.$parent = p;
-        p.$children.push(c);
-      });
-      let i = p.$children.findIndex(x=>x == this);
-      p.$children.splice(i, 1);
-      console.log('transmissionParent', i, this.containerTagInfo.id);
+      
+      // console.log('over', node.id, index);
+      let onContainer = false;
+      if (node.isContainer) {
+        if (d.onContainerId == node.id) {
+          onContainer = Date.now() - d.onContainerCnt > 200;
+        } else {
+          d.onContainerCnt = Date.now();
+          d.onContainerId = node.id;
+        }
+      }
+      
+      if (onContainer || node.isRoot) {
+        let y = ev.offsetY / ev.target.clientHeight;
+        if (y < 0.2 || y > 0.8) {
+          if (!this.isTargetParent(ev.target, d.el)) {
+            ev.target.insertAdjacentElement(y < 0.5 ?'afterbegin' :'beforeend', d.el);
+            d.stop = true;
+            let list = node.isRoot ?this.nestedList :node.props.nestedList;
+            d.moveTo = { list, index };
+          }
+        }
+      } else {
+        let x = ev.offsetX / ev.target.clientWidth;
+        if (x > 0.1 && x < 0.9) {
+          if (!this.isTargetParent(ev.target, d.el)) {
+            ev.target.insertAdjacentElement(x >= 0.5 ?'beforebegin' :'afterend', d.el);
+            d.stop = true;
+            let i = index;
+            if (this.nestedList != d.list) ++i;
+            d.moveTo = { list: this.nestedList, index: i };
+          }
+        }
+      }
+      
+      return false;
+    },
+    
+    // 拖放到被接受节点上的事件
+    onDragEnter(ev, node, index) {
+      // console.log('enter', node.id, node.isRoot, index);
+      if (node.isRoot) {
+        ev.preventDefault();
+        ev.dataTransfer.dropEffect = 'move';
+      }
+      
+      let d = this.loadData(ev.dataTransfer);
+      d.stop = false;
+    },
+    
+    onDragLeave(ev, node, index) {
+      // console.log("leave", node.id, index);
+    },
+    
+    onDrop(ev, node, index) {
+      let d = this.loadData(ev.dataTransfer);
+      console.log('drop', d.node.id);
+      
+      d.list.splice(d.index, 1);
+      d.moveTo.list.splice(d.moveTo.index, 0, d.node);
+    },
+    
+    // 如果 parent 是 target 的父容器, 返回 true
+    isTargetParent(target, parent) {
+      const id = '_3iofdEEnwa0jfdsaFESAldfdsa';
+      const oid = target.id;
+      try {
+        target.id = id;
+        return parent.querySelector('#'+ id) != null;
+      } finally {
+        target.id = oid;
+      }
+    },
+    
+    loadData(dataTransfer) {
+      let t = dataTransfer.types;
+      for (let i=0; i<t.length; ++i) {
+        if (t[i].startsWith(DPRE)) {
+          return tool.loadData(t[i]);
+        }
+      }
     },
     
     initContainerInstanceTag() {
@@ -124,7 +262,7 @@ export default {
       if (this.bindclass[id] === undefined) {
         this.$set(this.bindclass, id, this.newDragClass(b, isContainer));
       } else {
-        this.bindclass[id]['cl-draggable-item-active'] = b;
+        this.bindclass[id]['cl-draggable-item-active'] = this.draging ? false : b;
       }
     },
     
@@ -238,7 +376,7 @@ export default {
     load_plugin(clid, cid) {
       return ()=>{
         return new Promise((ok, fail)=>{
-          let _next = ()=>{
+          let _next = (state)=>{
             clib.makeComponentPluginLoader(cid, this.$options.components);
             this.$forceUpdate();
             ok();
@@ -263,9 +401,12 @@ export default {
   /*border: 1px dashed green;*/ padding: 20px 8px; min-height: 200px;
 }
 .cl-draggable-item {
-  border: 1px dashed #f1f1f1; min-height: 5px;
+  border: 1px dashed #eee; min-height: 5px; cursor: grab;
 }
 .cl-draggable-item-active {
   border: 1px dashed #3e33e9 !important;
+}
+.cl-draging {
+  cursor: grabbing; border: 3px dotted green !important; opacity: 0.5;
 }
 </style>

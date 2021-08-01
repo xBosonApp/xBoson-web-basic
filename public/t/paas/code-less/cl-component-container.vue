@@ -52,6 +52,7 @@
 const clib  = require("./component-library.js");
 const crole = require("./component-role.js");
 const tool  = require("./tool.js");
+const methodPitch = ['setChildProps'];
 let key = 1;
 
 export default {
@@ -90,35 +91,37 @@ export default {
     },
   },
   
+  errorCaptured(err, vm, info) {
+    console.warn(info, err, vm);
+    return false;
+  },
+  
   methods : {
     initContainerInstanceTag() {
       let clci = this.clComponentInstance;
       if (!clci) return;
       
-      // BUG: 导致内部组件不可拖拽, 并抛出异常
+      // BUG: 部分父子组件关系需要严格匹配, 
+      // 中间插入其他tag导致异常(依赖$parent属性)
+      // 异常抛出后, 拖拽组件停止工作
       // this.tag = this.getComponentRealName(clci); 
       
       this.pkey = clci.id;
       this.load_plugin(clci.clid, clci.cid)();
       
+      this.makeVirtualProp(clci.props, 'styleProp', clci.props.style);
+      this.makeVirtualProp(clci.props, 'rootConfig', this.rootConfig);
+      
       this.componentData.on = clci.on;
-      this.componentData.props = this.makeVirtualProps(clci);
+      this.componentData.props = clci.props;
     },
     
-    makeVirtualProps(clci) {
-      if (!clci.props.styleProp) {
-        Object.defineProperty(clci.props, 'styleProp', {
-          get() { return this.style; }
+    makeVirtualProp(obj, name, val) {
+      if (!obj[name]) {
+        Object.defineProperty(obj, name, {
+          get() { return val; }
         });
       }
-      
-      if (!clci.props.rootConfig) {
-        let _this = this;
-        Object.defineProperty(clci.props, 'rootConfig', {
-          get() { return _this.rootConfig; }
-        });
-      }
-      return clci.props;
     },
     
     setHover(id, b, isContainer) {
