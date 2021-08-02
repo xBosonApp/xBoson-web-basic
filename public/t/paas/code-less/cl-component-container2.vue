@@ -16,8 +16,6 @@
     v-bind='tag.props'
     v-on='tag.on'
     
-    @add='add' 
-    @update='onUpdate'
     @dragenter.self='isRoot && onDragEnter($event, rootNode, 0)'
     @dragleave.self='isRoot && onDragLeave($event, rootNode, 0)'
     @dragover.self='isRoot && onDragOver($event, rootNode, 0)'
@@ -69,7 +67,6 @@
 
 <script>
 const NoConflictID = '_3iofdEEnwa0jfdsaFESAldfdsa__'+ Math.random().toString(16).substr(2);
-const DKEY  = 'key/drag/component-data';
 const DPRE  = 'component-container-drag-data';
 const clib  = require("./component-library.js");
 const crole = require("./component-role.js");
@@ -131,8 +128,13 @@ export default {
       ev.target.classList.add('cl-draging');
       ev.target.style.border = '3px dotted green';
       
+      let release = ()=>{
+        this.nestedList.splice(index, 1);
+      };
+      
       let key = tool.saveData({
-        node, index, pagex:0, pagey:0,
+        node, index,
+        release,
         list : this.nestedList, 
         el   : ev.target, 
         stop : false,
@@ -155,11 +157,13 @@ export default {
       ev.preventDefault();
       
       let d = this.loadData(ev.dataTransfer);
-      if (ev.pageX == d.pagex && ev.pageY == d.pagey) return;
+      if ((ev.pageX == d.pagex) && (ev.pageY == d.pagey)) {
+        return false;
+      }
       d.pagex = ev.pageX;
       d.pagey = ev.pageY;
       if ((d.node == node) || (d.stop > Date.now())) {
-        return;
+        return false;
       }
       
       let onContainer = false;
@@ -204,7 +208,6 @@ export default {
     
     // 拖放到被接受节点上的事件
     onDragEnter(ev, node, index) {
-      // console.log('enter', node.id, node.isRoot, index);
       if (node.isRoot) {
         ev.preventDefault();
         ev.dataTransfer.dropEffect = 'move';
@@ -214,6 +217,10 @@ export default {
       if (d) {
         ev.preventDefault();
         d.stop = 0;
+        if (!d.node.isInstance) {
+          ev.dataTransfer.dropEffect = 'copy';
+        }
+        // console.log('enter', node.id, node.isRoot, index, d.node.id);
       }
     },
     
@@ -224,11 +231,22 @@ export default {
     
     onDrop(ev, node, index) {
       let d = this.loadData(ev.dataTransfer);
+      // console.log('drop', d.node.id);
       
       if (d.moveTo && d.moveTo.list) {
-        d.list.splice(d.index, 1);
-        d.moveTo.list.splice(d.moveTo.index, 0, d.node);
-        // console.log('drop', d.node.id);
+        if (!d.node.isInstance) {
+          d.release();
+          this.initComponent(d.node.id, d.moveTo.index, d.moveTo.list);
+          // console.log('drop new instance', d.node.id);
+        } else {
+          d.release();
+          d.moveTo.list.splice(d.moveTo.index, 0, d.node);  
+          // console.log("drop inst")
+        }
+        ev.dataTransfer.dropEffect = 'copy';
+        this.fileChanged();
+      } else {
+        console.warn("Cancel drop", node.id, index);
       }
     },
     
@@ -280,35 +298,8 @@ export default {
       };
     },
     
-    add(ev) {
-      const i = ev.newIndex;
-      let tplcfg = this.nestedList[i];
-      
-      if (tplcfg == null) {
-        console.error("why is null?", i, ev);
-        return;
-      }
-      
-      if (tplcfg.isInstance) {
-        // Draggable 有时发送错位的索引: 把对象插入数组位置1上, 返回的索引为2
-        // throw new Error("bad index");
-      
-        for (let x=0; x<this.nestedList.length; ++x) {
-          let item = this.nestedList[x];
-          if (!item.isInstance) {
-            let instance = this.initComonent(item.id, x);
-            if (x != i) {
-              this.nestedList.splice(x, 1);
-              this.nestedList.splice(i, 0, instance);
-            }
-          }
-        }
-      } else {
-        this.initComonent(tplcfg.id, i);
-      }
-    },
-    
-    initComonent(id, index) {
+    initComponent(id, index, _list) {
+      let list = _list || this.nestedList;
       let component = clib.getComponent(id);
       if (component.plugins) {
         this.load_plugin(component.clid, id)();
@@ -316,16 +307,11 @@ export default {
       this.save_requires(component.clid);
       
       let instance = crole.createInstance(this.rootConfig, component);
-      this.$set(this.nestedList, index, instance);
+      // this.$set(list, index, instance);
+      list.splice(index, 0, instance);
       this.$store.commit('setEditFileChanged', true);
-      this.setAdjRef(index);
+      this.setAdjRef(index, list);
       return instance;
-    },
-    
-    onChoose(ev) {
-      this.setAdjRef(ev.oldIndex);
-      // let [x, y] = this.getOffset(ev.srcElement);
-      // console.log(x, y, ev)
     },
     
     getOffset(el) {
@@ -340,14 +326,15 @@ export default {
       return [x, y];
     },
     
-    onUpdate() {
+    fileChanged() {
       this.$store.commit('setEditFileChanged', true);
     },
     
-    setAdjRef(index) {
-      let cfg = this.nestedList[index];
+    setAdjRef(index, _list) {
+      let list = _list || this.nestedList;
+      let cfg = list[index];
       this.$store.commit('setAdjustmentComponent', cfg);
-      this.$store.commit('setNestedItemRef', { list: this.nestedList, index });
+      this.$store.commit('setNestedItemRef', { list, index });
     },
     
     // 必须调用该方法, 否则直接用 component 属性会产生数组错位

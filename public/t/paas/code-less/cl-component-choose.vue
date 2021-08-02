@@ -9,20 +9,14 @@
       
       <div v-for='(list, gname) in c.group' :key='gname'>
         <div class='cl-classify'>{{ gname }}</div>
-        
-        <draggable 
-          :group="{ name: 'ui-component', pull: 'clone', put: false }" 
-          :value="list"
-          chosenClass="cl-drag-drop-component-chosen" 
-          ghostClass='cl-drag-drop-component-ghost' 
-          @start='start'
-        >
           <span class='component' 
             v-for="(e, idx) in list" 
             :key='idx'
             :id.prop='e.id'
+            :draggable.prop="true"
+            @dragstart.stop='onDragStart($event, e, idx)'
+            @dragend.stop='onDragEnd($event, e, idx)'
           >{{e.txt}}</span>
-        </draggable>
       </div>
       
     </a-collapse-panel>
@@ -31,6 +25,7 @@
 </template>
 
 <script>
+const DPRE = 'component-container-drag-data';
 const clib = require("./component-library.js");
 const tool = require("./tool.js");
 
@@ -39,6 +34,7 @@ export default {
     let data = {
       sname : '$codeless__defaultActiveComponentIndex',
       libs  : clib.getLibrary(),
+      clearList : [],
     };
     return data;
   },
@@ -48,8 +44,51 @@ export default {
   },
   
   methods : {
-    start() {
+    onDragStart(ev, node, index) {
       this.$store.commit('closeDropTip');
+      let el = ev.target.cloneNode(true);
+      let release = ()=>{
+        el.remove();
+      };
+      
+      el.id = null;
+      el.classList.add('cl-draging');
+      this.clearList.push(release);
+      // console.log('drag c', el);
+      
+      let key = tool.saveData({
+        node, index,
+        release,
+        list : [], 
+        el,
+        stop : false,
+      }, DPRE);
+      
+      ev.dataTransfer.effectAllowed = 'copyMove';
+      ev.dataTransfer.setData(key, 'true');
+    },
+    
+    onDragEnd(ev, node, index) {
+      // console.log("end c", ev);
+      this.doClear();
+      tool.clearData(DPRE);
+    },
+    
+    doClear() {
+      while (this.clearList.length > 0) {
+        let fn = this.clearList.pop();
+        fn();
+      }
+    },
+    
+    loadData(dataTransfer) {
+      let t = dataTransfer.types;
+      for (let i=0; i<t.length; ++i) {
+        console.log('ll', i, t[i])
+        if (t[i].startsWith(DPRE)) {
+          return tool.loadData(t[i]);
+        }
+      }
     },
     
     onChange(key) {
