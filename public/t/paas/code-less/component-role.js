@@ -62,6 +62,7 @@ function newInstance(root, component) {
       'key'   : { value:null, propsConfig: emptyPropsConfig('expr') },
       'ref'   : { value:null, propsConfig: emptyPropsConfig('constant') },
       'is'    : { value:null, propsConfig: emptyPropsConfig('expr') },
+      'v-slot': { value:null, propsConfig: emptyPropsConfig() },
     },
   }
 }

@@ -47,12 +47,14 @@
     
     <space/>
     
-    <h4 @click='showVspecial = !showVspecial' class='clbutton'>
-      <a-icon type="caret-down" v-if='showVspecial'/> 
-      <a-icon type='caret-up' v-else/>
-      控制属性
-    </h4>
-    <cl-adj-vspecial :config='config' v-if='showVspecial'/>
+    <div v-if='config.vspecial'>
+      <div @click='showVspecial = !showVspecial' class='clbutton'>
+        <a-icon type="caret-down" v-if='showVspecial'/> 
+        <a-icon type='caret-up' v-else/>
+        控制属性
+      </div>
+      <cl-adj-vspecial :config='config' v-if='showVspecial'/>
+    </div>
     
   </div>
 </template>
@@ -177,9 +179,9 @@ space {
   height: 1em; width: 100%; display: block;
 }
 .clbutton {
-  cursor: pointer;
+  cursor: pointer; color: #999;
 }
 .clbutton:hover {
-  background-color: #eee;
+  background-color: #eee; color: #000;
 }
 </style>

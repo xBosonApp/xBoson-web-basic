@@ -10,6 +10,29 @@
       @change='fileChanged'
     />
   </div>
+  
+  <div v-if='vSlot'>
+    <div class='items-group sl'>
+      <div>插槽</div>
+      <a-switch v-model='vSlot.propsConfig.isExprAttr' 
+          size="small" class='to'>
+        <span slot="checkedChildren">绑定到插槽</span>
+        <span slot="unCheckedChildren">无</span>
+      </a-switch>
+    </div>
+    
+    <a-input-group compact>
+      <a-input class='hf' 
+        placeholder='插槽名' 
+        v-model='vSlot.propsConfig.ref'
+        :disabled='!vSlot.propsConfig.isExprAttr'/>
+        
+      <a-input class='hf' 
+        placeholder='接收参数表达式' 
+        v-model='vSlot.value'
+        :disabled='!vSlot.propsConfig.isExprAttr'/>
+    </a-input-group>
+  </div>
 </div>
 </template>
 
@@ -28,10 +51,15 @@ export default {
         { title:'组件实例唯一 Key', attr:'key' },
         { title:'DOM 引用', attr:'ref' },
       ],
+      
+      vSlot: this.config.vspecial["v-slot"],
     };
   },
 }
 </script>
 
 <style scoped>
+.hf { width: 50%!important; }
+.sl { grid-template-columns: 1fr auto; }
+.to { margin-top: 3px; }
 </style>
