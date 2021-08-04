@@ -56,6 +56,13 @@ function newInstance(root, component) {
     isInstance  : true,
     isContainer : component.isContainer,
     bindStyle   : {},
+    vspecial    : {
+      'v-if'  : { value:null, propsConfig: emptyPropsConfig('expr') },
+      'v-for' : { value:null, propsConfig: emptyPropsConfig('expr') },
+      'key'   : { value:null, propsConfig: emptyPropsConfig('expr') },
+      'ref'   : { value:null, propsConfig: emptyPropsConfig('constant') },
+      'is'    : { value:null, propsConfig: emptyPropsConfig('expr') },
+    },
   }
 }
 
@@ -76,15 +83,20 @@ function createProps(component) {
 
 
 function createPropsConfig(name, component) {
-  return tool.exts({
+  return tool.exts(emptyPropsConfig(), component.props[name].propsConfig);
+}
+
+
+function emptyPropsConfig(_varType, _isExprAttr) {
+  return {
     type        : 'attribute',
-    varType     : 'constant', 
+    varType     : _varType || 'constant', 
     ref         : null,
     expr        : null,
     callParams  : [],
     modifiers   : [],
-    isExprAttr  : false,
-  }, component.props[name].propsConfig);
+    isExprAttr  : !!_isExprAttr,
+  };
 }
 
 

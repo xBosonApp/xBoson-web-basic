@@ -29,7 +29,7 @@
         <a-button type='primary' size='small' block class='space'>删除组件</a-button>
     </a-popconfirm>
     
-    <space/>  
+    <space/>
     
     <div v-for='(p, name) in getComponentProps()'>
       <component :is="getGasketName(p, name)"
@@ -44,6 +44,16 @@
         @change='fileChanged'
       />
     </div>
+    
+    <space/>
+    
+    <h4 @click='showVspecial = !showVspecial' class='clbutton'>
+      <a-icon type="caret-down" v-if='showVspecial'/> 
+      <a-icon type='caret-up' v-else/>
+      控制属性
+    </h4>
+    <cl-adj-vspecial :config='config' v-if='showVspecial'/>
+    
   </div>
 </template>
 
@@ -51,7 +61,6 @@
 const clib = require("./component-library.js");
 const tool = require("./tool.js");
 
-const components = tool.loadc('cl-select-fa-icon', 'cl-attr-dynamic', 'cl-attr-fixed');
 const compMap = {
   1:'a-input',
   2:'a-input-number',
@@ -63,7 +72,14 @@ const compMap = {
 
 export default {
   props: ['config'],
-  components,
+  components : tool.loadc('cl-select-fa-icon', 'cl-attr-dynamic', 'cl-attr-fixed', 
+    'cl-attr-bind-data', 'cl-adj-vspecial'),
+    
+  data() {
+    return {
+      showVspecial: false,
+    };
+  },
   
   computed: {
     componentCfg() {
@@ -159,5 +175,11 @@ export default {
 }
 space {
   height: 1em; width: 100%; display: block;
+}
+.clbutton {
+  cursor: pointer;
+}
+.clbutton:hover {
+  background-color: #eee;
 }
 </style>
