@@ -1,0 +1,292 @@
+<!-- Create By xBoson System -->
+
+
+<div class="modal fade" id="tenant-add-edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+  data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+        </button>
+        <h4 class="modal-title"><span id="tenant_title"></span></h4>
+      </div>
+      <div class="modal-body no-padding">
+        <!-- FORM Start -->
+        <form id="tenant_form" method="post" onsubmit="return false;" class="smart-form">
+          <fieldset>
+            <input type="hidden" name="_id" /> 
+            <div class="row">
+              <section class="col col-6">
+                <label class="label">租户名称</label>
+                <label class="input has-warning">
+                  <input type="text" name="name" placeholder="租户名称">
+                  <!--<b id="tenant-name" class="tooltip tooltip-bottom-right">租户名称为必填项目</b>-->
+                </label>
+              </section>
+
+              <section class="col col-6">
+                <label class="label">租户昵称</label>
+                <label class="input has-warning">
+                  <input type="text" name="nickname" placeholder="租户昵称"/>
+                </label>
+              </section>
+            </div>
+            <div>
+              <section>
+                <label class="label">地址</label>
+                <label class="input">
+                  <input type="text" name="add" placeholder="地址"/>
+                  <!--<b class="tooltip tooltip-bottom-right">字典编码为必填项目</b>-->
+                </label>
+              </section>
+              <!--<section class="col col-6">-->
+              <!--  <label class="label">字典中文名</label>-->
+              <!--  <label class="input has-warning">-->
+              <!--    <input type="text" name="nm" placeholder="字典中文名">-->
+              <!--  </label>-->
+              <!--</section>-->
+            </div>
+            <div class="row">
+              <!--<section class="col col-6">-->
+              <!--  <label class="label">标准</label>-->
+              <!--  <label class="input">-->
+              <!--<input type="text" name="standard" placeholder="标准码">-->
+              <!--    <input type="hidden" name="standard" data-type="select2" placeholder="标准码" />-->
+
+              <!--    <b class="tooltip tooltip-bottom-right">标准为必填项目</b>-->
+              <!--  </label>-->
+              <!--</section>-->
+            </div>
+            <!--<div class="row">-->
+            <!--  <section class="col col-6">-->
+            <!--    <label class="label">版本</label>-->
+            <!--    <label class="input">-->
+            <!--      <input type="text" name="ver" placeholder="版本" />-->
+            <!--    </label>-->
+            <!--  </section>-->
+            <!--</div>-->
+            <div class="row">
+              <section class="col col-6">
+                <label class="label">管理员ID</label>
+                <label class="input">
+                  <input type="hidden" name="pid" placeholder="管理员ID">
+                </label>
+              </section>
+              <section class="col col-6">
+                <label class="label">状态</label>
+                <label class="input">
+                  <input type="hidden" name="status" data-type="select2" placeholder="状态" />
+                </label>
+              </section>
+            </div>
+            <div class="row" id="tenant-create-update-time">
+              <section class="col col-6">
+                <label class="label">创建时间</label>
+                <label class="input">
+                  <input type="text" name="createdt" placeholder="创建时间" readonly>
+                  <!--<b id="tenant-name" class="tooltip tooltip-bottom-right">租户名称为必填项目</b>-->
+                </label>
+              </section>
+
+              <section class="col col-6">
+                <label class="label">上次更新时间</label>
+                <label class="input">
+                  <input type="text" name="updatedt" placeholder="更新时间" readonly/>
+                </label>
+              </section>
+            </div>
+            <div>
+              <section>
+                <label class="label">说明</label>
+                <label class="textarea">
+                  <textarea rows="2" name="mark" id="mark" placeholder="说明"></textarea>
+                </label>
+              </section>
+            </div>
+          </fieldset>
+          <footer>
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary">确定</button>
+          </footer>
+        </form>
+        <!-- FORM End -->
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<script type="text/javascript" src="/dev/face/ui/paas/lib/js/plugin/jquery-form/jquery.form.min.js"></script>
+<script type="text/javascript">
+  /**
+   * param: {_id, name, nickname, add, status, ...}
+   * flag:i,u
+   * submitCB:提交回调函数
+   * */
+  function tenant_add_edit(param, flag, submitCB) {
+    
+    var $modal = $('#tenant-add-edit');
+    var $form = $("#tenant_form");
+    var $title = $("#tenant_title")
+    var $create_update_time = $form.find("#tenant-create-update-time");
+    
+    // var oldData = {}; //修改之前的表单数据
+    // zy.cache.initDicts("ZR.0039", function(){
+    // $('#datadict_ver_form input[name=standard]').zySelect("ZR.0039", false, {
+    //   width: '100%'
+    // });
+    $form.find("input[name=status]").zySelect('ZR.0001', false, {
+      width: '100%'
+    });
+    
+    var pidSelect2Options = {
+      width : '100%',
+      placeholder : "请输入",
+      minimumInputLength : 1,
+      maximumSelectionSize : 5, // 限制数量
+      query : function(option) {
+      	zy.g.am.app = 'c9e98ea6fc7148d186289e8c33776f8a';
+      	zy.g.am.mod = 'user_manager',
+      	zy.net.get.call(option,"api/getusersel2", function(_m){
+      		var _d = {results : _m.result}
+      		option.callback(_d);
+      	}, {mailAtel : option.term});
+      }
+    };
+
+    if (flag == 'i') {
+      $title.text('添加');
+      //状态默认值
+      $form.find("input[name=status]").select2("val", '1');
+      
+      $form.find('input[name=pid]').select2(pidSelect2Options);
+      
+      // $form.json2form(param);
+      
+      //隐藏 创建时间更新时间
+      $create_update_time.hide();
+      
+    } else if (flag == 'u') {
+      $title.text('修改');
+      
+      var cborg=function(msg){
+        
+        // 赋初始值
+        $.extend(pidSelect2Options, {
+          initSelection: function(element,callback){
+            callback(msg.result[0])
+          }
+        });
+        
+        $form.find('input[name=pid]').select2(pidSelect2Options);
+        
+        $form.find('input[name=pid]').select2('val', param.pid);
+      };
+    	zy.g.am.app = 'c9e98ea6fc7148d186289e8c33776f8a';
+    	zy.g.am.mod = 'user_manager';
+    	zy.net.get("api/getusersel2", cborg, {mailAtel: param.pid});
+      
+      // $form.formDisable(true);
+      
+      $create_update_time.show();
+      
+      // 铺数据
+      var callback = function(msg) {
+        $form.formDisable(false);
+        if (msg) {
+          // $('#datadict_ver_form').json2form(msg.result[0]);
+          // oldData=msg.result[0];
+          
+          $form.json2form(msg.result[0]);
+        }
+      };
+      zy.g.am.app = '78cf8922c5ea4afa9dae8970215ea796';
+      zy.g.am.mod = 'tenant';
+      zy.net.get("api/orgGet", callback, {_id: param._id});
+      
+      
+      
+
+      // $('#datadict_ver_form input[name=cd]').attr('readonly', true);
+      // $('#datadict_ver_form input[name=parentcd]').attr('readonly', true);
+      // $('#datadict_ver_typecd').remove();
+    }
+    $modal.modal('show');
+
+    $form.validate({
+      // Rules for form validation
+      rules: {
+        name: {
+          required: true,
+          maxlength: 100
+        },
+        nickname: {
+          // required: true,
+          maxlength: 150
+        }
+      },
+      // 验证成功后保存
+      submitHandler: function (form) {
+        
+        var data = $form.form2json();
+        
+        //添加
+        if (flag == 'i') {
+          //增加类别编码验证
+          // var _typecd_chk=$("#datadict_ver_form input[name=typecd]").val();
+          // if(_typecd_chk.indexOf('.')!=(-1)){
+          //   zy.ui.msg('提示信息：','类别编码不可包含\'.\'','w');
+          //   return;
+          // }
+          var callback = function (msg) {
+            $form.formDisable(false);
+            if (msg) {
+              $modal.modal('hide');
+              zy.ui.msg("提示信息：", "保存成功！", "s");
+              
+              // 租户id
+              data._id = msg.data._id;
+              // if(node.children){
+              
+              
+              // }else{
+              //   zy.log('!node.children');
+              //   node.isParent = true;
+              //   //异步展开树节点
+              //   ztreeObj.expandNode(node, true, false, true, true);
+              // }
+              submitCB && submitCB(data); //回调
+            }
+          };
+          zy.g.am.app = '78cf8922c5ea4afa9dae8970215ea796';
+          zy.g.am.mod = 'tenant';
+          zy.net.post("api/orgAdd", callback, data);
+          $form.formDisable(true);
+        }
+        //修改
+        else if (flag == 'u') {
+          var callback = function (msg) {
+            $form.formDisable(false);
+            if (msg) {
+              $modal.modal('hide');
+              
+              submitCB && submitCB(data); //回调
+              zy.ui.msg("提示信息：", "保存成功！", "s");
+            }
+          };
+          zy.g.am.app = '78cf8922c5ea4afa9dae8970215ea796';
+          zy.g.am.mod = 'tenant';
+          zy.net.post("api/orgEdit", callback, data);
+        }
+      },
+      // Do not change code below
+      errorPlacement: function (error, element) {
+        error.insertAfter(element.parent());
+      }
+    });
+
+    // });
+  }
+
+</script>
