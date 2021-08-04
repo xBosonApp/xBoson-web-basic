@@ -66,6 +66,11 @@ function createProps(component) {
     style      : Object.assign({}, component.style),
     nestedList : component.isContainer && [],
   };
+  // 这样设置会影响配置文件
+  // Object.defineProperty(props, 'disabled', {
+  //   value: false,
+  //   writable: false,
+  // });
   return props;
 }
 

@@ -6,12 +6,12 @@
     :styleProp="styleProp"
     :rootConfig='rootConfig'
     
+    :is='tag.name'
+    :key='tag.id'
     :style='styleProp'
     :class="{ 'cl-component-container': !isRoot, 
               'cl-root-component-container': isRoot, 
               'cl-draggable-item': !isRoot }"
-    :is='tag.name'
-    :key='tag.id'
     
     v-bind='tag.props'
     v-on='tag.on'
@@ -34,6 +34,7 @@
       :rootConfig='rootConfig'
       :containerTagInfo='e.isContainer && e'
       :isRoot='false'
+      :disabled.prop='false'
       
       :draggable.prop="true"
       @dragstart.stop='onDragStart($event, e, idx)'
@@ -142,7 +143,7 @@ export default {
       
       ev.dataTransfer.effectAllowed = 'copyMove';
       ev.dataTransfer.setData(key, 'true');
-      // console.log('start', node.id, index, key);
+      // console.debug('start', node.id, index, key);
     },
     
     onDragEnd(ev, node, index) {
@@ -150,7 +151,7 @@ export default {
       ev.target.classList.remove('cl-draging');
       ev.target.style.border = '';
       tool.clearData(DPRE);
-      // console.log('end', node.id, ev);
+      // console.debug('end', node.id, ev);
     },
     
     onDragOver(ev, node, index) {
@@ -182,7 +183,7 @@ export default {
           if (!this.isTargetParent(ev.target, d.el)) {
             moveTo(y < 0.5 ?'afterbegin' :'beforeend',
               node.isRoot ?this.nestedList :node.props.nestedList, index);
-            // console.log('move y', y<0.5, y)
+            // console.debug('move y', y<0.5, y, node.isRoot)
           }
         }
       } else {
@@ -191,13 +192,13 @@ export default {
           if (!this.isTargetParent(ev.target, d.el)) {
             moveTo(x <= 0.5 ?'beforebegin' :'afterend', 
               this.nestedList, this.nestedList == d.list ?index :(x<=0.5 ?index :index+1));
-            // console.log('move x', x<=0.5)
+            // console.debug('move x', this.nestedList == d.list, x<=0.5)
           }
         }
       }
       
       function moveTo(pos_str, list, index) {
-        // console.log('over', node.id, index, d.stop, Date.now());
+        // console.debug('over', node.id, index, d.stop, Date.now());
         ev.target.insertAdjacentElement(pos_str, d.el);
         d.stop = Date.now() + 500;
         d.moveTo = { list, index };
@@ -215,25 +216,29 @@ export default {
       
       let d = this.loadData(ev.dataTransfer);
       if (d) {
+        setTimeout(()=>d.el.style.opacity = '1', 1);
         ev.preventDefault();
         d.stop = 0;
         if (!d.node.isInstance) {
           ev.dataTransfer.dropEffect = 'copy';
         }
-        // console.log('enter', node.id, node.isRoot, index, d.node.id);
+        // console.debug('enter', node.id, node.isRoot, index, d.node.id);
       }
     },
     
     onDragLeave(ev, node, index) {
-      // console.log("leave", node.id, index);
-      // let d = this.loadData(ev.dataTransfer);
+      // console.debug("leave", node.id, index);
+      let d = this.loadData(ev.dataTransfer);
+      if (d) {
+        d.el.style.opacity = '0';
+      }
     },
     
     onDrop(ev, node, index) {
       let d = this.loadData(ev.dataTransfer);
-      // console.log('drop', d.node.id);
+      // console.debug('drop', d.node.id);
       
-      if (d.moveTo && d.moveTo.list) {
+      if (d && d.moveTo && d.moveTo.list) {
         if (!d.node.isInstance) {
           d.release();
           this.initComponent(d.node.id, d.moveTo.index, d.moveTo.list);
@@ -241,10 +246,11 @@ export default {
         } else {
           d.release();
           d.moveTo.list.splice(d.moveTo.index, 0, d.node);  
-          // console.log("drop inst")
+          // console.debug("drop inst", node.id)
         }
         ev.dataTransfer.dropEffect = 'copy';
         this.fileChanged();
+        tool.clearData(DPRE);
       } else {
         console.warn("Cancel drop", node.id, index);
       }
@@ -276,7 +282,7 @@ export default {
       
       // console.log(clci.id, clci)
       this.load_plugin(clci.clid, clci.cid)();
-      this.tag.name = this.getComponentRealName(clci);// 导致子组件无法拖拽
+      this.tag.name = this.getComponentRealName(clci);
       this.tag.props = clci.props;
       this.tag.on = clci.on;
       this.tag.id = clci.id;

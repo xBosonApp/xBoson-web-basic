@@ -106,6 +106,7 @@ export default {
     if (this.data.bind) {
       this.prop = this.data.bind.props;
       this.bname = this.data.bind.txt;
+      // console.log(this.data.bind)
     } else {
       this.getProps();
     }
