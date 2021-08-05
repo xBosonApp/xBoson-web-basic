@@ -50,7 +50,7 @@
     <div v-if='config.vspecial'>
       <div @click='showVspecial = !showVspecial' class='clbutton'>
         <a-icon type="caret-down" v-if='showVspecial'/> 
-        <a-icon type='caret-up' v-else/>
+        <a-icon type='vertical-align-bottom' v-else/>
         控制属性
       </div>
       <cl-adj-vspecial :config='config' v-if='showVspecial'/>
@@ -179,7 +179,7 @@ space {
   height: 1em; width: 100%; display: block;
 }
 .clbutton {
-  cursor: pointer; color: #999;
+  cursor: pointer; color: #999; padding: 3px 1px;
 }
 .clbutton:hover {
   background-color: #eee; color: #000;

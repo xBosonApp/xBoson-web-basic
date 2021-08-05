@@ -14,8 +14,7 @@
   <div v-if='vSlot'>
     <div class='items-group sl'>
       <div>插槽</div>
-      <a-switch v-model='vSlot.propsConfig.isExprAttr' 
-          size="small" class='to'>
+      <a-switch v-model='vSlot.propsConfig.isExprAttr' size="small" class='to'>
         <span slot="checkedChildren">绑定到插槽</span>
         <span slot="unCheckedChildren">无</span>
       </a-switch>
