@@ -108,6 +108,18 @@ require("cdn/xboson-vue/1.0.0/index.js");
 空组件, 什么也不做.
 
 
+## `<x-selector-api>`
+
+平台 api 选择器
+
+参数:
+* org - string 可选, 提供默认 org
+* hideOrgSelect - Boolean 可选, 隐藏 org 选择.
+
+事件 
+* change : ({org, app, mod, api}) 当选中 api 后被触发, 返回选中的机构/应用/模块/api
+
+
 # Vue2 插件 
 
 绑定到 Vue 实例上的方法 / 属性

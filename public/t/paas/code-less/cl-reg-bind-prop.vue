@@ -153,6 +153,7 @@ export default {
         { value: 6, label:'图标选择 (fontawesome)' },
         { value: 7, label:'自定义插件' },
         { value: 8, label:'事件' },
+        { value: 9, label:'隐藏配置' },
       ],
       
       labelCol: { span: 4 },

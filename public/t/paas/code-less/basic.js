@@ -187,4 +187,99 @@ module.exports = {
     groupName: '表单',
     // helpTag: 'div',
   },
+  
+  bc012: {
+    txt: '插槽',
+    component: 'slot',
+    groupName: '功能',
+    isContainer: true,
+    removeTxt: true,
+    helpTag: 'div',
+    props: {
+      name: {
+        desc: '插槽名称',
+        type: 1,
+      },
+    }
+  },
+  
+  bc013: {
+    txt: '动态组件',
+    component: 'component',
+    groupName: '功能',
+    props: {
+      is: {
+        desc: '组件名',
+        type: 1,
+        canDynamic: true,
+        def: 'div',
+      },
+    }
+  },
+  
+  bc014: {
+    txt: "平台接口",
+    component: 'x-api',
+    helpTag: 'div',
+    groupName: '功能',
+    plugins: {
+      'cl-select-api': './cl-select-api.vue',
+    },
+    props: {
+      org: {
+        desc: '机构',
+        type: 9,
+        canDynamic: true,
+      },
+      app: {
+        desc: '应用',
+        type: 9, 
+        canDynamic: true,
+      },
+      mod: {
+        desc: '模块',
+        type: 9, 
+        canDynamic: true,
+      },
+      api: {
+        desc: 'API',
+        type: 7, 
+        // canDynamic: true,
+        component: 'cl-select-api',
+      },
+      showMsg: {
+        desc: '异常信息提示',
+        type: 3,
+        select: {'有提示':true, '无提示':false},
+        def: false,
+        propsConfig: {isExprAttr:true},
+      },
+      params: {
+        desc: '接口请求参数',
+        type: 1,
+        canDynamic: true,
+      },
+      immediately: {
+        desc: '页面加载时',
+        type: 3,
+        select: {'立即请求接口':true, '无动作':false},
+        def: false,
+      },
+      flag: {
+        desc: '更新标志',
+        type: 1,
+        canDynamic: true,
+      },
+      success: {
+        desc: '接口成功返回 回调函数',
+        type: 8,
+        propsConfig: {type:'event'},
+      },
+      error: {
+        desc: '接口失败返回 回调函数',
+        type: 8,
+        propsConfig: {type:'event'},
+      },
+    },
+  },
 }

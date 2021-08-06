@@ -16,6 +16,7 @@ const componentNames = [
   'x-login-form',
   'x-login-page',
   'x-null',
+  'x-selector-api',
 ];
 
 if (!window.Vue) {

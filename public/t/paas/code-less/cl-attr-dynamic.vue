@@ -15,6 +15,7 @@
       v-if='!isdyn'
       @change='onChange'
       class='full'
+      :allComponentProps='props'
     />
     
     <cl-attr-bind-data
@@ -35,7 +36,8 @@ const role = require("./component-role.js");
 export default {
   props: ['name', 'desc', 'componentName', 'bind', 'props', 'propsConfig', 'isEventBind', 'cid'],
   
-  components: tool.loadc('cl-attr-bind-data', 'cl-attr-dyn-modifiers', 'cl-expr-help', 'cl-select-fa-icon'),
+  components: tool.loadc(
+    'cl-attr-bind-data', 'cl-attr-dyn-modifiers', 'cl-expr-help', 'cl-select-fa-icon'),
   
   computed: {
     config() {

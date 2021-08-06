@@ -139,6 +139,9 @@ function initProps(c, cfg) {
           cfg.props[n] = null; 
           break;
           
+        case 9: // 隐藏, 这个属性配置不会被显示, 通常由其他的属性一同配置
+          break;
+          
         default:
           throw new Error("init props invaild type val:"+ n +', type:'+ p.type);
       }

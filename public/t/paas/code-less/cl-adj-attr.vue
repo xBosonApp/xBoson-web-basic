@@ -42,6 +42,7 @@
         :cid='config.cid'
         :isEventBind='isEventBind(p)'
         @change='fileChanged'
+        v-if='p.type != 9'
       />
     </div>
     
@@ -70,11 +71,13 @@ const compMap = {
   4:'a-input',
   5:'a-input',
   6:'cl-select-fa-icon',
+  9:'x-null',
 };
 
 export default {
   props: ['config'],
-  components : tool.loadc('cl-select-fa-icon', 'cl-attr-dynamic', 'cl-attr-fixed', 
+  components : tool.loadc(
+    'cl-select-fa-icon', 'cl-attr-dynamic', 'cl-attr-fixed', 
     'cl-attr-bind-data', 'cl-adj-vspecial'),
     
   data() {
@@ -131,7 +134,7 @@ export default {
     getOption(name) {
       let p = this.componentCfg.props[name];
       // 1:字符串, 2:整数, 3:选项select属性, 4:字符串,并且带有select选项, 
-      // 5:来自变量, 6:图标选择, 7:自定义插件, 8:事件专用
+      // 5:来自变量, 6:图标选择, 7:自定义插件, 8:事件专用, 9:隐藏配置
       switch (p.type) {
         case 1:
           return { maxLength: p.max };
@@ -150,6 +153,8 @@ export default {
           return p.props || {};
         case 8:
           return { isEvent : true };
+        case 9:
+          return { hide: true };
         default:
           throw new Error("无效的值类型"+ p.type);
       }

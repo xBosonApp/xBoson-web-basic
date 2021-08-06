@@ -8,6 +8,7 @@
       v-model='props[name]' 
       @change='onChange'
       class='full'
+      :allComponentProps='props'
     />
   </div>
 </template>
