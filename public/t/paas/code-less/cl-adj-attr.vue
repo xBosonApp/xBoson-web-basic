@@ -5,7 +5,7 @@
     <div>ID</div>
     <a-input :value='config.id' disabled='true' />
     
-    <div v-if='!config.removeTxt'>文本</div>
+    <div v-if='!config.removeTxt' class='spt'>文本</div>
     <a-textarea 
       v-model='config.txt'
       placeholder="组件显示文本"
@@ -13,7 +13,7 @@
       @change='fileChanged'
       :auto-size="{ minRows: 2, maxRows: 10 }"/>
       
-    <div>备注</div>
+    <div class='spt'>备注</div>
     <a-textarea 
       v-model='config.note'
       placeholder="备注"
@@ -31,7 +31,7 @@
     
     <space/>
     
-    <div v-for='(p, name) in getComponentProps()'>
+    <div v-for='(p, name) in getComponentProps()' class='spt'>
       <component :is="getGasketName(p, name)"
         :name='name'
         :desc='p.desc'
@@ -189,4 +189,5 @@ space {
 .clbutton:hover {
   background-color: #eee; color: #000;
 }
+.spt { margin-top: 5px; }
 </style>

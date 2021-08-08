@@ -1,34 +1,108 @@
 <!-- Create By xBoson System -->
-
-
-<style>
-  div.dataTables_filter{
-    position: static;
-  }
-  div.dataTables_length{
-    position: static;
-  }
-</style>
-<link rel="stylesheet" href="../../paas/lib/js/plugin/datatables/examples/resources/bootstrap/3/dataTables.bootstrap.css" type="text/css" media="all" />
-
-<div id="msg-manage"  class="well">
-  <!--<div name="member-grid-toolbar" class="btn-group">-->
-  <!--  <button id="member-grid-toolbar-add" class="btn btn-success btn-xs" type="submit">&emsp;<i class="fa fa-magic"></i>&emsp;添 加&emsp;</button>-->
-  <!--  <button id="member-grid-toolbar-edit" class="btn btn-success btn-xs" type="submit" disabled="disabled">&emsp;<i class="fa fa-edit"></i>&emsp;修 改&emsp;</button>-->
-  <!--  <button id="member-grid-toolbar-delete" class="btn btn-success btn-xs" disabled="disabled">&emsp;<i class="fa  fa-trash-o "></i>&emsp;删 除&emsp;</button>-->
-    <!--<button id="member-grid-toolbar-export" class="btn btn-success btn-xs">&emsp;<i class="glyphicon glyphicon-export  "></i>&emsp;导出明细&emsp;</button>-->
-  <!--</div>-->
-  <!--<div class="pull-right"><b name="total_count"></b></div>-->
-  <h1></h1>
-  <!--<div id="mdms_datadictD_zydm_table"></div>-->
-  <table id="msg-grid" class="table table-bordered table-striped"></table>
-</div>
-<div id="msg-modal"></div>
-
-<script type="text/javascript" src="../../paas/lib/js/plugin/datatables/examples/resources/bootstrap/3/dataTables.bootstrap.js"></script>
-<script src="saas/tasks/msg/view.js" type="text/javascript"></script>
-
+ <!-- widget grid -->
+<section id="widget-grid" class="">
+	<!-- row -->
+	<div class="row">
+		<!-- NEW WIDGET START -->
+		<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<!-- Widget ID (each widget will need unique ID)-->
+			<div id="msg_log_wid" class="jarviswidget jarviswidget-color-blueDark" data-widget-fullscreenbutton="false" data-widget-colorbutton="true" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-deletebutton="false">
+				<header>
+					<!--<span class="widget-icon"> <i class="fa fa-table"></i> </span>-->
+					<h2>消息发送日志</h2>
+				</header>
+				<!-- widget div-->
+				<div>
+					<!-- widget edit box -->
+					<div class="jarviswidget-editbox">
+						<!-- This area used as dropdown edit box -->
+					</div>
+					<!-- end widget edit box -->
+					<!-- widget content -->
+					<div class="widget-body no-padding">
+						<div class="widget-body-toolbar">
+								<form id="msg_log_search_form" method="post" onsubmit="return false;" class="smart-form">
+								  <div class="row">
+									
+								    <section class="col col-2">
+  										<div class="input-group">
+  										  <span class="input-group-addon">开始日期</span>
+  											<input class="form-control" type="text" name="dt_from" placeholder="开始日期">
+  										</div>
+  									</section>
+										
+  									<section class="col col-1">
+  									  <div class="input-group">
+											  <input class="form-control" type="text" name="time_from" placeholder="开始时间"/>
+											</div>
+  									</section>
+										
+  									<section class="col col-2">
+  										<div class="input-group">
+  										  <span class="input-group-addon">结束日期</span>
+  											<input class="form-control" type="text" name="dt_to" placeholder="结束日期">
+  										</div>
+  									</section>
+										
+  									<section class="col col-1">
+  									  <div class="input-group">
+											  <input class="form-control" type="text" name="time_to" placeholder="结束时间"/>
+											</div>
+  									</section>
+  									
+  									<section class="col col-2">
+  										<label class="input">
+  											<input type="hidden" name="state" data-type="select2" placeholder="状态">
+  										</label>
+  									</section>
+  									
+  									<section class="col col-3">
+    									<button id="log_api_req_search" class="btn btn-info btn-sm" type="submit"><i class="fa fa-search fa-1"></i>&emsp;查 询&emsp;</button>
+  									</section>
+								</div>
+								</form>
+								
+								<div class="row">
+									<div class="col-md-12">
+										<div class="pull-right">
+										<b name="total_count"></b>
+									</div>
+								</div>
+							</div>
+						</div>
+						 <!--class="dataTables_wrapper"-->
+						<div class="table-responsive">
+							<table id="msg_log_dt" class="table table-bordered table-striped">
+								<!--<thead>-->
+								<!--	<tr>-->
+								<!--		<th>计划名称</th>-->
+								<!--		<th>产生时间</th>-->
+								<!--		<th>请求 URL</th>-->
+								<!--		<th>返回内容</th>-->
+								<!--	</tr>-->
+								<!--</thead>-->
+							</table>
+						</div>
+					</div>
+					<!-- end widget content -->
+					<div id="msg_log_pagination"></div>
+				</div>
+				<!-- end widget div -->
+			</div>
+			<!-- end widget -->
+		</article>
+		<!-- WIDGET END -->
+	</div>
+	<!-- end row -->
+</section>
+<!-- end widget grid -->
+<script src="lib/js/plugin/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
+<script src="lib/js/plugin/jquery-pagination/jqPaginator.js"></script>
+<!-- BOOTSTRAP UI + Slider -->
+<!-- <script src="lib/js/plugin/bootstrap-editable/js/bootstrap-editable.min.js"></script> -->
+<script src="saas/tasks/msg/view.js"></script>
 <script type="text/javascript">
-
-  msg_view();
+	// DO NOT REMOVE : GLOBAL FUNCTIONS!
+	pageSetUp();
+	var msg_log = new MsgLog();
 </script>

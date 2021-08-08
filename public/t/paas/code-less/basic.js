@@ -282,4 +282,94 @@ module.exports = {
       },
     },
   },
+  
+  bc015: {
+    txt: "通用接口",
+    component: 'x-api-comm',
+    helpTag: 'div',
+    groupName: '功能',
+    props: {
+      url : {
+        desc: '接口 URL',
+        type: 1,
+        canDynamic: true,
+      },
+      body : {
+        desc: 'HTTP Body',
+        type: 1,
+        canDynamic: true,
+      },
+      params : {
+        desc: "URL 参数",
+        type: 1,
+        canDynamic: true,
+      },
+      immediately: {
+        desc: '页面加载时',
+        type: 3,
+        select: {'立即请求接口':true, '无动作':false},
+        def: false,
+        propsConfig: {isExprAttr:true},
+      },
+      method: { 
+        desc: '请求方法',
+        type: 3,
+        select: {
+          'post':'post', 'get':'get', 'head':'head', 'delete':'delete',
+          'jsonp':'jsonp', 'put':'put', 'patch':'patch',
+        },
+        def: 'post',
+      },
+      timeout: {
+        desc: '超时, 毫秒',
+        type: 2,
+        def: 5000,
+        propsConfig: {isExprAttr:true},
+      },
+      urlencoded: {
+        desc: '转换为 URL 参数',
+        type: 3,
+        select: {
+          '转换': true, '维持原样': false,
+        },
+        def: true,
+        propsConfig: {isExprAttr:true},
+      },
+      rtype: {
+        desc: '返回数据类型',
+        type: 3,
+        select: {
+          '文本': 'text', "JSON对象": 'json', "二进制": 'blob',
+        },
+        def: 'json',
+      },
+      headers: {
+        desc: '请求头域',
+        type: 1,
+        canDynamic: true,
+      },
+      'update.sync': {
+        desc: '绑定更新方法到变量',
+        type: 1,
+        canDynamic: true,
+        propsConfig: {isExprAttr:true},
+      },
+      'v-model': {
+        desc: '绑定返回数据到变量',
+        type: 1,
+        canDynamic: true,
+        propsConfig: {isExprAttr:true},
+      },
+      success: {
+        desc: '接口成功返回 回调函数',
+        type: 8,
+        propsConfig: {type:'event'},
+      },
+      error: {
+        desc: '接口失败返回 回调函数',
+        type: 8,
+        propsConfig: {type:'event'},
+      },
+    },
+  },
 }

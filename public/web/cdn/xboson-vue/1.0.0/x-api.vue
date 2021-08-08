@@ -18,6 +18,8 @@ export default {
     immediately : { type: Boolean, default: true },
     // 如果flag改变, 则立即调用 api
     flag : { type: Object, default: null},
+    // update.sync 绑定更新方法, 调用该方法则发送请求 返回 promise
+    update : { type: Object },
   },
   
   watch : {
@@ -30,11 +32,11 @@ export default {
   },
   
   mounted: function () {
-    this.$nextTick(function () {
-      if (this.immediately) {
-        this.callApi();
-      }
-    });
+    if (this.immediately) {
+      this.$nextTick(()=>this.callApi());
+    }
+    
+    this.$emit('update:update', this.callApi);
   },
   
   methods : {
@@ -50,8 +52,9 @@ export default {
     callApi() {
       let url = [window.xv.ctx_prefix, 'app', this.org, this.app, this.mod, this.api].join('/');
       
-      this.$xapi(url, this.params).then(ret => {
+      return this.$xapi(url, this.params).then(ret => {
         this.$emit('success', ret);
+        return ret;
       }).catch(err => {
         this.error(err, url);
       });
