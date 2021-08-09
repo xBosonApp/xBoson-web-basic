@@ -194,7 +194,7 @@ module.exports = {
     groupName: '功能',
     isContainer: true,
     removeTxt: true,
-    helpTag: 'div',
+    helpTag: 'cl-tag-info',
     props: {
       name: {
         desc: '插槽名称',
@@ -220,7 +220,7 @@ module.exports = {
   bc014: {
     txt: "平台接口",
     component: 'x-api',
-    helpTag: 'div',
+    helpTag: 'cl-tag-info',
     groupName: '功能',
     plugins: {
       'cl-select-api': './cl-select-api.vue',
@@ -286,7 +286,7 @@ module.exports = {
   bc015: {
     txt: "通用接口",
     component: 'x-api-comm',
-    helpTag: 'div',
+    helpTag: 'cl-tag-info',
     groupName: '功能',
     props: {
       url : {
@@ -358,7 +358,6 @@ module.exports = {
         desc: '绑定返回数据到变量',
         type: 1,
         canDynamic: true,
-        propsConfig: {isExprAttr:true},
       },
       success: {
         desc: '接口成功返回 回调函数',
@@ -369,6 +368,51 @@ module.exports = {
         desc: '接口失败返回 回调函数',
         type: 8,
         propsConfig: {type:'event'},
+      },
+    },
+  },
+  
+  bc016: {
+    txt: "字典选择",
+    component: 'x-selector-dict-content',
+    helpTag: 'div',
+    groupName: '功能',
+    plugins: {
+      'cl-select-dict': './cl-select-dict.vue',
+    },
+    props: {
+      org: {
+        desc: '机构',
+        type: 7,
+        component: 'x-selector-org',
+      },
+      dict: {
+        desc: '字典',
+        type: 7,
+        component: 'cl-select-dict',
+      },
+      name: {
+        desc: '表单名',
+        type: 1,
+      },
+      'v-model': {
+        desc: '绑定表单数据到变量',
+        type: 1,
+        canDynamic: true,
+      },
+    }
+  },
+  
+  bc017: {
+    txt: "URL参数",
+    component: 'x-url-param',
+    helpTag: 'div',
+    groupName: '功能',
+    props: {
+      'v-model': {
+        desc: '绑定数据到变量',
+        type: 1,
+        canDynamic: true,
       },
     },
   },

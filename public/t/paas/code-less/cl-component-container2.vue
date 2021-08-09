@@ -78,6 +78,7 @@ export default {
   props: ['nestedList', 'styleProp', 'rootConfig', 'isRoot', 'containerTagInfo'],
   
   components: {
+    'cl-tag-info' : require("./cl-tag-info.vue", 1,1),
   },
   
   data() {

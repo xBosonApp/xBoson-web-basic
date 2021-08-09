@@ -71,7 +71,13 @@ function api(mod, name, params, cb) {
 
 function apiurl(url, params, cb) {
   let p = Vue.xapi(url, params);
-  p.then(ret => {cb(null, ret)}).catch(cb);
+  p.then(ret => {
+    if (ret.code == '1000') {
+      location.href = '../login.html';
+      return;
+    }
+    cb(null, ret);
+  }).catch(cb);
 }
 
 

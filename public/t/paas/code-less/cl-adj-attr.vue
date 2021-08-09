@@ -57,6 +57,11 @@
       <cl-adj-vspecial :config='config' v-if='showVspecial'/>
     </div>
     
+    <div v-if='componentCfg.doc'>
+      <div class='note docti'>组件帮助文档</div>
+      <pre v-html='componentCfg.doc'></pre>
+    </div>
+    
   </div>
 </template>
 
@@ -190,4 +195,7 @@ space {
   background-color: #eee; color: #000;
 }
 .spt { margin-top: 5px; }
+.docti { 
+  font-weight: bold; border-top: 1px dashed #ccc; margin-top: 20px;
+}
 </style>
