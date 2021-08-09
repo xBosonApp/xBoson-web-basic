@@ -20,7 +20,7 @@ function MsgLog(tenantId,dateObj){
   
   // 发送状态
   var stateArr = [
-    {id:0, name:'已启动计划任务'},
+    {id:0, name:'待发送'},
     {id:1, name:'发送成功'},
     {id:2, name:'发送失败'},
   ];
@@ -104,11 +104,11 @@ function MsgLog(tenantId,dateObj){
           title: "提醒时间",
           data: "date"
         },
-        {
-          title: "租户ID",
-          data: "orgid",
-          defaultContent: ''
-        },
+        // {
+        //   title: "租户ID",
+        //   data: "orgid",
+        //   defaultContent: ''
+        // },
         {
           title: "计划任务状态",
           data: "schedule_status",
@@ -128,7 +128,7 @@ function MsgLog(tenantId,dateObj){
           defaultContent: ''
         },
         {
-          title: "消息响应时间",
+          title: "消息发送时间",
           "render": function(data, type, row, meta) {
             if(row.state ==0) return '';
             if(row.state==1) return row.sms_status.date;

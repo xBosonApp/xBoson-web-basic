@@ -103,11 +103,11 @@ function MsgStatsLog(){
             
           }
         },
-        {
-          title: "租户ID",
-          data: "orgid",
-          defaultContent: ''
-        },
+        // {
+        //   title: "租户ID",
+        //   data: "orgid",
+        //   defaultContent: ''
+        // },
         {
           title: "已启动计划任务",
           data: "count.state0",

@@ -6,25 +6,17 @@
         <v-toolbar-title>标题栏</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-btn icon>
-          <v-icon>mdi-export</v-icon>
+          <v-icon>menu</v-icon>
         </v-btn>
       <!--</v-toolbar>-->
     </v-app-bar>
     <v-main>
+      <router-link to="/default">跳转到 default</router-link>
+      
       <v-container fluid>
-        <x-menu2 @openSubMenu='openSubMenu' :hideAll='hideAllMenu' title='xBoson 大数据 UI'>
-          <template v-slot:main>
-            <el-menu-item index='element'>Element UI</el-menu-item>
-            <el-menu-item index='ant'>Ant Design Vue</el-menu-item>
-            <el-menu-item index='boot'>Bootstrap Vue</el-menu-item>
-            <el-menu-item index='bigscreen'>大屏演示</el-menu-item>
-            <el-menu-item index='echarts'>图表演示</el-menu-item>
-            <el-menu-item index='other'>杂项</el-menu-item>
-          </template>
-          <template v-slot:sub>
-            <component :is="subMenuId"></component>
-          </template>
-        </x-menu2>
+        <!-- 路由出口 -->
+        <!-- 路由匹配到的组件将渲染在这里 -->
+        <router-view></router-view>
       </v-container>
     </v-main>
     
@@ -60,14 +52,28 @@ const store = new Vuex.Store({
 })
 
 let vt = require("cdn/xboson-vue/1.0.0/loader/vuetify.js");
-
+require("cdn/fontawesome/5.15.3/css/all.min.css");
 let vuetify = new vt.Vuetify({
   theme: { dark: false },
+  icons: {
+    iconfont: 'fa',
+    values: {
+      cancel: 'fas fa-ban',
+      menu: 'fas fa-ellipsis-v',
+    },
+  },
+});
+
+const router = new VueRouter({
+  routes : [
+    { path: '/default', component: require("./default.vue", 1,1) },
+  ]
 });
 
 export default {
   props : ['content'],
-  vuetify : vuetify,
+  vuetify,
+  router,
   store,
   data () {
     return {
