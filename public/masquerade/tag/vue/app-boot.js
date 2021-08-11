@@ -523,6 +523,7 @@
       el.classList.remove('animate__fadeInDown');
       el.classList.add('animate__fadeOutUp');
       el.addEventListener('animationend', ()=>el.remove());
+      // console.log("dialog close");
     };
     close.addEventListener('click', doClose);
     if (waitTime !== 0) setTimeout(doClose, waitTime > 0 ? waitTime : 5000)

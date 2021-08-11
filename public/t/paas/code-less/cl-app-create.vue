@@ -30,10 +30,22 @@
       </a-tooltip>
     </a-form-model-item>
     
+    <a-form-model-item label='根组件名称'>
+      <a-tooltip placement="top">
+        <template slot="title">更改后需要重新递交菜单方可生效</template>
+        <a-input v-model='form.rootcid' placeholder='不设置则使用 div 作为根组件'/>
+      </a-tooltip>
+    </a-form-model-item>
+    
     <div v-if='isRename' class='items-group as'>
-      <label>首页</label>
+      <label>测试首页</label>
       <div>
-        <a :href='path' target='_blank' style='overflow-wrap: anywhere;'>{{ path }}</a>  
+        <a :href='dev_path' target='_blank' style='overflow-wrap: anywhere;'>{{ dev_path }}</a>  
+      </div>
+      
+      <label>发布首页</label>
+      <div>
+        <a :href='prod_path' target='_blank' style='overflow-wrap: anywhere;'>{{ prod_path }}</a>  
       </div>
       
       <label>菜单类型</label>
@@ -104,9 +116,15 @@ export default {
       if (this.isRename) {
         let p = this.data.app.path;
         let i = p.indexOf('/', 1);
-        return xv.url_prefix +(xv.debug ? '/t' : '/ui')+ p.substr(i) +'/index.htm';
+        return p.substr(i) +'/index.htm';
       }
       return '';
+    },
+    dev_path() {
+      return this.path && (xv.url_prefix +'/t'+ this.path);
+    },
+    prod_path() {
+      return this.path && (xv.url_prefix +'/ui'+ this.path);
     },
     modename() {
       return this.modeMap[ this.data.app.mode ] || '未知类型的应用';
@@ -114,7 +132,7 @@ export default {
   },
   
   data() {
-    let form = { mode: 'pc' };
+    let form = { mode: 'pc', rootcid: null };
     if (this.data.createMode == 'rename') {
       Object.assign(form, this.data.app);
     }

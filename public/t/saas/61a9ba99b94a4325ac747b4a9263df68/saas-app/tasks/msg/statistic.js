@@ -86,7 +86,7 @@ function MsgStatsLog(){
       var rowData = memberDataTableApi.row($tr).data(); // 所在行数据
       // 
       
-      zy.net.loadHTMLs("saas/tasks/msg/view.html",contentDiv,function(){
+      zy.net.loadHTMLs("saas-app/tasks/msg/view.html",contentDiv,function(){
         // main(node);
         // tenant_member_view(node._id);
         MsgLog(tenantID, new Date(rowData.date));

@@ -97,7 +97,7 @@
     // if(zy.g.user.userid != node.pid) return ;
     window.tenantID = node._id;
     
-    zy.net.loadHTMLs("saas/tasks/msg/statistic.html",v_content,function(){
+    zy.net.loadHTMLs("saas-app/tasks/msg/statistic.html",v_content,function(){
       // main(node);
       // tenant_member_view(node._id);
     });

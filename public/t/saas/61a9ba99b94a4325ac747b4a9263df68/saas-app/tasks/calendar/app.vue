@@ -1,10 +1,10 @@
 <template>
   <v-app>
-    <v-app-bar app>
+    <v-app-bar height="50" app>
       <!--<v-toolbar prominent src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg">-->
-        <v-app-bar-nav-icon></v-app-bar-nav-icon>
-        <v-toolbar-title>标题栏</v-toolbar-title>
-        <v-spacer></v-spacer>
+        <v-app-bar-nav-icon>menu</v-app-bar-nav-icon>
+        <v-toolbar-title>标题栏：https://vuetifyjs.com/zh-Hans/</v-toolbar-title>
+        <v-spacer> | https://cn.vuejs.org/</v-spacer>
         <v-btn icon>
           <v-icon>menu</v-icon>
         </v-btn>
@@ -12,6 +12,7 @@
     </v-app-bar>
     <v-main>
       <router-link to="/default">跳转到 default</router-link>
+      <router-link to="/test">跳转到 test</router-link>
       
       <v-container fluid>
         <!-- 路由出口 -->
@@ -58,15 +59,20 @@ let vuetify = new vt.Vuetify({
   icons: {
     iconfont: 'fa',
     values: {
-      cancel: 'fas fa-ban',
-      menu: 'fas fa-ellipsis-v',
+      cancel: 'fa fa-ban',
+      menu: 'fa fa-ellipsis-v',
     },
   },
+  lang: {
+    // locales: { 'zhHans' },
+    current: 'zhHans',
+  }
 });
-
+console.log(vuetify,vt);
 const router = new VueRouter({
   routes : [
     { path: '/default', component: require("./default.vue", 1,1) },
+    { path: '/test', component: require("./test.vue", 1,1) },
   ]
 });
 
