@@ -4,117 +4,8 @@
 <meta charset='utf-8' />
 <link href='/xboson/face/web/cdn/fontawesome/5.15.3/css/all.css' rel='stylesheet'>
 <link href='/xboson/face/web/cdn/fullcalendar/5.9.0/main.css' rel='stylesheet' />
-<link href='saas-app/tasks/calendar/bootstrap.min.css' rel='stylesheet' />
-<script src='/xboson/face/web/cdn/fullcalendar/5.9.0/main.js'></script>
-<!--<script src='theme-chooser.js'></script>-->
-<script>
-
-  document.addEventListener('DOMContentLoaded', function() {
-    var calendarEl = document.getElementById('calendar');
-    var calendar;
-
-
-      function init(themeSystem) {
-        calendar = new FullCalendar.Calendar(calendarEl, {
-	        locale: 'zh-cn',
-          themeSystem: themeSystem,
-          headerToolbar: {
-            left: '',
-            center: 'prevYear,prev title next,nextYear',
-            right: 'today dayGridMonth,timeGridWeek,timeGridDay,listMonth'
-          },
-          buttonText:{
-            today:'今天',
-            month:'月',
-            week:'周',
-            day:'日',
-            list:'列表',
-          },
-          initialView: 'dayGridMonth',
-          initialDate: '2021-08-12',
-          displayEventEnd: true, //所有视图显示结束时间
-          weekNumbers: true,
-          navLinks: true, // can click day/week names to navigate views
-          editable: true,
-          selectable: true,
-          selectMirror: true,
-          nowIndicator: true,
-          dayMaxEvents: true, // allow "more" link when too many events
-          weekends: true,
-          // showNonCurrentDates: false,
-          // allowContextMenu:false,
-          // dateClick:this.handleDateClick,
-          events: [
-            {
-              title: 'All Day Event',
-              start: '2021-08-01'
-            },
-            {
-              title: 'Long Event',
-              start: '2021-08-07',
-              end: '2021-08-10'
-            },
-            {
-              groupId: 999,
-              title: 'Repeating Event',
-              start: '2021-08-09T16:00:00'
-            },
-            {
-              groupId: 999,
-              title: 'Repeating Event',
-              start: '2021-08-16T16:00:00'
-            },
-            {
-              title: 'Conference',
-              start: '2021-08-11',
-              end: '2021-08-13'
-            },
-            {
-              title: 'Meeting',
-              start: '2021-08-12T10:30:00',
-              end: '2021-08-12T12:30:00'
-            },
-            {
-              title: 'Lunch',
-              start: '2021-08-12T12:00:00'
-            },
-            {
-              title: 'Meeting',
-              start: '2021-08-12T14:30:00'
-            },
-            {
-              title: 'Happy Hour',
-              start: '2021-08-12T17:30:00'
-            },
-            {
-              title: 'Dinner',
-              start: '2021-08-12T20:00:00'
-            },
-            {
-              title: 'Birthday Party',
-              start: '2021-08-13T07:00:00'
-            },
-            {
-              title: 'Click for Google',
-              url: 'http://google.com/',
-              start: '2021-08-28'
-            }
-          ]
-        });
-        calendar.render();
-      }
-
-      function change(themeSystem) {
-        calendar.setOption('themeSystem', themeSystem);
-      }
-
-    init('bootstrap');
-
-  });
-
-</script>
+<link href='/xboson/face/t/saas/61a9ba99b94a4325ac747b4a9263df68/saas-app/tasks/calendar/bootstrap.min.css' rel='stylesheet' />
 <style>
-
   body {
     margin: 0;
     padding: 0;
@@ -198,3 +89,107 @@
 
 </body>
 </html>
+
+<script src='/xboson/face/web/cdn/fullcalendar/5.9.0/main.js'></script>
+<!--<script src='theme-chooser.js'></script>-->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar;
+
+      function init(themeSystem) {
+        calendar = new FullCalendar.Calendar(calendarEl, {
+	        locale: 'zh-cn',
+          themeSystem: themeSystem,
+          headerToolbar: {
+            left: '',
+            center: 'prevYear,prev title next,nextYear',
+            right: 'today dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+          },
+          buttonText:{
+            today:'今天',
+            month:'月',
+            week:'周',
+            day:'日',
+            list:'列表',
+          },
+          initialView: 'dayGridMonth',
+          initialDate: '2021-08-12',
+          displayEventEnd: true, //所有视图显示结束时间
+          weekNumbers: true,
+          navLinks: true, // can click day/week names to navigate views
+          editable: true,
+          selectable: true,
+          selectMirror: true,
+          nowIndicator: true,
+          dayMaxEvents: true, // allow "more" link when too many events
+          weekends: true,
+          // showNonCurrentDates: false,
+          // allowContextMenu:false,
+          // dateClick:this.handleDateClick,
+          events: [
+            {
+              title: '全天事件',
+              start: '2021-08-01',
+              mark: '这是备注信息'
+            },
+            {
+              title: '长事件',
+              start: '2021-08-07',
+              end: '2021-08-10'
+            },
+            {
+              groupId: 999,
+              title: '重复事件',
+              start: '2021-08-09T16:00:00'
+            },
+            {
+              groupId: 999,
+              title: '重复事件',
+              start: '2021-08-16T16:00:00'
+            },
+            {
+              title: 'Conference',
+              start: '2021-08-11',
+              end: '2021-08-13'
+            },
+            {
+              title: '会议',
+              start: '2021-08-12T10:30:00',
+              end: '2021-08-12T12:30:00'
+            },
+            {
+              title: '午餐',
+              start: '2021-08-12T12:00:00'
+            },
+            {
+              title: '会议',
+              start: '2021-08-12T14:30:00'
+            },
+            {
+              title: '快乐时光',
+              start: '2021-08-12T17:30:00'
+            },
+            {
+              title: '晚餐',
+              start: '2021-08-12T20:00:00'
+            },
+            {
+              title: '生日聚会',
+              start: '2021-08-13T07:00:00'
+            },
+            {
+              title: 'Click for 百度',
+              url: 'https://baidu.com/',
+              start: '2021-08-28'
+            }
+          ]
+        });
+        calendar.render();
+      }
+      function change(themeSystem) {
+        calendar.setOption('themeSystem', themeSystem);
+      }
+    init('bootstrap');
+  });
+</script>

@@ -13,6 +13,7 @@
     <v-main>
       <router-link to="/default">跳转到 default</router-link>
       <router-link to="/test">跳转到 test</router-link>
+      <router-link to="/test2">跳转到 test2</router-link>
       
       <v-container fluid>
         <!-- 路由出口 -->
@@ -73,6 +74,7 @@ const router = new VueRouter({
   routes : [
     { path: '/default', component: require("./default.vue", 1,1) },
     { path: '/test', component: require("./test.vue", 1,1) },
+    { path: '/test2', component: require("./test2.vue", 1,1) },
   ]
 });
 
