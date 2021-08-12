@@ -33,6 +33,7 @@
   'cl-component-container',
   'cl-component-container2',
   'cl-component-container3',
+  'cl-component-container4',
   'cl-component-choose',
   
   'cl-color-picker',

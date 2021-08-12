@@ -1,7 +1,7 @@
 <!-- Create By xBoson System -->
 
 <template>
-  <div class='page-design'>
+  <component class='page-design' :is='rootComponent'>
     <cl-device-emu v-if='pageSet.hasBorder' :setting='pageSet' style='margin-left: 20px;'>
       <div class='dd-footer cl-background-flanel-lines cl-vertical-center' v-if='showtip()'>
         <b>拖拽组件到这里</b>
@@ -23,7 +23,7 @@
         :is-root='true'
       />
     </div>
-  </div>
+  </component>
 </template>
 
 <script>
@@ -74,7 +74,7 @@ export default {
   data() {
     return {
       nullSet : {
-        index : {},
+        index : { sel_drc : 'div' },
         resolution : { h:'auto', w:'auto' },
       },
     };
@@ -83,6 +83,10 @@ export default {
   computed: {
     pageSet() {
       return this.file.content.root.pageSetting || this.nullSet;
+    },
+    
+    rootComponent() {
+      return this.pageSet.index.sel_drc || 'div';
     },
     
     previewSize() {

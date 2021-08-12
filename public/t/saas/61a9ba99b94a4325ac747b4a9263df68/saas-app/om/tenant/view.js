@@ -50,7 +50,7 @@ function tenant_member_view(){
     
     
     $add.on("click",function(){
-      zy.net.loadHTMLs("saas/om/tenant/member_add_edit.html",$modal_container,function(){
+      zy.net.loadHTMLs("saas-app/om/tenant/member_add_edit.html",$modal_container,function(){
         member_add_edit({tenantId:tenantID},"i",function(formData){
           // 添加表格行数据
           memberDataTableApi.row.add(formData).draw();
@@ -59,7 +59,7 @@ function tenant_member_view(){
     });
     
     $edit.on("click",function(){
-      zy.net.loadHTMLs("saas/om/tenant/member_add_edit.html",$modal_container,function(){
+      zy.net.loadHTMLs("saas-app/om/tenant/member_add_edit.html",$modal_container,function(){
         //获取当前选择表格行数据
         var data = memberDataTableApi.row('tr.active').data();
         data.tenantId = tenantID;

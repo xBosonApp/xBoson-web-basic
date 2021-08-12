@@ -1,20 +1,43 @@
 <template>
-  <v-app>
-    <v-app-bar height="50" app>
-      <!--<v-toolbar prominent src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg">-->
-        <v-app-bar-nav-icon>menu</v-app-bar-nav-icon>
-        <v-toolbar-title>标题栏：https://vuetifyjs.com/zh-Hans/</v-toolbar-title>
-        <v-spacer> | https://cn.vuejs.org/</v-spacer>
-        <v-btn icon>
-          <v-icon>menu</v-icon>
-        </v-btn>
-      <!--</v-toolbar>-->
+  <v-app class="mx-auto overflow-hidden">
+
+    <v-app-bar color="primary" app dark dense height="50">
+      <v-app-bar-nav-icon @click="drawer = true"><i class='fas fa-bars'></i></v-app-bar-nav-icon>
+      <v-toolbar-title>健康管理</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn icon><v-icon>fa-street-view</v-icon></v-btn>
+      <v-btn icon><v-icon>fa-sign-out-alt</v-icon></v-btn>
     </v-app-bar>
-    <v-main>
-      <router-link to="/default">跳转到 default</router-link>
-      <router-link to="/test">跳转到 test</router-link>
-      <router-link to="/test2">跳转到 test2</router-link>
-      
+
+    <v-navigation-drawer v-model="drawer" absolute bottom temporary>
+      <v-list nav dense>
+        <v-list-item-group v-model="group" active-class="primary--text text--accent-4">
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title class="text-h6">艾特日程</v-list-item-title>
+              <v-list-item-subtitle>v1.0.0</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+      <v-divider></v-divider>
+      <v-list nav dense>
+        <v-list-item-group v-model="selectedItem" color="primary">
+          <v-list-item v-for="(item, i) in items" :key="i" :to="item.to">
+            <v-list-item-icon>
+              <v-icon v-text="item.icon" dense></v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-content>
+              <v-list-item-title v-text="item.text"></v-list-item-title>
+              <!--<v-list-item-title v-text="item.text" exact exact-path><router-link :to="item.to">{{item.text}}</router-link></v-list-item-title>-->
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-main bottom>
       <v-container fluid>
         <!-- 路由出口 -->
         <!-- 路由匹配到的组件将渲染在这里 -->
@@ -23,7 +46,6 @@
     </v-main>
     
     <v-footer app>
-       
     </v-footer>
   </v-app>
 </template>
@@ -54,15 +76,14 @@ const store = new Vuex.Store({
 })
 
 let vt = require("cdn/xboson-vue/1.0.0/loader/vuetify.js");
-require("cdn/fontawesome/5.15.3/css/all.min.css");
 let vuetify = new vt.Vuetify({
   theme: { dark: false },
   icons: {
-    iconfont: 'fa',
-    values: {
-      cancel: 'fa fa-ban',
-      menu: 'fa fa-ellipsis-v',
-    },
+    iconfont: 'fas',
+    // values: {
+    //   cancel: 'fa fa-ban',
+    //   menu: 'fa fa-ellipsis-v',
+    // },
   },
   lang: {
     // locales: { 'zhHans' },
@@ -72,13 +93,16 @@ let vuetify = new vt.Vuetify({
 console.log(vuetify,vt);
 const router = new VueRouter({
   routes : [
-    { path: '/default', component: require("./default.vue", 1,1) },
+    { path: '/calendar', component: require("./calendar.vue", 1,1) },
     { path: '/test', component: require("./test.vue", 1,1) },
     { path: '/test2', component: require("./test2.vue", 1,1) },
   ]
 });
 
 export default {
+  icons: {
+    iconfont: 'mdi', // 默认值 - 仅用于展示目的
+  },
   props : ['content'],
   vuetify,
   router,
@@ -87,11 +111,22 @@ export default {
     return {
       hideAllMenu : 0,
       subMenuId : '',
+      drawer: false,
+      group: null,
+      selectedItem: 0,
+      items: [
+        { text: '【日历】总览', to: '/calendar', icon: 'fa-calendar-alt' },
+        { text: '成员管理', to: '', icon: 'fa-user' },
+        { text: '客户管理', to: '', icon: 'fa-users' },
+        { text: '测试1', to: '/test', icon: 'mdi-history' },
+        { text: '测试2', to: '/test2', icon: 'mdi-check-circle' },
+      ],
+
     }
   },
   
   components: {
-    // 'content-comp': require('./default.vue', 1, 1),
+    'content-comp': require('./calendar.vue', 1, 1),
   },
   
   computed : {
@@ -107,6 +142,10 @@ export default {
     // },
   },
   
+  mounted() {
+    this.checkLoginState();
+  },
+  
   methods : {
     // openSubMenu(id) {
     //   let path = './'+ id +'/index.vue';
@@ -116,6 +155,12 @@ export default {
     //   this.subMenuId = compId;
     //   this.$forceUpdate();
     // },
+    checkLoginState() {
+      this.$globalBus.on('x-login', ()=>{
+        let returnPage = encodeURIComponent(location.href);
+        location.href = xv.url_prefix +'/ui/paas/login.html?returnPage='+ returnPage;
+      });
+    },
   }
 }
 </script>

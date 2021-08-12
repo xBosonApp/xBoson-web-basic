@@ -519,10 +519,17 @@
     el.classList.add('animate__fadeInDown');
     
     let close = el.querySelector(".close");
+    let _remove = ()=>el.remove();
     let doClose = ()=>{
+      let tid = setTimeout(_remove, 50);
+      
+      el.addEventListener('animationstart', ()=>{
+        clearTimeout(tid);
+        el.addEventListener('animationend', _remove);
+      });
+      
       el.classList.remove('animate__fadeInDown');
       el.classList.add('animate__fadeOutUp');
-      el.addEventListener('animationend', ()=>el.remove());
       // console.log("dialog close");
     };
     close.addEventListener('click', doClose);

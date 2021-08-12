@@ -121,7 +121,7 @@
     // if(zy.g.user.userid != node.pid) return ;
     window.tenantID = node._id;
     
-    zy.net.loadHTMLs("saas/om/tenant/view.html",v_content,function(){
+    zy.net.loadHTMLs("saas-app/om/tenant/view.html",v_content,function(){
       // main(node);
       // tenant_member_view(node._id);
     });
@@ -183,7 +183,7 @@
   function Tree_ToolBar_Event() {
     //添加租户
     v_index.find("#node-add").on("click", function () {
-      zy.net.loadHTMLs("saas/om/tenant/tenant_add_edit.html", v_modal, function () {
+      zy.net.loadHTMLs("saas-app/om/tenant/tenant_add_edit.html", v_modal, function () {
         tenant_add_edit(nodeClick, "i",function(data){
           ztreeObj.addNodes(null,data);
         });
@@ -191,7 +191,7 @@
     });
     //修改租户
     v_index.find("#node-edit").on("click", function () {
-      zy.net.loadHTMLs("saas/om/tenant/tenant_add_edit.html", v_modal, function () {
+      zy.net.loadHTMLs("saas-app/om/tenant/tenant_add_edit.html", v_modal, function () {
         tenant_add_edit(nodeClick, "u", function(data){
           $.extend(nodeClick,data);
           ztreeObj.updateNode(nodeClick);
