@@ -1,20 +1,22 @@
 <!-- Create By xBoson System -->
 <template>
   <div>
-    <h2>【日历】总览（月视图）</h2>
-    <FullCalendar :options="co2" />
+    <h2 class="pt-4">【日历】总览</h2>
+    <FullCalendar class="pt-4" :options="co2" />
     
-    <v-dialog
-      max-width="600px"
-      v-model='dialogInfo'
-      v-if='dialogInfo'
-    >
+    <v-dialog fullscreen v-model='dialogInfo' v-if='dialogInfo'>
       <v-card>
-        <v-toolbar
-          dark
-          color="primary"
-        >
-          <span class="text-h5">事件详情</span>
+        <v-toolbar dark color="primary">
+            <v-btn icon dark @click="dialogInfo = false">
+              <v-icon>fa-times</v-icon>
+            </v-btn>
+          <v-toolbar-title>事件详情</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-toolbar-items>
+            <v-btn icon dark @click="dialogInfo = false">
+              <v-icon>far fa-times-circle</v-icon>
+            </v-btn>
+          </v-toolbar-items>
         </v-toolbar>
         
         <v-card-text style='padding-top: 50px'>
@@ -22,7 +24,7 @@
             <v-row>
               <v-text-field
                   label="标题"
-                  required
+                  readonly
                   :value='dialogInfo.event.title'
               />
             </v-row>
@@ -30,22 +32,22 @@
             <v-row>
               <v-text-field
                   label="事件发起人员"
-                  required
+                  readonly
                   :value='dialogInfo.event.writeRole.join(", ")'
               />
             </v-row>
             <v-row>
               <v-text-field
                   label="事件参与人员"
-                  required
+                  readonly
                   :value='dialogInfo.event.readRole.join(", ")'
               />
             </v-row>
             
-            <v-row>
+            <v-row v-if='dialogInfo.event.location'>
               <v-text-field
                   label="地址"
-                  required
+                  readonly
                   :value='dialogInfo.event.location.address +" "+ dialogInfo.event.location.name'
               />
             </v-row>
@@ -53,24 +55,43 @@
             <v-row>
               <v-textarea
                   label="备注"
-                  required
+                  readonly
                   rows="1"
                   auto-grow
                   :value='dialogInfo.event.mark'
               />
+            </v-row>
+            
+            <v-row>
+              <div v-if='dialogInfo.event.fileInfos && dialogInfo.event.fileInfos.length' 
+                  class='text-decoration-underline'>附件</div>
+              <div v-else class="text--disabled">无附件</div>
+            </v-row>
+            
+            <v-row v-if='dialogInfo.event.fileInfos' style='margin-top: 25px;'
+                   v-for='f in dialogInfo.event.fileInfos'>
+              <v-card>
+                <v-img :src="f.url">
+                  <template v-slot:placeholder>
+                    <v-row
+                      class="fill-height ma-0"
+                      align="center"
+                      justify="center"
+                    >
+                      <v-progress-circular
+                        indeterminate
+                        color="grey lighten-5"
+                      ></v-progress-circular>
+                    </v-row>
+                  </template>
+                </v-img>
+              </v-card>
             </v-row>
           </v-container>
         </v-card-text>
         
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            color="blue darken-1"
-            text
-            @click="dialogInfo = null"
-          >
-            关闭
-          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -79,13 +100,13 @@
 </template>
 
 <script>
+require("./bootstrap.min.css");
 export default {
   components: {
     // FullCalendar // make the <FullCalendar> tag available
   },
   
   mounted() {
-    // setTimeout(this.buildEvents, 1000);
     this.readCalendar();
   },
   
@@ -95,6 +116,7 @@ export default {
     return {
       co2: {
         locale: 'chs',
+        themeSystem: 'bootstrap',
         initialView: 'dayGridMonth',
         displayEventEnd: true, //所有视图显示结束时间
         // weekNumbers: true, //显示周数
@@ -120,18 +142,6 @@ export default {
         },
 
         events: [
-          // {
-          //   id: '1005',
-          //   title: 'Conference',
-          //   start: '2021-08-11',
-          //   end: '2021-08-13'
-          // },
-          // {
-          //   id: '1012',
-          //   title: 'Click for 百度',
-          //   url: 'https://baidu.com/',
-          //   start: '2021-08-28'
-          // }
         ],
 
         eventClick(e) {
@@ -140,13 +150,6 @@ export default {
           vm.dialogInfo = vm.detail[e.event.id];
           console.log('dateClick info = ', e.event.id, vm.dialogInfo);
         },
-        
-        // dateClick: function(info) {
-        //   let event = this.detail[info.id];
-        //   console.log('dateClick info = ', info.id, event)
-        //   // change the day's background color just for fun
-        //   // info.dayEl.style.backgroundColor = 'red';
-        // },
       },
       
       detail : {},
@@ -188,9 +191,22 @@ export default {
             start : e.event.date_end,
           });
           this.$set(this.detail, e.event._id, e);
+          this.bindImage(e);
           // console.log(e.event.title, e.event)
         });
       }).catch(this.error);
+    },
+    
+    bindImage(e) {
+      let api = '/app/61a9ba99b94a4325ac747b4a9263df68/f1b4adf82ee54a1c8e18d31349988a4b/task/get_attachment';
+      let devflag = xv.debug && '&s=d';
+      
+      if (e.event.fileInfos) {
+        e.event.fileInfos.forEach(f=>{
+          let path = e.person_id +'/'+ f.filename;
+          f.url = xv.ctx_prefix + api +'?path='+ encodeURIComponent(path) + devflag;
+        });
+      }
     },
     
     error(err) {

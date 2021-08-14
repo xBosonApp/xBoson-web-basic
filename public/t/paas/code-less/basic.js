@@ -270,6 +270,11 @@ module.exports = {
         type: 1,
         canDynamic: true,
       },
+      'v-model': {
+        desc: '绑定返回数据到变量',
+        type: 1,
+        canDynamic: true,
+      },
       success: {
         desc: '接口成功返回 回调函数',
         type: 8,
@@ -279,6 +284,12 @@ module.exports = {
         desc: '接口失败返回 回调函数',
         type: 8,
         propsConfig: {type:'event'},
+      },
+      'update.sync': {
+        desc: '绑定更新方法到变量',
+        type: 1,
+        canDynamic: true,
+        propsConfig: {isExprAttr:true},
       },
     },
   },
@@ -348,12 +359,6 @@ module.exports = {
         type: 1,
         canDynamic: true,
       },
-      'update.sync': {
-        desc: '绑定更新方法到变量',
-        type: 1,
-        canDynamic: true,
-        propsConfig: {isExprAttr:true},
-      },
       'v-model': {
         desc: '绑定返回数据到变量',
         type: 1,
@@ -368,6 +373,12 @@ module.exports = {
         desc: '接口失败返回 回调函数',
         type: 8,
         propsConfig: {type:'event'},
+      },
+      'update.sync': {
+        desc: '绑定更新方法到变量',
+        type: 1,
+        canDynamic: true,
+        propsConfig: {isExprAttr:true},
       },
     },
   },

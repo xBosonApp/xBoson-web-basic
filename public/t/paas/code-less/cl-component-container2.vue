@@ -134,23 +134,29 @@ export default {
         this.nestedList.splice(index, 1);
       };
       
-      let key = tool.saveData({
+      let drapData = {
         node, index,
         release,
         list : this.nestedList, 
         el   : ev.target, 
         stop : false,
-      }, DPRE);
+        dropNode : ()=>{},
+      };
       
+      let key = tool.saveData(drapData, DPRE);
       ev.dataTransfer.effectAllowed = 'copyMove';
       ev.dataTransfer.setData(key, 'true');
+      ev.target.drapData = drapData;
       // console.debug('start', node.id, index, key);
     },
     
     onDragEnd(ev, node, index) {
+      this.dropNode(ev.target.drapData);
+      
       this.draging = false;
       ev.target.classList.remove('cl-draging');
       ev.target.style.border = '';
+      ev.target.style.opacity = '1';
       tool.clearData(DPRE);
       // console.debug('end', node.id, ev);
     },
@@ -223,6 +229,7 @@ export default {
         if (!d.node.isInstance) {
           ev.dataTransfer.dropEffect = 'copy';
         }
+        d.dropNode = this.dropNode;
         // console.debug('enter', node.id, node.isRoot, index, d.node.id);
       }
     },
@@ -231,13 +238,18 @@ export default {
       // console.debug("leave", node.id, index);
       let d = this.loadData(ev.dataTransfer);
       if (d) {
-        d.el.style.opacity = '0';
+        d.el.style.opacity = '0.1';
       }
     },
     
     onDrop(ev, node, index) {
-      let d = this.loadData(ev.dataTransfer);
-      // console.debug('drop', d.node.id);
+      //let d = this.loadData(ev.dataTransfer);
+      //dropNode(d);
+      ev.dataTransfer.dropEffect = 'copy';
+    },
+    
+    dropNode(drapData) {
+      const d = drapData;
       
       if (d && d.moveTo && d.moveTo.list) {
         if (!d.node.isInstance) {
@@ -249,11 +261,10 @@ export default {
           d.moveTo.list.splice(d.moveTo.index, 0, d.node);  
           // console.debug("drop inst", node.id)
         }
-        ev.dataTransfer.dropEffect = 'copy';
         this.fileChanged();
         tool.clearData(DPRE);
       } else {
-        console.warn("Cancel drop", node.id, index);
+        console.warn("Cancel drop");
       }
     },
     

@@ -3,6 +3,7 @@
 <script>
 // @success(data) - 接口返回成功的数据
 // @error(Error) - 借口返回异常的数据
+// v-model - 接口返回值
 export default {
   props: {
     // 机构id, 应用id, 模块id, api
@@ -54,6 +55,7 @@ export default {
       
       return this.$xapi(url, this.params).then(ret => {
         this.$emit('success', ret);
+        this.$emit('input', ret);
         return ret;
       }).catch(err => {
         this.error(err, url);
