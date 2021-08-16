@@ -81,6 +81,7 @@ export default {
       }
       
       this.doClear();
+      ev.target.drapData = null;
       tool.clearData(DPRE);
     },
     

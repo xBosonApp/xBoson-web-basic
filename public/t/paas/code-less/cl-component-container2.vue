@@ -157,6 +157,7 @@ export default {
       ev.target.classList.remove('cl-draging');
       ev.target.style.border = '';
       ev.target.style.opacity = '1';
+      ev.target.drapData = null;
       tool.clearData(DPRE);
       // console.debug('end', node.id, ev);
     },

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<style type="text/css">
+/*向右流动*/
+.pipeline_right_arrows {
+    width: calc(100% - 5px);
+    height: 4px;
+    border-top: 1px solid #1AB395;
+    border-bottom: 1px solid #1AB395;
+	border-right: 1px solid #1AB395;
+}
+ 
+/*向下流动*/
+.pipeline_down_arrows {
+    width: 4px;
+    height: calc(100% - 2px);
+    border-left: 1px solid #1AB395;
+    border-right: 1px solid #1AB395;
+	border-bottom: 1px solid #1AB395;
+	border-top: 1px solid #1AB395;
+}
+/*向左流动*/
+.pipeline_left_arrows {
+    width: calc(100% - 9px);
+    height: 4px;
+    border-top: 1px solid #1AB395;
+    border-bottom: 1px solid #1AB395;
+}
+ 
+/*向上流动*/
+.pipeline_up_arrows {
+    width: 4px;
+    height: calc(100% - 6px);
+    border-left: 1px solid #1AB395;
+    border-right: 1px solid #1AB395;
+	border-top: 1px solid #1AB395;
+}
+.pipecorner_arrows{
+	position: relative;
+	width: 100%;
+    height: 100%;
+}
+ 
+.pipecorner_arrows .position_left_bottom {
+    position: absolute;
+	top: 0px;
+    left: 0;
+}
+ 
+.pipecorner_arrows .position_bottom_right {
+    position: absolute;
+    bottom: 0;
+    left: 5px;
+}
+.pipecorner_arrows .position_top_left {
+    position: absolute;
+	top: 0px;
+    left: 5px;
+}
+ 
+.pipecorner_arrows .position_right_top {
+    position: absolute;
+    bottom: 5px;
+    left: 495px;
+}
+ 
+/*初始化下箭头*/
+.arrow_down_arrows {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: linear-gradient(#2196F3, #fdfdfd,#2196F3) repeat-y 0 0;
+ 
+    /*无限循环箭头动画效果*/
+    animation: down_arrow_square_default 3s infinite linear;
+    -moz-animation: down_arrow_square_default 3s infinite linear;
+    -webkit-animation: down_arrow_square_default 3s infinite linear;
+    -o-animation: down_arrow_square_default 3s infinite linear;
+}
+ 
+/*初始化右箭头*/
+.arrow_right_arrows{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: linear-gradient(to right, #2196F3,#fdfdfd,#2196F3) repeat-x 0 0;
+    
+    /*无限循环箭头动画效果*/
+    animation: right_arrow_square_default 3s infinite linear;
+    -moz-animation: right_arrow_square_default 3s infinite linear;
+    -webkit-animation: right_arrow_square_default 3s infinite linear;
+    -o-animation: right_arrow_square_default 3s infinite linear;
+}
+/*初始化上箭头*/
+.arrow_up_arrows {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: linear-gradient(#2196F3, #fdfdfd,#2196F3) repeat-y 0 0;
+ 
+    /*无限循环箭头动画效果*/
+    animation: up_arrow_square_default 3s infinite linear;
+    -moz-animation: up_arrow_square_default 3s infinite linear;
+    -webkit-animation: up_arrow_square_default 3s infinite linear;
+    -o-animation: up_arrow_square_default 3s infinite linear;
+}
+ 
+/*初始化左箭头*/
+.arrow_left_arrows{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: linear-gradient(to right, #2196F3,#fdfdfd,#2196F3) repeat-x 0 0;
+    
+    /*无限循环箭头动画效果*/
+    animation: left_arrow_square_default 3s infinite linear;
+    -moz-animation: left_arrow_square_default 3s infinite linear;
+    -webkit-animation: left_arrow_square_default 3s infinite linear;
+    -o-animation: left_arrow_square_default 3s infinite linear;
+}
+ 
+@keyframes down_arrow_square_default {
+    0% {
+        background: linear-gradient(#2196F3, #fdfdfd,#2196F3) repeat-y 0 0;
+    }
+ 
+    100% {
+        background: linear-gradient(#2196F3, #fdfdfd,#2196F3) repeat-y 0 500px;
+    }
+}
+ 
+@keyframes right_arrow_square_default {
+    0% {
+        background: linear-gradient(to right, #2196F3,#fdfdfd,#2196F3) repeat-x 0 0;
+    }
+    100% {
+        background: linear-gradient(to right, #2196F3,#fdfdfd,#2196F3) repeat-x 500px 0;
+    }
+}
+@keyframes up_arrow_square_default {
+    0% {
+        background: linear-gradient(#2196F3, #fdfdfd,#2196F3) repeat-y 0 0;
+    }
+ 
+    100% {
+        background: linear-gradient(#2196F3, #fdfdfd,#2196F3) repeat-y 0 -500px;
+    }
+}
+ 
+@keyframes left_arrow_square_default {
+    0% {
+        background: linear-gradient(to right, #2196F3,#fdfdfd,#2196F3) repeat-x 0 0;
+    }
+    100% {
+        background: linear-gradient(to right, #2196F3,#fdfdfd,#2196F3) repeat-x -500px 0;
+    }
+}
+ 
+</style>
+<div style="margin:100px 100px;width:500px;height:500px;">
+<div class="pipecorner_arrows">
+    <div class="pipeline_down_arrows position_left_bottom">
+        <div class="arrow_down_arrows"></div>
+    </div>
+    <div class="pipeline_right_arrows position_bottom_right">
+        <div class="arrow_right_arrows"></div>
+    </div>
+	<div class="pipeline_up_arrows position_right_top">
+        <div class="arrow_up_arrows"></div>
+    </div>
+	<div class="pipeline_left_arrows position_top_left">
+        <div class="arrow_left_arrows"></div>
+    </div>
+</div>
+ 
+</div>
+</html>

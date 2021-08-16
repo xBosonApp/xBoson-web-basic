@@ -1,27 +1,34 @@
 <template>
-<div>
-  <h1>列车自主运行系统</h1>
+<div class='main'>
+  <router-view></router-view>
 </div>
 </template>
 
 <script>
 const store = new Vuex.Store(require("./store.js"));
 
+const defaultPage = require("./p1.vue", 1,1);
+
+const pageList = ['p1', 'p2', 'p3', 'p4'];
+
 const router = new VueRouter({
-  routes : [
-    { path: '/calendar', component: require("./calendar.vue", 1,1) },
-    { path: '/test', component: require("./test.vue", 1,1) },
-    { path: '/test2', component: require("./test2.vue", 1,1) },
-  ]
+  routes : makerouter(pageList, [{ path: '/', component: defaultPage }]),
 });
 
+const globalComponent = [
+  'bk', 'xtitle', 'rowcol', 'rowrow', 'colcol', 'colrow', 'dialog-data'
+];
+
+globalComponent.forEach(n=>{
+  Vue.component(n, require("./"+ n +".vue", 1, 1));  
+});
+
+
 export default {
-  icons: {
-    iconfont: 'mdi', // 默认值 - 仅用于展示目的
-  },
-  props : ['content'],
+  props : [],
   router,
   store,
+  
   data () {
     return {
     }
@@ -51,40 +58,68 @@ export default {
     },
   }
 }
+
+function makerouter(arr, _routes) {
+  let routes = _routes || [];
+  arr.forEach(p=>{
+    routes.push({
+      path : '/'+ p,
+      component : require("./"+ p +".vue", 1,1),
+    });
+  });
+  return routes;
+}
 </script>
 
-<style>
-h3 { padding-top: 60px; }
-.el-container {
-  height: 100%;
+<style lang='less'>
+#dv-full-screen-container {
+  display: flex; flex-flow: column;
+  
+  .border {
+    border: 0!important;
+  }
+  
+  .el-row {
+    padding-top: 20px;
+  }
+  
+  .el-col .el-row:first-child {
+    padding-top: 0;
+  }
+  
+  h4, h1, h2, h3 {
+    color: #eee; padding: 0;
+  }
+  
+  .content {
+    height: calc(100% - 40px); 
+  }
+  
+  .border-box-content {
+    padding: 7px 20px;
+  }
 }
-.el-menu-item-group__title {
-  color: #85c126!important;
-  border-bottom: 1px dotted #c1a06f;
-}
-.pagetitle a {
-  color: #999;
-}
-p {
-  color: #909090;
-}
-.content-container {
-  padding-left: 150px; 
-}
-.main-content {
-  padding-right: 7%!important;
-}
-.header-title {
-  /*padding-left: 200px;*/ border-bottom: 1px solid #eee;
-}
-/*.echarts {*/
-/*  width: 100%;*/
-/*  height: 600px;*/
-/*}*/
 
-@media screen and (max-device-width: 660px) {
-  .content-container {
-    padding-left: 40px; 
+* {
+  color: #bbb;
+}
+div, span, a {
+  font-size: smaller;
+}
+.txt {
+  background: -webkit-linear-gradient(#c4c1c1, #17178a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /*text-shadow: 1px 1px 3px #999;*/
+}
+.main {
+  height: 100%; width: 100%; background-color: #2a2953;
+}
+table {
+  width: 100%; background-color: #242480;
+  
+  tr:nth-child(even) {
+    background-color: #07146d;
   }
 }
 </style>
