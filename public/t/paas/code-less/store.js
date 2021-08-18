@@ -1,12 +1,19 @@
 /* Create By xBoson System */
 const KEY_PREFIX = "code_less$store$";
 
+const DefaultPageSetting = {
+  index: {},
+  hasBorder: false,
+  resolution: { w:'auto', h:'auto' },
+};
+
 
 module.exports = new Vuex.Store({
   state: {
     showDropTip: true,
     message: '',
     currentAdjustmentComponentConfig: null,
+    currentAdjustmentComponentExt: null,
     nestedItemRef: null,
     project: null,
     editFile: null,
@@ -19,16 +26,20 @@ module.exports = new Vuex.Store({
     // isComponentLoaded : {},
     componentLoadState : {},
     // 默认页面配置
-    defaultPageSetting : loads('defaultPageSetting'),
+    defaultPageSetting : loads('defaultPageSetting') || DefaultPageSetting,
     
     // 方便调试的开关
     test : true,
-    testOpenFile : '1dVDqLKCQxK9ghnvi1U1pw',
+    testOpenFile : 'Y0bziUtESjGCHOu_hmtebA',
   },
   
   mutations: {
     closeDropTip(state) {
       state.showDropTip = false;
+    },
+    
+    setAdjustmentComponentExt(s, ext) {
+      s.currentAdjustmentComponentExt = ext;
     },
     
     setAdjustmentComponent(s, cfg) {
@@ -37,6 +48,7 @@ module.exports = new Vuex.Store({
     
     clearAdjComponent(s) {
       s.currentAdjustmentComponentConfig = null;
+      s.currentAdjustmentComponentExt = null;
     },
     
     setEditFile(s, f) {

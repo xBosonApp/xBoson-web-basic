@@ -318,7 +318,7 @@ function refFunc(id, name, params) {
 
 
 function uiFileExists(path) {
-  let full = xv.getFullPath(path);
+  let full = xv.getFullPath(path, __dirname);
   if (full.startsWith('http://') || full.startsWith('https://')) {
     // do nothing.
   }

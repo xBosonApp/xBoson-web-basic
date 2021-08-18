@@ -67,17 +67,8 @@
 
 <script>
 const clib = require("./component-library.js");
+const crole = require("./component-role.js");
 const tool = require("./tool.js");
-
-const compMap = {
-  1:'a-input',
-  2:'a-input-number',
-  3:'a-select',
-  4:'a-input',
-  5:'a-input',
-  6:'cl-select-fa-icon',
-  9:'x-null',
-};
 
 export default {
   props: ['config'],
@@ -103,7 +94,7 @@ export default {
         if (!p.component) throw new Error("component is null");
         return p.component;
       }
-      return compMap[p.type];
+      return crole.propSettingComponent(p.type);
     },
     
     getGasketName(p, name) {
@@ -124,45 +115,10 @@ export default {
       return this.componentCfg.props;
     },
     
-    _getSelectOpt(select) {
-      let options = [];
-      for (let label in select) {
-        options.push({
-          label,
-          value : select[label],
-        });
-      }
-      return options;
-    },
-    
     // 返回的所有属性绑定到创建的组件上, 来自组件定义数据
     getOption(name) {
       let p = this.componentCfg.props[name];
-      // 1:字符串, 2:整数, 3:选项select属性, 4:字符串,并且带有select选项, 
-      // 5:来自变量, 6:图标选择, 7:自定义插件, 8:事件专用, 9:隐藏配置
-      switch (p.type) {
-        case 1:
-          return { maxLength: p.max };
-        case 2:
-          return { min: p.min, max: p.max, };
-        case 3:
-          let options = this._getSelectOpt(p.select);
-          return { 'default-value': p.def, options, style: 'width: 100%', 'allowClear': true };
-        case 4:
-          return {};
-        case 5:
-          return {};
-        case 6:
-          return { style: 'width: 100%' };
-        case 7:
-          return p.props || {};
-        case 8:
-          return { isEvent : true };
-        case 9:
-          return { hide: true };
-        default:
-          throw new Error("无效的值类型"+ p.type);
-      }
+      return crole.propSettingComponentOptions(p);
     },
     
     removeComponent() {

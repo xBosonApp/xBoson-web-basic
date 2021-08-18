@@ -35,6 +35,8 @@
       :containerTagInfo='e.isContainer && e'
       :isRoot='false'
       :disabled.prop='false'
+      :codelessDesignRuntime='true'
+      @extendsData='saveExtendsData(e.id, $event)'
       
       :draggable.prop="true"
       @dragstart.stop='onDragStart($event, e, idx)'
@@ -58,7 +60,7 @@
       @mouseover.self="setHover(e.id, true, e.isContainer)"
       @mouseout.self="setHover(e.id, false, e.isContainer)"
     >
-      <span v-if='!(e.isContainer || e.removeTxt)' v-frag>
+      <span v-if='!(e.removeTxt)' v-frag>
         {{ e.txt }}
       </span>
     </component>
@@ -87,6 +89,7 @@ export default {
       rootNode : { id:"root", isContainer:true, isRoot:this.isRoot },
       bindclass : {},
       draging : false,
+      extendsData : {},
     };
   },
   
@@ -101,10 +104,43 @@ export default {
   },
     
   errorCaptured(err, vm, info) {
-    // console.warn(info, err, vm, vm.$vnode.context );
-    xv.popError("组件错误: "+ vm.$vnode.data.key, err);
-    vm.$vnode.context.tag.name = 'div';
+    let pvm = vm;
+    let key = nextKey();
+    let findIndex = null;
+    
+    while (key) {
+      this.nestedList.forEach((n, i)=>{
+        if (n.id == key) {
+          findIndex = i;
+        }
+      });
+      if (findIndex !== null) {
+        // 删除错误的组件 (可能是子节点抛出的异常)
+        // console.log("Remove", findIndex);
+        this.nestedList.splice(findIndex, 1);
+        this.$store.commit('clearAdjComponent');
+        break;
+      }
+      key = nextKey(true);
+    };
+    
+    if (findIndex >= 0) {
+      xv.popError("错误的组件被删除: "+ key, err);
+    } else {
+      xv.popError("组件错误", err);
+    }
     return false;
+    
+    function nextKey(getparent) {
+      if (getparent) pvm = pvm.$parent;
+      if (!pvm) return;
+      
+      while (!pvm.$vnode.key) {
+        pvm = pvm.$parent;
+        if (!pvm) return;
+      }
+      return pvm.$vnode.key;
+    }
   },
   
   computed: {
@@ -354,6 +390,11 @@ export default {
       let cfg = list[index];
       this.$store.commit('setAdjustmentComponent', cfg);
       this.$store.commit('setNestedItemRef', { list, index });
+      
+      let ext = this.extendsData[cfg.id];
+      if (ext) {
+        this.$store.commit('setAdjustmentComponentExt', ext);  
+      }
     },
     
     // 必须调用该方法, 否则直接用 component 属性会产生数组错位
@@ -402,6 +443,13 @@ export default {
     save_requires(clid) {
       clib.saveLibRequires(clid, this.rootConfig.requires);
     },
+    
+    // 组件通过发出 extendsData 事件来发送扩展数据, 
+    // 只有定制属性编辑器可以读取这些扩展数据,
+    // 通过 this.$store.state.currentAdjustmentComponentExt
+    saveExtendsData(id, data) {
+      this.extendsData[id] = data;
+    },
   },
 }
 </script>
@@ -414,7 +462,7 @@ export default {
   /*border: 1px dashed green;*/ padding: 20px 8px; min-height: 200px;
 }
 .cl-draggable-item {
-  border: 1px dashed #eee; min-height: 5px; cursor: grab;
+  border: 1px dashed #eee; min-height: 5px; cursor: grab; padding: 20px 2px;
 }
 .cl-draggable-item-active {
   border: 1px dashed #3e33e9 !important;

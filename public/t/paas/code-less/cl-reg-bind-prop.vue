@@ -57,11 +57,11 @@
         <a-switch checked-children="表达式方式" un-checked-children="总是字符串" v-model='form.isExprAttr'/>
       </a-form-model-item>
       
-      <a-form-model-item label="自定义插件" prop="component" v-if='form.type == 7'>
+      <a-form-model-item label="自定义插件" prop="component" v-if='showDefineComponent'>
         <a-input v-model="form.component" placeholder='VUE 组件, 用于属性配置'/>
       </a-form-model-item>
       
-      <a-form-model-item label="自定义插件参数" prop="component" v-if='form.type == 7'>
+      <a-form-model-item label="自定义插件参数" prop="component" v-if='showDefineComponent'>
         <cl-array-input title='添加选项' 
           v-model='form.cprops'
           keyPlaceholder='有效的变量名格式: 数字/字母/字符 _$'
@@ -73,7 +73,7 @@
         />
       </a-form-model-item>
       
-      <a-form-model-item label='多选项列表' v-if='form.type == 3' prop='select'>
+      <a-form-model-item label='多选项列表' v-if='showSelect' prop='select'>
         <cl-array-input title='添加选项' 
           v-model='form.select'
           keyPlaceholder='用于显示, 中文字符'
@@ -97,6 +97,7 @@
 
 <script>
 const tool = require("./tool.js");
+const crole = require("./component-role.js");
 
 export default {
   props: ['next', 'data'],
@@ -138,28 +139,23 @@ export default {
         select: { required: true, validator: checkSelect }
       },
       
-      pctypeList: [
-        { value:'attribute' , label:'普通属性' },
-        { value:'event'     , label:'绑定事件' },
-        { value:'design'    , label:'设计时属性' },
-      ],
-      
-      typeList : [
-        { value: 1, label:'字符串' },
-        { value: 2, label:'数字' },
-        { value: 3, label:'选项列表' },
-        // { value: 4, label:'字符串/选项列表' },
-        // { value: 5, label:'废弃' },
-        { value: 6, label:'图标选择 (fontawesome)' },
-        { value: 7, label:'自定义插件' },
-        { value: 8, label:'事件' },
-        { value: 9, label:'隐藏配置' },
-      ],
+      pctypeList: crole.propTypeSelectOptions(),
+      typeList : crole.propSelectOptions(),
       
       labelCol: { span: 4 },
       wrapperCol: { span: 14 },
       buttonCol: { span: 14, offset: 4 },
     };
+  },
+  
+  computed: {
+    showSelect() {
+      return this.form.type == 3 || this.form.type == 10;
+    },
+    
+    showDefineComponent() {
+      return this.form.type == 7;
+    },
   },
   
   methods: {

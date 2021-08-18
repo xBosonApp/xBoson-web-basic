@@ -211,7 +211,7 @@ export default {
       if (!ps) return size;
       
       let rel = ps.resolution;
-      if (rel.h == 'auto' || rel.w == 'auto') return size;
+      if (rel == null || rel.h == 'auto' || rel.w == 'auto') return size;
       
       size.w = rel.w +'px';
       size.h = rel.h +'px';
