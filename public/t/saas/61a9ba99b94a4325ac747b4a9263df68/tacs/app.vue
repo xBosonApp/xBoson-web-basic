@@ -116,10 +116,10 @@ div, span, a {
   height: 100%; width: 100%; background-color: #2a2953;
 }
 table {
-  width: 100%; background-color: #242480;
+  width: 100%; background-color: #07146d;
   
   tr:nth-child(even) {
-    background-color: #07146d;
+    background-color: #0c0c46;
   }
 }
 </style>

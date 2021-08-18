@@ -6,31 +6,51 @@
     <xtitle class='t'/>
     <div class='f' ref='th'></div>
     
-    <div style='width: 300px; height: 90%; margin-left: 10px' class='t'>
-      <dialog-data title='停车偏差'>
-        <dv-active-ring-chart :config="c1" style="width:100%;height:270px; background-color: rgba(14,30,74,0.7)" />
+    <div style='width: 300px; height: 90%; margin-left: 10px;' class='t'>
+      <dialog-data title='报警统计'>
+        <div style='text-align: right; padding-right: 30px'><b ref='dom1'></b></div>
+        <x>动车时方式方向手柄</x>
+        <x>列车丢失位置</x>
+        <x>驾驶模式</x>
+        <x>列车超速</x>
+        <x>列车在站台</x>
+        <x>信号与车辆</x>
+        <x>受电弓落下</x>
+        <x>集电靴落下</x>
+        <x>集电靴抬起</x>
+        <x>列车出现倒溜</x>
+        <x>列车冲过站台:</x>
+        <x>WSU人工唤醒</x>
+        <x>司机确认站台</x>
+        <x>连续丢失两个定位应答器</x>
+        <x>车辆蓄电池组欠压状态</x>
+        <x>车辆空气压缩机故障</x>
+        <x>车辆牵引控制单元被隔离或锁闭</x>
+        <x>车门控制单元被隔离</x>
+        <x>车门控制单元探测到障碍物</x>
+        <x>乘客紧急拉手被拉下</x>
+        <x>车辆烟火报警系统故障</x>
+        <x>高压火灾报警</x>
+        <x>客室火灾烟雾报警</x>
+        <x>车辆视频安防系统清客完成</x>
+        <x>ATP唤醒自检过程中WSU通信超时</x>
+        <x>OFF模式下列车非静止</x>
       </dialog-data>
     </div>
     
     <div style='width: 300px; height: 90%; position: absolute; right: 10px; top: 100px' class='t'>
       <dialog-data title='车辆状态'>
-        <table>
-          <tr>
-            <td>总体</td> <td>正常</td>
-          </tr>
-          <tr>
-            <td>电压</td> <td>正常</td>
-          </tr>
-          <tr>
-            <td>刹车</td> <td>正常</td>
-          </tr>
-          <tr>
-            <td>气压</td> <td>正常</td>
-          </tr>
-          <tr>
-            <td>引擎</td> <td>正常</td>
+        <table ref='dom2'>
+          <tr v-for='i in tbdata'>
+            <td class='txt'>{{ i.name }}</td> 
+            <td class='txt'>{{ i.value }}</td>
           </tr>
         </table>
+      </dialog-data>
+      
+      <dialog-data title='停车偏差'>
+        <dv-active-ring-chart :config="c1" 
+          style="width:100%;height:270px; background-color: rgba(14,30,74,0.7)" />
       </dialog-data>
       
       <!--<dialog-data>-->
@@ -47,6 +67,15 @@ export default {
   data() {
     return {
       stop: false,
+      
+      tbdata: [
+        {name:'总体', value:'正常'},
+        {name:'电压', value:'正常'},
+        {name:'制动', value:'正常'},
+        {name:'气压', value:'正常'},
+        {name:'引擎', value:'正常'},
+      ],
+      
       c1: { 
         data: [
           {
@@ -72,6 +101,10 @@ export default {
         ]
       }
     };
+  },
+  
+  components: {
+    x: require('./process.vue', 1,1),
   },
   
   mounted() {
@@ -104,17 +137,10 @@ export default {
 			camera.position.set( -43, 16, 18);
 			camera.lookAt( 0, 0, 0 );
 			
-			const dracoLoader = new THREE.DRACOLoader()
-      dracoLoader.setDecoderPath(xv.url_prefix +'/web/cdn/three.js/0.131.3/draco/');
-			
-			const loader = new THREE.GLTFLoader().setPath(xv.url_prefix + __dirname);
-			loader.setDRACOLoader(dracoLoader);
-			// 模型单位 m, 场景单位 cm
-			loader.load( '/model/train2.glb', ( gltf )=>{
-        gltf.scene.translateX(-15);
-        gltf.scene.translateY(1.9);
-			  scene.add( gltf.scene );
-			});
+		  tool.loadModel(scene, '/model/train2.glb', model=>{
+		    model.scene.translateX(-15);
+        model.scene.translateY(1.9);
+		  });
 			
 			let renderer = new THREE.WebGLRenderer( { antialias: true } );
 			renderer.setPixelRatio( window.devicePixelRatio );
@@ -134,13 +160,17 @@ export default {
 			let light1;
       setlight(scene);
       
+      let line1 = tool.addLine(new THREE.Vector3( -5, 3, 0 ), tool.domToWorld(this.$refs.dom1, camera), scene);
+      let line2 = tool.addLine(new THREE.Vector3( 12, 3, 0 ), tool.domToWorld(this.$refs.dom2, camera), scene);
+      
 			window.addEventListener( 'resize', onWindowResize );
 			this.$refs.th.appendChild( renderer.domElement );
 			animate();
 			
 			function setlight(scene) {
-  			light1 = new THREE.DirectionalLight( 0xffffff );
+  			light1 = new THREE.RectAreaLight( 0xffffff, 10, 20, 20 );
   			light1.position.set( 1, 1, 1 );
+  			light1.lookAt( 0, 0, 0 );
   			scene.add( light1 );
   			
   			for (let x=-20; x<30; x+=8) {
@@ -155,14 +185,21 @@ export default {
       
       function animate(t) {
         if (vm.stop) return;
-        light1.position.set(t/10 % 300, 1, 1);
+        let l1x = t/10 % 300-200;
+        light1.position.set(l1x, 5, 5);
+        light1.lookAt( l1x, 5, 5 );
+        
         floor1.position.set(t/30 % 100+50, 1, 1);
         floor2.position.set(t/30 % 100-50, 1, 1);
         floor3.position.set(t/30 % 100-100, 1, 1);
+        
   			controls.update();
+        line1.moveEndTo(tool.domToWorld(vm.$refs.dom1, camera));
+        line2.moveEndTo(tool.domToWorld(vm.$refs.dom2, camera));
+        
   			render();
   			requestAnimationFrame(animate);
-  		// 	console.log(camera.position)
+  		  // console.log(camera.position)
   		}
   		
       function onWindowResize() {

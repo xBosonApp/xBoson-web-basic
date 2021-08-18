@@ -19,6 +19,7 @@ export default {
 }
 .fr {
   border: 1px solid #131378; min-height: 100px; margin: 10px 5px;
+  border-radius: 3px;
 }
 .ct {
   padding: 4px;
