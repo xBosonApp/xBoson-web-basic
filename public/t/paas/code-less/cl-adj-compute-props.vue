@@ -25,7 +25,7 @@ export default {
     initItem(opt) {
       opt.type = 'String';
       opt.scode = '//\n// Function setter(v)\n//  v - 设置的值\n//\n';
-      opt.gcode = '//\n// Function getter()\n//\n return 返回属性值//\nreturn;';
+      opt.gcode = '//\n// Function getter()\n// return 返回属性值\n//\nreturn;';
     },
     
     createConfigData(opt, id) {

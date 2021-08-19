@@ -128,6 +128,7 @@ export default {
   
   mounted() {
     if (this.data.bind) {
+      // 新建组件没有该属性
       this.prop = this.data.bind.props || {};
       this.bname = this.data.bind.txt;
       // console.log(this.data.bind)

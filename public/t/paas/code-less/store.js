@@ -29,7 +29,7 @@ module.exports = new Vuex.Store({
     componentLoadState : {},
     // 默认页面配置
     defaultPageSetting : loads('defaultPageSetting') || DefaultPageSetting,
-    
+    previouslySelectedDomElement : null,
     // 方便调试的开关
     test : true,
     testOpenFile : 'Y0bziUtESjGCHOu_hmtebA',
@@ -48,9 +48,34 @@ module.exports = new Vuex.Store({
       s.currentAdjustmentComponentConfig = cfg;
     },
     
+    setAdjustmentComponentView(s, el) {
+      let old = s.previouslySelectedDomElement;
+      if (old) {
+        old.revert();
+      }
+      
+      s.previouslySelectedDomElement = { 
+        el, 
+        border: el.style.border, 
+        bgc: el.style.backgroundColor,
+        
+        revert() {
+          this.el.style.border = this.border;
+          this.el.style.backgroundColor = this.bgc;
+        },
+      };
+      
+      el.style.border = '1px dotted #dccfcc';
+      el.style.backgroundColor = '#f9f9f9';
+    },
+    
     clearAdjComponent(s) {
       s.currentAdjustmentComponentConfig = null;
       s.currentAdjustmentComponentExt = null;
+      if (s.previouslySelectedDomElement) {
+        s.previouslySelectedDomElement.revert();
+        s.previouslySelectedDomElement = null;
+      }
     },
     
     setEditFile(s, f) {

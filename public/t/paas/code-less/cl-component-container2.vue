@@ -53,12 +53,14 @@
       @dragleave.native.self='onDragLeave($event, e, idx)'
       @drop.native.self='onDrop($event, e, idx)'
       
-      @click='setAdjRef(idx)'
-      @click.native.self='setAdjRef(idx)'
+      @click='setAdjRef(idx, null, $event)'
+      @click.native.self='setAdjRef(idx, null, $event)'
       @mouseover.native.self="setHover(e.id, true, e.isContainer)"
       @mouseout.native.self="setHover(e.id, false, e.isContainer)"
       @mouseover.self="setHover(e.id, true, e.isContainer)"
       @mouseout.self="setHover(e.id, false, e.isContainer)"
+      
+      @mouseleave.self="revertFreezeComponent(e)"
     >
       <span v-if='!(e.removeTxt)' v-frag>
         {{ e.txt }}
@@ -90,6 +92,7 @@ export default {
       bindclass : {},
       draging : false,
       extendsData : {},
+      errorMap: {},
     };
   },
   
@@ -99,11 +102,13 @@ export default {
       this.initContainerInstanceTag();  
     });
   },
-  
-  mounted() {
-  },
     
+  //
+  // 使用智能配置的文件再二次打开会抛出异常, 原因未知.
+  // 经处理后可以恢复到可编辑状态.
+  //
   errorCaptured(err, vm, info) {
+    const thiz = this;
     let pvm = vm;
     let key = nextKey();
     let findIndex = null;
@@ -115,9 +120,10 @@ export default {
         }
       });
       if (findIndex !== null) {
-        // 删除错误的组件 (可能是子节点抛出的异常)
-        // console.log("Remove", findIndex);
-        this.nestedList.splice(findIndex, 1);
+        // 冻结错误组件
+        let c = this.nestedList[findIndex];
+        c.tempFreeze = 'div';
+        addError(c.id);
         this.$store.commit('clearAdjComponent');
         break;
       }
@@ -125,21 +131,29 @@ export default {
     };
     
     if (findIndex >= 0) {
-      xv.popError("错误的组件被删除: "+ key, err);
+      // xv.popError("错误的组件被冻结: "+ key, err);
+      console.warn("错误的组件被临时冻结: "+ key, err);
     } else {
       xv.popError("组件错误", err);
     }
     return false;
     
+    function addError(id) {
+      if (thiz.errorMap[id] >= 0) {
+        thiz.errorMap[id]++;
+      } else {
+        thiz.errorMap[id] = 1;
+      }
+    }
+    
     function nextKey(getparent) {
       if (getparent) pvm = pvm.$parent;
-      if (!pvm) return;
       
-      while (!pvm.$vnode.key) {
+      for (;;) {
+        if ((!pvm) || (!pvm.$vnode)) return;
+        if (pvm.$vnode.key) return pvm.$vnode.key;
         pvm = pvm.$parent;
-        if (!pvm) return;
       }
-      return pvm.$vnode.key;
     }
   },
   
@@ -161,6 +175,15 @@ export default {
   },
   
   methods: {
+    revertFreezeComponent(e) {
+      // 当组件错误超过 3 次后不再解冻
+      if (this.errorMap[e.id] > 3) {
+        xv.popError("错误的组件被冻结: "+ e.id);
+        return;
+      }
+      e.tempFreeze = undefined;
+    },
+    
     onDragStart(ev, node, index) {
       this.draging = true;
       ev.target.classList.add('cl-draging');
@@ -385,7 +408,7 @@ export default {
       this.$store.commit('setEditFileChanged', true);
     },
     
-    setAdjRef(index, _list) {
+    setAdjRef(index, _list, _event) {
       let list = _list || this.nestedList;
       let cfg = list[index];
       this.$store.commit('setAdjustmentComponent', cfg);
@@ -394,6 +417,10 @@ export default {
       let ext = this.extendsData[cfg.id];
       if (ext) {
         this.$store.commit('setAdjustmentComponentExt', ext);  
+      }
+      
+      if (_event && _event.target) {
+        this.$store.commit('setAdjustmentComponentView', _event.target);
       }
     },
     
@@ -409,7 +436,7 @@ export default {
     },
     
     getComponentRealName(i) {
-      return i.helpTag || i.component;
+      return i.tempFreeze || i.helpTag || i.component;
     },
     
     loadDepsComponentLib() {
@@ -465,7 +492,7 @@ export default {
   border: 1px dashed #eee; min-height: 5px; cursor: grab; padding: 20px 2px;
 }
 .cl-draggable-item-active {
-  border: 1px dashed #3e33e9 !important;
+  border: 1px dashed #3e33e9 !important; cursor: pointer;
 }
 .cl-draging {
   cursor: grabbing; border: 3px dotted green !important; opacity: 0.5;
