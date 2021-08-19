@@ -21,6 +21,10 @@
     <a-tooltip title='新建属性'>
       <a-button icon='plus' @click='onCreate'/>
     </a-tooltip>
+    
+    <a-button @click='doCopy' icon='copy' />
+    <a-button @click='openPaste' icon='highlight' :disabled='cannotPaste' />
+    
     <a-button icon='home' @click='$emit("change", "default")'/>
     <a-button icon='rollback' @click='$emit("previous")'/>
   </div>
@@ -92,6 +96,25 @@
       
     </a-form-model>
   </div>
+  
+  <a-modal
+    title="粘贴选项"
+    :visible="propsClipboard != null"
+    :confirm-loading="confirmPropsClipboardLoading"
+    @ok="doPaste"
+    @cancel="cancelClipboard"
+  >
+    <h3>选择要粘贴的项目</h3>
+    <div v-for='(p, n) in propsClipboard'>
+      <a-checkbox :name='n' v-model='propsClipboardSelect[n]' class='pp'>
+        <b v-if='prop[n]' style='color: red'>覆盖</b>
+        <b v-else style='color: blue'>新建</b>
+        <span>{{ n }}</span>
+        <b> - </b>
+        <span>{{ p.desc }}</span>
+      </a-checkbox>
+    </div>
+  </a-modal>
 </div>
 </template>
 
@@ -105,7 +128,7 @@ export default {
   
   mounted() {
     if (this.data.bind) {
-      this.prop = this.data.bind.props;
+      this.prop = this.data.bind.props || {};
       this.bname = this.data.bind.txt;
       // console.log(this.data.bind)
     } else {
@@ -129,6 +152,9 @@ export default {
       mode : null,
       
       form: this.defaultForm(),
+      propsClipboard: null,
+      propsClipboardSelect: null,
+      confirmPropsClipboardLoading: false,
       
       rules: {
         name: { required: true, message: '属性名字不能为空', trigger: 'blur' },
@@ -155,6 +181,12 @@ export default {
     
     showDefineComponent() {
       return this.form.type == 7;
+    },
+    
+    cannotPaste() {
+      return (this.$store.state.propsClipboard == null) 
+        || (this.$store.state.propsClipboard == this.prop)
+        || (this.prop == null);
     },
   },
   
@@ -186,12 +218,16 @@ export default {
     onOpen(p, n) {
       this.mode = 'edit';
       this.showEditForm = true;
+      this.copyToForm(p, n);
+    },
+    
+    copyToForm(p, name) {
       this.form = {
-        name      : n,
+        name,
         desc      : p.desc,
         type      : p.type,
         select    : p.select,
-        def       : p.def,
+        def       : p.def || '',
         canDynamic: p.canDynamic,
         component : p.component,
         cprops    : p.props,
@@ -241,17 +277,22 @@ export default {
         if (!valid) {
           return false;
         }
-        try {
-          tool.api('register', 'set_c_prop', this.getApiParm(), (err, ret)=>{
-            if (err) return this.next(err);
-            antd.message.success("属性已设置");
-            this.showEditForm = false;
-            this.$emit('clear');
-            this.getProps();
-          });
-        } catch(e) {
-          console.error(e)
-        }
+        
+        this.callEditApi().catch(this.next).then(this.getProps);
+      });
+    },
+    
+    callEditApi() {
+      return new Promise((ok, fail)=>{
+        let p = this.getApiParm();
+        tool.api('register', 'set_c_prop', p, (err, ret)=>{
+          if (err) return fail(err);
+          
+          antd.message.success(p.name +" 属性已设置");
+          this.showEditForm = false;
+          this.$emit('clear');
+          ok(ret);
+        });
       });
     },
     
@@ -273,6 +314,36 @@ export default {
       });
       return parm;
     },
+    
+    doCopy() {
+      this.$store.commit('setComponentPropsClipboard', this.prop);
+      this.$message.info("已复制");
+    },
+    
+    openPaste() {
+      this.confirmPropsClipboardLoading = false;
+      this.propsClipboard = this.$store.state.propsClipboard;
+      this.propsClipboardSelect = {};
+    },
+    
+    cancelClipboard() {
+      this.confirmPropsClipboardLoading = false;
+      this.propsClipboard = this.propsClipboardSelect = null;
+    },
+    
+    async doPaste() {
+      this.confirmPropsClipboardLoading = true;
+      
+      for (let n in this.propsClipboardSelect) {
+        if (!this.propsClipboardSelect[n]) continue;
+        let p = this.propsClipboard[n];
+        this.copyToForm(p, n);
+        await this.callEditApi();
+      }
+      
+      this.getProps();
+      this.cancelClipboard();
+    },
   },
 }
 </script>
@@ -281,4 +352,5 @@ export default {
 .m { grid-template-columns: 1fr 2fr; }
 .p { grid-template-columns: 1fr auto; }
 .content { min-height: 300px; }
+.pp span { min-width: 100px; display: inline-block; };
 </style>

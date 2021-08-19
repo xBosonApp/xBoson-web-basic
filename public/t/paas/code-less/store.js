@@ -21,6 +21,8 @@ module.exports = new Vuex.Store({
     cssClipboard: null, 
     // 存储 json 字符串
     menuClipboard: null,
+    // 单个组件的全部属性
+    propsClipboard: null,
     bindContextStyle : {},
     // { id: boolean }
     // isComponentLoaded : {},
@@ -100,6 +102,10 @@ module.exports = new Vuex.Store({
     
     setMenuClipboard(s, data) {
       s.menuClipboard = data ? JSON.stringify(data) : null;
+    },
+    
+    setComponentPropsClipboard(s, data) {
+      s.propsClipboard = data;
     },
     
     setBindContextStyle(s, styledom) {
