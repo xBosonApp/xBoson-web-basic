@@ -107,7 +107,7 @@ div, span, a {
   font-size: smaller;
 }
 .txt {
-  background: -webkit-linear-gradient(#c4c1c1, #17178a);
+  background: -webkit-linear-gradient(#fff,#b5a5ff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   /*text-shadow: 1px 1px 3px #999;*/

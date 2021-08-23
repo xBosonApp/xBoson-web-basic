@@ -16,7 +16,7 @@
       </div>
     </div>
     
-    <h1 class='ti'><b class='txt' style='font-size: 2.5em;'>TACS数据中心【地铁6号线】</b></h1>
+    <h1 class='ti'><b class='txt ti_b'>TACS数据中心【6号线】</b></h1>
     
     <div class='menu-item ri'>
       <div>
@@ -52,6 +52,10 @@ export default {
   text-align: center;
   border-bottom: 1px solid #fff;
   border-image-source: linear-gradient(to left, #743ad5, #d53a9d);
+}
+.ti_b {
+  font-size: 2.5em;
+  text-shadow: 0 0 0px #fff, 0 0 8px #882eff, 0 0 8px #985bff, 0 0 20px #ff00de, 0 0 20px #ff00de;
 }
 .lf {
   text-align: left; margin-left: 10px;
