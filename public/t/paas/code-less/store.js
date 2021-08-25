@@ -31,7 +31,7 @@ module.exports = new Vuex.Store({
     defaultPageSetting : loads('defaultPageSetting') || DefaultPageSetting,
     previouslySelectedDomElement : null,
     // 方便调试的开关
-    test : true,
+    test : false,
     testOpenFile : 'Y0bziUtESjGCHOu_hmtebA',
   },
   

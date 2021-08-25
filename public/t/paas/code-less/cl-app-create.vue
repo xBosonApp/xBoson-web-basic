@@ -72,7 +72,10 @@
       </div>
       
       <span></span>
-      <div class='note'>修改应用名称不会改变物理目录</div>
+      <div class='note'>
+        <div>修改应用名称不会改变物理目录</div>
+        <div>特殊页面参数: '_dnsmm' : 不显示主菜单, '_dncl' : 不检查登陆状态(未登录不跳转)</div>
+      </div>
     </div>
     
     <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
