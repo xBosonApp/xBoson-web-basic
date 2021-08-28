@@ -1,6 +1,6 @@
 <!-- Create By xBoson System -->
 <!-- http://xboson.net -->
-<!-- Wed Aug 25 2021 14:38:37 GMT+0800 (CST) -->
+<!-- Sat Aug 28 2021 11:58:07 GMT+0800 (CST) -->
 <template>
 <component :is='rootComponent' class='mx'>
 <div class='mx animate__animated animate__fadeInDown' v-if='showLogin'>

@@ -1,5 +1,5 @@
 <!-- 这是 xboson 低代码平台自动生成的文件, 勿手动编辑 -->
-<!-- Automatic(0.1) generated at Wed Aug 25 2021 20:49:15 GMT+0800 (CST) -->
+<!-- Automatic(0.1) generated at Thu Aug 26 2021 11:00:17 GMT+0800 (CST) -->
 <!-- http://xboson.net -->
 
 <template>
@@ -72,6 +72,8 @@ computed:{
 },
 watch:{
 "v$37": function(nv, ov){this.v$37.pid=this.v$43.pid /* URL参数 */
+this.v$37.type=this.v$43.type /* 表单类型 */
+this.v$37.tk=this.v$43.tk /* token */
 },
 },
 data(){
