@@ -65,12 +65,24 @@
       if (window.zy) {
         // alert('vue app 不支持在 zy 环境下开发, 即将跳转');
         let path = location.href.substr(location.href.lastIndexOf('#') +1);
+        path = fix_saas_path(path);
         location.href = zy.g.host.ui +'/'+( zy.debug?'t':'ui' )+'/'+ path;
       } else {
         // 该脚本最先执行, 所有的程序库都没有加载, 必须等待
         window.addEventListener('load', pre_init(ok, fail), {once:true});
       }
     });
+    
+    function fix_saas_path(path) {
+      let saasi = location.pathname.indexOf('/saas/');
+      if (saasi > 0) {
+        let endi = location.pathname.indexOf('/', saasi + 6);
+        if (endi > saasi) {
+          return location.pathname.substring(saasi+1, endi+1) + path;
+        }
+      }
+      return path;
+    }
   }
   
   
@@ -289,6 +301,7 @@
       '.css'  : styleLoader,
       '.less' : styleLoader,
       '.sass' : styleLoader,
+      '.scss' : styleLoader,
       '.styl' : styleLoader,
       '.html' : htmlLoader,
       '.htm'  : htmlLoader,

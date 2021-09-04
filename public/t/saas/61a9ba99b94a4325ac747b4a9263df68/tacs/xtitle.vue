@@ -29,7 +29,9 @@
       </div>
       
       <div style="padding-top:10px;">
-        <router-link to="/p4"><div class="button ice">系统优化</div></router-link>
+        <!--<router-link to="/p4"><div class="button ice button-lg">系统优化</div></router-link>-->
+        <button class="button1 button-danger button-lg">系统优化</button>
+        
         <!--<dv-border-box-12 class='i'>-->
         <!--  <router-link to="/p4" class='txt'>系统优化</router-link>-->
         <!--</dv-border-box-12>-->
@@ -225,6 +227,58 @@ export default {
 
 .ref::first-letter {
     font-size: 12px;
+}
+
+.button1 {
+    height: 32px;
+    width: 180px;
+    border-radius: 2px;
+    border: 0px;
+    cursor: pointer;
+    position: relative;
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 15%), 0 1px 1px rgb(0 0 0 / 8%);
+    transition: all 0.1s ease;
+}
+.button-lg {
+    border-radius: 20px;
+    display: inline-block;
+    text-align: center;
+    line-height: 1.42857143;
+    font-size: 16px;
+}
+.button-danger {
+    color: #fff;
+    background-color: #0d3d51b3;
+    border: 1px solid var(--danger-d);
+}
+.button-lg:before, .button-lg:after {
+    content: "";
+    position: absolute;
+    border-radius: 20px;
+    top: -2px;
+    left: -2px;
+    background: linear-gradient( 45deg, #fb0094, #0000ff, #00ff00, #ffff00, #ff0000, #fb0094, #0000ff, #00ff00, #ffff00, #ff0000 );
+    background-size: 400%;
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    z-index: -1;
+    animation: animate 20s linear infinite;
+}
+
+.button-lg:after {
+    filter: blur(20px);
+}
+
+@keyframes animate {
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: 300% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
 }
 
 </style>

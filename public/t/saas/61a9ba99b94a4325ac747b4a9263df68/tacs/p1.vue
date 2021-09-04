@@ -2,7 +2,7 @@
 
 <template>
 <div>
-  <bk img='img/bk2.jpeg'/>
+  <bk img='img/skin-night.jpeg'/>
   
   <dv-full-screen-container>
     <xtitle/>
@@ -64,7 +64,8 @@ export default {
   background-position:center;
 }
 .img1 {
-  background-image: url(./img/guidao.png);
+  background-image: url(./img/Line6-.svg);
+  /*background-image: url(./img/guidao.png);*/
 }
 .img2 {
   background-image: url(./img/crt.png);
