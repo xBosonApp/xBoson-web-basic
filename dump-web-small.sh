@@ -1,3 +1,3 @@
 #!/bin/bash
 
-tar -x web-small.filelist -czvpf web4xboson-all.tar.gz public shell-script webservice xboson-node-modules
+tar --exclude-from=web-small.filelist -czvpf web4xboson-sm.tar.gz public shell-script webservice xboson-node-modules
