@@ -248,7 +248,7 @@ export default {
       // console.log("Three", THREE);
       
 			let scene = new THREE.Scene();
-			scene.background = new THREE.Color( 0x000034 );
+		// 	scene.background = new THREE.Color( 0x000034 );
 			scene.fog = new THREE.FogExp2( 0x000011, 0.02 );
 			
 			let floor1 = new THREE.GridHelper( 100, 50, 0xffff00, 0xff00ff );
@@ -267,12 +267,13 @@ export default {
         model.scene.translateY(1.9);
 		  });
 			
-			let renderer = new THREE.WebGLRenderer( { antialias: true } );
+			let renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
 			renderer.setPixelRatio( window.devicePixelRatio );
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			renderer.toneMapping = THREE.ACESFilmicToneMapping;
 			renderer.toneMappingExposure = 1;
 			renderer.outputEncoding = THREE.sRGBEncoding;
+			renderer.setClearColor(0x000034, 0.1);
 			
 			const controls = new THREE.OrbitControls( camera, renderer.domElement );
 			controls.enableDamping = true; 

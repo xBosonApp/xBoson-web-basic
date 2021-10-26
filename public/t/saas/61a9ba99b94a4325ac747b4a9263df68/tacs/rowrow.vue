@@ -19,6 +19,6 @@ export default {
   display: flex; width: 100%; flex-direction: column; flex: 1;
 }
 .rowrow > *:not(:first-child) {
-  margin-top: 20px;
+  margin-top: 10px;
 }
 </style>

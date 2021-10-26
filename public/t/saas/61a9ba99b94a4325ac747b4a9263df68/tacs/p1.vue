@@ -2,7 +2,6 @@
 
 <template>
 <div>
-  <bk img='img/skin-night.jpeg'/>
   
   <dv-full-screen-container>
     <xtitle/>

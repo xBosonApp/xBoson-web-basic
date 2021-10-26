@@ -322,7 +322,8 @@
       
       if (export_modules[name]) {
         console.debug("require from export_modules", name);
-        process = cacheLoader(export_modules[name], _donot_default);
+        // 原样导出
+        process = cacheLoader(export_modules[name], 1);
       }
       else if (mod._cache[absPath]) {
         console.debug("require from cache", name);

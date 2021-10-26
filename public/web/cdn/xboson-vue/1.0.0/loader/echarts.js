@@ -21,9 +21,17 @@ window.VueDemi = VueDemi;
 let echarts = require("cdn/echarts/5.1.1/echarts.min.js", 0,0,1);
 window.defineModule('echarts', { exports: echarts });
 window.defineModule('echarts/core', { exports: echarts });
+window.echarts = echarts;
 
-let vecharts = require("cdn/vue-echarts/6.0.0/index.umd.js", 0,0,1);
+try {
+  require("cdn/echarts-gl/2.0.4/echarts-gl.js");
+} catch(err) {
+  console.error(err);
+}
+
+let vecharts = require("cdn/vue-echarts/6.0.0/index.umd.min.js", 0,0,1);
 Vue.component('v-chart', vecharts);
+window.defineModule('vue-echarts', { exports: vecharts });
 
 module.exports = {
   VueCompositionAPI, echarts, vecharts,

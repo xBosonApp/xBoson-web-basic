@@ -19,6 +19,6 @@ export default {
   display: flex; width: 100%; flex-direction: row; flex: 1;
 }
 .rowcol > *:not(:first-child) {
-  margin-left: 20px;
+  margin-left: 10px;
 }
 </style>
