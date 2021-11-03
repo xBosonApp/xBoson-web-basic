@@ -56,21 +56,32 @@ export default {
       this.clearList.push(release);
       // console.log('drag c', el);
       
-      let key = tool.saveData({
+      let drapData = {
         node, index,
         release,
         list : [], 
         el,
         stop : false,
-      }, DPRE);
+        dropNode : ()=>{},
+      };
       
+      let key = tool.saveData(drapData, DPRE);
       ev.dataTransfer.effectAllowed = 'copyMove';
       ev.dataTransfer.setData(key, 'true');
+      ev.target.drapData = drapData;
     },
     
     onDragEnd(ev, node, index) {
       // console.log("end c", ev);
+      let d = ev.target.drapData;
+      if (d) {
+        d.dropNode(d);
+      } else {
+        ev.dataTransfer.dropEffect = 'none';
+      }
+      
       this.doClear();
+      ev.target.drapData = null;
       tool.clearData(DPRE);
     },
     

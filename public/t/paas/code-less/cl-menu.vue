@@ -211,7 +211,7 @@ export default {
       if (!ps) return size;
       
       let rel = ps.resolution;
-      if (rel.h == 'auto' || rel.w == 'auto') return size;
+      if (rel == null || rel.h == 'auto' || rel.w == 'auto') return size;
       
       size.w = rel.w +'px';
       size.h = rel.h +'px';
@@ -251,6 +251,7 @@ export default {
   methods: {
     test() {
       this.openFile(this.$store.state.testOpenFile);
+      this.$message.info("测试模式, 打开测试文件");
     },
     
     createComponent() {
@@ -285,6 +286,7 @@ export default {
         this.$delete(this.editorFiles, id);
       }
       this.$store.commit('clearAdjComponent');
+      this.$store.commit('setEditFile', null);
       this.$emit('quit');
     },
     
@@ -371,6 +373,7 @@ export default {
         return;
       }
       
+      this.$message.info("加载预览..");
       this.previewComponent = null;
       this.saveFile(()=>{
         let uipath = (xv.debug? '/t': '/ui')

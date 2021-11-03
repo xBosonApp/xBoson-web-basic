@@ -9,13 +9,16 @@
       <span slot="unCheckedChildren">固定</span>
     </a-switch>
     
+    <!-- 此处决定传递给自定义插件的参数, 另一处在 cl-attr-fixed -->
     <component :is='componentName' 
       v-bind='bind' 
       v-model='props[name]' 
       v-if='!isdyn'
       @change='onChange'
       class='full'
+      
       :allComponentProps='props'
+      :propsConfig='config'
     />
     
     <cl-attr-bind-data
@@ -72,11 +75,6 @@ export default {
   
   mounted() {
     this.mountPlugin();
-  },
-  
-  data() {
-    return {
-    };
   },
   
   methods: {

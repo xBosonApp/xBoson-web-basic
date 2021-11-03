@@ -120,6 +120,65 @@ require("cdn/xboson-vue/1.0.0/index.js");
 * change : ({org, app, mod, api}) 当选中 api 后被触发, 返回选中的机构/应用/模块/api
 
 
+## `<x-api-comm>`
+
+通用接口调用
+
+参数:
+* url - 地址
+* body - post 数据
+* params - url 参数
+* method - 方法: post/get/head/delete/jsonp/put/patch
+* headers - http 请求头域
+* timeout - 超时, 默认 5000 (5秒)
+* urlencoded - 请求的数据转换为 url 参数格式
+* rtype - 返回数据类型: text/json/blob
+* v-model - 绑定返回值
+* update.sync - 绑定更新方法, 调用该方法则发送请求 返回 promise
+* immediately - 在页面渲染后立即请求一次api
+
+事件:
+* success(data) 接口成功返回
+* error(err) 接口执行失败
+
+
+## `<x-selector-dict>`
+
+列出机构中的所有字典进行选择, 必要时在该组件外层设置弹出框.
+
+参数:
+* showTitle - 显示标题
+* org - 必须, 指定机构
+* v-model - 绑定变量
+
+
+## `<x-selector-dict-content>`
+
+下拉列表, 可用作表单, 列出字典中的项目, 进行选择.
+
+参数:
+* org - 必须, 指定机构
+* dict - 必须, 字典ID
+* v-model - 绑定变量
+
+
+## `<x-selector-org>`
+
+下拉列表, 可用作表单, 列出用户可用的机构列表, 进行选择
+
+参数:
+* v-model - 绑定变量
+* openid - 可选, 指定用户
+
+
+## `<x-url-param>`
+ 
+将 URL 请求参数绑定到变量
+
+参数:
+* v-model - 绑定变量
+
+
 # Vue2 插件 
 
 绑定到 Vue 实例上的方法 / 属性

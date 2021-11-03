@@ -33,6 +33,7 @@
   'cl-component-container',
   'cl-component-container2',
   'cl-component-container3',
+  'cl-component-container4',
   'cl-component-choose',
   
   'cl-color-picker',
@@ -49,6 +50,7 @@
 const router = new VueRouter({});
 const store = require("./store.js");
 
+
 export default {
   store,
   router,
@@ -61,6 +63,10 @@ export default {
     }
   },
   
+  mounted() {
+    this.checkLoginState();
+  },
+  
   methods : {
     openPrject(prj) {
       this.prjid = prj._id;
@@ -71,6 +77,13 @@ export default {
     returnChoosePrj() {
       this.prjid = null;
       this.$store.commit('setProject', null);
+    },
+    
+    checkLoginState() {
+      this.$globalBus.on('x-login', ()=>{
+        let returnPage = encodeURIComponent(location.href);
+        location.href = '../login.html?returnPage='+ returnPage;
+      });
     },
   },
 }

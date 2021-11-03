@@ -408,11 +408,14 @@ Login = (function() {
                 ls_zy_user_info.set('user_selected_org', msg.result[0].orgid);
                 ls_zy_user_info.set('user_selected_org_type', msg.result[0].org_type);
                 ls_zy_user_info.set('user_selected_org_path', orgpath);
+                
+                checkReturnParam();
                 // 转入 index
                 zy.net.loadIndex();
               } else {
                 // 当前用户所属机构列表 清空
                 thiz._g.orgList = [];
+                checkReturnParam();
                 zy.ui.msg("提示信息：", "您尚未被登记为属于任何一个机构的用户，将不能进行任何操作，请联系管理员！", "e");
               }
             }
@@ -478,9 +481,30 @@ Login = (function() {
       zy.g.comm.org = selectedOrg;
       zy.g.comm.orgtype = _orgtype;
       zy.g.comm.orgpath = _orgpath;
+      
+      checkReturnParam();
       // 跳转到主页面
       zy.net.loadIndex();
     });
+  }
+  
+  // 支持 returnPage 参数, 在登陆后跳转到 returnPage
+  function checkReturnParam() {
+    try {
+      let url = new URL(document.location);
+      let rp = url.searchParams.get('returnPage');
+
+      if (rp) {
+        // hack: 递交按钮中不能修改 href
+        setTimeout(function() {
+          location.href = rp;
+          console.log("return page "+ location.href, rp)
+        }, 1);
+        return true;
+      }
+    } catch(err) {
+      console.debug("cannot support return param", err);
+    }
   }
 
   return Login;

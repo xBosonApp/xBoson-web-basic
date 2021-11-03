@@ -21,6 +21,10 @@
     <a-tooltip title='新建属性'>
       <a-button icon='plus' @click='onCreate'/>
     </a-tooltip>
+    
+    <a-button @click='doCopy' icon='copy' />
+    <a-button @click='openPaste' icon='highlight' :disabled='cannotPaste' />
+    
     <a-button icon='home' @click='$emit("change", "default")'/>
     <a-button icon='rollback' @click='$emit("previous")'/>
   </div>
@@ -57,11 +61,11 @@
         <a-switch checked-children="表达式方式" un-checked-children="总是字符串" v-model='form.isExprAttr'/>
       </a-form-model-item>
       
-      <a-form-model-item label="自定义插件" prop="component" v-if='form.type == 7'>
+      <a-form-model-item label="自定义插件" prop="component" v-if='showDefineComponent'>
         <a-input v-model="form.component" placeholder='VUE 组件, 用于属性配置'/>
       </a-form-model-item>
       
-      <a-form-model-item label="自定义插件参数" prop="component" v-if='form.type == 7'>
+      <a-form-model-item label="自定义插件参数" prop="component" v-if='showDefineComponent'>
         <cl-array-input title='添加选项' 
           v-model='form.cprops'
           keyPlaceholder='有效的变量名格式: 数字/字母/字符 _$'
@@ -73,7 +77,7 @@
         />
       </a-form-model-item>
       
-      <a-form-model-item label='多选项列表' v-if='form.type == 3' prop='select'>
+      <a-form-model-item label='多选项列表' v-if='showSelect' prop='select'>
         <cl-array-input title='添加选项' 
           v-model='form.select'
           keyPlaceholder='用于显示, 中文字符'
@@ -92,11 +96,31 @@
       
     </a-form-model>
   </div>
+  
+  <a-modal
+    title="粘贴选项"
+    :visible="propsClipboard != null"
+    :confirm-loading="confirmPropsClipboardLoading"
+    @ok="doPaste"
+    @cancel="cancelClipboard"
+  >
+    <h3>选择要粘贴的项目</h3>
+    <div v-for='(p, n) in propsClipboard'>
+      <a-checkbox :name='n' v-model='propsClipboardSelect[n]' class='pp'>
+        <b v-if='prop[n]' style='color: red'>覆盖</b>
+        <b v-else style='color: blue'>新建</b>
+        <span>{{ n }}</span>
+        <b> - </b>
+        <span>{{ p.desc }}</span>
+      </a-checkbox>
+    </div>
+  </a-modal>
 </div>
 </template>
 
 <script>
 const tool = require("./tool.js");
+const crole = require("./component-role.js");
 
 export default {
   props: ['next', 'data'],
@@ -104,7 +128,8 @@ export default {
   
   mounted() {
     if (this.data.bind) {
-      this.prop = this.data.bind.props;
+      // 新建组件没有该属性
+      this.prop = this.data.bind.props || {};
       this.bname = this.data.bind.txt;
       // console.log(this.data.bind)
     } else {
@@ -128,6 +153,9 @@ export default {
       mode : null,
       
       form: this.defaultForm(),
+      propsClipboard: null,
+      propsClipboardSelect: null,
+      confirmPropsClipboardLoading: false,
       
       rules: {
         name: { required: true, message: '属性名字不能为空', trigger: 'blur' },
@@ -138,28 +166,29 @@ export default {
         select: { required: true, validator: checkSelect }
       },
       
-      pctypeList: [
-        { value:'attribute' , label:'普通属性' },
-        { value:'event'     , label:'绑定事件' },
-        { value:'design'    , label:'设计时属性' },
-      ],
-      
-      typeList : [
-        { value: 1, label:'字符串' },
-        { value: 2, label:'数字' },
-        { value: 3, label:'选项列表' },
-        // { value: 4, label:'字符串/选项列表' },
-        // { value: 5, label:'废弃' },
-        { value: 6, label:'图标选择 (fontawesome)' },
-        { value: 7, label:'自定义插件' },
-        { value: 8, label:'事件' },
-        { value: 9, label:'隐藏配置' },
-      ],
+      pctypeList: crole.propTypeSelectOptions(),
+      typeList : crole.propSelectOptions(),
       
       labelCol: { span: 4 },
       wrapperCol: { span: 14 },
       buttonCol: { span: 14, offset: 4 },
     };
+  },
+  
+  computed: {
+    showSelect() {
+      return this.form.type == 3 || this.form.type == 10;
+    },
+    
+    showDefineComponent() {
+      return this.form.type == 7;
+    },
+    
+    cannotPaste() {
+      return (this.$store.state.propsClipboard == null) 
+        || (this.$store.state.propsClipboard == this.prop)
+        || (this.prop == null);
+    },
   },
   
   methods: {
@@ -190,12 +219,16 @@ export default {
     onOpen(p, n) {
       this.mode = 'edit';
       this.showEditForm = true;
+      this.copyToForm(p, n);
+    },
+    
+    copyToForm(p, name) {
       this.form = {
-        name      : n,
+        name,
         desc      : p.desc,
         type      : p.type,
         select    : p.select,
-        def       : p.def,
+        def       : p.def || '',
         canDynamic: p.canDynamic,
         component : p.component,
         cprops    : p.props,
@@ -245,17 +278,22 @@ export default {
         if (!valid) {
           return false;
         }
-        try {
-          tool.api('register', 'set_c_prop', this.getApiParm(), (err, ret)=>{
-            if (err) return this.next(err);
-            antd.message.success("属性已设置");
-            this.showEditForm = false;
-            this.$emit('clear');
-            this.getProps();
-          });
-        } catch(e) {
-          console.error(e)
-        }
+        
+        this.callEditApi().catch(this.next).then(this.getProps);
+      });
+    },
+    
+    callEditApi() {
+      return new Promise((ok, fail)=>{
+        let p = this.getApiParm();
+        tool.api('register', 'set_c_prop', p, (err, ret)=>{
+          if (err) return fail(err);
+          
+          antd.message.success(p.name +" 属性已设置");
+          this.showEditForm = false;
+          this.$emit('clear');
+          ok(ret);
+        });
       });
     },
     
@@ -277,6 +315,36 @@ export default {
       });
       return parm;
     },
+    
+    doCopy() {
+      this.$store.commit('setComponentPropsClipboard', this.prop);
+      this.$message.info("已复制");
+    },
+    
+    openPaste() {
+      this.confirmPropsClipboardLoading = false;
+      this.propsClipboard = this.$store.state.propsClipboard;
+      this.propsClipboardSelect = {};
+    },
+    
+    cancelClipboard() {
+      this.confirmPropsClipboardLoading = false;
+      this.propsClipboard = this.propsClipboardSelect = null;
+    },
+    
+    async doPaste() {
+      this.confirmPropsClipboardLoading = true;
+      
+      for (let n in this.propsClipboardSelect) {
+        if (!this.propsClipboardSelect[n]) continue;
+        let p = this.propsClipboard[n];
+        this.copyToForm(p, n);
+        await this.callEditApi();
+      }
+      
+      this.getProps();
+      this.cancelClipboard();
+    },
   },
 }
 </script>
@@ -285,4 +353,5 @@ export default {
 .m { grid-template-columns: 1fr 2fr; }
 .p { grid-template-columns: 1fr auto; }
 .content { min-height: 300px; }
+.pp span { min-width: 100px; display: inline-block; };
 </style>

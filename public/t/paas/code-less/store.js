@@ -1,12 +1,19 @@
 /* Create By xBoson System */
 const KEY_PREFIX = "code_less$store$";
 
+const DefaultPageSetting = {
+  index: {},
+  hasBorder: false,
+  resolution: { w:'auto', h:'auto' },
+};
+
 
 module.exports = new Vuex.Store({
   state: {
     showDropTip: true,
     message: '',
     currentAdjustmentComponentConfig: null,
+    currentAdjustmentComponentExt: null,
     nestedItemRef: null,
     project: null,
     editFile: null,
@@ -14,16 +21,18 @@ module.exports = new Vuex.Store({
     cssClipboard: null, 
     // 存储 json 字符串
     menuClipboard: null,
+    // 单个组件的全部属性
+    propsClipboard: null,
     bindContextStyle : {},
     // { id: boolean }
     // isComponentLoaded : {},
     componentLoadState : {},
     // 默认页面配置
-    defaultPageSetting : loads('defaultPageSetting'),
-    
+    defaultPageSetting : loads('defaultPageSetting') || DefaultPageSetting,
+    previouslySelectedDomElement : null,
     // 方便调试的开关
-    test : true,
-    testOpenFile : '1dVDqLKCQxK9ghnvi1U1pw',
+    test : false,
+    testOpenFile : 'Y0bziUtESjGCHOu_hmtebA',
   },
   
   mutations: {
@@ -31,12 +40,42 @@ module.exports = new Vuex.Store({
       state.showDropTip = false;
     },
     
+    setAdjustmentComponentExt(s, ext) {
+      s.currentAdjustmentComponentExt = ext;
+    },
+    
     setAdjustmentComponent(s, cfg) {
       s.currentAdjustmentComponentConfig = cfg;
     },
     
+    setAdjustmentComponentView(s, el) {
+      let old = s.previouslySelectedDomElement;
+      if (old) {
+        old.revert();
+      }
+      
+      s.previouslySelectedDomElement = { 
+        el, 
+        border: el.style.border, 
+        bgc: el.style.backgroundColor,
+        
+        revert() {
+          this.el.style.border = this.border;
+          this.el.style.backgroundColor = this.bgc;
+        },
+      };
+      
+      el.style.border = '1px dotted #dccfcc';
+      el.style.backgroundColor = '#f9f9f9';
+    },
+    
     clearAdjComponent(s) {
       s.currentAdjustmentComponentConfig = null;
+      s.currentAdjustmentComponentExt = null;
+      if (s.previouslySelectedDomElement) {
+        s.previouslySelectedDomElement.revert();
+        s.previouslySelectedDomElement = null;
+      }
     },
     
     setEditFile(s, f) {
@@ -88,6 +127,10 @@ module.exports = new Vuex.Store({
     
     setMenuClipboard(s, data) {
       s.menuClipboard = data ? JSON.stringify(data) : null;
+    },
+    
+    setComponentPropsClipboard(s, data) {
+      s.propsClipboard = data;
     },
     
     setBindContextStyle(s, styledom) {

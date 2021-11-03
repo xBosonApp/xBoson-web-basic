@@ -65,12 +65,24 @@
       if (window.zy) {
         // alert('vue app 不支持在 zy 环境下开发, 即将跳转');
         let path = location.href.substr(location.href.lastIndexOf('#') +1);
+        path = fix_saas_path(path);
         location.href = zy.g.host.ui +'/'+( zy.debug?'t':'ui' )+'/'+ path;
       } else {
         // 该脚本最先执行, 所有的程序库都没有加载, 必须等待
         window.addEventListener('load', pre_init(ok, fail), {once:true});
       }
     });
+    
+    function fix_saas_path(path) {
+      let saasi = location.pathname.indexOf('/saas/');
+      if (saasi > 0) {
+        let endi = location.pathname.indexOf('/', saasi + 6);
+        if (endi > saasi) {
+          return location.pathname.substring(saasi+1, endi+1) + path;
+        }
+      }
+      return path;
+    }
   }
   
   
@@ -289,6 +301,7 @@
       '.css'  : styleLoader,
       '.less' : styleLoader,
       '.sass' : styleLoader,
+      '.scss' : styleLoader,
       '.styl' : styleLoader,
       '.html' : htmlLoader,
       '.htm'  : htmlLoader,
@@ -309,7 +322,8 @@
       
       if (export_modules[name]) {
         console.debug("require from export_modules", name);
-        process = cacheLoader(export_modules[name], _donot_default);
+        // 原样导出
+        process = cacheLoader(export_modules[name], 1);
       }
       else if (mod._cache[absPath]) {
         console.debug("require from cache", name);
@@ -519,10 +533,18 @@
     el.classList.add('animate__fadeInDown');
     
     let close = el.querySelector(".close");
+    let _remove = ()=>el.remove();
     let doClose = ()=>{
+      let tid = setTimeout(_remove, 50);
+      
+      el.addEventListener('animationstart', ()=>{
+        clearTimeout(tid);
+        el.addEventListener('animationend', _remove);
+      });
+      
       el.classList.remove('animate__fadeInDown');
       el.classList.add('animate__fadeOutUp');
-      el.addEventListener('animationend', ()=>el.remove());
+      // console.log("dialog close");
     };
     close.addEventListener('click', doClose);
     if (waitTime !== 0) setTimeout(doClose, waitTime > 0 ? waitTime : 5000)

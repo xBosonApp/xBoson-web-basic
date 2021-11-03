@@ -45,6 +45,11 @@
         icon='undo' style='margin-top: 8px' type='link'></a-button>
     </div>
     
+    <div class='items-group' style='grid-template-columns: auto 1fr; gap: 8px;'>
+      <label style='line-height: 30px'>设计时根组件:</label>
+      <a-input v-model='sel_drc' placeholder='通常使用 div, 不影响最终渲染结果'/>
+    </div>
+    
     <a-button-group class='sp'>
       <a-button type="primary" @click='ok'>确定</a-button>
       <a-button @click='cancel'>取消</a-button>
@@ -99,10 +104,11 @@ export default {
       units: { Destop:'px', Mobile:'pt', Pad:'pt' },
       setToDefault: false,
       
-      sel_type: 'Destop',
-      sel_relu: 0,
-      sel_bord: 0,
-      sel_scale: 100,
+      sel_drc   : 'div',
+      sel_type  : 'Destop',
+      sel_relu  : 0,
+      sel_bord  : 0,
+      sel_scale : 100,
         
       r : {
         Destop: [
@@ -190,6 +196,7 @@ export default {
           sel_relu : this.sel_relu,
           sel_bord : this.sel_bord,
           sel_scale: this.sel_scale,
+          sel_drc  : this.sel_drc,
         },
       }
     },

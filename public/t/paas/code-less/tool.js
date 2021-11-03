@@ -71,7 +71,13 @@ function api(mod, name, params, cb) {
 
 function apiurl(url, params, cb) {
   let p = Vue.xapi(url, params);
-  p.then(ret => {cb(null, ret)}).catch(cb);
+  p.then(ret => {
+    if (ret.code == '1000') {
+      location.href = '../login.html';
+      return;
+    }
+    cb(null, ret);
+  }).catch(cb);
 }
 
 
@@ -312,7 +318,7 @@ function refFunc(id, name, params) {
 
 
 function uiFileExists(path) {
-  let full = xv.getFullPath(path);
+  let full = xv.getFullPath(path, __dirname);
   if (full.startsWith('http://') || full.startsWith('https://')) {
     // do nothing.
   }

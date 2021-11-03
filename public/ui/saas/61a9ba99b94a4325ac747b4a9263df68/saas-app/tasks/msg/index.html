@@ -1,0 +1,116 @@
+<!-- Create By xBoson System -->
+<style>
+  /* 补充 bootstrap row 统一高度和底部间距调整 */
+  .widget-body .saas-row {
+    display: flex;
+    /*margin-bottom: -14px;*/
+    /*max-height: 600px;*/
+    /*overflow-y: scroll;*/
+    /*overflow-x: hidden;*/
+  }
+  /* ztree节点标注子节点数量 */
+  .ws-api-ztree-node-n {
+    font-size: 9px !important;
+    font-weight: 300 !important;
+    padding: 2px !important;
+    margin: 0px 0px 0px 2px !important;
+    min-width: 16px !important;
+  }
+  .jarviswidget>header>span {
+    float: left;
+    height: 100%;
+    width: auto;
+    font-size: 14px;
+    position: relative;
+    margin: 0 0 0 10px;
+    line-height: 34px;
+    font-weight: 400;
+    letter-spacing: 0;
+  }
+</style>
+<link rel="stylesheet" type="text/css" href="../../paas/lib/js/plugin/ztree/3545/css/metroStyle/metroStyle.css">
+
+<section id="widget-grid">
+  <div id="ws_api_v_index" class="jarviswidget jarviswidget-color-green" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+  <header>
+    <span>【提醒信息发送日志】</span>
+    <div class="widget-toolbar">
+      <!-- add: non-hidden - to disable auto hide -->
+      <!--<div class="btn-group">-->
+      <!--  <button class="btn dropdown-toggle btn-xs btn-success" data-toggle="dropdown" title="状态选择">-->
+      <!--    Status <i class="fa fa-caret-down"></i>-->
+      <!--  </button>-->
+      <!--  <ul class="dropdown-menu pull-right js-status-update">-->
+      <!--    <li>-->
+      <!--      <a href="javascript:void(0);"><i class="fa fa-circle txt-color-green"></i> 上线</a>-->
+      <!--    </li>-->
+      <!--    <li>-->
+      <!--      <a href="javascript:void(0);"><i class="fa fa-circle txt-color-red"></i> 下线</a>-->
+      <!--    </li>-->
+      <!--    <li>-->
+      <!--      <a href="javascript:void(0);"><i class="fa fa-circle txt-color-orange"></i> 停用</a>-->
+      <!--    </li>-->
+      <!--    <li class="divider"></li>-->
+      <!--    <li>-->
+      <!--      <a href="javascript:void(0);"><i class="fa fa-power-off"></i> 无效</a>-->
+      <!--    </li>-->
+      <!--  </ul>-->
+      <!--</div>-->
+    </div>
+    <div name="ws_api_v_tree" class="widget-toolbar button-icon jarviswidget-custom-btn" data-placement="bottom" role="menu" title="显示/隐藏租户列表">
+      <i class="glyphicon glyphicon-folder-open"></i>
+    </div>
+  </header>
+  <!-- widget div-->
+  <div>
+    <!-- widget edit box -->
+    <div class="jarviswidget-editbox">
+      <input class="form-control" type="text">
+    </div>
+    <!-- widget content -->
+    <div class="widget-body">
+    <!-- widget edit box -->
+      <div class="row">
+        <div id="ws_api_v_nouislider" class="noUiSlider"></div>
+      </div>
+      <div class="row saas-row">
+        <div id="ws_api_v_ztree" class="col-xs-3 custom-scroll">
+          <legend>
+            <ul class="btn-toolbar" style="padding-inline-start: 0px;">
+              <li class="btn-group">
+                <button id="tree_filter" type="button" class="btn btn-default" title="筛选所有租户">
+                  <i class="fa fa-search" style="color:#03a9f4"></i>
+                </button>
+              </li>
+            </ul>
+            
+            <form class="smart-form" style="display:none" name="tenant-filter-form" onsubmit="return false;">
+  						<div class="input-group">
+  							 <span class="input-group-addon">内容</span>
+  						  <input class="form-control" type="text" name="keywords" placeholder="名称,昵称,地址,管理员ID,说明">
+  						</div>
+  						<footer>
+  							 <button type="button" class="btn btn-default" id="filter_qx">取消</button>
+								<button type="button" class="btn btn-primary" id="filter_sx">筛选</button>
+  						</footer>
+				    </form>
+          </legend>
+          <ul class="ztree"></ul>
+        </div>
+        <div id="ws_api_v_innercontent" class="col-xs-9"></div>
+      </div>
+    </div>
+  <!-- end widget content -->
+  </div>
+  <!-- end widget div -->
+</div>
+</section>
+<!--<div id="ws_api_v_modal"></div>-->
+<script src="../../paas/lib/js/plugin/ztree/3545/js/jquery.ztree.all.min.js"></script> 
+<script src="../../paas/lib/js/plugin/ztree/3545/js/jquery.ztree.exhide.min.js"></script> 
+<script src="../../paas/lib/js/plugin/noUiSlider/jquery.nouislider.min.js"></script>
+<script src="saas-app/tasks/msg/index.js"></script>
+<script>
+  // 页面初始化设置
+  pageSetUp();
+</script>

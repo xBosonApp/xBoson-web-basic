@@ -4,6 +4,10 @@ module.exports = {
   createInstance,
   createPropsConfig,
   createProps,
+  propSelectOptions,
+  propTypeSelectOptions,
+  propSettingComponent,
+  propSettingComponentOptions,
 };
 
 
@@ -126,11 +130,14 @@ function initProps(c, cfg) {
         case 1: // 字符串(允许变量), 
         case 4: // 字符串,并且带有select选项, 
           cfg.props[n] = ''; break;
+          
         case 2: // 整数(允许变量), 
           cfg.props[n] = 0; break;
-        case 3: // 选项select属性, 
+          
+        case 3: // 选项select属性
+        case 10: // 选项select属性, 多选
         case 5: // 变量(废弃)
-        case 6: // 图标选择, 
+        case 6: // 图标选择
         case 7: // 自定义组件
           cfg.props[n] = null; break;
           
@@ -147,4 +154,80 @@ function initProps(c, cfg) {
       }
     }
   }
+}
+
+
+function propSelectOptions() {
+  return [
+    { value: 1, label:'字符串' },
+    { value: 2, label:'数字' },
+    { value: 3, label:'选项列表' },
+    // { value: 4, label:'字符串/选项列表' },
+    // { value: 5, label:'废弃' },
+    { value: 6, label:'图标选择 (fontawesome)' },
+    { value: 7, label:'自定义插件' },
+    { value: 8, label:'事件' },
+    { value: 9, label:'隐藏配置' },
+    { value: 10, label:'选项列表, 多选' },
+  ];
+}
+
+
+function propSettingComponent(index) {
+  return {
+    1:'a-input',
+    2:'a-input-number',
+    3:'a-select',
+    4:'a-input',
+    5:'a-input',
+    6:'cl-select-fa-icon',
+    9:'x-null',
+    10: 'a-select',
+  }[index];
+}
+
+
+function propSettingComponentOptions(cfg) {
+  let mode;
+  
+  switch (cfg.type) {
+    case 1:
+      return { maxLength: cfg.max };
+    case 2:
+      return { min: cfg.min, max: cfg.max, };
+    case 10:
+      mode = 'multiple'; // no break!
+    case 3:
+      let options = [];
+      for (let label in cfg.select) {
+        options.push({
+          label,
+          value : cfg.select[label],
+        });
+      }
+      return { 'default-value': cfg.def, options, style: 'width: 100%', 'allowClear': true, mode };
+    case 4:
+      return {};
+    case 5:
+      return {};
+    case 6:
+      return { style: 'width: 100%' };
+    case 7:
+      return cfg.props || {};
+    case 8:
+      return { isEvent : true };
+    case 9:
+      return { hide: true };
+    default:
+      throw new Error("无效的值类型"+ cfg.type);
+  }
+}
+
+
+function propTypeSelectOptions() {
+  return [
+    { value:'attribute' , label:'普通属性' },
+    { value:'event'     , label:'绑定事件' },
+    { value:'design'    , label:'设计时属性' },
+  ];
 }

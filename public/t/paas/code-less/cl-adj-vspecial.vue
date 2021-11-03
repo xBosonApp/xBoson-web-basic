@@ -2,7 +2,7 @@
 
 <template>
 <div>
-  <div v-for='c in vs' v-if='config.vspecial[c.attr]'>
+  <div v-for='c in vs' v-if='config.vspecial[c.attr]' class='spt'>
     <div>{{ c.title }}</div>
     <cl-attr-bind-data
       v-model='config.vspecial[c.attr].value'
@@ -11,7 +11,7 @@
     />
   </div>
   
-  <div v-if='vSlot'>
+  <div v-if='vSlot' class='spt'>
     <div class='items-group sl'>
       <div>插槽</div>
       <a-switch v-model='vSlot.propsConfig.isExprAttr' size="small" class='to'>
@@ -61,4 +61,5 @@ export default {
 .hf { width: 50%!important; }
 .sl { grid-template-columns: 1fr auto; }
 .to { margin-top: 3px; }
+.spt { margin-top: 5px; }
 </style>

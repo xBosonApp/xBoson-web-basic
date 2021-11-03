@@ -1,7 +1,15 @@
 /* Create By xBoson System */
-var vuetify  = require("cdn/vuetify/2.5.0/vuetify.min.js");
+var Vuetify = require("cdn/vuetify/2.5.0/vuetify.min.js");
 var css = require("cdn/vuetify/2.5.0/vuetify.min.css");
 
-Vue.use(vuetify);
+Vue.use(Vuetify);
 
-module.exports = { css, vuetify };
+let defaultInstance = new Vuetify({
+  theme: { dark: false },
+});
+// 混入一个默认配置
+Vue.mixin({
+  vuetify : defaultInstance,
+});
+
+module.exports = { css, Vuetify, defaultInstance };

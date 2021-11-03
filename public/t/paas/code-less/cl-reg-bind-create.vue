@@ -9,6 +9,10 @@
       <a-input v-model="form.txt" placeholder='在组件库中的显示名称, 渲染时的默认文字'/>
     </a-form-model-item>
     
+    <a-form-model-item label="帮助文档">
+      <a-textarea v-model="form.doc" placeholder='帮助文档会保留格式, 同时支持 Html 标签'/>
+    </a-form-model-item>
+    
     <a-form-model-item label="是否渲染组件名">
       <a-switch checked-children="不渲染" 
         un-checked-children="渲染" 
@@ -101,6 +105,7 @@ export default {
       
       form : {
         txt: '',
+        doc: '',
         removeTxt: false,
         component: '',
         helpTag: '',
@@ -157,7 +162,7 @@ export default {
     submitEdit() {
       tool.api('register', 'bind_edit', this.getApiParm(), (err, ret)=>{
         if (err) return this.next(err);
-        this.next(null, ret, {bind:ret});
+        this.next(null, ret, {ret});
       });
     },
 

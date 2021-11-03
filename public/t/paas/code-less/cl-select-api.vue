@@ -26,7 +26,7 @@
 
 <script>
 //
-// 这个组件同时设置 4个属性, 另3哥属性配置为隐藏状态
+// 这个组件同时设置 4个属性, 另三个属性配置为隐藏状态
 //
 export default {
   props: ['allComponentProps'],

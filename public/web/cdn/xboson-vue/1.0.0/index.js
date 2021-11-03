@@ -11,12 +11,17 @@
 const componentNames = [
   'x-menu2',
   'x-api',
+  'x-api-comm',
   'x-ace',
   'x-agreement',
   'x-login-form',
   'x-login-page',
   'x-null',
+  'x-url-param',
   'x-selector-api',
+  'x-selector-dict',
+  'x-selector-dict-content',
+  'x-selector-org',
 ];
 
 if (!window.Vue) {
