@@ -7,9 +7,5 @@
 ./public/ui/paas/pivot_table
 ./public/t/paas/modern-ui
 ./public/ui/paas/modern-ui
-./public/t/paas/fs-chain
-./public/ui/paas/fs-chain
-./public/t/paas/blockchain
-./public/ui/paas/blockchain
 ./public/t/paas/opcserver
 ./public/ui/paas/opcserver
