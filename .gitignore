@@ -19,11 +19,22 @@ out/**
 Test/**
 public/web/zxgl/**
 public/docx/*.*
+public/web/zr/**
+public/web/zb/**
+public/web/his/**
 
 public/lib/img/*jpg
 public/lib/img/*gif
 public/lib/img/*png
 public/*/paas/W_team_test/codelessprjtest/**
+
+public/*/saas/3da44270469945f19fa7192c9a6a5d44/**
+public/*/saas/afb9a9a1c80647e6a0d7e807f68e055a/**
+public/*/saas/b63ff18bcca54a099a230c5b433ba239/**
+public/*/saas/bc02994ec23341708e54c97f6b3f9f48/**
+public/*/saas/c499ae1b351e435f8403ae5697ec7937/**
+public/*/saas/d44d49360c224b828edd792c34456fd5/**
+public/*/saas/fd0ec7186f9247daac2b3183b8782081/**
 
 mongo-bak
 xboson-db-dump.sql
