@@ -1,7 +1,7 @@
 # xBoson 平台前端
 
-![screen1](./screenshot/login.html.png)
-![screen2](./screenshot/main.html.png)
+![screen1](./public/login.html.png)
+![screen2](./public/main.html.png)
 
 所以平台基础应用的画面文件.  
 平台开发指南文档.
