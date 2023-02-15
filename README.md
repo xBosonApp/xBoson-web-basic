@@ -56,7 +56,7 @@
 * public/t/paas/opcserver - OPC节点管理器
 * public/t/paas/modern-ui - 大屏DEMO
 * public/t/paas/graph - 知识库管理
-* public/t/paas/code-less - 低代码开发IDE
+* public/t/paas/code-less - 低代码开发IDE, 该项目没有上线只能以 /t/ 前缀打开.
 
 ## 其他
 
