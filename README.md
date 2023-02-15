@@ -1,7 +1,12 @@
 # xBoson 平台前端
 
+![screen1](./screenshot/login.html.png)
+![screen2](./screenshot/main.html.png)
+
 所以平台基础应用的画面文件.  
 平台开发指南文档.
+
+该项目由 [上海竹呗信息技术有限公司](https://xboson.net/) 提供技术支持.
 
 
 ## 主目录说明
